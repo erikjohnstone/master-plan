@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more candidates from an already-productive building tried and both turned down, each mislabeled in a different way (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Went back to the same finance-center renovation building that gave up
+a real answer earlier today, since its drawing carries well over a
+dozen further similar-looking condensate-drain-pipe labels never
+individually checked. Tried seven more of them. Two came back with
+exactly the clean, no-open-questions shape this effort has learned to
+trust most -- both ends landing on a definite stop, nothing left
+hanging.
+
+A close look at each showed a different way to be fooled by that
+clean shape. The first candidate's own printed label uses a little
+hooked pointer line that, followed all the way down, actually lands
+on a separate up-and-down pipe running well below the line that got
+traced -- the traced line just happened to sit closest to where that
+pointer crossed it. The second candidate's real label points to a
+completely different line altogether, in a tight bundle of three
+side-by-side pipes stacked close together, roughly four hundred
+drawing-pixels from where the trace actually ran -- an unrelated
+equipment tag's own pointer landing nearby likely didn't help. Both
+are the same underlying mistake already caught once on a different
+building earlier today: grabbing whichever printed label sits
+nearest, without confirming that label's own pointer line actually
+reaches the traced pipe. Two new specific ways for that same mistake
+to happen, neither used.
+
+The other two candidates tried both carried open questions on at
+least one end and were not checked further, being clearly
+lower-confidence than the two just turned down.
+
+No golden from this pass. Recall, precision, size accuracy, and every
+other measured number are unchanged from the last entry.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 67" section.
+
 2026-09-18 linear takeoff: an earlier set-aside candidate finally checked, and turned out to be following a pipe support stand, not the pipe itself (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Went back to a candidate found earlier today but never actually looked
 at closely -- a real plant-inspection building's own chilled-water
