@@ -1,5 +1,49 @@
 ## Active work
 
+2026-09-18 linear takeoff: one more real answer lands, but a re-check of the numbers finds the whole approach has a ceiling (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+Found and wrote down one more good, clean answer: a steam pipe about
+eleven feet long, on a Veterans Affairs hospital construction project,
+running from a valve to a junction that feeds a heater and continues
+on toward a rooftop air handler. Checked properly with a marked
+picture first. The same look-over also turned up four other candidates
+on the same project that were NOT written down because something was
+off about each one -- in two cases, two different pipes with different
+labels sitting close together confused the automatic size-reading (so
+it couldn't be trusted to say which pipe was which), in one case a
+pipe seemed to change size partway along its own length without the
+tool noticing, and in one case checking the same spot twice in slightly
+different ways gave two different answers. All four were left out
+rather than guessed at.
+
+More important than that one new answer: this pass stopped to compare
+the "everyday" scorecard against the "never-seen-before" scorecard
+side by side, instead of only watching the everyday one climb. The
+official finish line for this stage requires both scorecards to be
+close together -- within about five points of each other -- on every
+measurement, not just the everyday one to hit its own target. The
+everyday sizing score has been climbing nicely all week, now at about
+79%, but the never-seen-before score has not moved at all in that same
+time -- it's sitting at about 64%, because every answer added this
+week came from projects the tool gets tested against every day, never
+from the small, locked-away set of documents held back specifically to
+check whether the tool actually generalizes. The gap between the two
+scorecards is now about fifteen and a half points and getting WIDER
+with every new everyday answer added, not narrower -- so finding more
+everyday answers, which is most of what's been happening this week,
+cannot by itself get the two scorecards close enough together, no
+matter how many more are found. Digging into why: on the never-seen
+documents, the tool fails to read ANY size at all about twice as often
+as it does on the everyday documents it's used to. That points at a
+real weak spot in how the tool matches a size label to the right pipe
+or duct in the first place, not at a shortage of practice examples --
+worth fixing directly next, rather than continuing to hunt for more
+everyday answers.
+
+Checked everything the usual way: full benchmark re-run confirmed the
+new answer landed cleanly, and the complete test suite in both parts
+of the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: the last four leftover answers from that rich Idaho sheet get used up, bringing that one sheet's total to seven (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Finished going through the remaining good candidates already found and
 already confirmed on that same unusually rich Idaho laboratory
