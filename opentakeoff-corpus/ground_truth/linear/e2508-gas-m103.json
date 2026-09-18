@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf",
+  "source_pdf_sha256": "3d190df7097eec4210c28e5074411162092cb23af4b66ed7bcdb52e0f4fb4d62",
+  "sheet_id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#9",
+  "sheet_number": "M103",
+  "page": 9,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (Missouri capital project E2508, 'Replace Steam Heating Units'), pulled from the corpus_2 GitHub Release during a low-intensity corpus-hunting pass after this same pass's own first candidate (a Maine Air National Guard boiler-replacement project) yielded a real grammar fix but no usable golden. This sheet (M103) has a real detected scale (1/8\" = 1'-0\", unlike the prior project's own sheets) and draws new-work gas piping in a distinct GREEN highlight color against gray existing-to-remain linework -- a real, visually unambiguous new-vs-existing convention, not an inferred one. A text-anchor scan found abundant real callouts: new-work `2 1/2\" G` and `1 1/2\" G` (both parse cleanly, already in `SYS_ALT`) alongside existing `1\" G ETR` labels (an `ETR` -- 'existing to remain' -- suffix this grammar does NOT yet tolerate, a second real gap disclosed but not fixed this pass, scoped out since the candidate actually used doesn't need it).\n\n`trace_run` reaches a real 76.44 LF straight vertical run cleanly, and -- unlike most of this session's own recent real finds -- the automatic size/system bind SUCCEEDS: `size:{kind:pipe,nps_in:2.5}`, `systems:[\"G\"]`, `size-binding:beside`, matching the `2 1/2\" G` label printed directly beside the traced line (confirmed via marked crop). The forward stop (`dead_end`) sits at a real 90-degree elbow where the vertical run turns to a horizontal main heading toward the building's original gas service tie-in referenced elsewhere on the same sheet ('EXISTING GAS ... SHEET M101') -- confirmed via marked crop, a real corner, not an arbitrary cut. The backward stop (`ambiguous`) sits exactly where the traced line crosses a real drawn architectural line (the building's own roofline/parapet edge, visible in the same crop) -- a genuine geometric intersection, not empty space or a narrative stop; disclosed honestly that the raw `trace_run` response's own candidate-fan array was empty for this specific stop despite the `ambiguous` classification, a detail not smoothed over, though the visual evidence for a real feature at this exact point (an actual crossing with actual drawn ink) is the same standard this corpus already applies to every accepted `ambiguous`/`dead_end` boundary. Partway along its own length, the walked run passes directly through a real tee where a `1 1/2\" G` branch splits off toward a nearby rooftop unit -- consistent with this engine's own established behavior of continuing straight through a tee without registering a stop, not a hidden defect.",
+  "scope": "A single real 2 1/2-inch new-work natural gas (G) pipe main (76.44 LF) on Missouri capital project E2508's own mechanical plan, sheet M103, from a real elbow (turning toward the building's original gas service on sheet M101) to a real crossing with the building's own roofline/parapet edge. Explicitly OUT OF SCOPE: the `1 1/2\" G` branch that splits off this same main partway along its length toward a nearby rooftop unit (RTU-101's own general area); the parallel `1\" G ETR` existing gas line running beside this new main for its own visible length; the horizontal `2 1/2\" G` run this main's own top elbow connects to; every other new and existing gas run on this same sheet (multiple further `2 1/2\"`/`1 1/2\"` branches feeding other rooftop equipment, not attempted this pass); sheets M101/M102/MD101/MD102 and every other sheet on this real 15-sheet plan set; the `ETR` grammar-tolerance gap named in review_basis (a real, disclosed, not-yet-fixed limitation, separate from this pass's own `EHWS`/`EHWR` fix).",
+  "runs": [
+    {
+      "run_id": "e2508-m103-gas-2.5in-main",
+      "description": "2 1/2-inch new-work natural gas (G) pipe main, from a real elbow toward the original gas service tie-in to a real crossing with the building's own roofline/parapet edge, passing straight through one real branch tee along the way.",
+      "system": "G",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.31370552109372596, 0.7271270193954544],
+        [0.31370552109372596, 0.32906309308892284]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 2.5 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 76.44,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 76.44, "size": { "kind": "pipe", "nps_in": 2.5 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:2.5": 76.44 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:2.5": 76.44
+  },
+  "total_lf_all_runs": 76.44
+}

@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-18 linear takeoff: a second fresh drawing, in the same low-key search, lands the biggest single jump in the size-accuracy number all session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept the same easy-does-it search going onto a second new project after
+the first one's own boiler room turned out too tangled to use. Checked
+the first project's other floor plan sheet quickly too -- it had
+basically nothing usable, so moved on rather than forcing it.
+
+The second project (a Missouri state job replacing steam heating units)
+turned out much cleaner: a real, honest scale reading straight from the
+title block, and its own mechanical plan draws all-new gas piping in a
+visibly different color from the existing piping being left alone --
+about as unambiguous a "which one is which" signal as a real drawing
+ever gives.
+
+Found a long, straight, 76-foot run of new 2-1/2 inch gas pipe running
+up an exterior wall. Better still: for once, the computer read the
+printed size label correctly ON ITS OWN, without needing a person to
+type the size in by hand -- confirmed both ends against real drawn
+features (a real elbow at the top, a real crossing with the building's
+own roofline at the bottom) before trusting it. Added to the answer
+key, with the source drawing itself now kept in the project too.
+
+Because this one auto-read correctly, and because it's an unusually
+long single run, it moved the one number this project has been stuck
+on the most -- the size-accuracy score -- by more in one entry than
+several recent entries have managed put together. Still nowhere near
+the number this project is ultimately aiming for, and no reason yet to
+think the bigger picture has changed, but a real, concrete sign that
+plain, patient searching through new real drawings can still move that
+number meaningfully, not just fill out the easier "did it find the
+right pipe at all" measurement.
+
+Measured: the full check passes; only the new drawing's own row and the
+summary numbers that include it moved; every other drawing's own
+already-verified answer stayed exactly the same. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 83" section.
+
 2026-09-18 linear takeoff: went hunting on a genuinely new real drawing again -- found and fixed one more real labeling gap, no new answer key entry this time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 With the last few days' worth of engine-tuning question fully closed out,
 went back to the other lever this project has always had available:
