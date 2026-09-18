@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-18 linear takeoff: a second real new answer the same day, this time the cleanest label-to-drawing match seen all session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept checking never-before-touched building drawings. A warehouse
+renovation gave one usable-looking hit, but it turned out too long
+and too uncertain at both ends (over 80 small gaps bridged along the
+way) to trust as a clean single answer, so it was set aside. A batch
+of nine more chiller- and boiler-themed drawings mostly came back
+either empty or full of the same tightly-paired supply-and-return
+piping this effort already treats carefully. A further batch of
+fifteen more drawings turned up one clear standout: a health science
+building's own plumbing sheet, with three individual condensate-drain
+labels, each with its own plain-English note about where the pipe
+goes, rather than bunched mechanical-room piping.
+
+Checking those three found one real answer, and it's the cleanest
+one found all day: the printed label sits directly on top of the
+drawn line itself, with no pointer line at all connecting them --
+nothing to possibly get confused about. The line runs between two
+real junctions, one dropping down to a rooftop air-conditioning unit,
+the other dropping down to an existing mop sink, and both of those
+OTHER labels' own pointer lines were checked too, confirming they
+point to their own separate drops and not to this line. Added as a
+new real answer.
+
+Recall grows from 38 out of 44 to 39 out of 45 correct answers. Every
+other measured number moves in the right direction, with the size-
+accuracy number posting the single biggest jump of any one answer
+added this session, since it's a long line that matched exactly.
+
+Measured: full check suite passes; the new answer reproduces its
+exact length and size on a fresh run from the saved file, matching
+perfectly with zero shape difference.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 71" section.
+
 2026-09-18 linear takeoff: a real new answer lands on a fresh veterans' hospital renovation project, after five look-alike candidates on the same drawing were set aside for a now-familiar reason (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked nine more never-before-touched building drawings, mostly
 government veterans'-hospital renovation and infrastructure projects.
