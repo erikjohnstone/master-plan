@@ -1,5 +1,71 @@
 ## Active work
 
+2026-09-18 linear takeoff: found and fixed the actual root cause of this effort's worst remaining performance problem -- a single, tiny, well-understood code change turns a 148-second delay into under half a second, with every existing test and every accuracy number completely unchanged (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+With every other requirement now given a clear, final answer, turned to
+the one remaining problem that had a real, already-understood cause
+rather than just a scope limit: a specific real sheet that had, weeks
+ago, taken nearly two and a half minutes the very first time anything
+tried to read it, against a requirement of well under half a second.
+
+Measured exactly where that time was going rather than guessing.
+Timed each of the sheet's own 185 individual pieces of printed text
+one at a time. The answer was sharp and clear: just eight of those
+185 pieces of text -- all routine state-government title-block
+boilerplate, a governor's name, an office title, the state's own
+name, sitting near what is almost certainly this sheet's own
+elaborate state seal artwork -- accounted for the ENTIRE nearly
+two-and-a-half-minute delay between them, one single piece of text
+alone costing eighty seconds by itself. The actual mechanical
+drawings on the sheet were never the problem.
+
+The underlying cause: a piece of logic that follows a text label's own
+thin connecting line back to whatever it's pointing at, hopping from
+one dark mark to the next a few times, has no limit on how much work
+it's willing to do in one go. Near an ordinary drawing that's totally
+fine -- a real connecting line only ever touches a handful of marks.
+But near something artistically dense and completely unrelated, like
+an official seal, the same logic can end up re-examining the same
+crowded little area from thousands of newly-found points, piling up
+enormously before it's done.
+
+Fixed with a simple, already-proven idea used successfully once before
+this session in a similar spot: give the logic a hard cap on how much
+work it's allowed to do in one go before giving up and moving on. A
+real connecting line never needs anywhere near that much room; the cap
+only ever matters near this kind of dense, unrelated artwork. Checked
+the new limit carefully against a real second troublesome sheet too --
+a different one with a decorative logo spelled out letter by letter --
+and tightened the cap further once satisfied it still changed nothing
+about any real result anywhere.
+
+Proved this out properly before trusting it, not after: every existing
+automated check that touches this exact logic, and every one covering
+the tracing feature as a whole, still passes completely clean. Every
+single accuracy number this effort tracks -- how often a real run gets
+found, how often it's the right one, how close the length comes out,
+how well sizes get read -- came back byte-for-byte identical to before
+the change. This was a pure speed fix with zero effect on correctness,
+confirmed rather than assumed.
+
+The result: the worst measured delay across every real sheet in the
+whole test set dropped from nearly two and a half minutes to under
+half a second -- roughly three hundred times faster. The exact sheet
+that started this whole investigation now finishes comfortably inside
+the required time. A couple of other, much smaller sheets still run
+a little over the limit, but for an entirely different and much less
+serious reason that this same fix doesn't touch. As a real bonus,
+two sheets that had been completely stuck before -- taking so long
+nobody had ever found out how long they'd actually take -- now finish
+in a few seconds each, opening the door to finally growing this
+effort's smallest, most fragile test group past its current four
+sheets, though that particular follow-up wasn't attempted here.
+
+Measured: every relevant automated test passes, every existing
+accuracy number is unchanged, and one real file was edited --
+`symbollabels.ts` in the tracing engine's own shared code, a file this
+effort has always been allowed to touch. `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 60" section.
+
 2026-09-18 linear takeoff: the two remaining unexplained slow readings for the click-speed requirement traced back to noisy measurement, not a real slow spot -- completing a full, honest scorecard across every one of this goal's nine requirements for the first time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Two real sheets had been sitting on record for a while as genuinely
 unexplained: while every other sheet answered a repeat query in a
