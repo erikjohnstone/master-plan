@@ -344,6 +344,25 @@ export const controlSchematicOutput = {
   exclusions: z.array(z.string()),
 };
 
+/** WP2's DrawnTag, on the wire — shared by list_tags and
+ * reconcile_schedule_plan's unscheduled_tags so both surfaces agree on the
+ * one shape. Defined here (ahead of the shared `wireBox` const further
+ * down this file) so reconcileSchedulePlanOutput below can reference it
+ * without a temporal-dead-zone error at module load. */
+const drawnTagWire = z.object({
+  sheet: z.string(),
+  role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"]),
+  text: z.string().describe("As drawn, joined/reconstructed"),
+  key: z.string().describe("markKey identity — hyphen/space-insensitive, so 'P-1'/'P1'/'P 1' share one key"),
+  family: z.string().describe("canonicalLabelFamily — the instance-stripped family (VAV-E-101 → VAV-E)"),
+  bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }),
+  rot: z.number().optional().describe("Run direction in degrees, clockwise, when nonzero"),
+  source: z.enum(["exact", "joined", "stacked", "compound", "count_prefixed"]).describe("How this tag was recognized: a plain single-run match, a CAD glyph-split rejoin, a stacked prefix-over-number bubble, a key-free compound run ('R1 /C-11'), or a run carrying an authored count multiplier ('TYP 8', '(8)')"),
+  multiplier: z.number().int().positive().optional().describe("An authored drafting multiplier beside this tag ('TYP 8', '(8)'); omitted when 1"),
+  in_table: z.object({ sheet: z.string(), title: z.string().nullable() }).optional().describe("Present when this text sits inside a schedule table's own region (a row/column label, never a drawn field instance) — omitted only with include_tables:true"),
+  sheet_callout: z.boolean().optional().describe("true when this text equals one of the set's own sheet numbers — a cross-reference callout, never a device tag — omitted only with include_callouts:true"),
+});
+
 /** Schedule ↔ plan reconciliation table (contractor columns + cites). */
 export const reconcileSchedulePlanOutput = {
   family_filter: z.string().nullable(),
@@ -443,6 +462,11 @@ export const reconcileSchedulePlanOutput = {
     })).optional().describe("Present only when this row's own mark (e.g. a VALVE MARK) has zero drawn occurrences anywhere — every drawn occurrence of the UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED mark it names instead, so the row can still be located and reviewed. A citation, never installed evidence; sweep_schedule_row still refuses to count the served unit as the row's own mark"),
     reason: z.string().nullable().optional(),
   })),
+  unscheduled_tags: z.array(drawnTagWire).optional()
+    .describe("WP6: every drawn tag occurrence (sheet callouts excluded) whose key never appears as any schedule row's own identity anywhere in the set. A review list — never changes any row's quantity or status."),
+  alias_candidates: z.array(z.object({
+    drawn: z.string(), nearest_row_key: z.string(), distance: z.literal(1),
+  })).optional().describe("WP6: for every distinct drawn key, the nearest schedule-row key exactly one letter-edit away (never a digit edit), when one exists — a likely typo/OCR spelling drift between the drawing and the schedule, or between two schedule rows. A review list — never changes any row's quantity or status."),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
 };
@@ -1343,19 +1367,7 @@ export const sheetGraphOutput = {
 };
 
 export const listTagsOutput = {
-  tags: z.array(z.object({
-    sheet: z.string(),
-    role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"]),
-    text: z.string().describe("As drawn, joined/reconstructed"),
-    key: z.string().describe("markKey identity — hyphen/space-insensitive, so 'P-1'/'P1'/'P 1' share one key"),
-    family: z.string().describe("canonicalLabelFamily — the instance-stripped family (VAV-E-101 → VAV-E)"),
-    bbox: wireBox,
-    rot: z.number().optional().describe("Run direction in degrees, clockwise, when nonzero"),
-    source: z.enum(["exact", "joined", "stacked", "compound", "count_prefixed"]).describe("How this tag was recognized: a plain single-run match, a CAD glyph-split rejoin, a stacked prefix-over-number bubble, a key-free compound run ('R1 /C-11'), or a run carrying an authored count multiplier ('TYP 8', '(8)')"),
-    multiplier: z.number().int().positive().optional().describe("An authored drafting multiplier beside this tag ('TYP 8', '(8)'); omitted when 1"),
-    in_table: z.object({ sheet: z.string(), title: z.string().nullable() }).optional().describe("Present when this text sits inside a schedule table's own region (a row/column label, never a drawn field instance) — omitted only with include_tables:true"),
-    sheet_callout: z.boolean().optional().describe("true when this text equals one of the set's own sheet numbers — a cross-reference callout, never a device tag — omitted only with include_callouts:true"),
-  })),
+  tags: z.array(drawnTagWire),
   count: z.number().int(),
 };
 

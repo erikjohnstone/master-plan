@@ -25,6 +25,7 @@ import type { Point } from "../../web/src/lib/oneclick.ts";
 import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../web/src/lib/sheetgraph.ts";
 import {
   reconcileRowsFromTakeoffItems,
+  unscheduledTagsAndAliasCandidates,
   summarizeReconcile,
   reconcileScheduleFamilyWithSweeps,
   attachDiagramCorroboration,
@@ -1093,6 +1094,8 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   summary: ReturnType<typeof summarizeReconcile>;
   takeoff_stats: PlanSetTakeoff["stats"];
   family_filter: string | null;
+  unscheduled_tags: ReturnType<typeof unscheduledTagsAndAliasCandidates>["unscheduled_tags"];
+  alias_candidates: ReturnType<typeof unscheduledTagsAndAliasCandidates>["alias_candidates"];
 }> {
   const family = opts.family ? String(opts.family).trim() : null;
   const tags = opts.tags?.length ? opts.tags.map((t) => String(t).trim()).filter(Boolean) : null;
@@ -1102,6 +1105,9 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   // reference-kind grille tables never matched "GRD" in equipment_type/title.
   if (family) {
     const graph = await session.graphForPipeline();
+    // WP6: two review lists, whole-set regardless of family scope — neither
+    // changes any quantity.
+    const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
     // takeoff_stats is whole-set-sweep bookkeeping (buildPlanSetTakeoff's own
     // stats) that a family-scoped reconcile never computes — declared
@@ -1117,6 +1123,8 @@ export async function reconcileSchedulePlan(session: Session, opts: {
         summary: summarizeReconcile([]),
         family_filter: family,
         takeoff_stats: emptyStats,
+        unscheduled_tags,
+        alias_candidates,
       };
     }
     const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -1127,9 +1135,14 @@ export async function reconcileSchedulePlan(session: Session, opts: {
       sweepAll: !tags?.length && opts.familySweepAll !== false,
     });
     const rows = attachDiagramCorroboration(scoped.rows, graph.control_schematics || await session.controlSchematics());
-    return { ...scoped, rows, summary: summarizeReconcile(rows), takeoff_stats: emptyStats };
+    return {
+      ...scoped, rows, summary: summarizeReconcile(rows), takeoff_stats: emptyStats,
+      unscheduled_tags, alias_candidates,
+    };
   }
 
+  const graph = await session.graphForPipeline();
+  const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
   const takeoff = await buildPlanSetTakeoff(session, {
     categories: opts.categories ?? null,
     evaluationFast: opts.evaluationFast,
@@ -1162,5 +1175,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     summary: summarizeReconcile(rows),
     takeoff_stats: takeoff.stats,
     family_filter: familyFilter,
+    unscheduled_tags,
+    alias_candidates,
   };
 }

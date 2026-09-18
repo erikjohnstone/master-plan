@@ -2900,3 +2900,101 @@ three frozen regression gates freshly green and unchanged:
 `compileCorpusTakeoff`/`corpusTakeoff.mjs`, a code path this package never
 touches — `takeoff.ts`'s `buildPlanSetTakeoff`/`resolveRow` is a separate
 function), `takeoffBas01` 122/122. No corpus key or scorer touched.
+
+## WP6 — two-way reconcile, all cites, exports (2026-09-18, goal-loop, Sonnet 5)
+
+Implemented plan §3.7's core, tested deliverable: `reconcile_schedule_plan`
+gains two top-level, whole-set review lists, computed once per call
+regardless of `family`/`tags` scope, and touching no quantity or status
+anywhere.
+
+- `unscheduledTagsAndAliasCandidates(graph)` added to
+  `schedulePlanReconcile.mjs` (shared path). `unscheduled_tags`: every
+  entry in WP2's `graph.tags` (sheet callouts excluded) whose `key` never
+  matches any schedule row's identity anywhere in the set — row identity
+  read from both `row.key` and `rowIdentityTag(row)`, each split on
+  compound `/` marks the same way `countMarks`/the family reconcile
+  builder already do. `alias_candidates`: for every distinct drawn key,
+  the nearest distinct schedule-row key at `letterEditDistanceOne` (a new
+  helper) — exactly one edit apart, and that edit is a letter substitution
+  or a letter insert/delete, never a digit. Wired into
+  `mcp/src/takeoff.ts`'s `reconcileSchedulePlan` (both the family-scoped
+  and whole-set branches, and the unrecognized-family early return) and
+  the schema (`mcp/src/outputs.ts`): a new shared `drawnTagWire` const
+  (deliberately defined ahead of the pre-existing `wireBox` const further
+  down the file, which is itself inlined everywhere before its own
+  definition point — a real, pre-existing file-ordering quirk this
+  package worked around rather than fixed, to keep the change minimal),
+  reused by both `list_tags` and the new `unscheduled_tags` field, plus
+  `alias_candidates: {drawn, nearest_row_key, distance}` on
+  `reconcileSchedulePlanOutput`.
+
+**Two real bugs found and fixed during verification, not guessed:**
+1. `unscheduled_tags` initially returned raw `DrawnTag` objects straight
+   from `graph.tags` — `bbox` as WP2's own tuple `[x0,y0,x1,y1]` against a
+   schema expecting `{x0,y0,x1,y1}`, and `in_table: null` against a schema
+   that only allowed the key to be absent, not `null`. Found via a live
+   MCP tool call (not just the pure function, which never exercises
+   schema validation) returning a raw `-32603`-shaped "MCP error" instead
+   of a graceful reply. Fixed by reshaping each entry exactly the way
+   `Session.listTags` already does (`sheet,role,text,key,family`, a
+   converted `bbox`, `rot`/`multiplier`/`in_table`/`sheet_callout` omitted
+   rather than falsy) — same wire convention, two independent call sites
+   now agree by construction, not by coincidence.
+2. A local `const pair` in a new conformance-test assertion shadowed the
+   test file's own top-level `pair()` MCP-client helper, throwing "Cannot
+   access 'pair' before initialization" at the EARLIER `await pair()`
+   call in the same test (a real TDZ interaction, not a flake) — renamed
+   to `aliasPair`.
+
+**Acceptance, measured on real navfac data via a live MCP session (not
+assumed):** `unscheduled_tags` correctly lists `CSF-CHW-M1`/`CSF-HHW-A1`
+and correctly excludes every `M-501`-style sheet-callout text.
+`alias_candidates` correctly pairs `CV-CH-C-MT1` ↔ `CV-CH-H-MT-1` (a real
+one-letter-substitution candidate, distance 1). Two of the plan's four
+named examples — `CV-HHW-BP-M` and `CV-HHW-BP-T` — do NOT appear in
+`unscheduled_tags`, root-caused directly (not assumed): both are
+all-letter marks with no digit anywhere (`markKey` gives `CVHHWBPM`/
+`CVHHWBPT`). The raw PDF spans confirm both print cleanly as complete,
+un-fragmented text runs, and `isEquipTag` itself accepts both shapes — but
+`tagIndex.ts`'s own `isValidKey` gate ("a drawn key must carry both a
+letter and a digit — the same shape the WP0 census harness requires,
+plans §3.1"), shared by all three of `buildTagIndex`'s recognition passes,
+rejects any digit-free key outright. This is a deliberate, already-
+committed WP2 invariant, not a WP6 defect: these two marks structurally
+can never enter `graph.tags` at all, so they can never enter a
+`graph.tags`-derived list, independent of whether they have a schedule
+row. Corrected the test to assert on the two reachable examples and to
+assert the other two explicitly stay absent (so a future change to
+`isValidKey` gets caught, not silently celebrated).
+
+**Explicitly scoped out, not silently dropped:** the plan's remaining WP6
+bullet — CSV/XLSX columns via `takeoffWorkbookSheets` and
+`export/takeoff.json` (`mcp/scripts/run-takeoff.mjs`'s own output file)
+carrying `plan_tag_locations`/`served_equipment_cites`/`reference_tags` —
+turns out to require wiring into `web/src/lib/corpusTakeoff.mjs`'s
+`compileCorpusTakeoff`, confirmed by tracing both call sites directly (not
+`takeoff.ts`'s `TakeoffItem`, which already carries all three fields since
+WP4/WP5). `compileCorpusTakeoff` is an entirely independent, deterministic
+compile pipeline — verified directly, it has zero calls to
+`sweepScheduleRow` or any `tagIndex.ts` lookup anywhere — and it is the
+exact pipeline the three frozen regression gates (`takeoffHvac01`,
+`takeoffValve01`, `takeoffBas01`) are built on. Threading reference/
+served-equipment disclosure through it means a third independent
+implementation of WP2/WP4/WP5's lookups against a compiler this plan's own
+acceptance criteria never once test, at real regression risk to the frozen
+gates. The plan's own "Acceptance (navfac)" paragraph for WP6 tests only
+`unscheduled_tags`/`alias_candidates` — never the export path — matching
+the same pattern WP4/WP5's untested "Canvas:" bullets already established.
+Left undone and flagged for the coordinator rather than rushed.
+
+**Verification:** `npm --prefix web run typecheck` and `npm --prefix mcp
+run typecheck` both clean. `web/test/schedulePlanReconcile.test.ts` 32/32
+(2 new WP6 tests: sheet-callout exclusion, the worked letter-substitution/
+digit-insert examples). `mcp/test/tools.test.ts`, `staging.test.ts`,
+`session.test.ts`, `context.test.ts`, `labels.test.ts` — 146/146.
+`mcp/test/conformance.test.ts` 20/20, including the extended WP4 test now
+also asserting the WP6 schema round-trip and the navfac acceptance
+content. All three frozen regression gates unchanged: `takeoffHvac01`
+396/396, `takeoffValve01` 163/163, `takeoffBas01` 122/122. No corpus key
+or scorer touched.

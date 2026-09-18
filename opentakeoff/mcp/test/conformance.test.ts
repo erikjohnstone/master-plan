@@ -930,6 +930,30 @@ test("sweep_schedule_row: a mark drawn only on non-plan sheets discloses referen
   assert.equal(row.status, "SCHEDULE_ONLY");
   assert.equal(row.installed_qty, null);
   assert.ok(row.reference_tag_cites?.length >= 1);
+
+  // WP6: unscheduled_tags/alias_candidates are whole-set review lists,
+  // present regardless of the family/tags scope this call used — the
+  // plan's own named navfac examples (§3.7), except CV-HHW-BP-M/
+  // CV-HHW-BP-T: both are all-letter marks with no digit anywhere
+  // (markKey "CVHHWBPM"/"CVHHWBPT"), and tagIndex.ts's own isValidKey gate
+  // (plans §3.1's letter+digit rule, already committed in WP2) means
+  // neither ever enters graph.tags at all — confirmed directly against the
+  // raw PDF spans (the text IS drawn cleanly as "CV-HHW-BP-M"/"CV-HHW-BP-T",
+  // isEquipTag itself accepts both; isValidKey is the deliberate, stricter,
+  // universal gate every buildTagIndex pass shares). Structurally
+  // unreachable through graph.tags, not a WP6 defect — see PROGRESS.md.
+  assert.deepEqual(z.object(reconcileSchedulePlanOutput).parse(reconciled), reconciled, "schema states every returned field — nothing stripped, including unscheduled_tags/alias_candidates");
+  const unscheduledTexts = new Set(reconciled.unscheduled_tags.map((t: any) => t.text));
+  for (const expected of ["CSF-CHW-M1", "CSF-HHW-A1"]) {
+    assert.ok(unscheduledTexts.has(expected), `unscheduled_tags should list ${expected}`);
+  }
+  assert.ok(!unscheduledTexts.has("CV-HHW-BP-M") && !unscheduledTexts.has("CV-HHW-BP-T"), "digit-free marks never reach graph.tags at all (isValidKey), so this stays false rather than silently start passing if that gate ever changes");
+  assert.ok(!reconciled.unscheduled_tags.some((t: any) => /^M-\d{3}$/.test(t.text)), "no M-501-style sheet-callout text in unscheduled_tags");
+  const aliasPair = reconciled.alias_candidates.find((c: any) =>
+    (c.drawn === "CVCHCMT1" && c.nearest_row_key === "CVCHHMT1")
+    || (c.drawn === "CVCHHMT1" && c.nearest_row_key === "CVCHCMT1"));
+  assert.ok(aliasPair, "alias_candidates should pair CV-CH-C-MT1 <-> CV-CH-H-MT-1");
+  assert.equal(aliasPair.distance, 1);
 });
 
 // dimension annotation (0.9.20): the annotate reply's schema covers the new

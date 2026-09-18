@@ -15,6 +15,7 @@ import {
   attachDiagramCorroboration,
   rowIdentityTag,
   servedEquipmentTag,
+  unscheduledTagsAndAliasCandidates,
 } from "../src/lib/schedulePlanReconcile.mjs";
 import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
 import {
@@ -217,6 +218,46 @@ test("WP5 seam: a row whose own VALVE MARK IS drawn never gets a served-equipmen
   assert.equal(rows.length, 1);
   assert.equal(rows[0].served_equipment_cites, undefined, "the row's own mark IS drawn — never fall back to the served unit");
   assert.notEqual(rows[0].installed_evidence_grade, "located_via_served_equipment");
+});
+
+const tagFixture = (over: Record<string, unknown>) => ({
+  sheet: "set.pdf#1", role: "plan", text: "X", key: "X", family: "X",
+  bbox: [0, 0, 1, 1], rot: 0, source: "exact", multiplier: 1,
+  in_table: null, sheet_callout: false, ...over,
+});
+
+test("unscheduledTagsAndAliasCandidates: sheet callouts never count as unscheduled tags or alias candidates", () => {
+  const graph = {
+    tables: [{ rows: [{ key: "FCU-1", cells: { MARK: { text: "FCU-1" } } }] }],
+    tags: [
+      tagFixture({ text: "FCU-1", key: "FCU1" }),
+      tagFixture({ text: "CSF-CHW-M1", key: "CSFCHWM1" }),
+      tagFixture({ text: "M-501", key: "M501", sheet_callout: true }),
+    ],
+  };
+  const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
+  assert.deepEqual(unscheduled_tags.map((t: any) => t.text), ["CSF-CHW-M1"], "FCU-1 has a schedule row; the sheet callout is excluded outright");
+  assert.ok(!alias_candidates.some((c) => c.drawn === "M501" || c.nearest_row_key === "M501"));
+});
+
+test("unscheduledTagsAndAliasCandidates: worked examples — one-letter substitution qualifies, a digit insert never does", () => {
+  const graph = {
+    tables: [
+      { rows: [{ key: "CV-CH-C-MT1", cells: { "VALVE MARK": { text: "CV-CH-C-MT1" } } }] },
+      { rows: [{ key: "FCU-1", cells: { MARK: { text: "FCU-1" } } }] },
+    ],
+    tags: [
+      tagFixture({ text: "CV-CH-C-MT1", key: "CVCHCMT1" }),
+      tagFixture({ text: "CV-CH-H-MT-1", key: "CVCHHMT1" }),
+      tagFixture({ text: "FCU-1", key: "FCU1" }),
+      tagFixture({ text: "FCU-10", key: "FCU10" }),
+    ],
+  };
+  const { alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
+  const byDrawn = Object.fromEntries(alias_candidates.map((c) => [c.drawn, c]));
+  assert.equal(byDrawn.CVCHHMT1?.nearest_row_key, "CVCHCMT1", "one letter substitution (C vs H) is a candidate");
+  assert.equal(byDrawn.FCU10, undefined, "FCU-1 vs FCU-10 inserts a digit — never a candidate");
+  for (const c of alias_candidates) assert.equal(c.distance, 1);
 });
 
 test("familyNeedleFromSpecs: CONTROL_DAMPER / MOTORIZED DAMPER aliases (WP7.2)", () => {

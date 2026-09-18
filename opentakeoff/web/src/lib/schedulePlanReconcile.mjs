@@ -397,6 +397,101 @@ export function servedEquipmentTag(row) {
 }
 
 /**
+ * True only when `a`/`b` (already markKey-canonicalized, upper-case,
+ * hyphen/space-stripped) are exactly one edit apart AND the edited
+ * character is a letter on every side it appears — a substitution swaps
+ * one letter for another, an insert/delete adds/removes one letter. An
+ * edit that touches a digit (inserts, deletes, or changes one) never
+ * qualifies: "FCU1" vs "FCU10" differs by inserting the digit "0", so it
+ * is never an alias candidate — see WP6's own worked examples.
+ * @param {string} a
+ * @param {string} b
+ * @returns {boolean}
+ */
+function letterEditDistanceOne(a, b) {
+  if (a === b) return false;
+  const la = a.length;
+  const lb = b.length;
+  if (Math.abs(la - lb) > 1) return false;
+  const LETTER = /[A-Z]/;
+  if (la === lb) {
+    let diffIndex = -1;
+    let diffCount = 0;
+    for (let i = 0; i < la; i++) {
+      if (a[i] !== b[i]) {
+        diffCount++;
+        if (diffCount > 1) return false;
+        diffIndex = i;
+      }
+    }
+    if (diffCount !== 1) return false;
+    return LETTER.test(a[diffIndex]) && LETTER.test(b[diffIndex]);
+  }
+  const shorter = la < lb ? a : b;
+  const longer = la < lb ? b : a;
+  let i = 0;
+  while (i < shorter.length && shorter[i] === longer[i]) i++;
+  const extra = longer[i];
+  for (let j = i; j < shorter.length; j++) {
+    if (shorter[j] !== longer[j + 1]) return false;
+  }
+  return LETTER.test(extra);
+}
+
+/**
+ * WP6: two review lists, neither changes any quantity.
+ * `unscheduled_tags` — every drawn tag occurrence (WP2's graph.tags, sheet
+ * callouts excluded) whose key never appears as any schedule row's own
+ * identity anywhere in the set (row.key and rowIdentityTag(row), each
+ * split on compound "/" marks, the same way countMarks and the family
+ * reconcile builder already split them).
+ * `alias_candidates` — for every distinct drawn key, the nearest distinct
+ * schedule-row key at letterEditDistanceOne, if any — a likely typo/OCR
+ * spelling drift between the schedule and the drawing, or between two
+ * schedule rows themselves, surfaced for human review only.
+ * @param {{tables?: object[], tags?: object[]}} graph
+ * @returns {{unscheduled_tags: object[], alias_candidates: {drawn: string, nearest_row_key: string, distance: number}[]}}
+ */
+export function unscheduledTagsAndAliasCandidates(graph) {
+  const rowKeys = new Set();
+  for (const table of graph?.tables || []) {
+    for (const row of table.rows || []) {
+      for (const raw of [row?.key, rowIdentityTag(row)]) {
+        if (!raw) continue;
+        for (const part of markKey(raw).split("/").filter(Boolean)) rowKeys.add(part);
+      }
+    }
+  }
+  const drawnTags = (graph?.tags || []).filter((t) => !t.sheet_callout);
+  // Wire shape (bbox tuple → object, optional fields omitted rather than
+  // null) matches Session.listTags exactly, so both surfaces agree.
+  const unscheduled_tags = drawnTags.filter((t) => !rowKeys.has(t.key)).map((t) => ({
+    sheet: t.sheet, role: t.role, text: t.text, key: t.key, family: t.family,
+    bbox: { x0: t.bbox[0], y0: t.bbox[1], x1: t.bbox[2], y1: t.bbox[3] },
+    ...(t.rot ? { rot: t.rot } : {}),
+    source: t.source,
+    ...(t.multiplier > 1 ? { multiplier: t.multiplier } : {}),
+    ...(t.in_table ? { in_table: t.in_table } : {}),
+    ...(t.sheet_callout ? { sheet_callout: true } : {}),
+  }));
+  const distinctDrawnKeys = [...new Set(drawnTags.map((t) => t.key))].sort();
+  const sortedRowKeys = [...rowKeys].sort();
+  const alias_candidates = [];
+  for (const drawn of distinctDrawnKeys) {
+    let nearest = null;
+    for (const rowKey of sortedRowKeys) {
+      if (drawn === rowKey) continue;
+      if (letterEditDistanceOne(drawn, rowKey)) {
+        nearest = rowKey;
+        break;
+      }
+    }
+    if (nearest) alias_candidates.push({ drawn, nearest_row_key: nearest, distance: 1 });
+  }
+  return { unscheduled_tags, alias_candidates };
+}
+
+/**
  * Build reconcile rows from buildPlanSetTakeoff items (installed sweep path).
  * @param {Array<object>} items TakeoffItem[]
  * @param {Array<object>} [failures] TakeoffFailure[]
