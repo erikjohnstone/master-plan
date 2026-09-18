@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-18 linear takeoff: a fresh submarine-pier utility project checked upfront for size and scale before diving in, still ends in the same familiar leader-line trap, plus a seventh runaway-trace record (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Picked a genuinely fresh, never-touched real project this time --
+utility work at a Navy submarine pier -- and checked its own sheets
+for a safe size and a real scale FIRST, learning from an earlier
+dead end this same day where a promising-looking file turned out to
+have no usable scale on any of its labeled sheets. Five sheets passed
+that check.
+
+Reading the sheets' own printed text directly for size-and-system
+callouts came up completely empty on all five, the same real limit
+already seen a few times today -- this project's own real labels, if
+they exist, evidently split the number and the system code apart
+across separate pieces of text. Fell back to directly sweeping four of
+the five sheets instead, and found a dozen real candidates plus,
+almost as a side effect, a seventh confirmed instance of the runaway-
+trace problem already on record several times this session.
+
+The single most promising-looking candidate -- a real duct size label,
+one dead end, one open question, and a turn along the way -- was
+checked carefully before being trusted, because that turn's own angle
+was an unusual number rather than a normal square or diagonal corner,
+already a known warning sign. The check confirmed the worry: both
+marked points sat on a printed label's own thin pointer line aimed at
+a piece of equipment, not on the actual duct at all -- the exact same
+trap already caught more than once before this session on other real
+projects, now showing up on a fourth. A neighboring label on the same
+drawing used the identical style of pointer line, making the other
+eleven candidates found on that same sheet just as suspect without
+checking each one individually.
+
+No golden landed from this project either. Recall, precision, and size
+accuracy are unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 63" section.
+
 2026-09-18 linear takeoff: tried the sibling sheet too, found one candidate, and turned it down for a real, disclosed reason rather than risk a wrong permanent record (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 With the first of the two long-stuck sheets landing a real answer,
 tried its sibling next -- a larger, busier sheet covering the same
