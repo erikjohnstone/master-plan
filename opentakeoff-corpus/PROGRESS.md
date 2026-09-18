@@ -1,5 +1,36 @@
 ## Active work
 
+2026-09-18 linear takeoff: a real new answer lands on a fresh veterans' hospital renovation project, after five look-alike candidates on the same drawing were set aside for a now-familiar reason (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked nine more never-before-touched building drawings, mostly
+government veterans'-hospital renovation and infrastructure projects.
+Most came back either empty or full of the same tightly-paired
+supply-and-return piping this effort has already learned to be
+careful with. One drawing stood out: a hospital renovation project's
+own condensate-drain piping labels were scattered individually around
+the sheet rather than bunched in pairs.
+
+A quick look at eleven of those labels found six real answers. Five
+of them shared the same suspicious kink already caught several times
+today -- almost certainly more of the same label-pointer-line
+confusion -- and were set aside without individually checking each
+one, since the pattern is now well established. The sixth was
+different: a plain right-angle turn, and a close look confirmed it's
+a real pipe -- running straight down from a ceiling opening, through
+that one clean turn, to where it joins the drawing's own main
+condensate line feeding a small fan-coil unit. This time the label's
+own pointer line was independently checked too, and it agreed with
+what got traced, unlike every look-alike case caught today. Added as
+a new real answer.
+
+Recall grows from 37 out of 43 to 38 out of 44 correct answers, still
+comfortably clearing the required bar. Every other measured number
+moves by a small, expected amount in the same direction as this new
+correct answer, nothing unexpected.
+
+Measured: full check suite passes; the new answer reproduces its
+exact length and size on a fresh run from the saved file.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 70" section.
+
 2026-09-18 linear takeoff: two fresh Montana university buildings checked, both real candidates turned out to be following a label's own pointer line, one in a genuinely new, harder-to-catch way (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked eight more genuinely never-before-touched building drawings
 today. Most came back either completely empty or only matched an
