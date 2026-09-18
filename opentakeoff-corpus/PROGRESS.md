@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-18 linear takeoff: a genuine new real match finally lands, the first one this whole day of searching, on a fresh government finance-center renovation project (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked two more brand-new real projects for a safe scale and a
+reasonable size before spending any real time on either, the same
+upfront habit adopted earlier today after an avoidable dead end.
+Reading their own printed text directly turned up real signal on
+both this time -- a government office building's own renovation
+drawings carrying more than a dozen small condensate-drain callouts
+plus a steam line and some small domestic-water lines, and a plant-
+inspection building carrying a matched supply-and-return chilled-
+water pair.
+
+The chilled-water pair reproduced consistently across many nearby
+starting points, but with an open question on both ends rather than a
+clean stop -- set aside for a future look rather than rushed, given
+time was limited and the other candidate looked cleaner.
+
+That other candidate held up completely: a real, straight, one-inch
+condensate-drain pipe stub running from a real wall opening to the
+exact spot where its own printed size label begins, with nothing
+ambiguous or double-meaning about which line the label describes.
+Added as a new real match -- the first genuinely new one landed today,
+after a long stretch of real, honestly disclosed misses and near-misses.
+
+How often a real run gets found at all ticked up slightly with the
+addition, comfortably still above the required level, and how often a
+pipe's size reads correctly also nudged up a small amount -- nowhere
+close to closing the much larger gap already worked out earlier today,
+but real, verified movement rather than a number sitting still.
+
+Measured: the full benchmark passes, the new match reproduces exactly,
+and its own source file was independently re-checked from the copy now
+kept on file. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 64" section.
+
 2026-09-18 linear takeoff: a fresh submarine-pier utility project checked upfront for size and scale before diving in, still ends in the same familiar leader-line trap, plus a seventh runaway-trace record (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Picked a genuinely fresh, never-touched real project this time --
 utility work at a Navy submarine pier -- and checked its own sheets
