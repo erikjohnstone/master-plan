@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-18 linear takeoff: two clean-looking answers turned out not to be real building drawings at all, a brand new kind of trap worth remembering (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept checking never-before-touched drawings. One project's own
+promising scattered labels sat on pages with no readable scale
+printed anywhere, so those were left alone rather than guess. A
+different renovation project's own drawings turned up two answers
+that looked about as clean as they come: a straight line, both ends
+landing cleanly, a printed label sitting right next to it, no warning
+signs at all -- exactly what earlier successes today looked like.
+
+Looking at the actual pages showed something new: these weren't
+building floor plans at all. They were manufacturer's own equipment
+spec sheets -- one literally titled as a water softener's technical
+data sheet, the other a hot-water pump's own connection diagram --
+generic catalog drawings that happened to get included in the same
+set of construction documents. Drawings like this show pipe
+connections as a simple symbolic diagram, not as an accurate,
+to-scale picture of anything real, so any length measured off one
+means nothing, no matter how clean the answer looks.
+
+This is a genuinely new kind of trap to watch for, different from
+every other mistake caught so far today and earlier this session --
+all of which involved a REAL drawn line, just occasionally the wrong
+one or wrongly labeled. This is closer to reading a real number off a
+diagram that was never meant to represent a real distance in the
+first place. Worth remembering: these equipment spec-sheet pages tend
+to draw their connection lines with a distinctive interrupted-line
+break mark and label ends as "from" and "to" a piece of equipment
+rather than a real room or wall -- a visual tell to watch for before
+trusting an otherwise-clean-looking answer.
+
+No new answer from this pass. Nothing measured changes.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 72" section.
+
 2026-09-18 linear takeoff: a second real new answer the same day, this time the cleanest label-to-drawing match seen all session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept checking never-before-touched building drawings. A warehouse
 renovation gave one usable-looking hit, but it turned out too long
