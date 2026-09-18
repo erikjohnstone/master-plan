@@ -1,5 +1,46 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more tries in the newly-opened pool of previously-skipped sheets -- one clean empty result, one text-leader mistrace, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Continued testing the theory opened earlier today -- that sheets skipped
+by the original scan for lacking a classified drawing layer might still
+hold real, findable automatic size matches, since two separate cases
+already proved a real match can land on completely unclassified
+linework. Two more untouched real projects were tried.
+
+A psychiatric hospital's own mechanical sheet, swept everywhere across
+its whole drawing, produced nothing at all -- no automatic size match
+anywhere on the page. A genuine, clean negative result, not a search
+failure: the method worked correctly and simply found no candidate
+worth reporting.
+
+A regional history center's own mechanical sheet, swept the same way,
+produced nine separate rectangular duct-size matches. But checking the
+two cleanest candidates with a marked crop, this project's own
+standing rule before trusting any result, showed both were following
+the wrong ink: not the actual ducts the size callouts described, but
+the callouts' own diagonal leader lines, the thin arrows pointing from
+a size label back to the real duct nearby. The engine read a label's
+own pointer line with confidence, as if it were the duct itself -- the
+same specific mistake already caught once before this session on a
+different, unrelated project's sheet, now confirmed as a real,
+repeatable hazard on any sheet that labels duct sizes with diagonal
+leaders instead of text sitting directly beside the duct.
+
+Four tries into this newly-opened pool now -- one project with no
+automatic-bind candidates at all, one caught tracing its own scale
+bar, one with no signal whatsoever, and one tracing its own leader
+lines -- and none has produced a usable golden yet, against the
+original, narrower method's one golden across fourteen hits. Not
+enough tries to call the new method a dead end, but an honest sign its
+return may be thinner than the original lever's.
+
+No golden added either way. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md`'s "Run 53" section gained two more
+paragraphs covering these two tries.
+
 2026-09-18 linear takeoff: a graphic scale bar caught mistraced as a real pipe, a fifth hatching-pathology record, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 With the last batch of promising candidates fully checked, tried two
 fresh, completely untouched real projects with two different methods.
