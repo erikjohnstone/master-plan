@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-18 linear takeoff: a promising real candidate on a busy college mechanical room turned down after its own open question pointed to a background line, not a real pipe fitting (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Tried a fresh California college science building's own mechanical
+room drawing next. It carries dozens of real supply-and-return pipe
+labels throughout, most drawn in close matched pairs the way supply
+and return lines usually are, which this effort has already learned
+to treat carefully. One label stood a bit apart from the crowd and
+looked worth trying: a real one-inch chilled-water-return pipe,
+one end a clean stop, the other end a genuine open question with
+more than one possible next direction.
+
+That open end turned out to have an unusually large number of
+possible next directions -- far more than any other real answer found
+this whole session. Looking closely at exactly where that open
+question sat explained why: it landed right on the rounded corner of
+a plain gray background shape, part of the drawing's own ceiling or
+room-outline layer, not anything to do with the actual black pipe
+line at all. A rounded corner is drawn as a series of tiny curved
+segments, and each one looks like its own separate possible direction
+to the reading logic, which is exactly what inflated the count so
+much.
+
+It wasn't possible to say with real confidence, in the time available,
+whether the length already measured was still entirely real pipe that
+simply happened to end near this unrelated gray shape by coincidence,
+or whether the unrelated shape had already snuck into the answer
+somehow. Rather than guess either way, it was set aside, the same
+standing rule this effort has followed all along: an uncertain answer
+is worse than no answer at all.
+
+No golden added either way. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 65" section.
+
 2026-09-18 linear takeoff: a genuine new real match finally lands, the first one this whole day of searching, on a fresh government finance-center renovation project (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked two more brand-new real projects for a safe scale and a
 reasonable size before spending any real time on either, the same
