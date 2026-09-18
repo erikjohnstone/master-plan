@@ -2686,3 +2686,104 @@ names only the three HVAC/valve/BAS gates as required); flagging for the
 coordinator alongside the earlier-flagged `vectorGridClient.ts` missing
 error/timeout handling, since this may be the same class of gap. No corpus
 key or scorer touched by WP3.
+
+## WP4 — sweep discloses reference occurrences instead of throwing (2026-09-18, goal-loop, Sonnet 5)
+
+Implemented plan §3.5 exactly. `Session.sweepScheduleRow`'s `!totalOcc`
+throw (`mcp/src/session.ts`) now first consults `tagIndexFor(graph.tags, t)`
+(WP2's own index) filtered to `role !== "plan" && !sheet_callout &&
+!in_table`. If any such occurrence exists, it returns a result instead of
+throwing: `found: 0`, `anchor: null`, `status: "reference_only"`,
+`reference_tags: [{sheet, role, bbox, text}]`, a `note` naming the roles,
+plus schema-required `row`/`tag_citations: []`/`sheets` (all-zero, since
+nothing was geometrically swept)/`skipped`/`complete: true`. If no
+occurrence exists anywhere, the original throw is unchanged. `classifyError`
+is untouched, exactly as the plan specifies — this path no longer reaches it
+at all.
+
+Wired the full chain, all five files the plan names:
+- `mcp/src/outputs.ts`: `sweepScheduleRowOutput.anchor` is now `.nullable()`;
+  added `status: z.enum(["reference_only"]).optional()` and
+  `reference_tags: z.array({sheet,role,bbox,text}).optional()`.
+  `reconcileSchedulePlanOutput.rows[]` gains
+  `reference_tag_cites` (same shape), optional.
+- `web/src/lib/schedulePlanReconcile.mjs`
+  (`reconcileScheduleFamilyWithSweeps`): a dedicated branch for
+  `r.status === "reference_only"`, added BEFORE the generic anchor/sheets
+  handling (which would otherwise default `installedQtyBasis` to
+  `"symbol_fingerprint"` off a null anchor and — because `taggedPlanQty`
+  and `r.complete` both come out truthy for an all-zero placeholder sheets
+  array — wrongly compute `geometryVerified: true` and report a *verified*
+  zero, not "never searched"). The row lands `SCHEDULE_ONLY` via
+  `classifyReconcileStatus`'s own `scheduledQty>0 && installedQty==null`
+  fallback (verified directly — no schema/logic change needed there), with
+  `reason: "drawn on schematic/legend sheets only"` and the new
+  `reference_tag_cites` array attached to the final row.
+- `mcp/src/takeoff.ts` (`resolveRow`, the whole-set `buildPlanSetTakeoff`
+  path — separate from the family-scoped reconcile above): the same early
+  branch, mapping to `item.status = "refused"`, `item.reason`, and a new
+  `TakeoffItem.reference_tags` field (declared on the interface). Because
+  this path no longer throws for these rows, they never reach
+  `classifyError`, so `SYMBOL_FALSE_NEGATIVE` naturally excludes them — no
+  code change needed there beyond not throwing.
+- `web/src/lib/agentTakeoff.js` (tool-result folding): a
+  `data.status === "reference_only"` branch folds `reference_tags` into
+  rows with `field: "reference_tag"`, kept out of the generic
+  `installed_quantity`/`tagged_plan_quantity` folding so a citation can
+  never be mistaken for counted work.
+
+**Canvas chip rendering intentionally left to WP6:** the plan's own
+"Canvas:" bullet describes a `line.reference_tag_cites[]`/chip UI, but no
+such per-line-with-array-cites panel exists in this codebase yet —
+`TakeoffDataPanel.jsx` renders the flat row list directly, and WP6 (§3.7)
+is the package that explicitly owns building the cite-chip panel ("render
+every cite (a +N badge after the first chip)"). WP4's own File list names
+`session.ts`/`outputs.ts`/`schedulePlanReconcile.mjs`/`agentTakeoff.js`/
+`takeoff.ts` — no panel/canvas file — so the data (the `reference_tag`
+field, already folded) is ready for WP6 to render; wiring a chip into a
+panel that doesn't exist yet would be scope creep ahead of its own package.
+
+**Acceptance, measured, not assumed (real navfac data, `git stash`
+before/after, not a single-sample guess):**
+
+```
+                        before (WP3)   after (WP4)
+SYMBOL_FALSE_NEGATIVE       162            152
+reference_only items          0             10
+total failures               196            186
+```
+
+The drop is exactly 10 — exactly the count of items that moved to
+`reference_only`. (The plan's own illustrative "93 non-plan-only equipment
+marks" line is stale — same class of drift as WP0's and WP2's earlier
+corrections: it's from an earlier diagnosis-phase measurement, before WP1's
+role-classification fixes shifted table-extraction boundaries. The freshest
+committed census (`navfac-cherry-point-atc.after-wp2.txt`) already shows
+`equipment_row otherOnly: 91`, not 93 — and that count itself measures
+distinct KEYS with a non-plan occurrence, a broader and different quantity
+than the 10 actual SCHEDULE ROWS `buildPlanSetTakeoff` walks, which also
+applies row identity, family classification, and per-row filtering the raw
+key census does not. The 10/162→152 numbers above are the real, directly
+measured ones for this specific code path, not a restatement of the plan's
+older key-level census.)
+
+Confirmed via a real, non-synthetic conformance test
+(`mcp/test/conformance.test.ts`, "sweep_schedule_row: a mark drawn only on
+non-plan sheets discloses reference_tags instead of refusing"): `HRHWP-MT1`
+— the plan's own named example — genuinely has 9 real drawn occurrences, all
+role `schematic`, all on navfac-cherry-point-atc-mechanical.pdf#62/#75. The
+tool reply round-trips its schema unstripped (including the new
+`status`/`reference_tags` fields), and reconciling it via
+`reconcile_schedule_plan {family:"PUMP", tags:["HRHWP-MT1"]}` produces a
+`SCHEDULE_ONLY` row with `installed_qty: null` and `reference_tag_cites`
+populated — the full chain, not just the sweep in isolation.
+
+**Verification:** `npm --prefix web run typecheck` and `npm --prefix mcp
+run typecheck` both clean. `mcp/test/conformance.test.ts` 20/20 (includes
+the new WP4 test, ~100s for its real navfac load). `mcp/test/tools.test.ts`,
+`staging.test.ts`, `session.test.ts`, `context.test.ts`, `labels.test.ts` —
+146/146. `web/test/agentTakeoff.test.ts`, `schedulePlanReconcile.test.ts`,
+`markid.test.ts` — 80/80. All three frozen regression gates freshly green:
+`takeoffHvac01` 396/396, `takeoffValve01` 163/163, `takeoffBas01` 122/122 —
+unchanged, confirming this purely-additive disclosure path never touches an
+installed quantity. No corpus key or scorer touched.

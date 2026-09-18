@@ -435,6 +435,9 @@ export const reconcileSchedulePlanOutput = {
       grounding_basis: z.literal("exact_authored_diagram_tag"),
       schedule_binding_status: z.enum(["bound", "ambiguous", "unbound"]),
     })).optional(),
+    reference_tag_cites: z.array(z.object({
+      sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }), text: z.string(),
+    })).optional().describe("Every non-plan drawn occurrence of this row's mark (schematic/legend/detail/etc) — a citation, never installed evidence; present only when sweep_schedule_row returned status: reference_only"),
     reason: z.string().nullable().optional(),
   })),
   path: z.string().nullable().optional(),
@@ -1436,7 +1439,7 @@ export const sweepScheduleRowOutput = {
     occurrences: z.number().int().describe("Drawn occurrences of the tag across all plan sheets"),
     grounding_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag"]).optional()
       .describe("Whether installed evidence came from a repeated symbol fingerprint, an exact tag directly assigned to distinctive adjacent/leader-connected vector geometry, or only exact plan-tag text. exact_plan_tag is review-only, never installed quantity; repeated drawing references are disclosed as redundant_view"),
-  }),
+  }).nullable().describe("null only when status is reference_only — the mark is not drawn on any plan sheet, so there is nothing to anchor a fingerprint to"),
   found: z.number().int().describe("Matches carrying the row's own tag — the honest count, across every plan sheet"),
   sheets: z.array(z.object({
     sheet: z.string(),
@@ -1472,6 +1475,11 @@ export const sweepScheduleRowOutput = {
   ea_total: z.number().optional(),
   note: z.string().optional(),
   warning: z.string().optional().describe("Present when the per-sheet work cap dropped candidates"),
+  status: z.enum(["reference_only"]).optional()
+    .describe("Present only when the mark is not drawn on any plan sheet but IS drawn elsewhere (schematic/legend/detail/etc) — a disclosed citation, never a refusal and never installed quantity"),
+  reference_tags: z.array(z.object({
+    sheet: z.string(), role: z.string(), bbox: wireBox, text: z.string(),
+  })).optional().describe("status: reference_only only — every non-plan drawn occurrence of this mark, for citation"),
 };
 
 /** trace_connectivity (Phase 4 of the HVAC/BAS maturity plan) — which valve

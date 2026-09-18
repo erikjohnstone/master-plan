@@ -108,6 +108,16 @@ export interface TakeoffItem {
     reason?: string;
     hold?: unknown;
   }>;
+  /** Every non-plan drawn occurrence of this tag (schematic/legend/detail/
+   * etc) — a citation only, never installed evidence. Present only when
+   * sweep_schedule_row returned status: "reference_only" (not drawn on any
+   * plan sheet, but located and cited elsewhere). */
+  reference_tags?: Array<{
+    sheet: string;
+    role: string;
+    bbox: { x0: number; y0: number; x1: number; y1: number };
+    text: string;
+  }>;
   /** What proves the installed quantity; never inferred from the schedule. */
   quantity_basis?: "symbol_fingerprint" | "tag_attached_vector" | "exact_plan_tag" | "explicit_installation_note" | null;
   installed_evidence_grade?: "symbol_geometry" | "explicit_installation_note" | "tag_text_only" | "mixed_geometry_and_tag_text" | "unverified";
@@ -501,6 +511,30 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
           throw primary;
         }
         item.tag = alias;
+      }
+      // Not drawn on any plan sheet, but sweep_schedule_row still located
+      // and cited it elsewhere (schematic/legend/detail/etc) instead of
+      // throwing (WP4). This is disclosure, not a geometric search result —
+      // r.anchor is null and r.sheets is an all-zero placeholder, so skip
+      // the generic quantity/evidence logic below entirely rather than let
+      // it default into a false "symbol_fingerprint" reading of zero.
+      if (r.status === "reference_only") {
+        item.status = "refused";
+        item.reason = "drawn on schematic/legend sheets only";
+        item.reference_tags = (r.reference_tags || []).map((rt: any) => ({
+          sheet: rt.sheet, role: rt.role, bbox: rt.bbox, text: rt.text,
+        }));
+        item.search_scope = r.search_scope === "tagged_only" ? "tagged_only" : r.search_scope === "exhaustive" ? "exhaustive" : null;
+        item.unlabeled_audit_complete = r.unlabeled_audit_complete ?? null;
+        item.plan_search_complete = r.complete !== false;
+        out.stats.refused++;
+        out.items.push(item);
+        processedRows++;
+        opts.onProgress?.({
+          phase: "reconcile_row", state: "done", tag: item.tag, processed: processedRows,
+          elapsed_ms: Math.round(performance.now() - started), status: item.status,
+        });
+        return;
       }
       const quantityBasis = r.anchor?.grounding_basis ?? "symbol_fingerprint";
       const matchedLocations = (r.sheets || []).flatMap((ps: any) =>

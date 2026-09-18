@@ -192,7 +192,20 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
 
   if (name === "sweep_schedule_row") {
     const tag = data.tag || args.tag || null;
-    if (typeof data.found === "number") {
+    if (data.status === "reference_only") {
+      // Not drawn on any plan sheet, but cited elsewhere (schematic/legend/
+      // detail/etc) instead of refused outright. A citation, never an
+      // installed-quantity row — kept in its own field so it never folds
+      // into installed_quantity/tagged_plan_quantity accounting.
+      for (const ref of data.reference_tags || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "reference_tag", value: ref.text,
+          sheet_id: ref.sheet, table_title: data.row?.table || null,
+          bbox_px: ref.bbox, source_tool: name,
+          note: `Drawn on a ${ref.role} sheet — a schematic/legend/reference drawing, never installed work.`,
+        }));
+      }
+    } else if (typeof data.found === "number") {
       const quantityBasis = data.anchor?.grounding_basis || "symbol_fingerprint";
       const firstMatch = (data.sheets || []).flatMap((sheet) =>
         (sheet.matches || []).map((match) => ({ sheet: sheet.sheet, match })))[0] || null;

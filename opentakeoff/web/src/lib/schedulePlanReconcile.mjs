@@ -788,6 +788,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           plan_cites: sweep.planCites || [],
           plan_tag_cites: sweep.planTagCites || [],
           plan_candidate_cites: sweep.planCandidateCites || [],
+          ...(sweep.referenceTagCites?.length ? { reference_tag_cites: sweep.referenceTagCites } : {}),
           reason: qtyStatus.reason || sweep.reason
             || (installedEvidenceGrade === "tag_text_only"
               ? `Exact plan tag text was found ${sweep.taggedPlanQty ?? 0} time${sweep.taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
@@ -886,6 +887,36 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         preferSheet: row.schedule_cite?.sheet ?? null,
         preferTitle: row.schedule_cite?.title ?? null,
       });
+      // Not drawn on any plan sheet, but sweep_schedule_row still located it
+      // on a schematic/legend/detail/etc sheet and disclosed the citation
+      // instead of throwing (WP4). This is not a geometric search result —
+      // skip the generic anchor/sheets handling below entirely, since
+      // r.anchor is null and r.sheets is an all-zero placeholder (nothing
+      // was actually swept). installedQty stays null: text never proves
+      // installation.
+      if (r.status === "reference_only") {
+        sweepByTag.set(row.row_id || row.tag, {
+          installedQty: null,
+          installedQtyBasis: null,
+          installedEvidenceGrade: "unverified",
+          geometryVerified: false,
+          searchScope: r.search_scope || null,
+          unlabeledAuditComplete: r.unlabeled_audit_complete ?? null,
+          planSearchComplete: r.complete !== false,
+          itemStatus: "refused",
+          reason: "drawn on schematic/legend sheets only",
+          referenceTagCites: (r.reference_tags || []).map((rt) => ({
+            sheet: rt.sheet, role: rt.role, bbox: rt.bbox, text: rt.text,
+          })),
+        });
+        processed++;
+        opts.onProgress?.({
+          phase: "reconcile_row", state: "done", tag: row.tag, processed, total,
+          elapsed_ms: Math.round(performance.now() - started),
+          status: "refused",
+        });
+        continue;
+      }
       const installedQtyBasis = r.anchor?.grounding_basis || "symbol_fingerprint";
       const matchedCites = (r.sheets || []).flatMap((ps) =>
         (ps.matches || []).flatMap((m) => Array.from({ length: m.multiplier ?? 1 }, () => ({

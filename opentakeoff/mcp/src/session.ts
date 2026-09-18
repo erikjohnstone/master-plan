@@ -13,6 +13,7 @@ import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHan
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
 import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
@@ -4087,6 +4088,55 @@ export class Session {
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
     if (!totalOcc) {
+      // Not drawn on any PLAN sheet — but a schematic/legend/detail/etc
+      // occurrence still locates and cites the mark. Disclose it instead of
+      // refusing outright: text never proves installation, so this never
+      // becomes a count, but it beats a bare "not found".
+      const refTags = tagIndexFor(graph.tags ?? [], t)
+        .filter((dt) => dt.role !== "plan" && !dt.sheet_callout && !dt.in_table);
+      if (refTags.length) {
+        const roles = [...new Set(refTags.map((dt) => dt.role))].sort();
+        const cells: Record<string, string> = {};
+        for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+        const cellCitations = Object.fromEntries(Object.entries(r.cells).map(([header, cell]) => [
+          header,
+          { text: cell.text, bbox: Session.wireBox(cell.bbox) },
+        ]));
+        const firstCell = r.cells[Object.keys(r.cells)[0]];
+        return {
+          tag: t,
+          search_scope: opts.evaluationFast ? "tagged_only" as const : "exhaustive" as const,
+          unlabeled_audit_complete: false,
+          row: {
+            sheet: tb.sheet,
+            table,
+            key: t,
+            ...(drawingGroupScope ? { drawing_group: drawingGroupScope } : {}),
+            cells,
+            cell_citations: cellCitations,
+            citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
+          },
+          tag_citations: [],
+          anchor: null,
+          found: 0,
+          sheets: planSheets.map((sh) => ({
+            sheet: sh.key,
+            found: 0,
+            matches: [],
+            withheld: [],
+            excluded: [],
+            text_only: [],
+            candidates: { considered: 0, dropped: 0 },
+            complete: true,
+            elapsed_ms: 0,
+          })),
+          complete: true,
+          skipped,
+          status: "reference_only" as const,
+          reference_tags: refTags.map((dt) => ({ sheet: dt.sheet, role: dt.role, bbox: Session.wireBox(dt.bbox), text: dt.text })),
+          note: `The mark "${t}" is not drawn on any plan sheet, but ${refTags.length} occurrence${refTags.length === 1 ? "" : "s"} of it appear${refTags.length === 1 ? "s" : ""} on ${roles.join(", ")} sheet(s) — schematic/legend/reference drawings, disclosed below as citations, never installed work.`,
+        };
+      }
       const markNote = ownMarks.size > 1 ? ` Tried every mark of this compound key (${[...ownMarks].join(", ")}) — none is drawn on any plan sheet.` : "";
       throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone.${markNote} If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
     }

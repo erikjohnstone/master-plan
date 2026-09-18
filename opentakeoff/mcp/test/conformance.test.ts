@@ -898,6 +898,40 @@ test("symbol_sweep scope 'set' and sweep_schedule_row: replies round-trip their 
   assert.match(await callErr(client, "sweep_schedule_row", { tag: "ZZ" }), /No schedule row "ZZ" .* tables found/);
 });
 
+// WP4: a mark that is not drawn on any PLAN sheet, but IS drawn on a
+// schematic/legend/detail sheet, discloses that occurrence instead of
+// throwing. HRHWP-MT1 is a real PUMP SCHEDULE row on navfac-cherry-point —
+// the plan's own named example (plans/03-drawing-tag-recognition-audit.md
+// §3.5) of one of the 93 marks this changes from a bare refusal to a cited
+// disclosure.
+test("sweep_schedule_row: a mark drawn only on non-plan sheets discloses reference_tags instead of refusing (WP4, real navfac data)", async () => {
+  const client = await pair();
+  const NAVFAC = fileURLToPath(new URL(
+    "../../../opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf", import.meta.url,
+  ));
+  await callOk(client, "load_plan", { path: NAVFAC });
+  const r = await callOk(client, "sweep_schedule_row", { tag: "HRHWP-MT1" });
+  assert.deepEqual(z.object(sweepScheduleRowOutput).parse(r), r, "schema states every returned field — nothing stripped, including status/reference_tags");
+  assert.equal(r.status, "reference_only");
+  assert.equal(r.found, 0);
+  assert.equal(r.anchor, null);
+  assert.ok(r.reference_tags?.length >= 1, "at least one non-plan drawn occurrence disclosed");
+  for (const rt of r.reference_tags) {
+    assert.notEqual(rt.role, "plan");
+    assert.ok(rt.sheet && rt.text);
+  }
+  assert.match(r.note, /not drawn on any plan sheet/);
+
+  // The same disclosure folds into reconcile_schedule_plan as SCHEDULE_ONLY
+  // with a citation, never a thrown ERROR row.
+  const reconciled = await callOk(client, "reconcile_schedule_plan", { family: "PUMP", tags: ["HRHWP-MT1"] });
+  const row = reconciled.rows.find((x: any) => x.tag === "HRHWP-MT1");
+  assert.ok(row, "HRHWP-MT1 still produces a reconcile row");
+  assert.equal(row.status, "SCHEDULE_ONLY");
+  assert.equal(row.installed_qty, null);
+  assert.ok(row.reference_tag_cites?.length >= 1);
+});
+
 // dimension annotation (0.9.20): the annotate reply's schema covers the new
 // length_lf field, both on annotate and on the list round-trip.
 test("annotate dimension: reply validates against the schema, length rides the round-trip", async () => {
