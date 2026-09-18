@@ -1086,6 +1086,15 @@
       ],
       "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 7 sheets. career technical school \u2014 Butler Tech RTU / Welding Source Capture Installation. HVAC terms found: AHU, AIR HANDL, CFM, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, RTU, VAV. BAS/controls terms found: AUTOMATIC TEMPERATURE, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SET POINT, SETPOINT, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
       "provenance": "Downloaded from a public, unauthenticated source (https://www.butlertech.org/wp-content/uploads/2022/03/PROJECT-DRAWINGS.pdf), posted for open competitive bidding / public procurement (https://www.butlertech.org/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "tarrant-county-mechanical",
+      "project": "Tarrant County (TX) mechanical bid package \u2014 a genuine no-drawn-equipment-tags document, kept as a true-negative fixture",
+      "files": [
+        "tarrant-county-mechanical.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up). The raw PDF (and its opentakeoff/web/public/ mirror) already existed in-repo from earlier work but had never been added to this registry, so no eval script could ever resolve or score it. 8 pages. WP7's own independent verification workflow swept all 8 pages by render + textSpans cross-check and confirmed the pipeline's own zero-tag census is correct \u2014 a genuine schedule/legend/detail-only bid package with no equipment drawn on any plan view, not a recognizer blind spot. keys/tarrant-county-mechanical.tags.csv is intentionally header-only (0 data rows) to record this true-negative finding.",
+      "provenance": "Original acquisition source/date not documented before this registration; the PDF was already committed in-repo under opentakeoff-corpus/raw/ and opentakeoff/web/public/ prior to this catalogue entry."
     }
   ],
   "retired": [
