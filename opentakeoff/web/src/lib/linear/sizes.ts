@@ -185,7 +185,7 @@ export interface SizeLabelSpan {
   textHeightPx?: number;
 }
 
-export type SizePlacement = "beside" | "leader";
+export type SizePlacement = "beside" | "leader" | "on-run";
 
 export interface BoundSize {
   parsed: ParsedSize;
@@ -197,6 +197,7 @@ export interface BoundSize {
 
 const ORIENTATION_TOL_DEG = 10;
 const BESIDE_CONFIDENCE = 0.9;
+const ON_RUN_CONFIDENCE = 0.6;   // below LEADER_CONFIDENCE — see associateOnRunFallback's own header
 const LEADER_CONFIDENCE = 0.75;
 
 function labelHeightPx(label: SizeLabelSpan): number {
@@ -295,6 +296,70 @@ export function associateLabel(
   if (!best) return null;
   const b: { seg: number; placement: SizePlacement; orientation: number; placementFactor: number; total: number } = best;
   return { parsed, seg: b.seg, placement: b.placement, confidence: b.total, factors: { orientation: b.orientation, placement: b.placementFactor } };
+}
+
+/** GATE 3 bug catalogue (docs/LINEAR-TRACE-EVAL.md Run 76): `associateLabel`'s
+ *  own orientation gate is right in general — a label rotated to match ITS
+ *  OWN pipe is the strongest available signal that it describes THIS line,
+ *  not some other nearby one — but it has a real, disclosed blind spot: a
+ *  label kept horizontal beside a VERTICAL run (a common, legitimate riser-
+ *  diagram convention, confirmed on three independent real-corpus instances
+ *  across two unrelated projects and both pipe and rect geometry) can never
+ *  pass it at all. `orientationFactor` doesn't merely score the vertical run
+ *  lower, it excludes it outright, so whatever OTHER correctly-oriented
+ *  stroke happens to sit within the label's own small window wins instead —
+ *  in every confirmed instance, an unrelated tick-mark or leader stub, not
+ *  the pipe.
+ *
+ *  This is a STRICTLY ADDITIVE fallback, meant to be tried only once the
+ *  ordinary sheet-wide `associateLabel` pass has already run and produced
+ *  NOTHING landing on this specific run's own walked segments (the caller's
+ *  `onRun.length === 0`) — it can only ever turn a `size_missing` result
+ *  into a disclosed, lower-confidence one; it never competes with or
+ *  overrides an existing "beside"/"leader" bind, so no already-passing case
+ *  can regress from adding this. It drops the orientation gate entirely,
+ *  but ONLY for segments THIS run actually walked (never sheet-wide — a
+ *  bare proximity match across a whole sheet would be a real regression
+ *  risk), and it keeps the same "uniqueness" doctrine `resolveSizeConflicts`
+ *  already applies elsewhere: if more than one DISTINCT size shows up
+ *  within range of the walked path, that's a genuine ambiguity, withheld
+ *  rather than guessed, not silently resolved by picking the closest one.
+ *
+ *  NOT WIRED IN to either `session.ts`'s or `TakeoffCanvas.jsx`'s own
+ *  trace path (Run 77): measured against the real corpus, this fixed three
+ *  genuine no-label cases but ALSO turned an already-hard stacked-multi-
+ *  system-label sheet's own no-label triple into a confidently WRONG size
+ *  (dropping orientation let an unrelated header pipe's own real label win
+ *  by proximity at the junction it connects to, with nothing left here to
+ *  rule it out — the "uniqueness" check only catches DISAGREEING nearby
+ *  candidates, not a single wrong one with no competitor). Kept, tested,
+ *  and correct for what it claims to do — just not safe to deploy as-is
+ *  given that trade-off; a future pass with a sharper safeguard (e.g.
+ *  excluding candidates near a `branch_joins_main`/tee stop) may change
+ *  that verdict. See docs/LINEAR-TRACE-EVAL.md Run 77 for the full numbers. */
+export function associateOnRunFallback(
+  index: SegmentIndex, labels: SizeLabelSpan[], walkedSegs: ReadonlySet<number>,
+): BoundSize | null {
+  const found: { parsed: ParsedSize; seg: number; perp: number }[] = [];
+  for (const label of labels) {
+    const parsed = parseSize(label.text);
+    if (!parsed) continue;
+    const cx = (label.x0 + label.x1) / 2, cy = (label.y0 + label.y1) / 2;
+    const besideMaxPerpPx = 2 * labelHeightPx(label);
+    let best: { seg: number; perp: number } | null = null;
+    for (const seg of walkedSegs) {
+      const x1 = index.segs[seg * 4], y1 = index.segs[seg * 4 + 1], x2 = index.segs[seg * 4 + 2], y2 = index.segs[seg * 4 + 3];
+      const perp = distPointToSeg(cx, cy, x1, y1, x2, y2);
+      if (perp > besideMaxPerpPx) continue;
+      if (!best || perp < best.perp) best = { seg, perp };
+    }
+    if (best) found.push({ parsed, seg: best.seg, perp: best.perp });
+  }
+  if (!found.length) return null;
+  const distinctSizes = new Set(found.map((f) => JSON.stringify(f.parsed.size)));
+  if (distinctSizes.size > 1) return null;   // genuinely ambiguous — withheld, never guessed
+  const best = found.reduce((a, b) => (b.perp < a.perp ? b : a));
+  return { parsed: best.parsed, seg: best.seg, placement: "on-run", confidence: ON_RUN_CONFIDENCE, factors: { orientation: 0, placement: ON_RUN_CONFIDENCE } };
 }
 
 export interface SizeConflict {

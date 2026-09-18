@@ -5654,6 +5654,12 @@ export default function TakeoffCanvas() {
       const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, ftPx, { leaderPoints });
       if (binding) pairs.push({ span: sp, binding });
     }
+    // #linear-takeoff GATE 3 bug catalogue (docs/LINEAR-TRACE-EVAL.md Run 77):
+    // associateOnRunFallback (sizes.ts) exists and is unit-tested, but is
+    // DELIBERATELY NOT WIRED IN here — see mcp/src/session.ts's own
+    // matching comment and Run 77's writeup for why (measured against the
+    // real corpus, it traded 3 fixed no-label cases for 3 NEW confidently-
+    // wrong sizes on an already-hard stacked-multi-system-label sheet).
     const allBindings = pairs.map((pr) => pr.binding);
     const spanByBinding = new Map(pairs.map((pr) => [pr.binding, pr.span]));
     const { conflicts } = resolveSizeConflicts(allBindings);

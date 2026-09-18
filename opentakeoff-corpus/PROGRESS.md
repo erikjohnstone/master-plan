@@ -1,5 +1,43 @@
 ## Active work
 
+2026-09-18 linear takeoff: actually built the bigger fix from last entry, measured it honestly, and turned it down once the real numbers showed a cost not worth paying (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Last entry named a real, bigger problem but deliberately didn't try to
+fix it, given a real risk of making things worse in a different way.
+Built the actual fix anyway today, specifically to measure that risk
+with real numbers instead of just guessing at it -- carefully scoped
+so it could only ever help a currently-blank answer, never touch an
+answer that was already working, and refuses to guess if it finds
+more than one disagreeing possibility nearby.
+
+Wrote six new tests proving it does exactly that, then wired it into
+both places this project's own two interfaces (the visual tool and
+the programmatic one) read pipe sizes from, so the two can't quietly
+start disagreeing with each other. Ran the full check against every
+real drawing this project has ever verified.
+
+The real result: three previously-blank answers came back correctly
+sized. But the very same change also took the already-known-difficult
+three-systems-sharing-one-line case from earlier this week and made
+it actively wrong instead of honestly blank -- an unrelated nearby
+pipe's own real label won by being close, once the safeguard that
+would have ruled it out was loosened. Measured plainly: the overall
+size-accuracy number went up, but the count of confidently WRONG
+answers more than doubled.
+
+Turned it down. A wrong-but-confident answer is worse than an honest
+blank one, and that's been the rule the whole way through this
+effort, not something to bend for one metric moving the right
+direction. Put everything back to yesterday's safe state, checked
+that the numbers land exactly where they did before, and kept the new
+fix on the shelf, tested and ready, rather than thrown away -- a real
+tool for later, once it has a way to avoid grabbing the wrong nearby
+pipe's label at a junction specifically.
+
+Measured: the new tests pass; the full check suite still shows only
+the same already-known, unrelated problems as always; the actual
+answer numbers end up exactly where yesterday's entry left them.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 77" section.
+
 2026-09-18 linear takeoff: switched from hunting more answers to asking why some pipes come back with no size at all -- fixed one real bug, found a bigger one worth naming but not yet fixing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Instead of checking more drawings today, sat down with the list of
 every already-found pipe that came back with a correct route but no

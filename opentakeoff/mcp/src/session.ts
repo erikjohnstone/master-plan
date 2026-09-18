@@ -3848,6 +3848,17 @@ export class Session {
       const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, mppf, { leaderPoints });
       if (binding) pairs.push({ span: sp, binding });
     }
+    // #linear-takeoff GATE 3 bug catalogue (docs/LINEAR-TRACE-EVAL.md Run 77):
+    // associateOnRunFallback (sizes.ts) exists and is unit-tested, but is
+    // DELIBERATELY NOT WIRED IN here — see Run 77's own writeup for why:
+    // measured against the real corpus, it fixed 3 genuine no-label cases
+    // but ALSO turned 3 already-hard stacked-multi-system-label cases
+    // (va-durham-chillers-m401-b) from a safe blank into a confidently
+    // WRONG size (an unrelated header pipe's label won by proximity once
+    // orientation was dropped, with nothing left to rule it out). This
+    // project's own standing doctrine (sizes.ts's header: "a wrong MAX read
+    // as a duct size corrupts a real bid") treats that trade as a net loss,
+    // not a net win, regardless of the aggregate accuracy number moving up.
     const allBindings = pairs.map((p) => p.binding);
     const spanByBinding = new Map<BoundSize, TextSpan>(pairs.map((p) => [p.binding, p.span] as const));
     const { conflicts } = resolveSizeConflicts(allBindings);

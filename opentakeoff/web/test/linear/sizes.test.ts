@@ -11,7 +11,7 @@
 // consume that rotation, not the grammar).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { normalizeLabelText, parseSize, associateLabel, associationWindowPx, resolveSizeConflicts, type BoundSize, type SizeLabelSpan } from "../../src/lib/linear/sizes.ts";
+import { normalizeLabelText, parseSize, associateLabel, associateOnRunFallback, associationWindowPx, resolveSizeConflicts, type BoundSize, type SizeLabelSpan } from "../../src/lib/linear/sizes.ts";
 import { buildSegmentIndex } from "../../src/lib/linear/index.ts";
 
 function idxFor(segs: number[]) {
@@ -320,6 +320,66 @@ test("associationWindowPx: with no textHeightPx, falls back to the bbox's SHORTE
   assert.equal(associationWindowPx(wide, 1), 60, "6 * 10 (the short dimension), not 6 * 100");
   const tall = label("x", { x0: 0, y0: 0, x1: 10, y1: 100, textHeightPx: undefined });    // narrow, tall — rotated text
   assert.equal(associationWindowPx(tall, 1), 60, "6 * 10 (the short dimension) again, regardless of orientation");
+});
+
+// ── associateOnRunFallback — Run 77's own attempted fix for Run 76's own
+//    catalogued orientation-gate blind spot: a horizontal label beside a
+//    VERTICAL run can never pass associateLabel's own beside orientation
+//    check at all (this function is validated correct below and kept, but
+//    Run 77 declined to wire it live — see its own writeup for why)
+//    (confirmed on three real-corpus instances) ──────────────────────────
+
+test("associateOnRunFallback: a horizontal label beside a vertical run binds when associateLabel itself would reject it outright", () => {
+  const idx = idxFor([100, 0, 100, 200]);   // a vertical riser
+  const l = label('4" GLR', { x0: 82, y0: 95, x1: 98, y1: 105, rotDeg: 0, textHeightPx: 10 });   // horizontal text, close beside it (center 10px off)
+  assert.equal(associateLabel(idx, l, 18), null, "the ordinary path rejects this outright — 90 deg off, not merely scored lower");
+  const fallback = associateOnRunFallback(idx, [l], new Set([0]));
+  assert.ok(fallback);
+  assert.equal(fallback!.seg, 0);
+  assert.equal(fallback!.placement, "on-run");
+  assert.equal(fallback!.confidence, 0.6, "below LEADER_CONFIDENCE — a genuinely weaker signal than either beside or leader");
+  assert.deepEqual(fallback!.parsed.size, { kind: "pipe", nps_in: 4 });
+});
+
+test("associateOnRunFallback: restricted to the walked segments — a closer, better-oriented OFF-run stroke never wins over the walked run", () => {
+  const idx = idxFor([100, 0, 100, 200, 40, 95, 90, 95]);   // seg 0: the vertical riser; seg 1: a horizontal tick-mark right at the label's own baseline
+  const l = label('4" GLR', { x0: 82, y0: 95, x1: 98, y1: 105, rotDeg: 0, textHeightPx: 10 });
+  // associateLabel itself picks the tick-mark (seg 1) via ordinary beside placement, exactly like the real bug this catalogues
+  const ordinary = associateLabel(idx, l, 18);
+  assert.ok(ordinary);
+  assert.equal(ordinary!.seg, 1, "the real, confirmed failure mode: a closer, correctly-oriented but unrelated stroke wins");
+  // the fallback is only ever tried against the ACTUAL walked segments — seg 1 (the tick-mark) is never a candidate, seg 0 (the real riser) is
+  const fallback = associateOnRunFallback(idx, [l], new Set([0]));
+  assert.ok(fallback);
+  assert.equal(fallback!.seg, 0);
+});
+
+test("associateOnRunFallback: two on-run labels with different sizes are a genuine ambiguity — withheld, never guessed", () => {
+  const idx = idxFor([100, 0, 100, 200]);
+  const a = label('4" GLR', { x0: 82, y0: 95, x1: 98, y1: 105, rotDeg: 0, textHeightPx: 10 });
+  const b = label('6" GLR', { x0: 82, y0: 145, x1: 98, y1: 155, rotDeg: 0, textHeightPx: 10 });
+  assert.equal(associateOnRunFallback(idx, [a, b], new Set([0])), null);
+});
+
+test("associateOnRunFallback: two on-run labels that AGREE on the same size are not treated as a conflict", () => {
+  const idx = idxFor([100, 0, 100, 200]);
+  const a = label('4" GLR', { x0: 82, y0: 95, x1: 98, y1: 105, rotDeg: 0, textHeightPx: 10 });
+  const b = label('4" GLR', { x0: 82, y0: 145, x1: 98, y1: 155, rotDeg: 0, textHeightPx: 10 });
+  const fallback = associateOnRunFallback(idx, [a, b], new Set([0]));
+  assert.ok(fallback);
+  assert.deepEqual(fallback!.parsed.size, { kind: "pipe", nps_in: 4 });
+});
+
+test("associateOnRunFallback: a label too far from every walked segment finds nothing", () => {
+  const idx = idxFor([100, 0, 100, 200]);
+  const l = label('4" GLR', { x0: 400, y0: 400, x1: 450, y1: 410, rotDeg: 0, textHeightPx: 10 });
+  assert.equal(associateOnRunFallback(idx, [l], new Set([0])), null);
+});
+
+test("associateOnRunFallback: text that isn't a size at all never binds, regardless of geometry", () => {
+  const idx = idxFor([100, 0, 100, 200]);
+  const l = label("MECHANICAL ROOM", { x0: 40, y0: 95, x1: 90, y1: 105, rotDeg: 0, textHeightPx: 10 });
+  assert.equal(associateOnRunFallback(idx, [l], new Set([0])), null);
 });
 
 // ── resolveSizeConflicts — the other half of "uniqueness" ─────────────────
