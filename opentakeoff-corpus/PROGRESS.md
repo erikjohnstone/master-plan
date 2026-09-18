@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-18 linear takeoff: GATE 3's own `per-sheet build < 400ms` threshold confirmed VIOLATED on a live development-tier golden, not just unverified (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+With recall and precision now both clearing their own gate thresholds,
+went back and actually read the bench's own real-tier aggregate rather
+than only the recall/precision/size numbers already being tracked run
+to run. A field nobody had checked against the gate yet -- the
+sheet-build timing -- turned out to already be failing, on a sheet
+already inside the scored corpus: `t2523-replace-boilers-phase2.pdf#12`
+(sheet M-130, this project's own twelfth golden). Profiled the same way
+an earlier session-long hang was root-caused: loading the plan and
+reading the sheet's own info are both fast (under 2.5 seconds combined),
+but the FIRST trace call on this sheet takes nearly 149 seconds; a
+second call at the identical seed, same sheet, takes 6.5 milliseconds.
+The same one-time, first-call-only cost shape already root-caused twice
+before, on two unrelated files -- a shared per-label leader-line search
+that isn't specific to this project's own trace engine. This sheet has
+under 50,000 segments, barely half the gate's own quoted complexity
+target, and still stalls for two and a half minutes -- real, further
+evidence that text density, not raw segment count, drives this cost.
+
+Not fixed -- the underlying code is shared, performance-sensitive
+label-association logic used well beyond this one feature, and a real
+fix needs its own separately-validated follow-up, consistent with how
+the earlier two instances of this same category were handled. No code
+changed, no ground truth touched; purely a measurement that changes
+this gate's own recorded status from "not yet checked" to "checked,
+and it fails" on this specific criterion.
+
+Measured: `npm run bench:linear` numbers are unaffected (nothing added
+or removed from the corpus this round). `docs/LINEAR-TRACE-EVAL.md`
+gained a "Run 47" section and its priority list updated to reflect two
+criteria (size accuracy, per-sheet build) as CONFIRMED unmet rather
+than merely unverified.
+
 2026-09-18 linear takeoff: twenty-second new-corpus golden, MILESTONE -- development recall hits exactly 0.85, precision holds at 0.9719, both of the gate's primary trace-quality thresholds now met simultaneously for the first time this session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 A second sheet from the same fresh Maine heat-pump project as the
 twenty-first golden. A grid sweep near text anchors on the project's
