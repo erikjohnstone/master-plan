@@ -1,0 +1,6 @@
+sheet,tag,role,in_table,note
+19_CA_VistaUSD_DataCenter.pdf#12,CU-1,plan,false,Text label 'CU-1' with leader line pointing to a gray-filled condensing-unit box symbol on the roof plan. Unique instance mark.
+19_CA_VistaUSD_DataCenter.pdf#12,CU-2,plan,false,Text label 'CU-2' with leader line pointing to a gray-filled condensing-unit box symbol on the roof plan. Unique instance mark.
+19_CA_VistaUSD_DataCenter.pdf#12,EF-1,plan,false,"Hexagon 'EF/1' equipment glyph on roof plan (exhaust fan) with leader to a duct-mounted device symbol; same mark also appears as a MARK-column row (hexagon glyph) in the GENERAL EXHAUST FAN SCHEDULE at the bottom of the sheet (in_table left false since the primary drawn instance is the plan symbol, per common-case rule). Unique instance mark."
+19_CA_VistaUSD_DataCenter.pdf#12,EF-2,plan,false,"Hexagon 'EF/2' equipment glyph on roof plan, leader to device symbol; also a schedule row (same as EF-1 note). Unique instance mark."
+19_CA_VistaUSD_DataCenter.pdf#12,SFD,schematic,false,"Label directly under a hatched-damper symbol with actuator (black circle) in the 'DATA ROOM EF/SFD INTERLOCK' control schematic (detail 4, bottom-right of sheet) — smoke/fire damper interlocked with the exhaust fan. Only one instance on this sheet."

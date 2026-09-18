@@ -1,0 +1,101 @@
+sheet,tag,role,in_table,note
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,ACU-A-1,plan,false,unique instance mark on boxed motor symbol
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,ACU-A-2,plan,false,unique instance mark on boxed motor symbol
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,ACU-A-3,plan,false,unique instance mark on boxed motor symbol
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,ACU-A-4,plan,false,unique instance mark on boxed motor symbol
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,ACU-A-5,plan,false,unique instance mark on boxed motor symbol
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,ACU-A-6,plan,false,unique instance mark on boxed motor symbol
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,CP(E),plan,false,"repeatable type mark - existing control panel box drawn twice at different locations (one location's text layer double-rendered the same string), listed once"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,DP-M-29/QQ,plan,false,"distribution panel with transformer glyph, near TR-POWERSMITHS"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,DT-A5,plan,false,device tag on wall-mounted bar glyph in room A152
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-1,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-13,plan,false,"exhaust-fan unique tag on its own motor box (numbering not contiguous with E-A-1..8, expected on a multi-sheet set)"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-2,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-3,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-4,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-5,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-6,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-7,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,E-A-8,plan,false,exhaust-fan unique tag on its own motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-1-1,plan,false,louver/damper unique tag on duct-mounted box along perimeter duct run
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-1-2,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-2-1,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-2-2,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-3-1,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-3-2,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-4-1,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-4-2,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-5-1,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-5-2,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-6-1,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,IL-A-6-2,plan,false,louver/damper unique tag on duct-mounted box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,MCC-A1,plan,false,"motor control center panel box, existing"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,MCC-A2,plan,false,motor control center panel box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,PA-M-29QQ,plan,false,"panelboard, wall-mounted bar glyph in room A152"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,PB-M-29QQ,plan,false,"panelboard, wall-mounted bar glyph in room A152"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,PB-M-32QQ,plan,false,"panelboard, wall-mounted bar glyph in room A152"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,PB-M-32SS,plan,false,"panelboard, wall-mounted bar glyph"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,PB-M-32SS SUB,plan,false,"distinct sub-panel; drawn text is ""CH PNL PB-M-32SS SUB"" next to a separate panel bar glyph near MCC-A2/ACU-A-2 - treated CH PNL as a generic descriptor and kept the panel id"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,PVSA1,plan,false,"hatched equipment/panel box, unique"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,S-A-1,plan,false,supply-fan-side tag co-located with ACU-A-1's motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,S-A-2,plan,false,supply-fan-side tag co-located with ACU-A-2's motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,S-A-3,plan,false,supply-fan-side tag co-located with ACU-A-3's motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,S-A-4,plan,false,supply-fan-side tag co-located with ACU-A-4's motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,S-A-5,plan,false,supply-fan-side tag co-located with ACU-A-5's motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,S-A-6,plan,false,supply-fan-side tag co-located with ACU-A-6's motor box
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,TR-MEZZ,plan,false,transformer tag next to transformer glyph
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,TR-POWERSMITHS,plan,false,transformer tag (vendor name used as id) next to boxed T glyph
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#21,VFD,plan,false,"repeatable type mark - variable-frequency-drive equipment box, drawn ~12 times at distinct fan/motor circuits, listed once"
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,ACU-A-1(X),plan,false,"Unique air conditioning unit, drawn on/adjacent to fan-coil box glyph with CP(E) condensate pump below it. textSpans x0=1070.6,y0=2295.8."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,ACU-A-2(X),plan,false,"Unique ACU, right side of plan near gridline QQ. textSpans x0=4821.1,y0=2216.2."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,ACU-A-3(X),plan,false,"Unique ACU, on box glyph next to DDC-1(X)/DDC-3(X) cluster. textSpans x0=1418,y0=2032."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,ACU-A-4(X),plan,false,"Unique ACU, center-right of plan on fan/coil box glyph. textSpans x0=2587.2,y0=2040.3."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,ACU-A-5(X),plan,false,"Unique ACU, lower-middle of plan (MECH EQUIP RM A150 area) on box glyph. textSpans x0=2760.7,y0=2633.7."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,ACU-A-6(X),plan,false,"Unique ACU, near center-right, on angled fan/coil glyph. textSpans x0=4159.7,y0=2170."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,CP(E),plan,false,"Repeatable type mark: existing condensate pump, drawn as a small square glyph labeled 'CP(E)' at 3 distinct locations (x0=2597.4/y0=2394.8 near ACU-A-5(X); x0=1102.3/y0=2501.5 near ACU-A-1(X); x0=4887.8/y0=2611 near ACU-A-2(X)). Verified via image crop that each is a plain box symbol, not a schedule row. Listed once."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,DDC-1(X),plan,false,"Unique DDC control panel, diamond+leader to two stacked boxes (existing panels being demo'd/replaced), left side of mezzanine room. Verified in image crop and textSpans at x0=1255.9,y0=2032."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,DDC-3(X),plan,false,"Unique DDC control panel, same cluster as DDC-1(X), directly below it. textSpans x0=1255.9,y0=2162.7."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-1(X),plan,false,"Unique exhaust fan, hexagon/fan glyph lower-left area. textSpans x0=1529.8,y0=2386."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-13(X),plan,false,"Unique exhaust fan, far right lower area near stair. textSpans x0=3584.9,y0=2692.3."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-2(X),plan,false,"Unique exhaust fan, right side near ACU-A-2(X). textSpans x0=4401.1,y0=2594.7."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-3(X),plan,false,"Unique exhaust fan, near UH(E)/ACU-A-4(X) cluster. textSpans x0=1938.4,y0=2301 (label placed with leader to fan glyph further right)."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-4(X),plan,false,"Unique exhaust fan, center-top area. textSpans x0=2313.9,y0=2036.4."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-5(X),plan,false,"Unique exhaust fan, lower-middle plan. textSpans x0=3261.2,y0=2412.1."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-6(X),plan,false,"Unique exhaust fan, upper-middle plan near angled duct riser. textSpans x0=3609.9,y0=2098.3."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-7(X),plan,false,"Unique exhaust fan, near stair/E-A-5(X) cluster lower-middle. textSpans x0=3117.4,y0=2684.2."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,E-A-8(X),plan,false,"Unique exhaust fan, right-of-center on stacked box glyph. textSpans x0=4196.9,y0=2375.1."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,L(E),plan,false,"Repeatable type mark: existing louver, drawn as diamond callouts along the exterior wall at the top of the plan and elsewhere (many identical occurrences, e.g. 'L(E) (TYP OF 6)', 'L(E) (TYP OF 10)', 'L(E) (TYP OF 13)', plus bare 'L(E)' instances). Louvers are mechanical envelope devices tied to the exhaust/ACU system; treated as one repeatable equipment-type tag, listed once."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,T(E),plan,false,"Repeatable type mark: existing thermostat/sensor, drawn as a circle containing 'T' with an adjacent '(E)' status tag (image crop confirms circle-T glyph). Occurs 3 times (x0=1343.8/y0=2237.1 with (E) at x0=1309.7; x0=2135.8/y0=2237.1 with (E) at x0=2101.7; x0=2981.3/y0=2451.7... paired '(E)' 3003.3). Listed once as a repeatable sensor tag."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#5,UH(E),plan,false,"Repeatable type mark: existing unit heater. Same literal tag drawn on ~7 different small box/fan glyphs scattered around the plan perimeter (e.g. x0=2876.2/y0=1962.2, x0=2078.1/y0=1968.1, x0=1036.8/y0=1978.2, x0=4839.7/y0=1999.8, x0=1991.6/y0=2032.6, x0=2327.6/y0=2639.8, x0=1020/y0=2640.1). Listed once per rules for a repeatable type mark."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,ACU-A-1,plan,false,"Unique air conditioning unit instance mark, drawn on/adjacent to ACU equipment symbol (with a boxed keynote pair '1 7' beside it, which is a note reference, not part of the tag)."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,ACU-A-2,plan,false,Unique ACU instance mark on equipment symbol at far right of plan.
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,ACU-A-3,plan,false,Unique ACU instance mark on equipment symbol near DDC-1/DDC-3.
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,ACU-A-4,plan,false,"Unique ACU instance mark on equipment symbol, center-left of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,ACU-A-5,plan,false,Unique ACU instance mark on equipment symbol near MECH EQUIP RM A150.
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,ACU-A-6,plan,false,"Unique ACU instance mark on equipment symbol, center-right of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,CP(E),plan,false,"Repeatable type mark for existing condensate pumps; same literal tag labels 3 distinct symbols (under ACU-A-1, near MECH EQUIP RM, near ACU-A-2). Listed once."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,DDC-1,plan,false,"Unique DDC control panel instance mark, left side of plan (paired with boxed keynote '5' = 'provide DDC panel', which is excluded as a note reference)."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,DDC-3,plan,false,Unique DDC control panel instance mark just below DDC-1.
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-1,plan,false,Unique exhaust-fan instance mark on fan symbol.
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-13,plan,false,"Unique exhaust-fan instance mark, center-bottom of plan (numbering not sequential with the other E-A tags on this sheet, but confirmed as a single literal token 'E-A-13' in the text spans)."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-2,plan,false,"Unique exhaust-fan instance mark, right side of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-3,plan,false,"Unique exhaust-fan instance mark, left-center of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-4,plan,false,"Unique exhaust-fan instance mark, left-center of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-5,plan,false,"Unique exhaust-fan instance mark, center of plan near MECH EQUIP RM."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-6,plan,false,"Unique exhaust-fan instance mark, right-center of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-7,plan,false,"Unique exhaust-fan instance mark, center-bottom of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,E-A-8,plan,false,"Unique exhaust-fan instance mark, right-center of plan."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,H-A-3,plan,false,Unique equipment instance mark on a small rectangular unit symbol next to ACU-A-1/CP(E) (likely a duct heater); confirmed as distinct from ACU-A-1 by its own leader-connected box.
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,L(E),plan,false,"Repeatable type mark for existing (to-remain) louvers along the exterior wall/roof line, each occurrence annotated '(TYP OF n)' and paired with boxed keynote '3'; the louver symbol itself is tagged L(E) repeatedly. Listed once."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,T(E),plan,false,"Repeatable mark for existing thermostat/sensor symbols (circled 'T' with '(E)' beside it), appearing at several distinct locations on the plan. Included as a borderline case since it is a genuine sensor symbol per the rules, though the literal tag text is minimal (single letter)."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#7,UH(E),plan,false,Repeatable type mark for existing unit heaters; same literal tag labels 7 distinct physical unit-heater symbols scattered around the plan perimeter/rooms. Listed once.
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,ACU-A-1,plan,false,"Unique existing air conditioning unit; box symbol labeled 'ACU-A-1' with underline near column NN/QQ intersection (west end). Adjacent boxed '1' is a plan-note callout (Note 1: PROVIDE AIR CONDITIONING UNIT), not part of the tag."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,ACU-A-2,plan,false,"Unique existing ACU box symbol near column QQ, east end of sheet."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,ACU-A-3,plan,false,"Unique existing ACU box symbol, west-center of sheet."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,ACU-A-4,plan,false,"Unique existing ACU box symbol, center of sheet."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,ACU-A-5,plan,false,"Unique existing ACU box symbol, lower-center of sheet."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,ACU-A-6,plan,false,"Unique existing ACU box symbol, center-east of sheet."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,CP(E),plan,false,"Existing condensate pump - repeatable type mark. Small square-box glyph labeled 'CP(E)' appears 3 times (west end near H-A-3, center, and east end near ACU-A-2)."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,FD(E),plan,false,"Existing floor drain - repeatable type mark. Small circle/valve glyph with 'FD(E)' (some annotated '(TYP)') recurs roughly 10 times throughout the piping runs, each paired with a plan-note keynote box (e.g. '5' referencing 'PROVIDE LEAK DETECTION AT LOCATION INDICATED')."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,H-A-3,plan,false,"Single physical humidifier generator unit, box symbol labeled 'H-A-3' (underlined) at west end near CP(E)/FD(E). The literal string 'H-A-3' also appears a second time in a piping leader note ('1"" DCW TO H-A-3') pointing back to that same unit for DCW routing (plan note 3) - not a second equipment glyph, so counted once."
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#8,UH(E),plan,false,"Existing unit heater - repeatable type mark. Diamond/box-with-fan glyph appears at least 7 times across the sheet (multiple bays plus lower-left corner), each drawn on the plan next to its symbol, no unique numeric suffix distinguishing individual units."

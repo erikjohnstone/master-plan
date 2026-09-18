@@ -1,0 +1,152 @@
+sheet,tag,role,in_table,note
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#13,47-IDU-BB018,plan,false,Boxed indoor-unit symbol with leader in the BB018 mechanical plan (detail 3).
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#13,47-IDU-BC118A,plan,false,"Boxed indoor-unit symbol, first of two IDUs serving room BC118 (detail 2); per General Note 5 two IDUs serve this telecom room."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#13,47-IDU-BC118B,plan,false,"Boxed indoor-unit symbol, second IDU serving room BC118 (detail 2)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#13,47-IDU-BF107,plan,false,Boxed indoor-unit equipment symbol with leader in the BF107 mechanical plan (detail 1); unique physical IDU instance.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CRAC-1A,plan,false,"CRAC unit, boxed/underlined tag on the data-center unit footprint."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CRAC-1B,plan,false,CRAC unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CRAC-2A,plan,false,CRAC unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CRAC-2B,plan,false,CRAC unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CU-1A,plan,false,"Condensing unit, boxed/underlined tag with leader to unit glyph (top row of yard equipment)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CU-1B,plan,false,"Condensing unit, same style as 47-CU-1A."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CU-2A,plan,false,Condensing unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-CU-2B,plan,false,Condensing unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-IDU-BC131A,plan,false,"Indoor unit serving entrance room 01, boxed/underlined tag with leader to wall-mount unit."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-IDU-BC131B,plan,false,Indoor unit serving entrance room 01.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-IDU-BC143A,plan,false,Indoor unit serving entrance room 02.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-IDU-BC143B,plan,false,Indoor unit serving entrance room 02.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-IDU-BC143C,plan,false,Indoor unit near corridor/decommissioned telecom room BC143.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-ODU-BC131A,plan,false,"Outdoor unit, boxed/underlined tag over yard equipment glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-ODU-BC131B,plan,false,Outdoor unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-ODU-BC143A,plan,false,Outdoor unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-ODU-BC143B,plan,false,Outdoor unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,47-ODU-BC143C,plan,false,Outdoor unit.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,IF-1,plan,false,"In-line fan tag (boxed/underlined, same drafting convention as the 47- tags), tied to keynote 13 (in-line fan pulling OA to ceiling cassette)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,S,plan,false,"Circled single-letter sensor symbol with leader (TempTrak temp/humidity sensor per keynote 7), appears 4x on this sheet. Same low-confidence single-letter caveat as tag T."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#14,T,plan,false,"Circled single-letter thermostat/temperature-sensor symbol with leader, appears 3x (near 47-IDU-BC143A, and in both entrance rooms, each paired with keynote 6 = dual-unit controller). Repeatable type mark; single-letter tags are a judgment call but fit the 'controls/sensor' equipment category in the rules, so included with lower confidence."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#15,47-IDU-1A137,plan,false,"Boxed indoor-unit symbol, 1A137 mechanical plan (detail 4)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#15,47-IDU-1B134,plan,false,"Boxed indoor-unit symbol with leader, 1B134 mechanical plan (detail 1)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#15,47-IDU-1D144A,plan,false,Boxed indoor-unit symbol with leader inside the 1D144 room plan (detail 2).
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#15,47-IDU-1H113,plan,false,"Boxed indoor-unit symbol, 1H113 mechanical plan (detail 5)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#15,47-IDU-1W133,plan,false,"Boxed indoor-unit symbol, 1W133 mechanical plan (detail 3)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#15,47-ODU-1D144,plan,false,"Boxed outdoor-condensing-unit symbol on the 1D144 mechanical plan (detail 2), mounted at exterior wall/yard."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#16,47-IDU-2A246,plan,false,"Unique instance mark for an indoor unit (IDU), leader-lined to a wall-mounted equipment box symbol in the '2A246 - MECHANICAL PLAN' enlarged view. Confirmed both visually (crop) and in textSpans as two adjacent spans '47' + 'IDU-2A246' at the same y0 (joined visually by a hyphen glyph)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#16,47-IDU-2B212,plan,false,"Same pattern as 2A246, in the '2B212 - MECHANICAL PLAN' view. Room label '2B212'/'2B213' (gray boxed room numbers) excluded as non-tags."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#16,47-IDU-2E202A,plan,false,"Same pattern, in the '2E202A - MECHANICAL PLAN' view."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#17,47-IDU-A301,plan,false,"Unique instance IDU tag in the 'A301 - MECHANICAL PLAN' enlarged view, leader-lined to the wall-mounted unit box. Verified in textSpans as separate '47' and 'IDU-A301' spans at the same y-coordinate."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#17,47-IDU-A401,plan,false,"Same pattern, 'A401 - MECHANICAL PLAN' view."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#17,47-IDU-A501,plan,false,"Same pattern, 'A501 - MECHANICAL PLAN' view."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-1A137,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 2."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-1B134,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 3."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-1H113,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 4."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-1W133,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 1."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-2A246,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 2."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-2B212,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 3."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-2E202A,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 1."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-A301,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 5."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-A401,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 5."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-A501,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 5."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-BB018,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 3."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-BC118A,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 1."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-BC118B,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 1."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#18,47-ODU-BF107,plan,false,"Outdoor condensing unit fan-box symbol, roof plan detail 4."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) BC13,plan,false,"Existing panel tag in Elec Room BE123C, small glyph at doorway."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) BC8,plan,false,"Existing panel tag in Elec Room BF112, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) BCL-1,plan,false,"Existing panel tag, same location as BCL-2."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) BCL-2,plan,false,"Existing panel tag in Elec Room BD126, stacked with BCL-1 at one glyph location."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) BEQL,plan,false,"Existing electrical panel/board tag in Boiler Room BF152, leader-lined to a small wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) BLL1,plan,false,"Existing panel tag in Elec Room BD125, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) C1,plan,false,"Existing panel tag, same room, stacked below EQ2."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) EQ1,plan,false,"Existing panel tag in Elec Room BF134, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) EQ2,plan,false,"Existing panel tag, same room, stacked below EQ1."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#31,(E) MCC BC,plan,false,"Existing motor control center tag, same room/wall as BEQL, own panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#32,(E) 1C4,plan,false,"Existing panel tag in Elec Room 1C168, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#32,(E) 1C6-1,plan,false,"Existing panel tag, same room as 1C6-2, adjacent glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#32,(E) 1C6-2,plan,false,"Existing panel tag in Elec Room 1D131, own glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#32,(E) 1CL4,plan,false,"Existing panel tag in Elec Room 1W147, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#32,(E) 1CLD1-A,plan,false,"Existing panel tag in Elec Room 1D111, own glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#32,(E) 1CLD1-B,plan,false,"Existing panel tag, same room as 1CLD1-A, adjacent glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#32,(E) CH2,plan,false,"Existing panel tag in Elec Room 1D166, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#33,(E) 2CL1,plan,false,"Existing panel tag in Elec Room 2C234, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#33,(E) 2CL2,plan,false,"Existing panel tag in Elec Room 2E233, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#33,(E) 2ELB,plan,false,"Existing panel tag in Elec Room 2B265, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#33,(E) 2EQL1,plan,false,"Existing panel tag in Elec Room A283, wall-mounted panel glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,(E) 3CL1-1,plan,false,Existing electrical panel/device tag with leader to a filled wall-panel glyph near ELEC ROOM A365A.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,(E) 3CL1-2,plan,false,"Second existing electrical panel/device tag with leader to its own wall-panel glyph, directly below 3CL1-1."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,47-IDU-A301,plan,false,"Boxed mechanical indoor-unit tag inside the enlarged electrical TR power-plan inset (A301 telecom room), next to receptacle/switch symbols."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,A301A,plan,false,"Electrical panel tag labeling a hatched panelboard glyph on the room's east wall, inside the A301 enlarged plan inset."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,A301B,plan,false,"Electrical panel tag labeling the second hatched panelboard glyph beside A301A, same inset."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,L1,plan,false,"Luminaire type tag: underlined 'L1' with leader to a linear light-fixture glyph; appears 4x in the inset (same type), listed once as a repeatable schedule mark."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,L21-30R,plan,false,"NEMA twist-lock receptacle type tag drawn directly beneath the two receptacle symbols (per Sheet Note 1); repeatable type mark, appears 2x, listed once."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#34,SBB,plan,false,Signal/rack Bonding Busbar equipment tag with leader arrow pointing to the busbar glyph on the wall (per General Note 3); repeatable-type label for this equipment class.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#35,4CL1-1,plan,false,"Existing panel tag '(E) 4CL1-1' with leader line to a small gray panelboard glyph on the wall of 'ELEC ROOM A465A' (lower-left area of the main floor plan). '(E)' = existing-to-remain, not part of the tag text itself."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#35,4CL1-2,plan,false,"Second existing panel tag '(E) 4CL1-2', same wall/room as 4CL1-1, distinct leader/glyph -> separate physical panel section."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#35,A401A,plan,false,"Electrical panelboard tag lettered directly on/beside the black filled panel glyph in the TR (telecom room) enlarged power-plan detail (top-right of sheet, callout '2/ELEC 4TH FLOOR POWER PLAN - A401'). Unique panel."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#35,A401B,plan,false,"Second panelboard glyph in the same TR closet detail, directly labeled 'A401B'. Unique panel, distinct physical panel from A401A."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#35,IDU-A401,plan,false,"Boxed tag drawn on-plan reads '47-IDU-A401' (leader touches a fan/turbine-style equipment glyph at bottom of the TR closet). '47-' is this building's sheet-number prefix (matches this sheet's own drawing number 47-EP104, and 47-TN608/47-TN609 references elsewhere), so the equipment identifier itself is 'IDU-A401' (Indoor Unit serving room A401, paired with the outdoor units ODU-A401 etc. seen on the roof plan, sheet 37). This is real HVAC equipment (mini-split indoor unit cooling the data/telecom closet) - a legitimate mechanical tag despite appearing on an E-series sheet."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#35,SBB,plan,false,"Grounding/bonding busbar, labeled with leader-line + keynote bubble '3' pointing to a busbar mark on the room's wall in the same TR closet detail. Cross-checked against sheet note 3 which explains 'BOND EACH RACK BONDING BUSBAR (RBB) TO THE SBB.' Real infrastructure equipment with its own callout, so included despite not being in the pipeline's raw family hint."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#36,5CL1-1,plan,false,Existing panel tag '(E) 5CL1-1' with leader to a gray panelboard glyph on the wall of 'ELEC ROOM 5E519'.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#36,5EQL1,plan,false,"Second existing panel tag '(E) 5EQL1', same wall/room, distinct glyph -> a separate existing panel (not simply a second circuit of 5CL1, since the base name itself differs: EQL1 vs CL1)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#36,A501A,plan,false,"Panelboard glyph tag in the enlarged TR-closet power-plan detail (top-right), same layout pattern as page 35's A401A but for the 5th-floor TR ('ELEC 5TH FLOOR POWER PLAN - A501')."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#36,A501B,plan,false,"Second panelboard glyph in the same detail, distinct physical panel from A501A."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#36,IDU-A501,plan,false,"Boxed on-plan text '47-IDU-A501' with leader to the same fan/turbine-style equipment glyph at bottom of the TR closet; '47-' is the building/sheet-number prefix, so the equipment tag is 'IDU-A501' (indoor unit serving room A501, matches ODU-A501 seen on the roof plan)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#36,SBB,plan,false,"Bonding busbar callout with leader + keynote '3', identical convention to page 35."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-1A137,plan,false,"Second boxed ODU tag in the same top-right cluster, separate leader to a second outdoor-unit glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-1B134,plan,false,Third boxed tag in the right-side cluster.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-1H113,plan,false,Second boxed tag in the left-side cluster.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-1W133,plan,false,Fourth of the central-cluster tags.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-2A246,plan,false,Boxed tag '47-ODU-2A246' with leader arrow directly to a rooftop condenser/fan-style equipment glyph (top-right cluster of the roof plan). '47-' is the building/sheet prefix; equipment tag is ODU-2A246 (Outdoor Unit).
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-2B212,plan,false,"Boxed tag in the right-side cluster (near mid-right of roof), own leader/glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-2E202A,plan,false,Third of the central-cluster tags.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-A301,plan,false,Third tag in the bottom cluster; pairs with an IDU-A301 presumably on the (unassigned) 3rd-floor TR sheet.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-A401,plan,false,Second tag in the bottom cluster; pairs with IDU-A401 on page 35 (4th-floor TR closet).
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-A501,plan,false,Boxed tag in the bottom cluster; pairs with IDU-A501 found on page 36 (5th-floor TR closet).
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-BB018,plan,false,Second boxed tag in the right-side cluster.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-BC118A,plan,false,"First of four boxed tags in the central cluster, each with its own leader to a distinct outdoor-unit glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-BC118B,plan,false,Second of the central-cluster tags.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#37,ODU-BF107,plan,false,"Boxed tag in the left-side cluster, leader to its own outdoor-unit glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CP-1,plan,false,"Condensate pump, boxed tag next to G/WP (weatherproof GFCI) receptacle; tied to keynote 14 (weatherproof GFCI within 6ft of condensate pump)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CP-2,plan,false,"Condensate pump, second distinct unit, same convention as 47-CP-1."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CRAC-1A,plan,false,"Computer Room Air Conditioner unit, boxed tag with fan glyph on enlarged data center plan (view 2)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CRAC-1B,plan,false,"CRAC unit, distinct physical unit, lower portion of enlarged plan."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CRAC-2A,plan,false,"CRAC unit, distinct physical unit."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CRAC-2B,plan,false,"CRAC unit, distinct physical unit, lower portion of enlarged plan."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CU-1A,plan,false,"Condensing unit, boxed tag with fan/motor glyph on the outdoor equipment row."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CU-1B,plan,false,"Condensing unit, distinct physical unit."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CU-2A,plan,false,"Condensing unit, distinct physical unit."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-CU-2B,plan,false,"Condensing unit, distinct physical unit."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-IDU-BC131A,plan,false,Indoor unit serving new data center/entrance room BC131A.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-IDU-BC131B,plan,false,Indoor unit serving new data center/entrance room BC131B.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-IDU-BC143C,plan,false,"Indoor (mini-split) unit serving BC143C corridor/TR area, boxed tag with fan glyph."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-IF-1,plan,false,"Inline fan (confirmed fan-blade glyph next to boxed tag), near existing UPS-B disconnect/transformer area, tied to keynote 16 area."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-ODU-BC131A,plan,false,Outdoor unit serving BC131A entrance room.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-ODU-BC131B,plan,false,Outdoor unit serving BC131B entrance room.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-ODU-BC143A,plan,false,"Outdoor condensing/mini-split unit, boxed callout with equipment glyph, leader to unit icon in row of rooftop/outdoor units on Electrical Data Center Plan (view 1)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-ODU-BC143B,plan,false,"Outdoor unit, same row as 47-ODU-BC143A, distinct physical unit."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,47-ODU-BC143C,plan,false,"Outdoor unit, same row, distinct physical unit."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#39,FARP,plan,false,"Boxed panel tag next to equipment glyph, adjacent to keynote 16 which describes the clean-agent releasing panel circuit -- read as Fire Alarm/Clean-Agent Releasing Panel, a controls panel. Included cautiously as a 'panel' per the allowed equipment categories; flagged as lower-confidence since the abbreviation itself is not spelled out on this sheet."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,(E) 1CLA1-A,plan,false,"Existing electrical panel label with leader line to filled panelboard symbol, TR 1A136 plan (view 1)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,(E) 1CLA1-B,plan,false,"Existing electrical panel label with leader line to filled panelboard symbol, TR 1A136 plan."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,(E) 1CLB1-A,plan,false,"Existing electrical panel label with leader line to filled panelboard symbol, 1B134 plan (view 2)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,(E) 1CLB1-B,plan,false,"Existing electrical panel label with leader line to filled panelboard symbol, 1B134 plan."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,(E) 1CLDB,plan,false,"Existing electrical panel/distribution board label, 1B134 plan."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1A137A,plan,false,"New panelboard tag directly labeling a black wedge panel symbol inside TR 1A137A (unique instance; distinct from the circuit annotations '1A137A: 2' etc which label receptacles, not equipment, and were excluded)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1A137B,plan,false,New panelboard tag labeling its own panel symbol inside TR 1A137B.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1B134A,plan,false,New panelboard tag labeling panel symbol inside TR 1B134A.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1B134B,plan,false,New panelboard tag labeling panel symbol inside TR 1B134B.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1D144A,plan,false,New panelboard tag labeling panel symbol inside TR 1D144A.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1D144B,plan,false,New panelboard tag labeling panel symbol inside TR 1D144B.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1H113A,plan,false,New panelboard tag labeling panel symbol inside TR 1H113A; visually confirmed leader-free direct label next to black wedge panel glyph.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1H113B,plan,false,New panelboard tag labeling panel symbol inside TR 1H113B.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1W133A,plan,false,New panelboard tag labeling panel symbol inside TR 1W133A.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,1W133B,plan,false,New panelboard tag labeling panel symbol inside TR 1W133B.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,47-IDU-1A137,plan,false,Boxed callout with leader line to a mechanical symbol = mini-split HVAC indoor unit serving room 1A137.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,47-IDU-1B134,plan,false,"Boxed callout, HVAC indoor unit serving room 1B134."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,47-IDU-1D144,plan,false,"Boxed callout, HVAC indoor unit serving room 1D144."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,47-IDU-1H113,plan,false,"Boxed callout, HVAC indoor unit serving room 1H113."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,47-IDU-1W133,plan,false,"Boxed callout, HVAC indoor unit serving room 1W133."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,47-ODU-1D144,plan,false,"Boxed callout near exterior wall/GFCI-WP receptacle, HVAC outdoor condensing unit for the 1D144 mini-split system."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#40,SBB,plan,false,"Grounding busbar equipment label with leader line to a cable-tray-mounted busbar symbol; identical literal tag repeats once per TR room (repeatable type mark, listed once)."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#41,47-IDU-2A246,plan,false,"Indoor cooling unit for telecom room 2A246, boxed/underlined tag with leader to a fan/coil glyph on the wall - same drafting convention as page 14's 47-IDU-BC### tags."
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#41,47-IDU-2B212,plan,false,Indoor cooling unit for telecom room 2B212.
+038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#41,47-IDU-2E202A,plan,false,Indoor cooling unit for the new telecom room 2E202A.

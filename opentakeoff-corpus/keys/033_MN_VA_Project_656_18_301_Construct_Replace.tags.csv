@@ -1,0 +1,88 @@
+sheet,tag,role,in_table,note
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,AHU-6,plan,false,"unique air handling unit, drawn on duct main, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,RC,plan,false,repeatable diffuser/grille type mark (Return + schedule-type C / egg-crate grille); listed once
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,RD,plan,false,repeatable diffuser/grille type mark (Return + schedule-type D / deflection register); listed once
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,SA,plan,false,"repeatable diffuser/grille type mark (Supply + schedule-type A / square panel face diffuser), compound direction+type tag drawn on every matching supply diffuser glyph across pages 57-59; listed once"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,SB,plan,false,repeatable diffuser/grille type mark (Supply + schedule-type B / double-deflection grille for spiral duct); listed once
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,SUH-1,plan,false,"unique suspended unit heater, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,VAV-12,plan,false,"unique VAV terminal box, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,VAV-7,plan,false,"unique VAV terminal box, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,VAV-8,plan,false,"unique VAV terminal box, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,VAV-9,plan,false,"unique VAV terminal box, circled tag on ductwork, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,VAV-9A,plan,false,"unique VAV terminal box, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#57,WL-1,plan,false,"unique wall louver, drawn with leader on ductwork, basement Area 1"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,EC,plan,false,repeatable diffuser/grille type mark (Exhaust + schedule-type C / egg-crate); listed once
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,ED,plan,false,repeatable diffuser/grille type mark (Exhaust + schedule-type D); listed once
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,EF-2,plan,false,"unique exhaust fan, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,EF-2A,plan,false,"unique exhaust fan, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,VAV-2,plan,false,"unique VAV terminal box, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,VAV-4B,plan,false,"unique VAV terminal box, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,VAV-4C,plan,false,"unique VAV terminal box, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,VAV-4D,plan,false,"unique VAV terminal box, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,VAV-4E,plan,false,"unique VAV terminal box, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,VAV-6,plan,false,"unique VAV terminal box, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,VAV-C2,plan,false,"unique VAV terminal box, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,WL-2,plan,false,"unique wall louver, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#58,WL-3,plan,false,"unique wall louver, basement Area 2"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,EF-19,plan,false,"unique exhaust fan, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,VAV-19,plan,false,"unique VAV terminal box, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,VAV-21,plan,false,"unique VAV terminal box, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,VAV-21A,plan,false,"unique VAV terminal box, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,VAV-21B,plan,false,"unique VAV terminal box, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,VAV-C0C,plan,false,"unique VAV terminal box, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,VAV-C3,plan,false,"unique VAV terminal box, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#59,WL-4,plan,false,"unique wall louver, basement Area 3"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#62,WL-5,plan,false,"unique wall louver, drawn on roof duct run, attic plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#63,CO-1,plan,false,"unique cleanout tag, sub-basement plumbing plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,AHU-5,plan,false,"unique existing AHU (also called 51-AHU-5 in key-note prose), drawn on plumbing/HW-coil plan near Mechanical 15/16"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-12.1,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-12.2,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-12.3,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-12.4,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-19,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-2.1,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-2.2,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-2.3,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-21.1,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-21.2,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-21.3,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-21.4,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-21.5,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-21A,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-21B,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-2A,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4B,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4C.1,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4C.2,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4C.3,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4C.4,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4C.5,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4D.1,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-4D.2,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-6,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-7.1,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-7.2,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-8,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.1,plan,false,one of 39 unique wall-mounted convector tags on the basement plumbing plan; each CV-x.y names one physical convector cabinet
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.10,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.2,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.3,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.4,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.5,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.6,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.7,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.8,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9.9,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,CV-9A,plan,false,unique convector
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,FD-1,plan,false,unique floor drain tag (Type M)
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,P-12,plan,false,"unique heat-pump-water circulating pump, plumbing basement plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,P-13,plan,false,"unique heat-pump-water circulating pump, plumbing basement plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,VFD-P-12,plan,false,unique VFD for pump P-12
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#64,VFD-P-13,plan,false,unique VFD for pump P-13
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#78,51-LB1,plan,false,"unique existing electrical panelboard, drawn/labeled on Electrical - Basement - Plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#78,51-LB3,plan,false,"unique existing electrical panelboard, drawn/labeled on Electrical - Basement - Plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#78,51-LB4,plan,false,"unique existing electrical panelboard, drawn/labeled on Electrical - Basement - Plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#78,51-MDP,plan,false,"unique existing main distribution panel, drawn/labeled on Electrical - Basement - Plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#78,51-MSB,plan,false,"unique existing main switchboard, drawn/labeled on Electrical - Basement - Plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#78,51-MSB-2,plan,false,"unique existing switchboard section, drawn/labeled on Electrical - Basement - Plan"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#80,AHU-1-DS,schematic,false,"disconnect-switch tag for a different air handler (AHU-1) drawn on the Electrical Single Line Diagram, not on any plan sheet in this range"

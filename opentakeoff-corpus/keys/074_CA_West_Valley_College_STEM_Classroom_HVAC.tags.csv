@@ -1,0 +1,93 @@
+sheet,tag,role,in_table,note
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,ERV-A-15,plan,false,"Hexagon callout 'ERV / A-15', MAX OP WT=240#, an energy-recovery ventilator unit; referenced again in note text 'SUPPORTING ERV A-15'."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,FC-A-13-1,plan,false,"Hexagon callout 'FC-A / 13-1', MAX OP WT=100#, near 'TYP AT FC' note."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,FC-A-17-1,plan,false,"Hexagon callout 'FC-A / 17-1', MAX OP WT=100#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,FC-A-18-1,plan,false,"Hexagon callout 'FC-A / 18-1', MAX OP WT=100#, next to note 'ADD (3)-16d NAILS...SUPPORTING ERV A-15'."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,FC-A-2,plan,false,"Hexagon callout 'FC-A / 2', MAX OP WT=100#, verified via zoomed crop (non-hyphenated instance number)."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,FC-A-20-1,plan,false,"Hexagon callout 'FC-A / 20-1', MAX OP WT=100#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,FC-A-3,plan,false,"Hexagon callout 'FC-A / 3', MAX OP WT=100#, adjacent note 'SISTER 1 3/4""x7 1/4"" LVL TO (E) 2x8 UNDER THE UNITS AS SHOWN'."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-1,plan,false,"Hexagon equipment-anchor callout 'SF-A / 1' on structural roof framing plan, with MAX OP WT=185# leader to unit footprint; unique numbered instance of the SF-A equipment family."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-10,plan,false,"Hexagon callout 'SF-A / 10', MAX OP WT=185#, near gridline AD/A2."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-11,plan,false,"Hexagon callout 'SF-A / 11', MAX OP WT=50#, near gridline AD/A4."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-2,plan,false,"Hexagon callout 'SF-A / 2', MAX OP WT=185#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-3,plan,false,"Hexagon callout 'SF-A / 3', MAX OP WT=185#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-4,plan,false,"Hexagon callout 'SF-A / 4', MAX OP WT=185#; also referenced in note text 'SUPPORTING SF-A-1, SF-A-4 & SF-A-7'."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-5,plan,false,"Hexagon callout 'SF-A / 5', MAX OP WT=185#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-6,plan,false,"Hexagon callout 'SF-A / 6', MAX OP WT=185#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-7,plan,false,"Hexagon callout 'SF-A / 7', MAX OP WT=185#; also named in supporting-joist note."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-8,plan,false,"Hexagon callout 'SF-A / 8', MAX OP WT=185#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#15,SF-A-9,plan,false,"Hexagon callout 'SF-A / 9', MAX OP WT=185#."
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)CU-A-1,plan,false,"Condensing unit, box glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)ERH-A-10,plan,false,"Exhaust Roof Hood, unique instance, circle glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)ERH-A-11,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)ERH-A-13,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)ERH-A-14,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)ERH-A-16,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)ERH-A-17,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-1,plan,false,"Hood Exhaust Fan, unique instance, small box glyph on roof plan"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-10,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-11,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-12,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-13,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-14,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-15,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-16,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-17,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-18,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-19,plan,false,"Isolated unit near top of sheet, near an unlabeled duct elbow glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-2,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-3,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-4,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-5,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-6,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-7,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-8,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)HEF-A-9,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)IRH-A-12,plan,false,"Intake Roof Hood, unique instance, circle glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,(E)IRH-A-13,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-1,plan,false,"Supply Fan, hexagon glyph with number inside, 9 total drawn in 3x3-ish cluster grid + right column"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-2,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-3,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-4,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-5,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-6,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-7,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-8,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#21,SF-A-9,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)CU-A-1,plan,false,"Condensing unit, box glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)ERH-A-10,plan,false,"Exhaust Roof Hood, unique instance, circle glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)ERH-A-11,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)ERH-A-13,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)ERH-A-14,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)ERH-A-16,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)ERH-A-17,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-1,plan,false,"Hood Exhaust Fan, unique instance, small box glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-10,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-11,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-12,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-13,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-14,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-15,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-16,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-17,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-18,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-19,plan,false,"Isolated unit near top of sheet, adjacent to an unlabeled duct elbow"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-2,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-3,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-4,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-5,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-6,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-7,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-8,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)HEF-A-9,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)IRH-A-12,plan,false,"Intake Roof Hood, unique instance, circle glyph"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,(E)IRH-A-13,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-1,plan,false,"Supply Fan, hexagon glyph with number inside, 9 total"
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-2,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-3,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-4,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-5,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-6,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-7,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-8,plan,false,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#27,SF-A-9,plan,false,

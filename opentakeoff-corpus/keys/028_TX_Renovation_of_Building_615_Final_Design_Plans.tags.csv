@@ -1,0 +1,62 @@
+sheet,tag,role,in_table,note
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,DOAS-1,schedule,true,"M-505 External Static Pressure Schedule (supply & exhaust rows, same mark)"
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,DOAS-2,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,DOAS-3,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 1-3,schedule,true,External Static Pressure Schedule row on M-505; no plan view on this sheet
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 1-4,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 1-5,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 1-6,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 1-7,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 1-8,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 1-9,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 2-1,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 2-13,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 2-14,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#1,FCU 2-8,schedule,true,M-505 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#3,AS-1,schematic,false,M-507 P&ID air separator symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#3,CHILLER 1,schematic,false,M-507 Chilled Water System P&ID; box drawn on schematic (schedule elsewhere lists it as CH-1). Not a plan view.
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#3,CHP-1,schematic,false,M-507 P&ID pump symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#3,CHP-2,schematic,false,M-507 P&ID pump symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#3,CI-1,schematic,false,M-507 P&ID coil/inline device box
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,AS-2,schematic,false,M-508 P&ID air separator symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,BCP-1,schematic,false,M-508 P&ID boiler circulator pump symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,BCP-2,schematic,false,M-508 P&ID boiler circulator pump symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,BOILER 1,schematic,false,M-508 P&ID box (schedule elsewhere lists it as B-1). Not a plan view.
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,CI-2,schematic,false,M-508 P&ID device box
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,ET-2,schematic,false,M-508 P&ID expansion tank label
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,HWP-1,schematic,false,M-508 Heating Water System P&ID pump symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#4,HWP-2,schematic,false,M-508 P&ID pump symbol
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#7,DOAS 3,schematic,false,M-511 DOAS 3 P&ID box label
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,B-1,schedule,true,M-601 Boiler Schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,CH-1,schedule,true,M-601 Air-Cooled Chiller Schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DOAS-1,schedule,true,M-601 Dedicated Outside Air System Schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DOAS-2,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,DOAS-3,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EF-1,schedule,true,M-601 Exhaust Fan Schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EF-2,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,EF-3,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 1-1,schedule,true,M-601 Chilled Water Fan Coil Unit Schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 1-2,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-10,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-11,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-12,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-2,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-3,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-4,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-5,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-6,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-7,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCC 2-9,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 1-3,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 1-4,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 1-5,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 1-6,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 1-7,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 1-8,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 1-9,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 2-1,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 2-13,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 2-14,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,FCU 2-8,schedule,true,M-601 schedule row
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UH-1,schedule,true,M-601 Unit Heater Schedule row (combined row 'UH-1 & UH-2')
+028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#9,UH-2,schedule,true,M-601 Unit Heater Schedule row (combined row 'UH-1 & UH-2')

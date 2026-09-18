@@ -1,0 +1,97 @@
+sheet,tag,role,in_table,note
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#3,CU-1,plan,false,"Condensing unit shown as a small equipment box with leader on the structural 'Partial Roof Framing Plan' (S1.3); labeled 'CU-1 (180 LBS)' — unique instance mark for one physical condensing unit. Confirmed via textSpans (str='CU' + '-' + '1 (180 LBS)' at x0=2330.6,y0=2076)."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#3,RTU-1,plan,false,"Rooftop unit box labeled 'RTU-1 (2,310 LBS)' with note 'G.C. TO VERIFY/COORDINATE EXISTING SUPPLY AND RETURN AIR OPENINGS (ALTERNATE #2)'. Unique instance mark. textSpans x0=2649.4,y0=2589.9."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#3,RTU-2,plan,false,"Rooftop unit box labeled 'RTU-2 (2,540 LBS)'. Unique instance mark. textSpans x0=3164.6,y0=2615.3."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#3,RTU-G,plan,false,"Rooftop unit box on the same framing plan, labeled 'RTU-G (1,140 LBS)'. Unique instance mark. textSpans confirms 'RTU'+'-'+'G (1,140 LBS)' at x0=2442,y0=2500.5."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#33,AC-1,plan,false,"Hexagon equipment glyph near IT room 125, with leader from note '3/4"" CD DN TO AC-1' (condensate drain routed to the unit). Unique instance mark for one specific existing AC unit."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,(E)AHU,plan,false,"Italic/underlined 'existing equipment' abbreviation labeling the mechanical-room AHU footprint box (room G15 area), single instance on this sheet."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,(E)EF,plan,false,"Italic/underlined equipment abbreviation ((E)EF) labeling an existing exhaust-fan duct termination box near (E) Elev Mach G10 — distinct existing-equipment instance from EF-1, drawn directly on/next to the duct-end symbol."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,(E)FT,plan,false,"Italic/underlined 'existing fintube' abbreviation labeling two separate baseboard-fintube enclosure runs along the south wall (identical literal tag both times, no distinguishing suffix) — listed once as a repeatable/type-style existing-equipment tag."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,DSD,plan,false,Diamond glyph labeled 'DSD' (duct smoke detector) beside the fire-damper location near corridor G02. Single occurrence found; treated as a repeatable type mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,EF-1,plan,false,"Hexagon 'EF' over '1' glyph near (E) Mens G12 duct riser — new exhaust fan, unique instance."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,FD,plan,false,"Fire-damper label text at duct-mounted damper blade symbols (two occurrences near corridor G02 riser). Repeatable type mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,R1,plan,false,"Return-grille type mark, occurs many times (CFM 250/475/etc at different locations). Repeatable type mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,R2,plan,false,"Return-grille type mark, occurs several times (CFM 475/275/575/420 etc). Repeatable type mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,R3,plan,false,"Return-grille type mark, occurs twice (75 CFM at toilet G13E, 50 CFM near electrical panel/corridor). Repeatable type mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,S1,plan,false,"Supply-diffuser type mark in two-cell box (type|size, CFM below), e.g. 'S1 1 / 100' at Corridor G01. Repeatable schedule/type mark — listed once though the type-box format recurs."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,S2,plan,false,"Supply-diffuser type mark, occurs multiple times at different CFMs (150, 125, 165) at different diffusers. Repeatable type mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,S3,plan,false,"Supply-diffuser type mark, occurs many times (CFM 250/260/275/300 etc. at different rooms). Repeatable type mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,T,plan,false,"Circled 'T' thermostat/sensor symbol on ductwork/VAV runs, recurs many times throughout the sheet (near VAV boxes and duct risers). Repeatable controls sensor mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-1,plan,false,Hexagon 'VAV' over 'G-1' glyph on VAV box in corridor/debrief area; leader 'TO VAV-G-1' confirms full tag. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-10,plan,false,"Hexagon VAV glyph near corridor G02/electrical panel area; leader 'TO VAV-G-10' (leader also carries a keynote hexagon '1', which is a keynote reference, not part of the tag). Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-2,plan,false,Hexagon VAV glyph in Patient Rm Sim Lab (M/S); leader 'TO VAV-G-2'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-3,plan,false,Hexagon VAV glyph near Debrief G03; leader 'TO VAV-G-3'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-4,plan,false,Hexagon VAV glyph near Control Rm G01C; leader 'TO VAV-G-4'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-5,plan,false,Hexagon VAV glyph near Control Rm G01C; leader 'TO VAV-G-5'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-6,plan,false,Hexagon VAV glyph in Patient Rm Sim Lab (M/S); leader 'TO VAV-G-6'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-7,plan,false,Hexagon VAV glyph near Patient Rm Sim Lab (ICU); leader 'TO VAV-G-7'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-8,plan,false,Hexagon VAV glyph near Patient Rm Sim Lab (ICU); leader 'TO VAV-G-8'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#39,VAV-G-9,plan,false,Hexagon VAV glyph near Moulage Prep/Stor/Staff Wk; leader 'TO VAV-G-9'. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#40,AC-1,plan,false,"Same hexagon equipment tag as on page 33 (IT room 125 area), with '20X24S UP & DN / REFRIGERATION UP TO ROOF' callout. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#40,CUH,plan,false,"'(E)CUH' drawn directly on/beside a rectangular equipment glyph (existing cabinet unit heater), appears twice on the sheet at different wall locations with identical literal text — repeatable type mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#40,DSD,plan,false,"'DSD' drawn inside a diamond glyph pointing at ductwork with fire/smoke damper shading near '(E) CUSTODIAL ROOM 121' — duct smoke detector. Type mark, one instance on this sheet."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#40,EF,plan,false,"'(E)EF' drawn beside a small square equipment glyph in the '(E) RESTROOM 107' (existing exhaust fan). Type mark, one instance on this sheet."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#40,T,plan,false,"Circled 'T' (thermostat/sensor symbol) on ductwork next to the AC-1 hexagon near IT room 125. Single-letter controls symbol rather than a numbered schedule mark; only one instance found on this sheet. Flagged as lower-confidence given how generic the glyph is, but it matches the 'sensor'/controls category in scope."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,(E)FCU,plan,false,Existing fan coil unit label drawn directly on cabinet/fan-cone equipment glyph; appears twice
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,(E)FT,plan,false,"Existing fin-tube radiation hexagon callout along exterior wall baseboard run; appears 5x on this sheet (equipment abbreviation, no unique suffix, so treated as repeatable type tag)"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,(E)HP,plan,false,Existing heat pump unit label drawn directly on rectangular equipment glyph; appears twice at two different suites
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,DSD,plan,false,Diamond callout labeling duct-mounted damper/detector device next to duct transition fitting; appears twice (near (E)26x26R riser and near classroom 217 riser)
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,R1-1,plan,false,"Repeatable return register mark, CFM 75"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,R1-4,plan,false,"Repeatable return register mark, CFM 150"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,R2-1,plan,false,"Repeatable return register mark; appears twice, CFM 250 and CFM 300"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,R2-2,plan,false,"Repeatable return register mark; appears twice, CFM 855 and CFM 550"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,R2-4,plan,false,"Repeatable return register mark; appears twice, CFM 700 and CFM 570"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,S1-1,plan,false,"Repeatable supply diffuser type/schedule mark; appears twice (CFM 100 both times), boxed two-line callout on diffuser glyph"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,S2-1,plan,false,"Repeatable supply diffuser mark; appears ~6 times at different CFMs (160,200,175x4) across offices 212A-212H"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,S2-2,plan,false,"Repeatable supply diffuser mark, CFM 125, office 212A area"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,S3-4,plan,false,"Repeatable supply diffuser mark, CFM 300, appears twice (MA LAB area and office 204 row)"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,S3-6,plan,false,"Repeatable supply diffuser mark, CFM 265, radiation tech sim lab 221"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,S3-8,plan,false,"Repeatable supply diffuser mark; appears twice, CFM 350 (computer lab 216) and CFM 285 (classroom 217)"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,T,plan,false,"Circle-symbol thermostat/sensor tag with dashed leader to a VAV box; appears 6x at different zones. Borderline inclusion since it's a bare single letter with no distinguishing suffix, but it is a genuine drawn equipment/sensor symbol per the stated rules (controls sensor), so included as a repeatable type mark"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-1,plan,false,"Hexagon callout on VAV box, top run near radiation tech simulation lab 221"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-10,plan,false,Hexagon callout on VAV box inside classroom 217
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-2,plan,false,"Hexagon callout on VAV box, second supply run below VAV-2-1"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-3,plan,false,"Hexagon callout on VAV box near (E)26x20S riser, referenced by leader 'SEE SUPPLY VAV BOX SCHEMATIC'"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-4,plan,false,"Hexagon callout on VAV box, second run below VAV-2-3"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-5,plan,false,Hexagon callout on VAV box near (E) MA LAB 206
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-6,plan,false,Hexagon callout on VAV box near (E) Nursing Faculty Offices 212A
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-7,plan,false,Hexagon callout on VAV box near office 212D/212E
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-8,plan,false,Hexagon callout on VAV box near office 212H
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#41,VAV-2-9,plan,false,"Hexagon callout on VAV box near (E)26x20S riser, east of classroom 217"
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#42,CU-1,plan,false,"Condensing unit hexagon tag ('CU' over '1') near roof curb, tied to 'REFRIGERATION DN IN 4"" PIPE' note and 'SEE DETAIL - DUCTLESS SPLIT SYSTEM PIPING DETAIL J7/MH5.0' leader. Unique instance."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#42,RTU-1,plan,false,Hexagon tag ('RTU' over '1') under the middle unit labeled '(ALTERNATE #2)'. Unique instance.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#42,RTU-2,plan,false,Hexagon tag ('RTU' over '2') under the right rooftop unit (4-fan condenser section). Unique instance.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#42,RTU-G,plan,false,Hexagon tag ('RTU' over 'G') under the left rooftop unit (4-fan condenser section). Unique instance.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-1,plan,false,"VAV hexagon glyph labeled 'VAV / G-1', unique instance mark for a specific VAV box shown on this electrical/coordination floor plan (EP1.0, Ground Floor)."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-10,plan,false,"VAV hexagon glyph labeled 'VAV / G-10', near LP1 in corridor/lobby area."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-2,plan,false,VAV hexagon glyph labeled 'VAV / G-2'.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-3,plan,false,VAV hexagon glyph labeled 'VAV / G-3'.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-4,plan,false,"VAV hexagon glyph labeled 'VAV / G-4', near Patient RM Sim Lab (M/S) G01A."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-5,plan,false,VAV hexagon glyph labeled 'VAV / G-5'.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-6,plan,false,VAV hexagon glyph labeled 'VAV / G-6'.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-7,plan,false,"VAV hexagon glyph labeled 'VAV / G-7', near Patient RM Sim Lab (ICU) G01F."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-8,plan,false,VAV hexagon glyph labeled 'VAV / G-8'.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#56,G-9,plan,false,"VAV hexagon glyph labeled 'VAV / G-9', near Moulage Prep/Stor/Staff."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#57,AC-1,plan,false,Hexagon tag ('AC' over '1') next to a magenta-highlighted equipment connection near the corridor/office area. Unique instance.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#57,L-2,plan,false,Drawn as '(E)L-2' next to a filled panelboard glyph on the wall (existing electrical panel). Unique instance.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#57,L3,plan,false,"Drawn as '(E)L3' next to a filled panelboard glyph on the wall (existing electrical panel). Treated the '(E)' as an existing-status prefix, not part of the tag family. Unique instance."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,H3,plan,false,'(E)H3' — existing electrical panel glyph (gray rectangle) near the elevator/stair 02 area. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,H4,plan,false,'(E)H4' — existing electrical panel glyph near stair 01 / classroom 217 area. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,L5,plan,false,'(E)L5' — existing electrical panel glyph directly below H3 in the same wall chase. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,L5A,plan,false,"'(E)L5A' — existing electrical panel glyph; appears twice on the sheet (once feeding new panel LPM2 near storage 212B, and once alone near office 204E) referring to the same physical existing panel. Unique instance mark, listed once."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,L6,plan,false,'(E)L6' — existing electrical panel glyph next to H4 in the same location. Unique instance mark.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,LPM2,plan,false,"New electrical panel glyph (black/dashed-highlighted, i.e. new work) fed from existing panel L5A, located in the '(E) STORAGE 212B' area — serves as the source panel for all the VAV-2-x circuits. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-1,plan,false,"Hexagon tag on a magenta-highlighted (new) VAV box glyph, fed from panel LPM2-4,6,8. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-10,plan,false,"Hexagon tag on a new VAV box glyph near Computer Lab 216, fed from LPM2-28,30,32. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-2,plan,false,"Hexagon tag on a new VAV box glyph, fed from LPM2-5,7,9. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-3,plan,false,"Hexagon tag on a new VAV box glyph, fed from LPM2-10,12,14. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-4,plan,false,"Hexagon tag on a new VAV box glyph, fed from LPM2-11,13,15. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-5,plan,false,"Hexagon tag on a new VAV box glyph near room 204/205 corridor, fed from LPM2-16,18,20. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-6,plan,false,"Hexagon tag on a new VAV box glyph near Nursing Faculty Offices 212A, fed from LPM2-17,19,21. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-7,plan,false,"Hexagon tag on a new VAV box glyph near room 212A/Classroom, fed from LPM2-17,19,21. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-8,plan,false,"Hexagon tag on a new VAV box glyph near room 212D, fed from LPM2-22,24,26. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#58,VAV-2-9,plan,false,"Hexagon tag on a new VAV box glyph near Classroom 217, fed from LPM2-23,25,27. Unique instance mark."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#59,CU-1,plan,false,"Hexagon tag ('CU' over '1') on the small roof condensing-unit glyph at far left, matching the same physical unit shown on the mechanical roof plan (page 42). Unique instance."
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#59,RTU-1,plan,false,Hexagon tag ('RTU' over '1') beside the middle magenta-highlighted rooftop unit (4-fan condenser). Unique instance.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#59,RTU-2,plan,false,Hexagon tag ('RTU' over '2') beside the right magenta-highlighted rooftop unit (4-fan condenser). Unique instance.
+071_ME_BGS_Project_3809_Health_Science_Center.pdf#59,RTU-G,plan,false,Hexagon tag ('RTU' over 'G') above the left magenta-highlighted rooftop unit. Unique instance.

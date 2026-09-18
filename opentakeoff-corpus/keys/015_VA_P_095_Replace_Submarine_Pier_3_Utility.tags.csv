@@ -1,0 +1,200 @@
+sheet,tag,role,in_table,note
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,AS-1,detail,false,"Air separator device symbol on piping loop, Section at Pump (bottom-right)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,CCC-2,detail,false,"Closed circuit cooler, large equipment box, Section at USB1/USB0."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,CS-4,detail,false,"Small cylindrical device (separator/condensate item) attached to MPAC-2, Section at USB3."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,EF-3,detail,false,"Exhaust fan inline symbol, Section at USB3 (bottom-left)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,ET-1,detail,false,"Expansion tank symbol (vertical cylinder), Section at Pump."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,FC-1,detail,false,"Fan coil unit box symbol in duct run, Section at USB1/USB0 (top-left)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,GFS-1,detail,false,"Glycol feed system device symbol, Section at Pump."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,GR-2,detail,false,"Roof goose-neck vent cap symbol, Section at USB3."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,L-11A,detail,false,"Wall louver symbol (hatched box) behind MD-4, labeled 'L-11A 72x48 / 4675 CFM', Section at Pump."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,L-11B,detail,false,"Wall louver symbol (hatched box) behind MD-5, labeled 'L-11B 72x48 / 4675 CFM', Section at USB3."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,L-3,detail,false,"Wall louver symbol (hatched box) behind BDD damper, labeled 'L-3 48x48 / 6080 CFM', Section at USB3."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,L-9,detail,false,"Wall louver symbol (hatched box) behind MD-2, labeled 'L-9 24x16 / 550 CFM'."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,MD-2,detail,false,"Motorized damper symbol at louver L-9, Section at USB1/USB0."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,MD-4,detail,false,"Motorized damper symbol at louver L-11A, Section at Pump."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,MD-5,detail,false,"Motorized damper symbol at louver L-11B, Section at USB3 (right side)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,MPAC-2,detail,false,"Medium pressure air compressor unit box, Section at USB3."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,MPAP-2,detail,false,"Medium pressure air dryer/pump unit box, Section at USB3."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,P-2,detail,false,"Pump symbol at base of piping assembly, Section at Pump."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,P-3,detail,false,"Pump, leader points to symbol inline with FC-1 duct run, Section at USB1/USB0."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,SG-1,detail,false,Supply grille tag at duct terminus (text run concatenated as 'SG-112x6' = 'SG-1' + size '12x6' in raw extraction).
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,VLV-2,detail,false,"Valve symbol on CWR piping to CCC-2, Section at USB1/USB0 (text appears twice in span dump due to text render duplication, same single instance)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#10,VLV-5,detail,false,"Valve symbol on 2 1/2"" CWR line near MPAC-2, Section at USB3."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,CD-1,plan,false,"Ceiling diffuser 6x6, 50 CFM, repeatable type/schedule mark; same literal tag appears on both North View and West View sections, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,CU-3,plan,false,"Condensing unit, unique instance mark. Same physical unit drawn on both North View (C1) and West View (A1) sections; counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,EF-7,plan,false,"Roof exhaust fan, unique instance mark, North View section."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,EG-1,plan,false,"Exhaust grille 8x8, 50 CFM, repeatable type/schedule mark; single occurrence on this sheet (North View)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,GI-1,plan,false,"Intake louver/grille tag on North View section, single occurrence on this sheet; treated as a type/schedule mark for a grille type (label format matches other grille/register marks EG-1, RR-1/2, CD-1, LS-1)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,HP-1,plan,false,"Rooftop heat pump, unique instance mark. Box glyph on North View section, work notes 1/2 (refrigerant liquid/suction) reference it via leader; keynote numbers 1,2,48 nearby are WORK NOTES references, not part of the tag."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,LS-1,plan,false,"Return/linear grille 8-inch diameter, 200 CFM, repeatable type/schedule mark; single occurrence on this sheet (North View), split across textSpans as 'LS' + '-' + '1 8ø'."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,MD-21,plan,false,"Motorized damper, unique instance mark, North View section (near GI-1/HP-1 duct run)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,MD-22,plan,false,"Motorized damper, unique instance mark, North View section (near EF-7 duct run)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,RR-1,plan,false,"Return register 6x6, 50 CFM, repeatable type/schedule mark; single occurrence on this sheet (North View)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,RR-2,plan,false,"Return register 8x8, 250 CFM, repeatable type/schedule mark; single occurrence on this sheet (North View)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#12,SS-1,plan,false,"In-duct device (sound silencer or similar) drawn with box glyph; same tag/unit appears on both North View and West View sections, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#17,CU-X,detail,false,"Ductless split AC outdoor condensing unit in the same C4 detail, labeled 'OUTDOOR UNIT CU-X. SECURE TO CONCRETE PAD OR ROOF MOUNTED' with leader to the drawn outdoor unit glyph. Same placeholder-suffix caveat as DSS-X."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#17,DSS-X,detail,false,"Ductless split AC indoor unit, labeled 'INDOOR UNIT DSS-X' with leader to the drawn wall-mounted unit glyph in the 'Ductless Split AC-Wall Mount Detail' (C4). 'X' is a literal wildcard suffix used in this generic/typical (NOT TO SCALE) detail standing in for the real unit numbers (e.g. DSS-1, DSS-2) used elsewhere in the drawing set — included as a repeatable type/family tag drawn directly on the equipment glyph; flagged here for reviewer judgment since it is a placeholder rather than an instantiated number."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#17,GFS-1,detail,false,"Glycol feed tank symbol in the 'Glycol Feeder Detail' (A1) schematic, labeled via leader 'GFS-1 GLYCOL FEED SYSTEM' (text spans 'GFS','-','1 GLYCOL FEED','SYSTEM' concatenate to this). Names a specific real tank/equipment item — treated as a unique instance mark. Missed entirely by the pipeline hint (likely due to the split text spans)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,AS-1,schematic,false,"Air separator tank symbol, tag drawn beside keynote box '66' which cross-references AIR SEPARATOR DETAIL"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,CCC-1,schematic,false,"Equipment box, glycol/chemical feed component in top mechanical piping diagram"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,CCC-2,schematic,false,"Equipment box, paired with CCC-1"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,ET-1,schematic,false,"Expansion tank symbol, tag beside keynote box '67' (EXPANSION TANK DETAIL)"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,FC-1,schematic,false,"Fan coil unit tower symbol; internal sub-labels H/EH on the same glyph are heater-section markings, not separate tags"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,FC-2,schematic,false,Fan coil unit tower symbol
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,FC-3,schematic,false,Fan coil unit tower symbol
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,FC-4,schematic,false,Fan coil unit tower symbol
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,FM,schematic,false,"Flow meter device box on main supply line; single instance, no numeric suffix"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,HPAC-1,schematic,false,Equipment box (high-pressure air compressor unit)
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,HPAC-2,schematic,false,Equipment box
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,HPAC-3,schematic,false,Equipment box
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,MPAC-1,schematic,false,"Equipment box (medium-pressure air compressor unit), part of 7-unit bank"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,MPAC-2,schematic,false,Equipment box
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,MPAC-3,schematic,false,Equipment box
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,MPAC-4,schematic,false,Equipment box
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,P-1,schematic,false,"Pump symbol (circle w/ triangle), beside keynote box '24' (INLINE PUMP DETAIL)"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,P-2,schematic,false,"Second pump symbol, parallel to P-1, also beside keynote '24'"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,P-3,schematic,false,"Pump symbol feeding FC-1, in bottom condenser-water piping diagram"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,P-4,schematic,false,Pump symbol feeding FC-2
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,P-5,schematic,false,Pump symbol feeding FC-3
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,P-6,schematic,false,Pump symbol feeding FC-4
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-1,schematic,false,"Motorized valve symbol (circle w/ M) under CCC-1 branch, labeled NO (normally open, not a tag)"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-10,schematic,false,Motorized valve at HPAC-3 drop leg
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-11,schematic,false,Motorized valve at end of main header (drain/vent leg)
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-12,schematic,false,Motorized valve on P-3/FC-1 branch
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-13,schematic,false,Motorized valve on P-4/FC-2 branch
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-14,schematic,false,Motorized valve on P-5/FC-3 branch
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-15,schematic,false,Motorized valve on P-6/FC-4 branch
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-2,schematic,false,Motorized valve under CCC-1/site-drain branch
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-3,schematic,false,Motorized valve under CCC-2 branch
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-4,schematic,false,Motorized valve at MPAC-1 drop leg
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-5,schematic,false,Motorized valve at MPAC-2 drop leg
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-6,schematic,false,Motorized valve at MPAC-3 drop leg
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-7,schematic,false,Motorized valve at MPAC-4 drop leg
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-8,schematic,false,Motorized valve at HPAC-1 drop leg
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#21,V-9,schematic,false,Motorized valve at HPAC-2 drop leg
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,CCC-1,plan,false,Bold underlined tag with leader to a package condensing/cooling-coil unit symbol in the Equipment Yard (twin-coil box w/ louvered face).
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,CCC-2,plan,false,"Same equipment type as CCC-1, second unit in Equipment Yard."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,EF-1,plan,false,"Exhaust fan tag, bold/underlined at the actual fan symbol near FIRE PUMP (USB1) room; tag text is repeated 2 more times as duct/thermostat leader callouts for the same physical fan, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,EF-2,plan,false,"Exhaust fan tag at fan symbol near Pure Water Room; tag text repeats on duct/thermostat leader callouts for the same unit, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,EG-1,plan,false,"Exhaust-grille type mark ""EG-1 10x10, 550 CFM""; single occurrence on this sheet near Fire Pump room duct."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,FC-1,plan,false,"Fan coil unit tag, bold/underlined at the unit symbol next to pump P-3; tag text also repeats on two circled-T (thermostat) leader callouts for the same unit, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,FC-2,plan,false,"Fan coil unit tag at unit symbol next to pump P-4; tag text repeats once more on a thermostat leader for the same unit, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,L-1,plan,false,"Louver tag ""L-1 24x32, 1100 CFM"" at intake louver above EF-1."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,L-10,plan,false,"Louver tag ""L-10 40x32, 2160 CFM"" above MD-3 at top of equipment yard bay."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,L-2,plan,false,"Louver tag ""L-2 32x24, 2160 CFM"" near VLV-13/FC-2 area."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,L-8,plan,false,"Louver tag ""L-8 24x16, 550 CFM"" below MD-1."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,L-9,plan,false,"Louver tag ""L-9 24x16, 550 CFM"" below MD-2."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,MD-1,plan,false,Motorized damper tag on 24x16 OA louver duct near L-8.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,MD-2,plan,false,Motorized damper tag on 24x16 OA louver duct near L-9.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,MD-3,plan,false,Motorized damper tag on 40x32 OA duct near louver L-10 (top of equipment yard bay).
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,P-3,plan,false,"Pump tag, bold/underlined at pump symbol in Fresh Water Pump Room."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,P-4,plan,false,"Pump tag, bold/underlined at pump symbol in Pure Water Room."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,RG-1,plan,false,"Repeatable return-grille type mark ""RG-1 10x10, 210 CFM""; occurs twice on this sheet, listed once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,SG-1,plan,false,"Repeatable supply-grille type mark ""SG-1 12x6, 210 CFM""; occurs twice on this sheet (two physical grilles of the same type), listed once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,VLV-1,plan,false,Valve tag on CWS/CWR piping leaving CCC-1.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,VLV-12,plan,false,Valve tag on HHWS/SA branch near FC-1/P-3 in Fresh Water Pump Room.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,VLV-13,plan,false,Valve tag near P-4/FC-2 in Pure Water Room.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,VLV-2,plan,false,Valve tag on CWS/CWR piping leaving CCC-2.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#3,VLV-3,plan,false,"Shut-off valve tag near Fresh Water Pump Room, on CWS line to the mixer/tank symbol."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,AS-1,plan,false,"Air separator, symbol with leader top-left mechanical room"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,BDD,plan,false,"Backdraft damper, labeled directly on the duct-hood symbol with leader pointer (visually confirmed via crop), no numeric suffix but a real drawn equipment callout"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,EF-3,plan,false,"Exhaust fan/hood symbol; tag text appears at two duct-hood locations (mid and right) referencing the same fan system, counted once"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,ET-1,plan,false,"Expansion tank, circular symbol top-left mechanical room"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,FC-3,plan,false,"Fan coil unit box symbol, bottom-center; tag text appears twice (once at thermostat leader, once on the unit box) for same physical unit, counted once"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,GFS-1,plan,false,"Glycol feed system, box symbol top-left mechanical room"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,GR-1,plan,false,"Grille callout ""UP TO GR-1"" next to duct-up arrow above MPAC-1; grille itself is on another sheet/level but tag is drawn on this plan"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,GR-2,plan,false,"Grille callout ""UP TO GR-2"" above MPAC-2"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,GR-3,plan,false,"Grille callout ""UP TO GR-3"" above MPAC-3"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,GR-4,plan,false,"Grille callout ""UP TO GR-4"" above MPAC-4"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,L-11A,plan,false,"Louver, 72x48, 4675 CFM, top-left"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,L-11B,plan,false,"Louver, 72x48, 4675 CFM, top-center"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,L-11C,plan,false,"Louver, 72x48, 4675 CFM, top-right"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,L-3,plan,false,"Louver, 48x48, 6080 CFM, bottom-center"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-12,plan,false,"Damper below MPAC-1, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-13,plan,false,"Damper below MPAC-1, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-14,plan,false,"Damper below MPAC-2, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-15,plan,false,"Damper below MPAC-2, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-16,plan,false,"Damper below MPAC-3, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-17,plan,false,"Damper below MPAC-3, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-18,plan,false,"Damper below MPAC-4, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-19,plan,false,"Damper below MPAC-4, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-4,plan,false,"Motorized damper on louver L-11A duct, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-5,plan,false,"Motorized damper on louver L-11B duct, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MD-6,plan,false,"Motorized damper on louver L-11C duct, unique instance"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MPAC-1,plan,false,"Packaged AC unit box symbol, row of 4 units"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MPAC-2,plan,false,Packaged AC unit box symbol
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MPAC-3,plan,false,Packaged AC unit box symbol
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,MPAC-4,plan,false,Packaged AC unit box symbol
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,P-1,plan,false,"Pump symbol, top-left mechanical room"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,P-2,plan,false,"Pump symbol, top-left mechanical room"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,P-5,plan,false,"Pump symbol near FC-3, bottom-center"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,UH-3,plan,false,"Unit heater symbol near top-center; tag text appears twice (leader + label) for the same physical unit, counted once"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,V-14,plan,false,"Valve symbol near FC-3/P-5, bottom-center"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,VLV-4,plan,false,Valve symbol on CWS/CWR piping between MPAC units
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,VLV-5,plan,false,Valve symbol on CWS/CWR piping
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,VLV-6,plan,false,Valve symbol on CWS/CWR piping
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#4,VLV-7,plan,false,"Valve symbol on CWS/CWR piping, right side"
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,EF-4,plan,false,"Inline/cabinet exhaust fan (square inline-fan glyph in the central duct riser, keynote 65). Tag text also repeats far to the right next to a 'T' thermostat symbol on the same duct system - confirmed by cropping this is the thermostat label for the same single EF-4 unit, not a second fan; counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,EF-5,plan,false,"Inline exhaust fan glyph below the L-5 24x24 louver at top right of the plan, keynote 65."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,FC-4,plan,false,"Fan coil unit glyph (rectangular box with duct to a return-air grille). Tag text appears twice in textSpans (once at a 'T' thermostat symbol on the far-left CWR run, once bold/underlined directly on the unit) - confirmed by cropping these are the same single physical unit; counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,HPAC-1,plan,false,"Packaged heat-pump air-conditioning unit, westmost of three identical cabinet units along the C-line."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,HPAC-2,plan,false,Center packaged heat-pump AC unit of the three along the C-line.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,HPAC-3,plan,false,East packaged heat-pump AC unit of the three along the C-line.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,L-12,plan,false,"Louver tag (72x48, 5500 CFM) at the top-left wall/OA louver penetration feeding UH-4/MD-7 duct."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,L-4,plan,false,"Louver tag (48x48, 5500 CFM) at the floor-level duct/louver penetration at the bottom of the plan."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,L-5,plan,false,"Louver tag (24x24, 370 CFM) at the top-right wall louver penetration feeding EF-5."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,MD-7,plan,false,Motorized damper tag on the L-12 72x48 OA duct run at the top of the plan.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,P-6,plan,false,"Pump glyph (circular pump symbol) in the HHWR/HHWS piping branch feeding FC-4, confirmed by crop."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,UH-4,plan,false,"Unit heater glyph (hatched diagonal box) near top-left of Area C. Tag text appears twice in textSpans (once by the wall-mounted 'T' thermostat symbol, once bold/underlined with a leader arrow to the unit) - confirmed by cropping that both refer to the same single physical heater; counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,V-15,plan,false,"Valve tag on the piping fitting just downstream of pump P-6, confirmed by crop."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,VLV-10,plan,false,Valve tag at the CWS/CWR piping serving HPAC-3 (labeled 'shut off valve normally open').
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,VLV-11,plan,false,"Second valve tag near HPAC-3's piping run, adjacent to VLV-10."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,VLV-8,plan,false,Valve tag at the CWS/CWR piping serving HPAC-1.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#5,VLV-9,plan,false,Valve tag at the CWS/CWR piping serving HPAC-2.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,CU-1,plan,false,"Condensing unit, unique instance, bottom-left of sheet near loading platform."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,CU-2,plan,false,"Condensing unit, unique instance, adjacent to CU-1."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,DSS-1,plan,false,"Duct smoke switch, unique instance; drawn twice on sheet (device box on duct riser + remote T/S test-station leader) referring to the same physical unit, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,DSS-2,plan,false,"Duct smoke switch, unique instance; same dual-callout pattern as DSS-1 (box + T/S remote station), counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,EF-5,plan,false,"Exhaust fan, unique instance, labeled next to a (T) thermostat symbol on the riser duct (electrical room corridor)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,EF-6,plan,false,"Exhaust fan tag appears twice: once bold/underlined on the large fan symbol feeding the first generator's radiator duct, once next to a (T) thermostat control point in the corridor — same physical fan, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,EG-2,plan,false,"Exhaust grille type mark, 16x16 1480 CFM, single occurrence on this sheet (EF-5 branch)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,EG-3,plan,false,"Exhaust grille type mark, 20x20 2500 CFM, noted TYP OF 4 (one tag/callout representing 4 identical grilles) — listed once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,FOT-1,plan,false,"Fuel oil tank, unique instance, upper-right area of sheet with leader to tank glyph."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,L-13,plan,false,"Louver, unique instance, 18x18 370 CFM, bottom-left OA intake."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,L-14,plan,false,"Louver, unique instance, 96x96 30000 CFM, first generator radiator exhaust duct connection."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,L-15,plan,false,"Louver, unique instance, 96x96 30000 CFM, second generator radiator exhaust duct connection."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,L-6,plan,false,"Louver, unique instance, 48x48 5000 CFM, at top duct penetration."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,L-7,plan,false,"Louver, unique instance, 48x48 5000 CFM, second top duct penetration."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,M-1,plan,false,"Bold/underlined equipment tag with leader to a connection point on the second (bottom) generator package; exact full name unclear from this sheet (possibly muffler/manual valve callout), but styled and drawn exactly like the other confirmed equipment tags."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,M-2,plan,false,"Same tag family as M-1, leader to an analogous connection point on the first (top) generator package."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,MD-10,plan,false,"Motorized damper, unique instance, in riser shaft near fan inlet/outlet note."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,MD-8,plan,false,"Motorized damper, unique instance, near bottom of riser shaft / motorized damper note."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,MD-9,plan,false,"Motorized damper, unique instance, in riser shaft near Main Electrical Room."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,MD11,plan,false,"Motorized damper, unique instance near the first GENERATOR's supply duct; printed without a hyphen (""MD11"") unlike MD-8/9/10, but same tag family/leader-and-box style."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,SG-2,plan,false,"Supply grille type mark, 48x48 7500 CFM, noted TYP. 8 (one tag/callout representing 8 identical grilles) — listed once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,UH-1,plan,false,"Unit heater, unique instance near Main Electrical Room; tag drawn on hatched unit-heater glyph and again next to its (T) thermostat control point, same physical unit."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#6,UH-2,plan,false,"Unit heater, unique instance near bottom generator room; same dual box+thermostat callout pattern as UH-1, same unit."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,CCC-1,plan,false,"Roof-mounted condenser unit (west roof plan, grid A/1), box glyph with coil/fan symbol, leader to boxed label 'CCC-1'. Unique instance mark."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,CCC-2,plan,false,"Second roof-mounted condenser unit next to CCC-1, identical glyph, leader to 'CCC-2'. Unique instance mark (paired with CCC-1)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,GI-1,plan,false,"Gravity intake ventilator, square roof curb glyph, east roof plan (grids 5-6); leader to boxed label 'GI-1'. Keynotes '47'/'71' beside it are work-note callouts, excluded."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,GI-2,plan,false,"Second gravity intake ventilator glyph, labeled 'GI-2'."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,GI-3,plan,false,"Third gravity intake ventilator glyph, labeled 'GI-3'."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,GR-1,plan,false,"Gravity relief ventilator, square roof curb glyph with diagonal X, west roof plan; leader line up to boxed label 'GR-1'. Unique instance mark; keynote bubbles '68'/'71' sit below it but are work-note references, not tags."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,GR-2,plan,false,"Same glyph type as GR-1, next unit to the east, labeled 'GR-2'."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,GR-3,plan,false,"Same glyph type, third gravity relief ventilator, labeled 'GR-3'."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#7,GR-4,plan,false,"Same glyph type, fourth gravity relief ventilator, labeled 'GR-4'."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,CD-1,plan,false,"'CD-1 6x6 / 50 CFM' ceiling-diffuser type mark, drawn twice on plan (near top duct run, and near STO room) on identical box+X diffuser glyphs. Repeatable schedule/type mark, listed once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,CU-3,plan,false,"Condensing unit box glyph labeled underlined 'CU-3' on the roof plan, piped to HP-1. Unique instance."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,DSS-3,plan,false,"Ductless split indoor unit box in EQUIPMENT ROOM (underlined bold label with leader), plus a second 'DSS-3' label next to a (T) thermostat symbol just left of it referring to the same unit; also referenced (not re-tagged) via 'DN TO DSS-3' on the roof plan below. Unique instance mark, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,EF-7,plan,false,"Roof exhaust fan glyph (round with X) labeled underlined 'EF-7' on the roof plan, matching the 'UP TO EF-7 ON ROOF' callout on the floor plan below. Unique instance."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,EG-1,plan,false,'EG-1 8x8 / 50 CFM' exhaust-grille type mark on a box+X glyph near the Toilet. Repeatable type mark.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,GI-1,plan,false,Round gravity-intake hood glyph (circle with dashed X) labeled underlined 'GI-1' on the roof plan. Unique instance.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,HP-1,plan,false,"Heat pump unit, square box with circle glyph labeled underlined 'HP-1' on the Gatehouse roof plan. Unique instance."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,LS-1,plan,false,'LS-1 8ø / 200 CFM (TYP. 2)' labels a wall louver glyph (verified via zoom crop) near grid C. Explicit '(TYP. 2)' confirms it is a repeatable type mark used for 2 identical louvers; listed once.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,MD-21,plan,false,"Motorized damper glyph (box with X) in the OA duct run labeled 'MD-21' near 'TO GV-1' callout. Unique instance mark (two-digit numbered damper, not a repeated type)."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,RR-1,plan,false,"'RR-1 6x6 / 50 CFM' return-register type mark, drawn twice (near equipment room OA intake, and near STO/Toilet area) on box+X register glyphs. Repeatable type mark, listed once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,RR-2,plan,false,'RR-2 8x8 / 250 CFM' return-register type mark on a box+X glyph near the Sentry/Toilet corridor. Repeatable type mark; only one drawn occurrence on this sheet.
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#8,SS-1,plan,false,"Underlined bold 'SS-1' label on an equipment box in EQUIPMENT ROOM, plus a second 'SS-1' text next to a (T) thermostat symbol near the Toilet/Sentry wall (remote stat for same unit). Same literal tag both places; counted once as one physical unit."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9,CU-4,plan,false,"Guard-booth outdoor condensing unit, drawn as a labeled box glyph on the Guard Booth Floor Plan and again in both Guard Booth Section 1 and Section 2 elevation views; also appears as the 'CU-4' outdoor-unit MARK column entry in the Ductless Split System Schedule table on the same sheet. Since it is also drawn as a plan/section symbol (not table-only), in_table is false. Unique instance mark, one physical unit, counted once."
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9,DSS-4,plan,false,"Guard-booth wall-mounted ductless split indoor unit, drawn as a labeled glyph on the floor plan and in both sections, and also as the schedule table's MARK 'DSS-4' row. Same reasoning as CU-4: drawn on plan/sections, so in_table false. Unique instance, counted once."

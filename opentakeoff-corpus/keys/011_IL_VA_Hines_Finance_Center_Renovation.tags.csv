@@ -1,0 +1,14 @@
+sheet,tag,role,in_table,note
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,ACCU2,plan,false,"Callout 'ACCU2 DISCONNECT (ETR)' with leader to a disconnect-switch glyph in the electrical/mechanical room (bottom of sheet, near TRANSFORMER T19 and PANEL 2XL). Names the specific air-cooled condensing unit the disconnect serves; unique instance mark. Confirmed by visual crop of that area."
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 12-1,plan,false,"Hexagonal leader-line callout pointing to a physical heat-pump/fan-coil unit glyph on the floor plan (confirmed visually for the similar HP 24-11 instance). Per General Note D and Keynote 14, these tag individual relocated existing heat pumps being reconnected to specific circuits; each numeric suffix is a distinct physical unit."
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 12-2,plan,false,Same HP-series unique-instance callout family as HP 12-1 (see that note).
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 12-3,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 12-4,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 15-8,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 15-9,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 24-10,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 24-11,plan,false,Visually confirmed: hexagonal leader-line tag connected to a physical heat-pump unit glyph (drawn as a box unit under a workstation credenza) near the COLLAB room. Prototype for the whole HP-series family on this sheet.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 36-12,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 42-13,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 42-14,plan,false,Same HP-series unique-instance callout family as HP 12-1.
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,HP 48-15,plan,false,Same HP-series unique-instance callout family as HP 12-1.

@@ -1,0 +1,217 @@
+sheet,tag,role,in_table,note
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,BFP,plan,false,"Backflow preventer, boxed label directly on the 3"" CW domestic water line near the top of the mechanical room. Single instance. Not in textSpans; confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,CT-1,plan,false,"Existing cooling tower, circular callout split 'CT' over '1' with a keyed-note-2 box below it ('remove existing cooling tower'). Unique instance. NOT present in textSpans() -- this sheet's equipment labels are drawn with vector/SHX-style text that pdf.ts textSpans() does not extract; confirmed purely from the rendered image (zoomed crop)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,CT-2,plan,false,"Same pattern as CT-1, second existing cooling tower. Not extractable via textSpans; confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,CT-3,plan,false,"Same pattern, third existing cooling tower. Not extractable via textSpans; confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,CWP-1,plan,false,"Existing condenser water pump, rectangular box label in the pump room, unique instance (one of three pumps). Not in textSpans (SHX-style text); confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,CWP-2,plan,false,Second condenser water pump box label.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,CWP-3,plan,false,Third condenser water pump box label.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,HTP,plan,false,"Single shaded/gray box label next to TCP-19 (appears grayed to indicate existing-to-remain), one distinct panel instance. Not in textSpans; confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,TCP,plan,false,"Bare 'TCP' box label (no number) appearing twice more along the same equipment row as TCP-19, for two more distinct physical control panels -- treated as one repeatable type mark. Not in textSpans; confirmed visually. Lower confidence, same caveat as bare 'VFD'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,TCP-19,plan,false,"Unique numbered control panel tag, rectangular box, keynote-1 '(TYP)' leader points to it ('existing piping/equipment shall remain'). Not in textSpans; confirmed visually via zoomed crop."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,VFD,plan,false,"Bare 'VFD' label (no number) on a small box symbol at 3 separate locations along the CWP-1/CWP-2/CWP-3 discharge piping -- distinct physical drives for the 3 pumps, all labeled with the identical literal 'VFD', so treated as one repeatable type mark (listed once). Not in textSpans; confirmed visually. Lower confidence this counts vs. being a plain equipment-type glyph rather than a schedule mark."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,VFD-CT-1,plan,false,"VFD for cooling tower CT-1, unique instance. Confirmed in textSpans (str repeated 3x identically at x0=2790.8,y0=1362.4 -- overlapping duplicate spans, same literal tag, counted once)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,VFD-CT-2,plan,false,"VFD for cooling tower CT-2. In textSpans at x0=2788.9,y0=1323.4 (3 duplicate spans)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#12,VFD-CT-3,plan,false,"VFD for cooling tower CT-3. In textSpans at x0=2788.8,y0=1125.4 (3 duplicate spans)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,AS-1,plan,false,"Air separator circle glyph near PCHP row, keynote 5 beside it."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,AS-2,plan,false,Air separator circle glyph near boiler-3 / PHWP area.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,Boiler-1,plan,false,"Existing boiler box glyph, keynote 1 (existing to remain)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,Boiler-2,plan,false,Existing boiler box glyph.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,Boiler-3,plan,false,Existing boiler box glyph.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,CAF-1,plan,false,Labeled box near water softener (combustion air fan likely).
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,CF-1,plan,false,"Chemical feeder circle, bottom center, keynote 7 beside it."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,CF-2,plan,false,"Chemical feeder circle, near Boiler-3, keynote 7 beside it."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,CH-1,plan,false,"New water-cooled chiller box (bottom of vertical row of 3), keynote 2 beside it."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,CH-2,plan,false,New chiller box (middle of row).
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,CH-3,plan,false,New chiller box (top of row).
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,EF-2,plan,false,"Box glyph near REFRIG. MONITOR / third chiller row, exhaust fan interlocked with refrigerant monitor per keynote 9."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,ET-1,plan,false,"Circle glyph near bottom center, keynote 6 beside it."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,FCU-1,plan,false,"Fan coil unit box; literal 'FCU-1' drawn twice on this sheet (near boiler skid and near chiller row) but same literal, listed once."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,H-1,plan,false,"Labeled box near electrical room, top of sheet."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,H-2,plan,false,"Labeled box near electrical room, top of sheet."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,P-1,plan,false,"Small equipment box with leader, next to CAF-1/water softener skid."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,P-2,plan,false,"Small equipment box with leader, adjacent to P-1."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,PCHP-1,plan,false,"Primary chilled-water pump icon, one of a row of three."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,PCHP-2,plan,false,Primary chilled-water pump icon.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,PCHP-3,plan,false,Primary chilled-water pump icon.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,PHWP-1,plan,false,"Primary hot water pump icon, column of three near WH row."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,PHWP-2,plan,false,Primary hot water pump icon.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,PHWP-3,plan,false,Primary hot water pump icon.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,SCHP-1,plan,false,Secondary chilled-water pump icon.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,SCHP-2,plan,false,Secondary chilled-water pump icon.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,SF-1,plan,false,Box glyph near UH-3/SP-1/SP-2 cluster.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,SHWP-1,plan,false,"Secondary hot water pump icon, instance circle '1' under 'SHWP' label (keynote 4 sq beside it)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,SHWP-2,plan,false,"Secondary hot water pump icon, instance circle '2'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,SP-1,plan,false,"Circle glyph, sump pump, part of pair with SP-2."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,SP-2,plan,false,"Circle glyph, sump pump."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,TCP,plan,false,"Temperature control panel box; drawn 4 times on this sheet (near boiler-pump skid, twice near PCHP row, once near bottom) all with identical literal 'TCP' (no instance suffix on this sheet) and keynote 14 beside each -- treated as one repeatable/type mark, listed once."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,UH-3,plan,false,"Unit heater tag, drawn twice on sheet (near AS-2/PHWP area and near SF-1/SP), same literal listed once."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,WH-1,plan,false,"Water heater circle glyph, row of four."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,WH-2,plan,false,Water heater circle glyph.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,WH-3,plan,false,Water heater circle glyph.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#13,WH-4,plan,false,Water heater circle glyph.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,BFP,plan,false,"Small box callout on the 3"" CW line near a backflow-preventer/check valve symbol at top of the pump area. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,CT-1,plan,false,"Cooling tower callout, drawn as stacked 'CT' over '1' inside a circle on the rightmost of 3 cooling-tower boxes. In textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,CT-2,plan,false,"Middle cooling tower, same stacked-circle format. In textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,CT-3,plan,false,"Leftmost cooling tower, same stacked-circle format. In textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,CWP-1,plan,false,Condenser water pump hexagon callout ('CWP' over '1'). In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,CWP-2,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,CWP-3,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,HTP,plan,false,"Gray-filled box between TCP-19 and TCP boxes, single occurrence. NOT in textSpans; likely a heat-trace panel per keyed note 9 (self-regulating heat trace cable/controller)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,TCP,plan,false,"Two separate boxes both literally labeled bare 'TCP' (no suffix) next to TCP-19, near the pump-room MCC. Listed once (same literal tag on 2 boxes = repeatable type mark). NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,TCP-19,plan,false,"Small box near the pump-room piping, leader to keynote '1 (TYP)'. NOT present in textSpans dump at all (font-extraction gap) - confirmed only by rendering the page and zooming; text is legible and unambiguous."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,VFD-CT-1,plan,false,"VFD box label feeding CT-1 fan. Single-line text, in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,VFD-CT-2,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,VFD-CT-3,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,VFD-CWP-1,plan,false,VFD box label feeding CWP-1. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,VFD-CWP-2,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#14,VFD-CWP-3,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,Boiler-1,plan,false,"Existing boiler, dashed rectangle glyph, gray/existing-to-remain. Text confirmed with hyphen 'Boiler-1'. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,Boiler-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,Boiler-3,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,CAF-1,plan,false,"Small box near P-1/P-2, likely a combustion-air fan. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,Chiller 1,plan,false,"Existing chiller, dashed rectangle glyph. Exact text uses a SPACE, not a hyphen: 'Chiller 1' (verified by zoom). NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,Chiller 2,plan,false,Exact text 'Chiller 2' (space). NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,Chiller 3,plan,false,Exact text 'Chiller 3' (space). NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,EF-2,plan,false,"Small box, exhaust fan tag near the chiller room wall. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,FCU-1,plan,false,Bare 'FCU-1' fan-coil-unit box; appears twice at different locations on the sheet with identical literal text - listed once. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,H-1,plan,false,Small underlined tag on a box glyph near the stairwell (likely a duct heater/humidifier). NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,H-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,L1E,plan,false,"Panelboard box near stairwell, next to P1E/M1E. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,M1E,plan,false,Panelboard box near stairwell. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC,plan,false,"Bare label on the large multi-cell motor-control-center lineup box itself (the parent cabinet, distinct from the numbered starter tags MCC-1..27 below). NOT in textSpans (whole sheet's equipment labels are absent from textSpans - likely SHX/vector-font extraction gap)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-1,plan,false,"Bare MCC + '1' leader label; appears twice on this sheet (once near TCP/SHWP-1 junction, once near PHWP-1) - same literal tag, listed once. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-2,plan,false,Appears twice (near TCP junction and near PHWP-2). NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-22,plan,false,Feeds a VFD to SHWP-2. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-23,plan,false,Feeds a VFD to SHWP-2 (second VFD). NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-25,plan,false,Feeds Chiller 1 disconnect. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-26,plan,false,Feeds Chiller 2 disconnect. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-27,plan,false,Feeds Chiller 3 disconnect. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-3,plan,false,Appears twice (near TCP junction and near PHWP-3). NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-4,plan,false,Feeds PCHP-1. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-5,plan,false,Feeds PCHP-2. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-6,plan,false,Feeds PCHP-3. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-7,plan,false,Feeds a VFD to SCHP-2. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,MCC-8,plan,false,Feeds a VFD to SCHP-1. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,P-1,plan,false,Small pump icon near water softener/CAF-1 area. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,P-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,P1E,plan,false,"Electrical panel label, appears twice (gray box near stair/elevator equipment room, and near REFRIG. MONITOR circuit callout). NOT in textSpans in the panel-box location; the REFRIG.MONITOR-area occurrence IS present in textSpans at (2981.8, 2024.4)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,PCHP-1,plan,false,"Primary chilled-water pump, dashed box glyph near stair. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,PCHP-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,PCHP-3,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,PHWP-1,plan,false,"Another pump group, dashed box glyph, near water heaters. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,PHWP-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,PHWP-3,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,SCHP-1,plan,false,"Secondary chilled-water pump, dashed box glyph. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,SCHP-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,SF-1,plan,false,Small box near water softener. NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,SHWP-1,plan,false,"Heating hot-water pump, dashed box glyph. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,SHWP-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,SP-1,plan,false,Circle glyph near the expansion tanks (likely sump/sample pump). NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,SP-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,TCP,plan,false,"Bare 'TCP' box, appears twice near the MCC-1/2/3 junction area (same as page 14's bare TCP boxes). Listed once. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,UH-3,plan,false,"Unit heater, underlined tag; appears 3 times at different spots on the sheet with identical literal text - listed once. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,VFD,plan,false,"Bare 'VFD' box; 4 occurrences on this sheet (2 feeding SCHP-1/2, 2 feeding SHWP-2) all with identical literal text (no suffix) - listed once. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,WH-1,plan,false,"Water heater, circle glyph, row of 4. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,WH-2,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,WH-3,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,WH-4,plan,false,NOT in textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#22,XFMR P1E,plan,false,"Transformer symbol (box with X) labeled 'XFMR  P1E', feeding panel P1E. NOT in textSpans. Borderline whether this is its own tag or a 'feeds P1E' annotation; included since it labels a distinct physical transformer glyph."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,CT-1,plan,false,"Same cooling tower as on page 14 (rightmost), stacked 'CT'/'1' in circle. In textSpans (within e.g. 'VFD-CT-1' strings and separately as bare circle text - visually confirmed)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,CT-2,plan,false,In textSpans/visually confirmed.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,CT-3,plan,false,In textSpans/visually confirmed.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,CWP-1,plan,false,"Condenser water pump box, in textSpans (visually confirmed, dashed box glyph)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,CWP-2,plan,false,In textSpans/visually confirmed.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,CWP-3,plan,false,In textSpans/visually confirmed.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,EP1A-24,plan,false,"Panel EP1A circuit 24, feeds CT-1 oil pump. In textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,EP1A-26,plan,false,"Panel EP1A circuit 26, feeds CT-2 oil pump. In textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,EP1A-28,plan,false,"Panel EP1A circuit 28, feeds CT-3 oil pump. In textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,HTP,plan,false,"Grayed background box, same as page 14. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-10,plan,false,Feeds VFD to CWP-2. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-11,plan,false,Feeds VFD to CWP-3. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-15,plan,false,Feeds VFD-CT-1 and reused as the CT-1 fan/oil-pump starter label. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-16,plan,false,Feeds VFD-CT-2 / CT-2 fan-oil-pump starter. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-17,plan,false,Feeds VFD-CT-3 / CT-3 fan-oil-pump starter. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-18,plan,false,Feeds CT-1 basin heater. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-19,plan,false,Feeds CT-2 basin heater. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-20,plan,false,Feeds CT-3 basin heater. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,MCC-9,plan,false,Feeds VFD to CWP-1. In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,TCP,plan,false,"Two grayed bare 'TCP' boxes, same as page 14. Listed once. NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,TCP-19,plan,false,"Grayed background box, same TCP-19 also seen on page 14 (bleed-through reference of adjoining mech piping content). NOT in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,VFD,plan,false,"Bare 'VFD' box (no CWP suffix, unlike page 14's 'VFD-CWP-1/2/3'); 3 occurrences feeding CWP-1/2/3 respectively, identical literal text, listed once. NOT found as bare text in textSpans dump (only appears embedded inside longer 'VFD-CT-x' strings), confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,VFD-CT-1,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,VFD-CT-2,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#23,VFD-CT-3,plan,false,In textSpans.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,AS-1,plan,false,"Air separator glyph (tank icon), circle callout 'AS 1' near SCHP pumps."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,AS-2,plan,false,"Air separator glyph, circle callout 'AS 2' near PHWP/WH bank."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,Boiler-1,plan,false,"Existing boiler glyph (dashed rectangle, 'existing to remain' per keynote 1), label 'Boiler-1'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,Boiler-2,plan,false,"Existing boiler glyph, label 'Boiler-2'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,Boiler-3,plan,false,"Existing boiler glyph, label 'Boiler-3'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,CAF-1,plan,false,"Chemical feed/additive feeder box glyph, label 'CAF-1'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,CF-1,plan,false,"Chemical feeder tank glyph, circle callout 'CF 1' near bottom of sheet."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,CF-2,plan,false,"Chemical feeder glyph, circle callout 'CF 2' near expansion tank/WH bank."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,CH-1,plan,false,"Chiller glyph (long horizontal unit), circle callout 'CH 1'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,CH-2,plan,false,"Chiller glyph, circle callout 'CH 2'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,CH-3,plan,false,"Chiller glyph, circle callout 'CH 3'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,EF-2,plan,false,"Exhaust fan/register box glyph near CH-2, underlined dashed label 'EF-2'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,ET-1,plan,false,"Expansion tank glyph, circle callout 'ET 1'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,FCU-1,plan,false,"Fan coil unit box glyph, label 'FCU-1'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,H-1,plan,false,"Small equipment box glyph (likely cabinet heater), underlined label 'H-1' inside Electrical room 1E-001; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,H-2,plan,false,"Equipment box glyph, underlined label 'H-2', adjacent to H-1; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,L1E,plan,false,"Existing panelboard glyph next to P1E on stairwell wall, underlined label 'L1E'; not present in textSpans (background/existing xref layer text), confirmed visually only."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,M1E,plan,false,"Existing panelboard glyph next to L1E, underlined label 'M1E'; not present in textSpans, confirmed visually only."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,MCC,plan,false,"Single physical Motor Control Center switchgear box drawn once near top-center (rectangular hashed cell glyph). NOT counted separately for the ~15 'MCC <n>' arrow/leader labels scattered around the sheet (n=1..27) pointing at wires from PCHP/SHWP/PHWP/SCHP/CH pumps to VFD boxes -- those are home-run/circuit-number call-outs back to this one MCC panel, not separate equipment glyphs, so they are excluded like breaker/circuit numbering."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,P-1,plan,false,"Small pump glyph (box), label 'P-1' near UH-3/CAF-1 cluster; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,P-2,plan,false,"Small pump glyph, label 'P-2' adjacent to P-1; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,P1E,plan,false,"Existing panelboard glyph (small rectangle with tick marks) on stairwell wall, labeled P1E; string appears repeatedly in textSpans, some of those repeats are 'P1E <n>' home-run/circuit references (9,11,12,14,16) to this panel, which are excluded as circuit numbering, not separate tags."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,PCHP-1,plan,false,"Primary chilled-water pump glyph, stacked circle callout ('PCHP' + '1' as two textSpans, x0~2103/2119 y0~1430/1449). Unique instance."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,PCHP-2,plan,false,"Pump glyph, circle callout 'PCHP 2'; confirmed as two textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,PCHP-3,plan,false,"Pump glyph, circle callout 'PCHP 3'; confirmed as two textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,PHWP-1,plan,false,"Primary hot-water pump glyph, circle callout 'PHWP 1'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,PHWP-2,plan,false,"Pump glyph, circle callout 'PHWP 2'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,PHWP-3,plan,false,"Pump glyph, circle callout 'PHWP 3'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,SCHP-1,plan,false,"Secondary chilled-water pump glyph, circle callout 'SCHP 1'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,SCHP-2,plan,false,"Pump glyph, circle callout 'SCHP 2'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,SHWP-1,plan,false,"Secondary hot-water pump glyph, circle callout 'SHWP 1'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,SHWP-2,plan,false,"Pump glyph, circle callout 'SHWP 2'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,TCP,plan,false,"Temperature control panel box glyph; same literal 'TCP' labels 2-3 distinct relocated panel boxes on this sheet (per keynote 5) with no distinguishing suffix, so treated as one repeatable type mark, listed once. Confirmed in textSpans (appears duplicated at same coords, and once more near PHWP cluster)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,UH-3,plan,false,"Unit heater glyph (hatched diamond), underlined label 'UH-3'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-PCHP-1,plan,false,"VFD box symbol, wired to PCHP-1; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-PCHP-2,plan,false,"VFD box symbol, wired to PCHP-2; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-PCHP-3,plan,false,"VFD box symbol, wired to PCHP-3; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-PHWP-1,plan,false,"VFD box symbol, wired to PHWP-1; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-PHWP-2,plan,false,"VFD box symbol, wired to PHWP-2; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-PHWP-3,plan,false,"VFD box symbol, wired to PHWP-3; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-SCHP-1,plan,false,"VFD box symbol on unistrut, wired to SCHP-1; exact string confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-SCHP-2,plan,false,"VFD box symbol, wired to SCHP-2; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-SHWP-1,plan,false,"VFD box symbol, wired to SHWP-1; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,VFD-SHWP-2,plan,false,"VFD box symbol, wired to SHWP-2; confirmed in textSpans."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,WH-1,plan,false,"Water heater glyph (circle), underlined label 'WH-1' in bank of 4; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,WH-2,plan,false,"Water heater glyph, underlined label 'WH-2'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,WH-3,plan,false,"Water heater glyph, underlined label 'WH-3'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#24,WH-4,plan,false,"Water heater glyph, underlined label 'WH-4'; not present in textSpans, confirmed visually."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,CT-1,plan,false,"Cooling tower symbol, circle 'CT/1', rightmost of three towers."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,CT-2,plan,false,"Cooling tower symbol, circle 'CT/2', middle tower."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,CT-3,plan,false,"Cooling tower symbol, circle 'CT/3', leftmost tower."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,CWP-1,plan,false,"Condenser water pump icon, circle 'CWP/1'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,CWP-2,plan,false,"Condenser water pump icon, circle 'CWP/2'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,CWP-3,plan,false,"Condenser water pump icon, circle 'CWP/3'."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,DS-CT1-F,plan,false,"Disconnect switch box, fan feed for CT-1."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,DS-CT1-H,plan,false,"Disconnect switch box ('F' glyph) with rotated text label, heater feed for CT-1."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,DS-CT2-F,plan,false,"Disconnect switch box, fan feed for CT-2."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,DS-CT2-H,plan,false,"Disconnect switch box, heater feed for CT-2."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,DS-CT3-F,plan,false,"Disconnect switch box, fan feed for CT-3."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,DS-CT3-H,plan,false,"Disconnect switch box, heater feed for CT-3."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,HT,plan,false,"Small box glyph ('HT') near VFD-CT-3, keynote 10 pointing to it; heat-trace cutout/sensor device, distinct from the 'HTP' box further down the corridor."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,HTP,plan,false,"Shaded (new-work) wall box near 'TCP-19', heat trace panel/controller per keynote 10."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,TCP,plan,false,"Two unshaded (existing) temperature-control-panel boxes drawn immediately next to TCP-19, with no instance suffix on this sheet -- same literal 'TCP' appears twice, listed once as a repeatable/type mark."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,TCP-19,plan,false,"Numbered temperature control panel box near pump room corridor, keynote '1 (TYP)' beside it."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,VFD-CT-1,plan,false,Variable frequency drive box for cooling tower fan 1.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,VFD-CT-2,plan,false,VFD box for cooling tower fan 2.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,VFD-CT-3,plan,false,VFD box for cooling tower fan 3.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,VFD-CWP-1,plan,false,VFD box for condenser water pump 1.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,VFD-CWP-2,plan,false,VFD box for condenser water pump 2.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#25,VFD-CWP-3,plan,false,VFD box for condenser water pump 3.
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#8,CT-1,plan,false,"Cooling tower unit tag in a circle callout on the 'Enlarged Cooling Tower Framing Plan' (structural sheet S101), with weight note (13,057 LBS). Unique instance (one specific physical cooling tower)."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#8,CT-2,plan,false,"Same as CT-1, second cooling tower unit shown on the enlarged framing plan / partial framing plan."
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#8,CT-3,plan,false,"Same as CT-1, third cooling tower unit."

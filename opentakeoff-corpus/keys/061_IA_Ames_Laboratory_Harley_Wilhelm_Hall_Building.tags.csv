@@ -1,0 +1,372 @@
+sheet,tag,role,in_table,note
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#32,FCU-A,plan,false,"Fan coil unit, drawn as a hatched equipment box on the plan (6"" CHS/R piping connects into it), labeled 'FCU-A' directly beneath the symbol. Unique instance mark (single unit, letter suffix identifies it)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#32,FM,plan,false,"Existing building chilled-water flow meter, drawn as a circle glyph on the 5"" CHS/CHR line labeled 'FM' with a leader to the text 'EX BUILDING CHILLED WATER FLOW METER'. Confirmed via close-up crop. Unique instance mark on this sheet."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-A-13,plan,false,"Unique VAV box instance tag, hexagon/hatched-box glyph with leader, basement piping plan east."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-A-16B,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-A-18,plan,false,"Unique VAV box instance tag on main piping run, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-A-22,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-A-30,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-C-20,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-E-16A,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-G-26,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-J-29,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#33,VAV-J-C00,plan,false,"Unique VAV box instance tag, hatched-box glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,AS-A,plan,false,"Air separator, hatched circle symbol adjacent to ET-A, confirmed via zoom crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,ET-A,plan,false,"Expansion tank, circle/hatched symbol, confirmed via zoom crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,HWP-A-1,plan,false,"Heating water pump unique instance, circular hatched pump symbol, confirmed via zoom crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,HWP-A-2,plan,false,"Heating water pump unique instance, circular hatched pump symbol, confirmed via zoom crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,HX-A-1,plan,false,"Heat exchanger unique instance, hatched vertical cylinder symbol, confirmed via zoom crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,HX-A-2,plan,false,"Heat exchanger unique instance, adjacent hatched cylinder symbol, confirmed via zoom crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-32,plan,false,"Unique VAV box instance, hatched box symbol, bottom-left area"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-34,plan,false,Unique VAV box instance near room 34
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-37,plan,false,"Unique VAV box instance, top row over room 37"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-38,plan,false,"Unique VAV box instance, bottom row over room 38"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-39,plan,false,"Unique VAV box instance, top row over room 39"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-40,plan,false,"Unique VAV box instance, bottom row over room 40"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-46,plan,false,"Unique VAV box instance, bottom row over room 46"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-A-47,plan,false,"Unique VAV box instance, top row over room 47"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-B-45,plan,false,"Unique VAV box instance, top row over room 45"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-E-33,plan,false,"Unique VAV box instance, top row over room 33"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-E-36,plan,false,"Unique VAV box instance, bottom row over room 36"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-E-44,plan,false,"Unique VAV box instance, bottom row over room 44"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-E-48,plan,false,"Unique VAV box instance, bottom row over room 48"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-E-49,plan,false,"Unique VAV box instance, top row over room 49, confirmed via zoom crop next to hatched symbol"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-E-50,plan,false,"Unique VAV box instance, bottom row over room 50"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-G-41,plan,false,"Unique VAV box instance, top row over room 41"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#34,VAV-J-C01,plan,false,Unique VAV box instance in corridor/mid area; confirmed via zoom crop drawn directly on its own hatched symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,T,plan,false,"Circled 'T' thermostat symbol drawn directly on the heating-water piping main; appears 13 times at distinct locations, repeatable type mark for thermostat device, listed once per rules"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-B-104,plan,false,Hatched VAV box glyph near room 104
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-B-106,plan,false,Hatched VAV box glyph near room 106
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-B-108,plan,false,Hatched VAV box glyph near room 108
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-B-116,plan,false,Hatched VAV box glyph near room 116
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-B-118,plan,false,Hatched VAV box glyph near room 118
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-C-117,plan,false,"Hatched VAV box glyph near room 117, verified via crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-E-105,plan,false,Hatched VAV box glyph near room 105
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-E-109,plan,false,Hatched VAV box glyph
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-E-111,plan,false,Hatched VAV box glyph near room 111
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-E-115,plan,false,Hatched VAV box glyph
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-F-102,plan,false,Hatched VAV box glyph near room 102
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-F-112,plan,false,Hatched VAV box glyph near room 112
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-I-101,plan,false,"Hatched VAV box glyph near room 101, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#35,VAV-J-C10,plan,false,"Hatched VAV box glyph in interior room, verified via crop (label directly below symbol)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,DP,plan,false,"Differential-pressure sensor symbol: a small rectangle box literally labeled 'DP' with a leader line, tied to keyed note MP19 ('BUILDING INDOOR PRESSURE MONITOR SENSOR LOCATION'). Confirmed via zoomed crop at PDF-point coords ~(538,1895). This is a real controls sensor tag, not a room number or keynote bubble itself (MP19 is the excluded keynote bubble pointing at it)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-B-122,plan,false,"Unique VAV box instance on lower HW main near room 122. textSpans x0=1443.4,y0=3150."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-B-134C,plan,false,"Unique VAV box instance near room 134C. textSpans x0=3674.2,y0=3150."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-B-134D,plan,false,"Unique VAV box instance near room 134D. textSpans x0=2707,y0=3130.3."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-B-134F,plan,false,"Unique VAV box instance near room 134F. textSpans x0=1759,y0=3130.3."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-C-134,plan,false,"Same literal tag text drawn TWICE on two visually distinct hatched VAV box symbols in room 134 (confirmed by zoom crop at PDF-point coords ~(1489,1575) and ~(1714,1575) - two separate hatched boxes, each independently labeled 'VAV-C-134', apparent duplicate/non-unique labeling by the designer). Listed once per the distinct-literal rule."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-C-135A,plan,false,"Unique VAV box instance, hatched glyph near room 135/131. textSpans x0=3437,y0=2334.5."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-C-137B,plan,false,"Unique VAV box instance, hatched glyph, far east side of this crop near room 137B. textSpans x0=4345,y0=2353.4."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-D-134E,plan,false,"Unique VAV box instance near room 134E. textSpans x0=2028.2,y0=3130.3."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-E-121,plan,false,"Unique VAV box instance; hatched rectangle equipment glyph near HW branch, label directly below/beside symbol. Confirmed against textSpans at x0=1515.8,y0=2349.8 and visually on render."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-E-125,plan,false,"Unique VAV box instance, hatched glyph on HW supply/return main. textSpans x0=2107.2,y0=2339."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-E-131,plan,false,"Unique VAV box instance, hatched glyph. textSpans x0=3069.1,y0=2448.5."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-F-134B,plan,false,"Unique VAV box instance near room 134B. textSpans x0=4037.3,y0=3128.4."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-G-129,plan,false,"Unique VAV box instance, hatched glyph. textSpans x0=2407.4,y0=2339."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-G-137,plan,false,"Unique VAV box instance, hatched glyph near room 137/137A. textSpans x0=3726.5,y0=2220.5."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#36,VAV-J-C11,plan,false,"Unique VAV box instance, hatched glyph near corridor 006-C13/rooms 131/135. textSpans x0=3333.4,y0=2773.2."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-B-204A,plan,false,"Hatched VAV box symbol in room 204A, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-B-214,plan,false,"Hatched VAV box symbol in room 214, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-B-216A,plan,false,"Hatched VAV box symbol in room 216A, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-C-205,plan,false,"Hatched VAV box symbol in room 205, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-C-211,plan,false,"Hatched VAV box symbol between rooms 208/213 (serves 211), unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-D-206,plan,false,"Hatched VAV box symbol in room 206, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-E-210,plan,false,"Hatched VAV box symbol in room 210, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-E-213,plan,false,"Hatched VAV box symbol in room 213, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-F-216,plan,false,"Hatched VAV box symbol in room 216, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-G-204,plan,false,"Hatched VAV box symbol in room 204, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-G-209,plan,false,"Hatched VAV box symbol in room 209, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-G-217,plan,false,"Hatched VAV box symbol in room 217, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-I-203,plan,false,"Hatched VAV box symbol in room 203, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#37,VAV-J-C20,plan,false,"Hatched VAV box symbol in corridor near stairwell 006-S21; verified via zoomed crop that the literal text is exactly 'VAV-J-C20' (not truncated), unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,T,plan,false,Repeatable thermostat symbol (single-letter 'T' in small circle) placed along HW piping at ~14 locations across the plan; each marks a physical thermostat sensor per Keyed Note MP07 (new thermostat in same location as existing). Listed once as a repeatable type mark.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-B-216C,plan,false,Unique VAV box instance near room 216/216C
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-C-225,plan,false,Unique VAV box instance near room 225
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-E-228,plan,false,Unique VAV box instance near room 228
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-E-231,plan,false,Unique VAV box instance near room 231
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-E-232,plan,false,Unique VAV box instance near room 232
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-E-234,plan,false,Unique VAV box instance near room 234
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-E-235,plan,false,Unique VAV box instance near room 235
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-F-224,plan,false,Unique VAV box instance near room 224
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-F-237,plan,false,Unique VAV box instance near room 237
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-G-221,plan,false,"Unique VAV box instance, boxed callout w/ leader on plan near room 221"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-G-227,plan,false,Unique VAV box instance near room 227
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-H-236,plan,false,Unique VAV box instance near room 236
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#38,VAV-J-C21,plan,false,Unique VAV box instance near corridor 006-C21
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-B-304,plan,false,Unique VAV box instance tag near room 304
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-B-314,plan,false,Unique VAV box instance tag near room 314
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-B-316,plan,false,Unique VAV box instance tag near room 316
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-C-311,plan,false,Unique VAV box instance tag near room 311
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-D-308,plan,false,Unique VAV box instance tag near room 308
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-D-310,plan,false,Unique VAV box instance tag near room 310
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-D-C30,plan,false,"Unique VAV box instance tag, exact literal is 'VAV-D-C30' (verified via zoomed crop) near room 006-C31"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-E-317,plan,false,"Unique VAV box instance tag near room 317/315, adjacent to grayed-out 'EX FAN COIL' label (existing fan coil, not a new tag)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-F-302,plan,false,Unique VAV box instance tag near room 302
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-H-303,plan,false,"Unique VAV box instance tag, hatched box glyph near room 303"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-I-315,plan,false,Unique VAV box instance tag near room 315A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#39,VAV-I-320,plan,false,Unique VAV box instance tag near room 320
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,DP,plan,false,Boxed control-point glyph (verified via crop) labeled 'DP' (differential pressure sensor) with leader to keynote bubble MP19 (building indoor pressure monitor sensor location). Only one instance on this sheet.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,H,plan,false,"Circled control-point glyph = humidity sensor, appears once on this sheet next to a pair of T symbols near VAV-B-326 (verified via crop). Repeatable type mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,T,plan,false,"Circled control-point glyph = thermostat, repeatable type mark drawn ~15 times across the sheet (verified via crop, each with leader to keynote MP07 'new thermostat'). Listed once per rules for a repeatable schedule/type mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-B-323,plan,false,"Unique VAV box instance tag on hatched terminal-unit symbol, room 323."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-B-326,plan,false,"Unique VAV box instance tag, room 326 (verified crop shows hatched box + T/T/H control points nearby)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-B-332,plan,false,"Unique VAV box instance tag, room 332."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-C-329,plan,false,"Unique VAV box instance tag, room 329."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-D-335,plan,false,"Unique VAV box instance tag, room 335."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-D-336A,plan,false,"Unique VAV box instance tag, room 336A."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-D-C31,plan,false,Unique VAV box instance tag near room 006-C33 (mid-sheet).
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-E-322,plan,false,"Unique VAV box instance tag, room 322."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-E-327,plan,false,"Unique VAV box instance tag, room 327."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-E-331,plan,false,"Unique VAV box instance tag, room 331."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-F-336,plan,false,"Unique VAV box instance tag, room 336."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-I-328,plan,false,"Unique VAV box instance tag, room 328."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-I-330,plan,false,"Unique VAV box instance tag, room 330."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#40,VAV-I-334,plan,false,"Unique VAV box instance tag, room 334."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#41,DP,plan,false,"Differential-pressure sensor tag written on a small square instrument glyph tied into the roof piping near grid 9/F-E; reached by a leader from keynote bubble MP25 ('BUILDING OUTDOOR PRESSURE MONITOR SENSOR LOCATION... AVERAGE... BETWEEN THE FOUR (4) SENSORS'), implying the same generic 'DP' tag repeats at multiple sensor locations around the building -- treated as a repeatable type mark, listed once. textSpans 'DP' at true-pt approx (1529,1245)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#41,EF-1,plan,false,"Existing general exhaust fan, drawn as a screened (existing-to-remain) rectangle glyph with text inside reading 'EX GENERAL EXHAUST FAN (EF-1)'. Unique instance mark for one physical existing fan; textSpans confirms 'EF' / '-' / '1)' as split runs at true-pt approx (787.6,1521.8)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#41,EF-2,plan,false,"New exhaust fan tag written directly beside a fan (circle) glyph inside the 'BID ALTERNATE #2' dashed area (lower of two fans). Unique instance mark. textSpans 'EF-2' at true-pt approx (892,1394)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#41,EF-3,plan,false,"New exhaust fan tag written directly above a fan (circle) glyph inside the same 'BID ALTERNATE #2' dashed area (upper of two fans). Unique instance mark. textSpans 'EF-3' at true-pt approx (815,1127)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#41,HRU-A,plan,false,"Heat Recovery Unit tag written directly above the unit's rectangular equipment glyph inside the 'BID ALTERNATE #1' dashed area. Unique instance mark (letter suffix 'A' names one specific unit). textSpans 'HRU-A' at true-pt approx (1141,1132). Note the pipeline hint did not surface this family even though it is a clear on-plan equipment tag."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,AHU-A,plan,false,"Air handling unit, unique instance, large equipment footprint on plan"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,AS-B,plan,false,"Air separator, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,AS-C,plan,false,"Air separator, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,DP,plan,false,"Differential-pressure sensor/switch symbol drawn in a small box directly on piping/duct; occurs 3x at distinct locations (near grid 14/15, near VAV-I-401A, near roof sensor at bottom) each a different physical device -> repeatable type mark, listed once"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,ET-B,plan,false,"Expansion tank, hatched circle glyph, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,ET-C,plan,false,"Expansion tank, hatched circle glyph, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,GWP-A-1,plan,false,"Glycol water pump, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,GWP-A-2,plan,false,"Glycol water pump, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,GWP-B-1,plan,false,"Glycol water pump, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,GWP-B-2,plan,false,"Glycol water pump, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,H,plan,false,"Humidity-sensor circle glyph, paired with T near outdoor air temp/humidity sensor (keynote MP24) -> repeatable type mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,HUM-A,plan,false,"Humidifier unit, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,HWP-B,plan,false,"Hot water pump, drawn on pump glyph next to piping, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,T,plan,false,"Temperature-sensor circle glyph; occurs twice at distinct locations (once alone near HWP-B/AHU area, once paired with H near outdoor sensor keynote MP24) -> repeatable type mark, listed once"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,VAV-I-401A,plan,false,"VAV box, unique instance keyed to room 401A"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#42,WWHP-A,plan,false,"Water-to-water heat pump, large equipment glyph, unique instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,AS-A,plan,false,"Unique air separator instance, valve/separator glyph below ET-A"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,ET-A,plan,false,"Unique expansion tank instance, circular hatched glyph with leader arrow"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,FSD,plan,false,"Repeatable type mark for fire/smoke damper, drawn in small boxed callout directly on duct glyph in mechanical shaft (confirmed via crop); only one occurrence on this sheet but it is a generic type designation, not a unique numbered instance"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,HWP-A-1,plan,false,"Unique hot water pump instance, pump glyph"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,HWP-A-2,plan,false,"Unique hot water pump instance, pump glyph, adjacent to HWP-A-1"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,HX-A-1,plan,false,"Unique heat exchanger instance, cylindrical glyph, SW area near HWP pumps"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,HX-A-2,plan,false,"Unique heat exchanger instance, adjacent to HX-A-1"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,SP,plan,false,"Repeatable type mark for static-pressure sensor, drawn in small boxed callout on duct (confirmed via crop, referenced by keyed note MH22 'AIR HANDLING UNIT SUPPLY AIR STATIC PRESSURE SENSOR LOCATION'); appears twice on sheet, listed once as a repeatable type tag"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,T,plan,false,"Repeatable thermostat/temperature-sensor symbol (circle with T), appears at ~19 distinct locations along the corridor/VAV runs; listed once as a repeatable type tag"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-32,plan,false,"Unique VAV box instance, hatched box glyph at grid ~1, west end of corridor"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-34,plan,false,"Unique VAV box instance, near room 34 box"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-37,plan,false,"Unique VAV box instance, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-38,plan,false,"Unique VAV box instance, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-39,plan,false,"Unique VAV box instance, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-40,plan,false,"Unique VAV box instance, bottom row, confirmed on hatched glyph via crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-46,plan,false,"Unique VAV box instance, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-A-47,plan,false,"Unique VAV box instance, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-B-45,plan,false,"Unique VAV box instance, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-E-33,plan,false,"Unique VAV box instance, top row near grid 13"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-E-36,plan,false,"Unique VAV box instance, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-E-44,plan,false,"Unique VAV box instance, bottom row, confirmed on hatched glyph via crop"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-E-48,plan,false,"Unique VAV box instance, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-E-49,plan,false,"Unique VAV box instance, near room 49 box, east end top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-E-50,plan,false,"Unique VAV box instance, bottom row east end"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-G-41,plan,false,"Unique VAV box instance, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#45,VAV-J-C01,plan,false,"Unique VAV box instance mid-corridor near shaft, label continues off adjacent sheet edge but glyph and full text confirmed via crop and textSpans"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-B-104,plan,false,"VAV terminal unit box on plan, near room 104"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-B-106,plan,false,"VAV terminal unit box on plan, near room 106"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-B-108,plan,false,"VAV terminal unit box on plan, near room 108"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-B-116,plan,false,"VAV terminal unit box on plan, near room 116"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-B-118,plan,false,"VAV terminal unit box on plan, near room 118"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-C-117,plan,false,"VAV terminal unit box on plan, near room 117"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-E-105,plan,false,"VAV terminal unit box on plan, near room 105"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-E-109,plan,false,VAV terminal unit box on plan
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-E-111,plan,false,"VAV terminal unit box on plan, near room 111"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-E-115,plan,false,VAV terminal unit box on plan
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-F-102,plan,false,"VAV terminal unit box on plan, near room 102"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-F-112,plan,false,"VAV terminal unit box on plan, near room 112"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-I-101,plan,false,"VAV terminal unit box on plan, leader to unit symbol above room 101"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#46,VAV-J-C10,plan,false,VAV terminal unit box drawn mid-plan near ductwork/damper cluster (not adjacent to a room number)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,FSD,plan,false,"Fire/smoke damper tag on hatched X-pattern damper symbol in 30x20 SA duct riser near MH06 keynote (which explicitly references 'FIRE/SMOKE DAMPER CONNECTION'); repeatable type mark, only one occurrence on this sheet"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-B-122,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-B-134C,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-B-134D,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-B-134F,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-C-134,plan,false,"Same literal tag text labels TWO separate, adjacent VAV box symbols in this run (near grid 6-7); listed once per the repeat-literal rule, but flagging as a likely drawing/tagging duplication (both boxes visually distinct units)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-C-135A,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-C-137B,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-D-134E,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-E-121,plan,false,"VAV box tag on plan symbol, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-E-125,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-E-131,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-F-134B,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-G-129,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-G-137,plan,false,VAV box tag on plan symbol
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#47,VAV-J-C11,plan,false,"VAV box tag on plan symbol, verified via crop showing leader to VAV glyph near EX 24x18 RA duct"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,T,plan,false,"Repeatable thermostat symbol: single letter 'T' inside a small circle glyph drawn directly on flexible ductwork/branch runs at multiple locations (confirmed via zoomed crop). Listed once as a repeatable type mark, not once per occurrence (appears ~9 times on this sheet)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-B-204A,plan,false,"VAV box symbol, room 204A, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-B-214,plan,false,"VAV box symbol, room 214, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-B-216A,plan,false,"VAV box symbol, room 216A, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-C-205,plan,false,"VAV box symbol, room 205, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-C-211,plan,false,"VAV box symbol near room 209/213 (no room box 211 shown, label near duct run)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-D-206,plan,false,"VAV box symbol, room 206, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-E-210,plan,false,"VAV box symbol, room 210, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-E-213,plan,false,"VAV box symbol, room 213, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-F-216,plan,false,"VAV box symbol, room 216, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-G-204,plan,false,"VAV box symbol, room 204, bottom row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-G-209,plan,false,"VAV box symbol, room 209, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-G-217,plan,false,"VAV box symbol, room 217, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-I-203,plan,false,"VAV box symbol, room 203, top row"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#48,VAV-J-C20,plan,false,"VAV box symbol in corridor/mechanical space, confirmed by close crop - label sits directly on a hatched/dashed VAV box glyph fed by flexible duct"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,FSD,plan,false,"Fire/smoke damper: rectangular box glyph on ductwork labeled FSD, confirmed via crop near room 216B/216C. Repeatable type mark, single occurrence on this sheet, listed once."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,T,plan,false,"Thermostat/space-sensor symbol: circled 'T' glyph drawn directly on ductwork, confirmed via crop. Appears ~15 times on this sheet (repeatable type mark) — listed once per instructions."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-B-216C,plan,false,"Unique VAV box instance near room 216C, confirmed via image crop."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-C-225,plan,false,Unique VAV box instance near room 225.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-E-228,plan,false,Unique VAV box instance near room 228.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-E-231,plan,false,Unique VAV box instance near room 231.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-E-232,plan,false,Unique VAV box instance near room 232.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-E-234,plan,false,Unique VAV box instance near room 234.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-E-235,plan,false,Unique VAV box instance near room 235.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-F-216,plan,false,Unique VAV box instance near room 216.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-F-224,plan,false,Unique VAV box instance near room 224.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-F-237,plan,false,Unique VAV box instance near room 237.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-G-221,plan,false,"Unique VAV box instance, hatched box glyph with leader to grid F near room 221."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-G-227,plan,false,Unique VAV box instance near room 227.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-H-236,plan,false,Unique VAV box instance near room 236.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#49,VAV-J-C21,plan,false,"Unique VAV box instance mid-plan, confirmed via crop showing hatched box glyph on duct branch labeled VAV-J-C21."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-B-304,plan,false,"VAV box drawn near room 304, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-B-314,plan,false,"VAV box drawn near room 314, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-B-316,plan,false,"VAV box drawn near room 316, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-C-311,plan,false,"VAV box drawn near room 311, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-D-308,plan,false,"VAV box drawn near room 308, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-D-310,plan,false,"VAV box drawn near room 310, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-D-C30,plan,false,"VAV box near room 006-S31/mechanical shaft area, label reads exactly 'VAV-D-C30' (verified via zoomed crop at PDF-point coords ~x877/y1350, half of raw textSpans coords since textSpans returns a 2x-scaled coordinate space relative to the render-page-crop.mjs point space) - unique instance mark, distinct from the other VAV-D tags"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-E-317,plan,false,"VAV box drawn near room 317 (adjacent to EX FAN COIL), unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-F-302,plan,false,"VAV box drawn near room 302, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-H-303,plan,false,"VAV box drawn near room 303, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-I-315,plan,false,"VAV box drawn near room 315, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#50,VAV-I-320,plan,false,"VAV box drawn near room 320, unique instance mark"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,FSD,plan,false,Fire/smoke damper tag drawn as a small box directly on ductwork near room 320/FSD symbol; repeatable equipment-type mark (only one instance found on this sheet).
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-B-323,plan,false,"Unique VAV box instance mark, drawn on VAV symbol at room 323."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-B-326,plan,false,"Unique VAV box instance mark, room 326."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-B-332,plan,false,"Unique VAV box instance mark, room 332."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-C-329,plan,false,"Unique VAV box instance mark, room 329."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-D-335,plan,false,"Unique VAV box instance mark, room 335."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-D-336A,plan,false,"Unique VAV box instance mark, room 336A."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-D-C31,plan,false,Unique VAV box instance mark serving space C31; confirmed via close crop showing tag directly on the VAV/damper glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-E-322,plan,false,"Unique VAV box instance mark, room 322 (large lab AHU-like box)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-E-324,plan,false,"Unique VAV box instance mark, room 324."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-E-327,plan,false,"Unique VAV box instance mark, room 327."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-E-331,plan,false,"Unique VAV box instance mark, room 331."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-F-336,plan,false,"Unique VAV box instance mark, room 336."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-I-328,plan,false,"Unique VAV box instance mark, room 328."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-I-330,plan,false,"Unique VAV box instance mark, room 330."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#51,VAV-I-334,plan,false,"Unique VAV box instance mark, room 334."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#52,EF-1,plan,false,"Existing building relief fan, labeled '(EF-1)' next to 'EX BUILDING RELIEF FAN' text at bottom-left of roof plan; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#52,EF-2,plan,false,"Exhaust fan, hexagon+circle glyph pair in dashed box labeled 'EF-2' below the symbol; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#52,EF-3,plan,false,"Exhaust fan, hexagon+circle glyph pair in dashed box labeled 'EF-3' above the symbol; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#52,HRU-A,plan,false,"Heat recovery unit, large rectangular equipment glyph in dashed box labeled 'HRU-A'; unique instance (Bid Alternate #1)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,AFM,plan,false,"Airflow measuring station box-tag on duct with small sensor glyph; occurs twice (penthouse plan and west roof plan) with identical literal text -> repeatable type mark, listed once."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,AHU-A,plan,false,"New air handling unit, large equipment room/cabinet outline containing fan/motor glyphs; unique instance mark (also referenced by keynote MH13/MH17, not counted as a tag)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,AS-B,plan,false,"Air separator/valve device, drawn with distinct symbol glyph and leader; unique instance mark (paired with AS-C)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,AS-C,plan,false,"Air separator/valve device symbol, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,FSD,plan,false,"Fire/smoke damper box-tag on duct, drawn adjacent to a black damper-blade glyph; repeatable type mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,GWP-A-1,plan,false,"Glycol/water pump, circular pump glyph with leader, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,GWP-A-2,plan,false,"Glycol/water pump, circular pump glyph, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,GWP-B-1,plan,false,"Glycol/water pump, circular pump glyph, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,GWP-B-2,plan,false,"Glycol/water pump, circular pump glyph, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,HUM-A,plan,false,"Humidifier unit, hatched rectangular box glyph, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,HWP-B,plan,false,"Heating water pump, circular pump glyph adjacent to AHU-A, unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,SP,plan,false,Static-pressure sensor box-tag on duct (keynote MH24 nearby describes installing a static pressure sensor here); repeatable type mark.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,SW-1,plan,false,"Wall-supply register/diffuser type tag, printed as e.g. '16""x8"" SW-1' next to duct-mounted diffuser (bowtie) glyphs, with '(TYP. 2)'/'(TYP. 3)' notations confirming multiple identical fixtures; repeatable schedule-type mark, listed once (the leading size string is a duct/register size callout, excluded)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,T,plan,false,Circled 'T' thermostat/temperature-sensor symbol drawn on a duct run near the AS-C/60x30 SA branch; repeatable device-type mark.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,VAV-I-401A,plan,false,VAV terminal box drawn on duct run serving room 401A; unique instance mark.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#53,WWHP-A,plan,false,"Water-to-water heat pump unit, hatched box glyph, unique instance mark (near GWP pumps/glycol feeder cluster)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#60,EC-17,plan,false,"Unique equipment tag (exhaust/electrical cabinet), underlined text with leader to a small hatched cabinet glyph at the wall near the stair/UPS panel."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#60,EC-L,plan,false,"Unique equipment tag, underlined text with leader to a small hatched cabinet glyph, same wall run as EC-17."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#60,EF-1,plan,false,"Unique exhaust fan tag; appears twice on the sheet (once in the 'BID ALTERNATE #2' dashed relocation box, once in the cluster near 401A/AHU DISC), each time next to a small fan glyph -- same physical fan, counted once."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#60,EF-2,plan,false,"Unique exhaust fan tag; appears twice (BID ALTERNATE #2 box and the 401A cluster), each next to a fan glyph -- counted once."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#60,EF-3,plan,false,"Unique exhaust fan tag; appears twice (BID ALTERNATE #2 box and the 401A cluster), each next to a fan glyph -- counted once."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#60,PF-41,plan,false,"Unique roof power/exhaust fan tag, oval callout with leader down to a hatched fan-box glyph at gridline ~14/G."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#61,EC-18,plan,false,"Electrical panel, drawn as a hatched panelboard glyph on the wall labeled 'EC-18', also referenced in this sheet's own keyed note EP14 ('...FEEDER FROM FCU-A TO PANEL EC-18'). Unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#61,EM-SB,plan,false,"Electrical panel, drawn as a hatched panelboard glyph on the wall with leader/label 'EM-SB' (Emergency panel, Sub-Basement). Unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#61,FCU-A,plan,false,"Same fan coil unit as on the companion mechanical sheet (page 32), re-drawn here as a boxed equipment symbol with disconnect glyph for the electrical feed; labeled 'FCU-A'. Unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#62,BAS PANEL,plan,false,"Rectangular panel glyph with leader labeled 'BAS PANEL' (Building Automation System panel) near gridline 5, above the two pump VFD glyphs. Controls equipment; only one on this sheet."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#62,FSD,plan,false,"Small square damper glyph labeled 'FSD' (fire/smoke damper) near room EC-E/FA1 keynote bubble, with a leader/arrow pointing down toward the elevator shaft wall. Repeatable type mark (generic FSD label); only one instance drawn on this sheet."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#62,HWP-A-1,plan,false,"Hexagonal equipment tag drawn directly over a pump glyph (hot water pump A-1) near gridline 5/A-B. Unique instance mark. Confirmed in textSpans at x0=2681.3,y0=3134.7 area (HWP-A-1) and visually as a hex callout on a pump symbol."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#62,HWP-A-1 VFD,plan,false,"Small rectangular VFD glyph labeled 'HWP-A-1 VFD' with leader, stacked below the BAS PANEL glyph near gridline 5. Electrical-for-mechanical equipment (variable frequency drive serving pump HWP-A-1). Unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#62,HWP-A-2,plan,false,"Hexagonal equipment tag drawn directly over a second pump glyph (hot water pump A-2) adjacent to HWP-A-1. Unique instance mark. textSpans confirm 'HWP-A-2' near x0=2930,y0=3452 and hex callout at ~3074,3159 in render."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#62,HWP-A-2 VFD,plan,false,"Small rectangular VFD glyph labeled 'HWP-A-2 VFD' with leader, directly above the HWP-A-1 VFD glyph. Electrical-for-mechanical equipment (VFD serving pump HWP-A-2). Unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-21,plan,false,"Electrical panel, hatched glyph recessed in wall near room 101/107, labeled below; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-22,plan,false,"Electrical panel, hatched wall glyph adjacent to EC-5; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-23,plan,false,"Electrical panel, hatched wall glyph near room 115/117; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-5,plan,false,"Electrical panel, hatched wall glyph near room 107/111; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-6,plan,false,"Electrical panel, hatched wall glyph near room 106/108, leader line up to label; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-7,plan,false,"Electrical panel, hatched wall glyph near room 129/131; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-7A,plan,false,"Electrical panel, separate hatched wall glyph immediately adjacent to EC-7 (distinct suffix, distinct symbol); unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EC-8,plan,false,"Electrical panel, hatched wall glyph in corridor near 122/134F; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EM-1,plan,false,"Electrical panel, hatched wall glyph near room 117/121; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,EMX-5,plan,false,"Electrical panel, hatched wall glyph near room 135/137; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#63,FSD,plan,false,"Fire smoke damper glyph (small box symbol) near room 118/122, labeled 'FSD' directly on the box; repeatable type mark (generic damper type, not individually numbered)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EC-10,plan,false,"Electrical panel, hatched wall glyph in corridor near 006-C21; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EC-11,plan,false,"Electrical panel, hatched wall glyph next to EC-J near room 227/231; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EC-12,plan,false,"Electrical panel, hatched wall glyph in corridor near room 222/224; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EC-9,plan,false,"Electrical panel, hatched wall glyph near room 209/213; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EC-H,plan,false,"Electrical panel (letter-suffixed), hatched wall glyph near room 213, adjacent to EM-2; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EC-J,plan,false,"Electrical panel (letter-suffixed), hatched wall glyph near room 225/227; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EM-2,plan,false,"Electrical panel, hatched wall glyph immediately next to EC-H near room 213; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,EMX-6,plan,false,"Electrical panel, hatched wall glyph near room 235/237; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#64,FSD,plan,false,"Fire smoke damper glyph (small box) near BAS PANEL/room 222, labeled 'FSD'; repeatable type mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,EC-13,plan,false,"Electrical panel, hatched wall glyph next to EC-K near room 307/311; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,EC-14,plan,false,"Electrical panel, hatched wall glyph in corridor near room 312/006-C31; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,EC-15,plan,false,"Electrical panel, hatched wall glyph near room 329/331; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,EC-16,plan,false,"Electrical panel, hatched wall glyph in corridor near room 330/332; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,EC-K,plan,false,"Electrical panel (letter-suffixed), hatched wall glyph near room 307/307A; the same literal tag also appears at a second hatched glyph near room 322 further south (text extraction renders that occurrence as 'EC-K 322', where '322' is the adjacent room number merged in by proximity, not part of the tag) — listed once."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,EM-3,plan,false,"Electrical panel, hatched wall glyph near room 315; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,EMX-7,plan,false,"Electrical panel, hatched wall glyph near room 335; unique instance."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#65,FSD,plan,false,"Fire smoke damper glyph (small box) near BAS PANEL/room 320, labeled 'FSD'; repeatable type mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#66,EF-1,plan,false,"Roof exhaust fan symbol (box with small fan glyph) near bid-alternate equipment, grid ~4/D-C. Unique instance mark; only one occurrence on this sheet."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#66,EF-2,plan,false,"Exhaust fan glyph (circular fan symbol) inside 'BID ALTERNATE #2' dashed box, grid ~4/E. Unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#66,EF-2 DISC.,plan,false,"Local disconnect switch symbol wired to EF-2 fan, labeled 'EF-2 DISC.' (underlined) directly beside the switch glyph. Treated as its own equipment tag (disconnect switch) distinct from the EF-2 fan tag."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#66,EF-3,plan,false,"Exhaust fan glyph (circular fan symbol) inside 'BID ALTERNATE #2' dashed box, above EF-2. Unique instance mark."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#66,EF-3 DISC.,plan,false,"Local disconnect switch symbol wired to EF-3 fan, labeled 'EF-3 DISC.' beside the switch glyph."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,BAS PANEL,plan,false,Repeatable type mark - identical literal 'BAS PANEL' label drawn next to at least 3 separate physical panel-box glyphs at different locations on the plan; listed once per rules.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,EC-17,plan,false,"Underlined electrical panel tag next to hatched box glyph (distinct from the 'EC-17A:n' circuit-number leader callouts, which were excluded as circuit references, not equipment)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,EC-17A,plan,false,"Underlined electrical panel tag next to hatched box glyph, paired with PF-41 at one location."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,EC-L,plan,false,Underlined electrical panel tag next to hatched box glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,EF-1,plan,false,Underlined tag next to roof exhaust-fan box glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,EF-2,plan,false,Underlined tag next to roof exhaust-fan box glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,EF-3,plan,false,Underlined tag next to roof exhaust-fan box glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,FSD,plan,false,"Box-glyph tag for a fire/smoke damper near FA1 keynote, single occurrence on this sheet."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GF,plan,false,"Two-letter tag next to a crosshair/roof-penetration symbol near the exhaust fans and glycol feeder; exact equipment identity uncertain (possibly a fill/vent connection for the glycol feed system) but it is a discrete labeled glyph, not a note/dimension."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-A-1,plan,false,"Hexagon pump-symbol tag, glycol water pump A-1."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-A-1 VFD,plan,false,Text label with leader line to a distinct VFD box glyph (one of 4 boxes under the WWHP-A/GWP stack).
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-A-2,plan,false,"Hexagon pump-symbol tag, glycol water pump A-2."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-A-2 VFD,plan,false,Text label with leader line to a distinct VFD box glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-B-1,plan,false,"Hexagon pump-symbol tag, glycol water pump B-1."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-B-1 VFD,plan,false,Text label with leader line to a distinct VFD box glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-B-2,plan,false,"Hexagon pump-symbol tag, glycol water pump B-2."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,GWP-B-2 VFD,plan,false,Text label with leader line to a distinct VFD box glyph.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,HUM-A,plan,false,Underlined label with leader to a box/pump-glyph unit; humidifier A.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,HWP-B,plan,false,"Hexagon pump-symbol tag, hot water pump B, near SF/RF fan bank."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,PDB-208,plan,false,"Underlined tag 'PDB-208 (FUTURE)' next to hatched box glyph, future panelboard."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,PDB-480,plan,false,"Underlined power-distribution-board tag next to hatched box glyph; appears in both the lighting-plan inset and the main power plan (same physical unit, counted once)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,PF-41,plan,false,"Underlined electrical panel tag next to hatched panel-box glyph; drawn twice on sheet (relocated panel, per keyed notes EP3/EP6/EP8) - same physical panel, counted once."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-1,plan,false,"Hexagon fan-symbol tag, return fan 1."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-1 VFD,plan,false,Text label with leader to one of 4 VFD box glyphs in the RF VFD row.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-2,plan,false,"Hexagon fan-symbol tag, return fan 2."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-2 VFD,plan,false,Text label with leader to one of 4 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-3,plan,false,"Hexagon fan-symbol tag, return fan 3."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-3 VFD,plan,false,Text label with leader to one of 4 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-4,plan,false,"Hexagon fan-symbol tag, return fan 4."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,RF-4 VFD,plan,false,Text label with leader to one of 4 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-1,plan,false,"Hexagon fan-symbol tag, supply fan 1, part of SF-1..SF-6 bank."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-1 VFD,plan,false,Text label with leader to one of 6 VFD box glyphs in the SF VFD row.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-2,plan,false,"Hexagon fan-symbol tag, supply fan 2."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-2 VFD,plan,false,Text label with leader to one of 6 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-3,plan,false,"Hexagon fan-symbol tag, supply fan 3."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-3 VFD,plan,false,Text label with leader to one of 6 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-4,plan,false,"Hexagon fan-symbol tag, supply fan 4."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-4 VFD,plan,false,Text label with leader to one of 6 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-5,plan,false,"Hexagon fan-symbol tag, supply fan 5."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-5 VFD,plan,false,Text label with leader to one of 6 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-6,plan,false,"Hexagon fan-symbol tag, supply fan 6 (drawn among the SF/RF VFD box row, no separate fan glyph visible for this one on this sheet but tag/VFD text confirms it)."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,SF-6 VFD,plan,false,Text label with leader to one of 6 VFD box glyphs.
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,T-7,plan,false,"Box-glyph tag 'T-7 FUTURE 225kVA' - future transformer. Borderline: electrical infrastructure rather than pure mechanical/plumbing equipment, but it is a drawn equipment box with a distinct tag, so included."
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#67,WWHP-A,plan,false,"Hexagon pump tag on plan; wall/water-source heat pump unit near GWP pumps, inside dashed 'BID ALTERNATE #1' area."

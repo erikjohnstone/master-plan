@@ -1,0 +1,222 @@
+sheet,tag,role,in_table,note
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#102,FD-1,plan,false,"Floor drain -- type mark, in the same main-plan janitor-closet callout stack as MS-1/WH-1."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#102,FS-2,plan,false,"Floor sink -- type mark, only visible in the enlarged 3D janitor-closet detail inset (not called out separately in the main plan's stack, which shows FD-1 instead)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#102,MS-1,plan,false,"Mop sink -- schedule-style type mark (repeatable), same physical fixture labeled in the main plan callout stack and shown twice more (from 2 angles) in the 3D enlarged janitor-closet detail on the same sheet; listed once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#102,WH-1,plan,false,"Water heater -- type mark, labeled in the main plan callout stack and again (same physical unit) in the enlarged 3D janitor-closet detail inset; listed once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#105,CO,plan,false,"Plumbing roof-plan sheet (RBPL025B, Floor Plan - Roof Level - Area B). 'CO' (cleanout) is printed directly beside two filled-circle cleanout glyphs on the roof-drain/overflow-drain assembly near the left side of the plan (leader-free, text sits right next to the symbol). Same literal repeatable type mark used at both occurrences -> counted once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#112,FCA,schedule,true,"Appears only once, inside the 'SYMBOL LEGEND' box at the top of the sheet, as the abbreviation key for 'FIRE SPRINKLER SYSTEM CONTROL VALVE ASSEMBLY' next to its icon. Not drawn anywhere on the actual plan view on this page."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#112,FHV,schedule,true,"Same situation as FCA: only appears once, as the legend key for 'FIRE SPRINKLER SYSTEM HOSE VALVE' next to its icon. Not drawn on the plan view on this page."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#114,FCA,plan,false,Boxed 'FCA' label stacked directly under the 'FHV' box at the same combination-standpipe location. Matches legend's 'FIRE SPRINKLER SYSTEM CONTROL VALVE ASSEMBLY'.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#114,FHV,plan,false,"Drawn once on the plan: a small boxed 'FHV' label sits directly next to (stacked above) a boxed 'FCA' label, both pointing via leader-free adjacency at the combination-standpipe symbol in the small mechanical/stair shaft near gridlines 4/00. Matches the legend's 'FIRE SPRINKLER SYSTEM HOSE VALVE' abbreviation."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#115,FCA,plan,false,Boxed 'FCA' label drawn directly on the plan next to the combination-standpipe symbol in the small mechanical shaft near gridlines 3/00 (same visual pattern as page 114).
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#115,FHV,plan,false,Boxed 'FHV' label stacked directly under 'FCA' at the same combination-standpipe location.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#116,FHV,plan,false,"Boxed 'FHV' label drawn on the plan next to a hose-valve door/cabinet glyph in the wall, with a leader to the note 'HOSE VALVE TO BE DETAILED WITH SMITHGROUP'. Confirmed by crop. No accompanying 'FCA' box appears on this particular sheet (unlike 114/115)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#117,FCA,schedule,true,"Appears only once, inside the SYMBOL LEGEND box, as the key for 'FIRE SPRINKLER SYSTEM CONTROL VALVE ASSEMBLY'. Not drawn anywhere on this sheet's actual plan."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#117,FHV,schedule,true,"Appears only once, inside the SYMBOL LEGEND box, as the key for 'FIRE SPRINKLER SYSTEM HOSE VALVE'. Not drawn anywhere on this sheet's actual plan."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4A01,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4A02,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4A03,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4A04,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4A05,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4A06,plan,false,"loudspeaker device tag, boxed 'S' glyph with leader to text, unique instance"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4C01,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4C02,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4C03,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4C04,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4C05,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,LS2-RB4C06,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,SM1-RB4A1,plan,false,"ambient noise sensor device tag, boxed 'M' glyph"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,SM1-RB4B1,plan,false,"ambient noise sensor device tag, standalone 'M' box near JAN/SHAFT area"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,SM1-RB4B3,plan,false,"ambient noise sensor device tag, standalone 'M' box near EB-PGL"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,SM1-RB4C1,plan,false,ambient noise sensor device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4A07,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4A08,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4A09,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4A10,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4A11,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4C07,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4C08,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4C09,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4C10,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,LS2-RB4C11,plan,false,loudspeaker device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,SM1-RB4A2,plan,false,ambient noise sensor device tag
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,SM1-RB4B2,plan,false,"ambient noise sensor device tag, standalone 'M' box"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,SM1-RB4B4,plan,false,"ambient noise sensor device tag, standalone 'M' box"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,SM1-RBC2,plan,false,"ambient noise sensor device tag; text literally reads SM1-RBC2 (missing '4A' present in sibling tags, likely an as-drawn drafting inconsistency) - transcribed exactly as extracted"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#159,LS1-RB4B01,plan,false,"Unique instance mark for a recessed-ceiling-mounted loudspeaker (device type 'S' per Sheet Notes 'DEVICE ANNOTATIONS: S, LOUDSPEAKER, RECESSED CEILING MOUNTED'), drawn as a circled 'S' symbol on the reflected ceiling plan with tag text directly beneath it."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#159,LS1-RB4B02,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#159,LS1-RB4B03,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#159,LS1-RB4B04,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#159,LS1-RB4B05,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#16,RBME031A,plan,false,"FALSE POSITIVE (pipeline hint). This is a sheet cross-reference callout text 'REFER TO SHEET RBME031A FOR CONTINUATION' -- a drawing/sheet number, not an equipment tag. Excluded."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#160,EOL-RB4B1,plan,false,"Distinct unique-instance equipment tag for an End-Of-Line device, printed directly beneath/adjacent to the LS1-RB4B10 loudspeaker's tag text at the same glyph/leader location (confirmed via close-up crop) -- a separate life-safety/controls device (end-of-line resistor/supervisory unit for the notification circuit), not a duplicate of the speaker tag."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#160,LS1-RB4B06,plan,false,"Unique instance mark for a recessed-ceiling loudspeaker, circled 'S' glyph with tag text beneath, per Sheet Notes Device Annotations."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#160,LS1-RB4B07,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#160,LS1-RB4B08,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#160,LS1-RB4B09,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#160,LS1-RB4B10,plan,false,"Same loudspeaker family, distinct unique instance/location suffix."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,AHU-1,plan,false,"Air handling unit box symbol in mechanical room; unique instance (only one AHU on this sheet). Not in the pipeline's hint list for this page, which appears to be a miss by the recognizer."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,CU-4,plan,false,Condensing unit tag on outdoor unit box symbol below mechanical room; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,CU-5,plan,false,Condensing unit tag adjacent to CU-4; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,EDH-1,plan,false,Electric duct heater tag on a rectangular duct symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,FCU-1,plan,false,Fan coil unit tag in mechanical room; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,CU-1,plan,false,Condensing unit tag at bottom of sheet (near matchline to RBME021A); unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,CU-2,plan,false,Condensing unit tag; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,CU-3,plan,false,Condensing unit tag; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,D1,plan,false,"Repeatable diffuser/register type tag drawn next to duct branch symbols with CFM callouts; appears twice on this sheet (D1/400 near UPS RM branch, and D1/350 TYP.4 near ATC ROOM branch) -- same type tag, listed once per rules for repeatable marks."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,D2,plan,false,Diffuser type tag (D2/160 CFM) next to duct branch near UPS RM.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,D3,plan,false,Diffuser type tag (D3/240 CFM) near roof duct riser.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,D4,plan,false,"Diffuser type tag (D4/700 CFM, TYP.2) near ATC ROOM duct run."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,FC-1,plan,false,Fan coil unit tag in ATC/UPS mechanical area; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,FC-2,plan,false,Fan coil unit tag near ATS/Electrical Room; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,FC-3,plan,false,Fan coil unit tag near Electrical Room; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#19,FC-4,plan,false,Fan coil unit tag near IDF room; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#19,FC-5,plan,false,Fan coil unit tag near Fire Control room; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#19,GI-1,plan,false,"Intake ventilator, labeled under its duct/louver symbol below GR-1; unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#19,GR-1,plan,false,"Relief ventilator, labeled directly under its duct/louver symbol at top of sheet; unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#20,EF-1,plan,false,"Exhaust fan tag in a box, positioned at a roof curb/duct penetration symbol on the floor plan. Confirmed via textSpans at x0=801.2,y0=649.1. Unique instance mark (only one EF-1 shown on this sheet)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-2,plan,false,"Cabinet/ceiling fan tag on fan symbol, upper-left of platform level plan; unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-3,plan,false,"Fan tag on fan symbol, upper-right area; unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-5,plan,false,"Fan tag on fan symbol, lower-left area (mirrors CF-2 position); unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-6,plan,false,"Fan tag on fan symbol, lower-right area (mirrors CF-3 position); unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,EF-2,plan,false,Exhaust fan tag in Fire Control/Shaft area near stair; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-1,plan,false,"Unique instance mark on a 6-blade exhaust/ceiling fan symbol (star/hexagon glyph), top-left of Floor Plan - Level 4 - Area B. Confirmed visually (cropped zoom shows CF-1 directly on the fan glyph) and in textSpans at x0=958.2,y0=412.6."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-2,plan,false,"Same fan-symbol family as CF-1, drawn near right/matchline side of the plan. textSpans x0=1470.2,y0=413.3."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-4,plan,false,"Same fan-symbol family, lower-left of plan (near second fan glyph and the '44x44 SMOKE EXHAUST DUCT ... CONNECT TO SMOKE EXHAUST FAN' note). textSpans x0=955.3,y0=1027."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-5,plan,false,"Same family, lower-right. textSpans x0=1466.6,y0=1025.9. No CF-3 appears anywhere on this sheet."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#23,SEF-3,plan,false,"Roof exhaust fan tag in a box directly below a fan/louver glyph on the roof plan. Confirmed via textSpans x0=525.4,y0=741.3."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#23,SEF-4,plan,false,"Roof exhaust fan tag in a box directly below a second, identical fan/louver glyph. Confirmed via textSpans x0=915.5,y0=741.3."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E) CH-3,plan,false,"Existing chiller, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E) CT-1,plan,false,"Existing cooling tower, unique instance, one of three large square tower symbols on the left."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E)ET-1,plan,false,"Existing expansion tank, unique instance, tag next to circular tank symbol."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E)FC-1,plan,false,"Existing fan coil unit, unique instance, tag drawn directly on the equipment box."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E)FC-2,plan,false,"Existing fan coil unit, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,AS-1,plan,false,"Air separator, unique instance, tag on circular device symbol."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CH-1,plan,false,"Chiller, unique instance, tag on large chiller equipment outline."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CH-2,plan,false,"Chiller, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CT-2,plan,false,"Cooling tower, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CT-3,plan,false,"Cooling tower, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CWP-1,plan,false,"Condenser water pump, unique instance drawn on a pump symbol in the plant room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CWP-2,plan,false,"Condenser water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CWP-3,plan,false,"Condenser water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,EF-1,plan,false,"Exhaust fan, unique instance, tag on small fan symbol near bottom of plan."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-1,plan,false,"Primary chilled water pump, unique instance, one of a row of 4 pump boxes."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-2,plan,false,"Primary chilled water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-3,plan,false,"Primary chilled water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-4,plan,false,"Primary chilled water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PF-1,plan,false,Equipment tag on a small package/pump symbol near the bottom-left of the plant room (fire/plumbing pump); unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,RG-2,plan,false,"Return grille type tag, drawn twice on the plan (near PECM Storage '500' CFM callout, and near Meter Room '500' CFM callout), same repeatable type mark used for two physical grilles; listed once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-1,plan,false,"Secondary chilled water pump, unique instance, one of a vertical row of 4 pump symbols beside the chillers."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-2,plan,false,"Secondary chilled water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-3,plan,false,"Secondary chilled water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-4,plan,false,"Secondary chilled water pump, unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SR-1,plan,false,"Supply register/sensor type tag, drawn twice on the plan (near PECM Storage duct '400' CFM callout at top, and near Meter Room duct '400' CFM callout) with an inline diffuser-symbol leader each time — same literal tag reused for two physical duct-mounted devices of the same type, so listed once as a repeatable type mark."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,WS-1,plan,false,Water softener/similar equipment tag near a dashed equipment outline at bottom right; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E) CH-3,plan,false,Existing chiller equipment box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E) CT-1,plan,false,Existing cooling tower box symbol (round tower glyph); exact literal has a space after (E).
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E)ET-1,plan,false,Existing expansion tank box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E)FC-1,plan,false,Existing flow/coil equipment box with leader; exact literal as extracted from text spans (no space after (E)).
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E)FC-2,plan,false,Existing flow/coil equipment box with leader; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,AS-1,plan,false,Air separator (circle glyph) with tag box; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CH-1,plan,false,Chiller equipment box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CH-2,plan,false,Chiller equipment box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CT-2,plan,false,Cooling tower box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CT-3,plan,false,Cooling tower box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CWP-1,plan,false,"Condenser water pump box symbol, plan view; unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CWP-2,plan,false,Condenser water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CWP-3,plan,false,Condenser water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-1,plan,false,Primary chilled water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-2,plan,false,Primary chilled water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-3,plan,false,Primary chilled water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-4,plan,false,"Primary chilled water pump box symbol, drawn separately near piping; unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PF-1,plan,false,Small equipment box symbol at lower left (pot feeder); unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-1,plan,false,Secondary chilled water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-2,plan,false,Secondary chilled water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-3,plan,false,Secondary chilled water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-4,plan,false,Secondary chilled water pump box symbol; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,WS-1,plan,false,Equipment box symbol (water softener/sample station) near piping; unique instance.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#24,SEF-1,plan,false,"Roof exhaust fan tag in a box directly below a fan/louver glyph, matching the same style/family as SEF-3/SEF-4 on the adjacent sheet (page 23). Confirmed via textSpans x0=898.8,y0=744.7."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#24,SEF-2,plan,false,"Roof exhaust fan tag in a box below a second identical fan glyph. Confirmed via textSpans x0=1285.6,y0=744.7."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,AHU-1,plan,false,"Unique air handling unit, labeled on a rectangular equipment box inside the Mechanical Room on the piping plan. textSpans x0=770,y0=510.6. NOTE: this tag was NOT in the pipeline's hinted family list (CU-4, CU-5, FCU, FS-1, N1) — the pipeline appears to have missed it entirely."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,CU-4,plan,false,"Unique condensing unit box at bottom of Mechanical Room, paired with CU-5. textSpans x0=719.9,y0=912.5."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,CU-5,plan,false,"Unique condensing unit box adjacent to CU-4. textSpans x0=754.7,y0=912.5."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,FCU-1,plan,false,"Unique fan coil unit box in the Mechanical Room, referenced by note '...FROM FCU-1, INSIDE THE WALL...'. textSpans x0=714.6,y0=823.7."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,FS-1,plan,false,"Unique floor sink / equipment box next to AHU-1, with leader notes about condensate spilling to floor sink. textSpans x0=680.4,y0=527.4."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#251,CPLA,plan,false,"Existing electrical panel labeled '(E) CPLA' directly on its box symbol on the left side of the plan (also noted as having the '(E) 45KVA XFMR' stacked over it). One specific physical panel; also referenced via circuit-number callouts '(CPLA) - (n)' elsewhere on the sheet for individual circuits it feeds -- same single panel, listed once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#251,DSCP,plan,false,"Existing electrical distribution panel labeled '(E) DSCP' directly on its box symbol near the top of the plan (with keynote E01 leader pointing to it, per general note 'UNLESS OTHERWISE SHOWN ALL EQUIPMENT IS EXISTING'). One specific physical panel; referenced repeatedly elsewhere on the sheet via circuit-number callouts '(DSCP) - (n,n,n)' pointing to individual breaker/pump connections it feeds, but those are all the same one panel, not separate instances, so listed once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,CT-1,plan,false,"Cooling tower, labeled '(E) CT-1' beside the top circular tank glyph in the 3-tank stack on the left side of the plan. Unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,CT-2,plan,false,"Cooling tower, labeled 'CT-2' beside the middle circular tank glyph in the same stack. Unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,CT-3,plan,false,"Cooling tower, labeled 'CT-3' beside the bottom circular tank glyph in the same stack. Unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,FC-1,plan,false,"Existing fan coil unit, boxed label '(E)FC-1' on a rectangular equipment glyph near CT-1. Unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,FC-2,plan,false,"Existing fan coil unit, boxed label '(E)FC-2' on a rectangular equipment glyph near the top-center of the plan (paired with an adjacent (E)FS-1 floor sink). Unique instance."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,FS-1,plan,false,"Repeatable floor-sink type mark. Appears at least 8 times across the sheet, both '(E)FS-1' (existing, at multiple locations) and 'FS-1' (new, including the boxed callout near PF-1/WS-1 and inside the note 'INSTALL FS-1 ON 4"" HOUSE KEEPING PAD'). Each occurrence labels a distinct physical floor sink of the same type -- listed once per the repeatable-type rule."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,PF-1,plan,false,"Boxed tag next to a packaged pump/equipment symbol at the bottom-left of the plan, associated with the note 'INSTALL FS-1 ON 4"" HOUSE KEEPING PAD'. Only one occurrence on this sheet."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,S-1,plan,false,"Existing tag '(E)S-1', boxed, near small circle symbols at the bottom-right of the plan (by the 'CONNECT NEW 3"" TRAP ARM' note). Only one occurrence on this sheet; not in the pipeline's hinted family list."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,WS-1,plan,false,Boxed tag next to a circular tank/softener symbol inside the dashed enclosure at bottom-center-right of the plan. Only one occurrence on this sheet.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,CU-1,plan,false,"Unique condensing unit box at bottom, part of CU-1/CU-2/CU-3 row near the matchline. textSpans x0=775.3,y0=1284.9."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,CU-2,plan,false,"Unique condensing unit box, middle of the CU row. textSpans x0=738.8,y0=1284.9."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,CU-3,plan,false,"Unique condensing unit box, left of the CU row. textSpans x0=702,y0=1284.9."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,FC-1,plan,false,"Unique fan coil unit box, upper area of Piping Plan - Level 1 - Area D. textSpans x0=756.2,y0=820.2."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,FC-2,plan,false,"Unique fan coil unit box, mid/lower area near FC-3. textSpans x0=752.5,y0=1020.1."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,FC-3,plan,false,"Unique fan coil unit box adjacent to FC-2. textSpans x0=688.2,y0=1039.1."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,FS-1,plan,false,"Unique floor sink box just below FC-1. textSpans x0=742,y0=908.8."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#260,(E)S-1,plan,false,"Existing sink/fixture tag placed directly beside its fixture symbol (small plumbing fixture with valve, drawn schematically). '(E)' denotes existing equipment being reused. Not in the pipeline's raw hint but clearly a real drawn equipment tag; verified in zoomed crop."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#260,(E)SS-1,plan,false,Existing service-sink/valve assembly tag placed directly beside its symbol (valve/backflow-type fixture drawn schematically). Also missed by the pipeline's raw hint; verified in zoomed crop as a genuine equipment-adjacent tag.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#260,CT-3,plan,false,"Cooling tower symbol (circle) drawn in plan, labeled 'NEW COOLING TOWER / CT-3' directly inside the equipment graphic. Unique instance mark. Confirmed via zoomed crop and textSpans (str:'CT-3', x0=455.4,y0=995.4)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#260,WS-1,plan,false,"Tag in a small boxed callout sitting directly next to a fixture/equipment symbol (circular basin + rectangular unit) inside a dashed equipment enclosure; leader note 'ROUTE DCW TO WS-1 EQUIPMENT' confirms it is a real equipment tag, not a room/keynote number. Unique instance mark."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#27,FC-4,plan,false,"Fan-coil/refrigerant-line equipment tag in a box, next to a small wall-mounted unit glyph inside the 'IDF / RBST245' room, connected to labeled refrigerant piping ('REFRIGERANT LINES FROM BELOW'). Confirmed via textSpans x0=725.8,y0=712.9."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#27,FC-5,plan,false,"Same equipment type as FC-4, in the 'FIRE CONTROL / RBST246' room, next to an identical small unit glyph at the refrigerant piping run. Confirmed via textSpans x0=1277,y0=657.9."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,CHWP-1,plan,false,"Unique chilled water pump, drawn on a pump/circle glyph, confirmed in close-up crop. textSpans x0=490.6,y0=1196.2."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,CHWP-2,plan,false,"Unique chilled water pump, adjacent pump glyph to CHWP-1. textSpans x0=429.2,y0=1181.2."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,EF-3,plan,false,"Unique exhaust fan box at upper-left of the piping plan, near the combination fire/smoke damper note. textSpans x0=226.6,y0=942.9."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,FCU-2,plan,false,"Unique fan coil unit box near the bottom of the pump skid area. textSpans x0=721.1,y0=1321.8."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,SP-1,plan,false,"Unique sump pump, labeled inside a shaded/hatched equipment box ('SUMP PUMP (SP-1) WEIL SN-1408...'). Confirmed visually in close-up crop. textSpans x0=365.3,y0=1033.9 (plus a second textual mention 'SUMP PUMP (SP-1)' in the adjacent spec note, same physical unit, counted once)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,VFD-1,plan,false,"Unique variable frequency drive, leader-labeled near the control panel/pump skid. textSpans x0=765.4,y0=1163.4."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,VFD-2,plan,false,"Unique VFD, leader-labeled just below VFD-1. textSpans x0=757.9,y0=1205.9."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#45,OS,plan,false,"Occupancy-sensor device tag, drawn directly next to a small circle glyph on ceiling/wall lighting circuits (rotated 'OS' text abutting the sensor symbol). Appears at multiple locations on the sheet (e.g. x0=437.1,y0=335.7; x0=1151.9,y0=384.6; x0=873.2,y0=484; x0=1369,y0=484; x0=1268,y0=1164.2; x0=442.1,y0=1170.5) labeling the same device TYPE each time -- REPEATABLE type mark, listed once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-ATS-ES,plan,false,Second distinct ATS status/control point tag next to the same ATS symbol.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-ATS-OS,plan,false,Third distinct ATS status/control point tag near the ATS symbol.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-ATS-SE,plan,false,Control/status point tag on a small contact symbol next to the ATS (automatic transfer switch) equipment box in the Electrical Room.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-EDSE,plan,false,Distinct relay/control output tag with leader line to a small box symbol near the ATS/switchgear cluster.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-EH1,plan,false,"Relay panel terminal-block output tag, leader line to its rectangle in the same row as RC-SL2/RC-SH2."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-MSB-1,plan,false,Tag with leader arrow to the main switchboard 'MAIN SECTION' box symbol (main switchboard equipment).
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-SDH1,plan,false,Relay panel terminal-block output tag with leader line to its rectangle.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-SDL1,plan,false,Relay panel terminal-block output tag with leader line to its rectangle.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-SH1,plan,false,Relay panel terminal-block output tag with leader line to its rectangle.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-SH2,plan,false,Relay panel terminal-block output tag with leader line to its rectangle.
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-SL1,plan,false,"Unique relay-output terminal tag on a small rectangular terminal-block symbol within the 'WISCAPE RELAY PANEL' graphic, Level 1 Electrical/ATC Rooms plan; leader arrow points at the specific terminal."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-SL2,plan,false,"Same relay panel symbol row, distinct terminal-block output tag with leader line down to its own terminal rectangle."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,RC-SL4,plan,false,"Same relay panel symbol row, distinct terminal-block output tag with leader arrow."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-1,plan,false,"Condensing unit box symbol with leader line, level-1 mechanical power plan (Area A/D)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-2,plan,false,"Condensing unit box symbol with leader line, same cluster as CU-1/CU-3."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-3,plan,false,"Condensing unit box symbol with leader line, same cluster as CU-1/CU-2."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-4,plan,false,"Condensing unit box symbol with leader line, second rooftop cluster."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-5,plan,false,"Condensing unit box symbol with leader line, second rooftop cluster, adjacent to CU-4."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,AHU-1,plan,false,"Air handling unit box symbol with leader, Mechanical Room (bottom view, Area A)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-1,plan,false,"Condensing unit, leader to disconnect/G/WP symbol, Electrical room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-2,plan,false,"Condensing unit, leader to disconnect symbol, Electrical room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-3,plan,false,"Condensing unit, leader to disconnect symbol, Electrical room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-4,plan,false,"Condensing unit, leader to disconnect symbol, Mechanical Room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-5,plan,false,"Condensing unit, leader to disconnect symbol, Mechanical Room, adjacent to CU-4."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,EDH-1,plan,false,"Electric duct heater, label directly on a box symbol, Mechanical Room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,EF-1,plan,false,"Exhaust fan wall/duct symbol with leader, ATC/Electrical rooms plan (top view)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FC-1,plan,false,"Fan coil unit box symbol with leader, ATC room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FC-2,plan,false,"Fan coil unit box symbol with leader, Electrical room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FC-3,plan,false,"Fan coil unit box symbol with leader, near ATS space."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FCU-1,plan,false,"Fan coil unit box symbol with leader, Mechanical Room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#67,EF-2,plan,false,"Found in the JAN (janitor) room on 'LEVEL 4 - PLATFORM - AREA A' mechanical power floor plan. Drawn as a filled dot equipment symbol with a leader line pointing to a small square wall-mounted device symbol, labeled 'EF-2' directly beneath (Exhaust Fan 2) - a unique physical equipment instance, listed once. Confirmed by close crop: text 'EF-2' sits right next to/under the leader from the device glyph, clearly distinct from the room-number tag box 'RBST460' (JAN room number) just above it."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,CHWP-1,plan,false,"Chilled water pump, circular pump glyph with leader, pump room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,CHWP-2,plan,false,"Chilled water pump, circular pump glyph with leader, pump room, adjacent to CHWP-1."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,EF-2,plan,false,"Exhaust fan symbol near Jan closet, Platform Level vertical circulation core (view 2)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,EF-3,plan,false,"Exhaust fan roof symbol with leader, Level 1 pump room (view 4)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,FC-4,plan,false,"Fan coil unit box symbol with leader, Level 2 IDF room (view 3)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,FC-5,plan,false,"Fan coil unit box symbol with leader, Level 3 vertical circulation core (view 1)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,VFD-1,plan,false,"Variable frequency drive box symbol with leader, pump room."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,VFD-2,plan,false,"Variable frequency drive box symbol with leader, pump room, adjacent to VFD-1."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#93,FS-1,plan,false,"Floor sink/floor drain symbol (small filled square glyph) with leader to text 'FS-1', located in the Mechanical Room on the plumbing below-slab plan near the 3""ø W cleanout and vent runs. Verified against textSpans entry {""str"":""FS-1"",""x0"":723.7,""y0"":608.3} and the rendered image crop. Repeatable type/schedule mark (one physical floor sink shown here; same mark type reused on other sheets)."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#95,FS-1,plan,false,"Floor sink symbol (filled square) with leader labeled 'FS-1', near the 2""ø V vent stub inside the ATC Room area on the below-slab plumbing plan. Verified via textSpans {""str"":""FS-1"",""x0"":778.4,""y0"":979.7} and rendered crop; same fixture-type mark as seen on page 93/96."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#96,FS-1,plan,false,"Floor sink symbol (filled square) with leader 'FS-1' next to the 2""ø V vent in the Mechanical Room, same fixture-type mark as pages 93/95. textSpans {""str"":""FS-1"",""x0"":704.9,""y0"":575.1}."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#96,HB-1,plan,false,"Hose bibb symbol (small circle on the 3/4""ø DCW branch riser) labeled 'HB-1', with a separate leader note '3/4"" DCW DOWN TO HB-1' pointing to it from the domestic cold water main. Verified in rendered crop and textSpans {""str"":""HB-1"",""x0"":787,""y0"":708.6}. The pipeline's 'DOWNTOHB' family is a false positive: it comes from the note text '3/4"" DCW' + 'DOWN TO HB-1' being concatenated by the extractor into 'DOWNTOHB-1' — that string is just a leader annotation referencing the real tag HB-1, not a second distinct tag, so it is excluded."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#98,FS-1,plan,false,"Floor sink tag drawn next to a filled black square symbol on the plumbing floor plan (Level 1 - Area D), near the ATC Room wall, with a small leader/arc pointing to the fixture and a '2""ø V' vent-pipe callout beside it. Confirmed by zoomed crop; text span 'FS-1' not found in textSpans dump directly (span extraction on this sheet is heavily fragmented character-by-character in the title block) but the drawn glyph and label are unambiguous in the rendered image. Single unique occurrence on this sheet."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#99,CO,plan,false,"Cleanout tag drawn standalone next to a small circle symbol at a plumbing riser cluster (Level 2 - Area A), beside '4""ø ODL' / '4"" RD & OD (700 S.F.)' pipe callouts. Repeatable type mark (cleanouts recur across the building with the same label) - listed once."
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#99,GCO,plan,false,"Ground cleanout tag drawn standalone next to a circle symbol on the same pipe run, beside the '3""ø W' callout. Repeatable type mark - listed once."

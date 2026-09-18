@@ -1,0 +1,110 @@
+sheet,tag,role,in_table,note
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,AHU-26,plan,false,"Real, extractable PDF text (confirmed via textSpans, x0=2472.6,y0=2454.9). Printed as the 3rd line of a room-label stack ('FAN ROOM #11 / MECH. ROOM / AHU-26') directly inside the hatched Fan Room #11 / mechanical-room enclosure on the Basement Floor plan. This is the single cleanest, indisputable equipment tag on the whole document -- an Air Handling Unit number drawn on its own equipment room glyph, exactly matching the AHU-A2 example pattern. The pipeline's zero-tag census entirely missed this."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP D119 H 1,plan,false,"Callout box 'D-119 / Control Panels:' near a hatched equipment/electrical room, First Floor. Same literal also reused inside a separate 'D-119a / Control Panels:' box a short distance away (likely a copy/paste labeling slip -- D-119a's panels probably should read 'D119a'); listed once."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP D119 H 2,plan,false,"Duplicated between the D-119 and D-119a boxes, same as CP D119 H 1."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP D119 H 3,plan,false,Duplicated between the D-119 and D-119a boxes.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP D119 H 4,plan,false,Only in the D-119 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP D119 H 5,plan,false,Only in the D-119 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP D119 H 6,plan,false,Only in the D-119 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP D119 S 1,plan,false,Only in the D-119 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E11a H 1,plan,false,"Callout box 'E-11a / Control Panels:' with leader line to the Switch Gear E-11 / Office E-11a area, Basement Floor."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E11a H 2,plan,false,Same E-11a callout box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 H 1,plan,false,"Callout box 'Chiller Plant (E-26) / Control Panels:' pointing near the Boiler Plant/Service Room area. NOTE: the exact same literal 'CP E26 H 1' also appears in a second, separate callout box labeled 'Chiller Plant (E-26b)' elsewhere on the same sheet -- almost certainly a drawing labeling error (E-26b's panels should probably read 'E26b'), listed once here per instructions."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 H 2,plan,false,Same duplicate-literal situation as CP E26 H 1 (appears in both the E-26 and E-26b boxes).
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 H 3,plan,false,Only in the 'Chiller Plant (E-26b)' box (Boiler Room area).
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 H 4,plan,false,Only in the 'Chiller Plant (E-26b)' box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 H 5,plan,false,Only in the 'Chiller Plant (E-26b)' box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 H 6,plan,false,Only in the 'Chiller Plant (E-26b)' box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 S 1,plan,false,Only in the original 'Chiller Plant (E-26)' box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 S 2,plan,false,Only in the original 'Chiller Plant (E-26)' box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP E26 S 3,plan,false,Only in the original 'Chiller Plant (E-26)' box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 A 1,plan,false,Same F-8 control-panel callout box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 A 2,plan,false,Same F-8 control-panel callout box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 A 3,plan,false,"Same F-8 control-panel callout box; last line, box closes right after."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 H 1,plan,false,"Leader-line callout box labeled 'F-8 / Control Panels:' pointing at the hatched mechanical-equipment room near Compressor Rm F-12/Transformer Rm F-14 (Basement Floor). 8 distinct control-panel IDs listed (H1-H4, S1, A1-A3); this and the other 7 are each transcribed below. NOT present in textSpans -- these panel-callout boxes appear to be curves/outlined text, not real PDF text objects (confirmed by an empty textSpans query over that region), so they are invisible to text-based extraction even though clearly legible when rendered."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 H 2,plan,false,Same F-8 control-panel callout box as CP F8 H 1.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 H 3,plan,false,Same F-8 control-panel callout box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 H 4,plan,false,Same F-8 control-panel callout box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP F8 S 1,plan,false,Same F-8 control-panel callout box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP Fr17 AH 1,plan,false,"Single-line callout box 'Fan Room #17 / Control Panel:' with leader line pointing at a hatched roof-projection glyph, First Floor (far east side)."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP Fr7 H 1,plan,false,"Callout box 'Fan Room #7 / Control Panels:' with leader line to a hatched fan-room glyph near the legend, First Floor."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP Fr7 H 2,plan,false,Same Fan Room #7 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP Fr7 H 3,plan,false,Same Fan Room #7 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP Fr7 H 4,plan,false,Same Fan Room #7 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr11 H 1,plan,false,"Callout box 'Fan Room #11 / Control Panels:' pointing at the same hatched Fan Room #11/AHU-26 enclosure as the AHU-26 room label, Basement Floor."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr11 H 2,plan,false,Same Fan Room #11 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr12 A 1,plan,false,Same Fan Room #12 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr12 H 1,plan,false,"Callout box 'Fan Room #12 / Control Panels:' with leader line to a Fan Room symbol, First Floor."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr18 AH 1,plan,false,"Single-line callout box 'Fan Room #18 / Control Panel:' with leader line into a corridor area, Basement Floor."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 AH 1,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 1,plan,false,"Callout box 'Fan Room #4 / Control Panels:' with leader line to a large hatched Fan Room #4 enclosure, Basement Floor. 11 panel IDs listed total (H1-H8, AH1, S1, S2)."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 2,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 3,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 4,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 5,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 6,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 7,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 H 8,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 S 1,plan,false,Same Fan Room #4 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr4 S 2,plan,false,Same Fan Room #4 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr5 A 1,plan,false,Same Fan Room #5 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr5 H 1,plan,false,"Callout box 'Fan Room #5 / Control Panels:' with leader line to a hatched Fan Room #5 glyph, First Floor (near Cardiac O.R. area)."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr5 H 2,plan,false,Same Fan Room #5 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr5 H 3,plan,false,Same Fan Room #5 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#4,CP fr5 S 1,plan,false,Same Fan Room #5 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,AHU-25,plan,false,"Roof-mounted AHU named in a callout box 'Roof 2 South / AHU-25 / Control Panel: / CP Roof2south S 1', leader-lined off the edge of the roof plan toward the actual rooftop unit location. Genuine unique AHU instance tag, same pattern as AHU-A2 example -- but this box's text is NOT in the PDF text layer (confirmed absent from textSpans on page 5), unlike AHU-26 on page 4 which IS real text. Visually unambiguous when rendered at scale 3-4."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP Roof2south S 1,plan,false,"Control panel for rooftop AHU-25, same callout box as AHU-25 above."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 1,plan,false,"Callout box 'Fan Room #1 / Control Panels:' with leader line to the large hatched 'FAN RM 1' glyph. 9 panel IDs listed (H1-H9), all same H-suffix pattern."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 2,plan,false,Same Fan Room #1 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 3,plan,false,Same Fan Room #1 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 4,plan,false,Same Fan Room #1 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 5,plan,false,Same Fan Room #1 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 6,plan,false,Same Fan Room #1 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 7,plan,false,Same Fan Room #1 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 8,plan,false,Same Fan Room #1 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr1 H 9,plan,false,Same Fan Room #1 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr14 H 1,plan,false,"Callout box 'Fan Room #14 / Control Panels:' with leader line to a small hatched fan-room glyph, Third Floor. NOTE: a different callout box on page 6 ('Fan Room #10') mistakenly reuses the 'fr14' panel-name prefix for 4 more entries (H2-again, H3-again, H4, S1, A1) -- almost certainly a copy/paste labeling error in the source drawing rather than a second real panel bank; see the fr10/fr14 note on page 6."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr14 H 2,plan,false,Same Fan Room #14 box; literal also reappears (mislabeled) inside the 'Fan Room #10' box on page 6.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr14 H 3,plan,false,Same Fan Room #14 box; literal also reappears (mislabeled) inside the 'Fan Room #10' box on page 6; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr2 A 1,plan,false,Same Fan Room #2 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr2 A 2,plan,false,Same Fan Room #2 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr2 H 1,plan,false,"Callout box 'Fan Room #2 / Control Panels:' with leader line to the hatched 'FAN RM 2' glyph, Second/Third Floor roof area (east side)."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr2 H 2,plan,false,Same Fan Room #2 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr2 S 1,plan,false,Same Fan Room #2 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr8 H 1,plan,false,"Callout box 'Fan Room #8 / Control Panels:' with leader line to the small hatched 'FAN RM 8' glyph, Second Floor roof area."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr8 H 2,plan,false,Same Fan Room #8 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#5,CP fr8 S 1,plan,false,Same Fan Room #8 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr10 H 1,plan,false,"First line of the 'Fan Room #10 / Control Panels:' box (leader-lined to the opposite hatched stair/fan-room enclosure from Fan Room #9). Oddly, the remaining 5 lines in this same box are labeled 'CP fr14 ...' instead of 'CP fr10 ...' -- almost certainly a drawing copy/paste error, not a real second bank of Fan-Room-14 panels on this sheet."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr14 A 1,plan,false,Appears inside the 'Fan Room #10' callout box (mislabeled 'fr14' -- likely should read 'fr10 A 1'); last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr14 H 4,plan,false,Appears inside the 'Fan Room #10' callout box (mislabeled 'fr14' -- likely should read 'fr10 H 2'); this exact suffix is not used elsewhere.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr14 S 1,plan,false,Appears inside the 'Fan Room #10' callout box (mislabeled 'fr14' -- likely should read 'fr10 S 1').
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 H 1,plan,false,"Callout box 'Fan Room #15 / Control Panels:' leader-lined to a hatched fan-room glyph on the west side, Fifth & Sixth Floor plan. 8 panel IDs listed (H1-H7, S1)."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 H 2,plan,false,Same Fan Room #15 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 H 3,plan,false,Same Fan Room #15 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 H 4,plan,false,Same Fan Room #15 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 H 5,plan,false,Same Fan Room #15 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 H 6,plan,false,Same Fan Room #15 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 H 7,plan,false,Same Fan Room #15 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr15 S 1,plan,false,Same Fan Room #15 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr16 A 1,plan,false,Same Fan Room #16 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr16 H 1,plan,false,"Callout box 'Fan Room #16 / Control Panels:' leader-lined to a hatched fan-room glyph on the east side, Fifth & Sixth Floor plan. 7 panel IDs listed (H1-H5, S2, A1)."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr16 H 2,plan,false,Same Fan Room #16 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr16 H 3,plan,false,Same Fan Room #16 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr16 H 4,plan,false,Same Fan Room #16 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr16 H 5,plan,false,Same Fan Room #16 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr16 S 2,plan,false,Same Fan Room #16 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr3 H 1,plan,false,"Callout box 'Fan Room #3 / Control Panels:' leader-lined straight down to a hatched cooling-tower-base fan room, Fifth & Sixth Floor plan."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr3 H 2,plan,false,Same Fan Room #3 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr3 H 3,plan,false,Same Fan Room #3 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr3 H 4,plan,false,Same Fan Room #3 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr3 H 5,plan,false,Same Fan Room #3 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr3 S 1,plan,false,Same Fan Room #3 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr6 H 1,plan,false,"Callout box 'Fan Room #6 / Control Panels:' leader-lined to a hatched fan-room glyph at the south end (near the rotunda), Fifth & Sixth Floor plan."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr6 H 2,plan,false,Same Fan Room #6 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr6 H 3,plan,false,Same Fan Room #6 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr9 A 1,plan,false,Same Fan Room #9 box; last line.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr9 H 1,plan,false,"Callout box 'Fan Room #9 / Control Panels:' leader-lined to a hatched stair/fan-room enclosure, Fifth & Sixth Floor plan."
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr9 H 2,plan,false,Same Fan Room #9 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr9 H 3,plan,false,Same Fan Room #9 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr9 H 4,plan,false,Same Fan Room #9 box.
+057_US_VA_Project_626_15_106_Upgrade_Energy.pdf#6,CP fr9 S 1,plan,false,Same Fan Room #9 box.

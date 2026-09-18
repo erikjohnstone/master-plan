@@ -1,0 +1,239 @@
+sheet,tag,role,in_table,note
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CD,plan,false,"Repeatable type mark ""(E) CD"" (existing ceiling diffuser) drawn ~17 times on the main and enlarged plans next to square diffuser symbols with CFM callouts; also listed as keyed-note row 1 in the legend, but that reference is not counted separately."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-B1,plan,false,"Condensing unit, hexagon symbol in bottom fenced equipment yard, paired with keynote 8 and sheet ref M5.01."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-B2,plan,false,"Condensing unit, hexagon symbol in bottom fenced equipment yard."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-B3,plan,false,"Condensing unit, hexagon symbol in bottom fenced equipment yard."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-B4,plan,false,"Condensing unit, hexagon symbol in top fenced equipment yard."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-B5,plan,false,"Condensing unit, hexagon symbol in top fenced equipment yard."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-B7,plan,false,"Condensing unit, hexagon symbol in top fenced equipment yard."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-B9,plan,false,"Condensing unit, hexagon symbol next to gas meter/Vestibule area, separate small fenced pad."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-BO1,plan,false,"Condensing unit, hexagon symbol in bottom fenced equipment yard (tag reads ""BO1"")."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,CU-BO2,plan,false,"Condensing unit, hexagon symbol in bottom fenced equipment yard (tag reads ""BO2"")."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,EC-B9,plan,false,"Electric-coil tag for furnace B9 (hexagon+circle callout ""EC/B9""); drawn once in the enlarged floor-plan detail (B) and once in the furnace section detail (1) on this same sheet - same physical unit, counted once."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,EG,plan,false,"Repeatable type mark ""(E) EG"" (existing exhaust grille) drawn ~11 times on the plans next to grille symbols with CFM callouts; also keyed-note row 3."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B1,plan,false,"Furnace tag on box symbol, Room 23 area (top row), unique instance, leader to a ""T"" thermostat symbol."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B2,plan,false,"Furnace tag, Room 24 area (bottom row), unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B3,plan,false,"Furnace tag, Room 25 area (top row), unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B4,plan,false,"Furnace tag, Room 26 area (bottom row), unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B5,plan,false,"Furnace tag, Room 27 area (top row), unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B6,plan,false,"Furnace tag near CLS Room/corridor, unique instance (no paired CU visible on this sheet)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B7,plan,false,"Furnace tag, Room 28 area (bottom row), unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B8,plan,false,"Furnace tag near Boy's/Girl's restroom corridor, unique instance (no paired CU visible on this sheet)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,F-B9,plan,false,"Furnace tag near Corridor B101/Vestibule; same physical unit also detailed in ""Building B Enlarged Mechanical Level 1 Floor Plan"" (detail B) and ""Building B Furnace F-B9 Section"" (detail 1) on this same sheet - counted once."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,RG,schedule,true,"""(E) RG"" appears only once, as keyed-note row 2 in the legend table at the top of the sheet (same x-column/row pattern as the CD/EG legend rows). It is never actually drawn on the plan itself on this page - included for completeness but it is a legend-only occurrence, not a plan tag."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,RTU-B2,plan,false,"Rooftop unit tag on wall box symbol, Room 31, unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,RTU-B3,plan,false,"Rooftop unit tag on wall box symbol, Room 33B, unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,RTU-B4,plan,false,"Rooftop unit tag on wall box symbol, Room 33 area, unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,RTU-B5,plan,false,"Rooftop unit tag on wall box symbol, Book Storage/Work Room area, unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,T,plan,false,"Bare ""T"" thermostat symbol/tag placed at each of the 9 furnaces (F-B1..F-B9), per keyed-note 5 ""(E) THERMOSTAT""; repeatable type mark, counted once."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,T/CO2,plan,false,"Repeatable device tag ""T/CO2"" (new thermostat/CO2 sensor, keyed-note 4) drawn 4 times, once below each of RTU-B2, RTU-B3, RTU-B4, RTU-B5."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#12,TG,plan,false,"Repeatable type mark ""(E) TG"" (existing transfer grille), drawn once near Room 31/33A."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,BD-OA1,detail,false,Hexagon tag in the enlarged detail on the OA-1 duct branch (backdraft damper).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,CD-B1,detail,false,"Hexagon tag in the enlarged detail, on the OA intake hood/curb component at upper right (condensate drain or curb damper for unit B1)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,CD-OA2,detail,false,Hexagon tag in the enlarged detail on the OA-2 duct branch; confirmed by callout text '(BELOW CD-OA2)'.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,DF-B1,detail,false,"Hexagon tag in the enlarged detail, on the flue/damper-flap symbol near the 6-inch flue riser at the far left."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B1,plan,false,Hexagon tag ('EC' over 'B1') directly below F-B1 -- Economizer/Evap-cooler component of the same unit B1.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B2,plan,false,"Hexagon tag, EC component of unit B2."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B3,plan,false,"Hexagon tag, EC component of unit B3, paired with detail bubble 1/M5.02."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B4,plan,false,"Hexagon tag, EC component of unit B4, paired with detail bubble 1/M5.02."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B5,plan,false,"Hexagon tag, EC component of unit B5, directly below F-B5."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B6,plan,false,"Hexagon tag, EC component of unit B6."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B7,plan,false,"Hexagon tag, EC component of unit B7."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,EC-B8,plan,false,"Hexagon tag, EC component of unit B8."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B1,plan,false,"Stacked two-line hexagon tag (top 'F', bottom 'B1') = Fan component of rooftop/attic unit B1; paired with a circular detail-reference bubble '1/M5.02' (excluded, that's a detail callout not part of the tag) and keynote 19."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B2,plan,false,"Hexagon tag, Fan component of unit B2 (verified in zoomed crop, distinct location from EC-B2's hexagon)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B3,plan,false,"Hexagon tag, Fan component of unit B3."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B4,plan,false,"Hexagon tag, Fan component of unit B4 (verified in zoomed crop)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B5,plan,false,"Hexagon tag, Fan component of unit B5, paired with detail bubble 1/M5.02 and keynote 19."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B6,plan,false,"Hexagon tag, Fan component of unit B6, paired with detail bubble 1/M5.02."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B7,plan,false,"Hexagon tag, Fan component of unit B7 (verified in zoomed crop, paired with detail bubble 1/M5.02 to its left)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,F-B8,plan,false,"Hexagon tag, Fan component of unit B8, paired with detail bubble M5.02/B8 (REF.)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,OAU-B1,detail,false,"In the lower-left inset 'ENLARGED BUILDING B MECHANICAL ATTIC PLAN' (detail 2/M2.12, an elevation/section, not a plan view): hexagon tag over the right-hand outside-air unit, confirmed by the callout text '(BELOW OAU-B2)' proving the hyphenated tag format."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#13,OAU-B2,detail,false,Hexagon tag over the left-hand outside-air unit in the same enlarged detail; explicitly referenced as 'OAU-B2' in nearby callout text.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,CU-B6,plan,false,Hexagon condensing-unit tag on the main roof equipment cluster.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,CU-B8,plan,false,"Hexagon condensing-unit tag paired next to CU-B6, same cluster."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,EF-B1,plan,false,Hexagon 'EF' over 'B1' with leader to the round exhaust-fan glyph next to the louver box.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,HPO-1,plan,false,"Borderline case: '(E) CONDENSING UNIT (HPO-1), MITSUBISHI ELECTRIC MODEL MUH09TW' is a text note (HPO-1 underlined) with a leader arrow to a small rectangular wall-mounted unit glyph, rather than a tag sitting directly on/against a hexagon/box symbol. Included because it names one specific existing physical unit via a leader to its drawn symbol; flagged here in case the harness wants to exclude leader-note-style tags."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,IH-B,plan,false,"Hexagon tag 'IH' over 'B' (literally no numeric suffix as drawn) with leader to the louver/curb-mounted intake symbol near the small wing, left side of sheet. Distinct from IH-B9 below."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,IH-B9,plan,false,"Hexagon 'IH' over 'B9' with leader to a small round symbol on the smaller roof wing; adjacent circle '14/M5.01' is a detail-bubble reference, not part of the tag."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,RTU-B2,plan,false,"Hexagon RTU tag at top of the equipment cluster, adjacent circled '2' is a keyed-note reference, not part of the tag."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,RTU-B3,plan,false,"Hexagon RTU tag, right side of the equipment cluster."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,RTU-B4,plan,false,Hexagon RTU tag next to RTU-B3.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#14,RTU-B5,plan,false,Hexagon RTU tag at bottom of the equipment cluster.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-B1,plan,false,"Hexagon tag, bottom row of 5 condensing-unit hexagons under the building."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-B2,plan,false,"Hexagon tag, bottom row."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-B3,plan,false,"Hexagon tag, bottom row, rightmost of that group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-B4,plan,false,Hexagon tag on the upper roof/wall equipment trio (with fan symbols) at top of sheet.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-B5,plan,false,"Hexagon tag, middle of the upper trio."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-B7,plan,false,"Hexagon tag, right of the upper trio."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-B9,plan,false,"Hexagon tag at far left of sheet, leader to a fan/condenser glyph next to the gas meter."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-BO1,plan,false,"Hexagon tag, bottom row (between CU-B1 and CU-BO2)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,CU-BO2,plan,false,"Hexagon tag, bottom row."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,DF-B1,plan,false,"Hexagon 'DF' over 'B1' tag with leader to a wall-mounted fixture symbol near the water-heater/drain area, left-center of plan."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,EC-B9,detail,false,Hexagon tag in the 'BUILDING B FURNACE F-B9 PIPING SECTION' detail at bottom of sheet; leader to the existing DDC controls enclosure box.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#15,F-B9,detail,false,"Hexagon tag in the same furnace piping-section detail; leader to the furnace unit body, matches the detail's title 'BUILDING B FURNACE F-B9'."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B1,plan,false,"box glyph, view B (EC-B1 piping plan)"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B2,plan,false,"box glyph, view D"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B3,plan,false,"box glyph, view E"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B4,plan,false,"box glyph, view F"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B5,plan,false,"box glyph, view G"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B6,plan,false,"box glyph, view H"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B7,plan,false,"box glyph, view I"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B8,plan,false,"box glyph, view J"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,EC-B9,plan,false,"box glyph, view A"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B1,plan,false,"hexagon fan glyph, view B"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B2,plan,false,"hexagon fan glyph, view D"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B3,plan,false,"hexagon fan glyph, view E"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B4,plan,false,"hexagon fan glyph, view F"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B5,plan,false,"hexagon fan glyph, view G"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B6,plan,false,"hexagon fan glyph, view H"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B7,plan,false,"hexagon fan glyph, view I"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B8,plan,false,"hexagon fan glyph, view J"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,F-B9,plan,false,"hexagon fan glyph, view A"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,OAU-B1,plan,false,"diamond/hex glyph, view C; confirmed by leader text '...TO OAU-B1' elsewhere on sheet"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#16,OAU-B2,plan,false,"diamond/hex glyph, view C; confirmed by leader text '...TO OAU-B2' elsewhere on sheet"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,(E) CD,plan,false,"Repeatable type mark for existing ceiling supply diffuser. Text label directly next to a square 4-way-arrow diffuser glyph, appears ~20+ times across the sheet (every classroom/corridor), always with a CFM value beside it (e.g. '325 CFM'). Listed once as a repeatable schedule-type mark per the rules."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,(E) EG,plan,false,"Repeatable type mark for existing exhaust grille. Same square 4-way diffuser-style glyph pattern as (E) CD but labeled EG, paired with a CFM value; appears multiple times (rooms 41/45/47/49/51/etc). Listed once."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C1,plan,false,"Unique condensing-unit tag. Drawn as a hexagon glyph split into 'CU' (top) over 'C1' (bottom), 12 of these run along the bottom exterior wall, one per classroom's fan coil (paired with F-C1..F-C12). A second adjacent hexagon per unit reads a bare number over 'M5.02' (e.g. '2' / 'M5.02') -- that is a detail/drawing-reference callout, not an equipment tag, and was excluded. Confirmed via zoomed crop of the CU row."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C10,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C11,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C12,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C2,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C3,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C4,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C5,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C6,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C7,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C8,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,CU-C9,plan,false,"Unique condensing-unit tag, same pattern as CU-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C1,plan,false,"Unique fan-coil unit tag. Underlined 'F-C#' text with leader line to a rectangular wall-mount unit glyph and an adjacent circled 'T' (thermostat) symbol, one per classroom (F-C1..F-C12 map 1:1 to rooms). Confirmed via zoomed crop."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C10,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C11,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C12,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C2,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C3,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C4,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C5,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C6,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C7,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C8,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,F-C9,plan,false,"Unique fan-coil unit tag, same pattern as F-C1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#17,T,plan,false,"Repeatable symbol mark for existing wall thermostat: a circled 'T' drawn with a leader to the wall, appearing next to each F-C unit and also scattered standalone. Borderline-short (single letter) but it is a real controls-equipment glyph distinct from the numbered keynote bubbles (see excluded items below), so included once as a repeatable type mark."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C1,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C10,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C11,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C12,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C2,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C3,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C4,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C5,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C6,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C7,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C8,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,EC-C9,plan,false,box glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,ERV-C1,plan,false,"energy recovery ventilator glyph, west end near existing exhaust fan/breeze way"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,ERV-C2,plan,false,"energy recovery ventilator glyph, east end near existing exhaust fan/louver"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C1,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C10,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C11,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C12,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C2,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C3,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C4,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C5,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C6,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C7,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C8,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,F-C9,plan,false,hexagon fan glyph
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,RH-C1,plan,false,roof-hood/relief glyph near central curb
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#18,RH-C2,plan,false,roof-hood/relief glyph near central curb
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C1,plan,false,"Hexagon condensing-unit tag, bottom row (left group of 6)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C10,plan,false,"Hexagon tag, bottom row right group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C11,plan,false,"Hexagon tag, bottom row right group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C12,plan,false,"Hexagon tag, bottom row right group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C2,plan,false,"Hexagon tag, bottom row left group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C3,plan,false,"Hexagon tag, bottom row left group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C4,plan,false,"Hexagon tag, bottom row left group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C5,plan,false,"Hexagon tag, bottom row left group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C6,plan,false,"Hexagon tag, bottom row left group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C7,plan,false,"Hexagon tag, bottom row right group (of 6)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C8,plan,false,"Hexagon tag, bottom row right group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,CU-C9,plan,false,"Hexagon tag, bottom row right group."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,ERV-C1,plan,false,"Hexagon 'ERV' over 'C1' tag, left side of plan, leader to an ERV unit glyph near the existing louver/exhaust fan."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#19,ERV-C2,plan,false,"Hexagon 'ERV' over 'C2' tag, right side of plan, leader to the matching ERV unit glyph near the other existing louver/exhaust fan."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C1,plan,false,"Hexagon/box equipment glyph, two-line callout 'EC' over 'C1' (evaporative cooler unit, Building C zone 1), enlarged piping plan A. Small adjacent circle '2/M5.02' is a separate detail-reference bubble, excluded."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C10,plan,false,Panel J (unit C10).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C11,plan,false,Panel K (unit C11).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C12,plan,false,Panel L (unit C12).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C2,plan,false,"Same EC glyph pattern, panel B (unit C2)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C3,plan,false,Panel C (unit C3).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C4,plan,false,Panel D (unit C4).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C5,plan,false,Panel E (unit C5).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C6,plan,false,Panel F (unit C6).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C7,plan,false,Panel G (unit C7).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C8,plan,false,Panel H (unit C8).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,EC-C9,plan,false,Panel I (unit C9).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C1,plan,false,"Second hexagon glyph in the same panel, two-line callout 'F' over 'C1' (fan associated with EC-C1). Distinct symbol/leader from the EC box."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C10,plan,false,Panel J.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C11,plan,false,Panel K.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C12,plan,false,Panel L.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C2,plan,false,Panel B.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C3,plan,false,Panel C.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C4,plan,false,Panel D.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C5,plan,false,Panel E.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C6,plan,false,Panel F.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C7,plan,false,Panel G.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C8,plan,false,Panel H.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#20,F-C9,plan,false,Panel I.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,AC-2,plan,false,"Room 33, thermostat 'T' symbol below it names the unit; tag itself is 'AC-2'."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,AC-3,plan,false,Room 33/33B corridor area.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,AC-4,plan,false,"Work Room 30J area, paired with AC-5."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,AC-5,plan,false,"Work Room 30J area, beside AC-4."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,CU-9,plan,false,"Boxed equipment tag 'CU-9' (condensing unit) near vestibule, top-left of plan, with keynote ovals 1/3 pointing at it (keynotes excluded, box tag included)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-1,plan,false,"Exhaust-fan tag at ceiling 'T' switch symbol, room 23/25 doorway. F-1..F-9 confirmed only via the rendered image / high-res crops - none of these strings appear in textSpans() output at all (they are vector-drawn, not real PDF text objects on this sheet)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-2,plan,false,Room 24 corridor.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-3,plan,false,"Room 23/25 doorway, beside F-1."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-4,plan,false,"Room 26 corridor, beside F-2."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-5,plan,false,"Room 27/CLS room boundary, beside Panel 'HP'."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-6,plan,false,"Near CLS room / Panel 'T', corridor."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-7,plan,false,Room 28 corridor; verified with a tight 6x crop - reads clearly 'F-7'.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-8,plan,false,Restroom corridor (Boy's/Men's/Girl's/Women's area).
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,F-9,plan,false,"Appears twice (near Room B3/22A and again near the Vestibule/corridor with its wall switch) - same physical fan, listed once per the unique-instance rule."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,FACP,detail,false,"'(E) FACP HONEYWELL' - fire alarm control panel, same elevation view."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL '2B',plan,false,"'(E) PANEL 2B', top of plan near corridor."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL '2D',detail,false,Same enlarged electrical-room elevation.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'A',plan,false,"'(E) PANEL A' drawn twice on the main floor plan (near Room B3/22A boundary, and again near Room 33C/33D boundary) - same literal tag, listed once."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'AC',detail,false,"Same enlarged electrical-room elevation, right-hand column."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'C',plan,false,"'(E) PANEL C', Room 33A."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'HP',plan,false,"'(E) PANEL HP', near Room 27/CLS Room, beside F-5."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'LGB',detail,false,"Same enlarged electrical-room elevation, right-hand column."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'M',detail,false,"In the 'Enlarged Electrical Room Plan' (view B, bottom-left) - a schematic wall elevation of the electrical room's panels, not a floor-plan view, so tagged role=detail."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'SP' SECT 2,detail,false,Same enlarged electrical-room elevation.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#34,PANEL 'T',plan,false,"'(E) PANEL T', near CLS room/F-6 - a named panel, distinct from the generic bare 'T' switch/thermostat glyphs used elsewhere on the sheet (those bare 'T' circles have no separate alphanumeric ID and were excluded as symbols, not tags)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,AC-2,plan,false,"AC unit tag drawn on main plan next to a thermostat (T) glyph, underlined tag label 'AC-2' near Room 33. Unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,AC-3,plan,false,"AC unit tag drawn on main plan next to a thermostat (T) glyph, near Room 33B. Unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,AC-4,plan,false,"AC unit tag drawn on main plan next to a thermostat (T) glyph, near Work Room/Room 32. Unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,AC-5,plan,false,"AC unit tag drawn on main plan next to a thermostat (T) glyph and supply/return symbol, near Book Storage/Work Room. Unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,CU-9,plan,false,"Condensing unit, drawn on main floor plan top-left with leader from '(D) CONDENSING UNIT (CU-9), CARRIER MODEL 38HDC048531' to a dashed equipment-pad symbol on the plan. Unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,EC-9,detail,false,"Evaporator coil, labeled only in the enlarged/demolition detail views at the bottom of the sheet ('(D) EVAPORATOR COIL (EC-9), ADP MODEL CT6448') with a leader to a drawn dashed coil-box glyph inside the furnace assembly; does not appear as a separate symbol on the main floor plan. Unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-1,plan,false,"Furnace tag on main plan near Room 23/Corridor, with leader/T glyph. Unique instance."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-2,plan,false,Furnace tag on main plan near Room 24/Corridor. Unique instance.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-3,plan,false,Furnace tag on main plan near Room 25/Corridor. Unique instance.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-4,plan,false,Furnace tag on main plan near Room 26/Corridor. Unique instance.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-5,plan,false,Furnace tag on main plan near Room 27/Corridor. Unique instance.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-6,plan,false,Furnace tag on main plan near return-grille/corridor area between CLS Room and Boy's. Unique instance.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-7,plan,false,Furnace tag on main plan near Room 28/Corridor. Unique instance.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-8,plan,false,Furnace tag on main plan near Boy's/Men's restroom area. Unique instance.
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#5,F-9,plan,false,"Furnace tag on main plan near Room B3/B100 vestibule; same unit is re-labeled with a leader in the enlarged plan detail 'B' and the furnace demolition section '1' at the bottom of the sheet (role plan is primary occurrence; also appears in detail views repeating the same instance, not counted twice)."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-1,plan,false,"Unique fan/thermostat-controller unit tag, underlined text next to a wall-mounted circle-T (thermostat) symbol at Room 41 corridor wall; one per room, not repeated."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-10,plan,false,"Same pattern as F-1, at Room 48."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-11,plan,false,"Same pattern as F-1, at Room 51."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-12,plan,false,"Same pattern as F-1, at Room 50."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-2,plan,false,"Same pattern as F-1, at Room 40."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-3,plan,false,"Same pattern as F-1, at Room 43."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-4,plan,false,"Same pattern as F-1, at Room 42."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-5,plan,false,"Same pattern as F-1, at Room 45."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-6,plan,false,"Same pattern as F-1, at Room 44."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-7,plan,false,"Same pattern as F-1, at Room 47."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-8,plan,false,"Same pattern as F-1, at Room 46."
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#9,F-9,plan,false,"Same pattern as F-1, at Room 49."

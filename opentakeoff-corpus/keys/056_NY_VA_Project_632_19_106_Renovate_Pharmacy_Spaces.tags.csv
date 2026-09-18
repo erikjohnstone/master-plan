@@ -1,0 +1,46 @@
+sheet,tag,role,in_table,note
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#2,CM,detail,false,"Legend call-out 'SYMBOL: CM' next to Detail 9 (Continuity Monitor) isometric drawing on a details sheet (M-5003). Not a schedule row, not drawn on any plan/floor-plan view."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#2,TC,detail,false,Legend call-out 'SYMBOL: TC' next to Detail 7 (Ambient Temperature Thermostat Wiring Diagram) on the same details sheet. No plan view present.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#2,TP,detail,false,Legend call-out 'SYMBOL: TP' next to Detail 10 (Ambient Thermocouple Junction Box and Probe) on the same details sheet. No plan view present.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,AHU-PHARMACY-1,schedule,true,Unique instance row in the Air Handling Unit Schedule table (sheet 200-MH6000). No plan view on this page; sheet is pure schedule tables.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,CD1,schedule,true,"Repeatable diffuser type mark, one row in the Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,CD2,schedule,true,"Repeatable diffuser type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,CD3,schedule,true,"Repeatable diffuser type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,CD4,schedule,true,"Repeatable diffuser type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,CG-1,schedule,true,"Repeatable ceiling grille type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,CG-2,schedule,true,"Repeatable ceiling grille type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,EF-2A,schedule,true,Unique instance row in the Fan Information table (Mark Information section) on the same schedules sheet.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,H-1,schedule,true,"Unique instance row in the Humidifier Schedule table, same sheet."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,P-1,schedule,true,Unique instance row (AHU-Pharmacy-1 freeze protection pump) in the Pump Schedule table.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,RG-1,schedule,true,"Repeatable wall-mounted return grille type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,RG-2,schedule,true,"Repeatable wall-mounted return grille type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#3,RG-3,schedule,true,"Repeatable wall-mounted return grille type mark, Air Inlets/Outlets Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,HCD,schedule,true,Repeatable type mark used for 3 rows (differing airflow: 510/620/660 CFM) in the Laminar Flow Diffuser w/HEPA Filter schedule table; listed once.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-01R1,schedule,true,"Unique instance row, Air Flow Control Valve Schedule (fume-hood/room VAV boxes), sheet 200-MH6001. Sheet is pure schedule tables, no plan view."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-01R2,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-01R3,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-02R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-03R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-04R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-05R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-06R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-08R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-09R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-1,schedule,true,"Unique instance row in the separate CAV/VAV Schedule table (same sheet, different numbering scheme than the Air Flow Control Valve Schedule above)."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-10,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-10R,schedule,true,"Unique instance row, Air Flow Control Valve Schedule."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-2,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-3,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-4,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-5,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-6,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-7,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-8,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#4,VAV-9,schedule,true,"Unique instance row, CAV/VAV Schedule table."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#6,EF-2A,schematic,false,Exhaust blower instance labeled 'EF-2A' (paired with EF-2B) feeding the 'EF-2 PLENUM' box in the Pharmacy Compounding Exhaust System Diagram; matches the EF-2A row in the page-3 Fan Information schedule table.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#6,EF-2B,schematic,false,"Exhaust blower instance labeled 'EF-2B' in the same diagram, drawn with damper (D-2), speed sensor (SPD) and current-sensor (CS) glyphs."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#6,VAV-1R1,schematic,false,"Box+diamond terminal symbol tagged 'VAV-1R1' (664-300) in the 'Pharmacy Compounding Exhaust System Diagram' (bottom-left branch, off-image but same run as VAV-1R2/1R3), sheet 200-MH8001. Drawn NTS as a system/riser-style schematic, not a scaled floor plan -- borderline case, flagged for review."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#6,VAV-1R2,schematic,false,"Box+diamond terminal symbol tagged 'VAV-1R2' (664-300), same exhaust system diagram, labeled under 'CHEMO BUFFER ROOM' / Class II HD hoods. Schematic sheet, not a floor plan."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#6,VAV-1R3,schematic,false,Terminal symbol tagged 'VAV-1R3 N.C.(0-728)' in the same exhaust system diagram. Confirmed visually at scale-4 crop; textSpans returned 0 spans for this page so could not be cross-checked against extracted text.
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#6,VAV-2R,schematic,false,"Terminal symbol tagged 'VAV-2R (700)' feeding 'HD STORAGE' room box, same exhaust system diagram."
+056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf#6,VAV-3R,schematic,false,"Terminal symbol tagged 'VAV-3R (520)' feeding 'BUFFER ANTEROOM' room box, same exhaust system diagram."

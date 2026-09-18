@@ -1,0 +1,373 @@
+sheet,tag,role,in_table,note
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#10,AHU-1,plan,false,"Unique instance mark. Underlined equipment tag labeling a distinct rectangular AHU unit outline in the Mechanical Room (D201) on view 2, 'FIRE ALARM MECHANICAL MEZZANINE PLAN'. Confirmed by close crop (textSpans x0=3767,y0=928.8 in scale-2 px)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#10,AHU-2,plan,false,"Unique instance mark. Second, separate AHU unit outline in the same Mechanical Room, adjacent to AHU-1 but a physically distinct unit (textSpans x0=3238.1,y0=974.2)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S1,plan,false,"Sprinkler head tag (hexagon callout) next to circle-in-circle pendant/upright sprinkler head glyph, in the 'HYDRAULIC AREA 1' remote-area calc diagram inset within the Evidence Room (B133) on the floor plan. Unique instance mark - each S# labels one specific physical sprinkler head in this remote design area."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S2,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S3,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S4,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S5,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S6,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S7,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S8,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#13,S9,plan,false,"Sprinkler head tag, same diagram as S1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#15,BFP,plan,false,"Unique instance. Hexagon callout labeling the backflow preventer assembly on the incoming 8"" fire service riser (near MECH/ELEC D134), tied via leader/adjacent keynote bubble '1' to the check-valve/OS&Y-valve symbol string. Appears once on the sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#15,BR1,plan,false,"Unique instance. Paired with TR1 at the same callout, same valve symbol — branch riser designation for zone/area 1. Appears once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#15,BR2,plan,false,"Unique instance. Paired with TR2, branch riser designation for zone/area 2. Appears once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#15,TR1,plan,false,Unique instance. Stacked hexagon tag (with BR1) pointing via keynote bubble '2' to a valve symbol on the zone-control assembly riser — test riser designation for zone/area 1. Appears once.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#15,TR2,plan,false,Unique instance. Stacked hexagon tag (with BR2) pointing via keynote bubble '3' to the next valve symbol down the riser — test riser designation for zone/area 2. Appears once.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#15,UG1,plan,false,"Unique instance. Flag/hexagon tag on the underground fire-service riser stub labeled 'NEW 8"" FIRE INCOMING SERVICE'; identifies that specific underground service point. Appears once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,FCO,plan,false,"Floor cleanout symbol (circle-with-center-dot) with leader/label 'FCO'; occurs 4x on sheet (near A117/A118, near A119/C102, near A101/A108, near A114/A113) — repeatable type mark, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,FD-A,plan,false,"Floor drain type tag ('3"" FD-A'); occurs 2x with identical literal (near A107 area, twice), listed once as repeatable type mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-1A,plan,false,"Plumbing fixture connection tag (underlined), labels a toilet/fixture symbol; occurs 2x with identical literal, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-1B,plan,false,"Fixture tag next to a fixture symbol near A107, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-1C,plan,false,"Fixture tag next to a toilet symbol near A114, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-2A,plan,false,"Fixture tag (sinks/urinals); occurs 4x with identical literal across the sheet (two near P-3A/P-6A cluster, two near A108), listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-2B,plan,false,"Fixture tag next to a floor-drain-like symbol near A114, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-3A,plan,false,"Fixture tag next to a toilet symbol near WCO/A101, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-4A,plan,false,"Fixture tag ('3"" P-4A') near A119/C102, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-5A,plan,false,"Fixture tag next to a sink symbol near A113A, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,P-6A,plan,false,"Fixture tag next to a sink/lav symbol near A105, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#22,WCO,plan,false,"Wall cleanout, single occurrence near A101, leader to fixture symbol."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#23,FCO,plan,false,"Floor cleanout symbol/label, repeatable type mark; occurs 4 times on the sheet (near B135/B134 area, near B122, near B103, near B121/B107 area). Listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#23,P-1A,plan,false,"Plumbing fixture waste-connection type tag (underlined callout) adjacent to fixture symbols (water closet at bottom-right group near WCO/B107; another fixture near B136 top-left). Same literal tag labels two different physical fixture locations on this sheet -> repeatable type mark, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#23,P-2B,plan,false,"Plumbing fixture waste-connection type tag next to a sink/lavatory symbol; occurs twice on the sheet (near B136/B137 top-left, and near B107/WCO bottom-right). Repeatable type mark, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#23,P-5B,plan,false,"Plumbing fixture waste-connection type tag next to an elongated sink/basin fixture near B135, single occurrence on this sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#23,TD-A,plan,false,Underlined tag next to an elongated trench-drain/floor-drain style symbol (long rectangle with drain circle at top) near B134; single occurrence on this sheet.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#23,WCO,plan,false,"Wall cleanout label with leader to a wall-mounted cleanout fitting near B121/B107; repeatable type mark, single occurrence on this sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,AHU-1,plan,false,"Unique air-handling-unit instance mark, text drawn directly inside/on the AHU rectangle outline in the Mezzanine Mech Room Plan (view 2)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,AHU-2,plan,false,"Unique air-handling-unit instance mark, text drawn directly inside/on the AHU rectangle outline in the Mezzanine Mech Room Plan (view 2), adjacent to AHU-1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,CO,plan,false,Cleanout tag on the sanitary branch between AHU-1 and AHU-2 in the Mezzanine Mech Room Plan (view 2).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,FCO,plan,false,"Repeatable floor-cleanout tag at small circle glyphs on sanitary lines, multiple occurrences across view 1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,FD-A,plan,false,"Repeatable floor-drain type tag (""3\"" FD-A"") drawn at small circle glyphs on the floor in both restroom clusters, view 1. Several occurrences render as bare ""3\"" FD"" in the raw text dump because the rotated ""-A"" suffix glyphs land on a slightly different baseline than the base run and don't group by y0, but visually all confirmed as FD-A in this area."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,FD-B,plan,false,"Repeatable floor-drain type tag (""3\""/2\"" FD-B"") at circle glyphs near D134 (view 1) and near both AHUs in the Mezzanine Mech Room Plan (view 2)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-1A,plan,false,Repeatable plumbing-fixture connection tag (water closet) drawn with leader/underline next to toilet symbols; occurs near D111 (single-occupant room) and again at both mirrored restroom clusters at the bottom of Floor Plan Area D (view 1) - same literal tag on multiple physical fixtures.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-1B,plan,false,"Repeatable fixture tag (water closet/urinal type B) labeling multiple toilet symbols in both restroom clusters (view 1), each occurrence underlined next to its fixture."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-2A,plan,false,Repeatable fixture tag (lavatory type A) labeling multiple sink symbols in both restroom clusters (view 1).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-2B,plan,false,"Fixture tag (lavatory type B) on the sink symbol near D111 (view 1); only one instance seen on this sheet but same convention as P-2A, so treated as a repeatable type mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-3A,plan,false,Fixture tag on a fixture symbol in the left restroom cluster near D103 (view 1).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-3B,plan,false,Fixture tag on the fixture immediately next to P-3A in the left restroom cluster (view 1).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-4A,plan,false,Fixture tag on a small fixture symbol near room D110/D105 (view 1).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-5A,plan,false,"Repeatable fixture tag (double sink/counter) - one instance near D111 top, another near the center hexagonal area (D101) of view 1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-6A,plan,false,"Fixture tag on a mop-sink/floor-sink type symbol near the center hexagonal corridor (D101), view 1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-7A,plan,false,"Repeatable fixture tag (urinal type A), one instance in each mirrored restroom cluster (view 1)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,P-7B,plan,false,"Repeatable fixture tag (urinal type B), one instance in each mirrored restroom cluster (view 1), paired with P-7A."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,WCO,plan,false,"Repeatable wall-cleanout tag at circle glyphs, multiple occurrences in view 1 restroom areas."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#24,YCO,plan,false,Yard-cleanout tag at the sanitary line exiting the building near the invert-elevation callout (view 1).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-1A,plan,false,"Plumbing fixture tag (lavatory/sink symbol with oval bowl) drawn on plan; same literal tag labels 2 distinct fixture locations on this sheet (near A105/A107 corridor and near A101) -> repeatable type mark, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-1B,plan,false,"Fixture tag on oval sink/lavatory symbol near A107, single occurrence on this sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-1C,plan,false,"Fixture tag on lavatory symbol in A113 restroom, single occurrence on this sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-2A,plan,false,"Fixture tag on water-closet/toilet symbols; same literal tag appears at 4 distinct fixture locations (2 stacked near A101/A105 corridor, 2 stacked near A108) -> repeatable type mark, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-2B,plan,false,"Fixture tag on sink symbol in A113 restroom, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-3A,plan,false,"Fixture tag on urinal-type oval symbol near A101/roof area, single occurrence. (Nearby hexagon '1' is a plumbing keynote reference, excluded, not a tag.)"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-4A,plan,false,"Fixture tag near A119/A120 with leader to a floor drain/receptor symbol (two dots + hash marks), single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-5B,plan,false,"Fixture tag on sink symbol near A107/A110, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-6A,plan,false,"Fixture tag with leader to twin lavatory sinks at A105, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#25,P-7A,plan,false,"Fixture tag at top vestibule (near D102) with leader into small fixture alcove (mop sink/floor sink), single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#26,HB,plan,false,"Hose bibb, drawn with a double-hash pipe-stub symbol near B131/B132, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#26,P-1A,plan,false,"Plumbing fixture type tag (water closet, per WC glyph beside it), drawn at two locations (near B136 and near B107). Repeatable fixture type mark — listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#26,P-2B,plan,false,"Plumbing fixture type tag (lavatory), drawn at two locations (near B136 and near B121/B107). Repeatable fixture type mark — listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#26,P-5A,plan,false,"Plumbing fixture type tag (sink, near B135), single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#26,P702,plan,false,"Domestic hot water recirculation pump, drawn as a circle symbol (with 'B' system/type letter above it inside the same bubble) with leader/piping. Appears twice on this sheet (near B136/P-1A cluster at upper-left, and again near B121/B107 at lower area) — same literal tag both times, listed once per instructions."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#26,WH,plan,false,"Wall hydrant, drawn with a similar double-hash symbol and valve circle near the west wall by grid B/C, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,BP-1,plan,false,"Booster pump, unique instance tag drawn underlined on the skid-mounted booster-pump glyph near grid 14-15, tied to keynote hexagon '4' ('SKID-MOUNTED POTABLE WATER BOOSTER PUMPS, SEE DRAWING P-601 FOR PUMP SCHEDULE'). textSpans str 'BP-1' x0=2667.4,y0=520.6."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,DHWP-1,plan,false,"Domestic hot water recirculation pump, unique instance tag drawn underlined next to the pump glyph (circle+square symbol) beside DWH-1. textSpans str 'DHWP-1' x0=2462.2,y0=440.2."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,DWH-1,plan,false,"Domestic water heater, unique instance tag drawn underlined directly on/beside the water-heater tank glyph near grid 12-13, with plumbing keynote hexagon '5' pointing at same equipment (keynote 5 = 'PROVIDE DOMESTIC WATER HEATER PER DETAIL A ON DRAWING P-501'). Verified against textSpans str 'DWH-1' x0=2232,y0=419.8."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,HB,plan,false,"Hose bibb symbol abbreviation, drawn directly beside its own circle+hash equipment glyph near the water heater cluster (grid 13-14). Only one occurrence found (textSpans x0=2573.3,y0=373.7); treated as a repeatable type mark per rules even though only one instance appears on this particular sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-1A,plan,false,"Plumbing fixture type mark (water closet), underlined, drawn beside multiple physical toilet fixture glyphs across the restroom areas (e.g. textSpans x0=1493,y0=1010.9 and again in the lower restroom cluster). Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-1B,plan,false,"Plumbing fixture type mark (water closet variant), underlined, labels several toilet glyphs in the lower restroom row. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-2A,plan,false,"Plumbing fixture type mark (lavatory/sink), underlined, labels 3 sink glyphs in the lower restroom row. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-2B,plan,false,"Plumbing fixture type mark (lavatory variant), underlined, labels a single-sink glyph near room D123A. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-3A,plan,false,"Plumbing fixture type mark (shower/mop-sink type), underlined, labels a fixture glyph near D103A. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-3B,plan,false,"Plumbing fixture type mark, underlined, labels an adjacent fixture glyph near P-3A. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-4A,plan,false,"Plumbing fixture type mark (floor drain/hub near stair), underlined, labels a fixture glyph near room D110. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-5A,plan,false,"Plumbing fixture type mark (kitchen double sink), underlined, labels the double-basin sink glyph near room D123/D105 (occurs twice: textSpans y0=1019.5 and y0=1868.6). Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-6A,plan,false,"Plumbing fixture type mark (mop sink/basin), underlined, labels a fixture glyph near the lower restroom cluster beside detail bubble C/P702. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-7A,plan,false,"Plumbing fixture type mark (shower stall), underlined, labels shower glyphs in two separate restroom clusters (top and bottom of sheet). Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,P-7B,plan,false,"Plumbing fixture type mark (shower variant), underlined, labels an adjacent shower/fixture glyph next to P-7A in both restroom clusters. Repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#27,WH,plan,false,"Wall hydrant symbol abbreviation, drawn directly beneath/beside its own small circle+hash equipment glyph with no pipe-size prefix (unlike '3\"" DCW'/'3/4\"" DHWR' pipe labels, which were excluded). Repeatable type mark: occurs 3 times on this sheet (textSpans y0=291.6, 1498.8, 2145.4), each labeling a distinct wall-hydrant fixture drawn the same way; listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#28,RD-1,plan,false,"Roof Drain type mark. Appears 3x (near x=2214/y=1954, x=2120/y=2295, x=1596/y=2299 in raw PDF text coords) on the 'OVERALL ROOF PLAN - STORM DRAINAGE/VENTS' view, each next to a small circular drain symbol embedded in a stippled sloped-roof/canopy area. Same literal tag reused for the same fixture type -> repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#28,YCO,plan,false,"Yard Clean Out callout, drawn with a leader to a small open-circle symbol on the roof/site drainage runs (confirmed visually: circle glyph + leader + 'YCO' text, same convention as the roof-drain 'RD-1' symbol). Appears ~7x identically across the sheet (e.g. near grid 16, near grid 17/18, near grid 4) labeling the same fixture type each time -> repeatable, listed once. Borderline call: it is an all-letter abbreviation (no numeric suffix) rather than a hyphen-numbered mark like RD-1/CD-1, but it does sit on a discrete point symbol (not inline pipe text), unlike 'DS' and 'VTR' on this same sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M102,plan,false,"Duct/pipe shaft riser callout (split circle symbol, '1' over 'M102', leader line, adjacent 'DUCTWORK' label) in Area A near center core. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M103,plan,false,"Shaft riser callout, split circle '1'/'M103', adjacent 'DUCTWORK' label, near Area B top-left. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M104,plan,false,"Shaft riser callout, split circle '1'/'M104', adjacent 'DUCTWORK' label, near Area C right side. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M105,plan,false,"Shaft riser callout, split circle '1'/'M105', adjacent 'DUCTWORK' label, near Area D top. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M106,plan,false,"Shaft riser callout, split circle '1'/'M106', adjacent 'PIPING' label, near Area A. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M107,plan,false,"Shaft riser callout, split circle '1'/'M107', adjacent 'PIPING' label, near Area B. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M108,plan,false,"Shaft riser callout, split circle '1'/'M108', adjacent 'PIPING' label, near Area C. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#34,M109,plan,false,"Shaft riser callout, split circle '1'/'M109', adjacent 'PIPING' label, near Area D. Unique shaft instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,CD,plan,false,"Ceiling supply diffuser type mark, appears as 'NNxNN CD' callout with leader to a small square terminal glyph; occurs ~15x on this sheet for different physical diffusers, listed once as repeatable type mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,CDS,plan,false,"Supply diffuser type mark distinct from plain CD, 'NNxNN CDS' with leader to terminal glyph, occurs 3x, listed once"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,CO,plan,false,"Carbon-monoxide sensor, drawn inside its own circle glyph (distinct from the numbered mechanical-keynote hexagons), one occurrence on this sheet"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,EF-7,plan,false,"Ceiling exhaust fan, hexagon glyph with keynote '3' next to it, unique instance (only EF tag on this sheet)"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,EG,plan,false,"Exhaust grille type mark, 'NNxNN EG' with leader to terminal glyph, occurs 2x, listed once"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,LD-1,plan,false,"Linear diffuser type mark, leader to hatched linear diffuser glyph, occurs 4x at bottom curved wall, listed once"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,LD-2,plan,false,"Linear diffuser type mark (second type), occurs 3x, listed once"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,LR-1,plan,false,"Linear register type mark near top-left match line, leader to hatched linear glyph, one occurrence on this sheet"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,RG,plan,false,"Return grille type mark, 'NNxNN RG' with leader to terminal glyph, occurs many times, listed once as repeatable type"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,RGL,plan,false,"Louvered return grille type mark, 'NNxNN RGL' with leader to terminal glyph, occurs several times, listed once"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-16,plan,false,"VAV box tag with leader/dot to duct box symbol, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-19,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-20,plan,false,"VAV box tag with underline and leader dot to box symbol, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-21A,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-21B,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-22,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-23,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-24,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-26,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-27,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-29,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-30,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#35,VAV-1-31,plan,false,"VAV box tag, unique instance"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,ACCU-3,plan,false,"Air-cooled-condensing-unit box at far west edge of plan on an EQUIP PAD, referenced by keynote (12); unique instance (appears twice in raw text as duplicate label text near same symbol)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,ACU-1,plan,false,"Air-conditioning-unit equipment box below UH-1, west-central part of plan; unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,CD,plan,false,"Ceiling supply diffuser type mark (square-with-X symbol), always paired with a duct size/neck-size/CFM callout, e.g. '24X24 CD 6""ø NECK 100 CFM'; occurs ~26 times across the sheet for many distinct physical diffusers of the same type -> listed once as a repeatable type mark per general note 5 ('SURFACE MOUNTED SUPPLY DIFFUSERS (CD1)')."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,CDS,plan,false,"Slot-diffuser type mark, e.g. '12X12 CDS 6""ø NECK 50 CFM'; occurs ~4 times, repeatable type mark, distinct symbol/callout from plain CD."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,EF-10,plan,false,"Exhaust fan symbol at far west edge of plan, next to EXH HOOD keynote (11)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,EF-2,plan,false,"Exhaust fan symbol near B136, west side of plan; unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,EF-3,plan,false,"Exhaust fan symbol near south-central rooms (near WALL CAP, 630 CFM callout)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,EF-4,plan,false,"Exhaust fan symbol near outside-air-plenum riser, west side of plan, referenced by keynote (6) TYP."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,EF-5,plan,false,"Exhaust fan symbol near room B107/B120, east-central part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,EG,plan,false,"Exhaust-grille type mark, e.g. '12X12 EG 315 CFM EA (TYP OF 2)'; occurs twice, repeatable type mark matching general note 5's '(EG)'."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,RG,plan,false,"Return-grille type mark, e.g. '6X6 RG', '10X10 RG', '12X12 RG'; occurs ~23 times for many distinct physical grilles -> repeatable type mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,RGL,plan,false,"Return-grille-with-lightband (or similar variant) type mark, e.g. '24X24 RGL'; occurs ~5 times, repeatable type mark distinct from plain RG."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,UH-1,plan,false,"Unit heater symbol near B134/ACU-1, referenced by keynote (8) 'UNIT HEATER, SEE DETAIL G'; unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-1-18,plan,false,"VAV box near room B123/B124, northeast corner (zone 1 numbering, distinct from the VAV-2-xx series used elsewhere on this sheet)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-01,plan,false,"VAV box symbol (small square with leader) near grid line 3, room B126/B125 area; unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-02,plan,false,"VAV box near grid line 1-2, room B128 area."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-03,plan,false,"VAV box in room area near B136/B135, west side of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-04,plan,false,"VAV box near B135, west end of plan, adjacent to EF-10."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-05,plan,false,"VAV box near room B103, east side, near keynote (1) TYP."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-06,plan,false,VAV box near room B119.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-07,plan,false,VAV box near room B118/B117.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-08,plan,false,VAV box near room B116/B120.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-09,plan,false,"VAV box near room B109, south part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-10,plan,false,"VAV box near room B106/B108, south part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-11,plan,false,"VAV box near room B106, south part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-12,plan,false,"VAV box near room B105, southeast corner near match line to M-102."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-13,plan,false,"VAV box near room B111/B130A, south part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-14,plan,false,"VAV box near room B133, south-central part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-15,plan,false,"VAV box near room B132/B131, west-central part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-16,plan,false,"VAV box near room B110/B130, south part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#36,VAV-2-17,plan,false,"VAV box near room B117/B129, central part of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,CD,plan,false,"Ceiling (supply) Diffuser type mark, drawn directly next to a 4-way diffuser box glyph each time (confirmed visually), always paired with a duct size + neck size + CFM (e.g. '24X24 CD / 8""ø NECK / 160 CFM') -- only the 'CD' portion is the equipment-type tag; the size/CFM text is excluded per the duct-size-callout rule. Appears ~8x identically -> repeatable, listed once. General note 5 refers to this type as 'CD1' (typo/inconsistency vs. the plan's plain 'CD' label) -- noted for awareness, but the literal plan callout is 'CD'."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,EF-1,plan,false,"Unique inline exhaust fan instance mark on the Area C floor plan, drawn directly on the ductwork at an inline-fan break symbol; keynote 5 ('INLINE EXHAUST FAN, SEE DETAIL E') confirms EF-1 is the inline exhaust fan. Adjacent hexagon '5' is the separate keynote bubble, excluded."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,EH-1,plan,false,"Unique equipment instance on 'PARTIAL ROOF PLAN - AREA D - HVAC'; confirmed visually as a distinct double-circle roof-mounted glyph (likely electric/exhaust roof unit tied to the adjacent '3"" WATER HEATER VENT THRU ROOF' leader), with tag text 'EH-1' directly under the symbol, separate from the nearby hexagon keynote bubble '6' (excluded)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,RG,plan,false,"Return grille type mark, '10X10 RG (TYPICAL)', drawn next to a small box/duct-fitting glyph; distinct literal tag from 'RGL' so listed separately; repeatable (marked TYPICAL), listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,RGL,plan,false,"Return grille (linear) type mark, '24X24 RGL (TYP OF 3)', drawn next to a box glyph identical in style to the CD diffuser symbol; repeatable, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,RH-1,plan,false,"Unique Relief Air Hood instance on 'PARTIAL ROOF PLAN - AREA D - HVAC', drawn on/under a distinct rectangular hooded-louver roof glyph; general note calls out '(TYP OF 3)' but each of the 3 hoods carries its own distinct instance tag (RH-1/2/3), so each is listed separately, not as one repeatable mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,RH-2,plan,false,"Unique Relief Air Hood instance, same glyph type as RH-1/RH-3, distinct unit."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,RH-3,plan,false,"Unique Relief Air Hood instance; visually confirmed as a rectangular hood glyph with underlined 'RH-3' tag directly beneath it, distinct from RH-1/RH-2."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-1-25,plan,false,"Unique VAV box instance mark, underlined text under a diffuser cluster near grid 17/D."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-18A,plan,false,Unique VAV box instance mark.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-18B,plan,false,"Unique VAV box instance mark (paired with VAV-2-18A, distinct suffix A/B = distinct physical units)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-19,plan,false,Unique VAV box instance mark.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-20,plan,false,Unique VAV box instance mark.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-21,plan,false,"Unique VAV box instance mark; confirmed visually next to ductwork with box-fed diffusers (24X24 CD callouts) and keynote bubble '1' (VAV BOX keynote, excluded separately)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-22,plan,false,Unique VAV box instance mark.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-23,plan,false,Unique VAV box instance mark.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#37,VAV-2-24,plan,false,Unique VAV box instance mark.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,CD,plan,false,"Repeatable ceiling supply-diffuser type mark; appears many times as 'SIZE CD' text with leader arrow to a square/cross-hatched ceiling diffuser symbol (e.g. 24X24 CD, 8""ø NECK, 220 CFM). Matches general note 5's supply-diffuser type. Listed once as a type mark, not once per occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,CDS,plan,false,"Repeatable supply-diffuser variant type mark distinct from CD; appears as 'SIZE CDS' (e.g. 12X12 CDS, 24X24 CDS) near diffuser symbols in server room area."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,CRAC-1,plan,false,"Computer room AC unit, unique instance; underlined tag on rectangular equipment box symbol, confirmed visually."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,CRAC-2,plan,false,"Computer room AC unit, unique instance; underlined tag on rectangular equipment box symbol, confirmed visually adjacent to CRAC-1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,EF-8,plan,false,"Inline exhaust fan, unique instance; underlined tag next to circle-with-X inline fan symbol, confirmed visually, referenced by key note 6."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,EF-9,plan,false,"Inline/ceiling exhaust fan, unique instance near room D123/D123A, same tag format and duct-symbol placement pattern as EF-8."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,EG,plan,false,"Repeatable exhaust-grille type mark; appears as 'SIZE EG' with CFM near restroom exhaust grilles (e.g. 6X6 EG, 8X8 EG). Matches general note 5's exhaust-grille type."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,RG,plan,false,"Repeatable return-grille type mark; appears as 'SIZE RG' beside grille symbols throughout (e.g. 12X12 RG, 10X10 RG). Listed once as a type mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,RGL,plan,false,"Repeatable raised-floor return grille (louver) type mark; appears as 'SIZE RGL' near raised-floor return symbols (e.g. 24X24 RGL, 48X24 RGL)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-01,plan,false,"Unique VAV box instance; underlined tag beside VAV box symbol on duct run, room D120 area."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-02,plan,false,Unique VAV box instance near room D119/D118.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-03,plan,false,Unique VAV box instance near room D116.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-04,plan,false,Unique VAV box instance near room D111/D113.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-05,plan,false,"Unique VAV box instance, adjacent to VAV-1-01 cluster."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-06,plan,false,Unique VAV box instance; also called out by name in mechanical key note 11 (installed below raised floor).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-07,plan,false,Unique VAV box instance near room D112/D114.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-08,plan,false,Unique VAV box instance near room D133/D134.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-09,plan,false,Unique VAV box instance near room D131.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-10,plan,false,Unique VAV box instance near room D129/D130.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-11,plan,false,Unique VAV box instance near room D127/D128.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-12,plan,false,Unique VAV box instance near room D106/D109.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-13,plan,false,Unique VAV box instance near room D107/D109.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-14,plan,false,Unique VAV box instance near room D104A/D105.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-15,plan,false,"Unique VAV box instance near room D103A, confirmed visually with box symbol in crop."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#38,VAV-1-17,plan,false,"Unique VAV box instance near room D102, lower vestibule area (VAV-1-16 not present on this sheet)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,DPT,plan,false,"Differential pressure transmitter, circle glyph on the heating-water piping near VAV-1-19/VAV-1-21A, labeled 'HEATING WATER'; a genuine sensor tag, appears once on this sheet"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,T,plan,false,"Repeatable thermostat symbol (circle with 'T'), drawn ~15 times on this sheet at wall locations each wired to a 'TO VAV-x-xx' leader; listed once per repeatable-type-mark rule"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-16,plan,false,"Unique VAV box instance, underlined tag next to box glyph in room A120/C102 area"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-17,plan,false,Unique VAV box instance in room D102 (top of sheet)
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-19,plan,false,"Unique VAV box instance near B102/B102A, confirmed by close-up crop"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-20,plan,false,Unique VAV box instance near A104
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-21A,plan,false,"Unique VAV box instance near B102, confirmed by close-up crop"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-21B,plan,false,Unique VAV box instance near C102
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-22,plan,false,Unique VAV box instance near A112/A110
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-23,plan,false,Unique VAV box instance near C102A
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-24,plan,false,Unique VAV box instance near A107
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-26,plan,false,Unique VAV box instance near A109/A113A area (bottom of sheet)
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-27,plan,false,Unique VAV box instance near A113A
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-29,plan,false,Unique VAV box instance near A109B
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-30,plan,false,Unique VAV box instance near A109C/A109D
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#39,VAV-1-31,plan,false,Unique VAV box instance near A113/A115
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,ACCU-3,plan,false,"Outdoor air-cooled condensing unit equipment tag with box symbol, connected via refrigerant piping label to ACU-1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,ACU-1,plan,false,"Air-conditioning/handling unit equipment tag, underlined text with equipment symbol, near refrigerant piping run to ACCU-3."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,T,plan,false,"BORDERLINE/INCLUDED WITH CAVEAT: circled single letter 'T' (thermostat/temperature-transmitter symbol per Mechanical Key Note 2: 'MOUNT THERMOSTATS/TEMPERATURE TRANSMITTERS AT 54"" AFF') repeated ~20 times at different locations on the plan, drawn as a small circle glyph next to piping runs. Treated as one repeatable type/schedule mark since every occurrence is the identical bare letter with no distinguishing suffix -- it is arguably a generic device symbol rather than a true alphanumeric 'tag', so flagging for harness review rather than omitting silently."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,UH-1,plan,false,"Unit heater equipment tag, boxed/underlined text with leader, near hexagonal keynote '3' (keynote itself excluded) referencing detail G on M-501."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-1-18,plan,false,"Unique VAV box instance tag, boxed callout with leader to terminal unit near rooms B123/B122."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-1-19,plan,false,Unique VAV box instance tag near room B106/B105 area.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-01,plan,false,Unique VAV box instance tag near rooms B126/B125.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-02,plan,false,Unique VAV box instance tag near room B128.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-03,plan,false,Unique VAV box instance tag near rooms B137/B138.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-04,plan,false,Unique VAV box instance tag near room B135.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-05,plan,false,Unique VAV box instance tag near room B103/B119.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-06,plan,false,Unique VAV box instance tag near room B120.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-07,plan,false,Unique VAV box instance tag near room B118/B129.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-08,plan,false,Unique VAV box instance tag near room B121/B107.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-09,plan,false,Unique VAV box instance tag near room B110/B111.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-10,plan,false,Unique VAV box instance tag near room B109/B108.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-11,plan,false,Unique VAV box instance tag near room B108/B106.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-12,plan,false,Unique VAV box instance tag near room B105/match line.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-13,plan,false,Unique VAV box instance tag near room B133/B130.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-14,plan,false,Unique VAV box instance tag near room B130.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-15,plan,false,"Unique VAV box instance tag near room B132/B131, referenced twice via 'TO VAV-2-15'."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-16,plan,false,Unique VAV box instance tag near room B130A.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#40,VAV-2-17,plan,false,"Unique VAV box instance tag between B129/B118, referenced by two leader callouts ('2 TYP' and '1 TYP' keynote bubbles nearby, which are excluded)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-1-25,plan,false,"VAV box symbol at top-left of Area C piping plan, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-18A,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-18B,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-19,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-20,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-21,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-22,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-23,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#41,VAV-2-24,plan,false,"VAV box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,CRAC-1,plan,false,"Unique CRAC unit instance, boxed label on equipment symbol, center-right near D130."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,CRAC-2,plan,false,"Unique CRAC unit instance, boxed label on same equipment symbol group as CRAC-1."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,DPT,plan,false,Differential pressure transmitter tag drawn inside a circular instrument glyph in room D130 (labeled 'CHILLED WATER'); confirmed via zoomed crop. Only one instance on this sheet.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-01,plan,false,"Unique VAV box instance, boxed label with leader/adjacent VAV symbol, top-left of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-02,plan,false,"Unique VAV box instance, boxed label next to VAV glyph."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-03,plan,false,"Unique VAV box instance, boxed label."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-04,plan,false,"Unique VAV box instance, boxed label."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-05,plan,false,"Unique VAV box instance, boxed label."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-06,plan,false,"Unique VAV box instance, underlined label near piping below raised floor callout."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-07,plan,false,"Unique VAV box instance, boxed label."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-08,plan,false,"Unique VAV box instance, boxed label, upper right area."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-09,plan,false,"Unique VAV box instance, boxed label, near CRAC units."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-10,plan,false,"Unique VAV box instance, boxed/underlined label, right side."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-11,plan,false,"Unique VAV box instance, boxed label, center-right."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-12,plan,false,"Unique VAV box instance, underlined label next to VAV glyph, lower-left."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-13,plan,false,"Unique VAV box instance, underlined label with adjacent VAV glyph, lower-center."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-14,plan,false,"Unique VAV box instance, underlined label above small VAV box glyph; verified via zoom crop near D101/D104."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-15,plan,false,"Unique VAV box instance, underlined label, lower-left hexagonal wing."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#42,VAV-1-17,plan,false,"Unique VAV box instance, underlined label next to small VAV glyph; verified via zoom crop near D102. No VAV-1-16 present on this sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,ACCU-1,plan,false,"Air cooled condenser (circle bank) symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,ACCU-2,plan,false,"Air cooled condenser (circle bank) symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,B-1,plan,false,"Propane-fired heating water boiler symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,B-2,plan,false,"Propane-fired heating water boiler symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,CH-1,plan,false,"Air cooled chiller box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,CH-2,plan,false,"Air cooled chiller box symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,CHWP-1,plan,false,"Chilled water pump symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,CHWP-2,plan,false,"Chilled water pump symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,EF-6,plan,false,"Mech room exhaust fan symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,ET-1,plan,false,"Chilled water expansion tank/air separator symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,ET-2,plan,false,"Heating water expansion tank symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,HWP-1,plan,false,"Heating water pump symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,HWP-2,plan,false,"Heating water pump symbol, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#45,UH-2,plan,false,"Unit heater symbol near intake damper, unique instance mark"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#74,EF-7,plan,false,"Exhaust fan tag, unique instance mark. Drawn directly beside a circular fan/motor glyph in the Toilet A114 area (with leader/underline), confirmed by close-up crop. This is the only genuine mechanical/plumbing/controls equipment tag found on this sheet."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#77,AHU-1,plan,false,"Unique instance mark. Rectangular equipment-box glyph labeled 'AHU-1' (underlined) inside the Mechanical Room D201, drawn in the small inset 'POWER MECHANICAL MEZZANINE PLAN' (detail 2) on this electrical power sheet. Confirmed via zoomed crop."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#77,AHU-2,plan,false,"Unique instance mark. Second rectangular equipment-box glyph labeled 'AHU-2' (underlined), adjacent to AHU-1 in the same Mechanical Room mezzanine inset. Confirmed via zoomed crop."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-16,plan,false,"Unique-instance VAV box identifier labeling a junction-box symbol (per Keynote 1: junction box for 120V connection to VAV transformer, transformer/24VAC wiring to VAV box by mechanical contractor)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-17,plan,false,Same junction-box-for-VAV-transformer pattern as VAV-1-16.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-19,plan,false,Junction-box tag coordinating with mechanical VAV box VAV-1-19.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-20,plan,false,Junction-box tag for VAV-1-20.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-21A,plan,false,Junction-box tag for VAV-1-21A (letter-suffixed sub-unit).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-21B,plan,false,Junction-box tag for VAV-1-21B (letter-suffixed sub-unit).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-22,plan,false,Junction-box tag for VAV-1-22.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-23,plan,false,Junction-box tag for VAV-1-23.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-24,plan,false,Junction-box tag for VAV-1-24.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-26,plan,false,Junction-box tag for VAV-1-26.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-27,plan,false,Junction-box tag for VAV-1-27.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-28,plan,false,"Junction-box tag for VAV-1-28; this exact literal string appears drawn TWICE on this sheet at two separate box symbols (once near VAV-1-26 in the seating area, once near VAV-1-30 to the right) — listed once per the unique-instance rule (list every distinct one once), noting the duplicate occurrence as a possible drafting duplication/typo in the source drawing."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-30,plan,false,Junction-box tag for VAV-1-30.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#78,VAV-1-31,plan,false,Junction-box tag for VAV-1-31.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,ACCU-3,plan,false,"Air-cooled condensing unit, unique instance mark, lower-left near vehicle bay (labeled with a 30A 208V 1PH NON-FUSED disconnect note, and NLP-2B circuit reference)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,ACU-1,plan,false,"Air conditioning/coil unit, unique instance mark near vehicle bay, with S/M motor-starter leader."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,EF-10,plan,false,"Exhaust fan, unique instance mark; drawn as leader-labeled box near vehicle bay, top-left of plan."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,EF-2,plan,false,"Exhaust fan, unique instance mark; leader to fixture symbol near top-left rooms."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,EF-3,plan,false,"Exhaust fan, unique instance mark; drawn with leader/starter symbol near lower-left; referenced by keynote 2 (NEMA 0 disconnect for EF-3) which corroborates it is a real piece of equipment, not a keynote number itself."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,EF-4,plan,false,"Exhaust fan, unique instance mark, near vehicle bay stair area; referenced by keynote 3 (starter/disconnect for EF-4)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,EF-5,plan,false,"Exhaust fan, unique instance mark, near right-center restroom area, with S/M (starter/motor) connection leader."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,UH-1,plan,false,"Unit heater, unique instance mark near vehicle bay/stair."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-01,plan,false,"VAV terminal box, unique instance mark (VAV-2-01 through VAV-2-18 are 18 distinct physical VAV boxes serving Area B, each drawn once with its own box symbol and leader)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-02,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-03,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-04,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-05,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-06,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-07,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-08,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-09,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-10,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-11,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-12,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-13,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-14,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-15,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-16,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-17,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#79,VAV-2-18,plan,false,"VAV terminal box, unique instance mark."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,EF-1,plan,false,Exhaust-fan unique-instance tag next to a disconnect-switch symbol; Keynote 2 explicitly reads 'PROVIDE NEMA 0 DISCONNECT SWITCH FOR EF-1. MOUNT DISCONNECT ABOVE CEILING' — a real mechanical-equipment (exhaust fan) electrical disconnect tag.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-18A,plan,false,"Junction-box tag for VAV-2-18A (letter-suffixed sub-unit), per Keynote 1 (junction box for VAV transformer 120V connection)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-18B,plan,false,Junction-box tag for VAV-2-18B (letter-suffixed sub-unit).
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-19,plan,false,Junction-box tag for VAV-2-19.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-20,plan,false,Junction-box tag for VAV-2-20.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-21,plan,false,Junction-box tag for VAV-2-21.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-22,plan,false,Junction-box tag for VAV-2-22.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-23,plan,false,Junction-box tag for VAV-2-23.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-24,plan,false,Junction-box tag for VAV-2-24.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#80,VAV-2-25,plan,false,Junction-box tag for VAV-2-25.
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,ACCU-1,plan,false,"Air-cooled condensing unit, circular symbol, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,ACCU-2,plan,false,"Air-cooled condensing unit, circular symbol next to ACCU-1, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,ACCU-6,plan,false,"Condensing unit symbol near UH-2/VAV-1-08, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,AHU-1,plan,false,"Air handling unit on Mechanical Mezzanine plan, large equipment outline, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,AHU-2,plan,false,"Air handling unit on Mechanical Mezzanine plan next to AHU-1, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,B-1,plan,false,"Boiler, boxed symbol with motor/starter (M/$) marks above it, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,B-2,plan,false,"Boiler, boxed symbol next to B-1, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,CH-1,plan,false,"Chiller, boxed unit symbol (top of Area D mechanical/elec room), unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,CH-2,plan,false,"Chiller, boxed unit symbol next to CH-1, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,CHWP-1,plan,false,"Chilled water pump, circular pump symbol, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,CHWP-2,plan,false,"Chilled water pump, circular pump symbol next to CHWP-1, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,CRAC-1,plan,false,"Computer room A/C unit, boxed symbol, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,CRAC-2,plan,false,"Computer room A/C unit above CRAC-1, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,DHWP-1,plan,false,"Domestic hot water pump, small circular pump symbol, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,DWH,plan,false,"Domestic water heater, drawn as a round tank-like symbol in the mechanical/electrical room, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,EF-6,plan,false,"Exhaust fan, small square/fan symbol in mechanical room, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,EF-8,plan,false,"Exhaust fan near bottom-left corner of Area D plan (near match line), unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,EF-9,plan,false,"Exhaust fan near a restroom/utility room in Area D plan, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,GEN,plan,false,"Standby generator, large rectangular equipment symbol, single instance (no numeric suffix needed)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,HWP-1,plan,false,"Heating water pump, circular pump symbol, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,HWP-2,plan,false,"Heating water pump, circular pump symbol next to HWP-1, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,UH-2,plan,false,"Unit heater, boxed symbol near ACCU-6, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,UH-3,plan,false,"Unit heater on the Mechanical Mezzanine plan, boxed symbol with VFD leaders, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-01,plan,false,"VAV box, unique numbered instance (one of 15: VAV-1-01 through VAV-1-15 spread across Area D plan)."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-02,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-03,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-04,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-05,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-06,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-07,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-08,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-09,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-10,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-11,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-12,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-13,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-14,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VAV-1-15,plan,false,"VAV box, unique instance."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VFD 10HP,plan,false,"Variable frequency drive, boxed symbol on Mechanical Mezzanine plan, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VFD 25HP,plan,false,"Variable frequency drive, boxed symbol on Mechanical Mezzanine plan, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VFD 3HP,plan,false,"Variable frequency drive callout; same literal text labels 3 distinct VFD box symbols in the Area D mechanical/electrical room (near DHWP-1/B-1/B-2 area, near HWP-1/HWP-2, and near the MECH/ELEC panel) -- treated as a repeatable type mark, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VFD 40HP,plan,false,"Variable frequency drive, boxed symbol on Mechanical Mezzanine plan, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VFD 50HP,plan,false,"Variable frequency drive, boxed symbol on Mechanical Mezzanine plan, single occurrence."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#81,VFD 5HP,plan,false,"Variable frequency drive callout; same literal text labels 2 distinct VFD box symbols near CHWP-1/CHWP-2 -- repeatable type mark, listed once."
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#82,CRAC-1,plan,false,"Computer Room Air Conditioner unit, box symbol in equipment room D127, unique physical unit"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#82,CRAC-2,plan,false,"Computer Room Air Conditioner unit, box symbol in equipment room D127, unique physical unit"

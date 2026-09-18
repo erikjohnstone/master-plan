@@ -1,0 +1,66 @@
+sheet,tag,role,in_table,note
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#10,AHU 7040A,plan,false,"Unique instance tag on an AHU equipment-box glyph, lower unit of a stacked pair."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#10,AHU 7041A,plan,false,"Unique instance tag on an AHU equipment-box glyph, upper unit of a stacked pair."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#11,AHU 7010A,plan,false,"Unique instance tag on an AHU equipment-box glyph, lower-right unit."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#11,AHU 7015A,plan,false,"Unique instance tag on an AHU equipment-box glyph, bottom unit."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#11,AHU 7030A,plan,false,"Unique instance tag on an AHU equipment-box glyph, topmost unit in the vertical run."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,AHU-008,plan,false,"AHU equipment box, Area D-2, center."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,AHU-022,plan,false,"Unique AHU unit box, Area D-1, right side near riser."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,AHU-023,plan,false,"AHU equipment box, Area D-2, lower-center."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,AHU-032,plan,false,"Unique AHU unit drawn as equipment box, Area D-1 (upper plan)."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,UH-005,plan,false,"Unit-heater glyph, Area D-2 (lower plan), left side."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,UH-006,plan,false,"Vertical/rotated label next to unit-heater glyph, Area D-2 (bottom-right); raw tokens '006','-','UH' top-to-bottom read as UH-006 bottom-to-top; confirmed visually."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,UH-007,plan,false,"Vertical/rotated label next to wall unit-heater glyph, Area D-1 (top). Raw textSpans returns the rotated characters as separate top-to-bottom tokens '007','-','UH', which read bottom-to-top as UH-007; confirmed visually against a unit-heater symbol."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#12,UH-008,plan,false,"Unit-heater glyph, lower-left of Area D-1 plan."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#13,AHU-024,plan,false,"AHU equipment-box glyph mid-plan, labeled AHU-024."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#13,UH-003,plan,false,"Unit heater glyph at lower-left of room, labeled UH-003."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#13,UH-004,plan,false,"Unit heater glyph at upper-left of room, labeled UH-004."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,AHU-025,plan,false,"Unique AHU equipment box, upper-left of plan."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,ASP-004,plan,false,"Air separator, small circle symbol on vertical HHW riser; rotated label '004','-','ASP' top-to-bottom reads ASP-004 bottom-to-top; confirmed visually."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,B-001,plan,false,"Boiler unit 1 of 6 in new boiler row, each with its own rectangle symbol."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,B-002,plan,false,Boiler unit 2 of 6.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,B-003,plan,false,Boiler unit 3 of 6.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,B-004,plan,false,Boiler unit 4 of 6.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,B-005,plan,false,"Boiler unit 5 of 6 (existing, recently replaced, remains)."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,B-006,plan,false,"Boiler unit 6 of 6 (existing, remains)."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,CTP,plan,false,"Pump symbol (circle) labeled 'HHW' over 'CTP' with 'NEW' below it, adjacent to VFD; single circulation/transfer pump instance."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,ET-004,plan,false,"Expansion tank, circle symbol; rotated label '004','-','ET' reads ET-004."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,HWP-001,plan,false,"Hot-water pump, box/motor symbol, left of boiler row."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,HWP-002,plan,false,"Hot-water pump, adjacent box/motor symbol."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,UH-001,plan,false,"Unit heater symbol, bottom-left of plan near door."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,UH-002,plan,false,"Unit heater/exhaust-fan symbol, upper-right near roof penetration; rotated label '002','-','UH' reads UH-002; confirmed visually against the fan glyph."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#17,VFD,plan,false,"Variable-frequency-drive box glyph, drawn next to the CTP pump; single unnumbered instance on this sheet, but it is a distinct real equipment symbol with its own callout box, not a note or dimension."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#2,101,detail,true,"Example 'DOOR TAG' bubble in the SYMBOLS legend block, not a real door/equipment instance."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#2,A101,detail,true,"Example building-section/exterior-elevation symbol in the SYMBOLS legend (sheet reference format demo), not a real tag."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#2,A2,schedule,true,"'A2 OVER 200 TYPE I OR II' occupancy-classification note text near the code summary block, not an equipment tag."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,AHU-025,plan,false,Same AHU box also shown on M-210 (page 17); redrawn on this power plan at the same location.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,ASP-004,plan,false,"Air separator symbol; rotated label '004','-','ASP' reads ASP-004."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,B-001,plan,false,"Boiler 1 of 6, each with its own power/breaker connection shown."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,B-002,plan,false,Boiler 2 of 6.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,B-003,plan,false,Boiler 3 of 6.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,B-004,plan,false,Boiler 4 of 6.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,B-005,plan,false,Boiler 5 of 6 (existing).
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,B-006,plan,false,Boiler 6 of 6 (existing).
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,BAS,plan,false,"Repeatable type mark: two identical bracket-shaped BAS (building-automation-system) device symbols near the roof curb; same literal tag, listed once per rules."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,C1MCC,plan,false,"Existing motor-control-center panel, drawn as a rectangle box glyph labeled 'PANEL C1MCC' near the BAS devices; the same panel identifier is repeated as an '(EXIST) 480V/3PH C1MCC' power-source annotation under each of the 4 new boiler breakers -- same physical panel, counted once. A related note 'C1MCC-26 (NEW)' names a specific new breaker/circuit within this panel for the pump feed; treated as a circuit-reference annotation rather than a separate equipment tag."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,CTP,plan,false,"'HHW/CTP/NEW' pump symbol, same as on M-210."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,ET-004,plan,false,Expansion tank symbol; rotated label reads ET-004.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,HWP-001,plan,false,Hot-water pump symbol; rotated label reads HWP-001.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,HWP-002,plan,false,Hot-water pump symbol; rotated label reads HWP-002.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,J,plan,false,"Repeatable type mark: small circle 'J' (junction box) symbols recur ~10x along the boiler power wiring; genuine electrical-equipment symbol repeated for many physical boxes, listed once. Lower confidence this belongs in a mechanical-equipment tag set since it is pure electrical infrastructure rather than mechanical/plumbing/controls hardware -- flagging for reviewer judgment."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,UH-001,plan,false,"Unit heater symbol, bottom-left, matching M-210 location."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#26,UH-002,plan,false,"Unit heater/fan symbol, upper-right; rotated label reads UH-002."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,AHU-025,plan,false,Labeled directly on a large equipment-box glyph (air handling unit) in Mezzanine Boiler Room.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,ASP-004,plan,false,Small square symbol labeled ASP-004 on plan.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,B-001,plan,false,First of a row of 6 boiler unit glyphs; unique instance mark drawn vertically on the box.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,B-002,plan,false,Second boiler unit glyph in the row.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,B-003,plan,false,Third boiler unit glyph in the row.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,B-004,plan,false,Fourth boiler unit glyph in the row (referenced elsewhere as existing boiler B-004 tied to bid-alternate note).
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,B-005,plan,false,Fifth boiler unit glyph in the row.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,B-006,plan,false,Sixth boiler unit glyph in the row.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,ET-004,plan,false,Circle symbol (expansion tank) labeled ET-004.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,HWP-001,plan,false,Pump glyph labeled HWP-001.
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,HWP-002,plan,false,"Pump glyph labeled HWP-002, adjacent to HWP-001."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,UH-001,plan,false,"Unit heater glyph at bottom of room, labeled UH-001."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#8,UH-002,plan,false,"Unit heater glyph at right side of room, labeled UH-002."
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf#9,AHU 7031A,plan,false,"Unique instance tag drawn vertically directly on a large AHU equipment-box glyph in the mechanical room, next to the stairs."

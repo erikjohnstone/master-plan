@@ -1,0 +1,81 @@
+sheet,tag,role,in_table,note
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) ACC-(N),plan,false,"Labels a dashed/solid equipment-pad-like shape near HP-6A/CH-199CO; abbreviation and exact equipment type are ambiguous (possibly an existing accessory unit or air-cooled condenser being relocated). Included as a plausible unique equipment instance since it follows the same '(E) <ABBR>-<suffix>' equipment-tag pattern as FC-1/VAV-x/HRV-1 on this sheet and sits beside a drawn glyph, not a room outline. Flagging as lower-confidence."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) FC-1,plan,false,Existing fan coil unit; clearly drawn as a distinct hatched/shaded equipment box with internal fan-wheel circles.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) HRV-1,plan,false,"Existing HRV unit shown inline with ductwork near breakroom, with keynote bubble '1' beside it. A second textual occurrence of '(E) HRV-1' at y0~1347 is inside the Key Notes paragraph text (""TEST AND BALANCE (E) HRV-1 AND CONNECTED GRD'S."") and is NOT a drawn plan tag, so it is not double-counted."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) VAV-13,plan,false,"Existing VAV box near transformer vault, leader to inline duct symbol."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) VAV-15,plan,false,Existing VAV box inline in duct run east of breakroom.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) VAV-16,plan,false,"Existing VAV box inline in duct run, shaded terminal unit near HRV-1. (Note: at low zoom this can be misread as 'VAV-18'; text spans confirm '16'.)"
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) VAV-17,plan,false,Existing VAV box at east duct riser near grid D/E.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) VAV-8,plan,false,Existing VAV box inline in duct run near dock staging area.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,(E) VAV-9,plan,false,Existing VAV box inline in duct run near gondola staging area.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,HP-5A,plan,false,"Unique heat pump unit; shaded equipment box. Adjacent hexagon '2' is a keynote reference bubble (keynote 2: minimum clearances), not part of the tag."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,HP-6A,plan,false,Unique heat pump unit; drawn as shaded equipment box in upper corridor area with leader/underline to symbol.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,R-10,plan,false,"Repeatable return grille type mark, drawn at ~9 hatched-square return symbols with varying CFM values."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,R-20,plan,false,"Return grille type mark (CFM 915), single occurrence on this sheet but same S/R schedule-code naming convention as S-10/S-11/S-12/R-10, so treated as a repeatable type mark rather than a unique instance."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,S-10,plan,false,"Repeatable supply diffuser/register type mark (boxed 'S-10' over CFM number, e.g. 110/95/etc.), drawn at ~5 hatched-square diffuser symbols. Listed once per rules; the CFM numbers below each box are not part of the tag."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,S-11,plan,false,"Repeatable supply diffuser type mark, drawn at ~7 diffuser symbols with varying CFM values (230, 185, 275(no, that's S-12), 125, etc.)."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#12,S-12,plan,false,"Repeatable supply diffuser type mark, drawn at 3 diffuser symbols (CFM 275, 400, 400)."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#13,E-10,plan,false,"Exhaust-register schedule mark, appears once (CFM 100) on Main Level plan."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#13,HP-7A,plan,false,"Unique heat pump box glyph, Mechanical Penthouse plan, adjacent to HP-8A."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#13,HP-8A,plan,false,Unique heat pump box glyph (with connection stubs) in Mechanical Penthouse plan; keynote '3' (sound lining) attached but not part of tag.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#13,HRV-2,plan,false,"Existing HRV unit, drawn as '(E) HRV-2' box glyph with fan/damper symbols; appears in the Mechanical Penthouse plan and again in the small detail 3 '(E) HRV-2 DUCT CONNECTIONS' on the same sheet -- same physical unit, counted once."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#13,R-10,plan,false,"Repeatable return-register schedule mark (box with 'R-10' over CFM value). Appears 3x on the Main Level plan with different CFM (190, 1000, 170) -- listed once."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#13,S-11,plan,false,"Repeatable supply-diffuser schedule mark, appears 3x (CFM 230, 200, 200) -- listed once."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#13,S-12,plan,false,"Repeatable supply-register schedule mark, appears 3x (CFM 360 each) -- listed once."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,ACC-(N),plan,false,"Dashed-outline equipment footprint glyph labeled '(E) ACC-(N)' near HP-5A/FC-1 -- reads as a placeholder/future condenser location; has a distinct drawn glyph (dashed box with small tab) so included as a tag, though the literal string is unusual."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,CH-105LD,plan,false,"Existing equipment '(E) CH-105LD' with a real small box glyph and piping stubs (same visual convention as the VAV boxes) -- treated as a real equipment tag, unlike CH-199CO (see notes)."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,FC-1,plan,false,"Existing fan-coil unit, drawn as a square glyph containing 4 fan circles, '(E) FC-1'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,HP-1A,plan,false,"Unique heat pump box glyph, lower level piping plan."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,HP-2A,plan,false,"Unique heat pump box glyph, adjacent to HP-1A/HP-3A/HP-4A row."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,HP-3A,plan,false,Unique heat pump box glyph.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,HP-4A,plan,false,Unique heat pump box glyph.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,HP-5A,plan,false,"Unique heat pump box glyph, near top-left corridor."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,HP-6A,plan,false,"Unique heat pump box glyph, near top-left corridor, adjacent to HP-5A."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,HRV-1,plan,false,"Existing HRV unit, drawn as a filled gray rectangle glyph, '(E) HRV-1', near VAV-15/16."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-10,plan,false,"Existing VAV box glyph, '(E) VAV-10'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-11,plan,false,"Existing VAV box glyph, '(E) VAV-11'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-12,plan,false,"Existing VAV box glyph, '(E) VAV-12'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-13,plan,false,"Existing VAV box glyph, '(E) VAV-13'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-15,plan,false,"Existing VAV box glyph, '(E) VAV-15' (no VAV-14 present on this sheet)."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-16,plan,false,"Existing VAV box glyph, '(E) VAV-16', near existing HRV-1."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-17,plan,false,"Existing VAV box glyph, '(E) VAV-17'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-18,plan,false,"Existing VAV box glyph, '(E) VAV-18'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-7,plan,false,"Existing VAV box glyph, '(E) VAV-7'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-8,plan,false,"Existing VAV box glyph, '(E) VAV-8'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#14,VAV-9,plan,false,"Existing VAV box glyph, '(E) VAV-9'."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#15,HP-7A,plan,false,"Unique heat-pump instance mark, underlined. Drawn directly on/beside its physical equipment box glyph in the 'MECHANICAL PENTHOUSE - MECHANICAL PIPING FLOOR PLAN' view (left half of sheet MP1.1), with a leader arrow from the box to the text. The identical literal 'HP-7A' also appears a second time on the 'MAIN LEVEL - MECHANICAL PIPING FLOOR PLAN' view (right half), but there it is a bare text label with an arrow pointing toward a thermostat (T) symbol cluster near CORRIDOR 299, with no heat-pump equipment glyph nearby -- almost certainly referencing the same physical penthouse unit's duct/piping drop rather than a second physical unit. Per the unique-instance-mark rule, counted once."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#15,HP-8A,plan,false,"Unique heat-pump instance mark, underlined, drawn beside its physical equipment box glyph in the Mechanical Penthouse plan view (same cluster as HP-7A, keynote hexagons 1/5 point at valve/union symbols on its piping). Also appears a second time on the Main Level plan view near grid F/E as a bare underlined text label next to a (T) thermostat symbol only, no equipment box -- again read as a reference to the same physical unit, not a second one. Counted once."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#16,HP-1A,schematic,false,Zone-area label (heat-pump service zone) inside a cross-hatch-filled polygon; same physical unit as HP-1A on M1.1/MP1.0/M4.0. Appears in two separate zone polygons on this sheet (both counted as one unique tag).
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#16,HP-2A,schematic,false,"Zone-area label inside a light-gray-filled polygon, no box/hex glyph -- plain text placed in the zone."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#16,HP-3A,schematic,false,Zone-area label inside a cross-hatch-filled polygon.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#16,HP-4A,schematic,false,Zone-area label inside a fine-grid-hatch-filled polygon.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#16,HP-5A,schematic,false,Zone-area label inside a dot-hatch-filled polygon (narrow corridor-shaped zone).
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#16,HP-6A,schematic,false,"Zone-area label INSIDE a small rectangular box/callout (the one zone on this sheet with an actual box glyph around the tag), dark-filled triangular zone."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#16,HP-8A,schematic,false,"Label next to keynote hexagon '1' (thermostat-location keynote), sitting in the diagonally-hatched zone at upper right; no dedicated box of its own."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#17,HP-7A,schematic,false,"This sheet (M2.1, 'MAIN LEVEL - MECHANICAL ZONING PLAN') is a zoning diagram: the building footprint is divided into two large hatched/shaded zone polygons, each with a single floating underlined-free text label ('HP-7A', 'HP-8A') centered in the zone -- there is no equipment box/hexagon/diamond/circle glyph anywhere on this page, no leader line, just the zone outline itself acting as the 'symbol'. HP-7A/HP-8A are the same real, physical heat-pump units whose equipment glyphs are drawn on sheet MP1.1 (page 15) penthouse plan. Included as valid tag references naming real equipment, but flagged role=schematic (zoning diagram, not an item-level equipment plan) since strictly there is no adjacent equipment glyph, only a zone-region association -- reviewer judgment call; could alternately be excluded as a diagram callout rather than a drawn instance tag."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#17,HP-8A,schematic,false,"Same zoning-diagram situation as HP-7A above: floating text label inside a hatched zone polygon, no adjacent equipment glyph. Same physical unit as tagged with a real equipment-box glyph on MP1.1 (page 15)."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#18,HP-5A,plan,false,"Unique heat-pump instance mark, underlined, drawn directly beside a diamond/X ceiling-equipment glyph and adjacent open rectangle (access panel) on the 'LOWER LEVEL - MECHANICAL RCP' (reflected ceiling plan). This is the only tag-like text on the page and matches the pipeline hint (~1 raw instance, family HP-5A) exactly."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#20,HP-1A,plan,false,"Unique heat pump box glyph (X-braced square), Lower Level Storage Room enlarged plan."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#20,HP-2A,plan,false,"Unique heat pump box glyph, same duct run as HP-1A/HP-3A/HP-4A."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#20,HP-3A,plan,false,Unique heat pump box glyph.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#20,HP-4A,plan,false,"Unique heat pump box glyph, rightmost unit in the row."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#20,VD-100,plan,false,"Boxed volume-damper tag (CFM 100), near HP-1A."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#20,VD-175,plan,false,"Boxed volume-damper tag ('VD' over CFM value 175), same two-line-box convention as R-10/S-11 on M1.1."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#20,VD-70,plan,false,"Boxed volume-damper tag (CFM 70), lower duct run near section marker 2."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)2MDP,plan,false,Existing main distribution panel 2.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)4MDP,plan,false,"Existing main distribution panel 4, leader to the large equipment box in the middle cluster."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)ATS,plan,false,Existing automatic transfer switch; leader line to a distinct drawn rectangle in the electrical-room equipment cluster (top-right of plan).
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)EM,plan,false,Existing emergency panel; leader line into the same diagonal-wall equipment row as ATS/KPB-RT/KPB/H1.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)H1,plan,false,"Existing panel/transformer H1, bottom of the same stacked-label group."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)KPB,plan,false,"Existing panel, distinct leader line from (EX)KPB-RT."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)KPB-RT,plan,false,"Existing panel (kitchen panel board - roof top /variant), separate leader line/glyph from (EX)KPB."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)L1A,plan,false,Existing panel L1A (rendered as '(EX) L1A' with a space next to keynote '2' hexagon); normalized to (EX)L1A.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)L1B,plan,false,"Existing panel L1B (source text rendered as '(EX) L1B' with a space, adjacent to keynote '2' hexagon); normalized to (EX)L1B for consistency with the other (EX) tags."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)L1K,plan,false,Existing panel L1K.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,(EX)SB,plan,false,Existing switchboard; leader line to its own rectangle in the same equipment cluster.
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,HP-1A,plan,false,"Heat pump unit tag, underlined, next to unit symbol; keynote '1' hexagon and 'J' junction-box symbol also present nearby but those are not tags (see notes)."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,HP-2A,plan,false,"Heat pump unit tag, same pattern as HP-1A."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,HP-3A,plan,false,"Heat pump unit tag, same pattern."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,HP-4A,plan,false,"Heat pump unit tag, same pattern."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,HP-5A,plan,false,"Heat pump unit tag, upper-left cluster, with 'TYP'/keynote '3' nearby (keynote excluded)."
+077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#24,HP-6A,plan,false,"Heat pump unit tag, upper-left cluster."

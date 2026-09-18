@@ -1,0 +1,82 @@
+sheet,tag,role,in_table,note
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,B-1(E),plan,false,"Hexagon tag, drawn gray (existing/to remain), on lowest of three stacked existing boiler equipment symbols, left side of plan."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,B-2(E),plan,false,"Hexagon tag, gray, on middle existing boiler symbol."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,B-3(E),plan,false,"Hexagon tag, gray, on top existing boiler symbol."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CHP-1,plan,false,"Hexagon tag on first new chilled water pump, row of 5 (keynote 4)."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CHP-2,plan,false,Hexagon tag on second chilled water pump.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CHP-3,plan,false,Hexagon tag on third chilled water pump.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CHP-4,plan,false,Hexagon tag on fourth chilled water pump.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CHP-5,plan,false,Hexagon tag on fifth chilled water pump.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CT-1,plan,false,"Hexagon tag on first (leftmost) cooling tower cell, new stainless upper section per keynote 9."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CT-2,plan,false,Hexagon tag on second cooling tower cell.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CT-3,plan,false,Hexagon tag on third cooling tower cell.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CT-4,plan,false,Hexagon tag on fourth cooling tower cell.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CT-5(E),plan,false,"Hexagon tag, drawn in gray (existing, to remain) on fifth cooling tower cell, rightmost of the row -- distinct physical unit not covered by keynote 9's CT-1..4 list."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CWP-1,plan,false,"Hexagon tag on first new condenser water pump, row of 5 (keynote 8). Same tag repeats in the 'NEW CONDENSER WATER PUMP SECTION DETAIL' (view 3, same sheet), which shows the same 5 physical pumps -- counted once here."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CWP-2,plan,false,Hexagon tag on second condenser water pump; also shown in detail view 3.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CWP-3,plan,false,Hexagon tag on third condenser water pump; also shown in detail view 3.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CWP-4,plan,false,Hexagon tag on fourth condenser water pump; also shown in detail view 3.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,CWP-5,plan,false,Hexagon tag on fifth condenser water pump; also shown in detail view 3.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,DDC-B2-FTHL,plan,false,"Existing JCI DDC controls panel, named via leader line pointing to a small rectangular panel glyph near the water-softener piping ('EXISTING JCI DDC PANEL ""DDC-B2-FTHL"" (TO REMAIN)'). Included as a controls-panel equipment tag with a leader to a drawn glyph; borderline case flagged for reviewer judgment. A second panel name, 'DDC-B2-LTHW', appears only inside keynote 15's paragraph text (no leader/glyph on the plan) and was excluded as narrative, not a plan callout."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,DWP-2(E),plan,false,"Hexagon tag, gray (existing domestic water pump), between WS-1(E) and the tank/boiler cluster."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,HE-1,plan,false,Hexagon tag on new heat recovery heat exchanger symbol (keynote 1).
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,LV-1,plan,false,"Hexagon tag on louver symbol, top-left of plan (new louver in removed window location per keynote 3)."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,LV-2,plan,false,Hexagon tag on second louver symbol adjacent to LV-1.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,T-1,plan,false,"Hexagon tag (solid/new) on new condensate return/surge tank, near '6""o STM-V' label (keynote 6)."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,T-2(E),plan,false,"Hexagon tag, gray (existing), on a separate small tank symbol near HE-1, distinct from new T-1."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,WS-1(E),plan,false,Hexagon tag on existing water softener train (piping being replaced per keynote 16).
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#37,WS-2,plan,false,Hexagon tag on new water softener train installed in removed filter system location (keynote 15).
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,1-ECH-CP,plan,false,"Existing panel, dashed box symbol on wall of Electrical Room 2-112, labeled 'EXISTING PANEL 1-ECH-CP'"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,1-ECMCC-CP,plan,false,"Existing motor-control-center control panel; literal tag appears 3x on this sheet (near VFD-CT/VFD-CHP/VFD-CWP banks and again in the Electrical Room as 'EXISTING 1-ECMCC-CP') pointing to the SAME physical panel each time — counted once as a unique instance mark, not per occurrence"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-CHP-1,plan,false,"Chilled water pump, leader to pump-glyph in 5-unit hatched pump bank"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-CHP-2,plan,false,"Chilled water pump, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-CHP-3,plan,false,"Chilled water pump, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-CHP-4,plan,false,"Chilled water pump, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-CHP-5,plan,false,"Chilled water pump #5, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,"2-CP-1, 2",plan,false,"Existing condensate pump controller panel(s), single combined callout with leader lines to two symbols (a relocated box and a small device symbol); text is literally '2-CP-1, 2' referring jointly to units 2-CP-1 and 2-CP-2 per sheet note 11"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-CWP-5,plan,false,"Condenser water pump #5, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-ECL-CP,plan,false,"Existing panel, dashed box symbol on wall between Lobby/Work Area, labeled 'EXISTING PANEL 2-ECL-CP'"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,2-ECMCC-CP,plan,false,"Existing MCC control panel, same physical panel referenced 3x on sheet, counted once"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,3-ECMCC-CP,plan,false,"Existing MCC control panel, same physical panel referenced 3x on sheet, counted once"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,4-ECMCC-CP,plan,false,"Existing MCC control panel, same physical panel referenced 3x on sheet, counted once"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,CWP-1,plan,false,"Condenser water pump, leader to pump-glyph in 5-unit hatched pump bank"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,CWP-2,plan,false,"Condenser water pump, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,CWP-3,plan,false,"Condenser water pump, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,CWP-4,plan,false,"Condenser water pump, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,DWP-3,plan,false,"Existing filtered water booster pump skid, hatched box symbol in Boiler Room"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,I-ECDB-CP,plan,false,"Existing panel tag (literal text extracted as 'I-ECDB-CP', capital I likely a '1' in the drawing font); appears 4x pointing to same physical panel near VFD-2-CT-5/VFD-2-CHP-5/VFD-2-CWP-5, counted once"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,T-1,plan,false,"Existing condensate return/surge tank, hatched box symbol in Boiler Room, unique equipment"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-2-CHP-5,plan,false,"Chilled water pump VFD #5, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-2-CT-5,plan,false,"Cooling tower VFD #5, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-2-CWP-5,plan,false,"Condenser water pump VFD #5, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CHP-1,plan,false,"Chilled water pump VFD, leader to hatched VFD box in 5-unit CHP VFD bank"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CHP-2,plan,false,"Chilled water pump VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CHP-3,plan,false,"Chilled water pump VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CHP-4,plan,false,"Chilled water pump VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CT-1,plan,false,"Cooling tower VFD, leader to small hatched VFD box symbol at cooling-tower yard wall"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CT-2,plan,false,"Cooling tower VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CT-3,plan,false,"Cooling tower VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CT-4,plan,false,"Cooling tower VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CWP-1,plan,false,"Condenser water pump VFD, leader to hatched VFD box in 5-unit CWP VFD bank"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CWP-2,plan,false,"Condenser water pump VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CWP-3,plan,false,"Condenser water pump VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,VFD-CWP-4,plan,false,"Condenser water pump VFD, unique instance"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#41,WFS-1,plan,false,"Existing water filter softener system skid, hatched box symbol in Boiler Room"
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#42,3-ECMCC-CP,plan,false,Hexagon keynote '1' with leader/label '3-ECMCC-CP' pointing into the hatched equipment box in the Domestic Pumps room (electrical control/MCC panel being disconnected per Sheet Note 1). Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#42,IWP-1,plan,false,"Text 'IWP-1' written directly on the hatched equipment box (industrial water pump skid) in the Domestic Pumps room, under hexagon keynote '2'. Unique instance."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#43,DHWS,plan,false,"Existing control panel. Drawn as a dashed rectangle equipment glyph on the basement wall with a leader arrow, labeled 'EXISTING CONTROL PANEL DHWS' (textSpans: 'EXISTING CONTROL PANEL' + 'DHWS' at x0~3811-3861,y0~2011-2034). Unique instance mark for one specific existing panel."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#43,EC2HB,plan,false,"Existing electrical panel. Drawn as a dashed rectangle glyph with a leader arrow and adjacent keynote bubble '2', labeled 'EXISTING PANEL EC2HB' (textSpans x0~4792,y0~2415). Unique instance mark for one specific existing panel."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,1-ECDB-CP,plan,false,"Literal drawn text is 'I-ECDB-CP' (leading glyph is a capital I, evidently meant as '1'); label 'EXISTING PANEL I-ECDB-CP' with leader to a small existing-panel box near the chilled/condenser water pump area. Unique instance."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,1-ECH-CP,plan,false,'EXISTING PANEL 1-ECH-CP' with leader to a dashed equipment box at the top of the Electrical Room. Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,1-ECMCC-CP,plan,false,'EXISTING 1-ECMCC-CP' with leader to a dashed equipment box (existing MCC panel) in the Electrical Room. Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,2-CP-1,plan,false,"Drawn as combined label '2-CP-1, 2' in the Boiler Room with two separate leader lines to two distinct small equipment boxes (one marked '(TEMPORARILY RELOCATED)'). Split into two unique instance tags 2-CP-1 / 2-CP-2 since each leader points at a distinct physical item."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,2-CP-2,plan,false,"See 2-CP-1 note — second leader of the same combined '2-CP-1, 2' callout, pointing at the second small equipment box below."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,2-ECL-CP,plan,false,'EXISTING PANEL 2-ECL-CP' with leader pointing to a small equipment box near the Boiler Room / Hays Cleveland Controls cabinet. Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,2-ECMCC-CP,plan,false,'EXISTING 2-ECMCC-CP' with leader to a dashed equipment box in the Electrical Room. Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,3-ECMCC-CP,plan,false,'EXISTING 3-ECMCC-CP' with leader to a dashed equipment box in the Electrical Room. Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#52,4-ECMCC-CP,plan,false,'EXISTING 4-ECMCC-CP' with leader to a dashed equipment box in the Electrical Room. Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#53,1-U-CP-23,plan,false,Label '1-U-CP-23' with leader from a circular equipment glyph next to the Toilet room (appears to be a lighting/unit control panel or sensor tied to the Lutron system). Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#54,3-ECMCC-CP,plan,false,Same basement layout as page 42 (proposed/new version instead of demolition). Hexagon keynote '1' with leader/label '3-ECMCC-CP' pointing to the equipment box in the Domestic Pumps room. Unique instance.
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#54,IWP-1,plan,false,"Text 'IWP-1' written directly on the equipment box (industrial water pump skid) in the Domestic Pumps room, under hexagon keynote '2'. Unique instance."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#56,DHWS,plan,false,"Existing control panel, same glyph/leader/label as on page 43 ('EXISTING CONTROL PANEL DHWS', textSpans x0~3811,y0~2011). Unique instance mark."
+04_NV_VA_LasVegas_CentralUtilityPlant.pdf#56,EC2HB,plan,false,"Existing electrical panel, same glyph/leader/label as on page 43 ('EXISTING PANEL EC2HB', textSpans x0~4792,y0~2415), next to keynote bubble '2'. Unique instance mark."

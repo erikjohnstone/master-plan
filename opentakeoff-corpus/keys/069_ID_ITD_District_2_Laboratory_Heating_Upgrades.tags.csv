@@ -1,0 +1,76 @@
+sheet,tag,role,in_table,note
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,AHU-1,plan,false,"Unique instance. Existing AHU-1, hexagon callout pointing to the large air-handler cabinet drawn on the plan."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,AS,plan,false,"Repeatable type mark. Existing air separator hexagon, appears near boiler loop and near chiller/CHW pumps (2 locations per view)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,B-1,plan,false,"Unique instance. Existing Boiler 1, circular hexagon callout on loft mechanical plan (both demo and new-work views)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,B-2,plan,false,"Unique instance. Existing Boiler 2, hexagon callout on plan."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,BCV,plan,false,Repeatable/unique-ish. Existing bypass control valve hexagon near boiler return.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,BP-1,plan,false,"Unique instance. New boiler pump 1, hexagon on new-work plan view (not in demo view)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,BP-2,plan,false,"Unique instance. New boiler pump 2, hexagon on new-work plan view."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,BT,plan,false,Existing basket-strainer/boiler-trim hexagon near CHW pump bank.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,CWP-1,plan,false,"Unique instance. New chilled water pump 1, hexagon near existing chiller/pump bank on new-work plan view."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,CWP-2,plan,false,"Unique instance. New chilled water pump 2, hexagon on new-work plan view."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,ET,plan,false,"Repeatable type mark. Existing expansion tank hexagon callout, appears on both demo and new-work views."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,GT,plan,false,"Repeatable type mark. 'GT' hexagons (existing glycol/gauge tank) appear twice per plan view (once near expansion tank, once near CHW pumps) with identical literal text; no distinguishing number is drawn."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,HC,plan,false,"Repeatable type mark, paired with SV each of the 4 occurrences on the plan."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,HWP-1,plan,false,"Unique instance. New hot water pump 1, hexagon on new-work plan view."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,HWP-2,plan,false,"Unique instance. New hot water pump 2, hexagon on new-work plan view."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,L,plan,false,Existing louver hexagon at bottom-left wall opening.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,M,plan,false,"Motor/motorized-damper box callout at louver opening (per Controls Legend on M4.0, M = MOTOR)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,SV,plan,false,"Repeatable type mark. Shutoff/solenoid valve hexagon, paired with an adjacent HC hexagon; this exact pair repeats 4 times on the plan (2 unit-heater-like boxes at top, 2 more at mid/lower area)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,VFD-1,plan,false,"Unique instance. New VFD 1, hexagon on new-work plan view feeding boiler pumps."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,VFD-2,plan,false,"Unique instance. New VFD 2, hexagon on new-work plan view."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,AS,detail,false,Air separator callout in M2.0 hot-water piping schematic/detail.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,B-1,detail,false,Existing boiler 1 callout repeated in the not-to-scale boiler piping demolition/new-work details (sheet M2.0).
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,B-2,detail,false,Existing boiler 2 callout in M2.0 details.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,BCV,detail,false,Bypass control valve callout in M2.0 hot-water piping schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,BP-2,detail,false,New boiler pump 2 callout ('(N)BP/2') in M2.0 new-work piping schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,ET,detail,false,Expansion tank callout in M2.0 hot-water piping schematic/detail.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,GT,detail,false,Glycol tank callout in M2.0 hot-water piping schematic/detail.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,HWP-1,detail,false,New hot water pump 1 callout ('(N)HWP/1 (80 GPM)') in M2.0 new-work piping schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#4,HWP-2,detail,false,New hot water pump 2 callout in M2.0 new-work piping schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,AHU-1,schedule,true,"Row 'AHU-1(E)' in Existing Air Handling Unit Schedule, sheet M3.0."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-1,schedule,true,Row 'B-1(E)' in Existing Condensing Hot Water Boiler Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-2,schedule,true,Row 'B-2(E)' in Existing Condensing Hot Water Boiler Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-1,schedule,true,"Row 'BP-1' (Boiler Pump, area served B-1) in New Pump Schedule."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-2,schedule,true,Row 'BP-2' in New Pump Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-1,schedule,true,Row 'CWP-1' in New Pump Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-2,schedule,true,Row 'CWP-2' in New Pump Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-1,schedule,true,Row in New Pump Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-2,schedule,true,Row in New Pump Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,VFD-1,schedule,true,Row 'VFD-1' in New Variable Frequency Drive Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,VFD-2,schedule,true,Row 'VFD-2' in New Variable Frequency Drive Schedule.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,AS-HW1,schematic,false,Air separator hexagon labeled AS/HW1 on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,BCV-1,schematic,false,"Bypass control valve hexagon (labeled BCV/1) on Existing Heating Water System Control Schematic, sheet M4.0 (not to scale)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,BP-1,schematic,false,New boiler pump 1 on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,BP-2,schematic,false,New boiler pump 2 on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,ET-HW1,schematic,false,Expansion tank hexagon labeled ET/HW1 on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,GT-HW1,schematic,false,Glycol tank hexagon labeled GT/HW1 on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,HWP-1,schematic,false,New hot water pump 1 on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,HWP-2,schematic,false,New hot water pump 2 on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6,M,schematic,false,Motor box callouts (2x) next to HWP pumps on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,AS-CW1,schematic,false,"Air separator hexagon labeled AS/CW1 on Existing Chilled Water System Control Schematic, sheet M4.1."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,BT-1,schematic,false,Basket strainer hexagon labeled BT/1 on chilled-water control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,CH-1,schematic,false,Existing air-cooled chiller box labeled CH/1 at bottom of control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,CWP-1,schematic,false,New chilled water pump 1 hexagon on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,CWP-2,schematic,false,New chilled water pump 2 hexagon on control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,ET-CW1,schematic,false,Expansion tank hexagon labeled ET/CW1 on chilled-water control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,GT-CW1,schematic,false,Glycol tank hexagon labeled GT/CW1 on chilled-water control schematic.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7,M,schematic,false,Motor box callout on chilled-water pump.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,AHU-1,plan,false,Existing AHU-1 callout on E1.0 plan.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,B-1,plan,false,"Existing boiler 1 callout on scaled Electrical Loft Demo/New Plan, sheet E1.0 (same physical unit as page 3)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,B-2,plan,false,Existing boiler 2 callout on E1.0 plan.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,BP-1,plan,false,New boiler pump 1 callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,BP-2,plan,false,New boiler pump 2 callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,CWP-1,plan,false,New chilled water pump 1 callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,CWP-2,plan,false,New chilled water pump 2 callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,HC,plan,false,"Repeatable type mark paired with SV, 4 occurrences on E1.0 plan."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,HM,plan,false,Existing electrical panel 'HM' box callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,HWP-1,plan,false,New hot water pump 1 callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,HWP-2,plan,false,New hot water pump 2 callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,L,plan,false,Existing louver hexagon on E1.0 plan.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,LB,plan,false,Existing electrical panel 'LB' box callout on E1.0 new-plan view (panel serving mechanical equipment).
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,M,plan,false,"Motorized damper/motor box callouts on E1.0 plan (multiple, near boiler pumps and louver)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,SV,plan,false,"Repeatable type mark, shutoff valve hexagon paired with HC, appears 4 times on E1.0 plan (same physical unit heaters as page 3)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,T2,plan,false,Existing transformer 'T2' box callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,VFD-1,plan,false,New VFD 1 callout on E1.0 new-plan view.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,VFD-2,plan,false,New VFD 2 callout on E1.0 new-plan view.

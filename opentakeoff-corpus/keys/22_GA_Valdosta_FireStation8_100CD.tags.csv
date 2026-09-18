@@ -1,0 +1,170 @@
+sheet,tag,role,in_table,note
+22_GA_Valdosta_FireStation8_100CD.pdf#59,IB1,plan,false,"Boxed fixture tag next to an ice-maker/box symbol adjacent to the BREAK RM. sink (same cluster as the second SK1). Appears once. Verified against textSpans ('IB1' at x0=3747.6,y0=3079) and visually."
+22_GA_Valdosta_FireStation8_100CD.pdf#59,MB2,plan,false,"Boxed fixture tag drawn directly next to the mop-basin plumbing fixture symbol near STAIR 1 / UTILITY 147 (below the '1 1/2"" ANGLE HOSE VALVE' callout). Appears once on this sheet. Verified against textSpans ('MB2' at x0=2666.5,y0=1890.6) and visually via a zoomed crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#59,SK1,plan,false,Boxed sink-fixture tag drawn next to two different sink symbols: one in the KITCHEN (119) area and one in the BREAK RM. (123) area. Same literal tag used for both (repeatable type/schedule mark for a sink type) — listed once. Verified against textSpans (two 'SK1' occurrences) and visually.
+22_GA_Valdosta_FireStation8_100CD.pdf#60,LV1,plan,false,"Lavatory fixture-type tag, boxed callout appearing repeatedly across the plan and both riser diagrams/toilet blowups. Repeatable type mark - listed once."
+22_GA_Valdosta_FireStation8_100CD.pdf#60,MB1,plan,false,"Mop basin/sink fixture-type tag, boxed callout in the Riser No.4 laundry area and toilet-plan blowup #4. Repeatable type mark - listed once."
+22_GA_Valdosta_FireStation8_100CD.pdf#60,SH1,plan,false,"Shower fixture-type tag, boxed callout appearing repeatedly across the plan and riser diagrams. Repeatable type mark - listed once."
+22_GA_Valdosta_FireStation8_100CD.pdf#60,WB1,plan,false,"Wash basin fixture-type tag, boxed callout in Riser No.4 laundry area and toilet-plan blowup #4. Repeatable type mark - listed once."
+22_GA_Valdosta_FireStation8_100CD.pdf#60,WC1,plan,false,"Water closet fixture-type tag, boxed callout appearing many times across the second-floor plan, both toilet-plan riser blowups, and both riser diagrams (Riser No.3, Riser No.4). Repeatable type mark - listed once."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,LV1,plan,false,"Lavatory type-1 fixture tag on box symbols; appears repeatedly in decon-toilets plan (view 1) and riser No.1 waste/water schematics (view 3), 6 occurrences."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,LV2,plan,false,"Lavatory type-2 fixture tag on box symbols; appears in first-floor-toilets plan (view 2) and riser No.2 schematics (view 4), 6 occurrences."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,MB1,plan,false,"Mop-basin type-1 fixture tag on box symbol with leader line; appears in the large-scale decon-toilets plan (view 1) and again in riser diagram No.1 (view 3), 4 occurrences total."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,SH1,plan,false,"Shower type-1 fixture tag on box symbols; appears in decon-toilets plan (view 1) and riser No.1 schematics (view 3), 5 occurrences."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,SH2,plan,false,"Shower type-2 fixture tag on box symbols; appears in first-floor-toilets plan (view 2) and riser No.2 schematics (view 4), 6 occurrences."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,WB1,plan,false,"Plumbing fixture symbol (wall-mount fixture type 1) near VESTIBULE/NICHE 145A, top-left large-scale decon-toilets plan; only 1 occurrence on this sheet."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,WC1,plan,false,"Water-closet type-1 fixture tag on box symbols; appears in decon-toilets plan (view 1) and riser No.1 schematics (view 3), 6 occurrences."
+22_GA_Valdosta_FireStation8_100CD.pdf#61,WC2,plan,false,"Water-closet type-2 fixture tag on box symbols; appears in first-floor-toilets plan (view 2) and riser No.2 schematics (view 4), 6 occurrences."
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU1,plan,false,"unique AHU instance mark, boxed unit symbol with leader, keynote (1) 'remove existing fan coil unit' nearby (keynote excluded, tag counted separately)"
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU10,plan,false,unique AHU instance mark (textSpans emits it as two tokens 'AHU1'+'1' due to glyph spacing; verified by crop as AHU10)
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU11,plan,false,unique AHU instance mark (textSpans splits as 'AHU1'+' 1'; verified by crop as AHU11)
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU12,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU2,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU3,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU4,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU5,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU6,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU7,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU8,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,AHU9,plan,false,unique AHU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,EF,plan,false,"repeatable generic exhaust-fan symbol (small box-in-diamond with underlined 'EF', no number suffix) drawn at ~5 distinct locations on this demo plan (near AHU9, AHU4, AHU3-area x2, and near the restroom bank at bottom) -- every occurrence is the literal same 2-letter tag with no unique ID, so listed once per the repeatable-type rule even though it labels several different physical fans"
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU1,plan,false,"unique heat-pump-unit instance mark, each with a circled '2' demo keynote (excluded) beside it"
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU11,plan,false,"unique HPU instance mark (textSpans emits as 'HPU1 1'; crop-verified as HPU11). NOTE: the heat-pump unit drawn directly below it (same stack, same '2' demo keynote) has NO tag text at all -- verified by crop at pt(2463,1073) -- so HPU10 does not exist as a drawn tag on this sheet even though HPU1-9,11 are all present; do not invent it."
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU2,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU3,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU4,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU5,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU6,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU7,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU8,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#65,HPU9,plan,false,unique HPU instance mark
+22_GA_Valdosta_FireStation8_100CD.pdf#66,DAC-1,plan,false,"unique instance mark, boxed device near Data/Elec 117"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,DAC-2,plan,false,"unique instance mark, near Elec 105 / Women's-Men's corridor"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,DCU-1,plan,false,"unique instance mark, boxed unit at top of the HP-4/HP-3/HP-2/HP-1 stack on the west wall"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,DCU-2,plan,false,"unique instance mark, near the OCU/training-room stack lower on the same wall"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,DOAS-1,plan,false,"unique dedicated-outdoor-air-system instance, large boxed unit at building corner; drawn with an adjacent circled '12' keynote (excluded, general note reference) not part of the tag"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,EF-1,plan,false,"unique exhaust fan instance, boxed symbol near Stair 1 wall cap"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,EF-2,plan,false,unique exhaust fan instance at the apparatus-bay roof/wall louver; also referenced (not re-drawn) in the note '36x18 AVD; INTERLOCK w/EF-2' near the OA intake louver
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-1,plan,false,unique fan coil unit instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-2,plan,false,unique fan coil unit instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-3,plan,false,unique fan coil unit instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-4,plan,false,unique fan coil unit instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-5,plan,false,"unique fan coil unit instance, break room"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-6,plan,false,unique fan coil unit instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-7,plan,false,unique fan coil unit instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,FCU-8,plan,false,unique fan coil unit instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-1,plan,false,"unique heat pump instance, concrete-pad-mounted units along west wall"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-2,plan,false,unique heat pump instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-3,plan,false,unique heat pump instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-4,plan,false,unique heat pump instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-5,plan,false,"unique heat pump instance, east side"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-6,plan,false,"unique heat pump instance, east side"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-7,plan,false,"unique heat pump instance, east side"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,HP-8,plan,false,"unique heat pump instance; drawn once with an explicit 'RELOCATE HP-8' callout next to VRHP-1 (single physical unit, counted once)"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,KH-1,plan,false,"unique kitchen-hood instance, residential range hood in Kitchen 119, 6""ø duct up"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,TEF-1,plan,false,unique toilet exhaust fan instance
+22_GA_Valdosta_FireStation8_100CD.pdf#66,TEF-2,plan,false,"unique toilet exhaust fan instance, gray inline-fan box symbol"
+22_GA_Valdosta_FireStation8_100CD.pdf#66,VRHP-1,plan,false,"unique variable-refrigerant heat pump instance, boxed symbol east side near HP-7/HP-8"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,ERV-1,plan,false,"Energy recovery ventilator box, drawn as round-fan glyph in Stor. room, labeled ERV-1; unique instance"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-1,plan,false,"VRF indoor cassette unit box, Bunk Rm. 1, unique instance mark"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-10,plan,false,"VRF indoor cassette unit box, Bunk Rm. 8"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-11,plan,false,VRF indoor cassette unit box near Corridor
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-12,plan,false,VRF indoor cassette unit box near Tlt. 3 / Stair 2
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-13,plan,false,"VRF indoor cassette unit box, Laundry"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-2,plan,false,"VRF indoor cassette unit box, Bunk Rm. 2"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-3,plan,false,"VRF indoor cassette unit box, Bunk Rm. 3"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-4,plan,false,"VRF indoor cassette unit box, Bunk Rm. 4"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-5,plan,false,"VRF indoor cassette unit box, Locker 1"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-6,plan,false,"VRF indoor cassette unit box, Locker 2"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-7,plan,false,"VRF indoor cassette unit box, Bunk Rm. 5"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-8,plan,false,"VRF indoor cassette unit box, Bunk Rm. 6"
+22_GA_Valdosta_FireStation8_100CD.pdf#67,VRFC-9,plan,false,"VRF indoor cassette unit box, Bunk Rm. 7"
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU1,plan,false,Air handling unit box glyph with 'AHU DISC. ABOVE CEILING' disconnect note; unique instance mark.
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU10,plan,false,"AHU box glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU11,plan,false,Raw text extracted as split token 'AHU1 1' due to kerning; verified in crop as single tag AHU11 on box glyph.
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU12,plan,false,"AHU box glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU2,plan,false,"AHU box glyph, unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU3,plan,false,"AHU box glyph, unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU4,plan,false,"AHU box glyph, unique instance; near stray riser letters C/E/F (excluded, see notes)."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU5,plan,false,"AHU box glyph, unique instance, verified in crop with hatched box symbol."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU6,plan,false,"AHU box glyph, unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU7,plan,false,"AHU box glyph, unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU8,plan,false,"AHU box glyph, unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,AHU9,plan,false,"AHU box glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU1,plan,false,"Heat pump unit fan/condenser glyph (circular hatch symbol), unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU11,plan,false,"Raw text extracted as split token 'HPU1 1'; verified in crop as single tag HPU11 on fan glyph, adjacent to a similar unlabeled fan glyph tagged 'FUTURE' (excluded, not an alphanumeric tag)."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU2,plan,false,"HPU fan glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU3,plan,false,"HPU fan glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU4,plan,false,"HPU fan glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU5,plan,false,"HPU fan glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU6,plan,false,"HPU fan glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,HPU9,plan,false,"HPU fan glyph, unique instance, verified in crop."
+22_GA_Valdosta_FireStation8_100CD.pdf#72,WH,plan,false,Leader-line label 'WH' (water heater) pointing to an unlabeled receptacle-style circuit glyph near G-1/G-7/G-28/G-30 kitchen circuits; verified in crop. Only one instance on this sheet.
+22_GA_Valdosta_FireStation8_100CD.pdf#77,DAC-1,plan,false,"Ductless split-system indoor unit, Data/Elec. Rm 117. Confirmed via Ductless Split System Schedule p.64: indoor mark DAC-1 paired with outdoor mark DCU-1, 24 MBH/13 SEER. Unique instance (mechanical equipment, not a data/telecom device despite room name)."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,DAC-2,plan,false,"Ductless split-system indoor unit, Elec. Rm 105. Second row/instance of the same Ductless Split System type paired with DCU-2. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,DCU-1,plan,false,"Ductless split-system outdoor condensing unit (small rectangle glyph) on Training Room wall, above HP-4; per schedule p.64 paired with indoor unit DAC-1. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,DCU-2,plan,false,"Ductless split-system outdoor condensing unit, below HP-1 on same wall; paired with indoor unit DAC-2. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,DOAS-1,plan,false,"Dedicated Outdoor Air System unit (rectangle glyph), bottom right of Firearms training area. Listed in DOAS Unit Schedule p.64 (DOAS-1). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,EF-1,plan,false,"Exhaust fan symbol ('F' in square), Utility 147. Listed in Fan Schedule p.64 (EF-1: 745 CFM, PWF type). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,EF-2,plan,false,Exhaust fan symbol (roof/wall fan icon) at top of Apparatus Bay. Listed in Fan Schedule p.64 (EF-2: 4250 CFM). Unique instance.
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-1,plan,false,"Fan coil unit, VFD Office 1 area / corridor. Listed in Split System Air Handler Unit Schedule p.64. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-2,plan,false,Fan coil unit near corridor/ELEC. Schedule p.64. Unique instance.
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-3,plan,false,"Fan coil unit, Vestibule/Training Room area. Schedule p.64. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-4,plan,false,"Fan coil unit, Day Room. Schedule p.64. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-5,plan,false,"Fan coil unit, Break Room area. Schedule p.64. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-6,plan,false,"Fan coil unit, Gun/Ammo Vault area. Schedule p.64. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-7,plan,false,"Fan coil unit, Exist. Sprinkler Rm. area. Schedule p.64. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,FCU-8,plan,false,"Fan coil unit (rectangle glyph), Firearms/Defensive Tactics Training Room. Schedule p.64. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-1,plan,false,"Wall-mounted heat-pump unit symbol (fan glyph) on Training Room wall, paired with FCU-1 per Split System Air Handler Unit Schedule (p.64: 'FCU-1 / HP-1'). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-2,plan,false,"Same wall, same schedule pairing (FCU-2 / HP-2, p.64). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-3,plan,false,"Same wall, schedule pairing FCU-3 / HP-3 (p.64). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-4,plan,false,"Same wall, schedule pairing FCU-4 / HP-4 (p.64). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-5,plan,false,Heat-pump fan glyph on east corridor wall near Firearms/Defensive Tactics room; schedule pairing FCU-5 / HP-5 (p.64). Unique instance.
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-6,plan,false,Same wall; schedule pairing FCU-6 / HP-6 (p.64). Unique instance.
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-7,plan,false,Same wall; schedule pairing FCU-7 / HP-7 (p.64). Unique instance.
+22_GA_Valdosta_FireStation8_100CD.pdf#77,HP-8,plan,false,"Same wall, near FCU-8; schedule pairing FCU-8 / HP-8 (p.64). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,KH-1,plan,false,"Kitchen hood, drawn over range/cooktop symbol in Kitchen 119, with an 'R' (relay) callout consistent with sheet note 1 (shunt-trip breaker relay to fire alarm panel and hood suppression system). Not found in a dedicated schedule on the pages sampled but clearly a drawn mechanical-exhaust equipment tag. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,TEF-1,plan,false,"Toilet/transfer exhaust fan, near Toilet 110A. Listed in Fan Schedule p.64 (TEF-1: 75 CFM, CLG type). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,TEF-2,plan,false,"Toilet/transfer exhaust fan glyph (shaded box) near Gun/Ammo Vault / Tlt.-Shwr. 134. Same tag also appears on sheet p.66; not found in the 3-row Fan Schedule snippet captured on p.64 (only EF-1/EF-2/TEF-1 rows were present there) but is clearly a drawn equipment instance with its own glyph, consistent naming with TEF-1. Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#77,VRHP-1,plan,false,"Variable-refrigerant-flow heat pump condensing unit (rectangle glyph) near HP-8. Listed in Variable Refrigerant Flow Condensing Unit Schedule p.64 (VRHP-1, 120/135 MBH, PUHY-EP120). Unique instance."
+22_GA_Valdosta_FireStation8_100CD.pdf#78,DAC-1,schedule,true,"Ductless split indoor air-cooled unit row, Data Room"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,DAC-2,schedule,true,"Ductless split indoor air-cooled unit row, Elec Room"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,DCU-1,schedule,true,"Ductless split condensing unit row, Building Exterior North"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,DCU-2,schedule,true,"Ductless split condensing unit row, Building Exterior North"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,DOAS-1,schedule,true,"Dedicated outdoor air system unit row, Building Exterior"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,EF-1,schedule,true,"Exhaust fan row, Utility Room"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,EF-2,schedule,true,"Exhaust fan row, Truck Apparatus Bay"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,ERV-1,schedule,true,"Energy recovery ventilator row, Second Floor Above Ceiling; same tag also drawn on the plan inset (Stor. room) elsewhere on this sheet"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-1,schedule,true,"Indoor split system unit row, Above Corridor 109"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-2,schedule,true,"Indoor split system unit row, Above Corridor 109"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-3,schedule,true,"Indoor split system unit row, Above Dayroom 121"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-4,schedule,true,"Indoor split system unit row, Above Dayroom 121"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-5,schedule,true,"Indoor split system unit row, Above Breakrm 123"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-6,schedule,true,"Indoor split system unit row, Above Training 124"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-7,schedule,true,"Indoor split system unit row, Above Tactics Training 133"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,FCU-8,schedule,true,"Indoor split system unit row, Above Tactics Training 133"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-1,schedule,true,"Outdoor split system heat pump row, Building Exterior North"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-2,schedule,true,"Outdoor split system heat pump row, Building Exterior North"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-3,schedule,true,"Outdoor split system heat pump row, Building Exterior North"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-4,schedule,true,"Outdoor split system heat pump row, Building Exterior North"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-5,schedule,true,"Outdoor split system heat pump row, Building Exterior South"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-6,schedule,true,"Outdoor split system heat pump row, Building Exterior South"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-7,schedule,true,"Outdoor split system heat pump row, Building Exterior South"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,HP-8,schedule,true,"Outdoor split system heat pump row, Building Exterior South"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,RP-1,schedule,true,"Recirculation pump row, Utility Room"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,TEF-1,schedule,true,"Toilet exhaust fan row, Toilet 110"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-1,schedule,true,VRF indoor cassette schedule row; same tag also drawn as an equipment-box symbol on the small floor-plan inset elsewhere on this same sheet (Bunk Rm. 1)
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-10,schedule,true,"Also drawn on plan inset, Bunk Rm. 8"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-11,schedule,true,"Also drawn on plan inset, near Corridor"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-12,schedule,true,"Also drawn on plan inset, near Tlt. 3 / Stair 2"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-13,schedule,true,"Also drawn on plan inset, Laundry"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-2,schedule,true,"Also drawn on plan inset, Bunk Rm. 2"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-3,schedule,true,"Also drawn on plan inset, Bunk Rm. 3"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-4,schedule,true,"Also drawn on plan inset, Bunk Rm. 4"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-5,schedule,true,"Also drawn on plan inset, Locker 1"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-6,schedule,true,"Also drawn on plan inset, Locker 2"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-7,schedule,true,"Also drawn on plan inset, Bunk Rm. 5"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-8,schedule,true,"Also drawn on plan inset, Bunk Rm. 6"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRFC-9,schedule,true,"Also drawn on plan inset, Bunk Rm. 7"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,VRHP-1,schedule,true,"VRF system heat pump row, Building Exterior"
+22_GA_Valdosta_FireStation8_100CD.pdf#78,WH-1,schedule,true,"Water heater row, Utility Room"

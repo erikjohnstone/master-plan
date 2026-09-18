@@ -1,0 +1,12 @@
+sheet,tag,role,in_table,note
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,AHU-1A,plan,false,Unique instance mark. Text label with leader arrow pointing to an air-handling-unit box glyph in the 'ENLARGED MEP FLOOR PLAN (TYPICAL)' AHU closet view.
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,AHU-1B,plan,false,Unique instance mark. Same as AHU-1A but for the second AHU box glyph.
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,CU-1A,plan,false,Unique instance mark. Label with leader line pointing to a condensing-unit fan symbol (square housing with round fan blade) at bottom-left of enlarged plan.
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,CU-1B,plan,false,"Unique instance mark. Second condensing-unit fan symbol, mirrored layout from CU-1A."
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,DS,plan,false,Bare 'Disconnect Switch' abbreviation at the bottom of the same equipment stack (distinct from the hyphenated DS-CU-1A/DS-CU-1B disconnect tags elsewhere on the sheet). Same borderline caveat as GHP/GHEP/XFMR.
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,DS-CU-1A,plan,false,Unique instance mark. Labels the disconnect-switch glyph (triangle/box symbol) directly above the CU-1A fan symbol.
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,DS-CU-1B,plan,false,"Unique instance mark. Disconnect-switch glyph above CU-1B (rendered lighter/grey, likely existing-to-remain vs. DS-CU-1A shown solid/new)."
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,DWH-1,plan,false,Unique instance mark. Label with leader arrow pointing to the water-heater box glyph next to the AHU closets.
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,GHEP,plan,false,"Bare abbreviation stacked below GHP against the same shaded equipment outline (likely 'Ground Heat Exchange Pump'). Same borderline caveat as GHP — plain text next to equipment silhouette, no numeric suffix."
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,GHP,plan,false,"Bare abbreviation (no leader/box) placed directly beside the shaded equipment outline in the small mechanical/electrical closet next to AHU-1B; read as 'Ground Heat Pump' or similar geothermal pump equipment. No instance number exists on the sheet, so treated as a single unique tag. Flagging as borderline since it lacks the usual box/circle glyph or hyphenated suffix."
+10_MO_Hawthorn_PsychHospital_HVAC.pdf#7,XFMR,plan,false,Bare abbreviation ('Transformer') stacked directly below GHEP against the same equipment silhouette. Same borderline caveat as GHP/GHEP.

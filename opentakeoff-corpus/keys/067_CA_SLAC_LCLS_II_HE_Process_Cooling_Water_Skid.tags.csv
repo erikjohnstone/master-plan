@@ -1,0 +1,10 @@
+sheet,tag,role,in_table,note
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-AS-1001,plan,false,"Air separator, leader points into the lower equipment cluster; unique instance mark."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-ET-1001,plan,false,"Expansion tank, leader points to a round tank glyph below the pumps; unique instance mark."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-HX-PCWP-1001,plan,false,"Heat exchanger for the PCW/CHW loop, leader points to the piping/HX assembly at lower right of the skid; unique instance mark."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-PCWP-1001,plan,false,"Process cooling water pump 1001, leader points to one of the two round pump-body glyphs on the skid; unique instance mark."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-PCWP-1002,plan,false,"Process cooling water pump 1002, leader points to the second round pump-body glyph on the skid; unique instance mark."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-PF-1001,plan,false,"Pre-filter, leader points into the skid piping assembly; unique instance mark."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-VFD-PCWP-1001,plan,false,"VFD for pump PCWP-1001, leader-called on the enlarged 'BASEMENT (NEH) - PROCESS PIPING OVERALL PLAN - ENLARGED' (view 2/M3.0), drawn next to a small box glyph on top of the skid; unique instance mark (drawn as '(N) B950A-VFD-PCWP-1001'; '(N)' status prefix stripped from tag)."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-VFD-PCWP-1002,plan,false,"VFD for pump PCWP-1002, same leader/callout group as -1001, second VFD box glyph; unique instance mark."
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#3,B950A-WF-1001,plan,false,"Water filter, leader points into the same lower equipment cluster as ET-1001/AS-1001; unique instance mark."
