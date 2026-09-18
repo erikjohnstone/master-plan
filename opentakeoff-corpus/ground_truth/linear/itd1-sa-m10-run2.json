@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+  "source_pdf_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "sheet_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+  "sheet_number": "M1.0",
+  "page": 3,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A second real, independent duct segment authored from the same sheet as `itd1-sa-m10.json` (M1.0 of the ITD District 1 Laboratory Building), drawn from Run 101's own disclosed reserve of eight further bench-seed-verified candidates on this unusually productive sheet. A real, clean 16.61 LF horizontal `8\"x14\"` duct: `size:{kind:rect,w_in:8,h_in:14}`, confidence 0. A marked crop confirms it visually and unambiguously: a real double-line duct (with its own dashed reference centerline) running from a real branch/damper junction near Restroom 103 to a real ceiling diffuser box (D-6, 200 CFM, `8\"ø`) in Office 135 -- both real, visually-confirmed junction points. `resolveRunSegments` reproduces the identical single segment and the bench-style seed (`seedOnLongestSegment`) reproduces the identical trace exactly, confirmed before authoring per this session's own standard practice.",
+  "scope": "A single real 8x14-inch rectangular supply-air (SA) duct segment (16.61 LF) on the ITD District 1 Laboratory Building's own mechanical plan, sheet M1.0, from a real branch/damper junction near Restroom 103 to a real ceiling diffuser box (D-6) in Office 135. Explicitly OUT OF SCOPE: the duct's own continuation past either boundary; the parallel `12\"ø`/`6\"ø` round branches visible in the same crop; the sibling `itd1-sa-m10.json` golden and the remaining seven bench-seed-verified-but-unauthored candidates on this same sheet, not attempted this pass; every other sheet on this real 29-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "itd1-m10-sa-8x14",
+      "description": "8x14-inch rectangular duct segment, from a real branch/damper junction to a real ceiling diffuser box.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.545408950617284, 0.3030671296296297],
+        [0.6319444444444444, 0.3030671296296297]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 8, "h_in": 14 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 16.61,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 16.61, "size": { "kind": "rect", "w_in": 8, "h_in": 14 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:8x14": 16.61 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:8x14": 16.61
+  },
+  "total_lf_all_runs": 16.61
+}

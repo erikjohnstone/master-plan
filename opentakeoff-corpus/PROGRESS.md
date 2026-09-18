@@ -1,5 +1,29 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more real answers land, picked straight from yesterday's own leftover pile rather than a fresh search (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Instead of downloading a fresh batch of projects this time, went back
+to that unusually rich Idaho laboratory building sheet from last time,
+which had eight more good candidates already found and already
+confirmed to pass the strict official check, deliberately left unused
+so as not to strip the sheet bare in one sitting.
+
+Picked two of them and checked each one properly with a marked
+picture before writing it down: a duct section about sixteen and a
+half feet long, running from a real branch point to a real ceiling
+vent box; and a second duct trunk about nine feet long, running
+right alongside the very duct written down last time, in the same
+hallway chase, feeding its own separate set of small round branches
+to nearby rooms. Both checked out clean.
+
+Six more good candidates from that same sheet are still sitting there
+unused, ready for another day.
+
+This is the sixteenth and seventeenth of these small real wins in a
+row. Checked everything the usual way: full benchmark re-run
+confirmed both new answers landed cleanly, and the complete test
+suite in both parts of the project re-run clean at its already-known
+baseline.
+
 2026-09-18 linear takeoff: a fifteenth real answer lands, the second-biggest single jump this whole session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked four more brand-new real projects, plus double-checked that a
 similarly-named Klamath Falls community college file wasn't secretly
