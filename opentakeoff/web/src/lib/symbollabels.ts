@@ -299,13 +299,20 @@ function stackedEquipmentTagTokens(spans: LabelSpan[]): LabelSpan[] {
   const candidates: LabelSpan[] = [];
   for (const top of spans) {
     const prefix = top.str.trim().toUpperCase();
-    if (!/^[A-Z]{1,4}$/.test(prefix) || STACKED_SPACE_PREFIXES.has(prefix) || (top.rot ?? 0) !== 0) continue;
+    if (!/^[A-Z]{1,4}$/.test(prefix) || STACKED_SPACE_PREFIXES.has(prefix)) continue;
     const th = Math.max(top.y1 - top.y0, 1);
     const tcx = (top.x0 + top.x1) / 2;
+    const topRot = top.rot ?? 0;
+    // A rotated hexagon tag (a vertical duct run drawn with its label
+    // turned 90°) still stacks its runs as a simple vertical column in
+    // absolute page space — only the glyphs inside each run are sideways —
+    // so the y/x geometry below is unaffected by rotation. Require the
+    // pair to share one rotation, though: mixing an unrotated span with a
+    // rotated one nearby is a coincidence, never one divided tag.
     const suffix = spans
       .filter((candidate) => {
         const raw = candidate.str.trim();
-        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== 0) return false;
+        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== topRot) return false;
         const ch = Math.max(candidate.y1 - candidate.y0, 1);
         if (Math.max(th, ch) > 1.35 * Math.min(th, ch)) return false;
         const gap = candidate.y0 - top.y1;
@@ -343,7 +350,7 @@ function stackedEquipmentTagTokens(spans: LabelSpan[]): LabelSpan[] {
     const above = /^(?:AI|AO|DI|DO)$/.test(prefix) ? undefined : spans
       .filter((candidate) => {
         const raw = candidate.str.trim();
-        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== 0) return false;
+        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== topRot) return false;
         const ch = Math.max(candidate.y1 - candidate.y0, 1);
         if (Math.max(th, ch) > 1.35 * Math.min(th, ch)) return false;
         const gap = top.y0 - candidate.y1;
