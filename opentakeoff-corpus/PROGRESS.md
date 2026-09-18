@@ -1,5 +1,34 @@
 ## Active work
 
+2026-09-18 linear takeoff: twenty-fourth golden, a real guided continuation past an earlier round's own named elbow, second real ambiguous-to-ambiguous boundary case (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+An earlier golden on this same sheet had explicitly named a real,
+visible continuation past its own elbow as untried future work. Went
+back and tried it: the engine reaches a real, short pipe segment
+continuing from that same elbow to a real fitting where the pipe
+connects toward an existing storm system, the same printed size label
+sitting right on this exact segment though the engine's own automatic
+reading didn't pick it up this time (declared manually to match).
+
+Both ends of this new run are genuine forks, not engine mistakes: the
+shared elbow, and a coupling point where ten different real
+directions are possible -- a real, busy junction where the pipe, a
+keynote line, and a valve symbol all meet. This is only the second
+case all session where both ends of a golden are real forks rather
+than clean dead ends, directly answering a question this project's own
+notes had left open.
+
+Development-tier recall: **35/41 (0.8537) -> 36/42 (0.8571)**, exact
+length match. Size accuracy dips slightly (0.6811 -> 0.6779, exactly
+as expected -- a manually-declared size with no matching live reading
+adds to the total without adding to the count of matches). This one's
+own value is corpus variety and closing out a named open question,
+not size accuracy, which the automatic-bind goldens remain the real
+lever for.
+
+Measured: `npm run bench:linear` passes; the targeted linear test
+suite (165 tests) passes. `docs/LINEAR-TRACE-EVAL.md` gained a
+"Run 51" section.
+
 2026-09-18 linear takeoff: closes out the current layer-quality-survey batch -- two more oversized sheets declined, nothing left worth a sweep in this batch (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked the two remaining real candidates from the same fourteen-hit
 survey before moving on. Both a laboratory building's own mechanical
