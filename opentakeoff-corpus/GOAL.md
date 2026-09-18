@@ -3682,9 +3682,9 @@ whatever's currently in the corpus.
 
 ---
 
-## 2. The three metrics, precisely
+## 2. The four metrics, precisely
 
-Every set is scored three separate, structurally different ways — kept
+Every set is scored four separate, structurally different ways — kept
 deliberately unblended (a set can be excellent on one and weak on another,
 and hiding that behind one composite number would be exactly the kind of
 self-flattering measurement this project explicitly refuses to do).
@@ -3720,6 +3720,19 @@ row's text? rowsym is the metric that most directly tests "can this
 system point at the real thing on the real drawing," which is the crux of
 the whole deterministic (non-LLM) claim.
 
+### 2.4 `tag-eval.mjs` — tag census recall/precision
+Added by `plans/03-drawing-tag-recognition-audit.md` WP7. A human renders a
+sheet independently of the pipeline's own output (`render-page-crop.mjs`,
+never `view_sheet`'s own graph-aware crop) and writes down every drawn tag
+instance actually seen there — `keys/*.tags.csv`. Does WP2's
+`buildTagIndex` (`graph.tags`, the shared drawn-tag census both the MCP and
+canvas surfaces read) find that same tag, by sheet + canonical identity,
+and find *only* those — the same recall-tier discipline `table-recall-
+eval.mjs` established for schedule tables, one level down. This is the
+metric that tests the input rowsym and takeoff-eval both depend on: a
+schedule row can only ever be geometrically located if its mark is in the
+census at all.
+
 ---
 
 ## 3. Current real state, per set, per metric
@@ -3727,22 +3740,29 @@ the whole deterministic (non-LLM) claim.
 **The numbers below are the latest independently verified forced-cold
 full-corpus gate**, run 2026-08-29 against commit `2cd532b` in 56.2 seconds.
 
-| Set | takeoff-eval | reference-eval | graph-eval (rowsym) | Status |
-|---|---|---|---|---|
-| **bessemer** | **100.0%** (10/10) | **100.0%** (12/12) | rowsym 100.0% | Expected-tag takeoff and reference closed. |
-| **itd-d1-lab** | **100.0%** (116/116) | **100.0%** (34/34) | rowsym 100.0% | Closed. Tight cross-sheet registration removes plumbing plan/foundation redraws without collapsing distinct locations. |
-| **federal-mech** | **100.0%** (102/102) | **100.0%** (31/31) | rowsym 100.0% | Every audited extracted equipment row is now keyed; zero false additions remain. |
-| **navfac-cherry-point-atc** | **100.0%** (217/217) | **100.0%** (31/31) | rowsym 100.0% | Every installed row is exact; schedule-only rows refuse rather than inventing locations. |
-| **baker-county-eoc** | **100.0%** (40/40) | **100.0%** (21/21) | rowsym 100.0% | Closed. |
-| **bldg5406-hvac-demo** | **100.0%** (28/28) | 0/0 vacuous | rowsym 100.0% | Every extractable row is exact; the two fully exploded fan tags are correctly refused. |
-| **itd-d1-lab-raster** | **100.0%** (28/28 expected unavailable) | 0/0 cells, vacuous | rowsym vacuous | The zero-vector-text raster fixture is correctly unavailable without OCR; no value is invented. |
+| Set | takeoff-eval | reference-eval | graph-eval (rowsym) | tag-eval | Status |
+|---|---|---|---|---|---|
+| **bessemer** | **100.0%** (10/10) | **100.0%** (12/12) | rowsym 100.0% | (no key) | Expected-tag takeoff and reference closed. |
+| **itd-d1-lab** | **100.0%** (116/116) | **100.0%** (34/34) | rowsym 100.0% | **100.0%** (4/4) | Closed. Tight cross-sheet registration removes plumbing plan/foundation redraws without collapsing distinct locations. |
+| **federal-mech** | **100.0%** (102/102) | **100.0%** (31/31) | rowsym 100.0% | (no key) | Every audited extracted equipment row is now keyed; zero false additions remain. |
+| **navfac-cherry-point-atc** | **100.0%** (217/217) | **100.0%** (31/31) | rowsym 100.0% | **100.0%** (8/8) | Every installed row is exact; schedule-only rows refuse rather than inventing locations. |
+| **baker-county-eoc** | **100.0%** (40/40) | **100.0%** (21/21) | rowsym 100.0% | **100.0%** (4/4) | Closed. |
+| **bldg5406-hvac-demo** | **100.0%** (28/28) | 0/0 vacuous | rowsym 100.0% | 78.6% (11/14) | Every extractable row is exact; the two fully exploded fan tags are correctly refused. tag-eval (WP7) independently confirms the same exploded-glyph limitation directly against `graph.tags` — `EF-2`/`EF-3`/`VAV-6` are real, render-confirmed drawn tags with no corresponding vector text anywhere in `textSpans()`, root-caused, not a recognizer gap. |
+| **itd-d1-lab-raster** | **100.0%** (28/28 expected unavailable) | 0/0 cells, vacuous | rowsym vacuous | (no key) | The zero-vector-text raster fixture is correctly unavailable without OCR; no value is invented. |
 
 **Current corpus aggregate:** takeoff 541/541 outcomes exact (100.0%):
 499/499 applicable installed rows exact, 14/14 honest refusals correct, and
 28/28 intentionally raster-unavailable rows correctly absent. Quantity delta,
 missing rows, and false additions are all zero. Reference is 129/129 exact
 (100%); graph is 91/91 cells exact and 138/138 row-symbol outcomes (100%).
-The goal in §1 is achieved for the current corpus.
+Tag-eval (WP7, 2026-09-18, the four sets keyed so far) is 27/30 tags found
+(90.0% recall), 100.0% precision (zero extras anywhere once `tagEval.ts`'s
+own duplicate-instance and family-prefix bugs were fixed) — three of four
+keyed sets are fully closed (100.0%/100.0%); the fourth's entire shortfall
+is `bldg5406-hvac-demo`'s three confirmed, root-caused, exploded-glyph tags
+above, not a gap in tag-recognition logic. The goal in §1 is achieved for
+the current corpus on the first three metrics; tag-eval is new this entry
+and not yet part of that claim.
 
 ---
 

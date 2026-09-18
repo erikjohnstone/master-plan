@@ -1,0 +1,5 @@
+sheet,tag,role,in_table,note
+itd-d1-lab-mechanical.pdf#7,BCV-1,plan,false,"visually confirmed via independent render — sheet M3.0, keyed hexagon tag BCV-1 (bypass control valve) on the HEATING WATER PIPING SCHEMATIC diagram, left half of the sheet; the sheet's own dominant title is ENLARGED MECHANICAL PLAN (right half), so classified role plan, not schematic, for the whole sheet."
+itd-d1-lab-mechanical.pdf#7,HWP-1,plan,false,"visually confirmed — stacked hexagon tag reading HWP over 1 (heating water pump 1), same piping schematic, labeled '(46 GPM)' beside it."
+itd-d1-lab-mechanical.pdf#7,HWP-2,plan,false,"visually confirmed — stacked hexagon tag HWP over 2, directly below HWP-1, same pump pair."
+itd-d1-lab-mechanical.pdf#7,PF-1,plan,false,"visually confirmed — stacked hexagon tag PF over 1 (pot feeder 1) near the bladder expansion tank symbol."

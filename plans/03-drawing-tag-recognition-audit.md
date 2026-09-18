@@ -777,9 +777,24 @@ callouts; `alias_candidates` pairs `CV-CH-C-MT1` ↔ `CV-CH-H-MT-1`.
 ## 3.8 WP7 — Ground truth and eval
 
 - Add `opentakeoff-corpus/keys/<set>.tags.csv` with columns
-  `sheet,tag,x0,y0,x1,y1,role,in_table,note` for navfac (FCU + AHU + pumps
-  at minimum), bldg5406, baker-county-eoc, itd-d1-lab. Hand-verify from
-  renders (`view_sheet` crops), never from the index itself.
+  `sheet,tag,role,in_table,note` (built, corrected from this bullet's
+  original `sheet,tag,x0,y0,x1,y1,role,in_table,note` — no bbox column;
+  see below) for navfac (FCU + AHU + pumps at minimum), bldg5406,
+  baker-county-eoc, itd-d1-lab. Hand-verify from renders
+  (`render-page-crop.mjs`, corrected from this bullet's original
+  `view_sheet` crops — `view_sheet`'s own crop is graph-aware and shows the
+  pipeline's own tag answer, which would defeat the measurement).
+  Dropping `x0,y0,x1,y1`: a live check against real navfac/itd-d1-lab data
+  found that hand-measuring pixel offsets off a `render-page-crop.mjs` crop
+  and converting to PDF-point space doesn't reliably land in the same
+  coordinate space as `graph.tags`' own bbox on this corpus's CAD-exported
+  PDFs — some pages carry real content at point-space coordinates outside
+  their own reported page bounds (e.g. a duplicated content stream), so a
+  hand-authored bbox was silently and systematically wrong, not merely
+  approximate, and every real match failed a naive center-distance check.
+  `tagEval.ts` matches on sheet + canonical key identity only, the same
+  {sheet, title} identity `tableRecallEval.ts` already uses for tables —
+  see `tagEval.ts`'s own header comment for the full story.
 - Add `opentakeoff/mcp/scripts/tag-eval.mjs`: per set, precision/recall of
   `graph.tags` against the key, per role and per family; prints a table and
   exits non-zero when any keyed set has precision < 0.97 or recall < 0.95

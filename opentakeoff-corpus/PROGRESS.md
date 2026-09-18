@@ -2998,3 +2998,137 @@ also asserting the WP6 schema round-trip and the navfac acceptance
 content. All three frozen regression gates unchanged: `takeoffHvac01`
 396/396, `takeoffValve01` 163/163, `takeoffBas01` 122/122. No corpus key
 or scorer touched.
+
+## WP7 — tag ground truth and eval (2026-09-18, goal-loop, Sonnet 5)
+
+Implemented plan §3.8, the last package in this plan: a recall-tier scorer
+for `graph.tags` itself, mirroring `table-recall-eval.mjs`'s own discipline
+("does the pipeline find the real thing at all, independent of whether it
+scores it right") one level down — applied to drawn tags instead of tables.
+
+- `opentakeoff-corpus/keys/<set>.tags.csv` (columns `sheet,tag,role,
+  in_table,note`) for `navfac-cherry-point-atc` (8 tags), `baker-county-eoc`
+  (4), `itd-d1-lab` (4), `bldg5406-hvac-demo` (14) — every row hand-verified
+  from an independent render (`render-page-crop.mjs`, never `view_sheet`'s
+  own graph-aware crop, which would show the pipeline's own answer).
+- `mcp/src/tagEval.ts` (`parseTagKeyCsv`, `scoreTagEval`) + `mcp/scripts/
+  tag-eval.mjs`, wired into `corpus-eval.mjs` alongside `table-recall-eval.mjs`.
+  Matches on sheet + canonical (markKey) identity only, scores recall
+  overall/by-role/by-family, and precision scoped to keyed sheets and the
+  families the key was actually enumerating there (an extra outside those
+  families is real content the key never claimed to review, not a false
+  positive) — same "extras scoped to keyed sheets" rule `table-recall-
+  eval.mjs` already established, with family-scoping layered on top since a
+  drawn-tag census sees far more per sheet than a table census does.
+  `mcp/test/tagEval.test.ts` (11 tests) covers the CSV parser and every
+  scoring rule in isolation, same discipline as `tableRecallEval.test.ts`.
+
+**Plan text corrected, not just followed:** the plan's own WP7 bullet
+specified key columns `sheet,tag,x0,y0,x1,y1,role,in_table,note` (a
+hand-measured bbox, matched with a center-distance tolerance) and
+`view_sheet` crops for hand-verification. Both were changed in
+`plans/03-drawing-tag-recognition-audit.md` itself, with the reasoning
+inline, alongside this entry:
+- `view_sheet` crops are graph-aware (they render the pipeline's own
+  tag/table findings) — using them to author a key that scores that same
+  pipeline would make the measurement circular. `render-page-crop.mjs`
+  (built for exactly this in table-recall-eval's own WP) was already the
+  established, correct tool; this bullet's own wording was stale.
+- The bbox column and its center-distance match were dropped after a real,
+  reproducible failure: the first end-to-end run against real navfac/
+  itd-d1-lab data scored **0% recall on every hand-verified tag across all
+  four independently-authored keys**, while the identical tags (by
+  canonical key) simultaneously appeared in the EXTRAS list on the exact
+  right sheet for three of the four sets — proof `graph.tags` had the
+  right answer and the scorer's own bbox-tolerance check was rejecting
+  every match. Root cause, confirmed by direct comparison against real
+  `graph.tags` bboxes (not assumed): on this corpus's CAD-exported PDFs,
+  a single rendered page's pixel space does not reliably correspond 1:1
+  to `graph.tags`' own point-space bbox — some sheets carry real content
+  at point coordinates outside that sheet's own reported page bounds
+  (e.g. `itd-d1-lab-mechanical.pdf#7`'s real page is 2592×1728pt, but its
+  own drawn tags' bboxes range from x≈600 to x≈3925 and y up to ≈2345,
+  in two disjoint coordinate clusters for the same tag — a duplicate
+  content stream or overlaid form XObject, not a bug in this plan's own
+  code). A render-page-crop.mjs crop built from either cluster's raw
+  coordinates came back blank on direct visual re-check. Given
+  `table-recall-eval.mjs`'s own sibling scorer never used a bbox at all
+  (confirmed by reading it directly), the bbox requirement was this
+  bullet's own design excess, not a load-bearing part of the recall-tier
+  discipline it was built to mirror — dropped rather than chased further.
+  `tagEval.ts`'s own header comment carries the full story for future
+  readers.
+
+**A second, distinct precision bug found and fixed after the bbox removal
+fixed recall:** once sheet+identity matching worked, several ALREADY-KEYED
+tags (e.g. navfac's `AHU-A1`, itd's `BCV-1`) still showed up in their own
+set's EXTRAS list. Root cause: `buildTagIndex` can and does record the same
+real drawn tag more than once in `graph.tags` — confirmed directly, every
+real tag on the navfac sheet used here has exactly two raw entries — and
+the original precision loop counted every raw instance individually, so a
+tag's own second raw entry was scored as a brand-new false positive against
+itself. A repeatable schedule/type mark (`canonicalLabelFamily`'s own
+documented case: "CD-1, RG-1 ... repeatable schedule/type identities") made
+this worse — baker-county-eoc's `CD-1` and `RG-1` legitimately label many
+distinct physical fixtures, so their extras count reached 6–8 before the
+fix. Fixed by grouping precision counting by distinct (sheet, key) pair
+instead of raw instance count: once a key is enumerated in the CSV for a
+sheet, any number of raw `graph.tags` entries sharing that exact key are
+already accounted for and never separately penalized; a genuinely
+different, unenumerated key in the same family still counts as exactly one
+extra no matter how many raw duplicates it has. Two new
+`tagEval.test.ts` cases pin this down directly (a duplicated already-keyed
+tag scores 100% precision; a genuinely different unkeyed tag with
+duplicates still scores as exactly one extra).
+
+**A third bug, family-prefix inconsistency, found in the same pass:**
+navfac's own `-A#`-suffixed tags (`AHU-A2`, `FCU-A9`, ...) were being
+silently excluded from precision scoring entirely — the family-scoping
+check computed the KEY row's family from its raw hyphenated text
+(`"AHU-A2"` → `"AHU"`, stopping at the hyphen) but the FOUND tag's family
+from `markKey`'s hyphen-stripped canonical form (`"AHUA2"` → `"AHUA"`,
+since there is no longer a hyphen to stop at, so the leading-letter run
+swallows the "A"). Fixed by reading both sides' family prefix off the same
+raw, still-hyphenated shape (`row.tag` / `t.text`), never `t.key`. Covered
+by its own regression test.
+
+**Real, root-caused, out-of-scope recall gap found and kept, not smoothed
+over:** `bldg5406-hvac-demo`'s `EF-3`, `EF-2`, and `VAV-6` are all real,
+independently-render-confirmed drawn tags that `graph.tags` genuinely never
+finds. Root-caused directly, not assumed: `pdf.ts`'s own `textSpans()` —
+upstream of and independent from `buildTagIndex` — has zero spans
+containing "EF" or an isolated "3"/"2"/"6" anywhere within 350pt of where
+each tag visibly renders, while the sheet's other 11 VAV/EF tags all
+extract as clean, complete text runs at that same call site. These three
+tags' glyphs are not real vector text (an exploded/outlined label or
+equivalent) — exactly the "Plan-text OCR / exploded-glyph recognition"
+case plans/03-drawing-tag-recognition-audit.md §3.9 already lists as
+explicitly out of scope for this plan, no different in kind from a raster
+scan. Kept in the key deliberately (real content a human sees must stay in
+a recall key, or the metric stops measuring the real gap) rather than
+removed to make the number look better.
+
+**Final, measured numbers (all four sets run through the real
+`tag-eval.mjs`, not assumed):**
+
+| Set | found/total | recall | precision |
+|---|---|---|---|
+| itd-d1-lab | 4/4 | 100.0% | 100.0% |
+| navfac-cherry-point-atc | 8/8 | 100.0% | 100.0% |
+| baker-county-eoc | 4/4 | 100.0% | 100.0% |
+| bldg5406-hvac-demo | 11/14 | 78.6% | 100.0% |
+
+Corpus aggregate: 27/30 found (90.0% recall), 100.0% precision (zero
+extras anywhere once the duplicate-instance and family-prefix bugs were
+fixed). Three of four keyed sets are fully closed (100.0%/100.0%);
+`bldg5406-hvac-demo`'s shortfall is entirely the three confirmed,
+root-caused, explicitly out-of-scope exploded-glyph tags above — `tag-eval`
+exits non-zero on this run, correctly, and that is the honest state of the
+metric: the plan's own §3.9 scope boundary, not a WP7 defect.
+
+Typecheck (`web`, `mcp`) clean. `mcp/test/tagEval.test.ts` 11/11. All three
+frozen regression gates re-verified fresh and unchanged: `takeoffHvac01`
+396/396, `takeoffValve01` 163/163, `takeoffBas01` 122/122 — `tagEval.ts`/
+`tag-eval.mjs` touch nothing `compileCorpusTakeoff` or any frozen gate
+reads. This is the final work package in
+`plans/03-drawing-tag-recognition-audit.md` (WP0–WP7 all complete).
