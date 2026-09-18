@@ -1,5 +1,35 @@
 ## Active work
 
+2026-09-18 linear takeoff: a fourteenth real answer lands, sitting right at a real "before/after" construction marker (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked five more brand-new real projects. One, a middle school's HVAC
+replacement in Nevada, had 35 real large outside-air duct labels on
+one sheet, but every single one that returned an answer either got
+refused outright or failed the strict double-check -- an honest
+across-the-board miss on that sheet, not pursued further.
+
+A different project, a cooling tower replacement for a transit
+authority in Washington state, turned up a real, if short, win in its
+pump room drawing: a 6-inch hot water supply pipe about a foot and a
+half long, sitting right at a real marker this renovation drawing uses
+to show where "existing" piping ends and "new" piping begins, running
+from that marker to a nearby real coupling fitting. Checked against
+the strict method before writing anything down, and it matched
+perfectly.
+
+Worth noting honestly: this pump room repeats the same "6 inch hot
+water supply" label many times along what's mostly one long real pipe
+winding through several fittings, so it's genuinely dense and hard to
+say which exact printed copy of the label the reader used -- but since
+every nearby copy says the identical thing, that ambiguity can't
+actually produce a wrong answer, only make the drawing visually
+busier. A second, messier candidate on the same sheet failed the
+strict check and was left out.
+
+This is the fourteenth of these small real wins in a row. Checked
+everything the usual way: full benchmark re-run confirmed the new
+answer landed cleanly, and the complete test suite in both parts of
+the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: a thirteenth real answer lands, and checking the strict way FIRST saves wasted effort twice (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Went back to the very first, original batch of real projects this
 whole effort started from, rather than the newer batch used lately,
