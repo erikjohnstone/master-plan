@@ -1,5 +1,37 @@
 ## Active work
 
+2026-09-18 linear takeoff: sixteenth new-corpus golden (three runs), a triple-stacked pipe golden, development recall 23/29 -> 26/32, closest yet to the 0.85 gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+A fresh VA Durham "Replace Chillers for AHU 1 & 2" project. First found
+a real, dense multi-pipe rack (five parallel existing lines running
+tightly stacked) but rejected it: a pixel-level check showed the
+labeled lines sit only ~15-20px apart, too close to confidently tell
+which line a given trace actually landed on. The same project draws
+the same pipes again as a much cleaner isometric riser detail, each
+system given its own clearly separated run -- correctly preferring
+that cleaner view once the denser one proved too risky to verify.
+
+That cleaner sheet's own text discloses THREE systems sharing one
+drawn line (a real extension of the two-system stacked-pipe shape
+used in the previous round, this time three). The traced line reaches
+cleanly from a real elbow to a real cross-sheet continuation symbol,
+correctly bridging 16 real dash gaps along a dashed line. An adjacent
+two-system sibling line was tried too but only ever returned a
+shorter, partial fragment across a dozen seed positions -- a real,
+not-yet-understood gap in that specific line's own vector continuity,
+left unused rather than forced.
+
+Development-tier recall: **23/29 (0.7931) -> 26/32 (0.8125)**, all
+three runs an exact length match -- the single largest jump since the
+sixth new-corpus round, since one golden shape contributed three
+scored cases at once. Precision ticks up further above the project's
+own gate threshold (0.9645 -> 0.9652). Recall is now within 0.04 of
+the project's own 0.85 gate, the closest this session has come.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 40" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: fifteenth new-corpus golden (two runs), a fresh project and a new stacked-pipe golden shape, development recall 21/27 -> 23/29 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Tried and disclosed three fresh, low-yield files before this one landed:
 a roof plan with real gas/refrigerant piping but too much crossing
