@@ -79,7 +79,7 @@ const ELEV_RE = /\b(BOD|BOP|TOD|TOP|COD|COP|CL|IE|INV|FFL|AFF|EL|ELEV)\b|^\d+'-\
 
 // Longest-first so a shared prefix (CW/CWS/CWR, HW/HWS/HWR/HWC) never
 // needs the regex engine to backtrack past a wrong shorter alternative.
-const SYS_ALT = "HHWS|HHWR|CHWS|CHWR|HWS|HWR|HWC|CWS|CWR|SAN|GEX|HPS|MPS|LPS|CW|HW|SA|RA|EA|OA|MA|TA|RL|RS|RD|CD|PC|NG|ST|G|V|W";
+const SYS_ALT = "HHWS|HHWR|CHWS|CHWR|HWS|HWR|HWC|CWS|CWR|SAN|GEX|HPS|MPS|LPS|GLS|GLR|CW|HW|SA|RA|EA|OA|MA|TA|RL|RS|RD|CD|PC|NG|ST|G|V|W";
 const DIR_ALT = "UP|DN|DOWN|UP/DN|VTR";
 
 const RECT_RE = new RegExp(`^(\\d{1,3}(?:\\.\\d+)?)"?\\s*X\\s*(\\d{1,3}(?:\\.\\d+)?)"?(?:\\s*(FO|F\\.O\\.|FLAT OVAL))?(?:\\s+(${SYS_ALT}))?(?:\\s+(${DIR_ALT}))?$`);

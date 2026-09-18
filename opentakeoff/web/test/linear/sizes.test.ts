@@ -170,6 +170,17 @@ test("parseSize: PIPE — Baker p42 gas schematic's 3\" NG, 1 1/4\" NG", () => {
   assert.deepEqual(parseSize('1 1/4" NG')?.size, { kind: "pipe", nps_in: 1.25 });
 });
 
+test("parseSize: PIPE — VA Durham M-401's glycol-return risers, 6\" GLR, 4\" GLR, 3/4\" GLR, and a 6\" GLS supply counterpart (#linear-takeoff GATE 3 bug catalogue: GLS/GLR were missing from SYS_ALT entirely, so every real glycol-loop label on this sheet failed to parse as a size at all, not merely lost its system tag)", () => {
+  const a = parseSize('6" GLR');
+  assert.deepEqual(a?.size, { kind: "pipe", nps_in: 6 });
+  assert.deepEqual(a?.systems, ["GLR"]);
+  assert.deepEqual(parseSize('4" GLR')?.size, { kind: "pipe", nps_in: 4 });
+  assert.deepEqual(parseSize('3/4" GLR')?.size, { kind: "pipe", nps_in: 0.75 });
+  const s = parseSize('6" GLS');
+  assert.deepEqual(s?.size, { kind: "pipe", nps_in: 6 });
+  assert.deepEqual(s?.systems, ["GLS"]);
+});
+
 test("parseSize: PIPE — DN/NPS/mm forms (Appendix A's own second PIPE alternative, not yet seen in the six named sets but part of the stated grammar)", () => {
   assert.deepEqual(parseSize("DN150")?.size, { kind: "pipe", nps_in: 5.91 });
   assert.deepEqual(parseSize("NPS100")?.size, { kind: "pipe", nps_in: 3.94 });

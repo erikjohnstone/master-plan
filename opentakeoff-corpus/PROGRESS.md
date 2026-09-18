@@ -1,5 +1,57 @@
 ## Active work
 
+2026-09-18 linear takeoff: switched from hunting more answers to asking why some pipes come back with no size at all -- fixed one real bug, found a bigger one worth naming but not yet fixing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Instead of checking more drawings today, sat down with the list of
+every already-found pipe that came back with a correct route but no
+size attached, and read through what each one actually was, rather
+than guessing.
+
+Found a real, simple bug first: this project's own size-reading
+rules never learned the letters "GLR" and "GLS" -- the labels for
+glycol-loop piping, a genuinely common real system in chiller plants.
+Worse than just not knowing which system it was, the size reading
+failed COMPLETELY on any label using those letters, treating "4 inch
+GLR" as if it weren't a size at all. Fixed it, the same simple way
+every other known system abbreviation is already handled, and proved
+it: forty-one existing checks plus a new one all still pass, and both
+the small and large full check suites came back with exactly the same
+already-known, unrelated problems as before -- nothing new broken.
+
+Then checked why fixing that bug didn't actually move today's score,
+rather than just assuming it helped. It turned out both real,
+already-found examples of this specific problem hit a SECOND, bigger,
+separate issue: when a size label is written sideways-on (the normal,
+readable way) next to a pipe running straight up or down, the system
+that decides which nearby line a label belongs to currently refuses
+to even consider the vertical pipe as an option at all, because the
+label's own lettering doesn't line up with it. Instead it grabs
+whatever OTHER nearby mark happens to line up correctly -- in both
+cases checked, a small unrelated tick mark, not the pipe. Checked this
+same idea against a totally different building's own duct label too,
+and it happened again in exactly the same way. That's not a one-off
+drawing quirk; it's a real, general blind spot.
+
+Deliberately did not rush a fix for that second one. The safeguard
+causing it exists for a good reason -- stopping an unrelated nearby
+label from getting picked by mistake -- and loosening it carelessly
+risks creating new wrong answers instead of just fixing missing ones,
+which would make things worse, not better. The real fix needs the
+size-reading step to know which specific line was actually walked,
+which touches several connected pieces and deserves real care, not a
+quick patch under pressure. Written up clearly so it can be tackled
+properly later.
+
+Today's overall score doesn't move from this pass, and that's stated
+plainly rather than glossed over -- but this is a different, real kind
+of progress: an actual engine bug found and fixed, and a second,
+bigger one precisely understood and named for the first time, neither
+of which comes from just checking more drawings.
+
+Measured: full check suite passes except the same already-known,
+unrelated problems as always; nothing about pipe-tracing itself
+changed except the one fix described above.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 76" section.
+
 2026-09-18 linear takeoff: closed out an earlier open question -- a held-out drawing's second unanswered sheet has no further usable label, confirmed rather than just suspected (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Earlier today, a held-out drawing's own sibling sheet was tried and
 turned down for one specific reason: its only good-looking answer
