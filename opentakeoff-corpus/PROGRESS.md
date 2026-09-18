@@ -1,5 +1,39 @@
 ## Active work
 
+2026-09-18 linear takeoff: two fresh Montana university buildings checked, both real candidates turned out to be following a label's own pointer line, one in a genuinely new, harder-to-catch way (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked eight more genuinely never-before-touched building drawings
+today. Most came back either completely empty or only matched an
+unrelated electrical wiring schedule (a known false-alarm shape, not
+a new problem). Three had real plumbing or process-cooling labels
+worth trying: a lithography lab's own cooling loop, a classroom
+building's own restroom water piping, and a laboratory building with
+several scattered domestic-water and cooling labels not yet tried.
+
+The lithography lab's one clean-looking answer turned out to be yet
+another case of two different labels' own pointer lines meeting at
+one spot and getting stitched together as if they were one pipe --
+the same specific mistake caught several times before today.
+
+The restroom candidate was trickier and worth calling out on its own.
+It had exactly the one quality every other wrong answer today was
+missing: a plain, ordinary right-angle turn, not a suspicious one.
+Looking very closely anyway showed why that wasn't enough here --
+this particular drawing draws its real water piping in a distinct
+blue color, and the label's own thin black pointer line happens to
+run alongside the real blue pipe for a short stretch before turning
+and touching it, closely enough that it looks almost exactly like a
+real elbow-and-run from a distance. Only the color giving away which
+line is real ink and which is just a pointer -- something this
+effort doesn't currently have a way to check for -- makes the
+difference. A genuinely new, harder version of the same underlying
+mistake, worth remembering as its own specific case.
+
+No golden from either building this round. Recall, precision, and
+every other measured number are unchanged from the last entry.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 69" section.
+
 2026-09-18 linear takeoff: timed exactly where the slowest remaining drawing's own build time goes, confirming there's no easy further speed-up left there (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Earlier work fixed the one runaway cost that made a handful of
 drawings take minutes instead of well under a second to get ready.
