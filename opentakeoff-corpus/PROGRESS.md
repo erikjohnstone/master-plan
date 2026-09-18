@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-18 linear takeoff: twenty-second new-corpus golden, MILESTONE -- development recall hits exactly 0.85, precision holds at 0.9719, both of the gate's primary trace-quality thresholds now met simultaneously for the first time this session (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+A second sheet from the same fresh Maine heat-pump project as the
+twenty-first golden. A grid sweep near text anchors on the project's
+own second mechanical plan found a real, clean condensate-drain main.
+This one gets a genuine LIVE AUTOMATIC size and system bind straight
+from the engine (`size:{kind:"pipe",nps_in:1}, systems:["CD"]` via
+`size-binding:beside` on a `pen-weight-prior` stroke family) -- the
+first real automatic bind anywhere in this session's own recent run
+of goldens, every one of which (Runs 37-45) needed a manual size
+override due to missing PDF layer names on their own source files.
+Both ends confirmed via marked crop: a real dead-end at a connection
+symbol near an indoor unit, and a real ambiguous fork near a curved
+wall/door element. The same sweep also independently reconfirmed the
+hatching-density pathology first seen last round: four nearby seeds on
+this same sheet returned wildly implausible ~3918 LF traces capped at
+4,000 points, avoided entirely, not used.
+
+Development-tier recall: **33/39 (0.8462) -> 34/40 (0.85 exactly)** --
+the project's own `run recall >= 0.85` gate threshold is now MET for
+the first time this session. Precision holds at 0.9719, continuing to
+clear the project's own `>= 0.95` threshold. Both of the gate's own
+primary trace-quality thresholds are now satisfied simultaneously --
+a real milestone, though the gate as a whole remains unmet: size
+accuracy (0.6643) sits well under the required >= 0.90, and length
+error, over-trace, click-to-proposal timing, per-sheet build timing,
+held-out-tier-within-5-points, and guard-green remain separately
+unverified or unmet at this checkpoint.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 46" section and its priority
+list updated with the new recall number and milestone framing.
+
 2026-09-18 linear takeoff: twenty-first new-corpus golden, a fresh project, one case from the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Two more zero-detected-scale files were disqualified in seconds. A
 third, real, genuinely dangerous candidate was found and declined: a
