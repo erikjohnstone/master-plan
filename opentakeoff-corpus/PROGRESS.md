@@ -1,5 +1,43 @@
 ## Active work
 
+2026-09-18 linear takeoff: twenty-third new-corpus golden, a genuine automatic-bind duct on a Chicago stadium HVAC project, size accuracy climbs 0.6643 -> 0.6811 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Two more candidates from the same layer-quality survey were checked and
+declined before this one landed. A chemical-buildings HVAC sheet, though
+carrying real duct and pipe layer names, turned out to be dominated by
+the dense-geometry pathology already on record twice before -- over
+half of every sweep hit on that sheet was a runaway trace, one reaching
+a new record of 36,652 linear feet before hitting the walk's own
+4,000-point safety cap, and not a single hit anywhere on the sheet
+carried a real automatic size reading. A second, small pump-station
+sheet had only short, ambiguous fragments -- no clean single-call
+candidate there either.
+
+The one that landed: a real outside-air-intake duct on a Chicago
+stadium's own HVAC-replacement project, from a real louver/damper
+hood symbol to a real, clearly labeled "46x8" duct run. The engine's
+own automatic size reading matches that label exactly. Confirmed via
+a correctly marked render crop -- the first one this session where
+the marker actually appeared on the page, after finding and fixing a
+real bug in this project's own verification scripts (the marking
+option's true shape had been silently accepting the wrong input all
+session, discovered on the prior round's own declined candidate). The
+traced shape walks both parallel edges of the drawn duct symbol plus
+the connecting elbow at one end, rather than resolving to a single
+centerline -- an already-understood, already-accepted limitation of
+comparing a rail-traced path this way, not a new problem, and exactly
+what a fresh trace call at this seed reproduces.
+
+Development-tier recall: **34/40 (0.85) -> 35/41 (0.8537)**, an exact
+length match. Precision ticks up (0.9719 -> 0.9732). Size accuracy
+climbs **0.6643 -> 0.6811** -- a real, positive automatic-bind data
+point pulling the project's own most-binding remaining gate criterion
+toward its own required 0.90, not just diluting the average.
+
+Measured: `npm run bench:linear` passes; the targeted linear test
+suite (165 tests) passes. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 50"
+section covering both declined candidates and the new golden, with its
+priority list updated.
+
 2026-09-18 linear takeoff: a real 1.17-million-segment sheet found and declined, and a dimension-line mistrace caught on a genuinely mechanical sheet, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Scripted a survey of roughly 150 still-unexplored real sets, looking
 specifically for the one combination this project has learned reliably
