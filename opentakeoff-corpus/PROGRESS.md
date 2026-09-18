@@ -1,5 +1,52 @@
 ## Active work
 
+2026-09-18 linear takeoff: a real 1.17-million-segment sheet found and declined, and a dimension-line mistrace caught on a genuinely mechanical sheet, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Scripted a survey of roughly 150 still-unexplored real sets, looking
+specifically for the one combination this project has learned reliably
+produces a genuine automatic size/system read: a detected drawing
+scale plus at least one real, non-blank, classified layer with ink on
+it. Fourteen sheets across fourteen projects passed. Reading each
+hit's own full layer list (not the short summary) for names that are
+actually pipe/duct/HVAC-relevant, rather than just "some real layer
+exists", narrowed this to two genuinely promising candidates.
+
+The first, an Iowa State lab's own mechanical floor plan, has four
+clean, real duct and pipe layer names -- but carries 1.17 MILLION
+segments, over eleven times this project's own "100k segs" scale
+target and by far the largest sheet touched all session. Given how
+badly even a 50,000-segment sheet already stalls (the prior round's own
+finding), a sheet 23 times that size was declined outright, before
+ever seeding it -- the same discipline this project has applied to
+every other known-pathological case, just applied ahead of a bad wait
+this time rather than after one.
+
+The second, a NIST facility's own HVAC sheet, was a safe size to try
+and found two clean-looking hits sharing one line: a labeled 4-inch
+supply and a labeled 4-inch low-pressure-steam read, both with genuine
+automatic size AND system binds, both clean dead-ends on both sides.
+Both turned out to be wrong -- caught by the same marked-crop
+discipline this project has used all session, but only after first
+finding and fixing a real bug in how those crops were being made: the
+marking option's own real shape wasn't what this project's own scripts
+had been passing it all along, so no marker had ever actually been
+drawn on any crop this whole session -- past verification rested on
+the crop's own visible content matching, not literally seeing a dot.
+Corrected, the crop showed both readings sitting on a DIMENSION line,
+not the real pipe just below it -- a same-category mistrace already on
+record twice this session, but the first time on a genuinely mechanical
+sheet with a real, correct, nearby label attached to the wrong line
+rather than an obviously irrelevant one.
+
+Recall, precision, and size accuracy are unchanged -- no golden added
+this round. A further sweep on the same sheet, below the dimension
+line, found only short fragments and a fourth confirmed instance of
+the dense-geometry pathology already on record twice before.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 49" section documenting the
+marking-shape bug, the declined million-segment sheet, and the
+dimension-line mistrace, with its priority list updated.
+
 2026-09-18 linear takeoff: fixed a real bench-harness bug that had inflated the click-to-proposal proxy sevenfold (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 While checking the gate's own click-to-proposal threshold, the bench's
 own reported "warm query" ceiling was 7075 milliseconds -- nothing like
