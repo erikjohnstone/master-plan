@@ -1,5 +1,31 @@
 ## Active work
 
+2026-09-18 linear takeoff: tenth new-corpus golden, first real ambiguous-stop case, development recall 14/20 -> 15/21 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Followed up on the inconclusive text-anchored attempt with a simpler
+version of the same idea: read a sheet's own real text for a
+condensate-drain callout, then look at a wide render crop around it
+BEFORE trying to search for anything -- the same discipline this
+project uses throughout, just applied one step earlier. The crop
+immediately showed a real, legible riser diagram, letting a seed be
+placed by eye rather than guessed by a grid.
+
+The traced segment carries a genuine automatic size and system bind,
+but both its own ends are real forks (a wye junction, a real pipe
+direction choice at an elbow) rather than plain dead ends -- the first
+real-corpus case this session where that reflects genuine drawing
+complexity rather than an engine misread. Bounded the golden at those
+same two real forks, the same convention already used for tee-bounded
+manual goldens.
+
+Development-tier recall: **14/20 (0.7) -> 15/21 (0.7143)**, an exact
+length match, a genuine size match too. The new source PDF is now
+committed to this project's own real corpus (`raw/`).
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 34" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: a first attempt at text-anchored discovery, inconclusive (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Built a first version of the alternative discovery method proposed
 after the last checkpoint: extract a sheet's own real positioned text,

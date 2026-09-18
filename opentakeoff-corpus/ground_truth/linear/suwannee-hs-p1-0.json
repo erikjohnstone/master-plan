@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/suwannee-hs-courtyard.pdf",
+  "source_pdf_sha256": "8d1d0d6b48faf1b89b97a257ce94976a8fc69385a55b9e10353743feafd09702",
+  "sheet_id": "suwannee-hs-courtyard.pdf#12",
+  "sheet_number": "P-1.0",
+  "page": 12,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Tenth golden, found while building and calibrating a new text-anchored discovery method (extract a sheet's own real positioned text, regex-match candidate size/system callouts, seed near each match rather than blindly gridding the whole sheet). This specific candidate was actually surfaced by directly reading this sheet's own real text content for a 'CD' (condensate drain) callout, then visually inspecting a wide render crop around it BEFORE attempting any coordinate search -- the crop showed a real, isometric-style condensate-drain riser diagram: a real Y-branch (wye/tee) junction where a horizontal 2\" CD corridor run meets a vertical riser, the riser rising through a real elbow into a diagonal run terminating at a real vent-through-roof symbol.\n\n`trace_run` seeded directly on the vertical riser segment (between the wye and the elbow) returns a real, genuine automatic bind -- `size-binding:beside`, system `CD`, size `round:2.5in` (matching this run's own printed `2 1/2\"ø CD` label exactly) -- but BOTH ends report `ambiguous`, not `dead_end`: the bottom end is a real wye junction (multiple real candidate continuations along the corridor), the top end is a real elbow into a double-line pipe symbol turning diagonally toward the vent (multiple real candidate rail continuations). This is the FIRST real-corpus case this session where `trace_run`'s own `ambiguous` stop reason reflects genuine drawing complexity (a real branch, a real double-line-pipe direction choice) rather than an engine misread -- distinct from every dead-end-bounded golden so far, and closer in spirit to the tee-bounded runs Douglas County/ITD-D3 already established (a real, deliberate scope boundary at a genuine fork, not an assumed shape). Confirmed via a marked render crop that both ambiguous stop points sit exactly on the real wye and elbow, matching the visually obvious pipe geometry.\n\nThe golden's own scored extent is exactly this one segment (the wye to the elbow) -- re-verified live via the bench's own `seedOnLongestSegment` convention (the only segment, so trivially self-consistent): reseeding 40% into it reproduces the identical two-point, both-`ambiguous` result with the same automatic CD/2.5in bind. The corridor's own 2\" CD run and the diagonal vent-riser continuation beyond the elbow are real, visible in the same crop, and explicitly out of scope -- real continuations past a real fork, the same convention Douglas County/ITD-D3's own tee-bounded runs already established, not an assumed or guessed extent.",
+  "scope": "A single real 2 1/2-inch condensate drain (CD) pipe riser segment (6.09 LF) on Suwannee High School's own Courtyard Enclosure plumbing plan, sheet P-1.0, from a real wye/tee junction (where it meets a 2\" CD corridor run) to a real elbow (where it turns to continue diagonally toward a vent-through-roof termination). Explicitly OUT OF SCOPE: the horizontal 2\" CD corridor run the wye also connects to; the diagonal vent-riser continuation beyond the elbow, up to and including the vent-through-roof symbol; every other pipe/fixture visible in the same crop; every other run on this real 31-sheet plan set (only sheet 12/P-1.0 sampled); the text-anchored discovery method's own remaining untested candidates on this and other files, real disclosed future work.",
+  "runs": [
+    {
+      "run_id": "suwannee-p10-cd-2.5in",
+      "description": "2 1/2-inch condensate drain (CD) pipe riser, a real vertical segment from a real wye/tee junction to a real elbow turning diagonally toward a vent-through-roof termination.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.7628665123456789, 0.43666087962962963],
+        [0.7628665123456789, 0.34152199074074074]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 2.5 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 6.09,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 6.09, "size": { "kind": "round", "d_in": 2.5 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:2.5": 6.09 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "round:2.5": 6.09 },
+  "total_lf_all_runs": 6.09
+}
