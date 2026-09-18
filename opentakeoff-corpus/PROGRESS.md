@@ -1,5 +1,21 @@
 ## Active work
 
+2026-09-18 linear takeoff: a first attempt at text-anchored discovery, inconclusive (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Built a first version of the alternative discovery method proposed
+after the last checkpoint: extract a sheet's own real positioned text,
+regex-match candidate size/system callouts, then seed near each match
+instead of blindly gridding the whole sheet. Confirmed the premise --
+real callout text exists in places blind grid-sweeping never reaches --
+but two test files were each inconclusive for a different reason: one
+turned out to be a "typical unit" schematic detail (labels describe a
+type/spec, not a specific measurable run), the other's real condensate
+-drain callouts didn't yield a hit even with a wide offset search,
+for a reason not yet diagnosed.
+
+No golden changed. A real, partially-built tool for future
+continuation, not a finished capability yet. Documented as a "Run 33"
+addendum.
+
 2026-09-18 linear takeoff: a diminishing-returns checkpoint on grid-sweep discovery, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Mined two further small batches across both archives. Real mechanical
 sheets were genuinely swept -- seven real M/MD-prefixed sheets on one
