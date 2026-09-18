@@ -1,5 +1,32 @@
 ## Active work
 
+2026-09-18 linear takeoff: seventeenth new-corpus golden (three runs), a second instance of the same triple-stacked pipe shape, development recall 26/32 -> 29/35, within 0.02 of the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked the same VA Durham sheet's own text for a second "STACKED"
+callout rather than assuming the first instance found was the only
+one -- found a second, physically distinct triple-stacked pipe run
+near a different pump bank on the same sheet.
+
+The traced line reaches cleanly with a real dead-end at one end (the
+same cross-sheet continuation break symbol as before) and a real
+elbow/valve fork at the other, correctly bridging 13 real dash gaps
+along its dashed length. This is the cleanest stop pair of any
+stacked-pipe golden this round -- a real dead-end, not just two
+forks, real evidence the project's own break-symbol convention can
+register cleanly when the walk direction and symbol geometry line up.
+
+Development-tier recall: **26/32 (0.8125) -> 29/35 (0.8286)**, all
+three runs an exact length match -- the same one-golden-three-cases
+jump as the previous round, repeated on the same file's second
+instance of the pattern. Precision ticks up further above the
+project's own gate threshold (0.9652 -> 0.9676). Recall is now within
+0.02 of the project's own 0.85 gate, closer than any prior checkpoint
+this session.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 41" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: sixteenth new-corpus golden (three runs), a triple-stacked pipe golden, development recall 23/29 -> 26/32, closest yet to the 0.85 gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 A fresh VA Durham "Replace Chillers for AHU 1 & 2" project. First found
 a real, dense multi-pipe rack (five parallel existing lines running
