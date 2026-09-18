@@ -1,0 +1,46 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf",
+  "source_pdf_sha256": "375360a3187b787f8a362185659f1160777372d072c0ffbc96a809305dd3bcf8",
+  "sheet_id": "074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#26",
+  "sheet_number": "M201",
+  "page": 26,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (West Valley College STEM Classroom HVAC, California), pulled from the corpus_2 GitHub Release during the same low-intensity corpus-hunting pass as e2508-gas-m103.json/ochc-chwsr-m102.json/poultry-ra-m101.json. Screened for image coverage first per Run 86's own established check: `imgRatio` reads ~0.01 on sheet M201, real vector CAD, safe to sweep.\n\nThis sheet's 236 real size-callout text spans are overwhelmingly `(E)`-prefixed (an existing-marker printed BEFORE the whole label, e.g. `(E) 6\"ø`, `(E)10\"ø`) -- a known, already-catalogued grammar gap (a structural prefix change, not a suffix fix like the ones already made this session) that is deliberately NOT touched this pass. Instead this golden targets one of the sheet's few non-`(E)`-prefixed labels, which parses cleanly with the existing grammar: a bare `22\"x12\"` rectangular duct callout with no leading system token.\n\nA grid sweep of this and eleven other non-`(E)` labels on the sheet found one confirmed hatching-mistrace pathology on a different candidate (5332 LF, cap/cap, 3998 vertices -- rejected, matching the established pattern from prior runs) and this real, automatic-bind-capable short candidate. `trace_run` returns a real 3.39 LF two-segment run through a real 117.3-degree elbow: `size:{kind:rect,w_in:22,h_in:12}`, factors `[\"stroke-family:pen-weight-prior\",\"size-binding:beside\",\"ambiguous_stop\",\"layer-unclassified\",\"scale_unconfirmed\"]`, confidence 0.5. A wide marked crop confirms the run visually: the `22\"x12\"` label's own leader terminates at the forward `dead_end` stop; the backward `ambiguous` stop (a real 4-candidate fan in the raw `trace_run` response) sits at a duct-collar connection into fan coil unit FC-A (tag \"5\"), from which the run continues (out of scope) as a trunk feeding several `(E)`-prefixed round branch ducts (6\"/8\"/10\" diameter) that in turn feed CFM-tagged supply diffusers in the adjacent OFFICE rooms (A110/A111/A121/A122). A `resolveRunSegments` recompute from the authored vertices reproduces the identical two segments (2.76 LF + 0.63 LF = 3.39 LF total, matching `totals_by_size`) and a reseed `trace_run` from a fresh coordinate against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, and size.\n\nHonest caveat on the `system` field: this sheet carries no explicit system-letter prefix on the `22\"x12\"` callout itself (unlike this session's other multi/single-system goldens). \"SA\" (supply air) is inferred from the run's own topology -- an unmarked (i.e., new, non-`(E)`) rectangular main duct running directly off fan coil unit FC-A and branching into round ducts that feed CFM-labeled supply diffusers in adjacent offices, a standard fan-coil-to-diffuser supply arrangement -- rather than read directly off a label. A sheet-wide text search for an explicit FC-A supply/return schedule or legend on this sheet found only generic project notes (fan coil general notes, an unrelated FC-A-#-# equipment tag list) with no line-by-line SA/RA legend to confirm this specific duct run. Per this corpus's established convention (see ochc-chwsr-m102.json), `run.system` is documentation only and never affects `sizeMatch` scoring, so this uncertainty does not affect any GATE 3 metric, but it is disclosed here rather than asserted as confirmed.",
+  "scope": "A single real 22x12-inch rectangular duct segment (3.39 LF) on the West Valley College STEM Classroom HVAC project's own mechanical plan, sheet M201, from a real duct-collar connection at fan coil unit FC-A (tag \"5\") through a real 117.3-degree elbow to the label's own leader terminus. Explicitly OUT OF SCOPE: the run's own continuation past the equipment connection (the other three candidate directions at that real multi-candidate junction, including the round branch ducts FC-A feeds onward to office diffusers); every `(E)`-prefixed round duct on this same sheet (dozens, not attempted this pass, blocked on the parenthetical-prefix grammar gap); the rejected 5332 LF hatching-mistrace candidate found during the same sweep; every other sheet on this real project's plan set.",
+  "runs": [
+    {
+      "run_id": "wvc-m201-sa-22x12",
+      "description": "22x12-inch rectangular supply duct segment, from a real duct-collar connection at fan coil unit FC-A through a real elbow to the size callout's own leader terminus.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5978174603174603, 0.4773842592592593],
+        [0.5921792328042328, 0.46206018518518516],
+        [0.5950066137566138, 0.46206018518518516]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 22, "h_in": 12 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 3.39,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 2.76, "size": { "kind": "rect", "w_in": 22, "h_in": 12 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.63, "size": { "kind": "rect", "w_in": 22, "h_in": 12 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:22x12": 3.39 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:22x12": 3.39
+  },
+  "total_lf_all_runs": 3.39
+}

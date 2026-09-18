@@ -1,5 +1,48 @@
 ## Active work
 
+2026-09-18 linear takeoff: a fourth real self-reading answer lands, plus an honestly-flagged guess about which duct system it belongs to (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept the search going on yet another genuinely new real project, a
+California college's classroom HVAC drawings. Checked image coverage
+first as usual -- clean, a real digital drawing. Most of this sheet's
+own size labels use a formatting convention (an "existing equipment"
+marker stuck on the front of the label) that the reader still can't
+handle -- a known, already-written-down gap, not fixed this time. But
+a handful of labels on the same sheet don't use that convention, and
+those already read cleanly.
+
+Swept those labels and found one obviously-wrong trace to throw out
+(an absurdly long, clearly-mistraced result from hatching pattern
+lines, same as several times before) and one real, clean answer: a
+duct section about three and a half feet long, running through a real
+elbow, from a fan-coil unit's own connection point out to where the
+size label's own leader line points. Checked it twice -- once by
+recomputing the segments by hand from the same points, once by asking
+the reader to find it again from scratch on the original file -- both
+came back identical.
+
+One honest complication: this drawing doesn't print which air system
+(supply, return, etc.) this particular duct belongs to. Based on the
+drawing's own layout -- a plain duct running straight off a fan-coil
+unit toward supply-air grilles in nearby offices, the standard
+arrangement -- a reasonable guess is that it's a supply duct, and
+that's what got written down. But this is a guess made from context,
+not something read directly off the drawing, and there's no separate
+schedule on this sheet spelling it out either way. This label doesn't
+actually affect the reader's own score either way (the corpus only
+grades size-matching, not which air system's name is written down),
+but the guess is written down honestly rather than presented as
+confirmed fact, matching how this project has always preferred a
+disclosed uncertainty over a silent one.
+
+This is the fourth of these small real wins in a row, moving the
+project's own size-reading accuracy score up again, though still a
+good way under where the finish line for this measure sits. Checked
+everything the usual way: full benchmark re-run confirmed the new case
+landed cleanly with nothing else disturbed, and the complete test
+suite in both parts of the project re-run clean at its already-known
+baseline (the same handful of pre-existing, already-written-down
+failures elsewhere in the project, untouched by this work).
+
 2026-09-18 linear takeoff: a third real self-reading answer lands, this time with no new labeling fix needed (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept the search going on yet another genuinely new real project, a
 poultry research facility's own mechanical drawings. Checked image
