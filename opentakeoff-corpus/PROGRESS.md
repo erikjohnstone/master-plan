@@ -1,5 +1,39 @@
 ## Active work
 
+2026-09-18 linear takeoff: an eighth try lands a fourth caught near-miss instead of a golden -- a surveying elevation marker mistaken for a pipe, and this specific search method set aside for now (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Tried the last of this round's already-identified safe candidates: a
+Stanford physics-lab cooling-water skid drawing. A sweep found four
+matches, all reading the same one pipe size, but none as clean as
+hoped -- every one stopped short on at least one side rather than
+terminating cleanly. A marked-crop check on the best of the four
+explained why: it wasn't a pipe at all, but a dashed reference line
+running to a real surveying benchmark symbol, the kind used to mark a
+known elevation, labeled with a height measurement. The engine's own
+size reading had simply grabbed the trailing number off that height
+label, mistaking it for a pipe size. A confident-looking result that
+was actually reading a construction reference mark, not routed
+equipment -- a new specific flavor of the same mistake this session has
+now caught in several different disguises.
+
+Eight tries into this newly-opened pool of previously-skipped sheets,
+and still zero real goldens, against four separate caught near-misses,
+three clean negatives, and one dead end from an earlier method. With
+this much consistent evidence now in hand, this specific broad search
+method is being set aside for now, not thrown away -- the honest
+conclusion is that the original, narrower method (requiring both a
+detected scale and a real, classified drawing layer) was doing
+genuinely useful work narrowing things down, and searching blindly
+through what it had already set aside mostly turns up things worth
+ruling out rather than new real matches worth keeping.
+
+No golden added either way. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md`'s "Run 55" section gained a closing
+paragraph covering this last try and the decision to set the method
+aside.
+
 2026-09-18 linear takeoff: two more clean misses, then a promising-looking sheet that turned out to be tracing a background gridline, not a pipe -- a new kind of near-miss caught, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept working through the same newly-opened pool of previously-skipped
 sheets. Two more real projects, a Missouri steam-heating job and a
