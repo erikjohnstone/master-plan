@@ -1,6 +1,39 @@
 ## Active work
 
-2026-09-18 linear takeoff: checked the regression guard for the first time this session -- found and fixed a real, unrelated, pre-existing environment gap (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+2026-09-18 linear takeoff: a graphic scale bar caught mistraced as a real pipe, a fifth hatching-pathology record, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+With the last batch of promising candidates fully checked, tried two
+fresh, completely untouched real projects with two different methods.
+Reading a sheet's own real text directly for size/system callouts,
+the method that worked well once before, came up empty across all
+thirty sheets of an air-handling-unit project -- its own real labels,
+if any exist, evidently split the number and the system code across
+separate pieces of text, a real limit of that specific method, not a
+failure of the search itself.
+
+A direct grid sweep on a second project, a central utility plant, was
+more eventful. It found a real automatic size reading -- a genuine
+6-inch pipe match, twice with clean dead-ends on both sides -- but a
+marked-crop check, this project's own standing discipline before ever
+trusting a result, showed the trace walking something else entirely:
+the sheet's own graphic scale bar, the small checkered ruler symbol
+every drawing carries near its own text explaining what one inch on
+paper means in the real world. The engine read its own checkered
+outline with confidence, as if it were a routed pipe, complete with a
+coincidental size match pulled from unrelated nearby text. A genuinely
+new example of an already-known category -- real, drawn linework with
+no MEP intent read with confidence -- caught before it could become a
+wrong golden. The same sweep also turned up a fifth confirmed instance
+of the dense-geometry pathology already on record four times before,
+a new record for how far a single runaway trace can travel before
+hitting its own safety limit.
+
+No golden added either way. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 53" section.
+
+2026-09-18 linear takeoff: checked the regression guard for the first time this session -- one real gap found and fixed, a second, larger, unrelated set of pre-existing failures found and catalogued out of scope (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Ran both halves of the project's own regression guard directly, since
 it had never been separately re-checked this session despite several
 commits including a real code change. The backend half failed --
@@ -32,9 +65,22 @@ anything else measured all session. Left it running rather than
 interrupting it or working around it; not yet a confirmed problem,
 just a real, disclosed, still-open data point.
 
-Net: the regression guard isn't fully confirmed green yet, but for a
-clear reason, with real, disclosed progress -- a genuine backend gap
-found and fixed, and the frontend's own core checks confirmed clean.
+Running the backend's own full suite all the way through (past where
+the first check stopped) turned up a second, separate, much larger
+problem: eleven more failures, nothing to do with the package that
+was just fixed, spread across a completely different part of the
+platform -- real count and cross-reference mismatches against frozen,
+known-correct answers, in the schedule and takeoff-compiler area this
+project is explicitly told never to touch or fix itself. Confirmed
+none of it traces back to anything done this session, then catalogued
+it and stopped, exactly as this project's own standing rule for that
+area requires, rather than attempting a fix outside its own lane.
+
+Net: the regression guard is now confirmed NOT green, with a clear,
+disclosed accounting of why -- one real, unrelated gap found and
+fixed, a second, larger, unrelated set of failures found and
+catalogued (not this project's own to fix), and the frontend's own
+core checks confirmed clean.
 
 Measured: `docs/LINEAR-TRACE-EVAL.md` gained a "Run 52" section with
 the full detail. No linear-takeoff code changed; no ground truth
