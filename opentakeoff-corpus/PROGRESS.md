@@ -1,5 +1,42 @@
 ## Active work
 
+2026-09-18 linear takeoff: worked out, precisely, just how large the size-accuracy shortfall actually is -- and it is much bigger than hand-finding a few more real examples can realistically close (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The one requirement still furthest from being met is how often a
+correctly-sized pipe or duct gets automatically read right, weighted
+by how long each one actually is -- currently a bit over two-thirds,
+against a required nine-tenths. Rather than just keep hunting for a
+few more real examples the way today's earlier work did, worked out
+the actual arithmetic behind that number to see how big a job closing
+it really is.
+
+The answer: to reach the required level by adding only brand-new,
+perfectly-read examples, with not a single new "couldn't tell" or
+wrong guess mixed in along the way, would take roughly thirteen
+hundred more feet of correctly-read pipe and duct -- more than double
+everything already banked across every real example found so far this
+entire effort. That is somewhere around seventy or eighty more
+average-sized real, perfectly-clean finds, on top of the several dozen
+already landed. And the zero-mistakes assumption behind that number is
+itself unrealistic -- every real search this whole effort has turned
+up a genuine mix of correct reads, honest "couldn't tell" declines,
+and outright wrong guesses, never a clean run of successes only.
+
+This is a real, useful piece of honesty to put on record: closing this
+specific requirement by continuing to hand-search for one example at a
+time, the way this effort has worked all along, is not a realistic
+near-term path -- it would take either a much faster, more automated
+way of finding and checking candidates, or an actual improvement to
+how the underlying reading logic itself works, neither of which this
+pass attempted. Better to say so plainly than to keep implying "just a
+few more" will get there.
+
+No golden added or needed. Recall, precision, and size accuracy are
+unchanged -- this work only made the true size of one already-known gap
+precise and honest.
+
+Measured: no ground truth touched, no bench numbers changed, no code
+touched. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 58" section.
+
 2026-09-18 linear takeoff: two more requirements confirmed met by reading the numbers already on hand, one made precise for the first time and confirmed still short (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 With the hunt for new real matches showing thinner and thinner returns
 today, switched to a more direct kind of progress: going back over
