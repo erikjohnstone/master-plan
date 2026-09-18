@@ -1,5 +1,28 @@
 ## Active work
 
+2026-09-18 linear takeoff: a batch of eleven more never-before-touched drawings checked, mostly thin or empty, one more pointer-line mix-up caught (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked eleven more building drawings never looked at before, drawn
+from the other half of this project's own larger drawing library.
+Five came back completely empty. Several more had only a couple of
+matches, either bunched into the same kind of tightly-paired
+supply-and-return piping already handled carefully, or too few hits
+to bother checking individually today.
+
+One drawing looked promising: a child development center with
+several individually scattered small water-pipe labels. Checking
+seven of them found two answers. One had the same suspicious turn
+already flagged several times today. The other looked clean at first
+-- short, both ends landing, no odd turns -- but a close look showed
+it's yet another case of a label's own pointer line getting mistaken
+for the pipe, this time pointing to a small oval callout symbol on
+the wall rather than to either of the two real dashed pipe lines
+sitting right there in the same picture.
+
+No new answer from this batch. Nothing measured changes.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 73" section.
+
 2026-09-18 linear takeoff: two clean-looking answers turned out not to be real building drawings at all, a brand new kind of trap worth remembering (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept checking never-before-touched drawings. One project's own
 promising scattered labels sat on pages with no readable scale
