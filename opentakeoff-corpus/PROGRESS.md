@@ -1,5 +1,36 @@
 ## Active work
 
+2026-09-18 linear takeoff: solved yesterday's mystery -- the drawing that "looked right but wouldn't trace" turned out to be a photo pretending to be a real drawing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Went back and actually figured out why that one drawing refused to
+cooperate last time, instead of leaving it as an open question.
+
+Checked exactly what data exists at the precise spot the pipe line
+sits on the page -- and there's nothing there. No real line data of
+any kind runs through that spot, despite the picture clearly showing a
+continuous pipe line. Then checked how much of the page is covered by
+an embedded photo/scan rather than real drawn lines: MORE than the
+entire page's own area is covered by embedded images.
+
+That answers it completely. This isn't a normal digital drawing with
+real lines a computer can trace -- it's a scanned picture of a drawing,
+with just the text labels and a few leader lines added back on top as
+real, separate data. The labels are real and readable, which is why
+the first pass looked so promising, but the actual pipe itself is just
+pixels in a picture, the same as a photograph -- nothing there for a
+line-tracing tool to follow, no matter how well it's aimed.
+
+This is a real, useful thing to have nailed down: it is a slightly
+different flavor of an already-known problem (drawings that are pure
+scanned pictures with nothing readable at all) -- this one has real,
+readable text sitting on top of a scanned picture instead, which is
+exactly what made it look tricky rather than obviously hopeless. Worth
+knowing the difference, for next time a drawing looks promising by its
+text but its embedded-picture coverage is suspiciously large.
+
+Measured: nothing added to the answer key; nothing in the tool
+changed -- this was purely running down the "why," not building
+anything. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 86" section.
+
 2026-09-18 linear takeoff: a good-looking drawing that just wouldn't cooperate -- a real miss worth writing down plainly (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked two more Montana State University renovation jobs. One reads
 mostly as an architectural set with just a couple of usable mechanical
