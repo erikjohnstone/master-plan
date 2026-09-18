@@ -1,5 +1,29 @@
 ## Active work
 
+2026-09-18 linear takeoff: an earlier set-aside candidate finally checked, and turned out to be following a pipe support stand, not the pipe itself (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Went back to a candidate found earlier today but never actually looked
+at closely -- a real plant-inspection building's own chilled-water
+supply-and-return pair, which had reproduced a stable, consistent
+length across many nearby starting points but was set aside for time
+reasons rather than checked properly.
+
+A close look this time showed the actual line being traced wasn't the
+real pipe at all: it ran along the base of two small pipe-support
+stands -- little pedestal brackets that hold real pipe up off the
+floor -- while the actual labeled supply and return lines sat higher
+up in the same drawing, each with its own clearly printed label and
+pointer line. The automatic size-and-system reading had simply grabbed
+the nearby printed label without the traced line actually being the
+pipe that label describes. Another specific new flavor of the same old
+mistake -- confidently reading something real and drawn, just not the
+right thing -- caught and set aside rather than kept.
+
+No golden from this one either. Recall, precision, and size accuracy
+are unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 66" section.
+
 2026-09-18 linear takeoff: a promising real candidate on a busy college mechanical room turned down after its own open question pointed to a background line, not a real pipe fitting (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Tried a fresh California college science building's own mechanical
 room drawing next. It carries dozens of real supply-and-return pipe
