@@ -1,5 +1,32 @@
 ## Active work
 
+2026-09-18 linear takeoff: a twelfth real self-reading answer lands, a thin flexible connector this time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked five more brand-new real projects. One sheet at a Michigan
+State University student-store renovation had a productive batch of
+already-readable round duct labels. An earlier candidate from a
+different project's dining-hall sheet only turned up tiny fragments
+under a foot long, not worth using -- an honest miss, moved on.
+
+Found one real, clean answer on the winning sheet: a 14-inch round
+flexible duct connector about four and a half feet long, drawn as a
+thinner single line than the main double-line ductwork nearby (the
+normal, real way flexible duct hookups get drawn), running from a
+fan coil unit's own discharge point through two gentle bends to a
+supply air diffuser. The diffuser's own printed schedule confirmed
+the same 14-inch size independently. Checked with a marked picture
+and the same strict double-check method as recent answers -- both
+matched exactly.
+
+A very similar-looking second candidate on a companion sheet in the
+same small project was found but deliberately set aside rather than
+also written up, to avoid two near-duplicate answers from one small
+project in the same sitting.
+
+This is the twelfth of these small real wins in a row. Checked
+everything the usual way: full benchmark re-run confirmed the new
+answer landed cleanly, and the complete test suite in both parts of
+the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: a sixth real labeling-format fix lands, plus an eleventh real answer it unlocked (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked five more brand-new real projects; most were weak this round
 (mostly architectural dimension numbers, not real mechanical size

@@ -1,0 +1,48 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf",
+  "source_pdf_sha256": "661b5308103229e25276e705fccc1f05df9887f80c492711eb57ed5de3c7a91f",
+  "sheet_id": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf#16",
+  "sheet_number": "M-400",
+  "page": 16,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (CP25028, MSU Union Sparty Store Renovations, Michigan State University), pulled from the corpus_2 GitHub Release during a seventh batch-survey pass (also covering 075_MT, 077_MT, 080_CA, 100_OH -- 077_MT's own M4.0 sheet was swept first but its round/rect labels only yielded trivially short 0.19-0.25 LF fragments, not pursued). Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.00 on this sheet, real vector CAD.\n\nThis project's own labeling convention prefixes equipment TAGS with `X-` throughout (`X-FCU-5`, `X-TU-10`, `X-SD`, `X-RG`) -- a real, existing-equipment naming convention distinct from a size-label prefix, and one that does not touch the bare `N\"ø` size callouts themselves, so no grammar change was needed here. A grid sweep of sixteen bare round-duct labels found a real, clean 4.68 LF `14\"ø` round duct: `size:{kind:round,d_in:14}`, confidence 0. A marked crop confirms it visually: a real thin flexible-duct connector (drawn single-line, thinner than the double-line main trunk visible elsewhere in the same crop, a normal convention for flex-duct takeoffs) running from a real fan coil unit's own discharge connection (X-FCU-5, fed by a `28\"x12\" SA` trunk) through two real elbows to a real supply diffuser connection (tagged X-SD, 300 CFM, `14\"ø` per its own schedule table printed directly beside it). Both stops are real: a `dead_end` at the FCU discharge, an `ambiguous` stop at the diffuser's own multi-candidate connection box. `resolveRunSegments` reproduces the identical three-segment path (2.23 + 0.33 + 2.12 = 4.68 LF) and a reseed `trace_run` using the exact `bench:linear`-style seed (`seedOnLongestSegment`, standard practice since Run 95) against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, and size exactly.\n\nA second, visually similar thin flex-duct candidate on the companion M-300 sheet (page 15, a `10\"ø` connector from a different diffuser tagged X-SD to a similar fan-coil-style symbol) was swept but not pursued further this pass, to avoid two very similar goldens from the same small project in one sitting.",
+  "scope": "A single real 14-inch round flexible-duct connector segment (4.68 LF) on the Sparty Store renovation project's own mechanical plan, sheet M-400, from a real fan coil unit's own discharge connection (X-FCU-5) through two real elbows to a real supply diffuser connection (X-SD, 300 CFM). Explicitly OUT OF SCOPE: the `28\"x12\" SA` trunk duct feeding the fan coil unit; the similar `10\"ø` flex-duct candidate noted in review_basis on the companion M-300 sheet, not authored; every other one of the real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 25-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "sparty-m400-sa-14in-flex",
+      "description": "14-inch round flexible-duct connector, from a real fan coil unit's discharge to a real supply diffuser connection.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.48456802370182267, 0.7185544198792727],
+        [0.47129196095547976, 0.7185544198792727],
+        [0.4693575906674074, 0.7185775654556902],
+        [0.45938814379811127, 0.7294328407954672]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 14 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 4.68,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 2.23, "size": { "kind": "round", "d_in": 14 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.33, "size": { "kind": "round", "d_in": 14 }, "size_src": "manual" },
+            { "i": 2, "lf": 2.12, "size": { "kind": "round", "d_in": 14 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:14": 4.68 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "round:14": 4.68
+  },
+  "total_lf_all_runs": 4.68
+}
