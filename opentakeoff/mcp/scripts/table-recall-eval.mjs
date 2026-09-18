@@ -70,8 +70,10 @@ if (singleJsonSetId) {
   let result;
   try { result = await evalSet(set); }
   catch (e) { result = { id: set.id, error: String(e.message || e) }; }
-  process.stdout.write(JSON.stringify(result));
-  process.exit(0);
+  // process.exit() right after a large stdout.write() can truncate the pipe
+  // write before it flushes (Node doesn't guarantee synchronous pipe writes
+  // the way it does for TTYs/files) — wait for the write's own callback.
+  process.stdout.write(JSON.stringify(result), () => process.exit(0));
 }
 
 const wanted = spec.sets.filter((s) => !only.length || only.includes(s.id));
