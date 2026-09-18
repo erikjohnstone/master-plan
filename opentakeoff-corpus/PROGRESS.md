@@ -1,5 +1,37 @@
 ## Active work
 
+2026-09-18 linear takeoff: closed out the shelved-fix question for good -- checked color and line thickness too, still no safe rule (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept pulling on yesterday's thread a little further before setting it
+down for real. Yesterday's check showed that plain distance doesn't
+tell a label's real pipe apart from a nearby wrong one. Today checked
+two more things that might have: whether the line is a different
+color, and whether it's drawn a different thickness.
+
+Neither one works either. Every real drawing checked draws its pipes
+in plain black or gray, no color-coding by system at all -- nothing to
+compare there. Line thickness does sometimes differ between the right
+pipe and the wrong one, but it differs in the SAME way for a case that
+was already known to work correctly, so a rule based on it would flag
+a good answer as suspicious right alongside the bad one.
+
+Also went back and confirmed the very first version of this problem
+(discovered two entries back, before the fix was even built) has the
+exact same shape: a real, different, nearby pipe stub, sitting close
+enough to be picked up, every single time -- not something special
+about the one bad case that came out of the shelved fix.
+
+This settles the question rather than just leaving it open: there
+isn't a cheap, safe way to tell these two situations apart using
+anything readily available (position, color, thickness). The one idea
+left that might actually work would need to check whether a label
+sits along the SAME connected stretch of drawing as the pipe, not just
+whether it's physically close to it -- a real, separate piece of
+engineering, not a quick fix, and not started.
+
+Measured: color, dash pattern, and line thickness read directly for
+the same drawings already checked yesterday. Nothing in the tool
+changed. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 81" section.
+
 2026-09-18 linear takeoff: broke down exactly where the slow-drawing time goes, and found the speed test itself has been reading a bit optimistic (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 One of the nine things this project measures is how long it takes to
 get a drawing ready to click on the first time -- meant to stay under
