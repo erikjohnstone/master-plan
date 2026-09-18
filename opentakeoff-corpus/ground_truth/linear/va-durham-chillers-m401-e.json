@@ -1,0 +1,43 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/va-durham-chillers-ahu.pdf",
+  "source_pdf_sha256": "8ca2b79d82a7b595c5ad3a7bcfcb64e829b96e20b963c5f507738b6fb3156274",
+  "sheet_id": "va-durham-chillers-ahu.pdf#16",
+  "sheet_number": "M-401",
+  "sheet_title": "MECHANICAL ENLARGED NEW WORK PLANS",
+  "page": 16,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Twentieth golden, a fifth candidate on the same rich VA Durham sheet M-401. Found via a grid sweep near a `3/4\" GLR` (glycol return) text anchor -- the sheet's own real label appears twice along the same drawn vertical line (once lower, once higher), the same repeated-label-on-one-line convention already seen on several prior goldens this session.\n\n`trace_run` reaches this dashed vertical line cleanly and reproducibly (16.49 LF, `bridged_dash_gap(18)` -- correctly bridging 18 real dash gaps along its length) with a real `dead_end` at the bottom (a real large connection/cleanout symbol, confirmed via marked crop) and a real `ambiguous` stop at the top (near where this line passes close to the header area of the already-used `EX 4\" HPS, EX 2\" CD, & EX 3\" MPS STACKED` run from `va-durham-chillers-m401.json` -- a real, disclosed proximity to other real linework on this dense sheet, not an isolated engine artifact). This file's own file-wide missing-PDF-layer-names cause applies here too -- a manual size override is used. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result.",
+  "scope": "A single real 3/4-inch existing glycol-return (GLR) pipe run (16.49 LF) on the same VA Durham 'Replace Chillers for AHU 1 & 2' project's own mechanical enlarged new-work plan, sheet M-401, from a real connection/cleanout symbol at the bottom to a real proximity-to-other-linework stop near a header at the top. Explicitly OUT OF SCOPE: whatever this line's own real continuation is past its top stop; every other run on this real 28-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "va-durham-m401e-glr-0.75in",
+      "description": "3/4-inch existing glycol-return (GLR) pipe run, from a real connection/cleanout symbol to a real stop near a header area.",
+      "system": "GLR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.493452380952381, 0.3789351851851852],
+        [0.493452380952381, 0.10412037037037038]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 16.49,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 16.49, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:0.75": 16.49 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:0.75": 16.49 },
+  "total_lf_all_runs": 16.49
+}

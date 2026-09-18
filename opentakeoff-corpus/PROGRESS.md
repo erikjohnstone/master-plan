@@ -1,5 +1,25 @@
 ## Active work
 
+2026-09-18 linear takeoff: twentieth new-corpus golden, a fifth candidate on the same sheet, development recall 31/37 -> 32/38, within 0.008 of the gate -- two cases away (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+A fifth candidate on the same rich VA Durham sheet, found via a grid
+sweep near a real text anchor whose own label repeats twice along one
+drawn line, the same convention already seen on several prior goldens.
+The traced dashed line reaches cleanly and reproducibly, correctly
+bridging 18 real dash gaps, with a real dead-end at one end (a large
+connection/cleanout symbol) and a real stop at the other where it
+passes close to an already-used stacked-pipe run's own header area --
+a real, disclosed proximity to other linework on this dense sheet.
+
+Development-tier recall: **31/37 (0.8378) -> 32/38 (0.8421)**, an
+exact length match. Precision ticks up further above the project's
+own gate threshold (0.9692 -> 0.9701). Recall is now within 0.008 of
+the project's own 0.85 gate -- just two more fully-reached cases away.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 44" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: nineteenth new-corpus golden, the most structurally complex real capture this session, development recall 30/36 -> 31/37, within 0.012 of the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Caught a real engine false positive before it became a wrong golden:
 a pipe label's own leader arrow (the thin annotation line connecting
