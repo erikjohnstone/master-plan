@@ -1,0 +1,43 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/va-durham-chillers-ahu.pdf",
+  "source_pdf_sha256": "8ca2b79d82a7b595c5ad3a7bcfcb64e829b96e20b963c5f507738b6fb3156274",
+  "sheet_id": "va-durham-chillers-ahu.pdf#16",
+  "sheet_number": "M-401",
+  "sheet_title": "MECHANICAL ENLARGED NEW WORK PLANS",
+  "page": 16,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Eighteenth golden, a third and much simpler candidate on the same VA Durham sheet M-401 that already yielded two triple-stacked-pipe goldens -- this one a single, unstacked system, found via the same sheet's own full text scan turning up a `4\" GLR` (glycol return) callout in a completely different area (a glycol pump bank elsewhere on the sheet). A render crop shows a real, simple 4-inch glycol-return vertical riser: from a real butterfly-valve connection at the top (the sheet's own printed 'BUTTERFLY VALVE EACH PUMP' note, with a leader pointing directly at the real valve symbol) straight down to a real pump connection at the bottom (a drawn pump symbol) -- no stacking, no crowded parallel-line ambiguity, the cleanest single-line candidate on this sheet.\n\n`trace_run` reaches this riser cleanly (9.33 LF, matching the visible span) with a real `branch_joins_main` stop at the top (a new stop-reason category for this session's own corpus, genuinely appropriate here -- the valve is where this riser branches off the header main serving each pump) and a real `ambiguous` stop at the bottom (the pump connection, a genuine multi-directional real fitting). Both endpoints confirmed via marked render crop sitting exactly on the drawn valve and pump symbols. This file's own file-wide missing-PDF-layer-names cause (already established by this project's own first two goldens) applies here too -- a manual size override is used, per that same precedent. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result.",
+  "scope": "A single real 4-inch existing glycol-return (GLR) pipe riser (9.33 LF) on the same VA Durham 'Replace Chillers for AHU 1 & 2' project's own mechanical enlarged new-work plan, sheet M-401, from a real butterfly-valve branch connection to a real pump connection. Explicitly OUT OF SCOPE: the header main the valve branches from; the pump's own other connections past the bottom fork; every other GLR/CW/CHWS/CHWR instance elsewhere on this same rich sheet (several more real candidates remain, not yet attempted); every other run on this real 28-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "va-durham-m401c-glr-4in",
+      "description": "4-inch existing glycol-return (GLR) pipe riser, from a real butterfly-valve branch connection to a real pump connection.",
+      "system": "GLR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.3261078042328042, 0.5558333333333333],
+        [0.3261078042328042, 0.7113425925925926]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 4 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 9.33,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 9.33, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:4": 9.33 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:4": 9.33 },
+  "total_lf_all_runs": 9.33
+}

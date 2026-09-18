@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-18 linear takeoff: eighteenth new-corpus golden, a simple single-system riser, development recall 29/35 -> 30/36, within 0.017 of the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Tried and set aside two more candidates on the same rich VA Durham
+sheet first: a domestic cold water line that fragmented into several
+short, inconsistent pieces across a dozen seeds (the same kind of
+solid-line vector-continuity gap already seen once before); a glycol
+return candidate that landed a real, clean dead-end at one end, but
+whose other stop sits right where a decorative compass symbol and an
+unrelated reference line cross the pipe -- not confidently a real
+fork, set aside rather than risk a wrong boundary.
+
+The one that landed: a real, simple 4-inch glycol-return riser
+elsewhere on the same sheet -- no stacking, no crowded parallel lines,
+from a real butterfly-valve connection at the top to a real pump
+connection at the bottom. The trace reaches it with a stop reason not
+seen anywhere else in this session's own corpus (a "branch joins main"
+stop right at the valve, genuinely appropriate here) and a real fork
+at the pump connection, both confirmed via marked crop.
+
+Development-tier recall: **29/35 (0.8286) -> 30/36 (0.8333)**, an
+exact length match. Precision ticks up further above the project's
+own gate threshold (0.9676 -> 0.9682). Recall is now within 0.017 of
+the project's own 0.85 gate.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 42" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: seventeenth new-corpus golden (three runs), a second instance of the same triple-stacked pipe shape, development recall 26/32 -> 29/35, within 0.02 of the gate (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked the same VA Durham sheet's own text for a second "STACKED"
 callout rather than assuming the first instance found was the only
