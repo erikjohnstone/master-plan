@@ -1,5 +1,32 @@
 ## Active work
 
+2026-09-18 linear takeoff: timed exactly where the slowest remaining drawing's own build time goes, confirming there's no easy further speed-up left there (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Earlier work fixed the one runaway cost that made a handful of
+drawings take minutes instead of well under a second to get ready.
+What's left is a much smaller gap on the single slowest remaining
+drawing, which still runs a bit over the target time. Rather than
+guess at where that remaining time goes, timed each of the three real
+steps involved separately on that exact drawing.
+
+Just over half of it turned out to be the underlying PDF-reading
+library's own one-time cost to parse the page's raw drawing
+instructions -- work this project doesn't own and can't change. Most
+of the rest is this project's own single pass turning those
+instructions into usable line-and-point data, a large, careful piece
+of shared code already read closely earlier and left alone on
+purpose, since it's also used by a completely different feature and
+changing it carries real risk of breaking that other feature instead.
+A small last step (organizing points into a quick-lookup grid) is
+plainly fine, doing simple, bounded, non-repeating work.
+
+No further easy win found. This confirms, with real timing numbers
+this time rather than a guess, that closing this last small gap
+would mean touching code well outside what's safe to change here --
+not something to attempt.
+
+Measured: no bench numbers changed, nothing rewritten.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 68" section.
+
 2026-09-18 linear takeoff: two more candidates from an already-productive building tried and both turned down, each mislabeled in a different way (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Went back to the same finance-center renovation building that gave up
 a real answer earlier today, since its drawing carries well over a
