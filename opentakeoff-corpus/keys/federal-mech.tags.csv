@@ -1,0 +1,110 @@
+sheet,tag,role,in_table,note
+federal-attachment4-mechanical.pdf#6,FCU-1,plan,false,"Fan coil unit box symbol in Vestibule 100. Exact match in textSpans at x0=2182.8,y0=830.9. Unique instance."
+federal-attachment4-mechanical.pdf#6,FTR-1,plan,false,"Fin-tube radiator, leader label on curved wall run in Central Park. Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,FTR-1B,plan,false,"Fin-tube radiator segment, leader label on curved wall near Check-In Kiosk. Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,FTR-2,plan,false,"Fin-tube radiator, leader label on curved wall run. Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,FTR-2B,plan,false,"Fin-tube radiator segment, leader label near NICoE Dir. office. Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,CP-1,plan,false,Small equipment box (condensate pump) near EQPT STOR 324/CP-1 area. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,CP-2,plan,false,Equipment box near Trans-Cranial Magnetic Stim room. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,CP-3,plan,false,"Equipment box in Comm 211 area, visually confirmed as a drawn rectangle symbol (see crop-mech-room.png). Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,CP-4,plan,false,"Equipment box in Elec 114 area, visually confirmed as a drawn rectangle symbol. Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,CP-5,plan,false,Equipment box near Storage/Kiln 338.1. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,CP-6,plan,false,Equipment box near Storage/Kiln 338.1. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,EV-1,plan,false,Equipment box near CP-1/EQPT STOR 324. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,EV-2,plan,false,Equipment box near CP-2. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,EV-3,plan,false,"Rectangular equipment box in Comm 211, visually confirmed (see crop-mech-room.png, labeled with leader/adjacent box). Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,EV-4,plan,false,"Rectangular equipment box in Elec 114, visually confirmed with leader line from M216 keynote circle to the EV-4 box (see crop-mech-room.png). Matches textSpans exactly. Unique instance."
+federal-attachment4-mechanical.pdf#6,EV-5,plan,false,Equipment box near CP-5/CP-6. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,EV-6,plan,false,Equipment box near CP-6/Storage-Kiln. Matches textSpans exactly. Unique instance.
+federal-attachment4-mechanical.pdf#6,CH-1,plan,false,"Chiller, drawn in the small 'UTILITY YARD' inset plan (view 2, bottom of sheet) as a rectangle box, leader to label. Visually confirmed via crop-utility-yard.png. Matches textSpans exactly. Unique instance. Sheet is a plan for both view 1 (Ground Floor) and view 2 (Utility Yard), both are true plan views."
+federal-attachment4-mechanical.pdf#6,VAV-1,plan,false,VAV box symbol near Music Therapy 312. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-2,plan,false,VAV box symbol near Corridor 342/Exam. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-3,plan,false,VAV box symbol near Pain MD 316. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-4,plan,false,VAV box symbol near BH/SW Providers 327. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-5,plan,false,VAV box symbol near Space C203/Public Waiting area. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-6,plan,false,VAV box symbol near BH/SW Provider 329. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-7,plan,false,VAV box symbol near Music Therapy 312. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-8,plan,false,VAV box symbol near Case Mgmt 311. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-9,plan,false,VAV box symbol near Neurologist 309. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-10,plan,false,VAV box symbol near PC MD/PAT TLT 313. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-11,plan,false,VAV box symbol near Corridor C300. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-12,plan,false,VAV box symbol near Corridor C300. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-13,plan,false,VAV box symbol near Chaplin 301/Space C203. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-14,plan,false,VAV box symbol near Corridor 348/347. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-15,plan,false,VAV box symbol near Staff Tlt 318. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-16,plan,false,VAV box symbol near Corridor 345/Gait Obs Lane. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-17,plan,false,VAV box symbol near Exam 345. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-18,plan,false,VAV box symbol near Corridor-1 342/Brain Lab. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-19,plan,false,VAV box symbol near Treatment IPMC 322. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-20,plan,false,VAV box symbol near Bio Neurofeedback 323. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-21,plan,false,VAV box symbol near Corr-2. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-22,plan,false,VAV box symbol near Corr-2. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-23,plan,false,VAV box symbol near Corr-1 340. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-24,plan,false,VAV box symbol near BH/SW Providers 326. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-25,plan,false,VAV box symbol near Comm 324/Trans-Cranial. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-26,plan,false,VAV box symbol near BH/SW Providers 326/Corr. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-27,plan,false,VAV box symbol near Corr 330. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-28,plan,false,"VAV box symbol; NOTE: literal string 'VAV-28' appears TWICE in textSpans at two different x/y locations (x0=1881.8,y0=3579.1 and x0=2405,y0=3579.1) near Alcove/Storage and Art and Clay Therapy 338 -- appears to be the same tag duplicated on two separate physical VAV box symbols on the sheet (possible drafting duplication/error, or a legitimate case of two units sharing a callout). Listed once as the distinct tag string per instructions, but flagging the double physical occurrence as unusual."
+federal-attachment4-mechanical.pdf#6,VAV-29,plan,false,VAV box symbol near Pat Tlt 340/Case Mgmt 339. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-30,plan,false,VAV box symbol near Chaplin 301/Public Waiting. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-31,plan,false,VAV box symbol near Acupuncture-1 341.1-1. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-32,plan,false,VAV box symbol near Gait Obs Lane 204. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-33,plan,false,VAV box symbol near Public Waiting C101. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-34,plan,false,VAV box symbol near Dayroom 105. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-35,plan,false,VAV box symbol near Corridor/Central Park area. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-36,plan,false,"VAV box symbol near Classroom 103, visually confirmed with box glyph and leader-adjacent pipe run (see crop-fcu1.png). Matches textSpans exactly."
+federal-attachment4-mechanical.pdf#6,VAV-37,plan,false,"VAV box symbol near Classroom 103.1, visually confirmed with box glyph (see crop-fcu1.png). Matches textSpans exactly."
+federal-attachment4-mechanical.pdf#6,VAV-38,plan,false,VAV box symbol near Classroom 103.1/Dir. Clinical Services. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-39,plan,false,VAV box symbol near NCOIC/Admin 109.1. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-40,plan,false,VAV box symbol near NCOIC/Admin 109.1. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-41,plan,false,VAV box symbol near NICoE Dir. 112. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-42,plan,false,VAV box symbol near Corr C102. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-43,plan,false,VAV box symbol near Female Toilet 107/Comm 211. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-44,plan,false,VAV box symbol near Speech Therapy 214/Daily Living Skills. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-45,plan,false,VAV box symbol near Male Toilet 108/House Keeping. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-46,plan,false,VAV box symbol near Male Toilet/Corridor. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-47,plan,false,VAV box symbol near Changing/Locker (M) 218. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-48,plan,false,VAV box symbol near Corr C201/Reception. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-49,plan,false,VAV box symbol near Corr C200/Multi-Station Treatment 217. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-50,plan,false,VAV box symbol near OT O/E 213/Corridor. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-51,plan,false,VAV box symbol near OT O/E 208. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-52,plan,false,VAV box symbol near Speech Therapy 210/Comm. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-53,plan,false,VAV box symbol near Trazer/FATS 209. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-54,plan,false,VAV box symbol near Gait Obs Lane 204. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#6,VAV-55,plan,false,VAV box symbol near PT Gym-2/PT Gym-1 area. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-56,plan,false,VAV box symbol near Storage/Alcove 200.1. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-57,plan,false,VAV box symbol near BH/SW Provider 329. Confirmed vs textSpans.
+federal-attachment4-mechanical.pdf#6,VAV-58,plan,false,VAV box symbol near Brain Lab 342/Corr-2 C306-2. Visually confirmed (crop-vav-sample.png). Matches textSpans exactly.
+federal-attachment4-mechanical.pdf#7,ET-1,plan,false,"Expansion tank, circular symbol. Drawn once in the duct-plan view (textSpans x0=1122.2,y0=1364.2) and once in the piping-plan view (x0=3317.3,y0=1391.8) — same physical unit shown in both enlarged views of the mechanical room. Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,ET-2,plan,false,"Expansion tank, circular symbol, adjacent to ET-1. Occurs in both views (x0=1025.3,y0=1364.2 and x0=3223.7,y0=1390.1). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,AS-1,plan,false,"Air separator symbol (circle with small valve glyph) near the 500-gal chilled water buffer tank. Occurs in both views (x0=1195.9,y0=1284.2 and x0=3403,y0=1295.8). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,AS-2,plan,false,"Second air separator, lower in the mechanical room near B-1/B-2. Occurs in both views (x0=1340.9,y0=2093.5 and x0=3424.1,y0=2078.2). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,CWP-1,plan,false,"Chilled water pump symbol (inline pump glyph with valves). Occurs in both views (x0=860.9,y0=1650.5 and x0=3253.4,y0=1687.4). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,CWP-2,plan,false,"Chilled water pump, stacked above CWP-1. Occurs in both views (x0=842.6,y0=1539.6 and x0=3235.2,y0=1577). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,HWP-1,plan,false,"Hot water pump symbol. Occurs in both views (x0=852.2,y0=1857.6 and x0=3244.8,y0=1904.6). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,HWP-2,plan,false,"Hot water pump, stacked above HWP-1. Occurs in both views (x0=852.2,y0=1764.7 and x0=3244.8,y0=1802.6). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,HWRP-1,plan,false,"Hot water return/recirculation pump, small inline pump glyph near the AHU. Only one instance found (no HWRP-2). Occurs in both views (x0=1476.7,y0=2005.9 and x0=3644.6,y0=1904.6). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,B-1,plan,false,"Boiler, square equipment box with valve glyph. Occurs in both views (x0=1175,y0=2154.7 and x0=3383,y0=2154.5). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,B-2,plan,false,"Boiler, below B-1. Occurs in both views (x0=1175,y0=2347.4 and x0=3383,y0=2346.5). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,UH-1,plan,false,"Unit heater, diamond/hatched fan glyph near ceiling duct, upper right of room. Occurs in both views (x0=1824,y0=1207.7 and x0=4103,y0=1186.8). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,UH-2,plan,false,"Second unit heater, lower right of room near relief-air duct riser. Occurs in both views (x0=1864.8,y0=2795.5 and x0=4051,y0=2795.5). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,AHU-1,plan,false,"Air handling unit, large multi-section equipment footprint (coils/fans drawn in detail). Occurs in both views (x0=1932.2,y0=2494.3 and x0=3919.9,y0=2506.6). Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,DWH-1,plan,false,"Domestic water heater, circular tank symbol with PVC exhaust note. Only appears in the duct-plan (left) view (x0=1159.2,y0=2511.6); not separately labeled in the piping-plan view although the same tank footprint is visible there. Exact textSpans match."
+federal-attachment4-mechanical.pdf#7,S-1,plan,false,"Leader-labeled tag pointing to the edge of a hatched screen/enclosure that surrounds the CWP-1/CWP-2/HWP-1/HWP-2 pump bank (duct-plan view only, x0=952.8,y0=1714.3). Likely a sound/vibration screen or partition rather than a pump itself — visual leader clearly points at the hatch boundary, not at any single pump glyph. Exact textSpans match; only one occurrence found (piping-plan view does not repeat this label)."
+federal-attachment4-mechanical.pdf#7,S-2,plan,false,"Same type of leader-labeled tag as S-1, pointing to a second hatched screen/enclosure area near the AHU intake louvers (duct-plan view only, x0=1500,y0=2275.2). Exact textSpans match; only one occurrence found."
+federal-attachment4-mechanical.pdf#5,EF-1,plan,false,"Exhaust fan symbol (circle with fan blade glyph) at grid ~D.7/6.4 area. Exact textSpans match ""EF-1"" at x0=1904.4,y0=3171.6. Unique instance mark."
+federal-attachment4-mechanical.pdf#5,EF-2,plan,false,"Exhaust fan symbol near grid B/8. Exact textSpans match ""EF-2"" at x0=1066.3,y0=2087.8. Unique instance mark."
+federal-attachment4-mechanical.pdf#5,EF-3,plan,false,"Exhaust fan symbol near grid A.9/4.5. Exact textSpans match ""EF-3"" at x0=2838.7,y0=1543. Unique instance mark."
+federal-attachment4-mechanical.pdf#5,EF-4,plan,false,"Exhaust fan symbol near boiler intake/exhaust area, grid B2/2.8. Exact textSpans match ""EF-4"" at x0=4022.6,y0=2104.6. Unique instance mark."
+federal-attachment4-mechanical.pdf#5,CU-1,plan,false,"Air-cooled condensing unit symbol (H-shaped glyph), leftmost of a group of four near grid E/8.6-8.3. Exact textSpans match ""CU-1"" at x0=960,y0=3146.6. Unique instance mark (schedule-type but each numbered unit is a distinct physical unit)."
+federal-attachment4-mechanical.pdf#5,CU-2,plan,false,"Condensing unit symbol adjacent to CU-1. Exact textSpans match ""CU-2"" at x0=1068,y0=3146.6."
+federal-attachment4-mechanical.pdf#5,CU-3,plan,false,"Condensing unit symbol near grid A.9/4.5, next to EF-3. Exact textSpans match ""CU-3"" at x0=3768,y0=1552.3."
+federal-attachment4-mechanical.pdf#5,CU-4,plan,false,"Condensing unit symbol adjacent to CU-3. Exact textSpans match ""CU-4"" at x0=3898.3,y0=1552.3."
+federal-attachment4-mechanical.pdf#5,CU-5,plan,false,"Condensing unit symbol near grid E/6.8-6.4, rightmost of a pair. Exact textSpans match ""CU-5"" at x0=2076,y0=3149.8."
+federal-attachment4-mechanical.pdf#5,CU-6,plan,false,"Condensing unit symbol adjacent to CU-5, near EF-1. Exact textSpans match ""CU-6"" at x0=1981.9,y0=3149.8."
+federal-attachment4-mechanical.pdf#5,ALP-1,plan,false,"Architectural louvered penthouse roof opening, drawn as a box with dashed 54""x32"" duct callout inside it, near grid B2/2.8-B. Exact textSpans match ""ALP-1"" at x0=4337.8,y0=2131. Unique instance mark."
+federal-attachment4-mechanical.pdf#5,ALP-2,plan,false,"Second architectural louvered penthouse opening box, with dashed 54""x30"" duct callout, directly above ALP-1. Exact textSpans match ""ALP-2"" at x0=4345.9,y0=1787."
+federal-attachment4-mechanical.pdf#5,ALP-3,plan,false,"Third, smaller architectural louvered penthouse opening (square box with X, near grid A.2), separate from ALP-1/ALP-2. Exact textSpans match ""ALP-3"" at x0=4196.9,y0=1314."
+federal-attachment4-mechanical.pdf#5,B2,plan,false,"NOT an equipment tag — this is a column/grid-line label at the far left margin (x0=401.3, same x-column as the plain grid letters A/A.2/A.7/A.9/B/C/D/D.7/E/E.8/F which all sit around x0=387-408). Deliberately excluded from the tag list; flagged here because the pipeline's unverified output apparently misidentified this grid label as an equipment tag — a likely false positive worth root-causing."
+federal-attachment4-mechanical.pdf#5,M214,plan,false,"NOT an equipment tag — keynote/detail-bubble circle referencing the Keyed Notes table (M214 = 'PROVIDE EXHAUST FAN WITH MOTORIZED CONTROL DAMPER...'). Appears multiple times pointing at each EF-x fan. Excluded per instructions; listed here only as a note, not counted as a distinct tag."
+federal-attachment4-mechanical.pdf#5,M221/M228/M229/M239,plan,false,"NOT equipment tags — keynote bubbles referencing Keyed Notes table rows (duct routing, seismic penthouse install, boiler flue clearance, roof curb). Excluded per instructions."
