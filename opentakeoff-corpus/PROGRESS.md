@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-18 linear takeoff: a good-looking drawing that just wouldn't cooperate -- a real miss worth writing down plainly (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked two more Montana State University renovation jobs. One reads
+mostly as an architectural set with just a couple of usable mechanical
+sheets, not chased further today. The other looked genuinely
+promising: a lab renovation with a clean, real pair of labeled chilled
+water pipes running side by side down to a heat pump, and a separate
+sheet with several real labeled duct sizes too.
+
+Neither one actually worked out, for an honest, slightly unusual
+reason. Zoomed in carefully, found exactly where the two pipe lines
+sit on the page, and a check-mark picture confirmed the guess landed
+right on top of both lines by eye. But when actually asked to trace
+from those same exact spots, the tool either refused outright or only
+found tiny few-foot fragments near a cluttered equipment area, not the
+long clean run visible in the picture. The duct sheet had the same
+problem. Didn't dig into exactly why today -- flagged, not chased,
+since one candidate on a low-key pass isn't the place to root-cause a
+new mismatch between what a picture shows and what the tool's own
+index finds there.
+
+This is a different kind of miss than the usual "the stop point looks
+fake" rejections -- here the visual read looked right the whole way
+through, and the tool itself just didn't cooperate. Worth being just
+as honest about this kind as about the others.
+
+Measured: nothing added to the answer key; nothing in the tool
+touched. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 85" section.
+
 2026-09-18 linear takeoff: two more fresh drawings checked, both honest misses this time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept the same search going after yesterday's good find. Checked two
 more genuinely new real projects, and came up empty on both, for two
