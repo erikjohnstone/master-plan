@@ -44,14 +44,38 @@
 # (see ground_truth/linear/itd-d1-lab-m1-1-heldout.json),
 # navfac-cherry-point-atc-mechanical.pdf#6 (see ground_truth/linear/navfac-mh101-heldout.json),
 # and baker-county-eoc-bidset.pdf#38 (see ground_truth/linear/baker-m101-heldout.json).
+# Also authored (2026-09-18): bldg5406-hvac-demo-mechanical.pdf#14 (P-101,
+# see ground_truth/linear/bldg5406-p101-heldout.json, LINEAR-TRACE-EVAL.md
+# Run 61 -- unblocked by Run 60's own chase()/nearDark() fix) and
+# navfac-cherry-point-atc-mechanical.pdf#18 (MP101, see
+# ground_truth/linear/navfac-mp101-heldout.json, Run 78 -- the two prior
+# failed attempts described below are superseded, kept here as history of
+# why it took a second real pass to land).
 #
-# navfac-cherry-point-atc-mechanical.pdf#18 (MP101) was ATTEMPTED, not
-# authored: one seed near a real "2\"o HHWR" label ran away to 11,809 LF (a
+# navfac-cherry-point-atc-mechanical.pdf#18 (MP101) was originally ATTEMPTED,
+# not authored: one seed near a real "2\"o HHWR" label ran away to 11,809 LF (a
 # fully-looped hydronic distribution network -- not a fair single-call
 # target); a second seed's own "dead_end" calls looked premature against a
 # real duct line that visibly continues past both marked stops in a render
 # crop. Neither was trustworthy enough to author as ground truth; set aside
-# rather than forced, per this corpus's own repeated discipline.
+# rather than forced, per this corpus's own repeated discipline. Revisited
+# and authored successfully in Run 78 (see above) once a broader scan aware
+# of this sheet's own diameter-symbol callout format (labels like
+# `1 1/2"o HHWS`, with the diameter symbol between the inch mark and the
+# system token -- a format the standard combined-token regex had never
+# matched) surfaced a clean,
+# fully-verified 2" CHWR candidate distinct from four further pathological
+# candidates rejected in the same pass (a hatching mistrace, a leader-dot
+# artifact, and a CHWS/CHWR crosstalk pair).
+#
+# bldg5406-hvac-demo-mechanical.pdf#2 (M-101) was re-checked directly via a
+# text-anchored scan (LINEAR-TRACE-EVAL.md Run 75, from the already-committed
+# raw file) after becoming tractable (Run 60): no further real, size-bound
+# callout exists on this sheet beyond the one candidate Run 62 already tried
+# and rejected. This sheet stays permanently unauthored, a confirmed limit,
+# not an open item -- see Run 75's own writeup for the full negative result.
+# With this and navfac-mp101 both landed, the held-out tier sits at 6 of this
+# file's own 7 declared sheets, its ceiling for this frozen split.
 #
 # bldg5406-hvac-demo-mechanical.pdf#2 (AC-1 -- sheetInfo's own sheet_number
 # reads "AC-1", not "M-101" as this file's own parenthetical names it; the

@@ -1,5 +1,55 @@
 ## Active work
 
+2026-09-18 linear takeoff: the last stuck held-out drawing finally got a real, verified answer (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+One drawing from this project's own frozen "answer key" set had been
+tried twice before and set aside both times -- once because the
+computer's guess ran wildly too far (nearly two miles of pipe on what
+should have been a short answer), once because its stopping point
+looked premature next to a line that clearly kept going. Went back to
+it today instead of leaving it stuck indefinitely.
+
+The first re-scan of this drawing's own text turned up almost nothing
+-- suspiciously little for how busy the sheet actually is. The reason:
+this particular sheet writes its pipe callouts with a small diameter
+symbol sitting in an unusual spot in the label, a format the scanning
+pattern used everywhere else on this project had never accounted for.
+A broader scan without that narrow assumption immediately turned up
+many more real candidates.
+
+Four of those were tried and thrown out first, each for a reason
+already seen elsewhere on this project: one kept reading a dense
+cross-hatched patch as several hundred feet of straight pipe; one
+landed exactly on a label's own tiny arrow-tip mark rather than real
+pipe ink; and two read two side-by-side pipes' labels backwards from
+each other, a known confusion between two parallel lines running
+close together.
+
+The one that worked was checked hard before being trusted: a close-up
+photo-style crop showed two separate arrows, at two different heights,
+each landing on its own separate parallel line -- confirming the
+computer had picked the right one of the two, not guessed. Both of its
+stopping points landed on real, visible features too: one end sits
+exactly where the pipe crosses a much thicker riser pipe, the other
+sits exactly where the drawn line ends at a wall. Re-running the exact
+same click against the original file reproduced the identical answer.
+
+Added it to the answer key. The held-out set -- the drawings held back
+specifically to check whether the tool's numbers hold up on sheets it
+was never tuned against -- grows from five cases to six, the most it
+can reach on this particular frozen list (the one remaining stuck
+sheet was already separately confirmed to have nothing further worth
+adding). The size-accuracy gap between the held-back set and the
+main working set, one of the harder numbers this project tracks,
+narrows again: from about 14 points to about 6 -- still not fully
+closed, but the closest it has ever measured, across three real
+successive drawings added one at a time, not one lucky guess.
+
+Measured: the full check passes; the answer numbers for every
+drawing this project already had a verified answer for come back
+completely unchanged; only the new drawing's own row, and the summary
+numbers that include it, moved. `docs/LINEAR-TRACE-EVAL.md` gained a
+"Run 78" section.
+
 2026-09-18 linear takeoff: actually built the bigger fix from last entry, measured it honestly, and turned it down once the real numbers showed a cost not worth paying (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Last entry named a real, bigger problem but deliberately didn't try to
 fix it, given a real risk of making things worse in a different way.

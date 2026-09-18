@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf",
+  "source_pdf_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#18",
+  "sheet_number": "MP101",
+  "sheet_title": null,
+  "page": 18,
+  "tier": "held_out",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "navfac-cherry-point-atc-mechanical--rry-point-atc-mechanical-p18--full.png",
+    "hash": "29cb287315de1764df6b9b19066394f889e87bbd02621adc493252603c5bdb62"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 held-out-tier authoring pass, 6th entry -- the last tractable sheet in reports/LINEAR_HELDOUT.txt's frozen split; that file's own sibling bldg5406-hvac-demo-mechanical.pdf#2 (M-101) is confirmed exhausted and stays unauthored)",
+  "date": "2026-09-18",
+  "review_basis": "navfac-cherry-point-atc-mechanical.pdf#18 (MP101) is the second navfac coordinator pick named in reports/LINEAR_HELDOUT.txt, and that file's own text records it as ATTEMPTED, NOT AUTHORED: one earlier seed near a real '2\"ø HHWR' label ran away to 11,809 LF across a fully-looped hydronic network (not a fair single-call target), and a second seed's own dead_end calls looked premature against a duct line that visibly continued past both marked stops. Neither was trustworthy, so the sheet was set aside rather than forced.\n\nRevisiting it this pass, the first text-anchor scan (the same combined `\\d+\"?\\s*(SYS)` pattern used successfully elsewhere in this corpus) found only 2 hits across this sheet's own 390 text spans -- implausibly few for a sheet this dense (61,641 segments at cold build). The cause: this sheet formats many of its own real size+system callouts as e.g. '1 1/2\"ø HHWS' and '2\"ø CHWR', with a literal ø (diameter symbol) glyph sitting between the inch mark and the system token -- a format the strict regex never accounted for. A broader, ø-aware scan without that combined-token constraint surfaced many more real candidates that the first pass had silently missed.\n\nFour candidates from that broader sweep were tried and rejected before this one, each a previously-established rejection pathology, not a new failure mode: (1) seeds near a '1 1/2\"ø HHWR' label at [2739.1,1432.8] repeatedly produced ~401 LF traces with cap/cap stops and 134 vertices -- the corpus's own recognized hatching-mistrace signature (a dense hatched area read as one long run), not real pipe ink; (2) a seed at [2739.1,1372.8] produced a 4 LF, round:2, CHWR trace (dead_end/dead_end at [2740.1,1362.7] and [2812.1,1362.7]) that a marked crop confirmed sits exactly on a label's own tiny leader-dot/tick-mark artifact, not drawn pipe; (3) and (4) seeds near stacked '2.5\"ø CHWS'/'2.5\"ø CHWR' labels at [1961.5,1792.8] and [1966.8,1824] both produced ~44.8 LF traces with systems read backwards from their own seed label (CHWS seed reading CHWR, and vice versa) and ambiguous/ambiguous stops -- the corpus's own recognized system-crosstalk pattern between two closely-parallel real pipes, genuinely undecidable at this zoom, not a safe golden.\n\nThe candidate actually used (seed [2741.2,1779.2], 12.53 LF, round:2 CHWR, dead_end/dead_end) was confirmed through both a wide marked crop and two very tight per-endpoint crops (session.viewSheet at 15x zoom, ring marks at each raw endpoint): the traced span is the LOWER of two closely-parallel horizontal double-stroke pipe lines. A tight zoom at the label leader junction shows two separate arrowheads terminating at two different heights on these two distinct strokes -- the upper arrowhead (from a '2\"ø CHWS' label) lands on the UPPER stroke, and the lower arrowhead (from a '2\"ø CHWR' label) lands on the SAME LOWER stroke the trace's own two rings sit on -- confirming the automatic 'beside' CHWR/round:2 bind against a real, visually distinguishable sibling line, not the crosstalk pattern rejected above. The two dead_end stops are each a genuine drawn feature, not narrative or arbitrary cuts: the backward (west) stop at [2689.9,1777.9] sits exactly where this horizontal run crosses a real, much-thicker vertical riser pipe (a genuine T/cross junction, confirmed at 15x zoom -- the horizontal line's own segment continuity breaks against the wider perpendicular stroke, not against empty space); the forward (east) stop at [2915.5,1777.9] sits exactly where the same stroke caps against a real dashed vertical partition/wall line bordering room 136 (KITCHEN/BREAK, visible in the wider crop) -- the pipe's own ink genuinely ends there, it does not fade out or run off-render. A reseed from the exact same seed coordinate against the freshly re-loaded, already-committed raw PDF reproduced the identical points, length, size, and system read.",
+  "scope": "The second and final navfac coordinator pick named in reports/LINEAR_HELDOUT.txt's frozen split (the sibling pick, navfac-cherry-point-atc-mechanical.pdf#6/MH101, is already authored as ground_truth/linear/navfac-mh101-heldout.json). This run is a single 2\" round CHWR (chilled water return) pipe segment (12.53 LF) on a dense mechanical piping plan, from a real T-junction against a vertical riser main to a real cap at a wall/partition line near room 136. Explicitly OUT OF SCOPE: the four rejected candidates described in review_basis (a hatching-mistrace loop, a leader-artifact mistrace, and two CHWS/CHWR system-crosstalk ambiguous-stop pairs -- none usable as ground truth); the parallel 2\" CHWS line running directly beside this run; the vertical riser main this run T's into; the '1 1/2\"ø HHWS/R' and '3/4\"ø CHWS/R' up-riser callouts referenced on this same sheet ('...UP TO FLOOR ABOVE. SEE MP104 FOR CONTINUATION' -- a different sheet, out of this corpus's scope entirely); every other duct and pipe run on this same dense sheet; bldg5406-hvac-demo-mechanical.pdf#2 (M-101), the one remaining held-out sheet in this file's own frozen list that stays permanently unauthored (confirmed exhausted).",
+  "runs": [
+    {
+      "run_id": "navfac-mp101-chwr-riser-to-wall",
+      "description": "2\" round CHWR (chilled water return) pipe segment, from a real T-junction against a vertical riser main to a real cap at a wall/partition line near room 136 (KITCHEN/BREAK).",
+      "system": "CHWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5494076797385621, 0.5612058080808081],
+        [0.5954861111111112, 0.5612058080808081]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 2 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 12.53,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 12.53, "size": { "kind": "round", "d_in": 2 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:2": 12.53 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "round:2": 12.53
+  },
+  "total_lf_all_runs": 12.53
+}
