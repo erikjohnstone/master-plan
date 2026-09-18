@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-18 linear takeoff: fourteenth new-corpus golden, a third sheet on the same NAVFAC project, development recall 20/26 -> 21/27 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+A third sheet mined from the same 75-sheet NAVFAC Cherry Point ATC
+Tower project (development goldens now on two different sheets, a
+held-out golden on a third). A render crop near an exhaust fan showed
+a real, clean 6-inch round exhaust-air duct connector: a diagonal
+segment from a real elbow at the fan's own connection down to a
+second real elbow turning toward another branch. Both ends confirmed
+via marked crop as genuine fittings, not engine misreads.
+
+This candidate's own stroke classification came back partially better
+than every other candidate tried on this file so far (a real prior
+grade instead of flat unclassified), though the file's own file-wide
+missing-layer-names cause still blocked an automatic size bind -- a
+manual override was used, following the same precedent already set
+for this exact project.
+
+Development-tier recall: **20/26 (0.7692) -> 21/27 (0.7778)**, an
+exact length match. Precision ticks up further above the project's
+own gate threshold (0.9627 -> 0.9632). Size accuracy dips again for
+the same understood, non-regressive reason as the previous round --
+another honest "no automatic label" case from the same file-wide
+cause, not a wrong guess.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 38" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: thirteenth new-corpus golden, a pivot to a new project after resolving a loose end, development recall 19/25 -> 20/26 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 First tracked down the previous golden's own disclosed loose end: the
 flagged large "(NEW)" riser turned out to sit immediately beside the
