@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-18 linear takeoff: a fifth real self-reading answer lands, found faster this time by checking several new projects at once (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Changed approach slightly for speed: instead of digging deeply into
+one new real project at a time, downloaded five genuinely new ones at
+once and quickly checked each for image-heaviness and label format
+before picking the best one to dig into further.
+
+One candidate, a small airport air-traffic-control-tower project, had
+several already-readable duct labels, but a sweep around each one
+came up empty -- the reader couldn't find the actual duct nearby at
+any of the tried spots. Wrote that down as an honest miss rather than
+forcing it.
+
+The winner was a genuinely different kind of source than anything
+tried before this session: a real student engineering design
+competition entry (an 83-drawing HVAC design submission), not a
+professional construction project. Found a clean, straight duct
+section about eighteen and a half feet long, labeled directly on the
+line, running between two real spots where the duct's own size
+changes -- smaller on one side, bigger on the other. Both ends were
+correctly recognized as points where the drawing itself hands off to
+a different duct size, not places where the reader got confused.
+Checked twice, both checks matching exactly. A nearly identical copy
+of this same duct showed up on a second sheet in the same set (a
+plan view and a matching diagram of the same real duct) -- only wrote
+down the one from the plan view, to avoid double-counting one real
+duct as two separate answers.
+
+This is the fifth of these small real wins in a row, moving the
+project's own size-reading accuracy score up again by a bit more than
+the last one -- still a good way under where the finish line for this
+measure sits, but continuing to climb steadily through this same
+patient, one-real-example-at-a-time method. Checked everything the
+usual way: full benchmark re-run confirmed the new case landed
+cleanly with nothing else disturbed.
+
 2026-09-18 linear takeoff: a fourth real self-reading answer lands, plus an honestly-flagged guess about which duct system it belongs to (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept the search going on yet another genuinely new real project, a
 California college's classroom HVAC drawings. Checked image coverage
