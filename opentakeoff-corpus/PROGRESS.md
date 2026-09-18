@@ -1,5 +1,28 @@
 ## Active work
 
+2026-09-18 linear takeoff: a tenth real self-reading answer lands (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked five more brand-new real projects. One of them, a hospital
+emergency-room renovation, had a sheet packed with 82 already-readable
+round duct labels. Swept seventeen of them and found one real, clean
+answer: a supply-air duct section a little over six feet long, running
+from a real spot where it narrows down to a smaller duct, to a real
+three-way split feeding a terminal box below and continuing on
+diagonally.
+
+Two more things noticed on the same sheet and written down honestly
+rather than used: one duct run where the drawing itself shows a real
+change into a different kind of construction partway along (not
+pursued this pass), and one case where two different-sized labels
+sitting near a busy multi-way junction both pointed the reader to the
+exact same physical duct -- a real instance of the reader picking up
+the wrong one of two nearby labels at a crowded junction.
+
+The new answer was double-checked using the exact same clicking method
+the official scoring tool itself uses, which is now the normal way
+every new answer gets checked (learned from the near-miss two answers
+ago), and it held up perfectly. Full benchmark and full test suite
+both re-run clean afterward, matching the established baseline exactly.
+
 2026-09-18 linear takeoff: a ninth real self-reading answer lands, this time double-checked the newly learned careful way (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked five more brand-new real projects. One of them, a warehouse
 renovation in Missouri, had a mechanical sheet full of already-readable
