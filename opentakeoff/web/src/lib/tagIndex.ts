@@ -16,7 +16,7 @@
  */
 import type { Bbox, ScheduleTable, SheetRole, SheetSpans } from "./sheetgraph.ts";
 import { classifySheetRole } from "./sheetgraph.ts";
-import { labelTokens, canonicalLabelFamily, type LabelSpan } from "./symbollabels.ts";
+import { labelTokens, canonicalLabelFamily, rawStackedEquipmentTagCandidates, hyphenatedEquipmentFamilies, type LabelSpan } from "./symbollabels.ts";
 import { isEquipTag, joinHyphenatedTags } from "./equiptags.ts";
 import { compoundRunLeadTag } from "./symbolsweep.ts";
 import { markKey } from "./markid.ts";
@@ -85,6 +85,27 @@ export function buildTagIndex(sheets: SheetSpans[], tables: ScheduleTable[], she
     tablesBySheet.set(tb.sheet, arr);
   }
 
+  // A real divided-hexagon equipment-tag family (AHU, CU, DCU, LEF, PH...)
+  // often draws exactly one instance per sheet, spread across many
+  // different sheets — stackedEquipmentTagTokens's own per-sheet evidence
+  // rule (this family repeats twice, or is independently demonstrated, ON
+  // THIS SHEET) would reject every one of them despite the family being
+  // genuinely, repeatedly drawn across the set. Pool raw stacked candidates
+  // and explicit hyphenated-tag evidence across every sheet up front so the
+  // real per-sheet pass below can draw on set-wide, not just local, proof.
+  const crossSheetFamilies = new Set<string>();
+  {
+    const perFamily = new Map<string, number>();
+    for (const sheet of sheets) {
+      const labelSpans = sheet.spans.map(toLabelSpan);
+      for (const raw of rawStackedEquipmentTagCandidates(labelSpans)) {
+        perFamily.set(raw.family!, (perFamily.get(raw.family!) ?? 0) + 1);
+      }
+      for (const family of hyphenatedEquipmentFamilies(labelSpans)) crossSheetFamilies.add(family);
+    }
+    for (const [family, count] of perFamily) if (count >= 2) crossSheetFamilies.add(family);
+  }
+
   const out: DrawnTag[] = [];
   for (const sheet of sheets) {
     const role = classifySheetRole(sheet).role;
@@ -137,7 +158,7 @@ export function buildTagIndex(sheets: SheetSpans[], tables: ScheduleTable[], she
     // reconstruction (a stacked bubble) — "stacked".
     const byBox = new Map<string, LabelSpan>();
     for (const s of labelSpans) byBox.set(boxId([s.x0, s.y0, s.x1, s.y1]), s);
-    for (const tok of labelTokens(labelSpans)) {
+    for (const tok of labelTokens(labelSpans, crossSheetFamilies)) {
       const box: Bbox = [tok.x0, tok.y0, tok.x1, tok.y1];
       const orig = byBox.get(boxId(box));
       const exact = !!orig && orig.str.trim().toUpperCase() === tok.str.trim().toUpperCase();
