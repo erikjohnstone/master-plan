@@ -1,5 +1,37 @@
 ## Active work
 
+2026-09-18 linear takeoff: tested the two ideas from last week's shelved fix against real numbers -- neither one holds up (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+The fix put on the shelf a few entries back had two guessed-at ways to
+make it safe, neither actually tried yet. Tried both today, against
+real measurements from the four drawings already known -- the three it
+correctly fixed, and the one it got confidently wrong.
+
+The first idea: maybe the wrong answer only happens right at a place
+where a pipe run stops and forks. Measured the actual distance -- the
+wrong guess in that one bad case sits about a quarter of the way in
+from the end, roughly three feet, not right at it. That distance would
+need to be big enough to also start swallowing the middle of shorter
+runs, so this idea doesn't hold up on its own numbers.
+
+The second idea: maybe the wrong guess can be told apart because a
+better, more obviously-correct match exists somewhere else on the
+sheet. Checked this properly across all four drawings, not just the
+bad one, and it doesn't hold either: in one of the three GOOD fixes,
+the "somewhere else, more obvious" match is actually the CLOSER one by
+raw distance -- and it's still the wrong pipe to use there. Any rule
+strict enough to catch the bad case also throws out that good one.
+
+Neither idea survives being checked against real numbers, so nothing
+changed in the actual tool. This wasn't wasted effort -- it turns an
+open "maybe a smarter version fixes this later" question into a
+settled "no, not this way" answer, the same kind of honest close-out
+this project keeps doing rather than leaving a maybe hanging
+indefinitely.
+
+Measured: four real drawings fully re-checked with detailed
+instrumentation; no code, tests, or answer numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 79" section.
+
 2026-09-18 linear takeoff: the last stuck held-out drawing finally got a real, verified answer (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 One drawing from this project's own frozen "answer key" set had been
 tried twice before and set aside both times -- once because the
