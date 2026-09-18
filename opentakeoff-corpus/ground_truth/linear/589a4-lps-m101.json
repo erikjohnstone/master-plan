@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf",
+  "source_pdf_sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+  "sheet_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#63",
+  "sheet_number": "M-101",
+  "page": 63,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (VA Project 589A4-20-158, a warehouse renovation, Missouri), pulled from the corpus_2 GitHub Release during a fourth batch-survey pass (also covering 039_TX, 040_IL, 041_IL, 047_NC -- none swept this pass). Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.01 on this sheet, real vector CAD.\n\nSheet M-101's text scan found abundant already-parseable bare pipe callouts (`2\"HWS`, `1\"LPS`, `6\"CWS`, etc., system suffix directly appended with no space -- already handled by this session's own Run 87 `normalizeLabelText` fix that inserts a space after a closing quote before a letter). A grid sweep of fifteen of them found this real, clean 14.83 LF straight `3\"LPS` (3-inch low-pressure steam) pipe: `size:{kind:pipe,nps_in:3}`, `systems:[\"LPS\"]`, confidence 0.5. A marked crop confirms it visually and unambiguously: a real vertical pipe labeled '3\"LPS' directly on the run, from a real trap/pump fitting connection at the top to a real elbow-down connection at the bottom (a keynote reads '3\" LPS DN TO HX1 AND WH...', a heat exchanger/water heater feed) -- both real, visually-confirmed fitting junctions, clearly distinct from the adjacent, separately-drawn `6\"LPS` riser running parallel a short distance away (no stacked-parallel-pipe ambiguity here, unlike several nearby `CWS`/`CWR` pairs on this same sheet that were swept and declined -- see scope). `resolveRunSegments` reproduces the identical single segment (14.82 LF from its own per-segment rounding path vs. `trace_run`'s own reported 14.83 LF total -- the same small rounding-convention gap already established and accepted in `poultry-ra-m101.json`) and a reseed `trace_run` using the exact `bench:linear`-style seed (40% along the run's longest segment, per `seedOnLongestSegment` in `bench/linear.mts`, not an arbitrary working coordinate -- a verification-methodology correction made directly in response to Run 94's own seed-position-dependence finding on a different project) against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, size, and system exactly.\n\nSeveral nearby `CWS`/`CWR` candidates on this same sheet (closely stacked twin-pipe pairs, e.g. two `18\"CWS`/`18\"CWR` labels only ~24px apart, two `8\"CWS`/`8\"CWR` pairs) were swept and found to report a SYSTEM MISMATCH against the label nearest each individual seed (e.g., an `8\"CWR`-labeled seed's own automatic bind read back `systems:[\"CWS\"]`) -- a real instance of the twin-pipe label-crosstalk risk this corpus already tracks, not authored as goldens.",
+  "scope": "A single real 3-inch low-pressure-steam (LPS) pipe segment (14.83 LF) on the 589A4 warehouse renovation project's own mechanical plan, sheet M-101, from a real trap/pump fitting connection to a real elbow-down connection feeding a heat exchanger/water heater. Explicitly OUT OF SCOPE: the pipe's own continuation past either boundary (including the DN branch to HX1/WH); the adjacent, separately-drawn `6\"LPS` riser visible in the same crop; the several `CWS`/`CWR` twin-pipe candidates on this same sheet noted in review_basis, none authored due to system-label crosstalk; every other pipe run on this same 90-sheet plan set, not attempted this pass.",
+  "runs": [
+    {
+      "run_id": "589a4-m101-lps-3in",
+      "description": "3-inch low-pressure-steam (LPS) pipe segment, from a real trap/pump fitting connection to a real elbow-down connection.",
+      "system": "LPS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.732771164021164, 0.3546064814814815],
+        [0.732771164021164, 0.2928472222222222]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 3 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 14.83,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 14.82, "size": { "kind": "pipe", "nps_in": 3 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:3": 14.82 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:3": 14.82
+  },
+  "total_lf_all_runs": 14.83
+}

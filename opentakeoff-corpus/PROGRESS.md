@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-18 linear takeoff: a ninth real self-reading answer lands, this time double-checked the newly learned careful way (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked five more brand-new real projects. One of them, a warehouse
+renovation in Missouri, had a mechanical sheet full of already-readable
+pipe labels. Swept fifteen of them and found one real, clean answer: a
+steam pipe section about fifteen feet long, running from a real
+pump/trap fitting down to a real elbow feeding a heat exchanger and
+water heater.
+
+The same sheet also turned up a real, honestly-noted trap: several
+places where two closely-parallel pipes (a supply line and a return
+line running right next to each other) confused the reader about
+which label belonged to which pipe -- a real, known kind of mix-up,
+written down rather than used.
+
+This time, learning directly from the near-miss last time, the good
+answer was double-checked using the EXACT same clicking approach the
+official scoring tool itself uses (a specific point measured a set
+percentage along the pipe's own length), not just any spot that
+happened to work by hand. It matched perfectly under that stricter
+check too, and the full scoring run afterward confirmed it landed
+cleanly with the score moving up as expected and nothing else
+disturbed.
+
+This is the ninth of these small real wins in a row. Checked
+everything the usual way: full benchmark re-run confirmed the new
+answer landed cleanly, and the complete test suite in both parts of
+the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: a bad answer caught and thrown out before it ever left the workbench, plus a genuinely new thing learned about how the reader behaves (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked another batch of five brand-new real projects. One of them, an
 Air Force base project, had by far the largest number of size labels
