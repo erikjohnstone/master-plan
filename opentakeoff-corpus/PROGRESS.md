@@ -1,5 +1,31 @@
 ## Active work
 
+2026-09-18 linear takeoff: twelfth new-corpus golden (two runs), a second sheet from the same project, development recall 17/23 -> 19/25 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Mined a second sheet from the same boiler-replacement project as the
+previous golden. Real text search surfaced a richer set of candidates
+including an explicitly-flagged large "(NEW)" riser -- an initial
+attempt to trace it directly near its own label came up empty (the
+label sits some real distance from the pipe on this sheet), but
+widening the search nearby found a different real, clean 6-inch
+supply/return pair with genuine automatic binds instead.
+
+Both runs bounded at two real, crop-confirmed forks: a branch tee
+where a smaller pipe ties in, and a cross-sheet continuation
+break-line pointing to yet another sheet in the same set.
+
+Development-tier recall: **17/23 (0.7391) -> 19/25 (0.76)**, both runs
+an exact length match with a genuine size match too. Precision climbs
+further above the project's own gate threshold (0.9557 -> 0.9614) and
+size accuracy keeps climbing too (0.832 -> 0.855) -- three consecutive
+new-corpus rounds now landing correctly-sized, exact-length goldens
+with no rejections needed. The larger flagged "(NEW)" riser on this
+same sheet remains a real, disclosed, not-yet-located candidate.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 36" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: eleventh new-corpus golden (two runs), a real precision milestone, development recall 15/21 -> 17/23 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Applied the same "read real text, look at a crop, seed by eye" method
 to another narrow-scope boiler-replacement project (a Missouri Army
