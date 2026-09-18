@@ -1,5 +1,43 @@
 ## Active work
 
+2026-09-18 linear takeoff: fifteenth new-corpus golden (two runs), a fresh project and a new stacked-pipe golden shape, development recall 21/27 -> 23/29 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Tried and disclosed three fresh, low-yield files before this one landed:
+a roof plan with real gas/refrigerant piping but too much crossing
+leader-line clutter to confidently attribute any traced segment to
+its own label; a set of "MECHANICAL"-titled sheets that turned out to
+be architectural/structural floor plans merely naming mechanical rooms
+and levels, carrying an explicit "preliminary design intent"
+disclaimer and zero real size callouts; and a NAVFAC duct trunk
+repeating an already-known size-transition labeling ambiguity on a
+different sheet, confirming it as a recurring category rather than a
+one-off.
+
+The one that landed: a small, fresh, previously-untouched 13-sheet
+chiller-addition project. A real "PIPE BELOW GRADE" detail on its own
+piping plan shows an underground chilled-water run drawn as ONE
+double-line symbol representing a stacked supply-over-return pair (the
+sheet's own annotation discloses this explicitly), from a real
+wall-penetration valve pair to a second real valve pair. Since the
+label discloses two stacked pipes sharing one drawn line, this golden
+captures both as separate runs sharing identical coordinates -- a new
+shape for this corpus, matching what a real takeoff would need to
+count from this drawing. Checked the benchmark's own per-run scoring
+loop first to confirm it has no uniqueness assumption that would break
+on repeated coordinates.
+
+Development-tier recall: **21/27 (0.7778) -> 23/29 (0.7931)**, both
+runs an exact length match. Precision ticks up further above the
+project's own gate threshold (0.9632 -> 0.9645). Size accuracy dips
+again for the same understood, non-regressive reason as recent rounds
+-- this new project also carries no PDF layer names, the same cause
+already established elsewhere, now confirmed recurring across
+unrelated projects rather than being specific to one.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 39" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: fourteenth new-corpus golden, a third sheet on the same NAVFAC project, development recall 20/26 -> 21/27 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 A third sheet mined from the same 75-sheet NAVFAC Cherry Point ATC
 Tower project (development goldens now on two different sheets, a
