@@ -1,5 +1,35 @@
 ## Active work
 
+2026-09-18 linear takeoff: tried the sibling sheet too, found one candidate, and turned it down for a real, disclosed reason rather than risk a wrong permanent record (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+With the first of the two long-stuck sheets landing a real answer,
+tried its sibling next -- a larger, busier sheet covering the same
+building's own chiller plant. A full sweep across it found exactly one
+real, size-labeled candidate: a real pipe running from a real pump
+connection down to a labeled area near the title block.
+
+Looking closely at that label before trusting it revealed a real
+reason for caution: the printed callout there actually describes TWO
+separate, closely-parallel pipes -- a supply line and a return line,
+each with its own arrow -- and the automatic reading came back mixing
+pieces of both labels together rather than confidently picking one.
+This is the exact same kind of trap already caught once before this
+session on a different real project, where two pipes drawn close
+together made it genuinely unclear which one a given starting point
+actually followed. Locking in a permanent test answer with a possibly
+wrong label felt worse than simply not having one yet, so it was set
+aside rather than used.
+
+The larger sheet stays without a usable answer for now. Its own sibling
+sheet already has one; this one can be tried again later with a more
+careful, targeted search instead of a blind sweep, since it is also
+slower to experiment on than its sibling.
+
+No golden added either way. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 62" section.
+
 2026-09-18 linear takeoff: one of the two long-stuck real test sheets finally lands a real answer -- and a careless mistake in writing it down was caught and fixed before it could quietly hide a correct result as a miss (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 With today's own speed fix making two long-stuck real sheets usable
 for the first time, went back and tried the faster of the two for a
