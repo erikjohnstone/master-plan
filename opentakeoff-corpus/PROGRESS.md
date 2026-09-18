@@ -1,5 +1,45 @@
 ## Active work
 
+2026-09-18 linear takeoff: the two remaining unexplained slow readings for the click-speed requirement traced back to noisy measurement, not a real slow spot -- completing a full, honest scorecard across every one of this goal's nine requirements for the first time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Two real sheets had been sitting on record for a while as genuinely
+unexplained: while every other sheet answered a repeat query in a
+handful of milliseconds, comfortably fast enough, these two had once
+each logged a single much slower reading -- one around two hundred
+milliseconds, one close to six hundred -- during a single big run
+through the whole real test set earlier today. Nobody had gone back to
+find out why.
+
+Isolated each of those two sheets completely on its own, away from
+everything else, and asked the same question six times in a row. Both
+answered fast and consistently every single time -- a few milliseconds
+each, matching every other sheet, with no trace of the earlier slow
+reading anywhere. The honest conclusion: those two slow numbers were a
+one-off hiccup in how the big test run measures things -- likely a
+brief pause somewhere in the background while it was busy churning
+through dozens of other real files back to back -- not a real slow
+spot in the actual reading logic. The same kind of measurement-only
+mistake already found and fixed once before this session in a
+different spot.
+
+With that settled, every single one of this effort's nine core
+requirements now has a clear, final answer for the first time --
+five genuinely met (how often a real run gets found at all, how often
+a found run is actually a real one, how close the measured length
+comes to the truth, how much extra gets wrongly tacked on, and how
+fast a single click-sized query answers), and four still genuinely
+short (how often a pipe or duct's size gets read correctly, how fast
+a very large, complex sheet can be prepared the first time it's
+opened, how closely a small held-back set of sheets tracks the main
+test set, and whether the project's own full automated check passes
+clean). No more open, "not yet checked" items remain -- only real,
+understood, disclosed shortfalls.
+
+No golden added or needed. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed, no code
+touched. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 59" section.
+
 2026-09-18 linear takeoff: worked out, precisely, just how large the size-accuracy shortfall actually is -- and it is much bigger than hand-finding a few more real examples can realistically close (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 The one requirement still furthest from being met is how often a
 correctly-sized pipe or duct gets automatically read right, weighted
