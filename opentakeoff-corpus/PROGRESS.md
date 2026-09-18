@@ -1,5 +1,45 @@
 ## Active work
 
+2026-09-18 linear takeoff: checked the regression guard for the first time this session -- found and fixed a real, unrelated, pre-existing environment gap (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Ran both halves of the project's own regression guard directly, since
+it had never been separately re-checked this session despite several
+commits including a real code change. The backend half failed --
+two real test failures, both tracing to the exact same cause: a
+required Python testing package was simply never installed into this
+environment's own isolated Python environment for a completely
+separate part of the platform (building-automation engineering, not
+anything to do with linear takeoff or tracing).
+
+Confirmed this wasn't caused by anything done this session -- that
+whole area of the codebase is explicitly off-limits to this project's
+own work, and every change made this session stayed inside its own
+lane. Confirmed it WAS a real, fixable gap: the missing package is
+that other area's own documented setup step, simply never run in this
+particular environment. Installed it properly, the documented way,
+touching no source code anywhere. Re-ran the previously-failing tests
+directly: both now pass. Re-ran the broader suite they belong to: it
+went from 105 passing/2 failing to 133 passing/0 failing on the same
+step.
+
+The frontend half of the guard is a much bigger job (type-checking,
+linting, the full test suite, several separate benchmark scripts, and
+a full production build, all chained together). Its own type-checking,
+linting, and full test suite (760+ individual cases) all came back
+clean. One step deep in its own benchmark tail -- involving a real
+project file already flagged twice this session as unusually dense --
+ran past ten minutes without finishing or failing, longer than
+anything else measured all session. Left it running rather than
+interrupting it or working around it; not yet a confirmed problem,
+just a real, disclosed, still-open data point.
+
+Net: the regression guard isn't fully confirmed green yet, but for a
+clear reason, with real, disclosed progress -- a genuine backend gap
+found and fixed, and the frontend's own core checks confirmed clean.
+
+Measured: `docs/LINEAR-TRACE-EVAL.md` gained a "Run 52" section with
+the full detail. No linear-takeoff code changed; no ground truth
+touched.
+
 2026-09-18 linear takeoff: twenty-fourth golden, a real guided continuation past an earlier round's own named elbow, second real ambiguous-to-ambiguous boundary case (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 An earlier golden on this same sheet had explicitly named a real,
 visible continuation past its own elbow as untried future work. Went
