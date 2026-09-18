@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-18 linear takeoff: a bad answer caught and thrown out before it ever left the workbench, plus a genuinely new thing learned about how the reader behaves (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked another batch of five brand-new real projects. One of them, an
+Air Force base project, had by far the largest number of size labels
+found on any single sheet this whole session -- 182 on one drawing.
+But checking a handful of them by eye showed something concerning:
+several supposedly-good answers were actually the reader getting
+confused by equipment symbols (a box drawn with an X through it, or a
+gap next to a reference line) and tracing along THOSE instead of a
+real duct. All four checked this way were thrown out, written down
+honestly as a sheet that's unusually easy to fool this way.
+
+A different project, a boiler room drawing for a Forest Service lab in
+Montana, looked much more promising: a short real pipe section between
+two boilers, checked carefully and looking clean. But this time,
+instead of just trusting the careful check, the full automatic
+scorecard was run before anything got written down for good -- and it
+caught a real problem. When the scoring tool clicked on a slightly
+different spot along that same real pipe than the spot used during the
+careful check, it got a shorter, less certain answer instead of the
+same one. In other words: the exact same real pipe can give a
+different result depending on precisely where along its length you
+click, at least in one small area with what looks like a fitting or
+gap in the drawing. That's a genuinely new kind of gotcha, distinct
+from every other kind of mistake already catalogued, and worth having
+found even though nothing was actually gained today -- the bad answer
+was deleted before it ever became a real commit, so the project's own
+official score didn't move in either direction from this one.
+
+This is exactly why every new answer gets run through the full
+automatic check before being kept, rather than trusted just because it
+looked right by eye -- and this time, that check did its job and
+caught a real problem before it caused any damage.
+
 2026-09-18 linear takeoff: an eighth real self-reading answer lands, still mining the same one unusually rich drawing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Went back to that same especially clear Missouri renovation drawing
 sheet from last time and checked seventeen more of its size labels
