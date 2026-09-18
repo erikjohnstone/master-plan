@@ -181,6 +181,21 @@ test("parseSize: PIPE — VA Durham M-401's glycol-return risers, 6\" GLR, 4\" G
   assert.deepEqual(s?.systems, ["GLS"]);
 });
 
+test("parseSize: PIPE — MEANG B493 Boiler Replacement's own existing-heating-water labels, 3\" EHWR/EHWS and 3/4\" EHWR/EHWS (#linear-takeoff GATE 3 bug catalogue: the same SYS_ALT-missing-token shape as GLS/GLR — an EXISTING-prefixed system code this grammar had never seen, failing the whole PIPE_RE match rather than just losing its system tag)", () => {
+  const a = parseSize('3" EHWR');
+  assert.deepEqual(a?.size, { kind: "pipe", nps_in: 3 });
+  assert.deepEqual(a?.systems, ["EHWR"]);
+  const b = parseSize('3" EHWS');
+  assert.deepEqual(b?.size, { kind: "pipe", nps_in: 3 });
+  assert.deepEqual(b?.systems, ["EHWS"]);
+  assert.deepEqual(parseSize('3/4" EHWR')?.size, { kind: "pipe", nps_in: 0.75 });
+  assert.deepEqual(parseSize('3/4" EHWS')?.size, { kind: "pipe", nps_in: 0.75 });
+  // longest-first placement (before the bare HWR/HWS pair it shares a suffix
+  // with) still leaves the unprefixed real convention working unambiguously.
+  assert.deepEqual(parseSize('3" HWR')?.systems, ["HWR"]);
+  assert.deepEqual(parseSize('3" HWS')?.systems, ["HWS"]);
+});
+
 test("parseSize: PIPE — DN/NPS/mm forms (Appendix A's own second PIPE alternative, not yet seen in the six named sets but part of the stated grammar)", () => {
   assert.deepEqual(parseSize("DN150")?.size, { kind: "pipe", nps_in: 5.91 });
   assert.deepEqual(parseSize("NPS100")?.size, { kind: "pipe", nps_in: 3.94 });

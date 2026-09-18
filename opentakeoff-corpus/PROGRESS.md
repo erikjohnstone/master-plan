@@ -1,5 +1,44 @@
 ## Active work
 
+2026-09-18 linear takeoff: went hunting on a genuinely new real drawing again -- found and fixed one more real labeling gap, no new answer key entry this time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+With the last few days' worth of engine-tuning question fully closed out,
+went back to the other lever this project has always had available:
+looking at drawings nobody on this project has looked at yet. Pulled
+down the full second batch of real drawings fresh and checked its own
+list against everything already used -- dozens of genuinely untouched
+real projects are still sitting there.
+
+Picked a Maine Air National Guard boiler-replacement project, the same
+kind of agency whose drawings have read cleanly before. Found a real
+boiler room detail sheet with plenty of real, well-labeled pipe
+callouts -- but a good chunk of them use a labeling convention this
+project's own reader had never seen: an "E" prefix marking a pipe as
+EXISTING rather than new (a completely normal real-world convention for
+a renovation project), which caused those specific labels to fail to
+read as a size AT ALL, not just lose their own detail -- the exact same
+shape of bug found and fixed a few days back for a different prefix.
+Fixed the same safe, narrow way, with a new passing test.
+
+Went on to look for an actual new example to add to the answer key
+using these labels, and came up empty-handed for an honest reason, not
+a lazy one: the first candidate pipe run crosses a real point where the
+pipe size actually changes partway through (checked with a close-up
+picture) -- not safe to score as one uniform size, the same kind of
+situation already turned down elsewhere on this project. The second
+candidate looked cleaner at first, but two more close-up pictures
+showed both of ITS OWN endpoints are false stops too -- the real line
+clearly keeps going past both of them. This is a tangled, small,
+existing-equipment-heavy room, not a clean single-shot target, and
+that's a legitimate finding worth writing down plainly, not something
+to force.
+
+Measured: the new label-reading test passes alongside the whole
+existing test file (49/49); the full check on both parts of this
+project still shows only the same already-known, unrelated problems as
+always; the answer-key numbers land exactly where yesterday's entry
+left them, since nothing currently on the books uses these particular
+labels yet. `docs/LINEAR-TRACE-EVAL.md` gained a "Run 82" section.
+
 2026-09-18 linear takeoff: closed out the shelved-fix question for good -- checked color and line thickness too, still no safe rule (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Kept pulling on yesterday's thread a little further before setting it
 down for real. Yesterday's check showed that plain distance doesn't
