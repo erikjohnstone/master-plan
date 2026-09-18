@@ -1,0 +1,43 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf",
+  "source_pdf_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#7",
+  "sheet_number": "MH102",
+  "sheet_title": "AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA B",
+  "page": 7,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Thirteenth golden, a second sheet mined from the same NAVFAC Cherry Point ATC Tower project that already has one HELD-OUT golden (`navfac-mh101-heldout.json`, sheet MH101, index 5) -- this golden deliberately uses a DIFFERENT sheet (MH102, index 6, the very next sheet in the same MH ductwork series) to avoid any development/held-out tier leakage on this project. Found via the text-anchored discovery method: a duct-callout regex (`NxN SA/RA/EA/OA/VA`) scan of this sheet's own real text turned up 16 hits; a wide render crop around one cluster showed a clean, real, double-line 8x6 RA return-air duct riser dropping from a horizontal main run down to a floor penetration.\n\nThis project's own PDF export carries NO layer names at all (every sheet's own `sheetInfo` reports `layers:[]`), which this session has now confirmed drives `trace_run`'s own automatic size/system binding to fail file-wide even on clean, unambiguous, correctly-labeled runs -- both this golden's own seed and several other seeds tried on this same file (a chilled-water pipe run on sheet MP104, a mechanical-room-section chilled water main on sheet M-301) came back `stroke-family:unclassified`/`size_missing`/`confidence:0` despite geometrically correct, real, plausible trace results. The project's own PRE-EXISTING `navfac-mh101-heldout.json` golden already worked around this the same way (its own `size_overrides` carries `size_src:\"manual\"`, not an automatic bind) -- this golden follows that same established, file-specific precedent rather than treating the miss as a new rejection category.\n\nThe chosen run's own geometry was independently confirmed via a marked render crop: the top end sits exactly at a real elbow where the horizontal `8x6 RA` main duct (continuing right toward unit DH-A5) turns down into this riser -- a real fork, `ambiguous` for a genuine reason. The bottom end sits exactly at a real floor/wall duct-penetration symbol (a hatched riser-drop marker, matching two neighboring `8x6 SA` supply-air riser stubs drawn the same way immediately beside it) -- also a real physical terminus, `ambiguous` likely due to the classifier's own general confusion on this unlayered file rather than a real nearby branch, but the STOP LOCATION itself is confirmed as a genuine drawn symbol, not an engine misread of open space. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result.",
+  "scope": "A single real 8x6 rectangular return-air (RA) duct riser (15.17 LF) on the NAVFAC Cherry Point ATC Tower project's own First Floor Mechanical Ductwork Plan - Area B, sheet MH102, from a real elbow (where the horizontal main duct continues toward unit DH-A5) to a real floor/wall duct-penetration symbol. Explicitly OUT OF SCOPE: the horizontal `8x6 RA` main duct run the top elbow also connects to; the two neighboring `8x6 SA` supply-air riser stubs visible in the same crop; the duct's own continuation below the floor penetration (a different level, not shown on this sheet); every other run on this real 75-sheet plan set (only sheet 7/MH102 sampled, in addition to the pre-existing held-out sheet 6/MH101); this file's own two other rejected candidates this session (an unbound chilled-water pipe run on sheet MP104, and an unbound chilled-water main on a mechanical-room section, sheet M-301) -- both real, disclosed, not used.",
+  "runs": [
+    {
+      "run_id": "navfac-mh102-ra-duct",
+      "description": "8x6 rectangular return-air (RA) duct riser, from a real elbow (main duct continues toward unit DH-A5) to a real floor/wall duct-penetration symbol.",
+      "system": "RA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.2884803921568628, 0.5166666666666666],
+        [0.2884803921568628, 0.6028724747474747]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 8, "h_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 15.17,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 15.17, "size": { "kind": "rect", "w_in": 8, "h_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:8x6": 15.17 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "rect:8x6": 15.17 },
+  "total_lf_all_runs": 15.17
+}

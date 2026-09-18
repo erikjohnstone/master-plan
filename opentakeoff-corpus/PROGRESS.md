@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-18 linear takeoff: thirteenth new-corpus golden, a pivot to a new project after resolving a loose end, development recall 19/25 -> 20/26 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+First tracked down the previous golden's own disclosed loose end: the
+flagged large "(NEW)" riser turned out to sit immediately beside the
+already-used pair, but a live trace and a wider marked crop showed it
+carries three DIFFERENT size labels along one continuous drawn line
+with no visible reducer -- a real "size-transition riser labeling
+ambiguity", the same rejection category an earlier project already
+established. Correctly rejected, not forced into a golden.
+
+Pivoted to a fresh 75-sheet NAVFAC project that already had one
+held-out-tier golden but no development-tier golden of its own. Two
+real, clearly-labeled pipe candidates on that project both failed
+automatic size/system binding for a file-wide reason: this project's
+PDF export carries no layer names at all, unlike every other file in
+the corpus so far. Both rejected. A third candidate -- a real return-air
+duct riser on the very next sheet after the held-out one (deliberately
+different, to avoid tier leakage) -- reached cleanly with both ends
+confirmed at real fittings via marked crop, and used a manual size
+override following the same project's own pre-existing precedent for
+this exact file.
+
+Development-tier recall: **19/25 (0.76) -> 20/26 (0.7692)**, an exact
+length match. Precision ticks up further above the project's own gate
+threshold (0.9614 -> 0.9627). Size accuracy dips for an understood,
+non-regressive reason: the file-wide blank-layer-names cause means
+every candidate on this project reads as a "no automatic label" case
+regardless of the label's own visual clarity.
+
+Measured: `npm run bench:linear` passes, refusal/held-out/synthetic
+numbers unchanged; the targeted linear test suite (165 tests) passes.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 37" section and its priority
+list updated with the new recall number.
+
 2026-09-18 linear takeoff: twelfth new-corpus golden (two runs), a second sheet from the same project, development recall 17/23 -> 19/25 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Mined a second sheet from the same boiler-replacement project as the
 previous golden. Real text search surfaced a richer set of candidates
