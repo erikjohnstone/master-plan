@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more real self-reading answers land from one unusually clear real drawing (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked another batch of five brand-new real projects at once. One of
+them, a Missouri renovation project, had a single sheet that stood out
+immediately: a genuinely clearer style of drawing than almost anything
+seen this session -- the duct drawn as two parallel lines showing its
+actual real width on the page, with 75 separate size labels printed
+right on the ductwork across that one sheet alone.
+
+Swept ten of those labels and found two separate, real, clean vertical
+duct sections that both worked automatically: one about four and a
+third feet long, running from a real branch point (where the duct
+splits toward two small grille outlets) down to a real spot where the
+duct's own size changes; another about three feet long, running from
+a different real branch point down to another real size-change spot.
+Checked both carefully with marked pictures of the actual drawing --
+both are about as clean and easy to confirm by eye as anything found
+this session. Made one small mistake along the way -- tried to
+double-check both by asking the reader to find them again from nearby
+made-up spots instead of the exact original spots, which (correctly)
+found something different and shorter each time -- caught it right
+away, redid the double-check from the exact right spots, and both
+matched perfectly.
+
+A separate airport control-tower project in the same batch had several
+already-readable duct labels, but none of them led to a real duct
+being found nearby when swept -- written down honestly as a miss
+rather than forced.
+
+These are the sixth and seventh of these small real wins in a row,
+moving the project's own size-reading accuracy score up again --
+still a good way under where the finish line for this measure sits,
+but continuing its steady climb. Checked everything the usual way:
+full benchmark re-run confirmed both new answers landed cleanly with
+nothing else disturbed, and the complete test suite in both parts of
+the project re-run clean at its already-known baseline.
+
 2026-09-18 linear takeoff: a fifth real self-reading answer lands, found faster this time by checking several new projects at once (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Changed approach slightly for speed: instead of digging deeply into
 one new real project at a time, downloaded five genuinely new ones at

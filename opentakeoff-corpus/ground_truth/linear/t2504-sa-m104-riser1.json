@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf",
+  "source_pdf_sha256": "e3d0cc1bc22fd82445079c068872f2877a6c2c9bd37cca59b0b727b1adb8816f",
+  "sheet_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+  "sheet_number": "M-104",
+  "page": 36,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (an interior/exterior renovation, Missouri, project T2504), pulled from the corpus_2 GitHub Release during the same batch-survey pass that also found lambda-sa-m403.json. Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.00 on this sheet. Sheet M-104 is drawn in a genuinely different, notably clean style from most of this session's other real-corpus finds: real DOUBLE-LINE duct (both walls of the duct drawn as parallel strokes, not a single centerline), with dimension callouts printed directly on the duct itself -- one of the most legible real drawings found this session.\n\nA text-anchor scan found 75 bare `WxH\"` rectangular duct callouts on this one sheet alone (no `(E)` prefix, no system suffix, already fully parseable with no grammar change needed). A grid sweep of ten of them found this real, clean 4.34 LF vertical duct riser: `size:{kind:rect,w_in:12,h_in:10}`, confidence 0.5, `factors:[\"stroke-family:pen-weight-prior\",\"size-binding:beside\",\"ambiguous_stop\",\"layer-unclassified\",\"scale_unconfirmed\"]`. A marked crop confirms it visually and unambiguously: a real double-line vertical duct labeled '12\"x10\"' directly on the run, connecting a real branch-tee junction at the top (where two 6\"x6\" grille branches split off through 8\"x6\" transition boots) to a real transition point at the bottom (just above where the duct continues, at a different size, further down past an S2/150 CFM diffuser tag) -- both real, visually-confirmed junction/transition points, not engine misreads, matching this corpus's own established ambiguous-stop-at-a-real-junction convention. `resolveRunSegments` reproduces the identical single 4.34 LF segment and a reseed `trace_run` from the same known-good seed against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, and size exactly.\n\nThis sheet has a second, independent riser of the same overall style and quality authored alongside this one (see `t2504-sa-m104-riser2.json`, a `16\"x11\"` riser elsewhere on the same sheet) -- both verified from the same batch-sweep pass since this sheet's drawing quality made both efficient to confirm.",
+  "scope": "A single real 12x10-inch rectangular duct riser segment (4.34 LF) on the T2504 renovation project's own mechanical plan, sheet M-104, from a real branch-tee junction (feeding two 6\"x6\" grille takeoffs) down to a real size-transition point above where the duct continues at a different size. Explicitly OUT OF SCOPE: the duct's own continuation past either boundary; the parallel 16\"x8\" duct run visible in the same crop; the second riser authored separately on this same sheet (`t2504-sa-m104-riser2.json`); every other one of the 75 real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 51-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "t2504-m104-sa-12x10-riser1",
+      "description": "12x10-inch rectangular duct riser segment, from a real branch-tee junction to a real size-transition point.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5221160077770577, 0.5676873582372819],
+        [0.5221160077770577, 0.658039392676943]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 12, "h_in": 10 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 4.34,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 4.34, "size": { "kind": "rect", "w_in": 12, "h_in": 10 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:12x10": 4.34 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:12x10": 4.34
+  },
+  "total_lf_all_runs": 4.34
+}
