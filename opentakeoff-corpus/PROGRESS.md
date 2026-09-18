@@ -1,5 +1,40 @@
 ## Active work
 
+2026-09-18 linear takeoff: a thirteenth real answer lands, and checking the strict way FIRST saves wasted effort twice (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Went back to the very first, original batch of real projects this
+whole effort started from, rather than the newer batch used lately,
+and checked five single-drawing-file projects from it that hadn't
+been tried yet.
+
+One of them, a Michigan State University life-sciences lab
+renovation, looked promising at first glance -- three separate
+candidate answers found. But this time, instead of doing all the
+careful checking first and finding out only at the very end (the way
+a near-miss a few answers back was caught late), each candidate was
+checked against the strict official method FIRST, before investing
+any more time in it. All three failed that stricter check immediately
+-- real ducts, but the strict method's own way of picking where to
+click landed just far enough from the label that it couldn't read the
+size. Caught early, at almost no cost, instead of late.
+
+A different single-drawing-file project, a Montana State University
+building renovation, turned up a real winner: a supply duct trunk
+about eight and a half feet long, drawn in this drawing's own red
+highlight color for new work, connecting two real branch points that
+feed round takeoffs up and down to classroom ceiling diffusers. This
+one passed the strict check immediately, with no back-and-forth
+needed at all.
+
+This is the thirteenth of these small real wins in a row, and the
+first time the stricter double-check method (adopted after an earlier
+near-miss) got used from the very start of a search rather than
+tacked on afterward -- worth noting as it becoming the normal way of
+working now rather than an extra step remembered after the fact.
+Checked everything else the usual way too: full benchmark re-run
+confirmed the new answer landed cleanly, and the complete test suite
+in both parts of the project re-run clean at its already-known
+baseline.
+
 2026-09-18 linear takeoff: a twelfth real self-reading answer lands, a thin flexible connector this time (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked five more brand-new real projects. One sheet at a Michigan
 State University student-store renovation had a productive batch of
