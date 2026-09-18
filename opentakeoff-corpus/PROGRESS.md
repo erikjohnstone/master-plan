@@ -1,5 +1,42 @@
 ## Active work
 
+2026-09-18 linear takeoff: two more clean misses, then a promising-looking sheet that turned out to be tracing a background gridline, not a pipe -- a new kind of near-miss caught, no new golden (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Kept working through the same newly-opened pool of previously-skipped
+sheets. Two more real projects, a Missouri steam-heating job and a
+California community-college building, both swept completely clean --
+no automatic size match anywhere on either sheet. Two more honest,
+clean negatives.
+
+A third project, a Virginia hospital's own emergency-room mechanical
+sheet, looked genuinely promising at first: a full sweep turned up
+fourteen separate matches, most carrying real hot-water supply and
+return labels, including three clean, well-terminated short runs. But
+a close, zoomed-in look at two of the three showed something new: the
+line being traced wasn't the sheet's own real black pipe ink at all,
+but a thin gray line running on and on well past where the "pipe"
+supposedly starts and stops -- almost certainly a background
+reference or column line bleeding through from an architectural or
+structural layer bundled into this same drawing, not anything actually
+routed. A real hot-water label just happens to sit right next to it,
+handing the engine a coincidental, wrong size match. A new specific
+flavor of an already-known mistake -- confidently reading real, drawn,
+but non-mechanical linework -- caught before it could become a wrong
+golden, the same discipline that has now caught this exact kind of
+thing several times this session in different disguises.
+
+Seven tries into this newly-opened pool now, and still zero goldens
+landed from it, against three separate confirmed near-misses, three
+clean negatives, and one dead end from an earlier different method.
+The honest read stands: this broader method keeps finding real,
+interesting things to catch and rule out, just not, so far, real new
+goldens to keep.
+
+No golden added either way. Recall, precision, and size accuracy are
+unchanged.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 55" section.
+
 2026-09-18 linear takeoff: the front-end's own full regression check finally ran to the end -- the long-stuck step wasn't actually stuck, but a second, separate, unrelated batch of failures showed up once it finished (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 A step in the project's own front-end regression check had been left
 running from earlier today, past twenty-five minutes without finishing
