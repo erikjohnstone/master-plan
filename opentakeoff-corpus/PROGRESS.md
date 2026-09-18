@@ -1,5 +1,27 @@
 ## Active work
 
+2026-09-18 linear takeoff: closes out the current layer-quality-survey batch -- two more oversized sheets declined, nothing left worth a sweep in this batch (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked the two remaining real candidates from the same fourteen-hit
+survey before moving on. Both a laboratory building's own mechanical
+sheet and a veterinary medical center's own sanitary-piping sheet
+carry real, genuinely relevant layer names -- but at 153,000 and
+258,000 segments respectively, both already sit well past this
+project's own "100k segs" scale target before a single seed would ever
+be tried, the same risk band that ruled out last round's own
+million-segment sheet. Declined outright rather than risking another
+long, likely-unproductive wait.
+
+This closes out the batch: of fourteen real hits, one became a golden,
+one was a caught mistrace, four (now six, counting these two) were
+declined outright for size or dense-geometry risk, and seven were
+never worth a sweep at all once their own full layer lists were read
+closely -- real layer names, but not actually mechanical or too thin
+to matter.
+
+Measured: no ground truth touched, no bench numbers changed --
+`docs/LINEAR-TRACE-EVAL.md`'s own "Run 50" section extended with the
+final tally.
+
 2026-09-18 linear takeoff: twenty-third new-corpus golden, a genuine automatic-bind duct on a Chicago stadium HVAC project, size accuracy climbs 0.6643 -> 0.6811 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Two more candidates from the same layer-quality survey were checked and
 declined before this one landed. A chemical-buildings HVAC sheet, though
