@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-18 linear takeoff: three more drawings checked, all empty or too risky -- today's easy returns from this particular method have clearly thinned (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+Checked three more drawings. One's few matches read as plain
+installation instructions rather than plan labels ("pipe to
+equipment, refer to manufacturer's instructions"), not worth chasing.
+A second was almost entirely the same tightly-paired supply-and-
+return piping style already handled carefully elsewhere today. The
+third looked promising on paper -- four scattered condensate-drain
+labels -- but reading their full text showed they're the same kind of
+plain instruction note as the first drawing, not a plan callout, and
+checking all four confirmed it: nothing traceable near any of them.
+
+Stepping back: today's drawing-by-drawing search covered roughly
+forty never-before-touched drawings, and only two of them (the
+finance-center renovation and the health-science building found
+earlier today) actually panned out. The last six candidates checked
+in a row all came back empty or wrong. That's a real, honest signal
+that this specific way of finding new answers -- guessing plausible
+labels, then checking each one -- has gotten a lot harder to strike
+gold with today, at least on this batch. It doesn't mean the roughly
+fifty-to-sixty still-unchecked drawings are hopeless, just that a
+plainer version of this same search method is running out of easy
+wins for now.
+
+No new answer from this batch. Nothing measured changes.
+
+Measured: no ground truth touched, no bench numbers changed.
+`docs/LINEAR-TRACE-EVAL.md` gained a "Run 74" section.
+
 2026-09-18 linear takeoff: a batch of eleven more never-before-touched drawings checked, mostly thin or empty, one more pointer-line mix-up caught (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 Checked eleven more building drawings never looked at before, drawn
 from the other half of this project's own larger drawing library.
