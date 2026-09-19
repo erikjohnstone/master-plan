@@ -119,7 +119,7 @@ import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading,
 // linear/worker.ts worker below builds once per (sheet, scale) off-thread.
 import { nearestSegment, hitTolerancePx, deserializeSegmentIndex } from "../lib/linear/index.ts";
 import { walkBothDirections } from "../lib/linear/walk.ts";
-import { associateLabel, resolveSizeConflicts } from "../lib/linear/sizes.ts";
+import { associateLabel, parseSize, resolveSizeConflicts } from "../lib/linear/sizes.ts";
 import { buildTraceReceipt, REFUSAL_NO_LINEWORK, REFUSAL_NO_STROKE_FAMILY, sizeConflictRefusal } from "../lib/linear/receipt.ts";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -5650,6 +5650,13 @@ export default function TakeoffCanvas() {
     const spans = textSpansRef.current.get(tp.key) || [];
     const pairs = [];
     for (const sp of spans) {
+      // #linear-takeoff GATE 3 bug catalogue: mirrors mcp/src/session.ts's
+      // own traceRun fix, kept in lockstep — leaderTerminalPointsForLabel
+      // is real, non-trivial work, and associateLabel below never uses
+      // `leaderPoints` when `parseSize(label.text)` fails, so computing it
+      // for a non-size span (the overwhelming majority on a real sheet)
+      // changes no output, only its cost.
+      if (!parseSize(sp.str)) continue;
       const leaderPoints = leaderTerminalPointsForLabel(sp, spans, index.segs, segLumRef.current.get(tp.key) || null);
       const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, ftPx, { leaderPoints });
       if (binding) pairs.push({ span: sp, binding });

@@ -29,7 +29,7 @@ import { SEED_ASSEMBLIES } from "../../web/src/lib/linear/assemblyLibrary.ts";
 import { classifyStrokes as classifyStrokesPure, type StrokeClasses, type StrokeFamily } from "../../web/src/lib/linear/strokes.ts";
 import { buildSegmentIndex, nearestSegment, hitTolerancePx, type SegmentIndex } from "../../web/src/lib/linear/index.ts";
 import { walkBothDirections } from "../../web/src/lib/linear/walk.ts";
-import { associateLabel, resolveSizeConflicts, type BoundSize } from "../../web/src/lib/linear/sizes.ts";
+import { associateLabel, parseSize, resolveSizeConflicts, type BoundSize } from "../../web/src/lib/linear/sizes.ts";
 import { buildTraceReceipt, REFUSAL_NO_LINEWORK, REFUSAL_NO_STROKE_FAMILY, sizeConflictRefusal, type TraceOrigin, type TraceReceipt } from "../../web/src/lib/linear/receipt.ts";
 import { leaderTerminalPointsForLabel } from "../../web/src/lib/symbollabels.ts";
 
@@ -3844,6 +3844,22 @@ export class Session {
     const spans = s.spans;
     const pairs: { span: TextSpan; binding: BoundSize }[] = [];
     for (const sp of spans) {
+      // #linear-takeoff GATE 3 bug catalogue: leaderTerminalPointsForLabel
+      // (symbollabels.ts) is real work — a whole-sheet CFM-value scan
+      // (airflowValuesFor) plus a spatial leader chase — and associateLabel
+      // below ignores its own `leaderPoints` opt entirely whenever
+      // `parseSize(label.text)` fails, which happens on every non-size span
+      // (room labels, equipment tags, keynotes — the overwhelming majority
+      // on a real sheet). Computing it unconditionally for every one of a
+      // sheet's spans is provably wasted work on every non-size span: the
+      // outcome (`binding === null`) is identical whether or not
+      // `leaderPoints` was ever computed. Confirmed as the dominant
+      // per-sheet-build cost on a real, dense corpus sheet (1034 spans, 25
+      // of them real sizes): 2.3s in this loop alone, almost all of it
+      // spans that could never have used their own leader points anyway.
+      // Skipping the computation for a span that isn't a size in the first
+      // place changes no output, only the cost of producing it.
+      if (!parseSize(sp.str)) continue;
       const leaderPoints = leaderTerminalPointsForLabel(sp, spans, geo.segs, geo.lum);
       const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, mppf, { leaderPoints });
       if (binding) pairs.push({ span: sp, binding });

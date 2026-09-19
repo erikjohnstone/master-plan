@@ -1,5 +1,51 @@
 ## Active work
 
+2026-09-19 linear takeoff: found and fixed a real speed problem -- one drawing was taking almost 3 seconds to process when it should take well under half a second (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+Moved on to the other open speed target for this stage of the project:
+every drawing sheet should be ready to trace in under 400 milliseconds,
+even a very large one. The slowest sheet in the whole test set was
+taking 2.7 seconds -- nearly seven times over budget.
+
+Timed each step separately to find out where the time was actually
+going, rather than guessing. It wasn't the big, expensive step
+(reading all the lines off the page) that was slow -- that one was
+reasonably fast even on this large a drawing. It was a smaller-looking
+step: checking every single piece of text on the sheet to see if it's
+a size label. This one sheet has 1,034 pieces of text on it, and only
+25 of them turn out to actually be real size labels. For every single
+one of the other 1,009 -- room names, equipment tags, notes -- the
+tool was still doing a full, expensive check (tracing possible leader
+lines back to their source, which itself involves scanning the whole
+sheet's text again) before finally deciding "nope, not a size label,"
+throwing all that work away. That expensive check should only ever
+run on the 25 real candidates, not all 1,034.
+
+Fixed it by adding one cheap, quick test right at the very start:
+check whether the text even LOOKS like a size label before doing any
+of the expensive leader-line work at all. This doesn't change any
+answer the tool gives -- it was always going to throw away that work
+for non-size text anyway -- it just skips doing wasted work in the
+first place. Made the identical change in both places this same logic
+lives (the web app and the separate assistant tool), since those two
+are required to always agree.
+
+Measured a real improvement: that same slow sheet now finishes in
+roughly a quarter to a third of the time it used to take, with the
+exact same answer as before -- checked directly that nothing about
+what the tool actually found changed, only how long it took to find
+it. Ran the complete test suite for both parts of the project
+afterward and confirmed both land at their already-known, unchanged
+baselines -- nothing broken.
+
+The 400-millisecond target for every sheet isn't fully met yet -- a
+different sheet is now the slowest one, at a little under 3 times over
+budget, not yet looked into -- but this is now the SECOND real speed
+bug found and fixed with this exact same shape (unnecessary work
+being done for every item when it should only run for the handful
+that actually matter), which is worth remembering when looking at
+whatever sheet is slowest next.
+
 2026-09-19 linear takeoff: figured out exactly why yesterday's fix backfired -- it wasn't a bad guess, it walked straight into a genuinely different, harder problem (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 Followed up on yesterday's thrown-away fix to make sure the lesson learned
