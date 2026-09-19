@@ -1,5 +1,33 @@
 ## Active work
 
+2026-09-19 linear takeoff: tested the obvious next tweak to the last attempt (only check recent history, not the whole path) -- got the EXACT same result as before, proving the problem was never "how far back to look" (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+The previous entry ended by blaming the fresh regressions on checking
+"the whole path walked so far" for a match, with the natural next idea
+being: only check recent history, not everything ever walked. Tried
+exactly that -- only look at, say, the last several dozen steps instead
+of the whole thing.
+
+Got numbers that are IDENTICAL, down to the exact decimal, to the
+previous, broader attempt. Not similar -- identical, on every single
+drawing that changed. That's actually a useful, clean result: it proves
+the earlier idea (limit how far back the tool looks) was never going to
+work, because the false alarms and the one real, correct catch are ALL
+happening at roughly the same short distance from each other. There's
+no "far away, unrelated" match to filter out by narrowing the search --
+the tool's own test for "is this the same duct's return path" simply
+can't tell a real return path apart from two different things that
+happen to run alongside each other for a while, at ANY distance.
+
+Reverted again, confirmed clean. This closes off an entire branch of
+"maybe a different distance would fix it" ideas as tried and ruled out,
+not just unexplored -- a real step forward even though nothing shipped.
+The only idea left, same as the previous entry already said, is the
+big one: track the duct's own two walls as one specific, identified
+pair from the very start, so the tool always knows exactly which one
+specific line is its own current partner, instead of re-checking "does
+anything nearby match" over and over.
+
 2026-09-19 linear takeoff: at the user's own direction, went back to the double-wall-duct problem a fourth time and finally found the EXACT real mechanism -- but the fix built for it turns out to cause new problems elsewhere just as bad as the one it solves, so reverted again (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 Asked the user directly which of two big, real problems to tackle next
