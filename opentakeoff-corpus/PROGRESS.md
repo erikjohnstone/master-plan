@@ -1,5 +1,59 @@
 ## Active work
 
+2026-09-19 linear takeoff: tried the "have I been here before" idea from the previous entry's own next-step suggestion -- it made the same drawing much better, but broke several other drawings worse than before, so reverted again (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+The previous entry ended with an untried idea: instead of checking
+whether the tool is about to re-walk a specific matching-partner line,
+just check whether the two directions it walks out from the starting
+point (one going each way) ever pass close to each other on the map --
+a simpler, more general "have these two paths crossed paths" check.
+Confirmed first that the tool really does walk each direction totally
+separately, with no memory of what the other direction has done, using
+a small investigation script -- the two directions share zero of the
+same lines on the problem drawing, but their paths do visibly pass
+within about 18-19 feet-worth of pixels of each other (the duct's own
+two walls), which a same-line check could never see but a "how close
+are these two paths" check could.
+
+Built it: after both directions finish walking, compare their two paths
+point by point; if one path comes close enough to a later point on the
+other path, cut it off right there instead of keeping the extra distance
+past that point. Brought back the earlier fix underneath it (needed for
+the two paths to even get far enough to test against each other) and
+ran the full drawing set before deciding anything, per this project's
+own standing rule of never trusting one hand-picked example.
+
+Not safe to bring back -- worse than either earlier attempt, not
+better. The one drawing that broke worst 8 fixes ago -- correctly right,
+zero error, at the current baseline -- still breaks the exact same way:
+18.5 feet traced as 75.9 feet, unchanged from the plain earlier fix with
+no safety check at all. The check never engages on that drawing at all.
+The drawing this whole idea was built for DID improve a lot -- from 74
+feet down to under 10 feet, so the check clearly does something real --
+but the correct answer is 10.77 feet, and 9.69 feet is still off by
+about 10%, not a match. Worse, several OTHER previously-correct drawings
+now come out badly wrong in the other direction -- one drops from 38.7
+feet to 0.4 feet, another from 15.5 feet to 1 foot, another from 10.5
+feet to 0.5 feet -- because two paths passing near each other early on
+turns out to be a completely ordinary, usually-harmless thing (two
+nearby branches off the same header, a tight U-turn, a busy corridor of
+close-together runs), not a reliable sign that the tool is about to
+make the "same duct, wrapped around" mistake. The check can't tell those
+two situations apart from distance alone, and picks wrong far more often
+than right.
+
+Reverted the whole thing, confirmed the project folder is back to
+exactly its last saved state, and re-confirmed the full test set is
+still clean. This closes out this specific idea as tried, measured, and
+declined -- not something left sitting half-open. The one idea from this
+whole line of attempts that hasn't been tried yet is the bigger one:
+teaching the tool to recognize a duct's own two walls as one paired
+thing right from the start of the walk (using the same matching-partner
+geometry check already built and tested on its own), rather than trying
+to catch the mistake after the fact once the walk has already gone the
+wrong way -- a real, separate piece of work, not another small guard on
+top of the existing one.
+
 2026-09-19 linear takeoff: built and tested a small piece of the double-wall duct capability, but it turned out not to be enough to safely fix the earlier problem, so kept the useful part and set the rest aside (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 Went back to the wrong-answer problem from before (the fix that correctly
