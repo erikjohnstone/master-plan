@@ -1,5 +1,73 @@
 ## Active work
 
+2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
+recognizer bugs found and fixed: the previous WP7 baseline (below) covered
+only four hand-keyed sets. `sets.json` now registers 121 sets total (108
+newly registered from the bulk `HVAC_BAS_Plan_Sets`/`HVAC_BAS_Plan_Sets_Vol2`
+corpus releases). Ground truth (`keys/<id>.tags.csv`) was authored for 103 of
+those newly-registered sets via an exhaustive per-sheet wave — every
+tag-bearing sheet either whole-document-swept (confirmed zero real plan tags)
+or light-batch verified against an independent render + `pdf.ts` `textSpans()`
+dump per sheet, never against the pipeline's own `graph.tags` (that would
+make the ground truth circular). Committed in `24fd1701`/`3cede97`.
+
+Re-running `tag-eval.mjs` against this much larger, more diverse corpus
+surfaced three distinct, real, root-caused `buildTagIndex`/`equiptags.ts`
+bugs — not corpus-specific hacks, all three are shape-level fixes with their
+own regression tests:
+
+1. **`joinHyphenatedTags` sorted glyph fragments by raw `y0`, not row.**
+   A hyphen glyph's own bounding box commonly sits a point or two off the
+   baseline of the letters/digits beside it (drawn at vertical-center height,
+   not cap-height) — on `itd-d1-lab-mechanical.pdf#4`, "R","-","2" boxes at
+   y0 1087.6/1086.2/1087.6 sorted as "-","R","2", corrupting left-to-right
+   join order so the two-glyph mark never reassembled. Fixed by only
+   treating two spans as different rows when their vertical centers differ
+   by more than a real row's worth of height (`EQUIP_JOIN_ROW_K`); same-row
+   spans now always sort by x. Commit `0a6453f`.
+2. **`isEquipTag` only recognized `-` as a segment separator.** Some sheets
+   hexagon-callout an equipment-list row as `EQ.11` rather than `EQ-11` —
+   sometimes inconsistently on the very same sheet next to genuinely
+   hyphenated tags (`itd-d1-lab-mechanical.pdf#4`'s "EQ.3".."EQ.29" series).
+   This was the single largest driver of that sheet's recall gap: the `EQ`
+   family scored 1/59 before the fix. `isEquipTag` now splits on `[-.]`
+   instead of a literal hyphen. Commit `e453b68`.
+3. **`tag-eval.mjs` had no per-set timeout.** A pathologically slow document
+   (or, this session, a wedged table-sidecar handshake — see below) pinned a
+   concurrency slot forever; observed directly with two sets running 80+
+   minutes unfinished while 117 sat unstarted. Each child process is now
+   bounded by `OPENTAKEOFF_EVAL_TIMEOUT_MS` (default 10 min) and reports a
+   timeout like any other error instead of hanging the whole run. Commit
+   `8482887`.
+
+**Verified before/after, `itd-d1-lab` (the set that surfaced both real
+bugs):** 66.3% recall (167/252) before either fix → 70.6% (178/252) after
+the row-sort fix alone → the `EQ` family fix additionally recovers up to 58
+more tags on that one sheet once the full re-run lands (in progress — see
+below). `D` family went 0/9 broken → 9/9; `R` family 0/7 broken → 6/7 (one
+remaining `R-2` instance genuinely still missing, not yet root-caused).
+
+**Infra bug found and NOT yet fixed, flagged rather than silently worked
+around:** `tableSidecarClient.ts` has no timeout on its stdin/stdout
+handshake with the Python `tables.py` sidecar — under concurrent load
+(multiple `Session.graphForPipeline()` calls competing for the sidecar) the
+handshake can wedge indefinitely (`unix_stream_data_wait` on both sides, no
+progress for 1+ hour, confirmed via direct `/proc/<pid>/wchan` inspection).
+Reproduced twice with identical code, not fixed once with `OPENTAKEOFF_TABLE_SIDECAR=0`
+disabling the sidecar. This session's full-corpus re-runs use the sidecar
+disabled to sidestep the hang — table-region precision is not what WP7
+measures, so this is safe for THIS eval but the underlying client bug is
+real and still open.
+
+**Full-corpus re-eval status:** in progress at the time of this checkpoint,
+chunked into 9 groups of ~15 sets (resumable — a chunk is skipped on retry
+once its own `TAG CENSUS` table has printed) because this session's
+container shares CPU with an unrelated, unexplained worker process that
+periodically spikes to 90-100% kernel time and forced several full-run
+restarts before landing on the chunked approach. This entry will be updated
+with final corpus-wide recall/precision and the next queue once all 9
+chunks complete.
+
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
 plan-tag text into installed quantity. It now retains text-only observations
