@@ -633,7 +633,7 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   // too, not just "finish"-kind ones, since a real per-code material row
   // routinely lands there when its own column header is drawn once,
   // shared, outside its little box) reads intact end to end.
-  assert.equal(bySurface.EAST.definition.cells["WHITE 962"], "SMOKEY MOUNTAIN AC-18", "the code chains to its material-schedule definition");
+  assert.equal(bySurface.EAST.definition.cells["COLOR"], "SMOKEY MOUNTAIN AC-18", "the code chains to its material-schedule definition");
   for (const f of res.finishes) {
     assert.ok(f.source.sheet && f.source.bbox.x1 > f.source.bbox.x0, `${f.surface} carries a citation`);
   }
