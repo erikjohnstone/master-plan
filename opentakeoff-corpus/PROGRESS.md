@@ -1,5 +1,41 @@
 ## Active work
 
+2026-09-19 linear takeoff: figured out exactly why yesterday's fix backfired -- it wasn't a bad guess, it walked straight into a genuinely different, harder problem (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+Followed up on yesterday's thrown-away fix to make sure the lesson learned
+was the right one, not just "that didn't work, move on." Temporarily
+brought the fix back (never saved, just borrowed for one investigation)
+and traced through, step by step, the one previously-correct answer it
+broke -- a return-air duct that used to measure a clean 11 feet and,
+with the fix in place, measured a wrong 74 feet instead.
+
+The fix itself wasn't sloppy: the two duplicate line traces it merged
+at that spot really were the exact same line drawn twice, byte-for-
+byte identical, the same mistake pattern as yesterday's original find.
+Merging them was correct. The problem is what merging them revealed:
+a real three-way pipe junction where the tool's own long-standing,
+sensible rule is to keep going straight through a side junction
+rather than stop and ask -- normally the right call, since real duct
+runs pass lots of minor branch taps without needing to pause at each
+one. But by printing out the ENTIRE 74-foot path point by point rather
+than just trusting the number, it became clear this duct run doubles
+back on itself: it heads one way, hits the rounded end-cap of a
+double-walled duct (drawn as two parallel lines representing the
+duct's own two edges), wraps around that end-cap, and comes back down
+the OTHER wall of the very same duct -- which the tool, only able to
+follow one line at a time right now, mistakes for a brand new,
+separate run continuing onward. That's not a wrong guess at a fork; it's
+the tool getting confused by a shape it isn't built to fully
+understand yet, since following BOTH edges of a double-walled duct
+together is planned as a separate, later piece of work, not built yet.
+
+This is worth writing down clearly for whoever works on that later
+double-wall piece: this specific failure is exactly the kind of case
+that work is meant to solve, and trying to patch it earlier, without
+that capability, risks exactly this kind of wrong-in-a-new-way answer.
+Nothing new was built or kept this pass -- confirmed the project
+folder is completely unchanged before and after this investigation.
+
 2026-09-19 linear takeoff: found the real reason one never-seen-before answer was failing, built a fix, and then had to throw it away when it broke something else (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 Followed up directly on yesterday's finding (the "never-seen-before"
