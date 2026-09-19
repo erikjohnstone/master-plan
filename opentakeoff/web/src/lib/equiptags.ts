@@ -88,7 +88,20 @@ function mergeBoxes<T extends TagBox>(run: T[]): T {
 export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
   const items = spans.filter((s) => piece(s));
   if (items.length < 2) return items;
-  const ordered = [...items].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+  // A hyphen glyph's own box commonly sits a point or two above/below the
+  // letters and digits beside it (it draws at vertical-center height, not
+  // baseline-to-cap-height like a letter) — sorting by raw y0 can then place
+  // it before the character it should follow ("R","-","2" bounding-box y0s
+  // of 1087.6, 1086.2, 1087.6 sort as "-","R","2"), corrupting left-to-right
+  // order and silently breaking the join below. Only treat two spans as
+  // different rows when their vertical centers differ by more than a real
+  // row's worth of height; same-row spans always sort by x.
+  const ordered = [...items].sort((a, b) => {
+    const cyA = (a.y0 + a.y1) / 2, cyB = (b.y0 + b.y1) / 2;
+    const h = Math.max(a.y1 - a.y0, b.y1 - b.y0, 1);
+    const rowDiff = cyA - cyB;
+    return Math.abs(rowDiff) > h * EQUIP_JOIN_ROW_K ? rowDiff : a.x0 - b.x0;
+  });
   const out: T[] = [];
   const used = new Set<number>();
   for (let i = 0; i < ordered.length; i++) {
