@@ -1,5 +1,82 @@
 ## Active work
 
+2026-09-19 guard-green: switched from the (now exhausted) double-wall-duct problem to the other thing blocking a fully-green test suite, and traced two real, separate table-reading bugs to precise causes -- but both need a genuine redesign, not a quick patch, so both are written up and left unfixed (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md, opentakeoff-corpus/TAKEOFF_BUG_CATALOGUE.md B-44/B-45) —
+
+Three attempts at the double-wall-duct problem (this file's own last three
+entries) all reverted, so moved to the OTHER thing standing between this
+project and a fully green test suite: 6 failing tests in the demo/takeoff
+regression suite (`npm test` in the mcp folder), previously only sketched
+from a distance, now actually dug into.
+
+Two of the six turned out to share one root cause. One drawing's own
+"VOLUME CONTROL BOX SCHEDULE" was missing exactly 3 of 58 real rows
+(VAV-16, VAV-17, VAV-43) -- ordinary rows, nothing visually different
+about them, sitting right next to correctly-read neighbors. A second,
+completely different drawing's own "PACKAGED ROOFTOP AIR CONDITIONING
+UNIT SCHEDULE" didn't show up AT ALL, even though its title text and its
+real ruled gridlines both extract fine on their own. Traced both all the
+way down to the shared measuring tool this whole project uses to turn a
+grid of ruled lines into rows and columns: it builds one shared "where do
+the rows start" ruler for the WHOLE table from every column's own top
+edges, with no requirement that a candidate row-line be backed up by
+MOST of the table's own columns, only ONE. That's exactly right when a
+genuinely uneven header needs it (some column groups need three stacked
+header rows, others need only one, and both are real) -- but exactly
+wrong when it happens to split what should be one ordinary, same-shaped
+DATA row into two half-empty pieces, which is what happened to VAV-16
+and VAV-17, and which is likely also why the rooftop schedule's own very
+uneven real header (some columns have one tall header cell, others have
+three stacked ones) pushed its own "how full are the cells" health check
+below the line and got the whole table thrown out as noise.
+
+This is the same measuring tool used for every ruled table in the whole
+corpus, so a fix has to somehow tell "a real uneven header" apart from
+"a data row getting cut in half by mistake" -- BEFORE building the
+shared ruler, not after. That's a real design change to a piece of code
+everything else depends on, not a quick guard bolted on top, so -- same
+discipline as the last three entries -- it's written up in detail (a new,
+numbered entry in the corpus's own running bug list) rather than
+attempted under time pressure.
+
+A third, separate bug was found the same way, on a valve-counting test:
+one whole valve schedule table ("CHW CONTROL VALVE SCHEDULE," one
+building's worth) is completely missing from a drawing sheet that
+otherwise reads seven OTHER real tables on that exact same sheet just
+fine -- including that valve schedule's own next-door neighbor (the HHW
+version of the same schedule, same building, same sheet), which extracts
+correctly. Traced as far as "this one real table's own real, ruled
+geometry produces nothing, right next to a sibling that works," without
+pinning down the exact reason two side-by-side tables interact badly --
+a real, disclosed gap, also written up rather than guessed at. This
+correction also caught something worth flagging on its own: the bug
+list's own "what's working" section had been claiming a clean 64+99
+valve count on this exact drawing since the list was first written,
+which is no longer true (currently 45+97) -- corrected in place rather
+than left to mislead whoever reads it next.
+
+A fourth failing test (checking overall equipment counts across three
+whole drawings at once) shows the exact same shape -- undercounts only,
+never overcounts, on one of the SAME drawings the VAV bug already
+explains part of -- strongly suggesting more of the same family of bug
+rather than something new, but not individually confirmed for each of
+the three drawings under this pass's own time budget, so left as an
+educated guess rather than a proven finding.
+
+Net, across all six originally-failing tests: three (the VAV-count test
+and both rooftop-schedule tests) share one precisely-traced root cause;
+two more (the two valve-counting tests, which check the same two numbers
+two different ways) share a second, separate, real, traced-as-far-as-
+safely-possible gap; the sixth (the multi-drawing title-matching/keyed-
+compile test) shows the same undercount-only shape on one of the same
+drawings the VAV bug already explains part of, strongly suggesting more
+of the same family rather than something new, but not individually
+proven for its own three drawings under this pass's own time budget.
+None of the two root causes found has a safe fix ready to ship -- both
+would touch the one piece of code every schedule table in the corpus
+depends on, and the standing rule against guessing at a fix under time
+pressure on shared, load-bearing code applies just as much here as it
+did to the duct-pairing attempts.
+
 2026-09-19 linear takeoff: tried the "have I been here before" idea from the previous entry's own next-step suggestion -- it made the same drawing much better, but broke several other drawings worse than before, so reverted again (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 The previous entry ended with an untried idea: instead of checking

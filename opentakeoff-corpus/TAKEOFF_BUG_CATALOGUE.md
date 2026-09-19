@@ -4990,6 +4990,179 @@ resolves B-32, whose own remaining defects (title fabrication,
 misclassification, and this newly-found duplicate-content issue) are
 distinct, unrelated code paths still open.
 
+### B-44 — a real data row is split in two wherever an uneven multi-tier header shares a table with a simple single-tier header, undercounting D04's VAV schedule and (as a whole-table fill-ratio casualty) dropping D05/D09's rooftop unit schedule entirely (NOT FIXED — found, traced, disclosed; the linear-takeoff engine's own GATE 3 guard-green failures)
+
+**Where:** `federal-attachment4-mechanical.pdf#16` (`VOLUME CONTROL BOX
+SCHEDULE`, D04's own fixture) and `baker-county-eoc-bidset.pdf#41`
+(`PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)`, D05's own
+fixture — the identical PDF T-VALVE-01/T-HVAC-01 and the linear-takeoff
+held-out tier already use elsewhere in this corpus). Found chasing
+`npm test`'s own `demoD04`/`demoD05`/`demoD09` regression failures
+during a GATE 3 guard-green pass.
+
+**D04, measured exactly, not estimated.** `VOLUME CONTROL BOX SCHEDULE`
+extracts 55 of 58 real rows; `VAV-16`, `VAV-17`, and `VAV-43` are the
+three missing. Direct `textSpans()` extraction confirms all three are
+ordinary, well-formed rows: same tag-column x-range (`x0=2371.7`), same
+25.9pt row pitch, same 17-cell shape as their own immediate, correctly-
+extracted neighbors (`VAV-15`/`VAV-18`, `VAV-42`/`VAV-44`) — nothing
+about their own printed geometry is anomalous. `VAV-16` and `VAV-17`
+happen to share byte-identical cell values (a real, ordinary coincidence
+— two same-size boxes), which is the only structural thing that
+distinguishes them from their neighbors.
+
+**D05/D09, measured exactly.** The `PACKAGED ROOFTOP AIR CONDITIONING
+UNIT SCHEDULE`'s own title text is a real, single, correctly-extracted
+span (`findText` returns it once, cleanly) — the table simply never
+becomes a `ScheduleTable` at all; `graph.tables` has zero entries with
+any region overlapping its own real geometry. That geometry is real and
+ruled: 201 vector segments confirmed spanning `x:[645,3662]`, with
+horizontal rules at `y=423/631/678/725` running the table's own FULL
+width (14 contiguous collinear segments each). But the header band
+between `y=423` and `y=631` (208pt) is UNEVEN across columns: the
+`SERVICE`/`MANUFACTURER`/`MODEL`/`NOMINAL`/`SUPPLY AIR` column group has
+no internal divider (one tall header cell), while the
+`COOLING`/`GAS HEATER`/`EXHAUST`/`SUPPLY AIR FAN` column group has two
+further dividers at `y=470` and `y=517` (a genuine 3-tier sub-header) —
+both real, both correct, on the SAME physical table.
+
+**Root cause, traced to the exact function, already named in this
+codebase's own comments before this entry existed
+(`web/src/lib/sheetgraph.ts:11092-11120`, citing this very file's own
+B-20).** `sidecar/vectorgrid_rpc.py`'s `extract_grid` builds ONE shared
+row axis for a whole table (`ys = _axis(b[1] for b in cells)`) from
+every cell's own top edge, table-wide — there is no per-column
+weighting or width-corroboration requirement (`vectorgrid_rpc.py`'s
+`_axis`, ~line 131). A row-divider present under only SOME columns
+(D05's own 3-tier sub-header columns; a stray internal hairline rule in
+B-20's own `HP-1` case) still mints a new shared row-grid line; every
+OTHER column's own cell, whose real top edge does not land there, gets
+its `rowSpan` WIDENED by `_span()` to swallow the phantom line instead of
+being split — which is exactly correct behavior for D05's own simple-
+header columns (their genuinely-one-tall header cell correctly reports
+`rowSpan>1`) but is CATASTROPHIC for a DATA row that happens to trigger
+the same mechanism: two adjacent, identically-shaped VAV rows (D04's own
+`VAV-16`/`VAV-17`) sitting in a schedule ALSO carrying, somewhere on the
+same sheet or an earlier version of the same grid, a partial-width
+divider gives the shared axis an extra row-line it should not have,
+splitting what should be one whole row into two half-populated faces —
+`sheetgraph.ts`'s own downstream `dupOf` guard (B-20's fix) only catches
+the case where the SAME key AND every cell text end up byte-identical
+across the split; when the split instead orphans the row's own KEY cell
+from its data cells (this entry's own D04 mechanism), the guard never
+fires and the row is dropped outright, with no duplicate to de-duplicate.
+For D05's whole-table blackout specifically, the same uneven-header
+mechanism regularizes into many synthetically-empty header cells for
+the simple-header columns once cross-referenced against the 3-tier
+columns' own row count, and `scheduleTableSidecarAdapter.ts`'s own
+`SANITY_MIN_FILL = 0.6` (mirrored in `sidecar/tables.py`'s own docstring
+constant of the same name and value) rejects the resulting low-fill
+candidate outright — the whole table, title included, never reaches
+`graph.tables`.
+
+**Why this is disclosed without a fix.** The two failure modes need
+OPPOSITE treatment from the same signal: a row-divider corroborated by
+only some columns is exactly correct when it delimits a genuine multi-
+tier HEADER (D05's own 3-tier sub-header must stay uneven — collapsing
+it would just trade D04's bug for a new one on D05), and exactly wrong
+when it splits a DATA row that should be uniform across every column
+(D04's own `VAV-16`/`VAV-17`, B-20's own `HP-1`). Distinguishing the two
+needs the row axis construction to know where the header ends and the
+data body begins BEFORE building the shared axis — a real design change
+to `vectorgrid_rpc.py`'s own row-axis construction (the file's own
+docstring already frames row/column axis symmetrically; this is the
+first traced case where the symmetry itself is the problem), not a
+threshold tune or a downstream guard. `vectorgrid_rpc.py`/
+`bakeoff/vectorgrid.py`/`bakeoff/celltext.py` are the corpus's single
+shared face-extraction engine for EVERY ruled table in this corpus (the
+module's own docstring cites `137/137 table boxes`, `222/222 keyed
+tables`, `917/917 hand-transcribed cells` measured against it) — a
+header/data-aware row-axis change here is corpus-wide-blast-radius
+surgery on the most load-bearing extraction primitive this project has,
+not a narrow patch, and per this file's own standing rule needs a full
+corpus regression sweep (not just these two fixtures) before shipping,
+not attempted here under this session's own no-guessing-at-fixes-under-
+time-pressure rule.
+
+**Consequence:** GATE 3's own `guard-green` criterion
+(`opentakeoff-corpus/goals/LINEAR_TAKEOFF.md`) stays unmet on the mcp
+side specifically because of `demoD04`/`demoD05`/`demoD09` (D04
+undercounts `vav_count` by 3; D05/D09 both fail identically on
+`"packaged rooftop schedule must remain extractable"`) — three separate-
+looking `npm test` failures that are one root cause, not three.
+
+### B-45 — a whole schedule table (`CHW CONTROL VALVE SCHEDULE`, Building M) vanishes from its own sheet while its immediate physical sibling (`HHW CONTROL VALVE SCHEDULE`, same building, same sheet) extracts correctly, undercounting T-HVAC-01/T-VALVE-01 by 19 of their own 21-item gap (NOT FIXED — found, traced, disclosed; also corrects this file's own stale "What is working" claim below)
+
+**Where:** `navfac-cherry-point-atc-mechanical.pdf#47`. Found chasing
+`npm test`'s own `takeoffHvac01`/`takeoffValve01` regression failures
+during the same GATE 3 guard-green pass as B-44 — both tests assert
+`CHW_CONTROL_VALVE.count === 64` / `HHW_CONTROL_VALVE.count === 99`
+(`opentakeoff-corpus/takeoffs/T-VALVE-01-navfac-control-valves/truth.json`);
+both currently read 45 and 97.
+
+**Measured exactly, not estimated.** Truth's own 19 missing CHW tags
+(`CV-AHU-M1-CHW`, `CV-CRAH-M1A/1B/2A/2B-CHW`, `CV-CH-C-MT1/MT2`,
+`CV-CHW-BP-M`, `CV-DOAH-M1-CHW`, `CV-FCU-M1A/1B/2A/2B/3/4A/4B/5/6/7-CHW`
+— 19 of 19) all carry `sheet_id: "...#47"`, `table_title: "CHW CONTROL
+VALVE SCHEDULE"`, and an IDENTICAL `bbox_px` left edge (`x0=1709.52`) at
+a perfectly regular 34.56pt row pitch — one coherent, physically real
+sub-table. `graph.tables` has ZERO entries whose title matches `/CHW
+CONTROL VALVE/i` anywhere near sheet `#47` (the two that DO exist,
+`region`s `[3460…4442,485…1337]` and `[3639…4492,1424…2379]`, both carry
+`{sheet}` on `#44` and `#49` respectively — different, unrelated
+Building-A and Building-T instances of the same recurring caption).
+Sheet `#47` itself is NOT a blackout page (B-28's own "whole page, zero
+tables" shape ruled out directly): it yields 8 OTHER real tables,
+including `HHW CONTROL VALVE SCHEDULE` (33 rows, Building M) — its own
+immediate physical neighbor, almost certainly the side-by-side column
+block sharing the same schedule region, extracted essentially correctly
+(33 of 35 real HHW-M rows; `M112`/`M113` are the small residual 2-item
+gap, and 31 of the 33 extracted rows carry a truncated tag lacking the
+expected `CV-`/`-HHW` wrap — `CUH-M1` instead of `CV-CUH-M1-HHW` — a
+separate, likely-simple tag-formatting defect in
+`web/src/lib/corpusTakeoff.mjs`'s own valve-naming logic, not traced
+further this pass since it does not move any of the two failing tests'
+own asserted `.count` numbers).
+
+**Relationship to already-catalogued bugs.** Not B-28 (whose own fixed
+mechanism — a same-SHEET, same-title, same-row-key collision in
+`collapseEquivalentPrimaryTables`'s dedup identity — requires a same-
+titled rival ON THE SAME SHEET; the CHW-M table's own siblings are on
+different sheets entirely, `#44`/`#49`, and no second `CHW CONTROL
+VALVE SCHEDULE` claims sheet `#47`). Not B-25 (transposed-layout) or a
+page-role blackout (`#47` produces 8 real tables). Closest in shape to
+B-16/B-32's own "two side-by-side blocks, one consumed by the other's
+own face-weld" family, but not traced to the exact consuming mechanism
+under this pass's own time budget — plausibly the CHW-M and HHW-M
+blocks share a border/gutter close enough for vectorgrid's own
+`shapely polygonize_full` face-finder to weld the CHW-M block's own
+ruled lines into the HHW-M block's own region rather than resolving two
+independent tables, but this was not confirmed at the geometry level the
+way B-44's mechanism was.
+
+**Why this is disclosed without a fix:** the exact consuming mechanism
+(title-collision vs. face-weld vs. something else) was traced only to
+"CHW-M's own real, ruled geometry produces no table object at all while
+its physical neighbor does," not to a specific function and line the
+way B-44 and this file's other closed entries are — shipping a guess at
+the boundary between two real, adjacent tables risks exactly the kind
+of confidently-wrong table-region change this file's own standing rule
+exists to prevent, on the same shared, corpus-wide extraction engine
+B-44 already named. A future pass should start from `#47`'s own raw
+vectorgrid RPC reply (`extract_grid_rpc`) for this one page, checked
+directly against both the CHW-M and HHW-M regions' own cell/face lists,
+before touching any shared code.
+
+**This corrects a stale claim in this file's own "What is working"
+section below:** written 2026-09-13/14 against this exact document
+(`64 CHW + 99 HHW control valves`), that claim does not currently hold —
+whether it never held under `corpusTakeoff.mjs`'s own strict per-
+category counting (a different, stricter measurement than whatever
+produced the original claim) or genuinely regressed since, was not
+determined this pass; either way, the honest current count is 45/97,
+not 64/99, and the section below is corrected accordingly rather than
+left to mislead a future reader.
+
 ---
 
 ## What is working
@@ -5003,8 +5176,12 @@ against — compiled **333 items across 22 populated categories** with correct m
 - 28 FCUs, 25 VAVs, 4 boilers; air-cooled chillers (`CH-A1`) separated from heat-recovery
   chillers (`CH-MT1`)
 - 18 pumps with discipline vocabulary intact: `HRHWP`, `PCHWP`, `SCHWP`, `PHHWP`, `SHHWP`
-- 64 CHW + 99 HHW control valves named by served equipment (`CV-AHU-A1-CHW`,
-  `CV-FCU-A8-A-HHW`) — the valve-to-equipment relationship survives, which is the hard part
+- control valves named by served equipment (`CV-AHU-A1-CHW`, `CV-FCU-A8-A-HHW`) — the
+  valve-to-equipment relationship survives, which is the hard part. **Correction
+  (2026-09-19, see B-45):** this line originally claimed 64 CHW + 99 HHW, matching
+  this same document's own frozen truth; the current, honestly-measured count is 45
+  CHW + 97 HHW — B-45's own whole-table CHW-M dropout accounts for 19 of the 21-item
+  gap, with a further, separate small residual open on the HHW side.
 - air separators (`AS-CHW-M1`) separated from expansion tanks (`ET-CHW-MT1`); humidifiers
   from dehumidifiers
 - building segmentation (`-M-`/`-T-`/`-A-`) consistent across every family
