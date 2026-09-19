@@ -26,7 +26,10 @@ const canon = (s: string) => (s || "").trim().toUpperCase().replace(/[–—−]
 
 /**
  * Multi-hyphen equipment tags: letter-led, hyphen-separated alphanumeric
- * segments — PCHWP-MT1, CUH-T1, CV-CHW-BP-T, AHU-1.
+ * segments — PCHWP-MT1, CUH-T1, CV-CHW-BP-T, AHU-1. A period reads as the
+ * same separator (some sheets hexagon-callout an equipment list row as
+ * "EQ.11" rather than "EQ-11", sometimes inconsistently on the very same
+ * sheet) — the shape is what matters, not which punctuation mark draws it.
  *
  * A two-segment tag must contain a digit so hyphenated English
  * ("FIRST-FLOOR", "SEE-NOTE") never reads as a tag. Three or more short
@@ -35,8 +38,8 @@ const canon = (s: string) => (s || "").trim().toUpperCase().replace(/[–—−]
 export function isEquipTag(raw: string): boolean {
   const t = canon(raw);
   if (t.length < 3 || t.length > MAX_TAG_LEN) return false;
-  if (!t.includes("-")) return false;
-  const parts = t.split("-");
+  if (!/[-.]/.test(t)) return false;
+  const parts = t.split(/[-.]/);
   if (parts.length < 2 || parts.length > MAX_SEGS) return false;
   if (!/^[A-Z]{1,8}$/.test(parts[0])) return false;
   for (let i = 1; i < parts.length; i++) {
