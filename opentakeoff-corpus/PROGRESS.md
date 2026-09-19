@@ -1,5 +1,49 @@
 ## Active work
 
+2026-09-19 linear takeoff: built and tested a small piece of the double-wall duct capability, but it turned out not to be enough to safely fix the earlier problem, so kept the useful part and set the rest aside (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+Went back to the wrong-answer problem from before (the fix that correctly
+solved one drawing but sent the tool 74 feet in the wrong direction on
+another) and tried to build just enough of the "understand a duct's own
+two walls together" capability to safely bring the original fix back.
+
+Built a small, self-contained checker: given one line, does it have a
+matching, parallel partner line running alongside it nearby -- the same
+basic geometry test planned for the fuller version of this capability
+down the road. Tested it carefully on its own with eight made-up
+examples (a real matching pair, two lines that just cross at an angle,
+a pair too far apart to be the same duct, two lines that barely touch
+rather than run together, a pair that spreads apart instead of staying
+parallel, and so on) -- all behaved correctly.
+
+Wired it in as a safety check: before letting the tool automatically
+continue through a junction, ask "would this walk us back into a line
+whose own matching partner we've already walked?" -- if yes, stop and
+ask rather than guess, since that's the exact shape of the earlier
+wrong-turn mistake.
+
+Checked it against both real drawings involved: the one that should
+work still works the same as before (good, no accidental new
+breakage), but the one that was going wrong in 74 feet... still goes
+wrong the same way. Looked closely at every single step of that wrong
+path and confirmed: at no point does the tool ever step into a line
+whose own obvious matching partner it already walked. Whatever is
+actually happening on that drawing, it isn't the simple "walked into
+your own other wall" mistake it looked like from a quick glance
+earlier -- something a bit more complicated is going on.
+
+Since the safety check doesn't actually catch the one real mistake it
+was built to catch, bringing back the original fix would be just as
+risky as before. Reverted the original fix again, exactly as before.
+Kept the new safety-check building block itself, though, since it's a
+real, tested, useful piece that a more complete future version of this
+capability can build on -- just not, by itself, enough to solve this
+specific problem yet. A next idea worth trying: instead of checking
+for a specific matching-partner line, just check whether the tool is
+about to walk back near ANY point on the map it's already visited,
+regardless of which specific line that point belongs to -- a simpler,
+more general "have I been here before" check, not yet tried.
+
 2026-09-19 linear takeoff: found and fixed a real speed problem -- one drawing was taking almost 3 seconds to process when it should take well under half a second (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 Moved on to the other open speed target for this stage of the project:
