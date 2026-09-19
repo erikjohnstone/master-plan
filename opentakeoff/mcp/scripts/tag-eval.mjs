@@ -33,6 +33,7 @@ import { spawn } from "node:child_process";
 import pLimit from "p-limit";
 import { Session } from "../src/session.ts";
 import { parseTagKeyCsv, scoreTagEval } from "../src/tagEval.ts";
+import { cachedEvalResult } from "./evalCache.mjs";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 // --single-json <setId>: internal mode, see takeoff-eval.mjs's own identical
@@ -52,17 +53,32 @@ const PRECISION_FLOOR = 0.97;
 const RECALL_FLOOR = 0.95;
 const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 
-async function evalSet(set) {
-  const keyPath = join(corpus, "keys", `${set.id}.tags.csv`);
-  if (!existsSync(keyPath)) return { id: set.id, unlabelled: true };
-  const key = parseTagKeyCsv(readFileSync(keyPath, "utf8"), keyPath);
-
+async function evalSetUncached(set, keyPath, key) {
   const s = new Session();
   const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
   const graph = await s.graphForPipeline();
 
   return { id: set.id, score: scoreTagEval(graph.tags ?? [], key) };
+}
+
+async function evalSet(set) {
+  const keyPath = join(corpus, "keys", `${set.id}.tags.csv`);
+  if (!existsSync(keyPath)) return { id: set.id, unlabelled: true };
+  const key = parseTagKeyCsv(readFileSync(keyPath, "utf8"), keyPath);
+  const files = resolveSetFiles(corpus, spec, set);
+  // A fresh child process per set (see CONCURRENCY comment below) pays the
+  // full PDF-parse-plus-sheet-graph cost cold every time otherwise —
+  // content-addressed by engine source + PDF identity + this key file, the
+  // same discipline takeoff-eval.mjs/graph-eval.mjs already use, so a repeat
+  // run over an unchanged corpus answers from cache instead of re-deriving
+  // graph.tags from scratch.
+  return cachedEvalResult(
+    "tag",
+    [...files, keyPath],
+    [JSON.stringify(set)],
+    () => evalSetUncached(set, keyPath, key),
+  );
 }
 
 if (singleJsonSetId) {
