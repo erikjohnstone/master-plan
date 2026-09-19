@@ -80,19 +80,38 @@ if (singleJsonSetId) {
 const wanted = spec.sets.filter((s) => !only.length || only.includes(s.id));
 const thisScript = fileURLToPath(import.meta.url);
 const limit = pLimit(CONCURRENCY);
+// One pathologically large/slow set (or a hung sidecar) would otherwise pin
+// a concurrency slot forever and stall the rest of the corpus. Bound it —
+// a timed-out set is reported like any other error, never silently dropped.
+const PER_SET_TIMEOUT_MS = Number(process.env.OPENTAKEOFF_EVAL_TIMEOUT_MS) || 10 * 60 * 1000;
 
 function evalSetInChildProcess(set) {
   return new Promise((res) => {
     process.stderr.write(`· ${set.id} …\n`);
     const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", set.id], { stdio: ["ignore", "pipe", "inherit"] });
     let out = "";
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      child.kill("SIGKILL");
+      res({ id: set.id, error: `timed out after ${PER_SET_TIMEOUT_MS}ms` });
+    }, PER_SET_TIMEOUT_MS);
     child.stdout.on("data", (d) => { out += d; });
     child.on("close", (code) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
       if (code !== 0 || !out.trim()) { res({ id: set.id, error: `child process exited ${code} with no result` }); return; }
       try { res(JSON.parse(out)); }
       catch (e) { res({ id: set.id, error: `bad child JSON: ${String(e.message || e)}` }); }
     });
-    child.on("error", (e) => res({ id: set.id, error: String(e.message || e) }));
+    child.on("error", (e) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      res({ id: set.id, error: String(e.message || e) });
+    });
   });
 }
 
