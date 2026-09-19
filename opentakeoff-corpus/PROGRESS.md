@@ -1,5 +1,53 @@
 ## Active work
 
+2026-09-19 linear takeoff: a sixth attempt at the double-wall-duct problem -- tracking one single, fixed identified partner instead of searching -- got closer than any previous try but still breaks real drawings, some worse than before (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+Before building the "track both walls as one paired thing from the start"
+idea the last two entries both pointed to, worked through it by hand
+first, step by step, on paper, against the real drawing that first
+exposed this whole problem. Found a real, fatal flaw before writing any
+code: the tool's own small end-cap fitting is built from a few short
+connector pieces that all happen to look like valid "matching partners"
+of EACH OTHER too, so an approach that keeps re-picking its own partner
+at every step ends up drifting onto a piece the tool had ALREADY walked
+earlier, and completely misses the real moment it needed to catch.
+Ruled out on paper, before ever running it.
+
+Tried something much simpler instead: identify ONE specific matching
+partner line, just once, right at the very start, and never change that
+choice for the rest of the walk -- instead of searching over and over
+(the whole path, or a recent slice of it, both already tried and
+failed).
+
+Getting the tool to correctly identify the RIGHT specific partner took
+four tries in itself. Picking whichever candidate is found first: wrong
+(a page-wide border line at the top of the sheet). Picking whichever is
+closest: also wrong (a real but unrelated 6-pixel-away mark that has
+nothing to do with the duct). Picking whichever overlaps the most:
+wrong again, twice, for two different reasons. Only "closest, but only
+among candidates roughly the SAME LENGTH as the original line" finally
+picked the real, correct matching wall every time it was checked.
+
+With that fixed, the tool now catches the original wraparound EVEN MORE
+precisely than any earlier attempt -- stopping exactly at the true
+end-cap junction itself. And for the first time in six tries, the
+smaller, carefully-protected test set stayed perfectly clean (previous
+attempts had broken one of those). But the larger, everyday test set
+still fails outright, and -- concerning -- one previously-fine drawing
+now breaks WORSE than it did under the earlier, cruder attempts, not
+just still-broken.
+
+Reverted again, confirmed clean. Six real, honestly different attempts
+now, each one diagnosed more precisely than the last, and the pattern
+holds every time: real mechanical drawings are full of separate,
+legitimate duct and pipe runs that happen to sit near and parallel to
+each other for ordinary reasons that have nothing to do with any one
+duct's own two walls. Any check built purely from "does this look like
+a matching pair, geometrically" keeps mistaking one for the other, no
+matter how the check is scoped or how carefully the specific partner is
+chosen. This is now a well and truly demonstrated limit of this
+approach, not a lever still worth turning.
+
 2026-09-19 linear takeoff: tested the obvious next tweak to the last attempt (only check recent history, not the whole path) -- got the EXACT same result as before, proving the problem was never "how far back to look" (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 The previous entry ended by blaming the fresh regressions on checking
