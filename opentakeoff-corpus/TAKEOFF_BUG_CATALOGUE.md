@@ -5198,6 +5198,56 @@ separate, likely-simple tag-formatting defect in
 further this pass since it does not move any of the two failing tests'
 own asserted `.count` numbers).
 
+**New evidence (2026-09-19), a real lead not previously checked.**
+Read this page's own raw PDF text directly (`pdf.ts`'s own `textSpans`,
+independent of any extraction pipeline) rather than only `graph.tables`'
+own output. `CHW CONTROL VALVE SCHEDULE`'s own title span is real, single,
+and well-formed (`x0=1723.9, y0=280.4, x1=2380.7`), and its own data rows
+directly beneath it are ordinary, complete, and correctly tagged
+(`CV-AHU-M1-CHW`, `CV-CRAH-M1A-CHW`, … starting at `y0=410.7`, same
+25.9-34.5pt-scale row pitch as every other schedule on this document) —
+nothing about the SOURCE PDF is malformed or unusual. But
+`HHW CONTROL VALVE SCHEDULE`'s own title span sits on the EXACT SAME
+line — `x0=600, y0=280.4, x1=1256.8` — CHW and HHW are printed as two
+independent, physically SIDE-BY-SIDE schedules sharing one title row,
+CHW to the right of HHW with roughly a 470pt gap between them. And
+`graph.tables`' own surviving `HHW CONTROL VALVE SCHEDULE` entry has a
+detected `region` of `[417.6, 280.4, 2418.6, 1647.6]` — its own
+right edge (`x1=2418.6`) lands just 38pt past CHW's own title's right
+edge (`x1=2380.7`), and its own `y0` (`280.4`) is CHW's title's `y0`
+EXACTLY. That is far too precise a coincidence to be unrelated: HHW's
+own detected table region, as extracted, already reaches out far enough
+to physically cover essentially the whole of CHW's own column space,
+title included — the same general SHAPE as B-44's own confirmed
+mechanism (two spans on the exact same logical row/line getting
+clustered or bounded together across a real but unrelated gap), here
+manifesting as whole-column consumption rather than a single
+mis-selected cell. Column-level confirmation: HHW's own extracted
+`anchors` are `MARK(x=486.6)`, `FLOWRATE VALVE GPM(x=844.15)`,
+`SIZE(x=967.7)`, `NOTES(x=1400.05)`, `GPM(x=1978.65)` — five columns,
+all sitting comfortably to the LEFT of CHW's own title (`x0=1709.52` per
+truth's own `bbox_px`, matching CHW's own raw `VALVE MARK` header token
+at `x=1749.8` closely) — so HHW's own COLUMN detection did not
+literally re-read CHW's own cells as extra HHW columns; the two tables'
+own column grids stay genuinely distinct even though their outer
+`region` boxes overlap. This narrows the mechanism specifically to
+whatever computes/uses a table's own bounding `region` (title-hunt or
+boundary detection) rather than the column/anchor or row-banding logic
+`bandDataRows`/`columnStarts` already cover — a real, useful distinction
+B-44's own investigation did not need to make, since that bug never
+touched region computation at all.
+
+**Not yet identified: the exact function that consumes CHW's own
+title/header block once HHW's own region is computed to cover it** — the
+`extractTableAt`/`findHeaderRow` chain (`sheetgraph.ts`) is the right
+place to keep looking (same file, same general "title-hunt walks a row
+and reads more of it than one table's own share" family as B-44's
+`joinGraphSpans` mechanism), but this was not traced to a specific
+line the way B-44 now is, and — given B-44's own precedent this same
+session, where a clean local fix cascaded into a corpus-wide dedup
+regression two levels away — should not be assumed shippable in
+isolation even once found.
+
 **Relationship to already-catalogued bugs.** Not B-28 (whose own fixed
 mechanism — a same-SHEET, same-title, same-row-key collision in
 `collapseEquivalentPrimaryTables`'s dedup identity — requires a same-

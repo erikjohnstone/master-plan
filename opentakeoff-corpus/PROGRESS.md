@@ -1,5 +1,38 @@
 ## Active work
 
+2026-09-19 table extraction: narrowed down (but didn't yet solve) the OTHER open bug -- a whole real schedule disappearing, not just one row of it (TAKEOFF_BUG_CATALOGUE.md B-45) --
+
+After documenting the row-drop bug above, picked the next most promising
+lead: a DIFFERENT bug where an entire real schedule table (a CHW valve
+schedule on one federal building set) goes completely missing, while an
+identical-looking schedule right next to it on the same page extracts
+fine. Read the source PDF's own raw text directly rather than trusting
+any extraction output, to rule out the source document itself being
+malformed -- it isn't. The missing schedule's own title and every one of
+its data rows are perfectly normal, well-formed text.
+
+Found something concrete: the missing schedule and its working neighbor
+are printed SIDE BY SIDE, sharing the exact same title line on the page
+(literally the same height, just one starting a few hundred points to the
+right of the other). The neighbor's own detected "this is where the whole
+table lives" box, as measured by the tool, reaches out far enough to the
+right to cover almost the ENTIRE missing schedule's own space, title
+included -- while its own individual columns stay correctly narrow and
+don't actually re-read the missing table's own numbers. That's too close
+a coincidence to be unrelated: this strongly looks like the same general
+family of mistake as the row-drop bug above (two separate things on the
+exact same line getting merged together across a gap that should have
+kept them apart), just showing up as "one whole table swallows its
+neighbor's space" instead of "one wrong word wins a sort."
+
+Did not find the exact line responsible, and didn't attempt a fix --
+given the row-drop bug's own fix, built and proven working, still had to
+be reverted because of a side effect two steps removed from where it was
+made, going any further here without a lot more care would risk exactly
+the same trap. Documented the concrete new lead plainly so the next pass
+starts from "two side-by-side titles on one line, in this specific
+function family" instead of "somewhere in this whole file, unknown."
+
 2026-09-19 table extraction: found the REAL reason a real schedule row goes missing (three sessions' worth of bug-catalogue entries had it blamed on the wrong piece of code entirely) -- built a fix, proved it works, then found it breaks something else and reverted (TAKEOFF_BUG_CATALOGUE.md B-44/B-45/B-46) --
 
 Went back to the still-open VAV-schedule bug (a schedule that should have
