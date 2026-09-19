@@ -5163,6 +5163,53 @@ determined this pass; either way, the honest current count is 45/97,
 not 64/99, and the section below is corrected accordingly rather than
 left to mislead a future reader.
 
+### B-46 — the sixth, previously-unlooked-at `npm test` failure (WP1's own keyed-compile acceptance) is confirmed to be MORE instances of B-44 and B-45, not a new bug — one engineering investment, not six separate ones (CONFIRMED — same root causes as B-44/B-45, not independently investigated further)
+
+**Where:** `federal-mech.compile.json` (`federal-attachment4-mechanical.pdf`, the same document D04's own `VAV-16`/`17`/`43` gap already names), one of three sets `crossCorpusWorkflow.test.mjs`'s own `"WP1 keyed compile acceptance on ≥2 non-NAVFAC sets"` currently fails on (the other two, `bldg5406-hvac-demo.compile.json` and `itd-d1-lab.compile.json`, were not individually re-checked this pass).
+
+**Measured exactly.** The reviewed key (base `compile.json` plus
+`cross-set-compile-reviewed-corrections.json`'s own overlay) expects
+128 total HVAC items; the compiler currently returns 114, a 14-item gap
+spread across SIX separate families, not one: `FCU` (6 vs 7), `VAV`
+(55 vs 58 — the exact same 3-row gap D04's own entry already names),
+`CONDENSING_UNIT` (2 vs 6 — a MAJORITY of the real units missing),
+`BOILER` (0 vs 2 — the entire family, not a partial miss), `GRD`
+(21 vs 23), and `EXPANSION_TANK` (0 vs 2 — again the entire family).
+Direct inspection of `graph.tables` confirms the same two shapes
+already catalogued, not a third: `"AIR-COOLED CONDENSING UNIT
+SCHEDULE"` exists and extracts, but with only 2 of 6 real rows (`CU-4`,
+`CU-6`) — B-44's own partial-row-axis-phantom-split shape; no table
+titled `BOILER` or `EXPANSION` appears anywhere in `graph.tables` at
+all — B-45's own whole-table-vanishes shape, on a THIRD real
+document now (`baker-county-eoc-bidset.pdf#47` was B-45's own
+original case), confirming that mechanism generalizes rather than
+being specific to one sheet's own layout.
+
+**Why this matters for prioritization, not just completeness.** Five
+of the six `npm test` failures this session's own guard-green pass
+found (`D04`, `D05`, `D09`, `T-HVAC-01`, `T-VALVE-01`) were already
+traced to B-44 or B-45. This entry confirms the sixth (`WP1`) is
+ALSO the same two root causes, on a different document, not a
+distinct defect needing its own investigation — matching this file's
+own opening rule ("Fix nothing listed here without reading 'How these
+connect' first... fixing them individually would produce three patches
+where one structural change belongs"). A real fix to `vectorgrid_rpc.py`'s
+own row-axis construction (B-44) and whatever causes a real, ruled,
+correctly-titled table to produce zero candidates alongside a correctly-
+extracting sibling (B-45) would very likely close ALL SIX of this
+session's own `npm test` failures at once, not six separate ones —
+raising the value of that engineering investment considerably above
+what either entry's own individual writeup implied on its own, though
+still the same scope of work: careful, corpus-wide-tested changes to
+the single shared face-extraction engine every ruled table in this
+corpus depends on, not a quick patch.
+
+**Not fixed, not further investigated this pass** — the other two WP1
+sets (`bldg5406-hvac-demo`, `itd-d1-lab`) were not individually broken
+down the way `federal-mech` was here; a future pass confirming they
+ALSO reduce to B-44/B-45 (rather than assuming it) would complete this
+entry's own claim with the same rigor.
+
 ---
 
 ## What is working
