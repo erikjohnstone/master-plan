@@ -1,5 +1,71 @@
 ## Active work
 
+2026-09-19 table extraction: found the REAL reason a real schedule row goes missing (three sessions' worth of bug-catalogue entries had it blamed on the wrong piece of code entirely) -- built a fix, proved it works, then found it breaks something else and reverted (TAKEOFF_BUG_CATALOGUE.md B-44/B-45/B-46) --
+
+Went back to the still-open VAV-schedule bug (a schedule that should have
+58 rows but only ever produced 55, missing exactly VAV-16, VAV-17, and
+VAV-43) to actually find the mechanism, instead of the earlier write-up's
+best guess. That write-up blamed a specific piece of Python code this
+project uses for reading ruled tables out of PDFs. Checked that directly
+before trusting it any further, and it does not hold up: that Python code
+never even runs in this environment at all -- it fails to start, every
+single time, on every sheet, because one of its own dependencies isn't
+installed here. Three bug-catalogue entries were confidently blaming code
+that was never actually running. Corrected all three, plainly, rather
+than let a future pass keep trusting a wrong lead.
+
+The real culprit turned out to be much closer to home: this project's own
+backup, in-house table reader (used whenever the fancier Python/Java
+readers can't handle a page). When it groups a row's words into cells, it
+sorts them top-to-bottom-then-left-to-right. That is exactly right for a
+schedule printed sideways, but wrong for an ordinary one: two words on the
+exact same line can print at very slightly different heights just from
+being different font sizes, and that tiny height difference was enough to
+put some random word from far off to the right of the row (in this exact
+case, leftover template text reading "BUILDING XX") ahead of the row's own
+real label in the sort order. The tool then reads "BUILDING XX" as the
+row's name, decides that isn't a real tag, and throws the ENTIRE row away
+-- real data included.
+
+Built a fix (read a row left-to-right normally, but sideways-first when a
+row is actually a sideways schedule) and it worked exactly as hoped: on
+the real document, the missing VAV rows all came back, and so did a
+matching set of missing air-conditioner units and diffusers/grilles on the
+same document -- 10 more correct rows recovered in total on ONE document
+alone, a bigger win than the original bug report even described.
+
+But bringing a real, previously-broken row back to life had a side
+effect: on a DIFFERENT sheet, a different, weaker table reader had also
+been quietly failing on this exact same mistake -- and failing was
+actually HIDING a worse problem, because this project's own "who wins
+when two different readers both claim the same table" logic had a rule
+that always favors a named reader over the structural, no-vocabulary one,
+no matter how much better the structural one's answer actually is. Once
+the fix let that weaker reader succeed, its own worse, merged-together
+answer started winning over the correct one. Fixed THAT too, carefully --
+and it fixed the second table, but broke a THIRD, unrelated table
+elsewhere the same way, through the same "who wins" logic reacting badly
+to yet another case it wasn't built for.
+
+Two careful, well-tested patches to that "who wins" logic each fixed the
+exact case in front of them and broke a different one. That is a strong
+signal that this project's own rules for picking between competing
+table-readings are already tuned tightly around the specific cases they
+were built for, and cannot safely be stretched further without a much
+bigger, dedicated pass over ALL of those existing cases at once -- not
+something to improvise under this session's usual quick verify-and-ship
+loop.
+
+Reverted the whole thing, confirmed clean. The original row-sorting fix
+by itself is solid and would still be worth shipping later specifically
+BECAUSE of what it revealed, but not on its own: it still leaves one
+other real schedule (a rotated FAN SCHEDULE, the very case that exposed
+the "who wins" problem) worse off than before, so shipping it alone would
+just trade one disclosed bug for a different, undisclosed one. Documented
+all of this plainly in the bug catalogue, including the correction to the
+earlier wrong blame, so the next pass starts from the real mechanism
+instead of chasing the Python code again.
+
 2026-09-19 linear takeoff: a sixth attempt at the double-wall-duct problem -- tracking one single, fixed identified partner instead of searching -- got closer than any previous try but still breaks real drawings, some worse than before (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 Before building the "track both walls as one paired thing from the start"

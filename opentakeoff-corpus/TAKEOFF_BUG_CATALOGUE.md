@@ -4990,7 +4990,7 @@ resolves B-32, whose own remaining defects (title fabrication,
 misclassification, and this newly-found duplicate-content issue) are
 distinct, unrelated code paths still open.
 
-### B-44 — a real data row is split in two wherever an uneven multi-tier header shares a table with a simple single-tier header, undercounting D04's VAV schedule and (as a whole-table fill-ratio casualty) dropping D05/D09's rooftop unit schedule entirely (NOT FIXED — found, traced, disclosed; the linear-takeoff engine's own GATE 3 guard-green failures)
+### B-44 — a real data row silently drops out of `sheetgraph.ts`'s own in-house table extractor whenever a far-right cell's ordinary font-height jitter outranks a much larger true left-right position gap in the row's own reading-order sort, undercounting D04's VAV schedule and (originally, wrongly, blamed on a different, non-running backend for D05/D09's rooftop unit schedule — see the correction below) (NOT FIXED — root cause now fully traced and confirmed by a working, corpus-tested fix; reverted because it exposes a separate, pre-existing table-candidate-arbitration bug elsewhere in the same file — see GOAL.md's own shared-path rule)
 
 **Where:** `federal-attachment4-mechanical.pdf#16` (`VOLUME CONTROL BOX
 SCHEDULE`, D04's own fixture) and `baker-county-eoc-bidset.pdf#41`
@@ -5026,63 +5026,137 @@ no internal divider (one tall header cell), while the
 further dividers at `y=470` and `y=517` (a genuine 3-tier sub-header) —
 both real, both correct, on the SAME physical table.
 
-**Root cause, traced to the exact function, already named in this
-codebase's own comments before this entry existed
-(`web/src/lib/sheetgraph.ts:11092-11120`, citing this very file's own
-B-20).** `sidecar/vectorgrid_rpc.py`'s `extract_grid` builds ONE shared
-row axis for a whole table (`ys = _axis(b[1] for b in cells)`) from
-every cell's own top edge, table-wide — there is no per-column
-weighting or width-corroboration requirement (`vectorgrid_rpc.py`'s
-`_axis`, ~line 131). A row-divider present under only SOME columns
-(D05's own 3-tier sub-header columns; a stray internal hairline rule in
-B-20's own `HP-1` case) still mints a new shared row-grid line; every
-OTHER column's own cell, whose real top edge does not land there, gets
-its `rowSpan` WIDENED by `_span()` to swallow the phantom line instead of
-being split — which is exactly correct behavior for D05's own simple-
-header columns (their genuinely-one-tall header cell correctly reports
-`rowSpan>1`) but is CATASTROPHIC for a DATA row that happens to trigger
-the same mechanism: two adjacent, identically-shaped VAV rows (D04's own
-`VAV-16`/`VAV-17`) sitting in a schedule ALSO carrying, somewhere on the
-same sheet or an earlier version of the same grid, a partial-width
-divider gives the shared axis an extra row-line it should not have,
-splitting what should be one whole row into two half-populated faces —
-`sheetgraph.ts`'s own downstream `dupOf` guard (B-20's fix) only catches
-the case where the SAME key AND every cell text end up byte-identical
-across the split; when the split instead orphans the row's own KEY cell
-from its data cells (this entry's own D04 mechanism), the guard never
-fires and the row is dropped outright, with no duplicate to de-duplicate.
-For D05's whole-table blackout specifically, the same uneven-header
-mechanism regularizes into many synthetically-empty header cells for
-the simple-header columns once cross-referenced against the 3-tier
-columns' own row count, and `scheduleTableSidecarAdapter.ts`'s own
-`SANITY_MIN_FILL = 0.6` (mirrored in `sidecar/tables.py`'s own docstring
-constant of the same name and value) rejects the resulting low-fill
-candidate outright — the whole table, title included, never reaches
-`graph.tables`.
+**CORRECTION (2026-09-19), scope note:** the fix described below is
+confirmed, by direct A/B measurement, to explain and repair ONLY the
+D04 shape above (a real row's own key cell mis-selected out of a
+correctly-banded set of tokens) — it does NOT touch whether a table is
+found at ALL. WP1's own `federal-mech.compile.json` check, run both
+before and after the fix, shows `BOILER`/`EXPANSION_TANK` (both a
+whole-family, whole-table-vanish shape exactly like D05/D09's own
+rooftop schedule here) sitting at 0 of 2 UNCHANGED by the fix — direct,
+measured proof that D05/D09's own whole-table disappearance is a
+SEPARATE mechanism from D04's row-drop, not the same bug's second face
+the way the original (vectorgrid-attributed) write-up assumed. D05/D09
+almost certainly belong with B-45's own whole-table-vanish shape below
+instead — not re-confirmed against baker-county-eoc-bidset.pdf#41
+directly this pass, so left catalogued here rather than reassigned on
+an unconfirmed assumption, but a future pass should check that directly
+before doing any further work under this entry's own name.
 
-**Why this is disclosed without a fix.** The two failure modes need
-OPPOSITE treatment from the same signal: a row-divider corroborated by
-only some columns is exactly correct when it delimits a genuine multi-
-tier HEADER (D05's own 3-tier sub-header must stay uneven — collapsing
-it would just trade D04's bug for a new one on D05), and exactly wrong
-when it splits a DATA row that should be uniform across every column
-(D04's own `VAV-16`/`VAV-17`, B-20's own `HP-1`). Distinguishing the two
-needs the row axis construction to know where the header ends and the
-data body begins BEFORE building the shared axis — a real design change
-to `vectorgrid_rpc.py`'s own row-axis construction (the file's own
-docstring already frames row/column axis symmetrically; this is the
-first traced case where the symmetry itself is the problem), not a
-threshold tune or a downstream guard. `vectorgrid_rpc.py`/
-`bakeoff/vectorgrid.py`/`bakeoff/celltext.py` are the corpus's single
-shared face-extraction engine for EVERY ruled table in this corpus (the
-module's own docstring cites `137/137 table boxes`, `222/222 keyed
-tables`, `917/917 hand-transcribed cells` measured against it) — a
-header/data-aware row-axis change here is corpus-wide-blast-radius
-surgery on the most load-bearing extraction primitive this project has,
-not a narrow patch, and per this file's own standing rule needs a full
-corpus regression sweep (not just these two fixtures) before shipping,
-not attempted here under this session's own no-guessing-at-fixes-under-
-time-pressure rule.
+**CORRECTION (2026-09-19): the root cause below was wrong.** Everything
+in the paragraph that follows — `vectorgrid_rpc.py`'s `extract_grid`,
+`_axis`, `_span`, `SANITY_MIN_FILL` — describes a real mechanism in a
+real file, but not the one that produced D04/D05/D09's own numbers in
+THIS environment. Directly checked via `graph.notes` (the diagnostic
+field naming which extraction layer ran per sheet): vectorgrid never
+successfully runs here at all — every attempt on every sheet fails
+identically with `ModuleNotFoundError: No module named 'pdfplumber'`
+(`sidecar/vectorgrid_rpc.py` imports `bakeoff/celltext.py`, which
+imports `pdfplumber` at module scope; that package is not installed in
+this environment). The prior write-up reasoned convincingly from the
+Python source's own docstrings and this file's own B-20 precedent
+without first confirming that code path actually executes — a real
+process failure this correction exists to name plainly, not just fix
+quietly. The corpus has THREE independent table-extraction backends
+with graceful fallback (Python vectorgrid → Java OpenDataLoader-PDF →
+an in-house TypeScript text-span clustering pass in
+`web/src/lib/sheetgraph.ts`); direct testing (feeding
+`federal-attachment4-mechanical.pdf#16` to each backend independently)
+confirms neither Python nor Java produces D04's own VAV table at all —
+the THIRD backend, `sheetgraph.ts`'s own `bandDataRows`, is the one
+actually running and actually producing the buggy output. The real
+mechanism, traced to the exact line:
+
+`bandDataRows` (`web/src/lib/sheetgraph.ts`, ~line 4880) clusters a
+sheet's text spans into rows (`clusterRows`), then for each row bands
+the tokens inside this table's own column range and reads `banded[0]` —
+the array's first element — as the row's KEY cell (the tag `rowKeyOf`
+checks). That array comes from `joinGraphSpans` (`equiptags.ts`), whose
+own final step sorts EVERY row it is given by `(y0, x0)` — top edge
+first, left edge second — a sort built for `joinGraphSpans`'s OTHER,
+cross-row callers, and coincidentally also correct for a QUARTER-TURNED
+schedule's own row (there, one physical row's cells share nearly the
+same x and fan out across y, so y0 legitimately carries the reading
+order). For an ORDINARY horizontal row it is wrong: two cells on the
+same visual baseline routinely have slightly different top-edge y0 from
+ordinary font/glyph-height variance — nothing anomalous, just different
+type sizes in adjacent cells. Measured exactly on `VAV-16`'s own row
+(`federal-attachment4-mechanical.pdf#16`): the row's real key cell,
+`VAV-16` (`x=2371.7, y=691.7`), sits beside a far-right cell containing
+generic template boilerplate text, `"BUILDING XX"` (`x=5503.7,
+y=687.4`) — 3132px away in x, but only 4.3px "higher" in y0 (a taller
+font, not a different line). `(y0, x0)` sorts the y0-smaller cell first
+regardless of how far away it sits in x, so `banded[0]` became
+`"BUILDING XX"`, `rowKeyOf` correctly refused to read it as a tag, and
+the ENTIRE row — VAV-16's own real cell data included — silently folded
+into the orphan pool instead of minting a row. `VAV-17`/`VAV-43` fail
+the identical way on the same sheet; `CONDENSING_UNIT`'s own missing
+rows on the same document reduce to the same mechanism.
+
+**A fix was designed, implemented, and corpus-tested — then reverted.**
+Re-sorting each row's own banded tokens by whichever axis they actually
+spread across (x when a row's own x-spread exceeds its y-spread, y
+otherwise — preserving the quarter-turned case exactly while fixing the
+ordinary case) is a 15-line change confined to `bandDataRows`. Measured
+directly against `federal-mech.compile.json` (WP1's own reviewed key):
+before, 114 of 128 items, with `FCU` 6/7, `VAV` 55/58, `CONDENSING_UNIT`
+2/6, `GRD` 21/23 all short; after, 124/128 — `FCU` 7/7, `VAV` 58/58,
+`CONDENSING_UNIT` 6/6 (all four missing units recovered, not just the
+two named above), `GRD` 23/23, all exactly matching truth. `BOILER` and
+`EXPANSION_TANK` stayed at 0/2 before and after, unchanged by this fix —
+real, direct confirmation that the whole-table-vanishing shape (B-45,
+below) is a genuinely SEPARATE mechanism from this one, not the same bug
+wearing two faces.
+
+But the fix does not ship, because of what it unlocks elsewhere. Once a
+row is no longer wrongly dropped, some OTHER table on a DIFFERENT sheet
+whose own "weak" extraction under one vocabulary (`finish`/`equipment`)
+used to fail with zero rows for the exact same reason now succeeds —
+and this corpus's existing, deliberately-written cross-kind dedup logic
+(`buildSheetGraph`'s own by-title collision pass, and
+`extractReferenceTableAt`'s own "already claimed by a real pass" skip)
+was tuned against a DIFFERENT known corpus case
+(`itd-d1-lab-mechanical.pdf#12`'s own SNORKEL HOOD SCHEDULE) where a
+structurally-driven `reference`-kind read is ALWAYS the worse one against
+a real vocabulary hit. Patching the dedup pass to prefer whichever
+candidate is genuinely richer (gated so the original SNORKEL HOOD
+protection still holds) fixed the newly-exposed collision
+(`bldg5406-hvac-demo-mechanical.pdf#6`'s own quarter-turned FAN
+SCHEDULE, which the row-order fix legitimately unlocks a real, complete
+`reference`-kind read of) — but then caused a DIFFERENT real regression
+two levels away (`navfac-cherry-point-atc-mechanical.pdf#42`'s own
+`BOILER SCHEDULE`, `B-A1`/`B-A2`, silently dropped from `graph.tables`
+entirely via what is very likely the SAME "bogus reference-kind title"
+failure mode this file's own `extractReferenceTableAt` comments already
+describe for the SNORKEL HOOD case, now reachable from a second
+direction). Two independent, careful patches to this arbitration layer
+each fixed their own targeted case and broke a different one — real
+evidence the shared-path table-candidate arbitration in `sheetgraph.ts`
+is more tightly tuned to its existing corpus cases than a local patch
+can safely extend, not that the row-order fix itself is unsound. Per
+this file's own standing rule (revert, don't force, a change that
+regresses the corpus), the full three-part patch (row-order fix +
+dedup richness gate + claim-coverage threshold) was reverted in full;
+`sheetgraph.ts` is back at its pre-session state. The row-order fix
+alone (without the two arbitration patches) passes the full corpus
+regression suite except this entry's own `D07` — meaning it is CLOSE to
+shippable, but "guard-green minus one test" is still not guard-green,
+and shipping the row-order fix without addressing what it unlocks would
+just trade this entry's own bug for a documented one.
+
+**Why this is disclosed without a fix.** The real work remaining is not
+another local patch to `bandDataRows` — that function is now correctly
+understood and its own fix is sound in isolation — but a genuine,
+corpus-wide-tested pass through `sheetgraph.ts`'s own cross-kind
+table-candidate arbitration (the by-title dedup in `buildSheetGraph`,
+and `extractReferenceTableAt`'s own "already claimed" skip), verifying
+EVERY existing corpus case that logic was tuned against (SNORKEL HOOD
+named explicitly; there may be others un-named in comments) still
+resolves correctly under a richness-aware rule, before the row-order fix
+that exposes the need for that rule can safely ship alongside it. Not
+attempted here under this session's own no-guessing-at-fixes-under-time-
+pressure rule — two iterations already showed the failure mode is real
+and not confined to one pairing.
 
 **Consequence:** GATE 3's own `guard-green` criterion
 (`opentakeoff-corpus/goals/LINEAR_TAKEOFF.md`) stays unmet on the mcp
@@ -5133,25 +5207,44 @@ VALVE SCHEDULE` claims sheet `#47`). Not B-25 (transposed-layout) or a
 page-role blackout (`#47` produces 8 real tables). Closest in shape to
 B-16/B-32's own "two side-by-side blocks, one consumed by the other's
 own face-weld" family, but not traced to the exact consuming mechanism
-under this pass's own time budget — plausibly the CHW-M and HHW-M
-blocks share a border/gutter close enough for vectorgrid's own
-`shapely polygonize_full` face-finder to weld the CHW-M block's own
-ruled lines into the HHW-M block's own region rather than resolving two
-independent tables, but this was not confirmed at the geometry level the
-way B-44's mechanism was.
+under this pass's own time budget.
+
+**CORRECTION (2026-09-19):** the "vectorgrid's own `shapely
+polygonize_full` face-finder" guess two paragraphs up, and the "start
+from `#47`'s own raw vectorgrid RPC reply" suggestion just below, both
+assumed vectorgrid is the code path actually producing this sheet's
+extraction — confirmed FALSE this pass (see B-44's own correction):
+vectorgrid never successfully runs in this environment at all
+(`ModuleNotFoundError: No module named 'pdfplumber'` on every sheet,
+every attempt). B-44's own root cause (a `bandDataRows`/`joinGraphSpans`
+row-reading-order defect in `web/src/lib/sheetgraph.ts`) is CONFIRMED
+NOT to explain this entry — the same session that traced it also showed
+directly, by A/B measurement, that fixing it leaves a whole-table-vanish
+case (WP1's own `BOILER`/`EXPANSION_TANK`, the same shape as this
+entry's own CHW-M) completely unchanged. So this entry's own consuming
+mechanism remains genuinely unidentified, on the in-house
+`sheetgraph.ts` path rather than vectorgrid, likely somewhere in the
+same family as B-44's shared extractor (`extractAllTables`/
+`extractTableAt`/the reference-kind pass) rather than the Python
+sidecar — but WHICH function, and why it drops a whole ruled, correctly-
+titled table while its immediate physical sibling survives, was not
+re-traced this pass.
 
 **Why this is disclosed without a fix:** the exact consuming mechanism
-(title-collision vs. face-weld vs. something else) was traced only to
+(title-collision vs. region-containment vs. something else in
+`sheetgraph.ts`'s own extraction/dedup path) was traced only to
 "CHW-M's own real, ruled geometry produces no table object at all while
 its physical neighbor does," not to a specific function and line the
-way B-44 and this file's other closed entries are — shipping a guess at
-the boundary between two real, adjacent tables risks exactly the kind
-of confidently-wrong table-region change this file's own standing rule
-exists to prevent, on the same shared, corpus-wide extraction engine
-B-44 already named. A future pass should start from `#47`'s own raw
-vectorgrid RPC reply (`extract_grid_rpc`) for this one page, checked
-directly against both the CHW-M and HHW-M regions' own cell/face lists,
-before touching any shared code.
+way B-44 now is — shipping a guess at the boundary between two real,
+adjacent tables risks exactly the kind of confidently-wrong table-region
+change this file's own standing rule exists to prevent, on the same
+shared, corpus-wide extraction engine B-44 traces (`sheetgraph.ts`, now
+correctly named — not the Python sidecar). A future pass should start
+from `#47`'s own raw `sheetgraph.ts` extraction trace for this one page
+(`graph.notes`, and direct `extractAllTables`/`extractReferenceTableAt`
+calls the way B-44's own investigation used), checked directly against
+both the CHW-M and HHW-M regions' own token/row lists, before touching
+any shared code.
 
 **This corrects a stale claim in this file's own "What is working"
 section below:** written 2026-09-13/14 against this exact document
@@ -5193,8 +5286,12 @@ ALSO the same two root causes, on a different document, not a
 distinct defect needing its own investigation — matching this file's
 own opening rule ("Fix nothing listed here without reading 'How these
 connect' first... fixing them individually would produce three patches
-where one structural change belongs"). A real fix to `vectorgrid_rpc.py`'s
-own row-axis construction (B-44) and whatever causes a real, ruled,
+where one structural change belongs"). **Correction (2026-09-19):**
+B-44's own fix does not live in `vectorgrid_rpc.py` — see its entry's
+own correction — but the claim here still holds under the corrected
+mechanism: a real fix to `sheetgraph.ts`'s own `bandDataRows` row-
+reading-order (B-44, now built and corpus-tested, held back only by
+what it exposes elsewhere) and whatever causes a real, ruled,
 correctly-titled table to produce zero candidates alongside a correctly-
 extracting sibling (B-45) would very likely close ALL SIX of this
 session's own `npm test` failures at once, not six separate ones —
