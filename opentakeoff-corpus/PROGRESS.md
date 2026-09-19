@@ -1,5 +1,58 @@
 ## Active work
 
+2026-09-19 linear takeoff: at the user's own direction, went back to the double-wall-duct problem a fourth time and finally found the EXACT real mechanism -- but the fix built for it turns out to cause new problems elsewhere just as bad as the one it solves, so reverted again (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+Asked the user directly which of two big, real problems to tackle next
+(this one, or the schedule-table problem below), since both would need a
+genuine redesign rather than a quick fix. They chose to give this one
+one more, more thorough attempt.
+
+This time, instead of reading a rough description of where the tool goes
+wrong, watched it happen one single step at a time, in both directions
+the tool walks out from its own starting point, separately. This finally
+showed the real, exact mechanism for the first time: right next to the
+starting point, the tool reaches what looks like an ordinary small jog --
+but that jog is actually the duct's own real end cap, a tiny U-turn
+connecting the duct's own "there" side to its own "back" side. A few
+steps past that U-turn, the tool ends up on a line that turns out to be
+a genuine, provable match (running alongside, same distance apart, same
+direction) for the very first line it started on -- confirming, for
+real this time, that it has walked onto its own return path.
+
+Built a proper fix for exactly this: before the tool commits to any next
+step, check whether that step's own line is a real matching-partner of
+ANY line already walked so far (not just the specific line right next
+to it, which is what the previous, failed attempt at this same idea
+checked). Confirmed directly that this exact fix stops the tool at the
+real end cap instead of reversing onto the return path.
+
+But checking against the WHOLE path walked so far, not just something
+closer to "the line right where this all started," turns out to be too
+broad. Run against the whole test set, real drawings regressed for the
+first time in any of these four attempts: one previously-perfect result
+now stops too EARLY (the opposite problem -- it used to correctly walk
+29 feet, now it stops at 15), and one previously-perfect result on the
+smaller, carefully-protected test set also broke. A duct that runs in a
+U-shape, or two ordinary separate branches that happen to run alongside
+each other for a while, looks EXACTLY like a duct wrapping onto its own
+return path once "have I been near this before, anywhere in my own
+path" is the whole test -- there's nothing left to tell a genuine
+same-duct return apart from two different, unrelated things that simply
+happen to run parallel to each other.
+
+Reverted again, confirmed the project folder is back to exactly its
+last saved state. Four real attempts at this same problem now, each
+diagnosed more precisely than the last, each failing for a different,
+better-understood reason. The one idea never yet tried is the one the
+original plan actually called for: instead of checking "have I walked
+near this before, anywhere," have the tool track its own duct's two
+walls as ONE paired thing from the very start, so at every step it knows
+exactly which specific line is its own current partner wall -- and can
+ask "is this next step actually my own already-tracked partner" rather
+than "does this match anything I've ever seen." That's a real, separate
+piece of new work (a genuinely different way of walking, not another
+check bolted onto the existing one), not attempted yet.
+
 2026-09-19 guard-green: switched from the (now exhausted) double-wall-duct problem to the other thing blocking a fully-green test suite, and traced two real, separate table-reading bugs to precise causes -- but both need a genuine redesign, not a quick patch, so both are written up and left unfixed (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md, opentakeoff-corpus/TAKEOFF_BUG_CATALOGUE.md B-44/B-45) —
 
 Three attempts at the double-wall-duct problem (this file's own last three
