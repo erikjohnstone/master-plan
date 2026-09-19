@@ -1,5 +1,50 @@
 ## Active work
 
+2026-09-19 linear takeoff: found the real reason one never-seen-before answer was failing, built a fix, and then had to throw it away when it broke something else (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
+
+Followed up directly on yesterday's finding (the "never-seen-before"
+scorecard has stopped improving because none of this week's new
+everyday answers can touch it). Picked the one locked-away document
+responsible for most of that scorecard's shortfall and dug into
+exactly why the tool couldn't read its size label.
+
+Turned out the earlier written explanation for that failure (the
+label sits too far away to be considered) was simply wrong -- checked
+directly, the label is well within range and reads correctly on its
+own. The REAL reason: the tool only trusts a label if it sits on a
+pipe or duct section it has actually walked all the way along, and
+here the walk stopped one step short of the label's true home, at a
+junction where three pipes meet. Dug further into why it stopped
+there: the underlying drawing data recorded each of those three pipes
+TWICE -- a very ordinary drawing-export glitch where the same line
+gets traced twice by mistake -- which fooled the tool into thinking
+six different things met at that spot instead of three, too confusing
+to sort out safely, so it correctly refused to guess and stopped.
+
+Built a fix that spots and collapses those duplicate tracings before
+deciding what kind of junction it's looking at. Tested in isolation,
+it worked exactly as hoped -- the junction was correctly recognized
+and the tool successfully continued one step further. But before
+accepting any fix, this project's own rule is to run the ENTIRE set
+of test documents, not just the one being fixed, and that step caught
+a real problem: on a totally different, previously-perfect answer
+elsewhere in the everyday set, the same fix caused the tool to run
+wildly past where it should have stopped -- a correct 11-foot answer
+turned into a wrong 74-foot one, nearly seven times too long. A few
+other answers got measurably worse in the same way. The fix, while
+correct for the one problem it targeted, was too aggressive and
+started merging together drawing lines that were actually genuinely
+different, not duplicates.
+
+Threw the fix away rather than keep something that trades one
+success for several new failures -- checked the project folder
+afterward and confirmed nothing was left half-changed. The underlying
+problem is real and now clearly understood and written up in detail
+for whoever picks it up next, but a safe version of the fix needs a
+stricter test for "these two lines are actually the same one drawn
+twice" than just "they end up close together" -- worth trying next,
+not a dead end.
+
 2026-09-18 linear takeoff: one more real answer lands, but a re-check of the numbers finds the whole approach has a ceiling (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md) —
 
 Found and wrote down one more good, clean answer: a steam pipe about
