@@ -234,32 +234,53 @@ every non-callout tag lands with `role: "unknown"`, never `"plan"`
 shouldn't block scoring, but it means the "plan" role classifier is
 silently failing across this entire document); (2) the found `RTU-1`/
 `RTU-2` instances sit on sheet `#30`/`#31`, and the key's real, verified
-instances are on `#4` and `#38` — no page in common at all. This document's
-`sets.json` entry resolves (via `_rejoined/`) to a PDF stitched back
-together from two separately-downloaded parts
-(`__part01_p1-21.pdf` + `__part02_p22-41.pdf`); a page-numbering skew
-between the rejoined file and whatever the wave-2 ground truth was
-authored against is the leading hypothesis and would explain BOTH the
-`0/131` here and plausibly several of the sixteen exact-zero sets above if
-they share the same split/rejoined provenance — not yet confirmed, and
-the "unknown" role finding needs its own separate look regardless. Left
-unresolved this checkpoint given how much budget the investigation above
-already spent; promoted to the top of the next queue.
+instances are on `#4` and `#38` — no page in common at all.
+
+Chased the page-skew hypothesis directly rather than leaving it as a guess.
+This document's `sets.json` entry resolves (via `_rejoined/`) to a PDF
+stitched back together from two separately-downloaded parts
+(`__part01_p1-21.pdf`, 21 real pages, + `__part02_p22-41.pdf`, 20 real
+pages — the split-by-`qpdf` `REJOIN_full_sets.sh` script). Page counts sum
+exactly (41 = 41) and glob order sorts `part01` before `part02`
+correctly, so **the rejoin mechanism itself is not generically broken** —
+confirmed separately: `21_VA_OrangeCounty_PublicSafetyBldg`, another set on
+that same rejoin script's list, scored a real 311/372 (83.6% recall) in
+this checkpoint's full-corpus run, which would be impossible if every
+rejoined PDF had scrambled page numbers. Dumped the actual PDF TEXT at the
+key's claimed sheets `#4` and `#38` directly: **neither page contains the
+substring "RTU" at all** — page `#4` is genuinely the "S-202 roof framing
+plan" the key describes (confirmed via the `S-202` sheet-callout tag
+`graph.tags` also places there), but no `RTU-1` leader text is on it in
+the current PDF. Page `#30` (where the pipeline's `RTU-1` hit actually
+sits) turns out to be a schematic/control-diagram TITLE BLOCK reading
+`"M-806 30 RTU-1 CONTROLS"` — the SHEET'S OWN NAME, not a plan-drawn
+equipment instance at all, so counting it as a real `RTU-1` hit would be
+its own kind of miss (a title-block false positive) even if the score had
+matched. Conclusion: **this specific key's sheet numbers for `RTU-1`/
+`RTU-2` don't match this document's current PDF content** — a
+key-authoring/provenance mismatch for this one document, not a rejoin bug
+and not (so far) evidence of a corpus-wide pattern. The `role: "unknown"`
+finding is a separate, still-open question. Left as an authored-key data
+issue rather than a code bug to fix; the fifteen other exact-zero sets
+need their own direct `graph.tags` dumps before assuming the same
+explanation applies — do not generalize from one document.
 
 **Next queue, in order:**
-1. Root-cause why `07_MO_MSHP_TroopB_HVAC_Boilers_Controls`'s real,
-   correctly-spelled equipment tags (`RTU-1`, `RTU-2`, `HWS-1`...) land with
-   `role: "unknown"` instead of `"plan"`, and why their sheet numbers
-   (`#30`/`#31`) don't match the key's verified sheets (`#4`/`#38`) —
-   check whether the `_rejoined/` PDF's page count/order actually matches
-   what the wave-2 ground truth was authored against for this and the other
-   split-and-rejoined bulk sets.
+1. Re-author or re-verify `07_MO_MSHP_TroopB_HVAC_Boilers_Controls.tags.csv`'s
+   `RTU-1`/`RTU-2` sheet numbers against the actual current `_rejoined/` PDF
+   (confirmed above: this document's own rejoin is structurally sound, so
+   the fix belongs in the key, not the pipeline) — and separately root-cause
+   why this document's non-callout tags all land `role: "unknown"` instead
+   of `"plan"`, which is a real pipeline question independent of the key
+   mismatch.
 2. Re-score `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly (its cached 0/113
-   is unverified — one re-run attempt already OOM-killed) and check it for
-   the same rejoined-PDF page-skew pattern.
+   is unverified — one re-run attempt already OOM-killed) and dump raw
+   `graph.tags` the same way before assuming its cause matches 07_MO_MSHP's.
 3. Root-cause the remaining exact-zero sets the same way — dump raw
    `graph.tags` directly rather than trusting the scored 0, per the finding
-   above that a scored zero does not mean nothing was found.
+   above that a scored zero does not mean nothing was found, and per the
+   explicit caution above against generalizing 07_MO_MSHP's specific cause
+   to the rest of them.
 4. Re-run the full corpus with `isEquipTag`'s status-code fix included and
    get a real before/after on the corpus-wide 63.3% recall number.
 5. Re-run `npm test` on a quiet window with the sidecar disabled to get a
