@@ -36,7 +36,13 @@ const canon = (s: string) => (s || "").trim().toUpperCase().replace(/[–—−]
  * segments are abbreviation-stacks and are accepted without a digit.
  */
 export function isEquipTag(raw: string): boolean {
-  const t = canon(raw);
+  // Renovation/retrofit sheets bracket a tag's status with a one-to-three
+  // letter code in parens — "BOILER-1(E)" (existing), "(N)AHU-2" (new),
+  // "CUH-1(R)" (relocated) — without changing which asset it names. Strip
+  // it before judging the shape so the tag underneath still reads; the
+  // ORIGINAL text (parens included) is what gets stored and matched, so
+  // this only widens which spans are recognized as a tag at all.
+  const t = canon(raw).replace(/^\([A-Z]{1,3}\)/, "").replace(/\([A-Z]{1,3}\)$/, "");
   if (t.length < 3 || t.length > MAX_TAG_LEN) return false;
   if (!/[-.]/.test(t)) return false;
   const parts = t.split(/[-.]/);
