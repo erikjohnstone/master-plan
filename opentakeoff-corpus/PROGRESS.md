@@ -457,13 +457,40 @@ real and individually addressable, but fixing all of them is a
 multi-session effort, not a single follow-up commit — and the two
 vector-extraction-gap categories (`07_MO_MSHP`, `20_TX_Judson`) aren't
 fixable by any text-pipeline change at all; they need the OCR/raster
-fallback capability from queue item 7. The remaining seven of the nine
-still-open batch-checked sets (`021_XX`, `036_LA`, `045_FL`, `067_CA`,
-`086_CA`, `09_ME`, `15_IA`) have not been individually diagnosed — expect
-more distinct causes among them rather than a repeat of one of the five
-above, and confirm any "no text found" suspicion by rendering the actual
-page, not by trusting a text-substring search alone (per the `07_MO_MSHP`
-correction above).
+fallback capability from queue item 7. Checked three more of the nine
+still-open sets against their keys directly: `067_CA_SLAC`'s tags
+(`B950A-AS-1001`, `B950A-HX-PCWP-1001`) fit the number-led-family gap
+(`B950A` fails `isEquipTag`'s letter-led first-segment check, same as
+`060_XX`/`068_US`/`087_US`); `036_LA`'s (`01-1-CU-1`, `02-1-CU-2`) fit the
+same family with a 2-digit zone code; `045_FL`'s (`(E)CTU2-4-12`,
+`(E)VTU1-1-18`) combine the already-fixed `(E)` status prefix with a NEW,
+sixth variant — a letter-class fused directly to a sub-type digit before
+the hyphen (`CTU2`, `VTU1`), which still fails the pure-letter
+first-segment check even after the status prefix is stripped.
+
+**Rendered a third document (`09_ME_BGS_KennebecValleyCC_Renovation`,
+sheet `#9`) after `021_XX`/`086_CA`/`09_ME` turned up ORDINARY tag shapes
+(`AHU-1`, `AC-1`, `SAC-11`) that should be trivially recognized — and
+found the exact same phenomenon as `07_MO_MSHP`, by a completely different
+engineering firm (Bennett Engineering here vs. Midwest Engineering /
+Taylor Structural there).** `SCU-1` and `SAC-11` are clearly drawn on the
+"RADIOLOGY LAB - POWER" plan exactly as the key describes — and the
+page's ENTIRE `KEYED NOTES` body and every equipment/circuit label are
+absent from the text layer; only room names, the sheet frame, and grid
+labels extract as real text. **This is now confirmed on three separate
+documents from at least two different firms — this is a recurring
+characteristic of this corpus, not a one-off,** and it likely explains a
+meaningful share of both the sixteen exact-zero sets and the broader
+below-floor population (a document need not be entirely outlined to lose
+recall this way — a handful of outlined sheets in an otherwise-recognized
+document would silently zero out just those sheets' tags). `021_XX` and
+`086_CA` (also ordinary-shaped, also unexplained) are the natural next
+sets to check for the same pattern before assuming their cause differs.
+This raises queue item 7 (OCR/raster fallback) from "the fix for one
+document" to "likely the single highest-value capability investment for
+this corpus's recall ceiling" — worth confirming its true prevalence
+(how many sheets corpus-wide are outlined-text) before committing
+engineering time to it.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
