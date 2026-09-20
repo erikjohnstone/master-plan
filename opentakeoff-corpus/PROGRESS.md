@@ -117,13 +117,128 @@ a tag), and verifying that needs the same negative-suite rigor as the three
 bugs already fixed above — left as an honest, documented gap rather than a
 rushed heuristic.
 
-**Full-corpus re-eval status:** in progress at the time of this checkpoint,
-now running as a single `tag-eval.mjs` process over all 121 sets
-(concurrency 2, `OPENTAKEOFF_EVAL_TIMEOUT_MS=1200000`,
+**Fourth real bug found and fixed: `isEquipTag` rejected status-bracketed
+tags outright.** `BOILER-1(E)`, `(N)AHU-2`, `CUH-1(R)` — renovation/retrofit
+sheets commonly bracket a tag with a one-to-three letter existing/new/
+relocated/demolish code without changing which asset it names, and the
+parenthetical broke the segment-shape check completely, so the whole span
+was never recognized as a tag. Found via
+`07_MO_MSHP_TroopB_HVAC_Boilers_Controls.tags.csv`, which enumerates six
+real `"(E)"`-suffixed instances the pipeline was missing outright
+(`BOILER-1(E)`, `BOILER-2(E)`, `CUH-1(E)`, `CUH-2(E)`, `C-1(E)`,
+`MAU-1(E)`). Fixed by stripping a leading/trailing `(X)`..`(XXX)` before
+judging shape; the original text (parens included) is still what gets
+stored and matched, so this only widens which spans are admitted as a tag.
+Commit `a6374ec`. Scoped test (`equiptags.test.ts`) passes 7/7, including a
+synthetic positive mirroring these real strings and a negative guarding
+against a parenthetical NOTE reading as a tag
+(`BOILER-1(EXISTING)`/`(EX)FIRST-FLOOR` stay rejected). **Not yet verified
+with a live before/after corpus re-score** — this container's memory
+pressure (see below) made two direct attempts on the motivating set both
+fail before producing a result; the fix stands on the unit tests alone
+until that verification lands.
+
+**This container is severely memory-constrained, and that — more than the
+CPU contention diagnosed above — looks like the dominant cause of this
+session's instability.** `dmesg` shows 23 `oom-kill` events over the course
+of this checkpoint (`cpuset=/…claude-code-bash`), `free -h` sat at ~1.3–1.6GB
+free of 15GB for extended stretches, and three concrete, reproduced
+failures trace directly to it: `20_TX_JudsonISD_MEP_Upgrades_Pkg6` (a
+`OPENTAKEOFF_EVAL_NO_CACHE=1` re-run was OOM-killed outright — `anon-rss`
+2.24GB at kill time — which also means its previously-cached `0/113` score
+predates whatever changed to make this container this tight on memory and
+should not be trusted without a re-run once memory pressure is resolved);
+a `07_MO_MSHP_TroopB_HVAC_Boilers_Controls` re-score attempt (killed the
+same way, competing with a concurrent test-suite run); and the full `npm
+test` run below.
+
+**Full web test suite: run, but not completed clean — killed after hitting
+the already-documented, still-open table-sidecar handshake hang, not a
+regression from this checkpoint's changes.** A first run (without
+`OPENTAKEOFF_TABLE_SIDECAR=0` — plain `npm test`, as CI runs it) reached
+"3094 pass / 73 fail" but the raw per-test output wasn't captured (only a
+truncated tail), so those 73 failures were never individually attributed. A
+second, fully-logged run stalled at test 716 (`compileProgressWalkthrough`)
+for 250+ seconds at 0% CPU, `wchan: ep_poll` — the exact signature already
+on record above for the sidecar handshake wedge, reproduced here for the
+first time in the ordinary test suite rather than only under corpus-eval
+concurrency. Killed rather than waited out. **Follow-up required before
+trusting this checkpoint's `isEquipTag` change against the full suite**: rerun
+`npm test` with the sidecar disabled or that one test isolated, on a quieter
+memory window, and confirm the 73 prior failures are pre-existing/
+environmental (every affected file so far — `compileProgressWalkthrough` —
+is unrelated to `equiptags.ts`) rather than caused by this session's edits.
+
+**A separate, unexplained process keeps launching uncontrolled
+`tag-eval.mjs --single-json` invocations in this container, independent of
+anything this session started, and is the best remaining explanation for
+the memory pressure above.** Observed repeatedly: dozens of
+`tag-eval.mjs --single-json <id>` processes alive at once with `ppid=1` (no
+live parent — the parent that forked them exits within milliseconds, too
+fast to inspect before it's gone), cycling through sets this session's own
+orchestrator was not asked to run, sustained across the entire checkpoint
+and confirmed again after this session's own runs were killed and cleaned
+up. Not attributable to any script in this repo; flagged as an
+infrastructure-level anomaly outside what a code fix can address, and a
+likely confound for every timing/memory measurement taken this checkpoint.
+
+**Full-corpus re-eval status:** completed once (before the `isEquipTag`
+status-code fix above), as a single `tag-eval.mjs` process over all 121
+sets (concurrency 2, `OPENTAKEOFF_EVAL_TIMEOUT_MS=1200000`,
 `OPENTAKEOFF_TABLE_SIDECAR=0`) instead of the prior custom chunk/retry
-scripts — simpler, and the built-in cache means every set this checkpoint
-already scored resolves instantly. This entry will be updated with final
-corpus-wide recall/precision and the next queue once the run completes.
+scripts. Real, non-timeout scores landed for 69/121 sets: **5 pass both
+floors** (`bessemer`, `federal-mech`, `17_FL_SuwanneeHS_Courtyard_100CD`,
+`055_US_VA_Project_673_20_107_EHRM_Infrastructure`,
+`064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit`), **64 score below
+floor**, aggregating to **3243/5121 tags found — 63.3% corpus-wide recall**
+across every set that returned a real number. 42 sets still timed out at
+20 minutes (two confirmed genuinely slow rather than contention artifacts —
+see above; the rest unconfirmed given the memory pressure and mystery
+process just documented), 3 crashed (`22_GA_Valdosta_FireStation8_100CD`,
+`082_OR_Klamath_Community_College_Career_Learning`,
+`098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade` — "child process
+exited null with no result", the same signature as an OOM kill, not yet
+individually confirmed), 7 remain unlabelled (no key authored). This run
+predates the `isEquipTag` status-code fix and does not reflect it.
+
+**Sixteen sets scored exactly 0 tags found** (`021_XX_Laboratory…`,
+`032_PA_Construct_EHRM…`, `036_LA_VA_Project_502…`,
+`045_FL_VA_Project_516…`, `056_NY_VA_Project_632…`, `060_XX_ASC_Open…`,
+`067_CA_SLAC_LCLS…`, `068_US_Antelope_Valley…`,
+`07_MO_MSHP_TroopB…` — now partially explained by the status-code fix
+above, though not yet re-scored — `086_CA_Contra_Costa_College…`,
+`087_US_Contra_Costa_College…`, `095_UT_JVWTP…`,
+`09_ME_BGS_KennebecValleyCC…`, `15_IA_IowaState…`,
+`20_TX_JudsonISD…` — its cached score, per the OOM finding above, needs a
+clean re-run before it means anything — `28_WA_KCHA_PublicHousing_HVAC`).
+Spot-checked a handful of their keys directly: `032_PA`'s tags
+(`AC-1-A455A`) and `20_TX_Judson`'s (`AHU-11`, `CH-1`, `EF-01`) are
+completely ordinary letter-led hyphenated shapes `isEquipTag` already
+handles — their zero scores are NOT a shape gap and point at something else
+entirely (a pipeline-level failure specific to these documents, file
+resolution, or — per the OOM/mystery-process findings above — simply an
+unreliable run). `056_NY`'s key (`CM`, `TC`, `TP`) uses bare 2-3 character
+instrument marks with no separator at all — the same class of
+out-of-scope gap as the `VENDOR-A` conflict documented earlier, not a bug
+to fix casually. Not root-caused further this checkpoint; next queue item.
+
+**Next queue, in order:**
+1. Get a clean, low-contention window (the mystery process above permitting)
+   and re-verify `07_MO_MSHP_TroopB_HVAC_Boilers_Controls` and
+   `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly — the former to confirm the
+   status-code fix's real recall gain, the latter because its 0/113 is
+   unexplained and its cache entry is now suspect.
+2. Re-run the full corpus with `isEquipTag`'s fix included and get a real
+   before/after on the corpus-wide 63.3% recall number.
+3. Root-cause the sixteen exact-zero sets individually — several (`032_PA`,
+   `20_TX_Judson`) use ordinary tag shapes the recognizer already handles,
+   so their failure is NOT a shape gap; something else is silencing them
+   completely.
+4. Re-run `npm test` on a quiet window with the sidecar disabled to get a
+   trustworthy full-suite baseline and confirm the 73 prior failures predate
+   this checkpoint's changes.
+5. If the mystery `ppid=1` process recurs, escalate it as an infrastructure
+   question — it is outside anything a commit to this repo can fix.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
