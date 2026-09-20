@@ -256,23 +256,48 @@ sits) turns out to be a schematic/control-diagram TITLE BLOCK reading
 `"M-806 30 RTU-1 CONTROLS"` — the SHEET'S OWN NAME, not a plan-drawn
 equipment instance at all, so counting it as a real `RTU-1` hit would be
 its own kind of miss (a title-block false positive) even if the score had
-matched. Conclusion: **this specific key's sheet numbers for `RTU-1`/
-`RTU-2` don't match this document's current PDF content** — a
-key-authoring/provenance mismatch for this one document, not a rejoin bug
-and not (so far) evidence of a corpus-wide pattern. The `role: "unknown"`
-finding is a separate, still-open question. Left as an authored-key data
-issue rather than a code bug to fix; the fifteen other exact-zero sets
-need their own direct `graph.tags` dumps before assuming the same
-explanation applies — do not generalize from one document.
+matched. **CORRECTION to this checkpoint's own earlier conclusion, found by actually
+rendering the pages instead of stopping at a text-substring search.** The
+"key mismatch" conclusion above was wrong. Rendered `#4` and `#38` to PNG
+with `scripts/render-page-crop.mjs` and looked at them directly: page `#4`
+shows a clearly legible `"NEW RTU-1 (1200# MAX.) (SEE MECH.)"` label with a
+leader to a rooftop-unit glyph, and a matching `"NEW RTU-2 (1300# MAX.)"`
+label — exactly where the key says they are. Page `#38` shows the
+`"EQUIPMENT DATA SCHEDULE"` table with real `RTU-1`/`RTU-2` rows, also
+exactly as the key describes. **The key was right all along.** Dumped
+every text item on both pages to find out why extraction still sees
+nothing: on `#4`, all 115 text items are the six grid labels (`A`-`F`,
+`1`-`6`), the sheet title `"ROOF FRAMING PLAN"`, and the title block
+(engineer info, project number, sheet number `S-202`) — NOTHING from the
+drawing area itself (no dimensions, no notes, no equipment labels). `#38`
+is identical: all 64 non-empty text items are title-block fields; the
+entire `EQUIPMENT DATA SCHEDULE` table and every plan/note callout are
+absent from the text layer even though they render perfectly. Conclusion:
+**this document's CAD export drew its title block as live text but
+flattened everything else — every plan, schedule, and note — to vector
+outlines.** This is the exact same fundamental class of gap as
+`20_TX_JudsonISD`'s raster plan below (vector extraction structurally
+cannot reach the answer), just a different specific mechanism (outlined
+paths rather than an embedded raster image) — not a key problem, not a
+pipeline bug, and nothing a tag-shape fix could ever touch. The
+`role: "unknown"` finding (queue item 1) is now moot for the same reason:
+there is no real plan-role content on these pages to classify correctly in
+the first place. Re-queued below under the same OCR/raster-fallback gap as
+Judson — this document needs the drawing rasterized and read visually (as
+this very correction just did by hand), not a code fix to the text
+pipeline. The other fourteen exact-zero sets still each need their own
+direct check — do not assume this outlined-text mechanism explains them
+too without verifying it the same way (render and look, not just grep).
 
 **Next queue, in order:**
-1. Re-author or re-verify `07_MO_MSHP_TroopB_HVAC_Boilers_Controls.tags.csv`'s
-   `RTU-1`/`RTU-2` sheet numbers against the actual current `_rejoined/` PDF
-   (confirmed above: this document's own rejoin is structurally sound, so
-   the fix belongs in the key, not the pipeline) — and separately root-cause
-   why this document's non-callout tags all land `role: "unknown"` instead
-   of `"plan"`, which is a real pipeline question independent of the key
-   mismatch.
+1. ~~Re-verify `07_MO_MSHP_TroopB_HVAC_Boilers_Controls.tags.csv`~~ — done by
+   actually rendering the pages: the key was correct, this document's
+   drawing content is flattened to vector outlines (see correction above).
+   Same OCR/raster-fallback capability gap as `20_TX_JudsonISD` (queue item
+   7 below); nothing to fix in the key or the text pipeline. The
+   `role: "unknown"` question is moot for this document specifically (no
+   real plan content in the text layer to classify) but may still be worth
+   a look on a document that DOES have real plan-role text, if it recurs.
 2. ~~Re-score `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly~~ — done, see
    below: root-caused as a raster-plan gap, not a bug.
 3. All sixteen exact-zero sets now checked at least shallowly (confirmed
@@ -424,14 +449,21 @@ deliberately un-fixed ceiling, not a bug.
 **Net effect on how to read the corpus-wide recall number: the gap is a
 long tail of distinct, legitimate tag-convention edge cases (stacked
 3-segment, stacked letter-only-suffix, bare unhyphenated marks, number-led
-families, raster plans, a key-authoring mismatch — six so far, from
-checking under twenty sets), not one dominant bug whose fix would move the
-number sharply.** Each is real and individually fixable, but fixing all of
-them is a multi-session effort, not a single follow-up commit. The
-remaining seven of the nine still-open batch-checked sets (`021_XX`,
-`036_LA`, `045_FL`, `067_CA`, `086_CA`, `09_ME`, `15_IA`) have not been
-individually diagnosed — expect more distinct causes among them rather
-than a repeat of one of the six above.
+families, and vector-extraction-cannot-reach-it documents — outlined-text
+drawings and raster-embedded plans, two mechanisms, same root capability
+gap — five distinct categories so far, from checking under twenty sets),
+not one dominant bug whose fix would move the number sharply.** Each is
+real and individually addressable, but fixing all of them is a
+multi-session effort, not a single follow-up commit — and the two
+vector-extraction-gap categories (`07_MO_MSHP`, `20_TX_Judson`) aren't
+fixable by any text-pipeline change at all; they need the OCR/raster
+fallback capability from queue item 7. The remaining seven of the nine
+still-open batch-checked sets (`021_XX`, `036_LA`, `045_FL`, `067_CA`,
+`086_CA`, `09_ME`, `15_IA`) have not been individually diagnosed — expect
+more distinct causes among them rather than a repeat of one of the five
+above, and confirm any "no text found" suspicion by rendering the actual
+page, not by trusting a text-substring search alone (per the `07_MO_MSHP`
+correction above).
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
