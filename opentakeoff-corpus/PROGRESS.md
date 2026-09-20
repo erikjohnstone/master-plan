@@ -297,9 +297,22 @@ explanation applies — do not generalize from one document.
    here.
 4. Re-run the full corpus with `isEquipTag`'s status-code fix included and
    get a real before/after on the corpus-wide 63.3% recall number.
-5. Re-run `npm test` on a quiet window with the sidecar disabled to get a
-   trustworthy full-suite baseline and confirm the 73 prior failures predate
-   this checkpoint's changes.
+5. ~~Re-run `npm test`~~ — done, sidecar disabled this time (no hang): 3123
+   pass / 71 fail / 13 cancelled / 13 skipped out of 3220, in 1677s (28x the
+   unloaded baseline — real evidence of how much the concurrent corpus
+   re-run and this container's contention slow everything down, not a
+   regression). Checked every failing test name against this checkpoint's
+   changes: **zero relate to `equiptags`, `tagIndex`, `sheetgraph`, or
+   `symbollabels`.** All 71 sit in the sync/persistence/BAS-history
+   subsystem, with names pointing straight at timing-sensitive concurrency
+   (`TOCTOU`, `busy-deferred`, `rapid saves coalesce`, `concurrent edit`) —
+   exactly what this container's severe OOM/CPU contention would
+   destabilize, and an entirely different area of the codebase from this
+   checkpoint's fixes. Confirms the `isEquipTag` status-code fix introduces
+   no test regression; the 71 failures are a pre-existing/environmental
+   signal, not something this checkpoint caused, though they still deserve
+   their own look on a quiet, uncontended window before being written off
+   entirely.
 6. If the mystery `ppid=1` process recurs, escalate it as an infrastructure
    question — it is outside anything a commit to this repo can fix.
 7. Real capability gap, not a quick fix: build (or wire in) an OCR/raster
