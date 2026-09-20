@@ -222,22 +222,50 @@ instrument marks with no separator at all — the same class of
 out-of-scope gap as the `VENDOR-A` conflict documented earlier, not a bug
 to fix casually. Not root-caused further this checkpoint; next queue item.
 
+**Direct re-verification of `07_MO_MSHP_TroopB_HVAC_Boilers_Controls` in a
+clean memory window (13GB free, mystery process quiet) landed a real result
+this time: still 0/131, but NOT because nothing is found.** Dumped
+`graph.tags` directly: 64 tags total, and real equipment marks ARE among
+them — `RTU-1`, `RTU-2`, `HWS-1`, `UTIL-1`, `TX-1`, `GEN-1` — so the
+`isEquipTag` status-code fix above is doing real work; this is not a
+tag-shape gap at all for this document. Two things are wrong instead: (1)
+every non-callout tag lands with `role: "unknown"`, never `"plan"`
+(`scoreTagEval` doesn't filter on role for matching, so this alone
+shouldn't block scoring, but it means the "plan" role classifier is
+silently failing across this entire document); (2) the found `RTU-1`/
+`RTU-2` instances sit on sheet `#30`/`#31`, and the key's real, verified
+instances are on `#4` and `#38` — no page in common at all. This document's
+`sets.json` entry resolves (via `_rejoined/`) to a PDF stitched back
+together from two separately-downloaded parts
+(`__part01_p1-21.pdf` + `__part02_p22-41.pdf`); a page-numbering skew
+between the rejoined file and whatever the wave-2 ground truth was
+authored against is the leading hypothesis and would explain BOTH the
+`0/131` here and plausibly several of the sixteen exact-zero sets above if
+they share the same split/rejoined provenance — not yet confirmed, and
+the "unknown" role finding needs its own separate look regardless. Left
+unresolved this checkpoint given how much budget the investigation above
+already spent; promoted to the top of the next queue.
+
 **Next queue, in order:**
-1. Get a clean, low-contention window (the mystery process above permitting)
-   and re-verify `07_MO_MSHP_TroopB_HVAC_Boilers_Controls` and
-   `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly — the former to confirm the
-   status-code fix's real recall gain, the latter because its 0/113 is
-   unexplained and its cache entry is now suspect.
-2. Re-run the full corpus with `isEquipTag`'s fix included and get a real
-   before/after on the corpus-wide 63.3% recall number.
-3. Root-cause the sixteen exact-zero sets individually — several (`032_PA`,
-   `20_TX_Judson`) use ordinary tag shapes the recognizer already handles,
-   so their failure is NOT a shape gap; something else is silencing them
-   completely.
-4. Re-run `npm test` on a quiet window with the sidecar disabled to get a
+1. Root-cause why `07_MO_MSHP_TroopB_HVAC_Boilers_Controls`'s real,
+   correctly-spelled equipment tags (`RTU-1`, `RTU-2`, `HWS-1`...) land with
+   `role: "unknown"` instead of `"plan"`, and why their sheet numbers
+   (`#30`/`#31`) don't match the key's verified sheets (`#4`/`#38`) —
+   check whether the `_rejoined/` PDF's page count/order actually matches
+   what the wave-2 ground truth was authored against for this and the other
+   split-and-rejoined bulk sets.
+2. Re-score `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly (its cached 0/113
+   is unverified — one re-run attempt already OOM-killed) and check it for
+   the same rejoined-PDF page-skew pattern.
+3. Root-cause the remaining exact-zero sets the same way — dump raw
+   `graph.tags` directly rather than trusting the scored 0, per the finding
+   above that a scored zero does not mean nothing was found.
+4. Re-run the full corpus with `isEquipTag`'s status-code fix included and
+   get a real before/after on the corpus-wide 63.3% recall number.
+5. Re-run `npm test` on a quiet window with the sidecar disabled to get a
    trustworthy full-suite baseline and confirm the 73 prior failures predate
    this checkpoint's changes.
-5. If the mystery `ppid=1` process recurs, escalate it as an infrastructure
+6. If the mystery `ppid=1` process recurs, escalate it as an infrastructure
    question — it is outside anything a commit to this repo can fix.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
