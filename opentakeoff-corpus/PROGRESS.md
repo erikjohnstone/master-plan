@@ -517,10 +517,50 @@ UNDERESTIMATED by this scan and likely broader than the 25/11-set counts
 above suggest.** A more accurate future measurement would search each
 set's FULL extracted text for its own key's exact expected tag strings
 (the same check already done by hand for `032_PA`/`09_ME`/`07_MO_MSHP`)
-rather than a page-level item count — real work, not a quick script, but
-the right next step before sizing the OCR/raster investment.
+rather than a page-level item count.
 
-2026-09-13 installed-quantity reconciliation checkpoint: the shared
+**Did exactly that — and it decisively answers the prevalence question,
+correcting this checkpoint's own overclaim above.** First cut: searched
+each keyed set's WHOLE document for each key tag's text anywhere at all.
+Result looked reassuring for `09_ME` (100%, 2/2) — but that directly
+contradicts the rendering-confirmed fact that `SAC-11`/`SCU-1` are NOT
+extractable at their drawn location; the match was a false positive from
+elsewhere in the document (the whole-document search can't tell "present
+at the cited sheet" from "this substring occurs somewhere, coincidentally
+or in an unrelated schedule/legend"). Fixed the methodology to check
+presence ON THE KEY'S OWN CITED SHEET specifically, parsed straight from
+each key row's `sheet` column — and it now reproduces every hand-verified
+case exactly: `09_ME` correctly reads **0%** (0/2), matching the direct
+render check precisely; `07_MO_MSHP` **2%** (2/131); `20_TX_Judson` **1%**
+(1/113).
+
+**Full corpus-wide result, all 113 keyed sets, sheet-scoped: only SEVEN
+sets score under 25% presence** — `056_NY_VA_Project_632` (0%), `09_ME`
+(0%), `021_XX_Laboratory_building` (1%), `057_US_VA_Project_626` (1%),
+`20_TX_Judson` (1%), `07_MO_MSHP` (2%), `086_CA_Contra_Costa_College`
+(2%). Every other checked-by-hand set (`067_CA`, `032_PA`, `036_LA`,
+`045_FL`, `095_UT`, `15_IA`, `28_WA_KCHA`, `060_XX`, `068_US`) sits well
+outside this severe band — their recall gap is confirmed to be a
+recognition/shape problem (stacked tags, number-led families, bare marks),
+NOT a text-extraction gap, exactly as those individual deep-dives already
+found. Corpus-wide: **81 of 113 sets (72%) score exactly 100%** — their
+key tags are fully present as extractable text at the exact cited sheet,
+so ANY recall gap on those sets is 100% a recognition/logic problem, not
+an extraction one. Only 9 sets fall under 50%, 15 under 75%.
+
+**This corrects the "likely the single highest-value capability
+investment" claim above — the real number is a narrow, well-defined set of
+seven documents (~6% of the keyed corpus), not a broad, corpus-wide
+prevalence.** The OCR/raster fallback (queue item 7) is real, worth
+building, and would fully unlock those seven sets — but the other ~93% of
+the keyed corpus's recall ceiling is reachable through code fixes to the
+text-pipeline's recognition logic (the stacked-tag, number-led-family, and
+bare-mark gaps already found), which is exactly where the earlier,
+lower-effort part of this checkpoint's work was already pointed. Recorded
+here as a deliberate self-correction: the first, cheaper measurement
+(whole-page item counts, then whole-document text search) both looked
+worse than reality until scoped to the exact unit the scorer itself
+uses — the lesson generalizes past this one number.
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
 plan-tag text into installed quantity. It now retains text-only observations
 separately, verifies surrounding vector geometry for production reconciliation,
