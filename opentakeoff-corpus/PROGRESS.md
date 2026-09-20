@@ -492,6 +492,34 @@ this corpus's recall ceiling" — worth confirming its true prevalence
 (how many sheets corpus-wide are outlined-text) before committing
 engineering time to it.
 
+**Measured that prevalence corpus-wide with a fast, standalone scan (raw
+`pdf.js` text-item counts per page, no pipeline) — real signal, but with an
+important, honestly-caught blind spot.** All 121 sets scanned successfully
+(`<100 non-empty text items on a page>` as the "likely outlined" proxy,
+calibrated against the three confirmed cases: `07_MO_MSHP` 93% of pages,
+`09_ME` — see below, `086_CA` 75%). Corpus-wide: mean 16% of pages per set
+score as low-text, median 4%; 25 sets have ≥30% of their pages low-text,
+11 have ≥50%. Confirms the phenomenon is real and widespread, not confined
+to the three documents already found by hand.
+
+**The proxy has a real blind spot, caught directly: it only detects
+FULLY blank pages, not SELECTIVELY blank ones.** `09_ME`'s own page 9 —
+the exact page visually confirmed above to be missing `SAC-11`/`SCU-1` and
+its entire `KEYED NOTES` body — has 158 total text items (grid labels,
+room names, the keyed-note ITEM NUMBERS survive) and so scores as
+"fine" by this whole-page-count proxy; the whole `09_ME` set reports only
+11% (1/9 pages). Likewise `067_CA` (0%), `032_PA` (0%), `036_LA` (2%),
+`15_IA` (0%) all score near-zero despite `032_PA`'s own confirmed stacked-
+tag gap and Q "is this ALSO partially outlined" left genuinely open for
+the others. **The true prevalence of "the equipment tags specifically are
+outlined even though the sheet has plenty of other live text" is
+UNDERESTIMATED by this scan and likely broader than the 25/11-set counts
+above suggest.** A more accurate future measurement would search each
+set's FULL extracted text for its own key's exact expected tag strings
+(the same check already done by hand for `032_PA`/`09_ME`/`07_MO_MSHP`)
+rather than a page-level item count — real work, not a quick script, but
+the right next step before sizing the OCR/raster investment.
+
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
 plan-tag text into installed quantity. It now retains text-only observations
