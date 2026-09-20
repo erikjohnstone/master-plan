@@ -275,13 +275,26 @@ explanation applies — do not generalize from one document.
    mismatch.
 2. ~~Re-score `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly~~ — done, see
    below: root-caused as a raster-plan gap, not a bug.
-3. Root-cause the remaining fourteen exact-zero sets the same way — dump raw
-   `graph.tags` directly rather than trusting the scored 0, per the finding
-   above that a scored zero does not mean nothing was found, and per the
-   explicit caution against generalizing either 07_MO_MSHP's (key mismatch)
-   or 20_TX_Judson's (raster plan) specific cause to the rest of them —
-   THREE different root causes have now turned up across three checked
-   sets, so each one needs its own direct check.
+3. ~~Root-cause the remaining fourteen exact-zero sets~~ — batch-checked ten
+   more directly (`021_XX`, `032_PA`, `036_LA`, `045_FL`, `067_CA`, `086_CA`,
+   `095_UT`, `09_ME`, `15_IA`, `28_WA_KCHA`): **every single one finds real,
+   substantial tags** (29 to 2764 non-callout tags each) — a scored zero in
+   this corpus essentially never means the pipeline found nothing. Deep-dove
+   one (`032_PA`) to find the actual cause: see the stacked-tag finding
+   below, now the single highest-leverage lead in this checkpoint. The
+   remaining four exact-zero sets (`056_NY`, `060_XX`, `067_CA` role/family
+   detail, `068_US`, `087_US`) already have their own explanations above
+   (bare instrument marks / number-led families) or fit this same
+   stacked-tag pattern and should be re-checked against it specifically
+   before assuming a fourth distinct cause.
+3a. **Highest-priority real fix, not yet attempted — deliberately, given its
+   risk:** extend `rawStackedEquipmentTagCandidates` (`symbollabels.ts`) to
+   join a THREE-segment stacked tag (`AC` over `1-A455A`), not just today's
+   two-run `PREFIX` over `INSTANCE` stack. See the full writeup below. This
+   is real, carefully-scoped follow-up work — a shape change to logic that
+   runs across the whole corpus needs the same negative-suite rigor as this
+   checkpoint's four fixes, and is too large to rush in the time remaining
+   here.
 4. Re-run the full corpus with `isEquipTag`'s status-code fix included and
    get a real before/after on the corpus-wide 63.3% recall number.
 5. Re-run `npm test` on a quiet window with the sidecar disabled to get a
@@ -317,6 +330,52 @@ complete, can find tags that are pixels. This is the first of the sixteen
 exact-zero sets with a genuinely different root cause from `07_MO_MSHP`'s
 key mismatch — do not assume one explanation covers the rest; each needs
 its own direct check (queue item 3 above).
+
+**Batch-checked ten more exact-zero sets directly; every one finds real,
+substantial tags (29-2764 each) — confirming a scored zero essentially
+never means the pipeline found nothing in this corpus.** Full counts:
+`021_XX` 466 (447 non-callout), `032_PA` 2764 (2724), `036_LA` 375 (345),
+`045_FL` 149 (74), `067_CA` 73 (73), `086_CA` 31 (31), `095_UT` 56 (29),
+`09_ME` 78 (70), `15_IA` 155 (118), `28_WA_KCHA` 29 (23). Deep-dove one
+(`032_PA_Construct_EHRM_Infrastructure_Upgrades`, 0/118) to find the actual
+mechanism rather than stopping at "it finds tags but they don't match":
+its key expects `AC-1-A455A`, `AC-1-B418`, `ACCU-1-A455A`, `ACCU-1-A502` —
+and its own authoring note is explicit that these are drawn as TWO STACKED
+LINES (`"AC"` over `"1-A455A"`, confirmed by the note's own recorded
+textSpan coordinates). The pipeline DOES find real `AC`/`ACCU` tags on this
+document (39 of them) — but only the shape `ACCU-A001D`/`ACCU-A154A` (a
+PREFIX over a single fused alphanumeric run), never the `AC-1-A455A` shape
+the key needs.
+
+**Root cause, read directly from the code
+(`rawStackedEquipmentTagCandidates` in `web/src/lib/symbollabels.ts`):**
+the existing stacked-tag reconstruction (already extended twice this
+project — commits `8615fa8`, `3821d64`, `1de79c5` — for the mirrored/
+rotated/cross-sheet-evidence cases) only ever joins a TWO-RUN stack, one
+prefix span (`/^[A-Z]{1,4}$/`) directly over-or-under one plain instance
+span (`/^[A-Z]{0,2}\d{1,3}[A-Z]?$/`, e.g. `"M107"`, `"T1"`) into
+`PREFIX-INSTANCE`. `032_PA`'s convention needs a THREE-segment result
+(`PREFIX-INSTANCE-ROOMCODE`) where the bottom line is itself a
+multi-glyph, already-hyphenated run (`"1"`, `"-"`, `"A455A"` as separate
+text spans, per the key's own note) that would need its own
+`joinHyphenatedTags`-style reassembly into `"1-A455A"` BEFORE being
+matched as this candidate's bottom half — something the current
+two-span-only matcher has no path for at all.
+
+**This is now the single highest-leverage, best-evidenced fix opportunity
+in this checkpoint** — a VA/GSA-style "equipment class over instance-and-
+room-code" stacked tag is a common real-world convention, not a one-off,
+and it plausibly explains some fraction of the corpus-wide recall gap
+beyond just `032_PA`. Deliberately NOT attempted this checkpoint: this
+logic runs across the entire corpus's stacked-tag recognition, so a hasty
+extension risks the same class of false-positive regression the `VENDOR-A`
+and `isEquipTag` negative suites exist to catch, and getting it right needs
+real design thought (how far should the bottom-line join search, when does
+a genuine two-line ROOM NAME over a room NUMBER — see
+`STACKED_SPACE_PREFIXES` — start looking like a false three-segment
+match?) rather than a quick patch under time pressure. Flagged as the
+clear next real fix, with the exact function, the exact gap, and a
+concrete real-corpus example to build a regression test from.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
