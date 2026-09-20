@@ -275,18 +275,20 @@ explanation applies — do not generalize from one document.
    mismatch.
 2. ~~Re-score `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly~~ — done, see
    below: root-caused as a raster-plan gap, not a bug.
-3. ~~Root-cause the remaining fourteen exact-zero sets~~ — batch-checked ten
-   more directly (`021_XX`, `032_PA`, `036_LA`, `045_FL`, `067_CA`, `086_CA`,
-   `095_UT`, `09_ME`, `15_IA`, `28_WA_KCHA`): **every single one finds real,
-   substantial tags** (29 to 2764 non-callout tags each) — a scored zero in
-   this corpus essentially never means the pipeline found nothing. Deep-dove
-   one (`032_PA`) to find the actual cause: see the stacked-tag finding
-   below, now the single highest-leverage lead in this checkpoint. The
-   remaining four exact-zero sets (`056_NY`, `060_XX`, `067_CA` role/family
-   detail, `068_US`, `087_US`) already have their own explanations above
-   (bare instrument marks / number-led families) or fit this same
-   stacked-tag pattern and should be re-checked against it specifically
-   before assuming a fourth distinct cause.
+3. All sixteen exact-zero sets now checked at least shallowly (confirmed
+   whether the pipeline finds real tags at all) — none turned out to be a
+   genuine "nothing found" case. Two already had their SPECIFIC mismatch
+   deep-dived and explained (`07_MO_MSHP` key mismatch, `20_TX_Judson`
+   raster plan, both above); `056_NY`/`060_XX`/`068_US`/`087_US` fit the
+   already-documented bare-instrument-mark / number-led-family gaps; `032_PA`
+   is now deep-dived below as the stacked 3-segment tag gap. **Still open:**
+   the other nine batch-checked sets (`021_XX`, `036_LA`, `045_FL`, `067_CA`,
+   `086_CA`, `095_UT`, `09_ME`, `15_IA`, `28_WA_KCHA`) were only confirmed to
+   find real, substantial tags (29-2764 each) — NOT individually diagnosed
+   for their specific mismatch. The stacked 3-segment pattern below is the
+   leading hypothesis for at least some of them, but each needs its own
+   check (the same `scoreTagEval`-plus-sample-inspection approach used on
+   `032_PA`) before assuming that explanation, not another distinct cause.
 3a. **Highest-priority real fix, not yet attempted — deliberately, given its
    risk:** extend `rawStackedEquipmentTagCandidates` (`symbollabels.ts`) to
    join a THREE-segment stacked tag (`AC` over `1-A455A`), not just today's
@@ -389,6 +391,47 @@ a genuine two-line ROOM NAME over a room NUMBER — see
 match?) rather than a quick patch under time pressure. Flagged as the
 clear next real fix, with the exact function, the exact gap, and a
 concrete real-corpus example to build a regression test from.
+
+**Checked two more of the nine still-open batch-checked sets directly —
+found TWO MORE distinct gaps, not the same stacked-tag cause, confirming
+this corpus's recall gap is a genuine long tail rather than one bug.**
+
+`095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC`'s key is explicit:
+`AC-WW` is drawn as `"AC"` stacked over `"WW"` (its own note gives both
+textSpans' y-coordinates). This is the SAME two-run stack shape the
+existing `rawStackedEquipmentTagCandidates` already supports — but it
+still fails, for a different, more fundamental reason: the suffix matcher
+requires a digit (`/^[A-Z]{0,2}\d{1,3}[A-Z]?$/`), and even if it didn't,
+`isEquipTag` itself refuses any 2-segment tag with no digit anywhere
+(`WW` has none) specifically to keep an English compound like
+`SEE-NOTE` from reading as a tag. The stacked geometry (two short runs
+inside one hexagon glyph) is real, independent evidence this is a genuine
+tag — evidence the plain-text `isEquipTag` check that gates the stacked
+path can't see, because it re-validates the joined string exactly as if
+it had been typed inline. A conforming fix would need to let confirmed,
+tightly-grouped stacked candidates skip (or relax) that inline-only digit
+rule, precisely BECAUSE the geometry itself is the corroborating evidence
+— its own kind of careful design work, not a one-line change.
+
+`28_WA_KCHA_PublicHousing_HVAC`'s key is a THIRD distinct shape again:
+`CFSD` (fire/smoke damper), `VHP` (vertical heat pump), `T` (thermostat) —
+bare, single-run, UNHYPHENATED labels with no stacking at all. This is the
+same out-of-scope class already flagged for `056_NY`'s `CM`/`TC`/`TP` and
+the `VENDOR-A` regression test: a bare alphabetic label is indistinguishable
+from ordinary prose without a separator or a digit, and stays a
+deliberately un-fixed ceiling, not a bug.
+
+**Net effect on how to read the corpus-wide recall number: the gap is a
+long tail of distinct, legitimate tag-convention edge cases (stacked
+3-segment, stacked letter-only-suffix, bare unhyphenated marks, number-led
+families, raster plans, a key-authoring mismatch — six so far, from
+checking under twenty sets), not one dominant bug whose fix would move the
+number sharply.** Each is real and individually fixable, but fixing all of
+them is a multi-session effort, not a single follow-up commit. The
+remaining seven of the nine still-open batch-checked sets (`021_XX`,
+`036_LA`, `045_FL`, `067_CA`, `086_CA`, `09_ME`, `15_IA`) have not been
+individually diagnosed — expect more distinct causes among them rather
+than a repeat of one of the six above.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
