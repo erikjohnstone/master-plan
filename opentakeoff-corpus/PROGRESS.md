@@ -273,14 +273,15 @@ explanation applies — do not generalize from one document.
    why this document's non-callout tags all land `role: "unknown"` instead
    of `"plan"`, which is a real pipeline question independent of the key
    mismatch.
-2. Re-score `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly (its cached 0/113
-   is unverified — one re-run attempt already OOM-killed) and dump raw
-   `graph.tags` the same way before assuming its cause matches 07_MO_MSHP's.
-3. Root-cause the remaining exact-zero sets the same way — dump raw
+2. ~~Re-score `20_TX_JudsonISD_MEP_Upgrades_Pkg6` directly~~ — done, see
+   below: root-caused as a raster-plan gap, not a bug.
+3. Root-cause the remaining fourteen exact-zero sets the same way — dump raw
    `graph.tags` directly rather than trusting the scored 0, per the finding
    above that a scored zero does not mean nothing was found, and per the
-   explicit caution above against generalizing 07_MO_MSHP's specific cause
-   to the rest of them.
+   explicit caution against generalizing either 07_MO_MSHP's (key mismatch)
+   or 20_TX_Judson's (raster plan) specific cause to the rest of them —
+   THREE different root causes have now turned up across three checked
+   sets, so each one needs its own direct check.
 4. Re-run the full corpus with `isEquipTag`'s status-code fix included and
    get a real before/after on the corpus-wide 63.3% recall number.
 5. Re-run `npm test` on a quiet window with the sidecar disabled to get a
@@ -288,6 +289,34 @@ explanation applies — do not generalize from one document.
    this checkpoint's changes.
 6. If the mystery `ppid=1` process recurs, escalate it as an infrastructure
    question — it is outside anything a commit to this repo can fix.
+7. Real capability gap, not a quick fix: build (or wire in) an OCR/raster
+   fallback for plan sheets whose equipment content is embedded as a raster
+   image rather than vector text — see `20_TX_JudsonISD` below for the
+   concrete, reproduced case this would need to handle. Root AGENTS.md
+   already anticipates this ("Use OCR, raster vision... when vector
+   extraction alone cannot reach the answer") — this is real, non-trivial
+   new work, not a bug in the existing recognizer.
+
+**`20_TX_JudsonISD_MEP_Upgrades_Pkg6`'s 0/113 root-caused: its key
+mechanical-plan sheets are embedded raster images, not vector text — a
+real capability gap, not a bug.** Direct `graph.tags` dump: the pipeline
+finds exactly 30 tags, all of them sheet/drawing NUMBER labels
+(`ME-1.1`, `M-1.1A`, …) that happen to be shaped like equipment tags, none
+of them the real equipment marks (`AHU-11`, `CH-1`, `EF-01`...) the key
+enumerates. Checked the PDF directly at the key's four cited sheets
+(`#6`, `#7`, `#11`, `#12`, all within this 13-page document's real range —
+no truncation): three of the four (`#6`, `#7`, `#12`) carry only 41-54 text
+items each — a title block and nothing else — and the fourth (`#11`, 196
+items) still contains zero occurrences of `AHU`, `CH-`, or `EF-` despite
+the key's specific room-by-room equipment call-outs on exactly that sheet.
+`pdf.js`'s own operator list confirms real embedded raster image paints on
+every page (2-6 per page). Conclusion: the actual floor-plan drawing on
+these sheets is a scanned/rasterized image pasted into an otherwise-vector
+PDF (title block, sheet border) — no text-based recognizer, however
+complete, can find tags that are pixels. This is the first of the sixteen
+exact-zero sets with a genuinely different root cause from `07_MO_MSHP`'s
+key mismatch — do not assume one explanation covers the rest; each needs
+its own direct check (queue item 3 above).
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
