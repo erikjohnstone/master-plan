@@ -59,14 +59,71 @@ disabled to sidestep the hang — table-region precision is not what WP7
 measures, so this is safe for THIS eval but the underlying client bug is
 real and still open.
 
+**Investigated and ruled NOT a bug:** a `tables.py` process was repeatedly
+observed spawning even with `OPENTAKEOFF_TABLE_SIDECAR=0` set in its own
+`/proc/<pid>/environ`, which looked at first like the disable flag above
+was silently bypassed somewhere. Read every caller
+(`tableSidecarClient.ts`, `scheduleTableSidecarAdapter.ts`,
+`vectorGridClient.ts`, `mcp/src/session.ts`): `vectorGridClient.ts`
+deliberately runs its own, separate `tables.py` child — the same script
+also serves the vectorgrid JSON-RPC protocol (`vectorGridRuntime.mjs`
+resolves both to `sidecar/tables.py`) — and is intentionally NOT gated by
+`OPENTAKEOFF_TABLE_SIDECAR` (see that file's own header comment: gating the
+primary table engine on the same flag every corpus script sets would
+silently disable it in exactly the runs meant to measure it). The
+`tableSidecarClient.ts` gate itself (`sidecarEnabled()` checked before
+`ensureProc()` in `rpc()`) is correct and was never bypassed. No code
+change made; this closes out what the prior checkpoint left as an open
+mystery.
+
+**Root cause found for most of the prior "timed out after 1200000ms"
+results: self-inflicted concurrency, not per-document bugs.** The chunked
+retry scripts from the prior checkpoint ran with far higher concurrency
+than `tag-eval.mjs`'s own default (a custom driver had many single-json
+children alive at once across chunks), and this container separately shows
+extra `tag-eval.mjs --single-json` processes with `ppid=1` — no live
+parent — cycling through the same small subset of sets every few seconds;
+origin unidentified (parent exits within milliseconds of forking, too fast
+to inspect), left as an open environmental anomaly rather than a code bug.
+Between the two, dozens of heavy PDF-parse processes were competing for
+CPU at once, and that contention, not the documents themselves, is the
+most likely explanation for most of the earlier timeouts. Switched to
+running the corpus through `tag-eval.mjs`'s own built-in orchestrator
+directly (`OPENTAKEOFF_EVAL_CONCURRENCY=2`, its documented default) instead
+of the custom chunk/retry scripts, now that caching (`9e00165`) makes a
+repeat run over already-scored sets nearly free. Confirmed: several
+previously-"timed-out" sets (`031_MO_VA_Project_589A4_20_158…`,
+`078_US_CP25028_MSU_Union_Sparty_Store_Renovations`) are genuinely slow —
+10+ minutes of continuous, real single-threaded work with no contention
+from this orchestrator — not contention artifacts, so a per-set timeout
+above 10 min stays justified for this corpus.
+
+**New genuine recognizer gap found, NOT yet fixed:** the zero-recall sets
+(`060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project` 0/27,
+`068_US_Antelope_Valley_College_Applied_Arts_Math`,
+`087_US_Contra_Costa_College_Chiller_Replacement`, others) were first
+checked for the obvious cause — a scanned/raster page with no text layer —
+and ruled out directly (`pdfjs-dist` text-content dump: `060_XX_ASC…` page
+1 alone carries 1137 text items/11103 chars; all three have substantial
+vector text on every sampled page). The real cause: this corpus's tags on
+these sheets are **zone/building-number-led**, not letter-led —
+`432CPA04-P`, `432PCHW01-1`, `432PCHW02-1` (hyphenated, but the segment
+before the hyphen starts with digits, failing `isEquipTag`'s
+`/^[A-Z]{1,8}$/` first-segment check) and `432DDCP01` (no separator at all,
+outside `isEquipTag`'s domain entirely). Not fixed this checkpoint: safely
+widening either shape risks the same class of false positive the `VENDOR-A`
+regression test already guards against (a bare alphanumeric run reading as
+a tag), and verifying that needs the same negative-suite rigor as the three
+bugs already fixed above — left as an honest, documented gap rather than a
+rushed heuristic.
+
 **Full-corpus re-eval status:** in progress at the time of this checkpoint,
-chunked into 9 groups of ~15 sets (resumable — a chunk is skipped on retry
-once its own `TAG CENSUS` table has printed) because this session's
-container shares CPU with an unrelated, unexplained worker process that
-periodically spikes to 90-100% kernel time and forced several full-run
-restarts before landing on the chunked approach. This entry will be updated
-with final corpus-wide recall/precision and the next queue once all 9
-chunks complete.
+now running as a single `tag-eval.mjs` process over all 121 sets
+(concurrency 2, `OPENTAKEOFF_EVAL_TIMEOUT_MS=1200000`,
+`OPENTAKEOFF_TABLE_SIDECAR=0`) instead of the prior custom chunk/retry
+scripts — simpler, and the built-in cache means every set this checkpoint
+already scored resolves instantly. This entry will be updated with final
+corpus-wide recall/precision and the next queue once the run completes.
 
 2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
