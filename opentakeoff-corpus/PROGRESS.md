@@ -561,6 +561,52 @@ here as a deliberate self-correction: the first, cheaper measurement
 (whole-page item counts, then whole-document text search) both looked
 worse than reality until scoped to the exact unit the scorer itself
 uses — the lesson generalizes past this one number.
+
+**The full-corpus re-run with the `isEquipTag` status-code fix included
+finished.** 121/121 sets accounted for: 66 scored (6 pass both floors —
+one more than the pre-fix run: `bessemer`, `federal-mech`,
+`14_OR_KlamathCC_LearningCtr_Mechanical`,
+`17_FL_SuwanneeHS_Courtyard_100CD`,
+`055_US_VA_Project_673_20_107_EHRM_Infrastructure`,
+`064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit` — plus 60 below
+floor), 46 timeouts, 2 crashes (`27_WA_ColvilleTribes_Hatchery_Lab`,
+`041_IL_VA_Project_537_17_115_Sterile_Processing` — "child process exited
+null with no result", the OOM-kill signature from earlier), 7 unlabelled.
+Raw aggregate: 3072/4647 = 66.1% recall across whichever 66 sets happened
+to complete this run.
+
+**Real before/after, not just a raw aggregate comparison across two runs
+that scored different sets (an apples-to-oranges trap given how much
+timeout luck varies run to run):** restricted to the 64 sets that
+completed successfully in BOTH the pre-fix and post-fix runs. Six sets'
+scores changed, every one of them UP, none down:
+`068_US_Antelope_Valley_College_Applied_Arts_Math` 0→8/27,
+`017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling` 66→83/100,
+`077_MT_Miller_Dining_Auxiliaries_Offices_HVAC` 44→52/80,
+`023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory` 9→13/22,
+`03_FL_HurlburtField_ChildDevCenter` 31→33/121,
+`042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17` 23→24/37. Common-set
+aggregate: **63.5% before → 64.4% after** (2801/4410 → 2841/4410, +40 tags
+found, zero regressions). This is the clean, controlled verification the
+earlier unit-test-only confirmation was still missing — the fix helps on
+real corpus documents, not just its own synthetic test cases, and hurts
+nothing.
+
+**Next queue, updated:** the sheet-scoped extraction-presence measurement
+above (7 severely extraction-starved sets, 81 sets with no extraction
+problem at all) plus this verified fix leave the highest-value remaining
+work as: (1) implement the stacked 3-segment tag fix now that it's fully
+scoped (`032_PA`'s `AC` over `1-A455A`), with the same negative-suite
+rigor as the fixes already landed; (2) do the same for the stacked
+letter-only-suffix case (`095_UT`'s `AC` over `WW`); (3) re-run the full
+corpus again after those land for another real before/after; (4) build
+the OCR/raster fallback for the seven confirmed extraction-starved sets,
+sized correctly now as a bounded, worthwhile but non-dominant investment;
+(5) chase down the 46 timeouts and 2 crashes with a clean, low-contention
+window and the per-set `graph.tags` dump technique developed this
+checkpoint, now proven reliable.
+
+2026-09-13 installed-quantity reconciliation checkpoint: the shared
 `sweepScheduleRow` / Agent reconciliation path no longer promotes bare exact
 plan-tag text into installed quantity. It now retains text-only observations
 separately, verifies surrounding vector geometry for production reconciliation,
