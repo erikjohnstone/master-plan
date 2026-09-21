@@ -5,7 +5,7 @@
 **The measurement engine for building plans—built so an AI agent can drive it, and so an estimator wants to.**
 
 A takeoff is the act of measuring quantities off a construction drawing. OpenTakeoff does it
-two ways over one engine: **40 MCP tools** for an agent, and a browser canvas for a person.
+two ways over one engine: **<!--tool-count-->60<!--/tool-count--> MCP tools** for an agent, and a browser canvas for a person.
 Same flood fill, same scale gate, same math, same record. Every measurement stores its
 **scale**, its **method**, and **who made it**—which is what makes the output auditable, and
 what makes it training data.
@@ -253,7 +253,7 @@ otherwise, and nothing an autonomous agent could call.
 
 OpenTakeoff is that engine, with two front ends over identical geometry:
 
-- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->56<!--/tool-count--> tools, on the
+- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->60<!--/tool-count--> tools, on the
   [official MCP registry](https://registry.modelcontextprotocol.io). An agent opens a plan,
   reads the title block, sets the scale, floods the rooms, checks its own work on a rendered
   overlay, and hands back a marked-up planset PDF.
@@ -355,7 +355,7 @@ becomes ink only when the operator clicks Accept.* The full run, live and uncut,
 |---|---|
 | **Open and orient** | `load_plan` · `sheet_info` · `sheet_context` · `read_sheet_text` · `find_text` · `view_sheet` |
 | **Scale** | `set_scale` |
-| **Measure** | `one_click` · `detect_rooms` · `measure_polygon` · `cut_out` · `measure_line` · `measure_surface` · `place_count` |
+| **Measure** | `one_click` · `detect_rooms` · `measure_polygon` · `cut_out` · `measure_line` · `resolve_linear_assembly` · `measure_surface` · `place_count` |
 | **Repeat and derive** | `symbol_sweep` · `sweep_schedule_row` · `derive_base` · `derive_transitions` · `apply_rules` |
 | **Read the drawing set** | `sheet_graph` · `resolve_tag` · `find_schedule` |
 | **Edit and audit** | `list_shapes` · `edit_shape` · `edit_condition` · `edit_materials` · `duplicate_condition` · `split_condition` · `delete_shape` · `undo_last` |
@@ -477,7 +477,7 @@ thresholding, polarity detection for blueprint negatives, a gap-bridging pass fo
 faded ink—and badges the result so you verify the edges before committing. On CAD exports
 that publish a layer tree, One-Click reads the declared roles instead of inferring them.
 
-Plus the full manual kit—**Area, Rectangle, Linear, Curved Line, Surface Area (walls),
+Plus the full manual kit—**Area, Rectangle, Linear, Surface Area (walls),
 Count**, and **Cut Out** deducts—and a **Zone check** that answers "what's in this wing?"
 without touching the takeoff.
 
@@ -652,7 +652,7 @@ plus a vision-capable model id.
 |---|---|
 | **Ingest** | PDF, image, or `.zip` plan set—unpacked in-browser, multi-page, multi-file, up to 4 sheets side-by-side |
 | **Scale** | Auto-detect the drawn note, calibrate from a known dimension, or verify one with a graded check—per sheet |
-| **Measure** | One-Click Area (vector flood + raster fallback), Area, Rectangle, Linear, Curved Line, Surface Area, Count, Cut Out deducts, ⟂ Transitions, Zone check—imperial or metric |
+| **Measure** | One-Click Area (vector flood + raster fallback), Area, Rectangle, Linear, Surface Area (every one of Area/Linear/Cut Out/Surface Area carries a **╱ Straight / ⌒ Curve** switch, `Q`, for bowed walls and radius corners), Count, Cut Out deducts, ⟂ Transitions, Zone check—imperial or metric |
 | **Drawing aids** | 45°/90° angle lock with `⇧` hard-lock, live angle + segment-length readout at the cursor, endpoint Snap (beta) |
 | **Conditions** | Color + CAD hatch per finish, waste %, ×N multiplier, wall height, border thickness, schedule import, browser-wide library |
 | **Supporting Materials** | Labor + subfloor type, coverage rate × basis (incl. figured seam LF) → rounded order quantities, trowel/roller presets, grout calculator |
@@ -665,7 +665,7 @@ plus a vision-capable model id.
 | **Voice** | Push-to-talk takeoff commands, recognized on-device in WebAssembly; audio never leaves the browser |
 | **View** | Light or **dark (negative print)**—sheet pixels inverted at draw time, exports follow |
 | **Storage** | IndexedDB + localStorage—client-only, nothing uploaded |
-| **MCP server** | <!--tool-count-->56<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
+| **MCP server** | <!--tool-count-->60<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
 | **Provenance** | Every shape records its scale, its method, its confidence, and whether a person or an agent made it |
 | **Capture (opt-in)** | Bundled [capture server](capture/README.md) banks each contributed takeoff as (geometry → label) training rows |
 | **Deploy** | One static build—Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3, any static host |

@@ -1,7 +1,7 @@
 // Benchmark scorer — the IoU/aggregate math the corpus gate stands on.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, type ProbeScore, type CrossScore } from "../bench/score.ts";
+import { polyIoU, scoreGolden, aggregate, crossAgreement, aggregateCross, polyOverlapPx2, caseCoverage, confidenceGate, checkWallSemantics, goldenVertexCoverage, CONF_GATE, CONF_GATE_EXEMPT, scoreLinearParity, scoreLinearTotals, scoreLinearDeterminism, aggregateLinear, polylineLength, projectOntoPolyline, clipPolyline, discreteFrechet, simplifyPolyline, scoreTraceShapeMatch, scoreTraceRecall, scoreTracePrecision, aggregateTrace, scoreRefusalCorrectness, type ProbeScore, type CrossScore, type TraceRunRow, type RefusalRow } from "../bench/score.ts";
 import { KNOWN_WALL_SEMANTICS, WALL_SEMANTICS } from "../bench/corpus.ts";
 import type { Point } from "../src/lib/oneclick.ts";
 
@@ -385,4 +385,297 @@ test("A2/A5b gate: the xfailAtMost and xfailEquals directions flip the same way 
   // is UNCHECKABLE, which is a failure rather than a silent pass
   const orphan = confidenceGate([...base, tile(0.85)]);
   assert.ok(orphan.failures.some((f) => /XFAIL UNCHECKABLE/.test(f)), orphan.failures.join("; "));
+});
+
+// ── #linear-takeoff (WP1.6) — parity/totals/determinism scoring ────────────
+test("scoreLinearParity: identical ComputedRuns are OK; any difference names the mismatch", () => {
+  const run = { segments: [{ i: 0, lf: 10, size_src: "manual" as const }], vertices: [], totals_by_size: {} };
+  assert.deepEqual(scoreLinearParity("c1", run, structuredClone(run)), { caseName: "c1", ok: true });
+  const different = { ...structuredClone(run), segments: [{ i: 0, lf: 11, size_src: "manual" as const }] };
+  const r = scoreLinearParity("c1", run, different);
+  assert.equal(r.ok, false);
+  assert.match(r.mismatch!, /canvas computed_run !== MCP computed_run/);
+});
+
+test("scoreLinearParity: one side null and the other resolved is a mismatch; both null is OK", () => {
+  const run = { segments: [], vertices: [], totals_by_size: {} };
+  assert.deepEqual(scoreLinearParity("c1", null, null), { caseName: "c1", ok: true });
+  const half = scoreLinearParity("c1", run, null);
+  assert.equal(half.ok, false);
+  assert.match(half.mismatch!, /one side resolved a run and the other didn't/);
+});
+
+test("scoreLinearTotals: exact match has zero error; a mismatch reports both absolute and percent error", () => {
+  assert.deepEqual(scoreLinearTotals("c1", 50, 50), { caseName: "c1", expectedLf: 50, actualLf: 50, errFt: 0, errPct: 0 });
+  const off = scoreLinearTotals("c1", 50, 51);
+  assert.equal(off.errFt, 1);
+  assert.ok(Math.abs(off.errPct - 0.02) < 1e-9);
+});
+
+test("scoreLinearTotals: a zero-length expected run reports 0% error rather than dividing by zero", () => {
+  assert.deepEqual(scoreLinearTotals("c1", 0, 0), { caseName: "c1", expectedLf: 0, actualLf: 0, errFt: 0, errPct: 0 });
+});
+
+test("scoreLinearDeterminism: reports the transform name and the raw error", () => {
+  assert.deepEqual(scoreLinearDeterminism("c1", "rotate90", 20, 20), { caseName: "c1", transform: "rotate90", expectedLf: 20, actualLf: 20, errFt: 0 });
+  const scaled = scoreLinearDeterminism("c1", "scale2x", 40, 40.02);
+  assert.ok(Math.abs(scaled.errFt - 0.02) < 1e-9, `expected ~0.02, got ${scaled.errFt}`);
+});
+
+test("aggregateLinear: rolls up parity failures and the worst totals/determinism error across cases", () => {
+  const parity = [{ ok: true }, { ok: false }, { ok: true }];
+  const totals = [scoreLinearTotals("a", 10, 10), scoreLinearTotals("b", 10, 10.03)];
+  const determinism = [scoreLinearDeterminism("a", "rotate90", 10, 10), scoreLinearDeterminism("a", "scale2x", 20, 19.98)];
+  const agg = aggregateLinear(parity, totals, determinism);
+  assert.equal(agg.cases, 2);
+  assert.equal(agg.parityFailures, 1);
+  assert.ok(Math.abs(agg.maxTotalsErrFt - 0.03) < 1e-9);
+  assert.ok(Math.abs(agg.maxDeterminismErrFt - 0.02) < 1e-9);
+});
+
+test("aggregateLinear: empty inputs report zero, not NaN or a thrown error", () => {
+  assert.deepEqual(aggregateLinear([], [], []), { cases: 0, parityFailures: 0, maxTotalsErrFt: 0, maxTotalsErrPct: 0, maxDeterminismErrFt: 0 });
+});
+
+// ── #linear-takeoff WP3+ trace-engine scoring ───────────────────────────────
+
+test("polylineLength: sums a multi-segment chain, including a 3-4-5 leg", () => {
+  assert.equal(polylineLength([[0, 0], [3, 4]]), 5);
+  assert.equal(polylineLength([[0, 0], [3, 4], [3, 4]]), 5, "a zero-length trailing leg adds nothing");
+  assert.equal(polylineLength([[0, 0]]), 0, "a single point has no length");
+});
+
+test("projectOntoPolyline: a point exactly on a vertex reports that vertex's own arc-length, zero distance", () => {
+  const poly: Point[] = [[0, 0], [100, 0], [100, 100]];
+  const hit = projectOntoPolyline([100, 0], poly);
+  assert.equal(hit.arcLen, 100);
+  assert.equal(hit.dist, 0);
+  assert.deepEqual(hit.at, [100, 0]);
+});
+
+test("projectOntoPolyline: a point off to the side projects perpendicularly onto the nearest segment", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  const hit = projectOntoPolyline([40, 10], poly);
+  assert.equal(hit.arcLen, 40);
+  assert.equal(hit.dist, 10);
+  assert.deepEqual(hit.at, [40, 0]);
+});
+
+test("projectOntoPolyline: a point beyond either end clamps to that endpoint, not extrapolating past it", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  assert.deepEqual(projectOntoPolyline([-50, 0], poly).at, [0, 0]);
+  assert.deepEqual(projectOntoPolyline([500, 0], poly).at, [100, 0]);
+});
+
+test("clipPolyline: clips a straight line's middle span to exact arc-length endpoints", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  assert.deepEqual(clipPolyline(poly, 20, 80), [[20, 0], [80, 0]]);
+});
+
+test("clipPolyline: a clip spanning an interior vertex keeps that vertex — the elbow's own shape survives", () => {
+  const poly: Point[] = [[0, 0], [50, 0], [50, 50]];   // elbow at (50,0), arc-length 50
+  const clipped = clipPolyline(poly, 20, 70);
+  assert.deepEqual(clipped, [[20, 0], [50, 0], [50, 20]]);
+});
+
+test("discreteFrechet: identical polylines are zero distance apart", () => {
+  const poly: Point[] = [[0, 0], [50, 0], [50, 50]];
+  assert.equal(discreteFrechet(poly, poly), 0);
+});
+
+test("discreteFrechet: two parallel lines offset by a constant distance report exactly that distance", () => {
+  const a: Point[] = [[0, 0], [100, 0]];
+  const b: Point[] = [[0, 10], [100, 10]];
+  assert.equal(discreteFrechet(a, b), 10);
+});
+
+test("discreteFrechet: a single spike far from an otherwise-matching path drives the whole distance up (it's a MAX, not an average)", () => {
+  const a: Point[] = [[0, 0], [50, 0], [100, 0]];
+  const b: Point[] = [[0, 0], [50, 1000], [100, 0]];
+  assert.equal(discreteFrechet(a, b), 1000);
+});
+
+test("scoreTraceShapeMatch: an exact-match trace over the golden's own span scores zero Fréchet distance and full overlap", () => {
+  const golden: Point[] = [[0, 0], [100, 0], [100, 100]];
+  const m = scoreTraceShapeMatch("c1", golden, golden, 1 / 18);
+  assert.equal(m.frechetPx, 0);
+  assert.equal(m.lengthOverlapPct, 1);
+  assert.equal(m.clippedLenFt, m.goldenLenFt);
+});
+
+test("scoreTraceShapeMatch: an over-traced polyline (extends well past the golden on both ends) is CLIPPED to the golden's own span first — over-trace is invisible here by design", () => {
+  const golden: Point[] = [[0, 0], [100, 0]];
+  const overTraced: Point[] = [[-500, 0], [0, 0], [100, 0], [600, 0]];   // same line, way longer
+  const m = scoreTraceShapeMatch("c1", golden, overTraced, 1 / 18);
+  assert.equal(m.frechetPx, 0);
+  assert.equal(m.lengthOverlapPct, 1);
+  assert.equal(m.clippedLenFt, m.goldenLenFt, "clipped to the golden's own 100px span, not the full 1100px trace");
+});
+
+test("scoreTraceShapeMatch: a trace that stops SHORT of the golden's own end reports partial overlap, not a false 100%", () => {
+  const golden: Point[] = [[0, 0], [100, 0]];
+  const shortTrace: Point[] = [[0, 0], [40, 0]];   // dead-ended 60% short of the golden's own end
+  const m = scoreTraceShapeMatch("c1", golden, shortTrace, 1 / 18);
+  assert.ok(m.lengthOverlapPct < 0.6, `expected well under 60% overlap, got ${m.lengthOverlapPct}`);
+});
+
+test("scoreTraceShapeMatch: the trace's own walk direction relative to the golden's is arbitrary — a REVERSED trace still matches cleanly", () => {
+  const golden: Point[] = [[0, 0], [100, 0], [100, 100]];
+  const reversedTrace: Point[] = [[100, 100], [100, 0], [0, 0]];
+  const m = scoreTraceShapeMatch("c1", golden, reversedTrace, 1 / 18);
+  assert.equal(m.frechetPx, 0);
+  assert.equal(m.lengthOverlapPct, 1);
+});
+
+test("simplifyPolyline: collinear interior points are dropped, endpoints always kept", () => {
+  const poly: Point[] = [[0, 0], [10, 0], [20, 0], [30, 0], [100, 0]];
+  assert.deepEqual(simplifyPolyline(poly, 0.5), [[0, 0], [100, 0]]);
+});
+
+test("simplifyPolyline: a real corner well past the tolerance survives", () => {
+  const poly: Point[] = [[0, 0], [50, 0], [100, 0], [100, 50], [100, 100]];
+  assert.deepEqual(simplifyPolyline(poly, 0.5), [[0, 0], [100, 0], [100, 100]]);
+});
+
+test("simplifyPolyline: a sub-tolerance wiggle (jitter, not a real kink) is dropped", () => {
+  const poly: Point[] = [[0, 0], [50, 0.2], [100, 0]];
+  assert.deepEqual(simplifyPolyline(poly, 0.5), [[0, 0], [100, 0]]);
+});
+
+test("simplifyPolyline: fewer than 3 points is returned unchanged", () => {
+  const poly: Point[] = [[0, 0], [100, 0]];
+  assert.equal(simplifyPolyline(poly, 0.5), poly);
+});
+
+test("scoreTraceShapeMatch: a golden authored with 2 vertices vs. a trace_run polyline with several EXTRA nearly-collinear vertices along the exact same straight line scores ~0 Fréchet, not an inflated one — GATE 3 held-out finding (itd-p4-ea-duct-stub, 2026-09-17): LF matched exactly (3.02→3.02) yet raw discreteFrechet on the un-simplified points read 9.2px, purely from vertex-count mismatch, not a real shape difference", () => {
+  const golden: Point[] = [[1554.2, 860.4], [1635.8, 860.4]];
+  const traced: Point[] = [[1554.2, 860.4], [1563.4, 860.4], [1626.7, 860.4], [1631.3, 860.4], [1635.8, 860.4]];
+  const m = scoreTraceShapeMatch("itd-p4-ea-duct-stub", golden, traced, 0.037037037037037035);
+  assert.ok(m.frechetPx < 2, `expected < 2px (the recall gate's own tolerance), got ${m.frechetPx}`);
+  assert.equal(m.lengthOverlapPct, 1);
+});
+
+test("scoreTraceShapeMatch: simplification does not mask a REAL shape mismatch — a genuinely different-shaped trace (a real detour) still scores a large Fréchet distance", () => {
+  const golden: Point[] = [[0, 0], [100, 0]];
+  const detouredTrace: Point[] = [[0, 0], [40, 0], [40, 50], [60, 50], [60, 0], [100, 0]];   // a real out-and-back detour mid-span
+  const m = scoreTraceShapeMatch("c1", golden, detouredTrace, 1 / 18);
+  assert.ok(m.frechetPx > 40, `expected the real 50px detour to still show up, got ${m.frechetPx}`);
+});
+
+function traceRow(over: Partial<TraceRunRow> & { caseName: string }): TraceRunRow {
+  return { status: "reached", goldenLf: 10, tracedLf: 10, lenErrPct: 0, overTracePct: 0, goldenSizeKey: null, tracedSizeKey: null, sizeMatch: null, ...over };
+}
+
+test("scoreTraceRecall: a hit needs BOTH Fréchet under the tolerance AND overlap at/above the minimum — either one failing is a miss", () => {
+  const goodShape = { caseName: "c1", frechetPx: 1, lengthOverlapPct: 0.9, clippedLenFt: 10, goldenLenFt: 10 };
+  const badFrechet = { ...goodShape, frechetPx: 5 };
+  const badOverlap = { ...goodShape, lengthOverlapPct: 0.5 };
+  const rows = [
+    traceRow({ caseName: "hit", shape: goodShape }),
+    traceRow({ caseName: "miss-frechet", shape: badFrechet }),
+    traceRow({ caseName: "miss-overlap", shape: badOverlap }),
+    traceRow({ caseName: "miss-refused", status: "refused", tracedLf: null, shape: goodShape }),
+  ];
+  const r = scoreTraceRecall(rows, 2, 0.8);
+  assert.equal(r.hits, 1);
+  assert.equal(r.total, 4);
+  assert.equal(r.recall, 0.25);
+  assert.deepEqual(r.misses.map((m) => m.caseName), ["miss-frechet", "miss-overlap", "miss-refused"]);
+});
+
+test("scoreTraceRecall: empty input reports zero recall, not NaN", () => {
+  assert.equal(scoreTraceRecall([], 2, 0.8).recall, 0);
+});
+
+test("scoreTracePrecision: an exact-length trace scores 1.0; an over-traced one is diluted by its own excess length", () => {
+  const exact = scoreTracePrecision([traceRow({ caseName: "c1", goldenLf: 10, tracedLf: 10 })]);
+  assert.equal(exact, 1);
+  const overTraced = scoreTracePrecision([traceRow({ caseName: "c1", goldenLf: 10, tracedLf: 20 })]);
+  assert.equal(overTraced, 0.5, "10 correct ft out of 20 walked ft");
+});
+
+test("scoreTracePrecision: an under-traced (short) run is NOT penalized here — under-trace is a recall problem, not a precision one", () => {
+  const short = scoreTracePrecision([traceRow({ caseName: "c1", goldenLf: 10, tracedLf: 4 })]);
+  assert.equal(short, 1, "min(10,4)/4 = 1.0 — everything walked was correct, it just wasn't enough of it");
+});
+
+test("scoreTracePrecision: length-weighted across cases — a small case's own noise doesn't swing the aggregate as hard as a large case's real drift", () => {
+  const rows = [
+    traceRow({ caseName: "small", goldenLf: 2, tracedLf: 4 }),     // 50% precision, tiny weight
+    traceRow({ caseName: "large", goldenLf: 100, tracedLf: 100 }),  // 100% precision, huge weight
+  ];
+  const p = scoreTracePrecision(rows);
+  assert.ok(p > 0.9, `expected the large exact case to dominate, got ${p}`);
+});
+
+test("scoreTracePrecision: refused/unreached rows are excluded, not scored as zero", () => {
+  const rows = [traceRow({ caseName: "refused", status: "refused", tracedLf: null })];
+  assert.equal(scoreTracePrecision(rows), 0, "no reached rows at all — reports 0, not a crash");
+});
+
+test("aggregateTrace: rolls up recall, precision, worst length/over-trace error and length-weighted size accuracy", () => {
+  const shape = { caseName: "c", frechetPx: 0, lengthOverlapPct: 1, clippedLenFt: 10, goldenLenFt: 10 };
+  const rows: TraceRunRow[] = [
+    traceRow({ caseName: "a", goldenLf: 10, tracedLf: 10, lenErrPct: 0, overTracePct: 0, goldenSizeKey: "pipe:1", tracedSizeKey: "pipe:1", sizeMatch: true, shape }),
+    traceRow({ caseName: "b", goldenLf: 20, tracedLf: 22, lenErrPct: 0.1, overTracePct: 0.1, goldenSizeKey: "pipe:2", tracedSizeKey: "pipe:1", sizeMatch: false, shape }),
+  ];
+  const agg = aggregateTrace(rows, 2, 0.8);
+  assert.equal(agg.cases, 2);
+  assert.equal(agg.recall, 1, "both cases have a qualifying shape match");
+  assert.ok(Math.abs(agg.maxLenErrPct - 0.1) < 1e-9);
+  assert.ok(Math.abs(agg.maxOverTracePct - 0.1) < 1e-9);
+  assert.ok(Math.abs(agg.sizeAccuracyPct! - 10 / 30) < 1e-9, "length-weighted: only the 10 ft case's size matched, out of 30 ft total");
+  assert.ok(Math.abs(agg.sizeWrongLabelPct! - 20 / 30) < 1e-9, "case b traced a real (wrong) size — wrong-label, not no-label");
+  assert.equal(agg.sizeNoLabelPct, 0, "no case in this rollup left the size unbound");
+});
+
+test("aggregateTrace: a WRONG size and a MISSING size are counted separately, not both lumped into 'not a match' — the plan's own \"no-label vs wrong-label separated\" spec", () => {
+  const shape = { caseName: "c", frechetPx: 0, lengthOverlapPct: 1, clippedLenFt: 10, goldenLenFt: 10 };
+  const rows: TraceRunRow[] = [
+    traceRow({ caseName: "wrong", goldenLf: 10, tracedLf: 10, goldenSizeKey: "pipe:1", tracedSizeKey: "pipe:0.75", sizeMatch: false, shape }),
+    traceRow({ caseName: "no-label", goldenLf: 30, tracedLf: 30, goldenSizeKey: "pipe:1", tracedSizeKey: null, sizeMatch: false, shape }),
+  ];
+  const agg = aggregateTrace(rows, 2, 0.8);
+  assert.equal(agg.sizeAccuracyPct, 0, "neither case matched");
+  assert.ok(Math.abs(agg.sizeWrongLabelPct! - 10 / 40) < 1e-9, "only the case that traced a real, wrong size counts here");
+  assert.ok(Math.abs(agg.sizeNoLabelPct! - 30 / 40) < 1e-9, "the case that left size unbound counts here, not as a wrong guess");
+});
+
+test("aggregateTrace: no case carries a golden size — sizeAccuracyPct and its wrong/no-label siblings are all null, never fabricated numbers", () => {
+  const agg = aggregateTrace([traceRow({ caseName: "a" })], 2, 0.8);
+  assert.equal(agg.sizeAccuracyPct, null);
+  assert.equal(agg.sizeWrongLabelPct, null);
+  assert.equal(agg.sizeNoLabelPct, null);
+});
+
+test("aggregateTrace: empty input reports zeros/nulls, not NaN or a thrown error", () => {
+  const agg = aggregateTrace([], 2, 0.8);
+  assert.deepEqual(agg, { cases: 0, recall: 0, precision: 0, maxLenErrPct: 0, meanLenErrPct: 0, maxOverTracePct: 0, sizeAccuracyPct: null, sizeWrongLabelPct: null, sizeNoLabelPct: null, maxColdBuildMs: null, maxWarmQueryMs: null });
+});
+
+// ── refusal correctness — a labeled negative corpus, distinct from recall/precision above ──
+
+function refusalRow(over: Partial<RefusalRow> & { caseName: string }): RefusalRow {
+  return { correct: true, gotStatus: "refused", ...over };
+}
+
+test("scoreRefusalCorrectness: all-correct reports rate 1.0 with no misses", () => {
+  const rows = [refusalRow({ caseName: "a" }), refusalRow({ caseName: "b" })];
+  const r = scoreRefusalCorrectness(rows);
+  assert.equal(r.correct, 2);
+  assert.equal(r.total, 2);
+  assert.equal(r.rate, 1);
+  assert.deepEqual(r.misses, []);
+});
+
+test("scoreRefusalCorrectness: a seed that confidently REACHED instead of refusing is a miss, named", () => {
+  const rows = [refusalRow({ caseName: "a" }), refusalRow({ caseName: "b", correct: false, gotStatus: "reached" })];
+  const r = scoreRefusalCorrectness(rows);
+  assert.equal(r.correct, 1);
+  assert.equal(r.rate, 0.5);
+  assert.deepEqual(r.misses.map((m) => m.caseName), ["b"]);
+});
+
+test("scoreRefusalCorrectness: empty input reports rate 0, not NaN", () => {
+  assert.equal(scoreRefusalCorrectness([]).rate, 0);
 });

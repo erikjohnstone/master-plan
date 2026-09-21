@@ -87,7 +87,24 @@ export interface TextMark { x: number; y: number; w: number; h: number }
  *  keeps hand-built geometry (rastermask, tests) and stitched composites
  *  working unchanged. */
 export interface InkContext { subpaths?: SubPath[] | null; texts?: TextMark[] | null; dimTexts?: DimTextMark[] | null }
-export interface VectorGeometry { points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; maxImageArea: number; lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[]; }
+export interface VectorGeometry {
+  points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; maxImageArea: number;
+  lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[];
+  /** Per-segment index into `dashPatterns`, 0 = solid (#linear-takeoff B-L5).
+   *  A line-type legend (existing/demo/new, or per-system dash keys) is real
+   *  drafting information `extractVectorGeometry` dropped entirely until now
+   *  — `setDash` was tracked nowhere in the graphics-state walk below. Purely
+   *  additive: omitted consumers see byte-identical output to before. */
+  dash?: Uint8Array;
+  /** `dashPatterns[k]` is the raw PDF dash array (user-space units, as
+   *  authored) for dash index k; `dashPatterns[0]` is always `[]` (solid). */
+  dashPatterns?: number[][];
+  /** Per-segment stroke colour, 3 bytes (r,g,b) per segment — `strokeRgb`
+   *  alongside the existing 1-byte `lum` (#260), which only ever kept the
+   *  luminance and threw the colour itself away. Same "cannot change
+   *  mid-path" rule as `lum`. */
+  strokeRgb?: Uint8Array;
+}
 export interface MaskObj { mask: Uint8Array; mw: number; mh: number; ws: number; softCount: number; mppf?: number; }  // mppf: mask px per foot (0/absent = scale unknown)
 export interface RegionResult { region: Uint8Array; mw: number; mh: number; ws: number; count?: number; }
 export type FloodResult =
@@ -336,11 +353,34 @@ export function strokeLuminance(args: unknown[]): number | null {
   return Math.max(0, Math.min(255, Math.round(L)));
 }
 
+/** The three raw stroke-colour bytes (#linear-takeoff B-L5) — same arg-shape
+ *  tolerance as strokeLuminance (three args, one array, or one typed array
+ *  across pdf.js versions), same 0–1-vs-0–255 disambiguation. Kept as a
+ *  SEPARATE function rather than widening strokeLuminance's return, since
+ *  every existing caller of strokeLuminance wants exactly a number and
+ *  nothing about that contract should move. */
+export function strokeRgbBytes(args: unknown[]): [number, number, number] | null {
+  const first = args?.[0];
+  const a = Array.isArray(first) || (ArrayBuffer.isView(first) && !(first instanceof DataView))
+    ? (first as ArrayLike<unknown>)
+    : args;
+  if (!a || a.length < 3) return null;
+  const [r, g, b] = [a[0], a[1], a[2]].map((v) => (typeof v === "number" && Number.isFinite(v) ? v : NaN));
+  if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null;
+  const k = r <= 1 && g <= 1 && b <= 1 ? 255 : 1;
+  const clamp = (v: number) => Math.max(0, Math.min(255, Math.round(v * k)));
+  return [clamp(r), clamp(g), clamp(b)];
+}
+
 export function extractVectorGeometry(opList: OpList, transform: number[], OPS: OpsTable): VectorGeometry {
   const points: Point[] = [];
   const segs: number[] = [];
   const metaArr: number[] = [];
   const lumArr: number[] = [];
+  // #linear-takeoff B-L5: one byte per segment (dash index), three per
+  // segment (r,g,b) — same 1:1-with-segs cadence as metaArr/lumArr.
+  const dashArr: number[] = [];
+  const rgbArr: number[] = [];
   const subpaths: SubPath[] = [];
   // the subpath under construction: opened by moveTo/rectangle, sealed when
   // the next one opens or the op stream ends. A figure that contributed no
@@ -392,7 +432,17 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   // PDF's initial fill colour is black, same as stroke, so 0 is the right
   // default and an uncoloured file costs nothing.
   let fillLum = 0;
-  const stack: Array<[number[], number, number, number]> = [];
+  // Raw stroke colour bytes (#linear-takeoff B-L5), beside the existing `lum`
+  // reduction — same default-black rule, same "setStrokeColorN keeps the
+  // prior state" tolerance as strokeLuminance.
+  let strokeR = 0, strokeG = 0, strokeB = 0;
+  // Dash pattern index (#linear-takeoff B-L5): 0 is always solid. `[]` is
+  // interned to 0 up front so "no dash ever set" and "dash explicitly
+  // cleared" both read solid without growing the table.
+  const dashPatterns: number[][] = [[]];
+  const dashIndexByKey = new Map<string, number>([["", 0]]);
+  let dashKey = 0;
+  const stack: Array<[number[], number, number, number, number, number, number, number]> = [];
   // Marked-content / Optional Content (#85): a purely SEQUENTIAL stack — not
   // graphics state, so save/restore never touches it, and a Form XObject with
   // /OC arrives as its own begin/end pair around the form's ops (the worker
@@ -426,12 +476,34 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   };
   for (let i = 0; i < fns.length; i++) {
     const fn = fns[i], args = A[i];
-    if (fn === OPS.save) stack.push([m.slice(), lw, lum, fillLum]);
-    else if (fn === OPS.restore) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; } }
+    if (fn === OPS.save) stack.push([m.slice(), lw, lum, fillLum, strokeR, strokeG, strokeB, dashKey]);
+    else if (fn === OPS.restore) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; strokeR = p[4]; strokeG = p[5]; strokeB = p[6]; dashKey = p[7]; } }
     else if (fn === OPS.transform) m = mul(m, args);
     else if (fn === OPS.setLineWidth) lw = args[0];
     else if (fn === OPS.setGState) { for (const pr of args[0] || []) if (pr && pr[0] === "LW") lw = pr[1]; }
-    else if (fn === OPS.setStrokeRGBColor && args) { const L = strokeLuminance(args); if (L !== null) lum = L; }
+    else if (fn === OPS.setStrokeRGBColor && args) {
+      const L = strokeLuminance(args);
+      if (L !== null) lum = L;
+      const rgb = strokeRgbBytes(args);
+      if (rgb) [strokeR, strokeG, strokeB] = rgb;
+    }
+    else if (fn === OPS.setDash) {
+      // args: [dashArray, dashPhase] (pdf.js OPS.setDash). Phase is not
+      // tracked — a legend keys off the PATTERN (what a dash/solid/dash-dot
+      // line looks like), never the phase a given stroke happened to start
+      // at, and folding phase in would fragment one visual line-type into
+      // many indices for no real distinction.
+      const rawArr = Array.isArray(args?.[0]) ? args[0] : [];
+      const norm = rawArr.filter((v: unknown) => typeof v === "number" && Number.isFinite(v)).map((v: number) => Math.round(v * 100) / 100);
+      const key = norm.length ? norm.join(",") : "";
+      let idx = dashIndexByKey.get(key);
+      if (idx === undefined) { idx = dashPatterns.length; dashPatterns.push(norm); dashIndexByKey.set(key, idx); }
+      // dash is packed one byte per segment (Uint8Array.from below) — cap at
+      // 255 the same way devW caps at 15 a few lines up. A sheet with 256+
+      // DISTINCT dash patterns is not a real drafting case; the 256th+ shares
+      // index 255 rather than silently wrapping through Uint8Array truncation.
+      dashKey = Math.min(idx, 255);
+    }
     // FILL luminance, the same device strokeLuminance already applies to
     // strokes (#260) — and the fact that finally answers "is this ink WALL".
     // A drafter poches a wall in dark grey or black because it is solid
@@ -440,8 +512,8 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
     // indistinguishable until now, which is why a wall test had to fall back
     // to guessing at a figure's shape.
     else if (fn === OPS.setFillRGBColor && args) { const L = strokeLuminance(args); if (L !== null) fillLum = L; }
-    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum]); if (args && args[0]) m = mul(m, args[0]); }
-    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; } }
+    else if (fn === OPS.paintFormXObjectBegin) { stack.push([m.slice(), lw, lum, fillLum, strokeR, strokeG, strokeB, dashKey]); if (args && args[0]) m = mul(m, args[0]); }
+    else if (fn === OPS.paintFormXObjectEnd) { const p = stack.pop(); if (p) { m = p[0]; lw = p[1]; lum = p[2]; fillLum = p[3]; strokeR = p[4]; strokeG = p[5]; strokeB = p[6]; dashKey = p[7]; } }
     else if (fn === OPS.beginMarkedContent) { mcStack.push(-1); }
     else if (fn === OPS.beginMarkedContentProps) {
       // worker emits ["OC", data] where data is {type:"OCG", id}, an OCMD
@@ -530,8 +602,10 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       const pathLayer = curLayer;   // one path = one marked-content scope (#85)
       const pathLum = lum;          // stroke color cannot change mid-path (#260)
       pathFill = fillLum;           // …and neither can the fill colour
+      const pathDash = dashKey;     // …nor the dash pattern (#linear-takeoff B-L5)
+      const pathR = strokeR, pathG = strokeG, pathB = strokeB;
       const visit = (p: Point) => { points.push(p); };
-      const lineTo = (p: Point) => { if (cur) { segs.push(cur[0], cur[1], p[0], p[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(cur, p); } cur = p; visit(p); };
+      const lineTo = (p: Point) => { if (cur) { segs.push(cur[0], cur[1], p[0], p[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); dashArr.push(pathDash); rgbArr.push(pathR, pathG, pathB); noteSeg(cur, p); } cur = p; visit(p); };
       for (const op of ops) {
         if (op === OPS.moveTo) { cur = tx(co[c], co[c + 1]); start = cur; openSub(flags, cur); visit(cur); c += 2; }
         else if (op === OPS.lineTo) { lineTo(tx(co[c], co[c + 1])); c += 2; }
@@ -549,17 +623,17 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
               u * u * u * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t * t * t * p3[0],
               u * u * u * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t * t * t * p3[1],
             ];
-            if (cur) { segs.push(cur[0], cur[1], q[0], q[1]); metaArr.push(flags | SEG_CURVE); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(cur, q); }
+            if (cur) { segs.push(cur[0], cur[1], q[0], q[1]); metaArr.push(flags | SEG_CURVE); lumArr.push(pathLum); layerOfArr.push(pathLayer); dashArr.push(pathDash); rgbArr.push(pathR, pathG, pathB); noteSeg(cur, q); }
             cur = q;
           }
           visit(p3);
         }
-        else if (op === OPS.closePath) { if (cur && start) { segs.push(cur[0], cur[1], start[0], start[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(cur, start); closeSub(); cur = start; } }
+        else if (op === OPS.closePath) { if (cur && start) { segs.push(cur[0], cur[1], start[0], start[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); dashArr.push(pathDash); rgbArr.push(pathR, pathG, pathB); noteSeg(cur, start); closeSub(); cur = start; } }
         else if (op === OPS.rectangle) {
           const x = co[c], y = co[c + 1], w = co[c + 2], h = co[c + 3]; c += 4;
           const q: Point[] = [tx(x, y), tx(x + w, y), tx(x + w, y + h), tx(x, y + h)];
           openSub(flags, q[0]);                       // a rect is its own figure
-          for (let k = 0; k < 4; k++) { const a = q[k], b = q[(k + 1) % 4]; segs.push(a[0], a[1], b[0], b[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); noteSeg(a, b); visit(a); }
+          for (let k = 0; k < 4; k++) { const a = q[k], b = q[(k + 1) % 4]; segs.push(a[0], a[1], b[0], b[1]); metaArr.push(flags); lumArr.push(pathLum); layerOfArr.push(pathLayer); dashArr.push(pathDash); rgbArr.push(pathR, pathG, pathB); noteSeg(a, b); visit(a); }
           closeSub();
           cur = q[0]; start = q[0];
         }
@@ -569,7 +643,11 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   sealSub();
   const meta = Uint8Array.from(metaArr);
   markPolylineArcs(segs, meta);
-  return { points, segs, meta, imageArea, maxImageArea, lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths };
+  return {
+    points, segs, meta, imageArea, maxImageArea,
+    lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths,
+    dash: Uint8Array.from(dashArr), dashPatterns, strokeRgb: Uint8Array.from(rgbArr),
+  };
 }
 
 // ── 1b. polyline arc detection ─────────────────────────────────────────────

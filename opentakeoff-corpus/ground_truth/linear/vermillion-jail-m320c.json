@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/vermillion-county-jail-mechanical.pdf",
+  "source_pdf_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "sheet_id": "vermillion-county-jail-mechanical.pdf#16",
+  "sheet_number": "M320C",
+  "page": 16,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Sixth golden authored from the project's own newly-expanded real corpus, the third from the 'corpus_2' Release archive. Found via the same automated batch-sweep method Runs 25-26 established, this time on a real mechanical-room riser sheet from a county jail's own mechanical bid set -- a sheet dense with parallel HWR/HWS/CHWR/CHWS branch stubs dropping off shared vertical risers, each individually labeled.\n\nThis single sweep produced FIVE candidates with an automatic size AND system bind across two sheets of this same PDF (M320C and M500) -- only ONE is used here, the rest explicitly REJECTED and disclosed as a genuinely NEW real failure category for this project's own record, not silently dropped: on this specific drawing convention (several SUPPLY/RETURN pairs -- e.g. '1 1/4\" HWR' stacked directly above '1 1/4\" HWS' -- each branching off closely-bundled parallel risers with their own short leader stubs), `size-binding:beside`'s own nearest-label search can associate a traced branch with the WRONG member of a closely-stacked pair. Confirmed directly via marked crops, not assumed: one M500 candidate (seed at [2220,2080]) was auto-read as system HWR, size 1.25in, but its own ring sits precisely at the '1 1/4\" HWS' label's own connection point one row below -- the engine picked the label ABOVE, not the one actually touching the traced branch. Two further M320C candidates (seeds at [3340,2850] and [2220,2920], read as HWS/CHWS respectively) sit in the same kind of tightly-stacked SUPPLY/RETURN pair and could not be independently confirmed correct with confidence from a marked crop alone -- rather than trust an automatic read this sheet has already shown can silently pick the wrong stacked label, ALL of these were set aside, including the one (M500, seed [1520,1870], read as HWS) whose own crop looked plausible on inspection: the same real ambiguity risk applies to it as much as to the one already caught wrong, and this project's own 'a wrong label is worse than no label' doctrine argues for declining all four together rather than trusting a visual read this sheet's own convention has already demonstrated can mislead.\n\nThe candidate actually used is the one case on this sheet with NO nearby competing stacked label to confuse the read: a single, isolated '1\" CHWR' branch stub (its own printed callout sits alone, well clear of any other label), confirmed via a marked crop to run from a real branch-off point on the shared riser bundle to the printed callout's own connection dot, both real, unambiguous stops.",
+  "scope": "A single real 1\" CHWR (chilled water return) branch stub (7.45 LF) in a county jail's own mechanical room, sheet M320C, from a real branch-off point on a shared HWR/HWS/CHWR/CHWS riser bundle to the printed '1\" CHWR' callout's own connection point. Explicitly OUT OF SCOPE: the four REJECTED candidates described in review_basis (all real, engine-bound reads this project's own visual verification could not confirm or actively disproved, on a sheet whose own tightly-stacked supply/return label convention is now a disclosed real risk factor for this bind mechanism); the shared riser bundle itself and every other HWR/HWS/CHWR/CHWS branch on this same dense sheet; every other sheet in this real, large mechanical bid set (30 pages sampled from, only sheet 16/M320C used); every other file in the `corpus_2` archive beyond the three now authored from it.",
+  "runs": [
+    {
+      "run_id": "vermillion-m320c-chwr-1in",
+      "description": "1\" CHWR (chilled water return) branch stub, from a real branch-off point on a shared riser bundle to the printed '1\" CHWR' callout's own connection point.",
+      "system": "CHWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5409556878306878, 0.21043981481481483],
+        [0.5409556878306878, 0.23777777777777778],
+        [0.5382936507936508, 0.23777777777777778]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 7.45,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 6.56, "size": { "kind": "pipe", "nps_in": 1 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.89, "size": { "kind": "pipe", "nps_in": 1 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1": 7.45 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:1": 7.45 },
+  "total_lf_all_runs": 7.45
+}

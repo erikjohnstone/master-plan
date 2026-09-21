@@ -18,13 +18,14 @@ import {
   measurePolygonOutput, measureLineOutput, measureSurfaceOutput, placeCountOutput, symbolSweepOutput, takeoffSummaryOutput,
   exportTakeoffOutput, deleteShapeOutput, readSheetTextOutput,
   editShapeOutput, undoLastOutput, sheetContextOutput,
-  findTextOutput, editMaterialsOutput, editConditionOutput, exportReportOutput,
+  findTextOutput, editMaterialsOutput, editConditionOutput, editRunOutput, resolveLinearAssemblyOutput, exportReportOutput,
   duplicateConditionOutput, splitConditionOutput,
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
   sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
+  classifyStrokesOutput, traceRunOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
@@ -58,6 +59,7 @@ import { fileURLToPath } from 'node:url';
 import { basScopeCommandSchema, basScopeTransportResultSchema } from '../../web/src/lib/basScopeTransportContract.ts';
 import { runBasScopeTransport } from './basScopeTransport.ts';
 import { inspectBasSnapshotFile, basSnapshotFileInspectionSchema } from './basSnapshotFile.ts';
+import { runSizeSchema, runVertexKindSchema } from '../../web/src/lib/linear/types.ts';
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -242,14 +244,73 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }, run("cut_out", (a) => session.cutOut(a)));
 
   server.registerTool("measure_line", {
-    description: `Measure an open polyline (min 2 points, image px): length_lf at the sheet's scale. Requires the scale to be set. Pass condition to commit it as a linear shape (base, transitions, feature strips). ${COORDS}`,
+    description: `Measure an open polyline (min 2 points, image px): length_lf at the sheet's scale. Requires the scale to be set. Pass condition to commit it as a linear shape (base, transitions, feature strips). #linear-takeoff: system/size/vertices author this run's \`run\` block on commit (require condition — they configure the committed shape, not the preview) and the reply echoes it as \`run\`, plus the resulting per-segment/per-vertex \`computed_run\`. A routed-system condition (family or system set via edit_condition) seeds this run's system and segment-0 size from its own defaults when system/size are omitted, exactly like a canvas trace; an explicit value here wins outright over the seed. Per-segment size changes after this call, or a vertex kind you didn't know yet, go through edit_run. ${COORDS}`,
     inputSchema: {
       sheet: z.string(),
       pts: z.array(pointSchema).min(2),
       condition: z.string().optional(),
+      system: z.string().optional().describe("#linear-takeoff: this run's system tag (e.g. 'SA', 'HHWS'). Falls back to the condition's own default system when omitted and the condition is routed."),
+      size: runSizeSchema.optional().describe("#linear-takeoff: this run's size (rect/round/oval/pipe), applied from segment 0 onward (carried the whole run until an edit_run segment_sizes override starts a new size partway through). Falls back to the condition's own default size when omitted and the condition is routed."),
+      vertices: z.array(z.object({
+        i: z.number().int().min(1).describe("Interior vertex index into THIS call's own pts (1..pts.length-2) — vertex 0 and the last point are the run's own ends, never listed here"),
+        kind: runVertexKindSchema.exclude(["end"]).describe("What this vertex actually is — geometry alone only ever infers 'elbow' from turn angle; state a tee/riser/crossing/equipment tap/symbol gap explicitly"),
+        dir: z.enum(["up", "down", "both"]).optional().describe("Riser direction, when kind is 'riser'"),
+      })).optional().describe("#linear-takeoff: explicit vertex-kind overrides for interior vertices this run already passes through — a fitting the agent can see on the sheet but geometry alone can't classify."),
     },
     outputSchema: measureLineOutput,
-  }, run("measure_line", (a) => session.measureLine(a.sheet, a.pts, { condition: a.condition })));
+  }, run("measure_line", (a) => session.measureLine(a.sheet, a.pts, { condition: a.condition, system: a.system, size: a.size, vertices: a.vertices })));
+
+  server.registerTool("edit_run", {
+    description: `#linear-takeoff: patch an existing linear shape's \`run\` block — the segment-size/vertex-kind equivalent of edit_condition, working on a committed shape instead of a condition default. system/status overwrite wholesale (null clears); segment_sizes and vertices patch BY INDEX — a null size/kind clears just that one entry, every other index is left alone, mirroring the canvas's right-click "Set size…" menu (applySegmentSize in TakeoffCanvas.jsx). computed.run is recomputed from the result via the same resolveRunSegments call the canvas panel uses, so the reply's computed_run is exactly what MEASUREMENTS would show. Refuses a shape a human has reviewed (ink, not pencil) and any non-linear shape. Reversible with undo_last.`,
+    inputSchema: {
+      shape_id: z.string().describe("Id of an existing linear shape, from measure_line's reply or list_shapes"),
+      system: z.union([z.string(), z.null()]).optional().describe("Set (string) or clear (null) this run's system tag"),
+      status: z.union([z.enum(["new", "existing", "demo"]), z.null()]).optional().describe("Set or clear this run's status"),
+      segment_sizes: z.array(z.object({
+        i: z.number().int().min(0).describe("Segment index (edge i runs vertex i → i+1); a size carries forward until the next overridden index"),
+        size: z.union([runSizeSchema, z.null()]).describe("The size starting at this segment, or null to clear this segment's own override (it then carries forward from the nearest earlier one, if any)"),
+      })).optional().describe("Per-segment size overrides to set or clear, by index"),
+      vertices: z.array(z.object({
+        i: z.number().int().min(1).describe("Interior vertex index (1..nverts-2)"),
+        kind: z.union([runVertexKindSchema.exclude(["end"]), z.null()]).describe("The vertex's kind, or null to clear this vertex's override (it then reads as plain geometry — 'elbow' at a real turn, nothing at a straight pass-through)"),
+        dir: z.enum(["up", "down", "both"]).optional().describe("Riser direction, when kind is 'riser'"),
+      })).optional().describe("Per-vertex fitting-kind overrides to set or clear, by index"),
+      params: z.object({
+        rise_ft: z.union([z.number(), z.null()]).optional(),
+        offset_allowance_pct: z.union([z.number(), z.null()]).optional(),
+        flex_per_diffuser_ft: z.union([z.number(), z.null()]).optional(),
+      }).optional().describe("Numeric run params to set or clear (null clears that one field)"),
+    },
+    outputSchema: editRunOutput,
+  }, run("edit_run", (a) => session.editRun(a.shape_id, { system: a.system, status: a.status, segment_sizes: a.segment_sizes, vertices: a.vertices, params: a.params })));
+
+  server.registerTool("resolve_linear_assembly", {
+    description: `#linear-takeoff: price one committed linear shape's run — per plan §8's fixed pipeline (per-segment weight/insulation/labor, per-vertex elbow/transition, per-run hangers), returning line items {item, qty, unit, basis, size_key?, source_segments?, source_vertices?, formula, provenance} with the same "assembly audit trail" a canvas-side call to the identical resolveLinearAssembly function produces — this reads a shape's own computed_run (from measure_line/edit_run), it commits nothing and takes no undo step, exactly like takeoff_summary. Resolves against the SHIPPED default assemblies (asm-duct-rect-default, asm-duct-round-default, asm-pipe-default — plan §5.5's own defaults, graded rate tables from mcp's shared linear/rates.ts) by assembly_id, the condition's own assembly_id when the call omits one, or the shape's family's built-in default; there is no reach from this server into an estimator's own browser-profile assembly library (Node has no browser storage to read) — a genuinely custom assembly goes in INLINE via the assembly parameter instead. Duct families (duct_rect/duct_round) resolve weight/insulation/hangers/joints/elbow+transition counts; the pipe family resolves LF/couplings/insulation/labor/hangers from NPS, material and service (pass pipe_service/pipe_hanger_material/pipe_hanger_service — these have no per-shape default the way duct's gauge lookup does). Waste and purchase-unit rounding are deliberately NOT applied here (plan §8's steps 6-7 are report-only); the condition's own multiplier IS applied, last, to every returned qty.`,
+    inputSchema: {
+      shape_id: z.string().describe("Id of a linear shape with a computed run block — from measure_line's or edit_run's reply, or list_shapes"),
+      assembly_id: z.string().optional().describe("One of the shipped defaults: asm-duct-rect-default, asm-duct-round-default, asm-pipe-default. Falls back to the shape's condition's own assembly_id, then the family's built-in default, when omitted"),
+      assembly: z.object({
+        family: z.enum(["duct_rect", "duct_round", "duct_oval", "duct_flex", "pipe", "conduit", "cable", "tubing"]),
+        name: z.string().optional(),
+        per_ft: z.array(z.object({ item: z.string() }).passthrough()).optional(),
+        per_vertex: z.array(z.object({ item: z.string() }).passthrough()).optional(),
+        per_run: z.array(z.object({ item: z.string() }).passthrough()).optional(),
+        allowances: z.record(z.string(), z.unknown()).optional(),
+        deduct_fittings: z.boolean().optional(),
+      }).optional().describe("A one-off assembly definition to resolve against instead of a shipped default or the condition's own — wins over assembly_id when both are given"),
+      pressure_class_in_wg: z.number().positive().optional().describe("Duct pressure class in inches w.g. — feeds the gauge lookup unless the assembly pins a fixed gauge. Default 2"),
+      climate_zone: z.enum(["cz0_4", "cz5_8"]).optional(),
+      adopted_pipe_hanger_code: z.enum(["mss_sp58", "imc305_4", "ipc308_5", "upc313_3"]).optional().describe("Selects which hanger-spacing table a pipe run resolves against (D3) — default mss_sp58 for a mechanical service, ipc308_5 for plumbing"),
+      pipe_service: z.string().optional().describe("Pipe insulation service band key, e.g. 'hw_dhw_105_140f', 'chilled_40_60f' — see rates.ts's PipeInsulationService. Pipe family only"),
+      pipe_hanger_material: z.string().optional().describe("Pipe hanger material/code key (e.g. 'steel', 'copper', or a code table's own material enum) — pipe family only"),
+      pipe_hanger_service: z.enum(["mechanical", "plumbing"]).optional().describe("Which D3 hanger-table group to use — default mechanical"),
+    },
+    outputSchema: resolveLinearAssemblyOutput,
+  }, run("resolve_linear_assembly", (a) => session.resolveLinearAssembly(a.shape_id, {
+    assembly_id: a.assembly_id, assembly: a.assembly,
+    pressure_class_in_wg: a.pressure_class_in_wg, climate_zone: a.climate_zone, adopted_pipe_hanger_code: a.adopted_pipe_hanger_code,
+    pipe_service: a.pipe_service, pipe_hanger_material: a.pipe_hanger_material, pipe_hanger_service: a.pipe_hanger_service,
+  })));
 
   server.registerTool("measure_surface", {
     description: `Surface Area — wall SF (#146): trace an OPEN run along the wall in plan view (min 2 points, image px) and the quantity is traced LF × height. This is how wall tile, wainscot, and wall systems are taken off — the quantity family one_click and measure_polygon cannot produce. Height lives on the CONDITION (the canvas's H knob): pass height_ft to set it on this call (journals as its own undo step, like typing H before tracing), or set it once with edit_condition; with neither, this refuses and mints nothing. The shape snapshots the height it was quantified at. Requires the sheet's scale. ${COORDS}`,
@@ -422,6 +483,27 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       ...(r.reason ? { reason: r.reason } : {}),
     };
   }));
+
+  server.registerTool("classify_strokes", {
+    description: `#linear-takeoff: which stroke families a sheet's own drawn ink classifies into, BEFORE tracing any of them — which pen is the duct pen, is there real CAD layer evidence backing it, how many segments each family covers. A setup/inspection tool, never a prerequisite: trace_run builds and caches the SAME classification itself the first time it runs on a sheet, so skipping this and going straight to trace_run costs nothing. Evidence grades run a-d (plan §6.2): a real CAD layer name (\`M-HVAC-DUCT\`-style) is the strongest signal (confidence ≥ 0.85); with no usable layers, the heaviest pen weight among candidate strokes stands in, after excluding the sheet's own MODAL pen (the background/architectural convention on every real set probed — 66-87% of segments, never the thing being emphasized) and flooring out noise. Refuses on a scanned sheet (no vector linework at all) or a sheet whose linework has no stroke family attributable to ductwork or piping. ${COORDS}`,
+    inputSchema: { sheet: z.string() },
+    outputSchema: classifyStrokesOutput,
+  }, run("classify_strokes", async (a) => session.classifyStrokes(a.sheet)));
+
+  server.registerTool("trace_run", {
+    description: `#linear-takeoff: walk the drawn duct/pipe run under a seed point (image px, ON the drawn line) and read its size off whatever label lands near it — the single-line trace engine (plan §6.2-§6.8), not proximity or a guess. The sheet's candidate strokes are classified into families (see classify_strokes) and spatially indexed once per sheet, then walked bidirectionally from the seed: a straight run extends, an elbow/tee/crossing records a vertex and continues (a tee taken via its OWN branch stops immediately — \"the main is its own run\"), a pen/dash/layer change stops as family_change rather than crossing onto a different system, and a REAL junction with no clean through-pair stops \"ambiguous\" and returns its candidate fan in \`candidates[]\` — offered, never picked from, exactly like trace_connectivity's own branches. Size labels near the run score on orientation (the label's own rotation parallel to the run, ±10°) and placement (beside the run beats a leader line traced to it); a label that parses (Appendix A's grammar: rect/round/oval/pipe, Unicode fractions, multi-service, riser UP/DN/UP-DN qualifiers) binds to the ONE segment it scores best against. Two labels disagreeing on the same segment come back in \`withheld[]\` with both readings — \`size\` stays unset on that run, not averaged or guessed. \`confidence\`/\`factors\` name exactly which signals are behind the number (stroke-family evidence grade, size-binding grade or size_missing, an ambiguous-stop penalty, layer-unclassified, scale_unconfirmed) — the same disclosed-factor doctrine as trace_connectivity, never a flat 1.0. FIND-ONLY unless \`commit: true\` (with \`condition\`): a committed run mints a real linear shape exactly like measure_line's own commit path — same \`run\`/\`computed_run\`, but \`origin.method: "traced"\` with the full walk+label receipt under \`origin.trace\`, reviewed:false like every other agent commit. A withheld or size-missing run STILL commits and measures LF; withholding is an answer, not a failure. Two hard refusals, before any of this: no candidate segment at all under the seed ("No routed linework under the cursor..."), or classify_strokes finds nothing on the sheet attributable to ductwork/piping at all. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      from: pointSchema.describe("Seed point (image px) ON the drawn duct/pipe line to trace from"),
+      condition: z.string().optional().describe("Required with commit:true — the condition the traced run commits under"),
+      max_hops: z.number().int().positive().optional().describe("Hops to walk (each direction) before giving up with stop reason \"cap\" (default 2000)"),
+      max_length_ft: z.number().positive().optional().describe("Real feet to walk (each direction) before capping — requires a set scale; ignored on an unscaled sheet"),
+      commit: z.boolean().default(false).describe("Commit the walked run as a real linear shape under condition — omit/false for a find-only trace"),
+    },
+    outputSchema: traceRunOutput,
+  }, run("trace_run", async (a) => session.traceRun(a.sheet, a.from, {
+    condition: a.condition, max_hops: a.max_hops, max_length_ft: a.max_length_ft, commit: a.commit,
+  })));
 
   server.registerTool("count_marks", {
     description: `The COUNT TAKEOFF in one deterministic call — no seeds, no model, seconds: census every VALUE-ANNOTATED mark tag on the plan-role sheets, counted per schedule mark, committed as EA markers when asked. The identity rule is the annotated-device drafting pattern: a device is drawn as its mark tag with a value under it ("S1" over "200" — CFM on air devices, GPM on fixtures, a rating on equipment), so a tag WITH a paired value counts, a tag inside a schedule table's own region is a row label (excluded, tallied), and every other occurrence is WITHHELD with a reason and coordinates — a tag amid linework but unvalued may be a real device (view_sheet it), a bare tag is probably a note mention. Marks default to the set's schedule row keys (a compound row "R1 / E1" answers for R1 AND E1; each mark cites its row), or state them: {marks: ["S1","R1"]}. The complement to sweep_schedule_row: THAT tool is for marks drawn ON their marker with no value (finish tags in bubbles) and matches geometry; this one is for annotated devices and needs no fingerprint at all. Refusal-honest: scans refuse (no text layer), a set with no mark-shaped rows refuses unless marks are stated, non-plan sheets are skipped with the role that excused them. commit: true commits every counted occurrence under its mark's own tag — ONE undo step for the whole census, schedule citation on origin. Counts are scale-free (EA) — no set_scale needed. Then AUDIT: view_sheet {overlay: true} where the markers landed, and read every withheld entry — a withheld item you ignore is a hole in the bid. ${COORDS}`,
@@ -640,28 +722,29 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }, run("edit_shape", (a) => session.editShape(a.shape_id, { verts: a.verts, condition: a.condition, role: a.role, label: a.label })));
 
   server.registerTool("edit_materials", {
-    description: `Add, remove, or patch supporting-materials rows on a condition — the coverage-rate lines that turn a measured area/length/count into an order quantity (adhesive at N sf/gal, grout at N lf/bag, …), matching the canvas's per-condition Supporting Materials panel. Each row is {name, per, basis, unit, round, note}: quantity = the condition's basis total (area/linear/count/seam_lf) ÷ per, rounded up to whole purchase units unless round:false. basis "seam_lf" is the one basis that is FIGURED rather than measured: it is the length where two cuts meet on the floor, read off the condition's roll layout (set roll_setup with edit_condition), which is what a heat-weld rod or a carpet seam tape is bought by. A 20-ft-wide room off a 12-ft roll seams once down its length; the same square footage as two 10-ft rooms seams not at all, and no percentage of the area or the perimeter can tell those two jobs apart. Without a roll_setup — or with no committed floor shapes to lay out — a seam_lf row reads 0, which is the honest state rather than a guess. condition names an existing OR NEW finish tag (minted on first touch, same as one_click/measure_polygon) — add alone is enough to seed materials on a condition before you've traced anything. remove/patch target existing row ids from this reply or export_takeoff (takeoff_summary strips materials for a compact quantities-only reply); a bad id 404s the WHOLE call before anything is written, and referencing an id on a tag with no condition yet errors rather than silently minting an empty one. No review gate here — materials rows are quantity config, not traced geometry, so this edits directly; undo_last reverses a call in one step (the condition's whole materials array, snapshotted before the write, restored verbatim).`,
+    description: `Add, remove, or patch supporting-materials rows on a condition — the coverage-rate lines that turn a measured area/length/count into an order quantity (adhesive at N sf/gal, grout at N lf/bag, …), matching the canvas's per-condition Supporting Materials panel. Each row is {name, per, basis, unit, round, note, hours_per_unit}: quantity = the condition's basis total (area/linear/count/seam_lf/vertex/run) ÷ per, rounded up to whole purchase units unless round:false. basis "seam_lf" is the one basis that is FIGURED rather than measured: it is the length where two cuts meet on the floor, read off the condition's roll layout (set roll_setup with edit_condition), which is what a heat-weld rod or a carpet seam tape is bought by. A 20-ft-wide room off a 12-ft roll seams once down its length; the same square footage as two 10-ft rooms seams not at all, and no percentage of the area or the perimeter can tell those two jobs apart. Without a roll_setup — or with no committed floor shapes to lay out — a seam_lf row reads 0, which is the honest state rather than a guess. basis "vertex"/"run" (#linear-takeoff WP2.3) are a routed condition's own totals: every interior fitting vertex across its linear runs, or the count of separate traced/manual runs — a gasket kit priced "1 per fitting" or a test kit priced "1 per run" uses these instead of area/linear/count. hours_per_unit adds a labor-hours figure to the row, resolved through the same rounded quantity (a materials row buys whole units; the labor to install them follows that same count). condition names an existing OR NEW finish tag (minted on first touch, same as one_click/measure_polygon) — add alone is enough to seed materials on a condition before you've traced anything. remove/patch target existing row ids from this reply or export_takeoff (takeoff_summary strips materials for a compact quantities-only reply); a bad id 404s the WHOLE call before anything is written, and referencing an id on a tag with no condition yet errors rather than silently minting an empty one. No review gate here — materials rows are quantity config, not traced geometry, so this edits directly; undo_last reverses a call in one step (the condition's whole materials array, snapshotted before the write, restored verbatim).`,
     inputSchema: {
       condition: z.string().describe("Finish tag, e.g. 'CPT-1'"),
       add: z.array(z.object({
         name: z.string().min(1),
         per: z.number().min(0).optional().describe("Coverage rate — basis units per purchase unit, e.g. 250 for 1 gal / 250 sf. Default 0 (quantity 0 until set)"),
-        basis: z.enum(["area", "linear", "count", "seam_lf"]).optional().describe("Which of the condition's totals this row divides against — default 'area' (total SF). 'seam_lf' is the figured roll-layout seam length (weld rod, seam tape), 0 until the condition carries a roll_setup"),
+        basis: z.enum(["area", "linear", "count", "seam_lf", "vertex", "run"]).optional().describe("Which of the condition's totals this row divides against — default 'area' (total SF). 'seam_lf' is the figured roll-layout seam length (weld rod, seam tape), 0 until the condition carries a roll_setup. 'vertex'/'run' are a routed condition's fitting-vertex count and separate-run count"),
         unit: z.string().optional().describe("Purchase unit, e.g. 'gal', 'bag', 'roll'"),
         round: z.boolean().optional().describe("Round up to whole purchase units — default true"),
         note: z.string().optional(),
+        hours_per_unit: z.number().min(0).optional().describe("Labor hours per purchase unit — resolved through the same rounded quantity as the row's own qty"),
       })).optional().describe("New rows to add"),
       remove: z.array(z.string()).optional().describe("Existing row ids to remove"),
       patch: z.array(z.object({
         id: z.string(),
-        fields: z.record(z.union([z.string(), z.number(), z.boolean()])).describe("Field:value pairs — name/per/basis/unit/round/note only"),
+        fields: z.record(z.union([z.string(), z.number(), z.boolean()])).describe("Field:value pairs — name/per/basis/unit/round/note/hours_per_unit only"),
       })).optional().describe("Field changes on existing rows"),
     },
     outputSchema: editMaterialsOutput,
   }, run("edit_materials", (a) => session.editMaterials(a.condition, { add: a.add, remove: a.remove, patch: a.patch })));
 
   server.registerTool("edit_condition", {
-    description: `Set a condition's quantity knobs — waste %, multiplier, height_ft (the H knob measure_surface quantifies against), and/or roll_setup (the roll-goods opt-in: seams and order footage figured from the committed rooms, #147). takeoff_summary emits waste-adjusted *_net order quantities and a per-condition multiplier, and every export carries both, but conditions minted through the measure tools start at waste 0 / multiplier 1 — without this tool an agent's takeoff always ships net === gross (#131). waste_pct is the estimator's cut-waste percentage (carpet commonly 5–10); multiplier scales every quantity on the condition (×N identical floors — takeoff_summary applies it before waste). condition must resolve to an EXISTING finish tag — a typo'd tag errors rather than minting an empty condition (the edit_materials remove/patch rule, not its add rule: these knobs mean nothing on a condition that doesn't exist yet). No review gate — quantity config, not traced geometry; undo_last reverses a call in one step (both knobs snapshotted together, restored verbatim).`,
+    description: `Set a condition's quantity knobs — waste %, multiplier, height_ft (the H knob measure_surface quantifies against), roll_setup (the roll-goods opt-in: seams and order footage figured from the committed rooms, #147), and/or the routed-system identity fields family/system/size/assembly_id (#linear-takeoff, plan §7.2, decision D1: ONE condition per system — e.g. "SA", "HHWS" — not per size; size lives on the segment via measure_line's run block, this condition-level size is only the DEFAULT a manual run seeds from). takeoff_summary emits waste-adjusted *_net order quantities and a per-condition multiplier, and every export carries both, but conditions minted through the measure tools start at waste 0 / multiplier 1 — without this tool an agent's takeoff always ships net === gross (#131). waste_pct is the estimator's cut-waste percentage (carpet commonly 5–10); multiplier scales every quantity on the condition (×N identical floors — takeoff_summary applies it before waste). condition must resolve to an EXISTING finish tag — a typo'd tag errors rather than minting an empty condition (the edit_materials remove/patch rule, not its add rule: these knobs mean nothing on a condition that doesn't exist yet). No review gate — quantity config, not traced geometry; undo_last reverses a call in one step (every knob snapshotted together, restored verbatim).`,
     inputSchema: {
       condition: z.string().describe("Finish tag of an existing condition, e.g. 'CPT-1'"),
       waste_pct: z.number().min(0).optional().describe("Waste percentage applied to net order quantities, e.g. 10 for 10%"),
@@ -680,9 +763,13 @@ No approval, installed count or complete requirement discovery. Changes stay in 
           price_unit: z.enum(["sy", "sf", "lf"]).optional().describe("Sell unit the order quantity is figured in"),
         }),
       ]).optional().describe("Roll-goods opt-in (#147): presence of a setup is what makes the condition roll goods — seams figured, cuts packed, order footage beside the measured quantities. Same-material partial edits patch the existing setup; null opts out. The reply echoes the figured order (cuts, order_lf, rolls, order_qty) whenever floor shapes exist on scaled sheets, and export_report's roll_goods block carries the same rows"),
+      family: z.string().optional().describe("#linear-takeoff: the assembly family this routed-system condition defaults to, e.g. 'duct_rect' — additive, only meaningful on duct/pipe/conduit conditions"),
+      system: z.string().optional().describe("#linear-takeoff: the system tag this condition belongs to, e.g. 'SA', 'HHWS' — decision D1 is one condition per system, not per size"),
+      size: runSizeSchema.optional().describe("#linear-takeoff: the condition's DEFAULT run size (one of rect/round/oval/pipe) — a manual run seeds from this; per-segment sizes still live on the shape's own run.size_overrides"),
+      assembly_id: z.string().optional().describe("#linear-takeoff: id of the assembly (plan §7) this condition prices against"),
     },
     outputSchema: editConditionOutput,
-  }, run("edit_condition", (a) => session.editCondition(a.condition, { waste_pct: a.waste_pct, multiplier: a.multiplier, height_ft: a.height_ft, roll_setup: a.roll_setup })));
+  }, run("edit_condition", (a) => session.editCondition(a.condition, { waste_pct: a.waste_pct, multiplier: a.multiplier, height_ft: a.height_ft, roll_setup: a.roll_setup, family: a.family, system: a.system, size: a.size, assembly_id: a.assembly_id })));
 
   server.registerTool("duplicate_condition", {
     description: `Twin a condition — the same finish measured somewhere else, with its own supporting materials. One finish in two areas is not two conditions and it is not one either: the same sheet goods over a slab and over a raised deck take the same field material and different preparation underneath (one wants a moisture barrier, the other a primer and a different adhesive). The twin arrives carrying the original's whole materials list and keeps FOLLOWING it — change a coverage rate on the original and every twin that has not touched that row gets it; edit a row on the twin and only THAT row stops following. \`label\` is REQUIRED and becomes the tag suffix ('CPT-1' + 'Level 2' → 'CPT-1 – Level 2'), because every tool in this server resolves a condition by finish tag and takes the FIRST match: two conditions sharing a tag would make one permanently unreachable, and a takeoff re-import collapses them last-wins. A label already in use is refused rather than de-collided. No takeoffs come along — measure the new area against the returned condition_id. Reversible with undo_last; use split_condition to end the inheritance permanently.`,

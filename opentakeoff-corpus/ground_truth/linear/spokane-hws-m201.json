@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/30_WA_SpokaneTransit_CoolingTower.pdf",
+  "source_pdf_sha256": "db27b8706f070dc2f652d9356c510f5f0ea8053f89d423c77df9da31d8fecf11",
+  "sheet_id": "30_WA_SpokaneTransit_CoolingTower.pdf#6",
+  "sheet_number": "M-201",
+  "page": 6,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (Spokane Transit Authority cooling tower replacement), pulled from the original corpus GitHub Release during a ninth batch-survey pass (also covering 16_NV_CarsonValleyMS, 19_CA_VistaUSD, 20_TX_JudsonISD, 24_IA_JohnsonCounty -- Carson Valley MS's own M3.01 sheet had 35 real large OA/EA duct callouts but every candidate that returned a size either failed the bench-seed check or refused outright, not pursued). Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.00 on this sheet, real vector CAD.\n\nThis sheet is a dense pump-room piping schematic with abundant real `6\" HWS`/`5\" HWS` callouts. A grid sweep of nine of them found a real, clean 1.67 LF straight `6\" HWS` (heating hot water supply) pipe segment: `size:{kind:pipe,nps_in:6}`, `systems:[\"HWS\"]`, confidence 0. A marked crop confirms it visually: a real short pipe segment sitting directly at this project's own EXISTING/NEW construction-phase demarcation marker (a vertical dashed boundary line with 'EXISTING'/'NEW' callouts, a standard renovation-drawing convention), bounded by that boundary marker on one end (`backward: branch_joins_main`) and a real flexible-connector/union fitting on the other (`forward: ambiguous`). Verified using the exact `bench:linear` seeding convention BEFORE authoring (standard practice since Run 95): the bench-style seed reproduces the identical trace exactly. `resolveRunSegments` also reproduces the identical single segment.\n\nHonest disclosure: this pump room has MANY closely-spaced `6\" HWS` labels along what is largely one continuous real pipeline as it winds through several inline fittings, unions, and dampers -- visually dense, though not a crosstalk risk in the same sense as this session's other declined twin-pipe cases, since every nearby label reads the identical `6\" HWS` size/system, so which specific text instance the automatic bind actually used cannot affect the recorded size or system either way. A separate, less-clean `6\" HWS` candidate on this same sheet (5.5 LF from an ad hoc seed) was tested and found to FAIL the bench-seed check (no size bind from the 40%-along point) and was not authored.",
+  "scope": "A single real 6-inch heating-hot-water-supply (HWS) pipe segment (1.67 LF) on the Spokane Transit cooling tower project's own pump room piping schematic, sheet M-201, from this project's own EXISTING/NEW construction-phase boundary marker to a real flexible-connector/union fitting. Explicitly OUT OF SCOPE: the pipe's own continuation past either boundary (into the existing piping on one side, through the union fitting on the other); the declined 5.5 LF `6\" HWS` candidate on this same sheet that failed the bench-seed check, not authored; the several other closely-spaced `6\"`/`5\" HWS` labels along the same visible run, not independently attempted; every other sheet on this real 14-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "spokane-m201-hws-6in",
+      "description": "6-inch heating-hot-water-supply (HWS) pipe segment, from a real existing/new construction-phase boundary to a real flex-connector fitting.",
+      "system": "HWS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.45142195767195764, 0.5824537037037036],
+        [0.4415013227513227, 0.5824537037037036]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 1.67,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 1.67, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 1.67 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:6": 1.67
+  },
+  "total_lf_all_runs": 1.67
+}

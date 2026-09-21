@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/12_MT_MSU_ReidHall_Renovation.pdf",
+  "source_pdf_sha256": "718889d45d60eac366be142265735c588c16e6a4bfad9d384c2c862969a3acc5",
+  "sheet_id": "12_MT_MSU_ReidHall_Renovation.pdf#32",
+  "sheet_number": "M2.1",
+  "page": 32,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (Montana State University, Reid Hall Renovation), pulled from the original corpus GitHub Release (not corpus_2) during an eighth batch-survey pass covering five single-file corpus_1 projects not yet used this session (03_FL_HurlburtField, 10_MO_Hawthorn, 12_MT_MSU_ReidHall, 13_MI_MSU_LifeSciences, 27_WA_ColvilleTribes). Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.00 on this sheet, real vector CAD, drawn with new-work linework highlighted in red.\n\nA text-anchor scan found 34 bare round/rect duct callouts (`8\"ø`, `16\"x12\"`, `20\"x14\"`, `14\"x12\"`) on this one sheet, already fully parseable with no grammar change needed. A grid sweep of ten of them found this real, clean 8.57 LF horizontal `16\"x12\"` trunk duct: `size:{kind:rect,w_in:16,h_in:12}`, confidence 0.5. A marked crop confirms it visually and unambiguously: a real trunk duct (drawn in the sheet's own red new-work highlight color) with its own '16\"x12\"' label centered directly on it, bounded on both ends by real branch-tee junctions feeding round `8\"ø` takeoffs up and down to CD-8 diffusers (215 CFM each) serving Classroom 124.\n\nApplying this session's own Run 94/95 lesson as standard practice: verified using the EXACT `bench:linear` seeding convention (`seedOnLongestSegment`) BEFORE authoring, not after -- it reproduced the identical trace exactly. `resolveRunSegments` also reproduces the identical single 8.57 LF segment.\n\nSeveral other candidates on other sheets swept during this same batch-survey pass were tested against the bench-seed convention FIRST and found to fail it (the trace succeeds from an ad hoc coordinate near the label but returns no size bind from the bench's own 40%-along seed) -- MSU Life Sciences Lab Renovation's own M-004/M-005 sheets (three short candidates, 2.17-5.08 LF) and a trivially short 1.36 LF Hurlburt Field Child Development Center stub, none authored. This is a second, independent confirmation of Run 94's own seed-position-dependence finding: short duct segments with off-center labels are the ones most at risk of failing the bench's own seeding convention even when a manually-placed seed succeeds, and checking this FIRST (before investing further verification effort) is now this session's standard practice.",
+  "scope": "A single real 16x12-inch rectangular supply-air (SA) trunk duct segment (8.57 LF) on the MSU Reid Hall Renovation project's own mechanical plan, sheet M2.1, bounded on both ends by real branch-tee junctions feeding round 8-inch takeoffs to CD-8 diffusers serving Classroom 124. Explicitly OUT OF SCOPE: the duct's own continuation past either boundary; the four round 8-inch branch takeoffs visible in the same crop; a second, similarly-sized `20\"x14\"` candidate found on the same sheet (also bench-seed-verified successfully, but not also authored this pass); the several declined MSU Life Sciences Lab and Hurlburt Field candidates noted in review_basis; every other one of the real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 43-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "reidhall-m21-sa-16x12",
+      "description": "16x12-inch rectangular trunk duct segment, bounded by two real branch-tee junctions feeding round takeoffs to classroom diffusers.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.48267746913580245, 0.48744212962962963],
+        [0.4231867283950618, 0.48744212962962963]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 16, "h_in": 12 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 8.57,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 8.57, "size": { "kind": "rect", "w_in": 16, "h_in": 12 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:16x12": 8.57 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:16x12": 8.57
+  },
+  "total_lf_all_runs": 8.57
+}

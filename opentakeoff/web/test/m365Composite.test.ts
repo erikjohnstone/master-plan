@@ -11,7 +11,9 @@ import { m365Config, m365Scope } from "../src/lib/msgraph/config.js";
 import { buildM365Store } from "../src/lib/msgraph/composite.js";
 import { createGraphDrive } from "../src/lib/msgraph/graphDrive.js";
 import { BASE, mockGraph } from "./fixtures/mockGraph.ts";
+import { installWebLocksPolyfill } from "./helpers/webLocksPolyfill.ts";
 
+installWebLocksPolyfill();
 beforeEach(() => {
   (globalThis as any).indexedDB = new IDBFactory();
 });

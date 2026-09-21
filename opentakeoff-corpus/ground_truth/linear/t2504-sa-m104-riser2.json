@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf",
+  "source_pdf_sha256": "e3d0cc1bc22fd82445079c068872f2877a6c2c9bd37cca59b0b727b1adb8816f",
+  "sheet_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+  "sheet_number": "M-104",
+  "page": 36,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A second real, independent duct riser found on the same sheet as `t2504-sa-m104-riser1.json` (M-104 of the T2504 renovation project) during the same grid-sweep pass -- this sheet's real double-line duct drawing with dimensions printed directly on each run made both efficient to verify in one pass. A grid sweep found this real, clean 3.14 LF vertical duct riser: `size:{kind:rect,w_in:16,h_in:11}`, confidence 0.5, `factors:[\"stroke-family:pen-weight-prior\",\"size-binding:beside\",\"ambiguous_stop\",\"layer-unclassified\",\"scale_unconfirmed\"]`. A marked crop confirms it visually and unambiguously: a real double-line vertical duct labeled '16\"x11\"' directly on the run, from a real horizontal main-duct tee junction at the top (a '16\"x14\"' main crossing directly above, with an '8\"x8\"' branch takeoff visible just to its side) down to a real size-transition point at the bottom, just above where the same riser continues on at a different size ('14\"x10\"', tagged keynote '2') further down past an S1/150 CFM diffuser takeoff. Both stops are real, visually-confirmed junction/transition points, matching this corpus's own established ambiguous-stop-at-a-real-junction convention, not engine misreads. `resolveRunSegments` reproduces the identical single 3.14 LF segment and a reseed `trace_run` from the same known-good seed against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, and size exactly.",
+  "scope": "A single real 16x11-inch rectangular duct riser segment (3.14 LF) on the T2504 renovation project's own mechanical plan, sheet M-104, from a real horizontal main-duct tee junction (with an 8\"x8\" branch takeoff nearby) down to a real size-transition point above where the same riser continues on as a differently-sized '14\"x10\"' segment. Explicitly OUT OF SCOPE: the duct's own continuation past either boundary (including the 14\"x10\" segment below it); the parallel 16\"x10\" risers visible on either side in the same crop; the first riser authored separately on this same sheet (`t2504-sa-m104-riser1.json`); every other one of the 75 real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 51-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "t2504-m104-sa-16x11-riser2",
+      "description": "16x11-inch rectangular duct riser segment, from a real main-duct tee junction to a real size-transition point.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.6662577539116749, 0.6187797991019767],
+        [0.6662577539116749, 0.5532796370874415]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 16, "h_in": 11 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 3.14,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 3.14, "size": { "kind": "rect", "w_in": 16, "h_in": 11 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:16x11": 3.14 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:16x11": 3.14
+  },
+  "total_lf_all_runs": 3.14
+}

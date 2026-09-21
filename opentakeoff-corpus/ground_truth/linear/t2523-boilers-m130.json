@@ -1,0 +1,71 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/t2523-replace-boilers-phase2.pdf",
+  "source_pdf_sha256": "c919f1e49505d0c381f92ce14850c6999d8dd4f07955133a33b74e2b97151902",
+  "sheet_id": "t2523-replace-boilers-phase2.pdf#12",
+  "sheet_number": "M-130",
+  "page": 12,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Twelfth golden, a second sheet mined from the same real project as Run 35's own golden (`013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf`), found the same way: reading the sheet's own real text for HHWS/HHWR callouts first, this time surfacing a much richer set (`1 1/2\"`, `3/4\"`, `1 1/4\"`, `4\"`, `6\"`, and an explicitly-marked `8\" HHWS/HHWR (NEW)` pair) on sheet M-130 ('PARTIAL MECHANICAL PLAN - AREA D', two stacked partial views D-1 and D-2). An initial attempt to trace the flagged `8\" (NEW)` riser directly near its own label did not land on it (the label sits some distance from the actual pipe on this sheet, a real search-radius miss rather than a missing candidate) -- widening the search around the SAME general area instead found a real, clean 6-inch HHWS/HHWR pair with genuine automatic binds.\n\nConfirmed via two marked render crops: the `ambiguous` end (top) sits exactly on a real elbow/tee where a smaller 4\" HHWR/HHWS branch ties into this run's own 6\" main -- a real fork, not a misread, the same category Runs 34-35 already established as a legitimate scope boundary. The `dead_end` end (bottom) sits exactly on a real drawn break-line symbol with the sheet's own printed 'REFER TO M-131 SHEET FOR CONTINUATION' leader pointing directly at it -- the same cross-sheet-continuation convention Run 35's own M-122 golden already used, this time pointing to a DIFFERENT sheet (M-131, not M-121) since this is a different riser elsewhere in the same building. Both runs' own bench-style reseed was independently re-verified live and reproduces each result identically. The larger `8\" (NEW)` riser flagged by the initial text search remains a real, disclosed, not-yet-located candidate on this same sheet -- worth a future, more careful visual search rather than further blind-radius guessing.",
+  "scope": "Two real 6-inch heating hot water pipe runs (a matched HHWS/HHWR supply/return pair, ~27-28 LF each) on the same Missouri National Guard boiler-replacement project's own Partial Mechanical Plan - Area D, sheet M-130 (the lower 'Area D-2' view), each from a real branch tee (where a smaller 4\" HHWR/HHWS run ties in) to a real cross-sheet continuation break-line (referring to sheet M-131). Explicitly OUT OF SCOPE: the 4\" HHWR/HHWS branch itself past the tee; the continuation of both 6\" pipes onto sheet M-131; the larger 8\" HHWS/HHWR (NEW) riser this sheet's own text also flags, not yet precisely located; every other run on this real 28-sheet plan set (only sheet 12/M-130 sampled, in addition to Run 35's own sheet 11/M-122).",
+  "runs": [
+    {
+      "run_id": "t2523-m130-hhws-6in",
+      "description": "6-inch heating hot water supply (HHWS) pipe, from a real branch tee (a smaller 4\" HHWS run ties in) to a real cross-sheet continuation break-line (referring to sheet M-131).",
+      "system": "HHWS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5169966215232306, 0.8786567578896258],
+        [0.5169966215232306, 0.7364073586562553],
+        [0.5169966215232306, 0.7337698177121366]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 27.16,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 26.67, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.49, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 27.16 }
+        }
+      }
+    },
+    {
+      "run_id": "t2523-m130-hhwr-6in",
+      "description": "6-inch heating hot water return (HHWR) pipe, from a real branch tee (a smaller 4\" HHWR run ties in) to a real cross-sheet continuation break-line (referring to sheet M-131), running parallel to this golden's own HHWS run.",
+      "system": "HHWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5218042292087754, 0.8786567578896258],
+        [0.5218042292087754, 0.7324955001773376],
+        [0.5218042292087754, 0.7297986886502049]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 27.91,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 27.4, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.51, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 27.91 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:6": 55.07 },
+  "total_lf_all_runs": 55.07
+}

@@ -4075,6 +4075,20 @@ export function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipmen
     return null;
   }
   if (ROW_KEY_RE.test(key)) return { key };
+  // A letter-led room number ("T1", "CE-5") — real, corpus-found and
+  // confirmed against raw extracted text (demo/sample-finish-plan.pdf's own
+  // ROOM FINISH SCHEDULE - FIRST FLOOR: 28 real room-number rows, five of
+  // them CE-2/CE-3/CE-4/CE-5/T1, silently dropped by ROW_KEY_RE's own
+  // digit-first shape alone). Most real buildings number every room, but
+  // some print special-area rooms (corridor egress, a lettered type) with a
+  // short letter prefix instead — the same CODE_RE shape already trusted,
+  // unconditionally, for a finish/equipment kind's own row key (line ~3967)
+  // without extra corroboration, so a room-finish key gets no less trust
+  // for being letter-led than an equipment tag does. Scoped to `kind ===
+  // "room-finish"` specifically — a "finish"-kind material-schedule code
+  // (CPT-1, P-2) never reaches this branch, so this cannot relabel a paint
+  // or material row as a room.
+  if (kind === "room-finish" && CODE_RE.test(key)) return { key };
   const q = key.match(QUALIFIED_KEY_RE);
   if (q && buildings?.has(q[1])) return { key, building: q[1] };
   // GOAL.md rule 22: a bare letter-only room key ("A" through "K", no

@@ -118,6 +118,10 @@ contractor-grade across sets.
 - Replacing or retuning ODL.
 - Expanding to 50 *new* chat intents (inventory is enough; deepen compile + join).
 - Full duct LF / sheet-metal estimating (FastDUCT / WenDuct territory — later).
+  - **Amended 2026-09-16 (user direction):** duct/pipe/BAS linear takeoff is now
+    its own goal loop — `opentakeoff-corpus/goals/LINEAR_TAKEOFF.md`. It runs beside
+    this loop with its own gates and must leave corpus-eval unchanged; it is not
+    part of this loop's definition of done.
 - Class-agnostic detectors, CLIP few-shot, bSDD ontology as primary work.
 - Token proxies / Playwright sharding / Clipper — ops, not takeoff IQ.
 

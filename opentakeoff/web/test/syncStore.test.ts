@@ -8,7 +8,9 @@ import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { createSyncStore } from "../src/lib/sync/syncStore.js";
 import { createLocalStore, metaGet, metaPut } from "../src/lib/store.js";
+import { installWebLocksPolyfill } from "./helpers/webLocksPolyfill.ts";
 
+installWebLocksPolyfill();
 beforeEach(() => {
   (globalThis as any).indexedDB = new IDBFactory();
 });

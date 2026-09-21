@@ -813,7 +813,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "edit_materials",
-    description: "Add, remove, or patch supporting-materials rows on a condition — the coverage-rate lines that turn a measured quantity into an order quantity (adhesive at N sf/gal, grout at N lf/bag, ...). Each row is {name, per, basis, unit, round, note}: quantity = the condition's basis total ÷ per, rounded up to whole purchase units unless round:false. basis is 'area' (default), 'linear', 'count', or 'seam_lf'. condition names an existing OR NEW finish tag (minted on first touch, like propose_shapes) — add alone is enough to seed materials before anything's traced. remove/patch target existing row ids from this reply or list_annotations-style reads; an unknown id refuses the WHOLE call before anything is written.",
+    description: "Add, remove, or patch supporting-materials rows on a condition — the coverage-rate lines that turn a measured quantity into an order quantity (adhesive at N sf/gal, grout at N lf/bag, ...). Each row is {name, per, basis, unit, round, note, hours_per_unit}: quantity = the condition's basis total ÷ per, rounded up to whole purchase units unless round:false. basis is 'area' (default), 'linear', 'count', 'seam_lf', or (#linear-takeoff WP2.3) 'vertex'/'run' — a routed condition's own fitting-vertex count or separate-run count. hours_per_unit adds labor hours to the row, resolved through that same rounded quantity. condition names an existing OR NEW finish tag (minted on first touch, like propose_shapes) — add alone is enough to seed materials before anything's traced. remove/patch target existing row ids from this reply or list_annotations-style reads; an unknown id refuses the WHOLE call before anything is written.",
     input_schema: {
       type: "object",
       properties: {
@@ -826,10 +826,11 @@ export const AGENT_TOOL_DEFS = [
             properties: {
               name: { type: "string" },
               per: { type: "number", minimum: 0, description: "Coverage rate — basis units per purchase unit, e.g. 250 for 1 gal / 250 sf. Default 0." },
-              basis: { type: "string", description: "'area' (default) | 'linear' | 'count' | 'seam_lf'." },
+              basis: { type: "string", description: "'area' (default) | 'linear' | 'count' | 'seam_lf' | 'vertex' | 'run'." },
               unit: { type: "string", description: "Purchase unit, e.g. 'gal', 'bag', 'roll'." },
               round: { type: "boolean", description: "Round up to whole purchase units — default true." },
               note: { type: "string" },
+              hours_per_unit: { type: "number", minimum: 0, description: "Labor hours per purchase unit." },
             },
             required: ["name"],
           },
@@ -840,7 +841,7 @@ export const AGENT_TOOL_DEFS = [
           description: "Field changes on existing rows.",
           items: {
             type: "object",
-            properties: { id: { type: "string" }, fields: { type: "object", description: "name/per/basis/unit/round/note key:value pairs." } },
+            properties: { id: { type: "string" }, fields: { type: "object", description: "name/per/basis/unit/round/note/hours_per_unit key:value pairs." } },
             required: ["id", "fields"],
           },
         },

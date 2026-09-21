@@ -1,0 +1,46 @@
+{
+  "code_floor": {
+    "max_spacing_ft": 10,
+    "grade": "C",
+    "source": "IMC 2021 §603.10 — 'Ducts shall be supported with approved hangers at intervals not exceeding 10 feet.' https://codes.iccsafe.org/s/IMC2021P1/chapter-6-duct-systems/IMC2021P1-Ch06-Sec603.10"
+  },
+  "note": "D3's default hanger table (duct = IMC 603.10 ceiling, SMACNA 5-1/5-2 'by size class'). The 10 ft code_floor above is the legally-mandated ceiling for ANY duct and is what the engine defaults to. The hardware-by-size bands below are the engine's OWN order-of-magnitude size-class guidance (LAW L10 — no licensed SMACNA Table 5-1/5-2 values ship); they never widen spacing past the 10 ft code floor, only vary the recommended strap gauge / rod diameter. UPC 313.3 and IMC 305.4 do not separately regulate SHEET-METAL duct hangers (those tables are for piping — see pipeHangerSpacing.json); the adopted-code selector here only ever chooses IMC 603.10 today.",
+  "hardware_bands": {
+    "grade": "M",
+    "source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A3 — engine-authored size-class bands modeled on typical SMACNA-class practice (mepacademy.com/sheet-metal-duct-hangers/, sbkjduct.com), not the licensed SMACNA Table 5-1/5-2 cells",
+    "rect_by_half_perimeter_in": [
+      { "max_half_perimeter_in": 30, "hanger": "1\" x 22 ga strap or 10 ga wire" },
+      { "max_half_perimeter_in": 72, "hanger": "1\" x 22 ga strap or 1/4\" rod" },
+      { "max_half_perimeter_in": 96, "hanger": "1\" x 20 ga strap or 1/4\"-3/8\" rod" },
+      { "max_half_perimeter_in": 120, "hanger": "1\" x 18 ga strap or 3/8\" rod" },
+      { "max_half_perimeter_in": 192, "hanger": "1 1/2\" x 16 ga strap or 3/8\"-1/2\" rod, trapeze" }
+    ],
+    "round_by_diameter_in": [
+      { "max_diameter_in": 18, "hanger": "1\" x 22 ga strap or 12 ga wire" },
+      { "max_diameter_in": 36, "hanger": "1\" x 20 ga strap or 1/4\" rod" },
+      { "max_diameter_in": 60, "hanger": "1\" x 18/20 ga strap or 3/8\" rod" },
+      { "max_diameter_in": 84, "hanger": "1\" x 16 ga strap or 3/8\" rod" }
+    ],
+    "flex_max_spacing_ft": 4
+  },
+  "trapeze_bom": {
+    "grade": "M",
+    "source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A3 — standard field practice, not a licensed table",
+    "items": [
+      { "item": "strut/angle", "qty": 1, "size": "W + 4 in." },
+      { "item": "threaded rod", "qty": 2, "size": "L = ceiling-to-BOD + 6 in." },
+      { "item": "anchor/insert or beam clamp", "qty": 2 },
+      { "item": "hex nut", "qty": 4 },
+      { "item": "washer", "qty": 4 }
+    ]
+  },
+  "strap_bom": {
+    "grade": "M",
+    "source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A3",
+    "items": [
+      { "item": "strap", "qty": 2 },
+      { "item": "anchor", "qty": 2 },
+      { "item": "sheet-metal screw", "qty": 4 }
+    ]
+  }
+}

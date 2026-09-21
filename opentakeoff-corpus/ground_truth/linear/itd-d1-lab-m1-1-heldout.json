@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/itd-d1-lab-mechanical.pdf",
+  "source_pdf_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "sheet_id": "itd-d1-lab-mechanical.pdf#4",
+  "sheet_number": "M1.1",
+  "sheet_title": null,
+  "page": 4,
+  "tier": "held_out",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "itd-d1-lab-mechanical--itd-d1-lab-mechanical-p4--full.png",
+    "hash": "b4583a8dd2e229cad3c6a250415290117a6024933ceb769fd931a4cacf39dbc9"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 held-out-tier authoring pass, 2nd entry)",
+  "date": "2026-09-17",
+  "review_basis": "The second entry off opentakeoff-corpus/reports/LINEAR_HELDOUT.txt's frozen list (itd-d1-lab-mechanical.pdf#4, pinned there by the plan verbatim). Candidates found via a grid-sweep of trace_run seeds across this sheet's own duct size labels (8\"/10\"/12\"/14\"/26\"/34\" round, several rectangular transitions) -- a first promising hit (3.11 LF, round:8, both stops 'dead_end') was VISUALLY REJECTED before being trusted: a marked render crop showed its two endpoints sat on a wall/shaft outline and a text-leader stub, not real ductwork at all -- confidence:0 and factors ['stroke-family:unclassified','layer-unclassified'] had already flagged it as suspect, and the crop confirmed the suspicion rather than overriding it. This is disclosed because a same-checkpoint discipline reminder: visually verify before trusting, exactly as this corpus's own prior findings (the two coordinate bugs in Run 3, Finding 5's own disproven hypothesis) already established. A second candidate (seed 1569,858 -> 3.02 LF, round:8) was verified instead: a marked render crop confirms a real double-line 8\"Ø round duct running horizontally from a genuine wall-penetration dead end to a real elbow/damper assembly (the walker's own 'family_change' stop at the wall end and 'ambiguous' stop at the elbow/damper end both correspond to real drawn CAD features, not narrative choices) -- this run ALSO reads confidence:0 / stroke-family:unclassified (unlike weld-county's layer-name read or federal-p7's pen-weight-prior read), a third, lower-confidence code path worth having in the held-out set on its own merits, not despite the low score. System code: no explicit SA/RA/EA tag sits on this run. Recorded as 'EA' (exhaust air) from disclosed circumstantial evidence, not a directly-read label: this sheet's own keynote list is dominated by exhaust-ductwork routing notes ('ROUTE 8\" DUCT DOWN TO SNORKEL HOOD', 'ROUTE EXHAUST DUCTWORK MAINS TIGHT TO STRUCTURE') for what is evidently a lab building with fume hoods and cooking-equipment exhaust (snorkel hoods, an oven flue) -- consistent with an 8\" branch feeding a hood connection -- and an unresolved equipment tag 'SEV' sits immediately beside this run's own far end, plausibly a hood-connection tag though its expansion could not be confirmed from extractable text. sheet_title is recorded as null rather than guessed: unlike itd-d1-lab-m1-2.json's own 'HYDRONIC FLOOR PLAN' (found in a title-block-shaped text run), no equivalent title text could be found anywhere on this sheet after several targeted searches -- this Revit-exported sheet may render its view title as a non-text graphic, or place it somewhere this pass's searches didn't check; left honestly blank rather than invented.",
+  "scope": "The second entry in opentakeoff-corpus/reports/LINEAR_HELDOUT.txt's frozen split (the first, federal-attachment4-mechanical.pdf#7, is already authored and measured at recall 1.0). This run is an 8\" round duct segment on a dense ductwork sheet (itd-d1-lab-mechanical.pdf, page 4, sheet M1.1 -- the SAME source PDF as the existing hydronic development-tier golden itd-d1-lab-m1-2.json, but a DIFFERENT page/sheet, so this remains a genuine held-out measurement: page 5 was traced during development, page 4 was not), from a real wall-penetration dead end to a real elbow/damper junction. Explicitly OUT OF SCOPE: the duct continuing past the elbow/damper (down toward whatever it serves); every other duct run on this visually dense sheet (dozens of round and rectangular duct sizes/branches feeding a lab's fume hoods, snorkel hoods, and general ductwork); the rejected 3.11 LF candidate (documented in review_basis as a caught mistrace, not a second run); the remaining 5 declared-but-unauthored held-out sheets (baker-county-eoc-bidset.pdf#38, bldg5406-hvac-demo-mechanical.pdf#2/#14, navfac-cherry-point-atc-mechanical.pdf#6/#18).",
+  "runs": [
+    {
+      "run_id": "itd-p4-ea-duct-stub",
+      "description": "8\" round exhaust-air duct segment, from the real wall-penetration dead end to the real elbow/damper assembly it turns down through.",
+      "system": "EA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.2998070987654321, 0.24895833333333334],
+        [0.3155478395061728, 0.24895833333333334]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 8 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 3.02,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 3.02, "size": { "kind": "round", "d_in": 8 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:8": 3.02 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "round:8": 3.02
+  },
+  "total_lf_all_runs": 3.02
+}

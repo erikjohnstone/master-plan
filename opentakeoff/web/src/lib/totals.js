@@ -26,6 +26,7 @@ import { M_PER_FT, M2_PER_SF } from "./units";
 import { attrValue } from "./conditionColumns.js";
 import { shapeLabelValue } from "./shapeLabels.js";
 import { compareSheetKeys } from "./sheetKey"; // NOT ./sheets — that module imports pdfjs-dist
+import { runSizeKey } from "./linear/run.ts";
 
 // Re-export so existing consumers (markedset, snapshotDiff, ReportPanel, tests)
 // keep importing round2 from here; num.js is the single definition.
@@ -73,22 +74,67 @@ export function conditionTotals(conditions, shapes, ctx = null) {
     const acc = { floor: 0, wall: 0, border: 0, lf: 0, ea: 0 };
     for (const s of cs) accumulateRole(acc, s);
     let { floor, wall, border, lf, ea } = acc;
+    // #linear-takeoff (WP1.4): per-size LF, keyed the same canonical way
+    // computed.run.totals_by_size already is (runSizeKey) — only linear
+    // shapes that carry an authored `run` block contribute; a plain trace
+    // (every shape before WP1.1 existed, and every non-routed trace today)
+    // adds nothing here, so `sizes` stays absent for a condition with none.
+    // One representative RunSize object per key rides along (read off the
+    // first segment carrying that key) so a consumer can format a label
+    // (canvasUtil.js's sizeLabel) without re-deriving it from the string key.
+    const sizeLf = {}, sizeObj = {};
+    // #linear-takeoff (WP2.3): the "vertex" and "run" materials bases —
+    // vertexCount is every interior vertex (fitting) across this
+    // condition's routed shapes (elbow, transition, whatever `run.ts`
+    // resolved), runCount is how many separate traced/manual runs (shapes
+    // carrying a `run` block) the condition has. A generic aggregate, same
+    // spirit as "linear"/"count" above: a materials row's own `note` names
+    // which real-world item it means ("gasket kit, 1 per fitting"), this
+    // just supplies the total to divide against.
+    let vertexCount = 0, runCount = 0;
+    for (const s of cs) {
+      const run = s.computed?.run;
+      if (!run?.totals_by_size) continue;
+      runCount += 1;
+      vertexCount += (run.vertices || []).length;
+      for (const [key, val] of Object.entries(run.totals_by_size)) {
+        sizeLf[key] = (sizeLf[key] || 0) + val;
+        if (!sizeObj[key]) {
+          const seg = (run.segments || []).find((sg) => sg.size && runSizeKey(sg.size) === key);
+          if (seg) sizeObj[key] = seg.size;
+        }
+      }
+    }
     // Seams are a property of the CUT LAYOUT, not of a role — they come in
     // pre-figured per shape and are summed here, then multiplied like every
     // other quantity: N identical units are N cuttings of the same layout.
     let seam = seamByShape ? cs.reduce((n, s) => n + (seamByShape.get(s.id) || 0), 0) : 0;
     floor *= mult; wall *= mult; border *= mult; lf *= mult; ea *= mult; seam *= mult;
+    vertexCount *= mult; runCount *= mult;
+    for (const key of Object.keys(sizeLf)) sizeLf[key] *= mult;
     const total = floor + wall + border;
     // supporting materials: deterministic quantity = basis ÷ coverage, rounded up
     // to whole units (you buy whole buckets/bags). basis = this condition's measured
-    // area (SF), linear (LF), count (EA), or figured seam length (LF — weld rod,
-    // seam tape). Coverage comes off the product data sheet.
+    // area (SF), linear (LF), count (EA), figured seam length (LF — weld rod,
+    // seam tape), or (#linear-takeoff WP2.3) vertex/run count for a routed
+    // condition's fitting- or run-scoped supplies. Coverage comes off the
+    // product data sheet.
     const materials = (c.materials || []).filter((m) => m && m.name).map((m) => {
       const per = Math.max(0, Number(m.per) || 0);
-      const basisVal = m.basis === "linear" ? lf : m.basis === "count" ? ea : m.basis === "seam_lf" ? seam : total;
+      const basisVal = m.basis === "linear" ? lf : m.basis === "count" ? ea : m.basis === "seam_lf" ? seam
+        : m.basis === "vertex" ? vertexCount : m.basis === "run" ? runCount : total;
       let qty = per > 0 ? basisVal / per : 0;
       qty = m.round === false ? round2(qty) : Math.ceil(qty - 1e-9);
-      return { name: m.name, unit: m.unit || "", per, basis: m.basis || "area", round: m.round !== false, note: m.note || "", basis_qty: round2(basisVal), qty };
+      // hours_per_unit (WP2.3): labor hours for this row, resolved through
+      // the SAME already-ceil'd `qty` above — a materials row prices whole
+      // purchased units, and the labor to install them follows the same
+      // whole-unit count, not a fractional live measurement.
+      const hoursPerUnit = Math.max(0, Number(m.hours_per_unit) || 0);
+      return {
+        name: m.name, unit: m.unit || "", per, basis: m.basis || "area", round: m.round !== false, note: m.note || "",
+        basis_qty: round2(basisVal), qty,
+        ...(m.hours_per_unit != null ? { hours_per_unit: hoursPerUnit, hours: round2(qty * hoursPerUnit) } : {}),
+      };
     });
     return {
       id: c.id, finish_tag: c.finish_tag, color: c.color, fill: c.fill, hatch: c.hatch,
@@ -102,6 +148,14 @@ export function conditionTotals(conditions, shapes, ctx = null) {
       total_sf_net: round2(total * w),
       sy_net: round2((total * w) / 9),
       materials,
+      // #linear-takeoff (WP1.4): APPENDED after materials, additive-only —
+      // present only when at least one shape carries a sized run; absent
+      // (never an empty array) for every condition that doesn't, so no
+      // existing key-order assertion or consumer sees a new key it doesn't
+      // expect.
+      ...(Object.keys(sizeLf).length
+        ? { sizes: Object.keys(sizeLf).map((key) => ({ size_key: key, size: sizeObj[key] || null, lf: round2(sizeLf[key]), lf_net: round2(sizeLf[key] * w) })) }
+        : {}),
     };
   });
 }
@@ -356,6 +410,46 @@ export function materialsSummary(rows) {
   return [...map.values()].map((x) => ({ ...x, qty: round2(x.qty) }));
 }
 
+// #linear-takeoff (WP2.5): "Fittings & supports" buy-list rows — the subset
+// of a condition's already-resolved materials whose basis is a routed
+// condition's own fitting-vertex or separate-run count (WP2.3: elbow
+// brackets, riser clamps, per-run test kits), pulled out of the general
+// materials list so a routed trade's procurement list isn't lost among
+// floor/linear/count-basis supplies (duct board, VCT adhesive, and the
+// like). Reads the SAME already-resolved `materials` rows conditionTotals
+// computed — no second pass over shapes or a separate resolveLinearAssembly
+// call, so this can never disagree with the Materials tab/CSV section.
+export function fittingsAndSupportsRows(rows) {
+  const out = [];
+  for (const r of (rows || [])) for (const m of (r.materials || [])) {
+    if (m.basis !== "vertex" && m.basis !== "run") continue;
+    out.push({
+      condition_id: r.id, finish_tag: r.finish_tag, name: m.name, unit: m.unit || "",
+      basis: m.basis, per: m.per, qty: m.qty,
+      ...(m.hours_per_unit != null ? { hours_per_unit: m.hours_per_unit, hours: m.hours } : {}),
+      note: m.note || "",
+    });
+  }
+  return out;
+}
+
+// Combined buy list over fittingsAndSupportsRows — same-named rows summed
+// across conditions, mirroring materialsSummary's own rule exactly (rounded
+// per condition first, then summed). hours sums alongside qty when any
+// contributing row carries one; a row with no hours_per_unit contributes 0,
+// never coercing an hours-less item into a spurious "0 hr" combined line.
+export function fittingsAndSupportsSummary(rows) {
+  const map = new Map();
+  for (const row of fittingsAndSupportsRows(rows)) {
+    const key = `${row.name}\x00${row.unit}`;
+    const cur = map.get(key) || { name: row.name, unit: row.unit, qty: 0, hours: 0, hasHours: false };
+    cur.qty += row.qty;
+    if (row.hours != null) { cur.hours += row.hours; cur.hasHours = true; }
+    map.set(key, cur);
+  }
+  return [...map.values()].map(({ hasHours, ...x }) => ({ name: x.name, unit: x.unit, qty: round2(x.qty), ...(hasHours ? { hours: round2(x.hours) } : {}) }));
+}
+
 // NB: the CSV TOTAL row emits g[key] for any column key present here — adding
 // a key that collides with a CSV column key changes that row (golden-guarded).
 export function grandTotals(rows) {
@@ -421,7 +515,7 @@ export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel =
   // supporting materials — per condition, then a combined buy list. Coverage
   // rates deliberately stay as entered (SF/LF-based) in metric mode — the
   // upstream metric contract; the report panel carries the footnote.
-  const basisLabel = (b) => (b === "linear" ? "LF" : b === "count" ? "EA" : b === "seam_lf" ? "seam LF" : "SF");
+  const basisLabel = (b) => (b === "linear" ? "LF" : b === "count" ? "EA" : b === "seam_lf" ? "seam LF" : b === "vertex" ? "vertex" : b === "run" ? "run" : "SF");
   const perCond = [];
   for (const r of rows) for (const m of (r.materials || [])) perCond.push([r.finish_tag, m.name, m.qty, m.unit, `1 ${m.unit || "unit"} / ${m.per} ${basisLabel(m.basis)}`, m.note || ""]);
   if (perCond.length) {
@@ -468,6 +562,22 @@ export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel =
   return title + lines.join("\n") + "\n";
 }
 
+// #linear-takeoff (WP1.4): the additive linear_runs block for
+// opentakeoff.report.v1 — mirrors rollTakeoff.js's rollReportRows (rows =
+// conditionTotals output, finish_tag/multiplier already applied there so
+// this can never disagree with the table), but reads straight off the
+// `sizes` field conditionTotals just computed rather than a second
+// cross-referenced map, since the per-size totals already live on the row.
+export function linearRunRows(rows) {
+  const out = [];
+  for (const r of rows || []) {
+    for (const sz of r.sizes || []) {
+      out.push({ condition_id: r.id, finish_tag: r.finish_tag, size_key: sz.size_key, size: sz.size, lf: sz.lf, lf_net: sz.lf_net });
+    }
+  }
+  return out;
+}
+
 // Report JSON envelope — schema opentakeoff.report.v1. Extracted pure so the
 // key set is testable (test/totals.test.ts pins it; schema drift fails there).
 // v1 is additive-only: new keys APPEND after the existing ones (see markups'
@@ -486,9 +596,10 @@ export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel =
  *   conditionColumns?: Array<{id: string, name: string, values: string[]}>,
  *   attrsByCond?: Map<any, object>|null, shapeLabels?: string[],
  *   byLabel?: Array<{value: string|null, rows: any[]}>, displayUnits?: string,
- *   rollGoods?: any[]}} args
+ *   rollGoods?: any[], linearRuns?: any[], linearSettings?: object,
+ *   fittingsAndSupports?: any[]}} args
  */
-export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [] }) {
+export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInfo = [], markups = [], rfis = [], sheetLabel = null, conditionColumns = [], attrsByCond = null, shapeLabels = [], byLabel = [], displayUnits = "imperial", rollGoods = [], linearRuns = [], linearSettings = {}, fittingsAndSupports = [] }) {
   const label = (id) => (sheetLabel ? sheetLabel(id) : id);
   // destructuring defaults don't apply to an explicit null, and both values can
   // trace back to a corrupted payload — coerce (and drop malformed items) so
@@ -583,6 +694,28 @@ export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInf
     // emitted; empty for projects with no roll-goods conditions, so every
     // pre-#136 export round-trips byte-identically except this one key.
     roll_goods: Array.isArray(rollGoods) ? rollGoods : [],
+    // linear_runs APPENDS last (additive-only v1, #linear-takeoff WP1.4):
+    // one row per (condition, size) — the per-size LF breakdown beside the
+    // condition's own plain `lf` total the conditions[] rows already carry.
+    // Always emitted; empty for projects with no sized routed runs, so every
+    // pre-WP1.4 export round-trips byte-identically except this one key.
+    linear_runs: Array.isArray(linearRuns) ? linearRuns : [],
+    // linear_settings APPENDS last (additive-only, #linear-takeoff WP2.4):
+    // the project's own adopted-code/climate-zone/pressure-class/stick-
+    // length/offset-allowance choices resolveLinearAssembly's `settings`
+    // parameter reads (plan §7.4) — passed straight through from
+    // TakeoffCanvas.jsx's own `linearSettings` state (already sanitized on
+    // load). Always emitted as an object, {} for every project that has
+    // not set one, so every pre-WP2.4 export round-trips byte-identically
+    // except this one key.
+    linear_settings: (linearSettings && typeof linearSettings === "object" && !Array.isArray(linearSettings)) ? linearSettings : {},
+    // fittings_and_supports APPENDS last (additive-only, #linear-takeoff
+    // WP2.5): the buy-list rows fittingsAndSupportsRows() pulled out of
+    // conditions[]'s own materials (vertex/run-basis rows only — plan §8's
+    // fitting/support supplies). Always emitted; empty for projects with no
+    // vertex/run-basis materials, so every pre-WP2.5 export round-trips
+    // byte-identically except this one key.
+    fittings_and_supports: Array.isArray(fittingsAndSupports) ? fittingsAndSupports : [],
   };
 }
 

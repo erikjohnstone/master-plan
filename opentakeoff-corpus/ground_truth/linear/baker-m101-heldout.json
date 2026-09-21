@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/baker-county-eoc-bidset.pdf",
+  "source_pdf_sha256": "1998d7daaac114b3780832b9cd6e017ed5b0342e6331ee025d4088fa47cc73cc",
+  "sheet_id": "baker-county-eoc-bidset.pdf#38",
+  "sheet_number": "M1.01",
+  "sheet_title": "MECHANICAL - LEVEL 1 PLAN",
+  "page": 38,
+  "tier": "held_out",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "baker-county-eoc-bidset--baker-county-eoc-bidset-p38--full.png",
+    "hash": "380c8b848d0b347acd7f3086772a660b216f44cce9f70b720dd39d80d0943e8a"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 held-out-tier authoring pass, 4th entry)",
+  "date": "2026-09-17",
+  "review_basis": "The fourth entry off opentakeoff-corpus/reports/LINEAR_HELDOUT.txt's frozen list (baker-county-eoc-bidset.pdf#38, pinned there by the plan verbatim). Candidates found via a grid-sweep of trace_run seeds across this sheet's own duct size labels -- two of the sweep's own hits were rejected before authoring, each for a concrete, confirmed reason, not a hunch: a 16.71 LF 'both dead_end' candidate looked ideal on paper but a marked render crop showed one of its two endpoints sitting on a GRAY architectural reference line running to a room-label leader ('JANITOR 102'), not real duct linework -- a mistrace, the same category Run 5's own itd-p4 pass already caught once; a 3.44 LF 'EA' candidate with a real bound size turned out to be a small label-leader tick mark (the short stub connecting an '8\"Ø EA' text callout to the real duct line it labels), too trivial and not an independent run in its own right. The chosen candidate (20.15 LF, seed on a real 24x14 SA trunk) held up under the same visual check: a marked render crop confirms BOTH stops sit on genuine drawn CAD junctions, not narrative choices -- the near end (1309.9,2185.2) at a real elbow/tee where the vertical trunk continues into a further diagonal branch (visible in the crop, continuing past the marked point); the far end (1309.9,1822.6) at a real tee where this vertical trunk meets a horizontal '24X14 SA' duct run (the label sits directly above this junction). Both of trace_run's own 'ambiguous' stops here are the SAME real-branch-point category `itd-p5-hc3-branch` and `federal-m41-hhws-pump-stub` (both already-confirmed clean hits) share -- NOT the same category as `bessemer-p101-cw-main`'s own disclosed judgment-call stop (Finding 4), where the human's own chosen endpoint sits on an otherwise-unbroken straight run with no real feature there. Two real '22X10 RG-1' register branch-taps visible along this run's own span (between the two endpoints) do not break the traced polyline -- the same 'incidental taps along a real span' pattern this corpus's other goldens already treat as out of scope. System code: read directly, not inferred -- the '24X14 SA' label sits immediately at the trunk's own top junction, explicitly naming this a supply-air (SA) duct; `trace_run`'s own automatic system read came back undefined (the label sits just outside its own size-binding search radius), so this golden's `system: 'SA'` comes from the same direct-label reading a human annotator would use, not from the engine's own (in this case blank) read.",
+  "scope": "The fourth entry in opentakeoff-corpus/reports/LINEAR_HELDOUT.txt's frozen split (federal-attachment4-mechanical.pdf#7, itd-d1-lab-mechanical.pdf#4, and navfac-cherry-point-atc-mechanical.pdf#6 are already authored). This run is a 24x14 rectangular supply-air (SA) duct trunk on a real building's mechanical level-1 plan, from a real tee/elbow junction (continuing into a further diagonal branch beyond it) to a real tee where it meets a horizontal duct run. Explicitly OUT OF SCOPE: the diagonal branch continuing past the near end; the horizontal duct run continuing past the far end; the two '22X10 RG-1' register taps along this run's own span (incidental, not separate runs); every other duct run on this sheet (a real, dense mechanical level-1 plan with dozens of branches feeding exhaust fans, registers, and equipment); the remaining 3 declared-but-unauthored held-out sheets (bldg5406-hvac-demo-mechanical.pdf#2/#14, navfac-cherry-point-atc-mechanical.pdf#18 -- the last of these was attempted this same checkpoint and set aside, not authored: see reports/LINEAR_HELDOUT.txt's own history).",
+  "runs": [
+    {
+      "run_id": "baker-m101-sa-trunk",
+      "description": "24x14 rectangular supply-air (SA) duct trunk, from a real tee/elbow junction to a real tee where it meets a horizontal duct run.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.25268132716049385, 0.6322916666666666],
+        [0.25268132716049385, 0.5273726851851852]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 24, "h_in": 14 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 20.14,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 20.14, "size": { "kind": "rect", "w_in": 24, "h_in": 14 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:24x14": 20.14 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:24x14": 20.14
+  },
+  "total_lf_all_runs": 20.14
+}

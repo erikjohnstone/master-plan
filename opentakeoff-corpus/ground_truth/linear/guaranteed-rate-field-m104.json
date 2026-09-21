@@ -1,0 +1,50 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/guaranteed-rate-field-hvac-ahu.pdf",
+  "source_pdf_sha256": "e72ce12a0b1a7857733e14d86ab0d1238c7c7003a789d5c74ed1edfb98c9a147",
+  "sheet_id": "guaranteed-rate-field-hvac-ahu.pdf#5",
+  "sheet_number": "M1.04",
+  "page": 5,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Twenty-third golden, from a fresh Guaranteed Rate Field (Chicago White Sox stadium) HVAC-replacement project sheet M1.04 ('Mechanical New Work Plan - Level 100 Enlarged Plans', Section 105 Ice Cream / Concessions area). A layer-quality scan flagged this project's own real M-DUCT-*/M-PIPE-REF-NEW layers; a grid sweep across their union bounding box found a real 46x8 outside-air-intake (OAI) duct, from a real drawn hood/transition symbol (labeled '1000 CFM 3.5 SQ. FT. OAI LOUVER') through a motorized-damper symbol ('M' in a box) to a real duct run labeled '46x8' with its own leader arrow, matching `trace_run`'s own genuine LIVE AUTOMATIC size bind (`size:{kind:rect,w_in:46,h_in:8}` via `size-binding:beside`) exactly. Confirmed via marked render crop (using the corrected `viewSheet` marks shape -- `marks:{ring:[[x,y],...]}` -- discovered this same session after the prior candidate's own marks silently failed to draw). `trace_run` walks this double-line duct symbol's own PERIMETER (both parallel rails plus the connecting elbow at the hood end), not a resolved centerline -- the same already-documented, understood rail-vs-centerline shape (`05-double-line-duct`, Run 12) rather than a new finding; the golden's own 4-point, 29.01 LF shape is exactly what a fresh `trace_run` call at this seed reproduces, not a human-corrected centerline value. Both physical ends are real `dead_end` stops at the duct's own open-drawn extent on this sheet. System declared manually as `OA` (outside air) to match the label's own 'OAI' (outside-air-intake) terminology -- no automatic system read was returned alongside the automatic size read on this stroke-family:unclassified segment. A second nearby candidate (a '14x8' duct jog near a kitchen-exhaust-fan assembly on the same sheet) was investigated and set aside: its own trace jumped across a visually cluttered cluster of overlapping EA/EF/kitchen-exhaust ductwork in a way that could not be confidently attributed to one real physical run without more scrutiny than this pass gives it -- not used, no golden risked on it.",
+  "scope": "A single real 46x8 rectangular outside-air-intake (OA) duct run (29.01 LF, walked as a double-line rail-perimeter with one connecting elbow pair) on the Guaranteed Rate Field HVAC-replacement project's own sheet M1.04, from a real OAI-louver hood/transition symbol to a real open dead-end on the same drawn duct run. Explicitly OUT OF SCOPE: the hood's own upstream louver connection; the motorized-damper symbol itself; a second, visually ambiguous '14x8' duct-jog candidate near the same sheet's own kitchen-exhaust-fan assembly, not used; every other duct/pipe run visible on this same sheet; every other sheet on this real multi-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "grf-m104-oa-46x8",
+      "description": "46x8 rectangular outside-air-intake (OA) duct, double-line rail-perimeter trace from a real OAI-louver hood/damper transition to a real open dead-end, sheet M1.04.",
+      "system": "OA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.1968315972222222, 0.23613040123456788],
+        [0.1600983796296296, 0.24066358024691356],
+        [0.15992476851851853, 0.23834876543209874],
+        [0.1966579861111111, 0.23381558641975306]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 46, "h_in": 8 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 29.01,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 14.17, "size": { "kind": "rect", "w_in": 46, "h_in": 8 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.67, "size": { "kind": "rect", "w_in": 46, "h_in": 8 }, "size_src": "manual" },
+            { "i": 2, "lf": 14.17, "size": { "kind": "rect", "w_in": 46, "h_in": 8 }, "size_src": "manual" }
+          ],
+          "vertices": [
+            { "i": 1, "kind": "elbow", "angle_deg": 89.6, "angle_class": "square" },
+            { "i": 2, "kind": "elbow", "angle_deg": 90.4, "angle_class": "square" }
+          ],
+          "totals_by_size": { "rect:46x8": 29.01 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "rect:46x8": 29.01 },
+  "total_lf_all_runs": 29.01
+}

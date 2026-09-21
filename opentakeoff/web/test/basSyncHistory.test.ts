@@ -6,6 +6,9 @@ import { captureBasPoints, mergeBasWorkflows, verifyBasWorkflow, retainBasWorkfl
 import { mergeAnnotations } from '../src/lib/sync/merge.js';
 import { createSyncStore } from '../src/lib/sync/syncStore.js';
 import { createLocalStore, metaGet, metaPut, localStore } from '../src/lib/store.js';
+import { installWebLocksPolyfill } from './helpers/webLocksPolyfill.ts';
+
+installWebLocksPolyfill();
 
 // Controlled persistence fixtures, not extraction/accuracy ground truth.
 async function capture(label: string) {

@@ -12,7 +12,9 @@ import assert from "node:assert/strict";
 import { createFsProvider, createFsSnapshotProvider, listConflictCopies } from "../src/lib/fs/fsProvider.js";
 import { createSyncStore } from "../src/lib/sync/syncStore.js";
 import { createLocalStore } from "../src/lib/store.js";
+import { installWebLocksPolyfill } from "./helpers/webLocksPolyfill.ts";
 
+installWebLocksPolyfill();
 beforeEach(() => {
   (globalThis as any).indexedDB = new IDBFactory();
 });

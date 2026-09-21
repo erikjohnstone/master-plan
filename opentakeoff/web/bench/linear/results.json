@@ -1,0 +1,2451 @@
+{
+ "cases": 11,
+ "parity": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "ok": true
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "ok": true
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "ok": true
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "ok": true
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "ok": true
+  },
+  {
+   "caseName": "06-label-inside",
+   "ok": true
+  },
+  {
+   "caseName": "07-label-beside",
+   "ok": true
+  },
+  {
+   "caseName": "08-label-leader",
+   "ok": true
+  },
+  {
+   "caseName": "09-crossing-run",
+   "ok": true
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "ok": true
+  },
+  {
+   "caseName": "11-y-branch",
+   "ok": true
+  }
+ ],
+ "totals": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "expectedLf": 50.54,
+   "actualLf": 50.52,
+   "errFt": 0.01999999999999602,
+   "errPct": 0.00039572615749893197
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0,
+   "errPct": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "expectedLf": 36.74,
+   "actualLf": 36.72,
+   "errFt": 0.020000000000003126,
+   "errPct": 0.0005443658138269767
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "expectedLf": 46.11,
+   "actualLf": 46.1,
+   "errFt": 0.00999999999999801,
+   "errPct": 0.00021687269572756476
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "expectedLf": 43.59,
+   "actualLf": 43.58,
+   "errFt": 0.010000000000005116,
+   "errPct": 0.00022941041523296893
+  },
+  {
+   "caseName": "06-label-inside",
+   "expectedLf": 27.81,
+   "actualLf": 27.8,
+   "errFt": 0.00999999999999801,
+   "errPct": 0.000359582883854657
+  },
+  {
+   "caseName": "07-label-beside",
+   "expectedLf": 50.61,
+   "actualLf": 50.62,
+   "errFt": 0.00999999999999801,
+   "errPct": 0.00019758940920762717
+  },
+  {
+   "caseName": "08-label-leader",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0,
+   "errPct": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0,
+   "errPct": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "expectedLf": 13.41,
+   "actualLf": 13.41,
+   "errFt": 0,
+   "errPct": 0
+  },
+  {
+   "caseName": "11-y-branch",
+   "expectedLf": 16,
+   "actualLf": 16,
+   "errFt": 0,
+   "errPct": 0
+  }
+ ],
+ "determinism": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "rotate90",
+   "expectedLf": 50.52,
+   "actualLf": 50.52,
+   "errFt": 0
+  },
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "translate",
+   "expectedLf": 50.52,
+   "actualLf": 50.52,
+   "errFt": 0
+  },
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "reverse",
+   "expectedLf": 50.52,
+   "actualLf": 50.52,
+   "errFt": 0
+  },
+  {
+   "caseName": "01-pen-thin-solid",
+   "transform": "scale2x",
+   "expectedLf": 101.04,
+   "actualLf": 101.04,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "rotate90",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "translate",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "reverse",
+   "expectedLf": 61.5,
+   "actualLf": 61.5,
+   "errFt": 0
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "transform": "scale2x",
+   "expectedLf": 123,
+   "actualLf": 123,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "rotate90",
+   "expectedLf": 36.72,
+   "actualLf": 36.72,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "translate",
+   "expectedLf": 36.72,
+   "actualLf": 36.72,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "reverse",
+   "expectedLf": 36.72,
+   "actualLf": 36.72,
+   "errFt": 0
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "transform": "scale2x",
+   "expectedLf": 73.44,
+   "actualLf": 73.44,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "rotate90",
+   "expectedLf": 46.1,
+   "actualLf": 46.1,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "translate",
+   "expectedLf": 46.1,
+   "actualLf": 46.1,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "reverse",
+   "expectedLf": 46.1,
+   "actualLf": 46.1,
+   "errFt": 0
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "transform": "scale2x",
+   "expectedLf": 92.2,
+   "actualLf": 92.2,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "rotate90",
+   "expectedLf": 43.58,
+   "actualLf": 43.58,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "translate",
+   "expectedLf": 43.58,
+   "actualLf": 43.58,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "reverse",
+   "expectedLf": 43.58,
+   "actualLf": 43.58,
+   "errFt": 0
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "transform": "scale2x",
+   "expectedLf": 87.16,
+   "actualLf": 87.16,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "rotate90",
+   "expectedLf": 27.8,
+   "actualLf": 27.8,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "translate",
+   "expectedLf": 27.8,
+   "actualLf": 27.8,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "reverse",
+   "expectedLf": 27.8,
+   "actualLf": 27.8,
+   "errFt": 0
+  },
+  {
+   "caseName": "06-label-inside",
+   "transform": "scale2x",
+   "expectedLf": 55.6,
+   "actualLf": 55.6,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "rotate90",
+   "expectedLf": 50.62,
+   "actualLf": 50.62,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "translate",
+   "expectedLf": 50.62,
+   "actualLf": 50.62,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "reverse",
+   "expectedLf": 50.62,
+   "actualLf": 50.62,
+   "errFt": 0
+  },
+  {
+   "caseName": "07-label-beside",
+   "transform": "scale2x",
+   "expectedLf": 101.24,
+   "actualLf": 101.24,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "rotate90",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "translate",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "reverse",
+   "expectedLf": 33.48,
+   "actualLf": 33.48,
+   "errFt": 0
+  },
+  {
+   "caseName": "08-label-leader",
+   "transform": "scale2x",
+   "expectedLf": 66.96,
+   "actualLf": 66.96,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "rotate90",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "translate",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "reverse",
+   "expectedLf": 36.13,
+   "actualLf": 36.13,
+   "errFt": 0
+  },
+  {
+   "caseName": "09-crossing-run",
+   "transform": "scale2x",
+   "expectedLf": 72.26,
+   "actualLf": 72.26,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "rotate90",
+   "expectedLf": 13.42,
+   "actualLf": 13.42,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "translate",
+   "expectedLf": 13.42,
+   "actualLf": 13.42,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "reverse",
+   "expectedLf": 13.42,
+   "actualLf": 13.42,
+   "errFt": 0
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "transform": "scale2x",
+   "expectedLf": 26.84,
+   "actualLf": 26.83,
+   "errFt": 0.010000000000001563
+  },
+  {
+   "caseName": "11-y-branch",
+   "transform": "rotate90",
+   "expectedLf": 16,
+   "actualLf": 16,
+   "errFt": 0
+  },
+  {
+   "caseName": "11-y-branch",
+   "transform": "translate",
+   "expectedLf": 16,
+   "actualLf": 16,
+   "errFt": 0
+  },
+  {
+   "caseName": "11-y-branch",
+   "transform": "reverse",
+   "expectedLf": 16,
+   "actualLf": 16,
+   "errFt": 0
+  },
+  {
+   "caseName": "11-y-branch",
+   "transform": "scale2x",
+   "expectedLf": 32,
+   "actualLf": 32,
+   "errFt": 0
+  }
+ ],
+ "extractionSanity": [
+  {
+   "caseName": "01-pen-thin-solid",
+   "segs": 5
+  },
+  {
+   "caseName": "02-pen-thick-solid",
+   "segs": 5
+  },
+  {
+   "caseName": "03-dashed-existing",
+   "segs": 3
+  },
+  {
+   "caseName": "04-dashdot-demo",
+   "segs": 4
+  },
+  {
+   "caseName": "05-double-line-duct",
+   "segs": 8
+  },
+  {
+   "caseName": "06-label-inside",
+   "segs": 3
+  },
+  {
+   "caseName": "07-label-beside",
+   "segs": 5
+  },
+  {
+   "caseName": "08-label-leader",
+   "segs": 4
+  },
+  {
+   "caseName": "09-crossing-run",
+   "segs": 5
+  },
+  {
+   "caseName": "10-arc-as-polyline",
+   "segs": 9
+  },
+  {
+   "caseName": "11-y-branch",
+   "segs": 3
+  }
+ ],
+ "aggregate": {
+  "cases": 11,
+  "parityFailures": 0,
+  "maxTotalsErrFt": 0.020000000000003126,
+  "maxTotalsErrPct": 0.0005443658138269767,
+  "maxDeterminismErrFt": 0.010000000000001563
+ },
+ "thresholds": {
+  "maxTotalsErrFt": 0.03,
+  "maxDeterminismErrFt": 0.03,
+  "maxParityFailures": 0
+ },
+ "trace": {
+  "frechetTolPx": 2,
+  "overlapMin": 0.8,
+  "thresholds": {
+   "minRecall": 0.1,
+   "minPrecision": 0.5,
+   "maxLenErrPct": 1,
+   "maxOverTracePct": 1,
+   "minRefusalRate": 1
+  },
+  "synthetic": {
+   "rows": [
+    {
+     "caseName": "01-pen-thin-solid.pdf",
+     "status": "reached",
+     "goldenLf": 50.54,
+     "tracedLf": 50.54,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:12x6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "01-pen-thin-solid.pdf",
+      "frechetPx": 0.1969771560358468,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 50.53,
+      "goldenLenFt": 50.52
+     },
+     "buildMs": 7.816007000000354
+    },
+    {
+     "caseName": "02-pen-thick-solid.pdf",
+     "status": "reached",
+     "goldenLf": 61.5,
+     "tracedLf": 61.5,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:16x8",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "02-pen-thick-solid.pdf",
+      "frechetPx": 0.24413111231482454,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 61.49,
+      "goldenLenFt": 61.5
+     },
+     "buildMs": 1.3589099999999235
+    },
+    {
+     "caseName": "03-dashed-existing.pdf",
+     "status": "reached",
+     "goldenLf": 36.74,
+     "tracedLf": 36.74,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:10",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "03-dashed-existing.pdf",
+      "frechetPx": 0.28425340807105537,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 36.73,
+      "goldenLenFt": 36.72
+     },
+     "buildMs": 1.2842759999998634
+    },
+    {
+     "caseName": "04-dashdot-demo.pdf",
+     "status": "reached",
+     "goldenLf": 46.11,
+     "tracedLf": 46.11,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "04-dashdot-demo.pdf",
+      "frechetPx": 0.2545584412270864,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 46.1,
+      "goldenLenFt": 46.1
+     },
+     "buildMs": 1.3087399999999434
+    },
+    {
+     "caseName": "05-double-line-duct.pdf",
+     "status": "reached",
+     "goldenLf": 43.59,
+     "tracedLf": 37.59,
+     "lenErrPct": 0.13764624913971094,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:24x12",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "05-double-line-duct.pdf",
+      "frechetPx": 67.83983785357952,
+      "lengthOverlapPct": 0,
+      "clippedLenFt": 37.59,
+      "goldenLenFt": 43.58
+     },
+     "buildMs": 2.4782960000002277
+    },
+    {
+     "caseName": "06-label-inside.pdf",
+     "status": "reached",
+     "goldenLf": 27.81,
+     "tracedLf": 27.81,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:14x8",
+     "tracedSizeKey": "rect:14x8",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "06-label-inside.pdf",
+      "frechetPx": 0.22360679774997896,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 27.81,
+      "goldenLenFt": 27.8
+     },
+     "buildMs": 7.65165399999978
+    },
+    {
+     "caseName": "07-label-beside.pdf",
+     "status": "reached",
+     "goldenLf": 50.61,
+     "tracedLf": 50.61,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:8",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "07-label-beside.pdf",
+      "frechetPx": 0.2126029162547456,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 50.61,
+      "goldenLenFt": 50.62
+     },
+     "buildMs": 2.885131999999885
+    },
+    {
+     "caseName": "08-label-leader.pdf",
+     "status": "reached",
+     "goldenLf": 33.48,
+     "tracedLf": 33.48,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:1.5",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "08-label-leader.pdf",
+      "frechetPx": 0.1523154621172889,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 33.47,
+      "goldenLenFt": 33.48
+     },
+     "buildMs": 3.0680799999995543
+    },
+    {
+     "caseName": "09-crossing-run.pdf",
+     "status": "reached",
+     "goldenLf": 36.13,
+     "tracedLf": 36.13,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:10x6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "09-crossing-run.pdf",
+      "frechetPx": 0.1897366596101459,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 36.13,
+      "goldenLenFt": 36.13
+     },
+     "buildMs": 1.7872940000002018
+    },
+    {
+     "caseName": "10-arc-as-polyline.pdf",
+     "status": "reached",
+     "goldenLf": 13.41,
+     "tracedLf": 5.18,
+     "lenErrPct": 0.6137211036539896,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "10-arc-as-polyline.pdf",
+      "frechetPx": 365.29109488187635,
+      "lengthOverlapPct": 0.43137254901960786,
+      "clippedLenFt": 5.18,
+      "goldenLenFt": 13.41
+     },
+     "buildMs": 1.7806879999998273
+    },
+    {
+     "caseName": "11-y-branch.pdf",
+     "status": "reached",
+     "goldenLf": 16,
+     "tracedLf": 8,
+     "lenErrPct": 0.5,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:10x6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "11-y-branch.pdf",
+      "frechetPx": 383.8761321051363,
+      "lengthOverlapPct": 0.5294117647058824,
+      "clippedLenFt": 8,
+      "goldenLenFt": 16
+     },
+     "buildMs": 0.6835940000000846
+    }
+   ],
+   "aggregate": {
+    "cases": 11,
+    "recall": 0.7272727272727273,
+    "precision": 1,
+    "maxLenErrPct": 0.6137211036539896,
+    "meanLenErrPct": 0.11376066843579097,
+    "maxOverTracePct": 0,
+    "sizeAccuracyPct": 0.06686381996537795,
+    "sizeWrongLabelPct": 0,
+    "sizeNoLabelPct": 0.9331361800346221,
+    "maxColdBuildMs": 7.816007000000354,
+    "maxWarmQueryMs": null
+   }
+  },
+  "real": {
+   "rows": [
+    {
+     "caseName": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#63",
+     "status": "reached",
+     "goldenLf": 14.83,
+     "tracedLf": 14.83,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": "pipe:3",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#63",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 14.82,
+      "goldenLenFt": 14.82
+     },
+     "buildMs": 945.8194719999992
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 31.69,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:16x8",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 28.79,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:10x6",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#6",
+     "status": "reached",
+     "goldenLf": 5.64,
+     "tracedLf": 5.64,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:14x3.5",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "bessemer-mechanical-bidset.pdf#6",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 5.64,
+      "goldenLenFt": 5.64
+     },
+     "queryMs": 16.01796800000011
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#3",
+     "status": "reached",
+     "goldenLf": 18.96,
+     "tracedLf": 35.02,
+     "lenErrPct": 0.8470464135021097,
+     "overTracePct": 0.8470464135021097,
+     "goldenSizeKey": "pipe:1",
+     "tracedSizeKey": "pipe:0.75",
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "bessemer-mechanical-bidset.pdf#3",
+      "frechetPx": 3.1675204329116737,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 18.88,
+      "goldenLenFt": 18.96
+     },
+     "buildMs": 205.2516829999986
+    },
+    {
+     "caseName": "bessemer-mechanical-bidset.pdf#3",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 6.79,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "douglas-county-courthouse-hvac-ddc.pdf#15",
+     "status": "reached",
+     "goldenLf": 10.33,
+     "tracedLf": 10.33,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": null,
+     "tracedSizeKey": null,
+     "sizeMatch": null,
+     "shape": {
+      "caseName": "douglas-county-courthouse-hvac-ddc.pdf#15",
+      "frechetPx": 4.547473508864641e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 10.33,
+      "goldenLenFt": 10.33
+     },
+     "buildMs": 320.4229110000015
+    },
+    {
+     "caseName": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#9",
+     "status": "reached",
+     "goldenLf": 76.44,
+     "tracedLf": 76.44,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2.5",
+     "tracedSizeKey": "pipe:2.5",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#9",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 76.44,
+      "goldenLenFt": 76.44
+     },
+     "buildMs": 294.042895999999
+    },
+    {
+     "caseName": "053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf#6",
+     "status": "reached",
+     "goldenLf": 6.36,
+     "tracedLf": 6.36,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:16",
+     "tracedSizeKey": "round:16",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf#6",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 6.36,
+      "goldenLenFt": 6.36
+     },
+     "buildMs": 1161.8794909999997
+    },
+    {
+     "caseName": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#33",
+     "status": "reached",
+     "goldenLf": 10.84,
+     "tracedLf": 10.84,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:1",
+     "tracedSizeKey": "pipe:1",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#33",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 10.84,
+      "goldenLenFt": 10.84
+     },
+     "buildMs": 301.7551130000029
+    },
+    {
+     "caseName": "federal-attachment4-mechanical.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 39.7,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "federal-attachment4-mechanical.pdf#6",
+     "status": "refused",
+     "reason": "No routed linework under the cursor — click on a drawn duct or pipe line, or switch to manual (M)",
+     "goldenLf": 40.71,
+     "tracedLf": null,
+     "lenErrPct": null,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": null
+    },
+    {
+     "caseName": "federal-attachment4-mechanical.pdf#6",
+     "status": "reached",
+     "goldenLf": 1.91,
+     "tracedLf": 1.91,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.75",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "federal-attachment4-mechanical.pdf#6",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 1.91,
+      "goldenLenFt": 1.91
+     },
+     "queryMs": 46.31191300000137
+    },
+    {
+     "caseName": "guaranteed-rate-field-hvac-ahu.pdf#5",
+     "status": "reached",
+     "goldenLf": 29.01,
+     "tracedLf": 29,
+     "lenErrPct": 0.0003447087211306985,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:46x8",
+     "tracedSizeKey": "rect:46x8",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "guaranteed-rate-field-hvac-ahu.pdf#5",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 29,
+      "goldenLenFt": 29
+     },
+     "buildMs": 438.9312669999963
+    },
+    {
+     "caseName": "h59-chiller-addition.pdf#10",
+     "status": "reached",
+     "goldenLf": 7.99,
+     "tracedLf": 7.99,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "h59-chiller-addition.pdf#10",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.99,
+      "goldenLenFt": 7.99
+     },
+     "buildMs": 261.21523799999704
+    },
+    {
+     "caseName": "h59-chiller-addition.pdf#10",
+     "status": "reached",
+     "goldenLf": 7.99,
+     "tracedLf": 7.99,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "h59-chiller-addition.pdf#10",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.99,
+      "goldenLenFt": 7.99
+     },
+     "queryMs": 0.6092790000038804
+    },
+    {
+     "caseName": "health-science-center-3809.pdf#33",
+     "status": "reached",
+     "goldenLf": 25.71,
+     "tracedLf": 25.71,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.75",
+     "tracedSizeKey": "pipe:0.75",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "health-science-center-3809.pdf#33",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 25.71,
+      "goldenLenFt": 25.71
+     },
+     "buildMs": 273.25429799999984
+    },
+    {
+     "caseName": "hines-finance-center-renovation.pdf#14",
+     "status": "reached",
+     "goldenLf": 2.23,
+     "tracedLf": 2.23,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:1",
+     "tracedSizeKey": "pipe:1",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "hines-finance-center-renovation.pdf#14",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 2.23,
+      "goldenLenFt": 2.23
+     },
+     "buildMs": 273.93564300000435
+    },
+    {
+     "caseName": "itd-d1-lab-mechanical.pdf#5",
+     "status": "reached",
+     "goldenLf": 7.22,
+     "tracedLf": 7.78,
+     "lenErrPct": 0.07756232686980617,
+     "overTracePct": 0.07756232686980617,
+     "goldenSizeKey": "pipe:1.25",
+     "tracedSizeKey": "round:1.25",
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "itd-d1-lab-mechanical.pdf#5",
+      "frechetPx": 0.6265875913745731,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.22,
+      "goldenLenFt": 7.22
+     },
+     "buildMs": 254.1035400000037
+    },
+    {
+     "caseName": "itd-d3-bruneau-hvac-upgrade-part02.pdf#2",
+     "status": "reached",
+     "goldenLf": 22.67,
+     "tracedLf": 22.67,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "itd-d3-bruneau-hvac-upgrade-part02.pdf#2",
+      "frechetPx": 4.687428401686771e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 22.67,
+      "goldenLenFt": 22.67
+     },
+     "buildMs": 141.915055999998
+    },
+    {
+     "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+     "status": "reached",
+     "goldenLf": 16.61,
+     "tracedLf": 16.61,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:8x14",
+     "tracedSizeKey": "rect:8x14",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 16.61,
+      "goldenLenFt": 16.61
+     },
+     "buildMs": 559.8114360000036
+    },
+    {
+     "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+     "status": "reached",
+     "goldenLf": 9.21,
+     "tracedLf": 9.21,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:20x16",
+     "tracedSizeKey": "rect:20x16",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 9.21,
+      "goldenLenFt": 9.21
+     },
+     "buildMs": 635.1702640000003
+    },
+    {
+     "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+     "status": "reached",
+     "goldenLf": 7.99,
+     "tracedLf": 7.99,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:16x16",
+     "tracedSizeKey": "rect:16x16",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.99,
+      "goldenLenFt": 7.99
+     },
+     "buildMs": 603.9129810000013
+    },
+    {
+     "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+     "status": "reached",
+     "goldenLf": 8.83,
+     "tracedLf": 8.83,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:12x12",
+     "tracedSizeKey": "rect:12x12",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 8.83,
+      "goldenLenFt": 8.83
+     },
+     "buildMs": 589.8284770000027
+    },
+    {
+     "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+     "status": "reached",
+     "goldenLf": 7.28,
+     "tracedLf": 7.28,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:14x14",
+     "tracedSizeKey": "rect:14x14",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.28,
+      "goldenLenFt": 7.28
+     },
+     "buildMs": 567.2508559999987
+    },
+    {
+     "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+     "status": "reached",
+     "goldenLf": 5.02,
+     "tracedLf": 5.02,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:12x12",
+     "tracedSizeKey": "rect:12x12",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 5.02,
+      "goldenLenFt": 5.02
+     },
+     "buildMs": 492.4133140000049
+    },
+    {
+     "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+     "status": "reached",
+     "goldenLf": 34.6,
+     "tracedLf": 34.6,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:12x14",
+     "tracedSizeKey": "rect:12x14",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 34.6,
+      "goldenLenFt": 34.6
+     },
+     "buildMs": 519.7557610000003
+    },
+    {
+     "caseName": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3",
+     "status": "reached",
+     "goldenLf": 12.75,
+     "tracedLf": 12.75,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": "pipe:3",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 12.75,
+      "goldenLenFt": 12.75
+     },
+     "buildMs": 238.4422229999982
+    },
+    {
+     "caseName": "jeffcity-natlguard-cst-addition-part04.pdf#17",
+     "status": "reached",
+     "goldenLf": 3.4,
+     "tracedLf": 3.4,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.75",
+     "tracedSizeKey": "pipe:0.75",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "jeffcity-natlguard-cst-addition-part04.pdf#17",
+      "frechetPx": 2.5421149729252077e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.4,
+      "goldenLenFt": 3.4
+     },
+     "buildMs": 159.710113000001
+    },
+    {
+     "caseName": "jonesboro-heat-pump-part01.pdf#3",
+     "status": "reached",
+     "goldenLf": 17.05,
+     "tracedLf": 17.05,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.75",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "jonesboro-heat-pump-part01.pdf#3",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 17.05,
+      "goldenLenFt": 17.05
+     },
+     "buildMs": 193.07793500000116
+    },
+    {
+     "caseName": "jonesboro-heat-pump-part01.pdf#4",
+     "status": "reached",
+     "goldenLf": 18.83,
+     "tracedLf": 18.83,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:1",
+     "tracedSizeKey": "pipe:1",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "jonesboro-heat-pump-part01.pdf#4",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 18.83,
+      "goldenLenFt": 18.83
+     },
+     "buildMs": 159.4673829999956
+    },
+    {
+     "caseName": "jps-hospital-central-plant-chiller.pdf#4",
+     "status": "reached",
+     "goldenLf": 7.66,
+     "tracedLf": 7.66,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2",
+     "tracedSizeKey": "pipe:2",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "jps-hospital-central-plant-chiller.pdf#4",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.66,
+      "goldenLenFt": 7.66
+     },
+     "buildMs": 215.75275200000033
+    },
+    {
+     "caseName": "klamath-cc-learning-center-mechanical.pdf#13",
+     "status": "reached",
+     "goldenLf": 38.68,
+     "tracedLf": 38.68,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.5",
+     "tracedSizeKey": "pipe:0.5",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "klamath-cc-learning-center-mechanical.pdf#13",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 38.68,
+      "goldenLenFt": 38.68
+     },
+     "buildMs": 309.23619399999734
+    },
+    {
+     "caseName": "klamath-cc-learning-center-mechanical.pdf#13",
+     "status": "reached",
+     "goldenLf": 15.49,
+     "tracedLf": 15.49,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:1.5",
+     "tracedSizeKey": "pipe:1.5",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "klamath-cc-learning-center-mechanical.pdf#13",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 15.49,
+      "goldenLenFt": 15.49
+     },
+     "queryMs": 1.4685169999938807
+    },
+    {
+     "caseName": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#7",
+     "status": "reached",
+     "goldenLf": 18.52,
+     "tracedLf": 18.52,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:18x18",
+     "tracedSizeKey": "rect:18x18",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#7",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 18.52,
+      "goldenLenFt": 18.52
+     },
+     "buildMs": 70.58442600000126
+    },
+    {
+     "caseName": "ma-town-offices-hvac-upgrades.pdf#12",
+     "status": "reached",
+     "goldenLf": 29.35,
+     "tracedLf": 29.35,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:0.75",
+     "tracedSizeKey": "round:0.75",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "ma-town-offices-hvac-upgrades.pdf#12",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 29.35,
+      "goldenLenFt": 29.35
+     },
+     "buildMs": 74.9589829999968
+    },
+    {
+     "caseName": "navfac-cherry-point-atc-mechanical.pdf#7",
+     "status": "reached",
+     "goldenLf": 15.17,
+     "tracedLf": 15.17,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:8x6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "navfac-cherry-point-atc-mechanical.pdf#7",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 15.17,
+      "goldenLenFt": 15.17
+     },
+     "buildMs": 196.60953600000357
+    },
+    {
+     "caseName": "navfac-cherry-point-atc-mechanical.pdf#14",
+     "status": "reached",
+     "goldenLf": 6.37,
+     "tracedLf": 6.37,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "navfac-cherry-point-atc-mechanical.pdf#14",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 6.37,
+      "goldenLenFt": 6.37
+     },
+     "buildMs": 361.0604699999967
+    },
+    {
+     "caseName": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4",
+     "status": "reached",
+     "goldenLf": 16.93,
+     "tracedLf": 16.93,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2.5",
+     "tracedSizeKey": "pipe:2.5",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 16.93,
+      "goldenLenFt": 16.93
+     },
+     "buildMs": 95.31237800000235
+    },
+    {
+     "caseName": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#10",
+     "status": "reached",
+     "goldenLf": 10.77,
+     "tracedLf": 10.77,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:12",
+     "tracedSizeKey": "round:12",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#10",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 10.77,
+      "goldenLenFt": 10.77
+     },
+     "buildMs": 231.6393509999907
+    },
+    {
+     "caseName": "12_MT_MSU_ReidHall_Renovation.pdf#32",
+     "status": "reached",
+     "goldenLf": 8.57,
+     "tracedLf": 8.57,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:16x12",
+     "tracedSizeKey": "rect:16x12",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "12_MT_MSU_ReidHall_Renovation.pdf#32",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 8.57,
+      "goldenLenFt": 8.57
+     },
+     "buildMs": 433.41566300000704
+    },
+    {
+     "caseName": "salinity-lab-chiller-replacement.pdf#11",
+     "status": "reached",
+     "goldenLf": 2,
+     "tracedLf": 2,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:6",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "salinity-lab-chiller-replacement.pdf#11",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 2,
+      "goldenLenFt": 2
+     },
+     "buildMs": 123.40788600000087
+    },
+    {
+     "caseName": "sdsu-eng-sciences-part03.pdf#28",
+     "status": "reached",
+     "goldenLf": 10.45,
+     "tracedLf": 10.45,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:36x20",
+     "tracedSizeKey": "rect:36x20",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "sdsu-eng-sciences-part03.pdf#28",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 10.45,
+      "goldenLenFt": 10.45
+     },
+     "buildMs": 182.81691599999613
+    },
+    {
+     "caseName": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf#16",
+     "status": "reached",
+     "goldenLf": 4.68,
+     "tracedLf": 4.68,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:14",
+     "tracedSizeKey": "round:14",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf#16",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 4.68,
+      "goldenLenFt": 4.68
+     },
+     "buildMs": 219.94483700000274
+    },
+    {
+     "caseName": "30_WA_SpokaneTransit_CoolingTower.pdf#6",
+     "status": "reached",
+     "goldenLf": 1.67,
+     "tracedLf": 1.67,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:6",
+     "tracedSizeKey": "pipe:6",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "30_WA_SpokaneTransit_CoolingTower.pdf#6",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 1.67,
+      "goldenLenFt": 1.67
+     },
+     "buildMs": 177.6541639999923
+    },
+    {
+     "caseName": "suwannee-hs-courtyard.pdf#12",
+     "status": "reached",
+     "goldenLf": 2.73,
+     "tracedLf": 2.73,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:2.5",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "suwannee-hs-courtyard.pdf#12",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 2.73,
+      "goldenLenFt": 2.73
+     },
+     "buildMs": 232.40148000000045
+    },
+    {
+     "caseName": "suwannee-hs-courtyard.pdf#12",
+     "status": "reached",
+     "goldenLf": 6.09,
+     "tracedLf": 6.09,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:2.5",
+     "tracedSizeKey": "round:2.5",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "suwannee-hs-courtyard.pdf#12",
+      "frechetPx": 4.547473508864641e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 6.09,
+      "goldenLenFt": 6.09
+     },
+     "buildMs": 153.63254599999345
+    },
+    {
+     "caseName": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+     "status": "reached",
+     "goldenLf": 4.34,
+     "tracedLf": 4.34,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:12x10",
+     "tracedSizeKey": "rect:12x10",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+      "frechetPx": 4.547473508864641e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 4.34,
+      "goldenLenFt": 4.34
+     },
+     "buildMs": 958.3156699999963
+    },
+    {
+     "caseName": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+     "status": "reached",
+     "goldenLf": 3.14,
+     "tracedLf": 3.14,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:16x11",
+     "tracedSizeKey": "rect:16x11",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.14,
+      "goldenLenFt": 3.14
+     },
+     "buildMs": 988.2839530000056
+    },
+    {
+     "caseName": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+     "status": "reached",
+     "goldenLf": 2.17,
+     "tracedLf": 2.17,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:12x12",
+     "tracedSizeKey": "rect:12x12",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 2.17,
+      "goldenLenFt": 2.17
+     },
+     "buildMs": 892.25712200001
+    },
+    {
+     "caseName": "t2523-replace-boilers-phase2.pdf#11",
+     "status": "reached",
+     "goldenLf": 75.85,
+     "tracedLf": 75.85,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:6",
+     "tracedSizeKey": "pipe:6",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "t2523-replace-boilers-phase2.pdf#11",
+      "frechetPx": 2.5421149729252077e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 75.85,
+      "goldenLenFt": 75.85
+     },
+     "buildMs": 268.3781639999943
+    },
+    {
+     "caseName": "t2523-replace-boilers-phase2.pdf#11",
+     "status": "reached",
+     "goldenLf": 73.97,
+     "tracedLf": 73.97,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:6",
+     "tracedSizeKey": "pipe:6",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "t2523-replace-boilers-phase2.pdf#11",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 73.97,
+      "goldenLenFt": 73.97
+     },
+     "queryMs": 1.5717960000038147
+    },
+    {
+     "caseName": "t2523-replace-boilers-phase2.pdf#12",
+     "status": "reached",
+     "goldenLf": 27.16,
+     "tracedLf": 27.16,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:6",
+     "tracedSizeKey": "pipe:6",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "t2523-replace-boilers-phase2.pdf#12",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 27.16,
+      "goldenLenFt": 27.16
+     },
+     "buildMs": 331.6829299999954
+    },
+    {
+     "caseName": "t2523-replace-boilers-phase2.pdf#12",
+     "status": "reached",
+     "goldenLf": 27.91,
+     "tracedLf": 27.91,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:6",
+     "tracedSizeKey": "pipe:6",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "t2523-replace-boilers-phase2.pdf#12",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 27.91,
+      "goldenLenFt": 27.91
+     },
+     "queryMs": 3.4967710000055376
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 11.98,
+     "tracedLf": 11.98,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 11.98,
+      "goldenLenFt": 11.98
+     },
+     "buildMs": 323.79111099999864
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 11.98,
+     "tracedLf": 11.98,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 11.98,
+      "goldenLenFt": 11.98
+     },
+     "queryMs": 3.554432999997516
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 11.98,
+     "tracedLf": 11.98,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 11.98,
+      "goldenLenFt": 11.98
+     },
+     "queryMs": 3.440506999992067
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 9.33,
+     "tracedLf": 9.33,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 9.33,
+      "goldenLenFt": 9.33
+     },
+     "buildMs": 330.2745589999977
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 17.55,
+     "tracedLf": 17.56,
+     "lenErrPct": 0.0005698005698004565,
+     "overTracePct": 0.0005698005698004565,
+     "goldenSizeKey": null,
+     "tracedSizeKey": null,
+     "sizeMatch": null,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 4.547473508864641e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 17.56,
+      "goldenLenFt": 17.56
+     },
+     "buildMs": 331.4599199999939
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 16.49,
+     "tracedLf": 16.49,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.75",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 16.49,
+      "goldenLenFt": 16.49
+     },
+     "buildMs": 340.87697100000514
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 3.1,
+     "tracedLf": 3.1,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:4",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.1,
+      "goldenLenFt": 3.1
+     },
+     "buildMs": 346.82874099999026
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 3.1,
+     "tracedLf": 3.1,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.1,
+      "goldenLenFt": 3.1
+     },
+     "queryMs": 3.441307000000961
+    },
+    {
+     "caseName": "va-durham-chillers-ahu.pdf#16",
+     "status": "reached",
+     "goldenLf": 3.1,
+     "tracedLf": 3.1,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:3",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "va-durham-chillers-ahu.pdf#16",
+      "frechetPx": 2.2737367544323206e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.1,
+      "goldenLenFt": 3.1
+     },
+     "queryMs": 4.558875000002445
+    },
+    {
+     "caseName": "va-project637-ehrm-infrastructure.pdf#66",
+     "status": "reached",
+     "goldenLf": 13.57,
+     "tracedLf": 13.57,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.75",
+     "tracedSizeKey": "pipe:0.75",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "va-project637-ehrm-infrastructure.pdf#66",
+      "frechetPx": 0.05999999999994543,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 13.58,
+      "goldenLenFt": 13.58
+     },
+     "buildMs": 255.58576899999753
+    },
+    {
+     "caseName": "vermillion-county-jail-mechanical.pdf#16",
+     "status": "reached",
+     "goldenLf": 7.45,
+     "tracedLf": 7.45,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:1",
+     "tracedSizeKey": "pipe:1",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "vermillion-county-jail-mechanical.pdf#16",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 7.46,
+      "goldenLenFt": 7.46
+     },
+     "buildMs": 320.50136200001
+    },
+    {
+     "caseName": "weld-county-mechanical-permit.pdf#7",
+     "status": "reached",
+     "goldenLf": 21.82,
+     "tracedLf": 21.82,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:16",
+     "tracedSizeKey": "round:16",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "weld-county-mechanical-permit.pdf#7",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 21.82,
+      "goldenLenFt": 21.82
+     },
+     "buildMs": 255.65303700001095
+    },
+    {
+     "caseName": "074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#26",
+     "status": "reached",
+     "goldenLf": 3.39,
+     "tracedLf": 3.39,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:22x12",
+     "tracedSizeKey": "rect:22x12",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#26",
+      "frechetPx": 4.547473508864641e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.39,
+      "goldenLenFt": 3.39
+     },
+     "buildMs": 715.5282979999902
+    }
+   ],
+   "aggregate": {
+    "cases": 67,
+    "recall": 0.9104477611940298,
+    "precision": 0.9825100175636023,
+    "maxLenErrPct": 0.8470464135021097,
+    "meanLenErrPct": 0.01492779434940076,
+    "maxOverTracePct": 0.8470464135021097,
+    "sizeAccuracyPct": 0.793938190283892,
+    "sizeWrongLabelPct": 0.028885725949709257,
+    "sizeNoLabelPct": 0.1771760837663985,
+    "maxColdBuildMs": 1161.8794909999997,
+    "maxWarmQueryMs": 46.31191300000137
+   }
+  },
+  "heldOut": {
+   "rows": [
+    {
+     "caseName": "baker-county-eoc-bidset.pdf#38",
+     "status": "reached",
+     "goldenLf": 20.14,
+     "tracedLf": 20.15,
+     "lenErrPct": 0.0004965243296920561,
+     "overTracePct": 0.0004965243296920561,
+     "goldenSizeKey": "rect:24x14",
+     "tracedSizeKey": null,
+     "sizeMatch": false,
+     "shape": {
+      "caseName": "baker-county-eoc-bidset.pdf#38",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 20.14,
+      "goldenLenFt": 20.14
+     },
+     "buildMs": 328.9149440000001
+    },
+    {
+     "caseName": "bldg5406-hvac-demo-mechanical.pdf#14",
+     "status": "reached",
+     "goldenLf": 4.16,
+     "tracedLf": 4.16,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:0.75",
+     "tracedSizeKey": "pipe:0.75",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "bldg5406-hvac-demo-mechanical.pdf#14",
+      "frechetPx": 1.1368683772161603e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 4.16,
+      "goldenLenFt": 4.16
+     },
+     "buildMs": 147.21302600000126
+    },
+    {
+     "caseName": "federal-attachment4-mechanical.pdf#7",
+     "status": "reached",
+     "goldenLf": 3.57,
+     "tracedLf": 3.57,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "pipe:2.5",
+     "tracedSizeKey": "pipe:2.5",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "federal-attachment4-mechanical.pdf#7",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.57,
+      "goldenLenFt": 3.57
+     },
+     "buildMs": 290.63542400000006
+    },
+    {
+     "caseName": "itd-d1-lab-mechanical.pdf#4",
+     "status": "reached",
+     "goldenLf": 3.02,
+     "tracedLf": 3.02,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:8",
+     "tracedSizeKey": "round:8",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "itd-d1-lab-mechanical.pdf#4",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 3.02,
+      "goldenLenFt": 3.02
+     },
+     "buildMs": 377.4872830000022
+    },
+    {
+     "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
+     "status": "reached",
+     "goldenLf": 12.39,
+     "tracedLf": 12.39,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "rect:8x8",
+     "tracedSizeKey": "rect:8x8",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "navfac-cherry-point-atc-mechanical.pdf#6",
+      "frechetPx": 0,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 12.39,
+      "goldenLenFt": 12.39
+     },
+     "buildMs": 629.6662890000007
+    },
+    {
+     "caseName": "navfac-cherry-point-atc-mechanical.pdf#18",
+     "status": "reached",
+     "goldenLf": 12.53,
+     "tracedLf": 12.53,
+     "lenErrPct": 0,
+     "overTracePct": 0,
+     "goldenSizeKey": "round:2",
+     "tracedSizeKey": "round:2",
+     "sizeMatch": true,
+     "shape": {
+      "caseName": "navfac-cherry-point-atc-mechanical.pdf#18",
+      "frechetPx": 4.547473508864641e-13,
+      "lengthOverlapPct": 1,
+      "clippedLenFt": 12.53,
+      "goldenLenFt": 12.53
+     },
+     "buildMs": 908.7389819999953
+    }
+   ],
+   "aggregate": {
+    "cases": 6,
+    "recall": 1,
+    "precision": 0.9998208527409531,
+    "maxLenErrPct": 0.0004965243296920561,
+    "meanLenErrPct": 0.00008275405494867602,
+    "maxOverTracePct": 0.0004965243296920561,
+    "sizeAccuracyPct": 0.6391327719046765,
+    "sizeWrongLabelPct": 0,
+    "sizeNoLabelPct": 0.3608672280953234,
+    "maxColdBuildMs": 908.7389819999953,
+    "maxWarmQueryMs": null
+   }
+  },
+  "guidedMultiHop": {
+   "rows": [
+    {
+     "caseName": "01-pen-thin-solid.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1008.1,
+       832.2
+      ],
+      [
+       1008.1,
+       498
+      ],
+      [
+       657.1,
+       498
+      ],
+      [
+       657.1,
+       1121.6
+      ],
+      [
+       1115.7,
+       1121.6
+      ],
+      [
+       1115.7,
+       463.4
+      ]
+     ]
+    },
+    {
+     "caseName": "02-pen-thick-solid.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1060.3,
+       1076.7
+      ],
+      [
+       1060.3,
+       464.4
+      ],
+      [
+       1748.6,
+       464.4
+      ],
+      [
+       1748.6,
+       1050.9
+      ],
+      [
+       1293.1,
+       1050.9
+      ],
+      [
+       1293.1,
+       441.6
+      ]
+     ]
+    },
+    {
+     "caseName": "03-dashed-existing.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1088.4,
+       1084.6
+      ],
+      [
+       1088.4,
+       608.3
+      ],
+      [
+       459.3,
+       608.3
+      ],
+      [
+       459.3,
+       1266.2
+      ]
+     ]
+    },
+    {
+     "caseName": "04-dashdot-demo.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1197.5,
+       973.7
+      ],
+      [
+       761.9,
+       973.7
+      ],
+      [
+       761.9,
+       483.5
+      ],
+      [
+       1441.9,
+       483.5
+      ],
+      [
+       1441.9,
+       1091
+      ]
+     ]
+    },
+    {
+     "caseName": "05-double-line-duct.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1059.8,
+       792.8
+      ],
+      [
+       1059.8,
+       1120.7
+      ],
+      [
+       1511.2,
+       1120.7
+      ],
+      [
+       1511.2,
+       664
+      ],
+      [
+       942.7,
+       664
+      ]
+     ]
+    },
+    {
+     "caseName": "06-label-inside.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1031.1,
+       1011.3
+      ],
+      [
+       1031.1,
+       1335.4
+      ],
+      [
+       1473.2,
+       1335.4
+      ],
+      [
+       1473.2,
+       766.8
+      ]
+     ]
+    },
+    {
+     "caseName": "07-label-beside.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1346.1,
+       740.8
+      ],
+      [
+       876.3,
+       740.8
+      ],
+      [
+       876.3,
+       1101.8
+      ],
+      [
+       542.1,
+       1101.8
+      ],
+      [
+       542.1,
+       508.8
+      ],
+      [
+       1213.5,
+       508.8
+      ]
+     ]
+    },
+    {
+     "caseName": "08-label-leader.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1319.4,
+       823.1
+      ],
+      [
+       607.5,
+       823.1
+      ],
+      [
+       607.5,
+       1400
+      ],
+      [
+       925.8,
+       1400
+      ]
+     ]
+    },
+    {
+     "caseName": "09-crossing-run.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1213.6,
+       934.1
+      ],
+      [
+       768.1,
+       934.1
+      ],
+      [
+       768.1,
+       1310.8
+      ],
+      [
+       1302.3,
+       1310.8
+      ],
+      [
+       1302.3,
+       933
+      ]
+     ]
+    },
+    {
+     "caseName": "10-arc-as-polyline.pdf",
+     "hops": 0,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       1602.2,
+       636.6
+      ],
+      [
+       1607.8,
+       580.4
+      ],
+      [
+       1607.8,
+       388.4
+      ]
+     ]
+    },
+    {
+     "caseName": "11-y-branch.pdf",
+     "hops": 1,
+     "status": "reached_golden_end",
+     "points": [
+      [
+       803.8,
+       916
+      ],
+      [
+       1187.8,
+       916
+      ],
+      [
+       1379.8,
+       583.5
+      ]
+     ]
+    }
+   ],
+   "aggregate": {
+    "total": 11,
+    "reachedGoldenEnd": 11,
+    "rate": 1,
+    "misses": [],
+    "maxHops": 1
+   }
+  }
+ },
+ "refusal": {
+  "rows": [
+   {
+    "caseName": "bessemer-mechanical-bidset.pdf#3 — Bessemer P101's own title block text (project name / seal area), top-right of the sheet -- text only, no drawn linework anywhere near it.",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "itd-d1-lab-mechanical.pdf#5 — ITD M1.2's 'Residency Lab' room-label text run.",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "federal-attachment4-mechanical.pdf#6 — Federal M3.1's own 'SCALE 1/8\" = 1'-0\"' callout text in the title block.",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "bessemer-mechanical-bidset.pdf#3 — Bessemer P101's own top-left page margin -- blank whitespace, no ink of any kind.",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "weld-county-mechanical-permit.pdf#7 — Weld County M1.0's own circled '2' reference/keynote balloon symbol near the top of the sheet -- a real, drawn stroke of an EXCLUDED family (an annotation symbol, not duct/pipe routing), extracted directly from the page's own vector geometry and confirmed present at this exact coordinate before being used as a seed. (Which numbered keynote entry this specific balloon corresponds to was not independently cross-checked -- the seed's own validity as a real, non-routable stroke does not depend on that identification.)",
+    "correct": true,
+    "gotStatus": "refused"
+   },
+   {
+    "caseName": "weld-county-mechanical-permit.pdf#6 — Weld County M0.5's own DUCT INSULATION SCHEDULE table -- a real horizontal gridline between two schedule rows (the 'WRAP 2\" 0.75' rows), extracted directly from the page's own vector geometry and confirmed present at this exact coordinate -- visually verified via a marked render crop to sit on the rule itself, not on any of the table's own text -- before being used as a seed. This sheet has no detected drawing scale (`scale_set: false`); the bench's own refusal loop no longer requires one to run this case (see this file's own `scope` field).",
+    "correct": true,
+    "gotStatus": "refused"
+   }
+  ],
+  "aggregate": {
+   "correct": 6,
+   "total": 6,
+   "rate": 1,
+   "misses": []
+  }
+ }
+}

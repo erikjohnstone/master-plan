@@ -1,0 +1,52 @@
+{
+ "name": "01-pen-thin-solid",
+ "hardCase": "pen-weight (thin)",
+ "pdf": "../synthetic/01-pen-thin-solid.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    17.67,
+    16.83
+   ],
+   [
+    17.67,
+    23.79
+   ],
+   [
+    10.36,
+    23.79
+   ],
+   [
+    10.36,
+    10.8
+   ],
+   [
+    19.91,
+    10.8
+   ],
+   [
+    19.91,
+    24.51
+   ]
+  ],
+  "system": "SA",
+  "size": {
+   "kind": "rect",
+   "w_in": 12,
+   "h_in": 6
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   6.96,
+   7.31,
+   12.99,
+   9.56,
+   13.71
+  ],
+  "total_lf": 50.54
+ }
+}

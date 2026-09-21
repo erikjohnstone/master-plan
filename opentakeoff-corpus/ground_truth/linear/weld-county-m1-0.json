@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/weld-county-mechanical-permit.pdf",
+  "source_pdf_sha256": "149fd19cd8454f4b8e67f822075670d317a58b86faeed4f03634b64bb00df2db",
+  "sheet_id": "weld-county-mechanical-permit.pdf#7",
+  "sheet_number": "M1.0",
+  "sheet_title": "MAIN FLOOR PLAN - MECHANICAL",
+  "page": 7,
+  "tier": "development",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "weld-county-mechanical-permit--county-mechanical-permit-p7--full.png",
+    "hash": "834921bf1940eaedd600eca0a7f2fb1d4b33d82f854ceebcc109a795e6151e18"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 held-out-tier authoring pass -- see review_basis for a correction made before this file was committed)",
+  "date": "2026-09-17",
+  "review_basis": "CORRECTION made before commit: this sheet was originally researched as a HELD-OUT golden candidate, but opentakeoff-corpus/goals/LINEAR_TAKEOFF.md's own explicit HELD-OUT TIER section pins weld-county p7 to the DEVELOPMENT tier by name ('weld-county p7' in its development list) -- the plan's own pre-declared assignment is authoritative over a candidate search that didn't know to check it first. Retagged 'development' before commit; nothing else about the run below changes, since none of it was ever used to tune the engine either way. weld-county-mechanical-permit.pdf was never used to author any prior ground_truth/linear/*.json, nor to diagnose Findings 1-5 or tune wall-vouch/dash-gap-bridging -- confirmed by grep across ground_truth/ before this file existed; it is simply a development-tier sheet not yet drawn on, same as itd-d1-lab-mechanical.pdf#3 (also plan-listed, also still unauthored). Candidate selection was delegated to a research pass (surveyed tarrant-county-mechanical.pdf, navfac-cherry-point-atc-mechanical.pdf#24, baker-county-eoc-bidset.pdf, and confirmed federal-mech-legend-raster.pdf/itd-d1-lab-raster.pdf/tinker-afb-iwcs-controls.pdf have zero usable vector linework or aren't mechanical duct/pipe sheets at all); this sheet was picked because it carries real named PDF OCG layers (M-HVAC-DUCT, M-HVAC-EQPM, M-PIPE-FITTING, confirmed via session.sheetInfo()'s own layer list) that give trace_run a stroke-family:layer-name read, unlike most of the development-tier sheets. Every claim below was independently re-verified before being trusted, not taken on the research pass's word: source_pdf_sha256 recomputed via sha256sum and matched; sheet_number/sheet_title/page/detected-scale/width_px/height_px all re-read via a fresh session.sheetInfo() call and matched exactly; the '14\"Ø'/'16\"Ø'/'18\"Ø' size-label text and their positions matched sheet.text to the pixel; trace_run, re-run independently from a fresh Session, reached (did not refuse) and reported the identical length_lf 21.82, size round:16, and both stops as 'ambiguous' (a real fork at each end, not a dead_end) -- matching factor 'stroke-family:layer-name' confirms the OCG-layer read, not a wall-vouch fallback. A marked render crop (session.viewSheet with ring marks at both endpoints, visually inspected) confirms both ends sit on genuine drawn CAD geometry: the top ring sits exactly at a visible width-transition/reducer notch where the line steps from the '14\"Ø' duct above into the '16\"Ø' duct below; the bottom ring sits exactly where this vertical run meets the horizontal '18\"Ø' duct main, immediately beside a further '8\"Ø' branch peeling off the main with its own leader -- a real tee, not a narrative stop. This is the same 'ambiguous, not dead_end' pattern the plan's own §6.3 'offer the candidate fan' design anticipates, and the same reached-cleanly category as itd-p5-hc3-branch (the one existing confirmed development-tier recall hit), NOT bessemer-p101-cw-main's 'branchy trunk, manual-mode only' caveat -- both real forks here bound a SHORT span (21.82 LF) that trace_run's own single call already stops at correctly, rather than running away into a longer trunk. System code: no explicit 'SA'/'RA' tag sits directly on this run, so it is not asserted with full confidence -- it is inferred as 'SA' (supply air) from three independent, disclosed signals: (1) the engine's own generic read is 'ductwork', consistent with an air-side (not hydronic) system; (2) this sheet's own numbered keynote list (re-read directly, not assumed) has keynote 3 reading '16\" x 14\" SA DUCT UP TO RTU-3. TRANSITION DUCT AS REQUIRED FOR UNIT CONNECTION.' -- the identical pair of diameters (16\" and 14\") present at this run's own top transition; (3) keynote 9, whose marker digit sits closest to this run (~6 ft away, vs. keynote 3's marker at 34-66 ft), reads 'SLOPE 14\"Ø DUCT UP BETWEEN STRUCTURE TO ROUTE ABOVE 28\"x20\" SA DUCT' -- placing this run's own continuation in explicit SA context, though not labeling it SA directly. The keynote-3 marker circle itself could not be pinned to this exact run (it sits too far away on a busy sheet with several similar ducts) -- this is disclosed as an evidence-based inference, not a directly-read label, following this corpus's own itd-d1-lab-m1-2.json precedent of recording an unresolved system distinction honestly rather than guessing silently.",
+  "scope": "This is a new DEVELOPMENT-tier golden on a sheet the plan already names for that tier (weld-county p7) but that no prior pass had actually drawn a golden from -- may be traced against and tuned against like any other development sheet (it just hasn't been yet). One run only, WP3.8's own 'representative run, not exhaustive trace' precedent applies here too. This run is a 16\" round supply-air duct riser on sheet M1.0 (a rack-storage warehouse floor plan), from the real reducer where it necks down from an unrelated 14\"Ø continuation, to the real tee where it joins the horizontal 18\"Ø duct main. Explicitly OUT OF SCOPE: the 14\"Ø duct continuing beyond the top reducer (per keynote 9, it slopes up between structure toward a different routing concern); the 18\"Ø main and its own further branches (including the '8\"Ø' branch visible just past this run's bottom end); every other duct run on this sheet (dozens of branches feeding 'A: 12x8 @270 CFM' diffusers throughout the rack-storage space) and on the rest of this PDF's plan sheets (pages 1, 4, 5, 8 also carry real vector duct/pipe linework, per the research pass's own survey, and remain untouched); resolving this run's own supply-air identity beyond the disclosed inference in review_basis (the permit set's own M0.1/M0.2 schedule sheets carry almost no extractable text to check against). This sheet's own double-line duct symbol has two parallel traceable edges 24px (≈ 16 inches, i.e. the duct's own drawn width) apart; this golden traces the EAST edge (x=1767.7 px) because trace_run auto-binds a clean 'round:16' size there, while the west edge (x=1743.7 px) traces the identical span but with a missing size bind -- the west edge is not recorded as a second run since it is the same physical duct, not a different one.",
+  "runs": [
+    {
+      "run_id": "weld-m1-0-duct-riser",
+      "description": "16\" round supply-air duct riser (east edge of the double-line symbol), from the real reducer fitting where it necks down from an unrelated 14\"Ø continuation, to the real tee where it joins the horizontal 18\"Ø duct main.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.34099151234567904, 0.5391203703703704],
+        [0.34099151234567904, 0.6527777777777778]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 16 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 21.82,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 21.82, "size": { "kind": "round", "d_in": 16 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:16": 21.82 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "round:16": 21.82
+  },
+  "total_lf_all_runs": 21.82
+}

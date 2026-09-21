@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/jonesboro-heat-pump-part01.pdf",
+  "source_pdf_sha256": "127a66b8bb59aba3945aa4d586f6cb069486a4312cb43446c397fb4fccf5a884",
+  "sheet_id": "jonesboro-heat-pump-part01.pdf#4",
+  "sheet_number": "M-102",
+  "page": 4,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Twenty-second golden, a second sheet from the same fresh Maine BGS heat-pump-upgrade project as `jonesboro-m101.json`. A grid sweep of this sheet's own second mechanical plan (M-102, 'Mechanical First Floor Plan') near several `1\" CD`/`3/4\" CD` text anchors found a real, clean horizontal condensate-drain main. Unlike this project's own M-101 golden (a manual size override, since M-101's own candidate carried no automatic bind), this run gets a genuine LIVE AUTOMATIC bind: `trace_run` itself reports `size:{kind:\"pipe\",nps_in:1}, systems:[\"CD\"]` directly, via `size-binding:beside` on a `pen-weight-prior` stroke family (`confidence:0.5`) -- the first real automatic size+system read on this project, and the first anywhere in this session's own recent run of goldens (Runs 37-45 all needed manual overrides due to missing PDF layer names on their own source files).\n\nBoth ends confirmed via marked render crop: the left end is a real `dead_end` at a drawn connection-point symbol near unit IU-14; the right end is a genuine `ambiguous` fork near a real curved wall/door element beyond room STOR-111A. This same sweep also independently reconfirmed a real, concrete instance of the hatching/dense-geometry pathology already disclosed in Run 45's own writeup: FOUR separate nearby seeds (x=1170-1230, y=1050-1080, all within ~60px of clean, valid candidates) returned wildly implausible ~3918-3919 LF traces capped at 4,000 points -- avoided entirely, not used, the seed for this golden chosen well clear of that zone. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical automatic bind and result.",
+  "scope": "A single real 1-inch condensate-drain (CD) pipe main (18.83 LF) on the same Maine BGS heat-pump-upgrade project's own first-floor mechanical plan, sheet M-102, from a real connection-point symbol near indoor unit IU-14 to a real fork near a curved wall/door element beyond room STOR-111A. Explicitly OUT OF SCOPE: the connection's own continuation at either end; a real, disclosed hatching-density pathology zone on this same sheet (four seeds near x=1170-1230,y=1050-1080 returned implausible ~3918 LF results capped at 4,000 points), not used; every other CD/L-S run visible on this same rich sheet; sheet M-101 already used, and every other sheet on this real multi-part plan set.",
+  "runs": [
+    {
+      "run_id": "jonesboro-m102-cd-1in",
+      "description": "1-inch condensate-drain (CD) pipe main, from a real connection-point symbol near indoor unit IU-14 to a real fork near a curved wall/door element beyond room STOR-111A.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.16819058641975307, 0.39103009259259264],
+        [0.2989390432098766, 0.39103009259259264]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 18.83,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 18.83, "size": { "kind": "pipe", "nps_in": 1 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1": 18.83 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:1": 18.83 },
+  "total_lf_all_runs": 18.83
+}

@@ -13,7 +13,9 @@ import { createDriveProvider } from "../src/lib/sync/provider.js";
 import { createSyncStore } from "../src/lib/sync/syncStore.js";
 import { createLocalStore } from "../src/lib/store.js";
 import { BASE, FOLDER_MIME, mockGraph } from "./fixtures/mockGraph.ts";
+import { installWebLocksPolyfill } from "./helpers/webLocksPolyfill.ts";
 
+installWebLocksPolyfill();
 beforeEach(() => {
   (globalThis as any).indexedDB = new IDBFactory();
 });

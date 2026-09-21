@@ -1,0 +1,93 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/va-durham-chillers-ahu.pdf",
+  "source_pdf_sha256": "8ca2b79d82a7b595c5ad3a7bcfcb64e829b96e20b963c5f507738b6fb3156274",
+  "sheet_id": "va-durham-chillers-ahu.pdf#16",
+  "sheet_number": "M-401",
+  "sheet_title": "MECHANICAL ENLARGED NEW WORK PLANS",
+  "page": 16,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Seventeenth golden, a SECOND instance of the same VA Durham project's own 'EX 4\" HPS, EX 2\" CD, & EX 3\" MPS STACKED' triple-stacked pipe convention that `va-durham-chillers-m401.json` (the immediately preceding golden) already established -- this time near a different pump bank (glycol pumps P-1/P-2/P-3) elsewhere on the same sheet M-401, a genuinely separate physical run, not a duplicate of the first. Found the same way: reading this sheet's own real text for another 'STACKED' callout, then a wide render crop before seeding.\n\n`trace_run` reaches this line cleanly (11.98 LF, `bridged_dash_gap(13)` -- a real dashed line, correctly bridged across 13 real dash gaps) with a real `dead_end` at the left end (the same drawn cross-sheet continuation break symbol convention, referring back to sheet MP111, confirmed via marked crop sitting exactly on the break mark) and a real `ambiguous` stop at the right end (where the line reaches a real elbow/valve assembly turning down toward the pump manifold, a genuine fork, not an engine misread). This file's own file-wide missing-PDF-layer-names cause (already established by this project's own first golden) applies here too -- manual size overrides are used for all three stacked systems, consistent with that same precedent. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result on all three runs.",
+  "scope": "A second, physically distinct real existing triple-stacked pipe group (4-inch high-pressure steam HPS, 2-inch condensate drain CD, and 3-inch medium-pressure steam MPS, 11.98 LF each) on the same VA Durham 'Replace Chillers for AHU 1 & 2' project's own mechanical enlarged new-work plan, sheet M-401, near the glycol pump bank (P-1/P-2/P-3) -- from a real cross-sheet continuation break symbol (referring to sheet MP111) to a real elbow/valve fork turning toward the pump manifold. Explicitly OUT OF SCOPE: the pipe's own continuation past the break symbol onto sheet MP111; the continuation past the elbow/valve fork into the pump manifold piping itself; the adjacent 'EX 4\" CHWS & CHWR STACKER' sibling line visible in the same crop (not attempted this pass); every other run on this real 28-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "va-durham-m401b-hps-4in",
+      "description": "4-inch existing high-pressure steam (HPS) pipe, from a real cross-sheet continuation break symbol (referring to sheet MP111) to a real elbow/valve fork toward the glycol pump manifold, drawn stacked with its CD and MPS pair.",
+      "system": "HPS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.46357473544973543, 0.09472222222222222],
+        [0.6061838624338624, 0.09472222222222222]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 4 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 11.98,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 11.98, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:4": 11.98 }
+        }
+      }
+    },
+    {
+      "run_id": "va-durham-m401b-cd-2in",
+      "description": "2-inch existing condensate drain (CD) pipe, drawn stacked with its HPS and MPS pair, same real break-symbol-to-fork span as the HPS run.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.46357473544973543, 0.09472222222222222],
+        [0.6061838624338624, 0.09472222222222222]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 2 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 11.98,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 11.98, "size": { "kind": "pipe", "nps_in": 2 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:2": 11.98 }
+        }
+      }
+    },
+    {
+      "run_id": "va-durham-m401b-mps-3in",
+      "description": "3-inch existing medium-pressure steam (MPS) pipe, drawn stacked with its HPS and CD pair, same real break-symbol-to-fork span as the HPS run.",
+      "system": "MPS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.46357473544973543, 0.09472222222222222],
+        [0.6061838624338624, 0.09472222222222222]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 3 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 11.98,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 11.98, "size": { "kind": "pipe", "nps_in": 3 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:3": 11.98 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:4": 11.98, "pipe:2": 11.98, "pipe:3": 11.98 },
+  "total_lf_all_runs": 35.94
+}

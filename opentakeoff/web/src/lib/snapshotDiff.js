@@ -50,6 +50,25 @@ function deltasOf(fields, a, b) {
 // the all-"—" changed-rows bug described above.
 const allZero = (d) => Object.entries(d).every(([k, v]) => Math.round(Math.abs(v) * (k === "ea" ? 1 : 10)) === 0);
 
+// #linear-takeoff (WP1.4): per-size LF deltas — a parallel field beside
+// `deltas` (conditionTotals' `sizes` is array-shaped, not a flat number).
+// Mirrors lib/revisions.js's own sizeDeltas exactly — two independent diff
+// modules, same shared conditionTotals input, same additive rule.
+function sizeDeltas(a, b) {
+  const aMap = new Map((a?.sizes || []).map((s) => [s.size_key, s]));
+  const bMap = new Map((b?.sizes || []).map((s) => [s.size_key, s]));
+  if (!aMap.size && !bMap.size) return [];
+  const out = [];
+  for (const key of new Set([...aMap.keys(), ...bMap.keys()])) {
+    const av = aMap.get(key), bv = bMap.get(key);
+    const aLf = av?.lf || 0, bLf = bv?.lf || 0;
+    const delta = round2(bLf - aLf);
+    const status = av && bv ? (Math.round(Math.abs(delta) * 10) === 0 ? "unchanged" : "changed") : bv ? "added" : "removed";
+    out.push({ size_key: key, size: (bv || av).size, lf: aLf, lf_b: bLf, delta, status });
+  }
+  return out;
+}
+
 // Pair A rows with B rows: id match first, then finish_tag fallback over the
 // leftovers (first-come, exact string, empty tags never pair). Returns entries
 // in B order (matched + added as they appear in B) with removed-A appended in
@@ -130,7 +149,9 @@ export function diffSnapshots(payloadA, payloadB) {
   const conditions = matched.map(({ key, a, b }) => {
     const deltas = deltasOf(COND_FIELDS, a, b);
     const status = !a ? "added" : !b ? "removed" : allZero(deltas) ? "unchanged" : "changed";
-    return { key, finish_tag: b ? b.finish_tag : a.finish_tag, status, a, b, deltas };
+    // sizes APPENDS after deltas (additive-only) — empty for every
+    // condition where neither side carries a sized run.
+    return { key, finish_tag: b ? b.finish_tag : a.finish_tag, status, a, b, deltas, sizes: sizeDeltas(a, b) };
   });
 
   // condition id → matched key, per side (sheet rows are keyed by condition id)

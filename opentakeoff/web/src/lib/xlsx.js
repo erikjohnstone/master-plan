@@ -14,9 +14,10 @@
 // the on-screen table: waste applied only to order quantities, never measured.
 
 import { GETTERS, colGetter, applyUnits, METRIC_CSV_LABELS } from "./reportColumns.js";
-import { grandTotals, materialsSummary, roundSheetRow, hasMultipliers, BY_SHEET_BASE_NOTE } from "./totals.js";
+import { grandTotals, materialsSummary, roundSheetRow, hasMultipliers, BY_SHEET_BASE_NOTE, linearRunRows, fittingsAndSupportsRows, fittingsAndSupportsSummary } from "./totals.js";
 import { round2 } from "./num.js";
 import { M_PER_FT, M2_PER_SF } from "./units";
+import { sizeLabel } from "./linear/run.ts";
 
 // ---------------------------------------------------------------------------
 // XML plumbing
@@ -229,7 +230,7 @@ export function reportWorkbook({ rows = [], bySheet = [], shapeRows = [], cols =
   if (hasMultipliers(bySheet)) bySheetRows.push([], [BY_SHEET_BASE_NOTE]);
 
   // Materials — per condition, then the combined buy list (mirrors the CSV)
-  const basisLabel = (b) => (b === "linear" ? "LF" : b === "count" ? "EA" : b === "seam_lf" ? "seam LF" : "SF");
+  const basisLabel = (b) => (b === "linear" ? "LF" : b === "count" ? "EA" : b === "seam_lf" ? "seam LF" : b === "vertex" ? "vertex" : b === "run" ? "run" : "SF");
   const materials = [["Finish", "Material", "Qty", "Unit", "Coverage", "Note"]];
   for (const r of rows) for (const m of (r.materials || [])) {
     materials.push([r.finish_tag, m.name, m.qty, m.unit, `1 ${m.unit || "unit"} / ${m.per} ${basisLabel(m.basis)}`, m.note || ""]);
@@ -276,11 +277,43 @@ export function reportWorkbook({ rows = [], bySheet = [], shapeRows = [], cols =
     }
   }
 
+  // Linear runs — per-(condition, size) LF (#linear-takeoff WP1.4). Reads
+  // straight off the `sizes` field conditionTotals already computed on each
+  // row (same convention every other tab here follows: one shared `rows`
+  // input, no second pass over shapes). Omitted entirely — not even a
+  // header-only sheet — when nothing on the project carries a sized run, so
+  // a pre-WP1.4 workbook's tab COUNT stays unchanged for every such project.
+  const linearRuns = linearRunRows(rows);
+  const linearRunsTab = linearRuns.length ? [
+    ["Finish", "Size", LU, `${LU} net`],
+    ...linearRuns.map((r) => [r.finish_tag, sizeLabel(r.size) || r.size_key, L(r.lf), L(r.lf_net)]),
+  ] : null;
+
+  // Fittings & supports — buy-list rows sourced from a routed condition's own
+  // vertex/run-basis materials (#linear-takeoff WP2.5/WP2.3): per-condition
+  // rows then the combined buy list, same two-part shape as the Materials
+  // tab's own "combined" section, plus Hours columns when any row carries
+  // hours_per_unit. Omitted entirely — not even a header-only sheet — when no
+  // condition carries a vertex/run-basis material, so a pre-WP2.5 workbook's
+  // tab COUNT stays unchanged for every such project.
+  const fittings = fittingsAndSupportsRows(rows);
+  const fittingsTab = fittings.length ? (() => {
+    const hasHours = fittings.some((f) => f.hours != null);
+    const header = ["Finish", "Material", "Qty", "Unit", "Basis", ...(hasHours ? ["Hours/unit", "Hours"] : []), "Note"];
+    const body = fittings.map((f) => [f.finish_tag, f.name, f.qty, f.unit, f.basis, ...(hasHours ? [f.hours_per_unit ?? "", f.hours ?? ""] : []), f.note]);
+    const combined = fittingsAndSupportsSummary(rows);
+    const combinedHasHours = combined.some((c) => c.hours != null);
+    const tail = combined.length ? [[], ["Material (combined)", "Qty", "Unit", ...(combinedHasHours ? ["Hours"] : [])], ...combined.map((c) => [c.name, c.qty, c.unit, ...(combinedHasHours ? [c.hours ?? ""] : [])])] : [];
+    return [header, ...body, ...tail];
+  })() : null;
+
   return [
     { name: "Conditions", rows: conditions },
     { name: "By sheet", rows: bySheetRows },
     { name: "Materials", rows: materials },
     { name: "Shapes", rows: shapesTab },
     { name: "By floor × room", rows: floorRoom },
+    ...(linearRunsTab ? [{ name: "Linear runs", rows: linearRunsTab }] : []),
+    ...(fittingsTab ? [{ name: "Fittings & supports", rows: fittingsTab }] : []),
   ];
 }

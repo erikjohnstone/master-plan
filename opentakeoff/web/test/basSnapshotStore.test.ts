@@ -13,6 +13,9 @@ import { canonicalBasJson } from '../src/lib/basCanonical.ts';
 import { sha256Hex } from '../src/lib/graphKeys.js';
 import { BAS_SOURCE_CHUNK_BYTES, basSourceChunkKey } from '../src/lib/basSourceStorage.js';
 import { createSyncStore } from '../src/lib/sync/syncStore.js';
+import { installWebLocksPolyfill } from './helpers/webLocksPolyfill.ts';
+
+installWebLocksPolyfill();
 import { buildLocalFirstStore } from '../src/lib/sync/composite.js';
 import { buildSyncedWorkspaceStore } from '../src/lib/sync/workspaceComposite.js';
 import { assertBasSnapshotStorageBounds } from '../src/lib/basSnapshotStore.js';

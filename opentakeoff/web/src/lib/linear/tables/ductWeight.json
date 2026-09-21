@@ -1,0 +1,15 @@
+{
+  "table_grade": "V",
+  "table_source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2 — https://mepacademy.com/toolbox/hvac/galvanized-sheet-metal-weight-chart-by-gauge-lb-ft%C2%B2-kg-m%C2%B2/ , https://www.engineeringtoolbox.com/gauge-sheet-d_915.html , https://pittsburghairsystems.com/wp-content/uploads/2023/05/Gauge-and-Weight-Chart-for-Sheet-Steel.pdf",
+  "note": "Standard galvanized sheet-steel gauge/weight physics (ASTM-style gauge convention), not a proprietary SMACNA duct-construction table — safe to ship as measured/published sheet-metal data. Cells the research note called out as independently 'verified' across sources are graded C; the rest V from the same citation set. Weight-per-LF formula and seam/waste allowances live in ductLabor.json, not here.",
+  "rows": [
+    { "gauge": 30, "lb_per_sf": 0.656, "grade": "V" },
+    { "gauge": 28, "lb_per_sf": 0.781, "grade": "V" },
+    { "gauge": 26, "lb_per_sf": 0.906, "grade": "C" },
+    { "gauge": 24, "lb_per_sf": 1.156, "grade": "C" },
+    { "gauge": 22, "lb_per_sf": 1.406, "grade": "C" },
+    { "gauge": 20, "lb_per_sf": 1.656, "grade": "C" },
+    { "gauge": 18, "lb_per_sf": 2.156, "grade": "C" },
+    { "gauge": 16, "lb_per_sf": 2.656, "grade": "V" }
+  ]
+}

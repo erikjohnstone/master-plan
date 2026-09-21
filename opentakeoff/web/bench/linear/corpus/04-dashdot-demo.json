@@ -1,0 +1,46 @@
+{
+ "name": "04-dashdot-demo",
+ "hardCase": "dash pattern (dash-dot)",
+ "pdf": "../synthetic/04-dashdot-demo.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    21.61,
+    13.88
+   ],
+   [
+    12.54,
+    13.88
+   ],
+   [
+    12.54,
+    24.09
+   ],
+   [
+    26.71,
+    24.09
+   ],
+   [
+    26.71,
+    11.44
+   ]
+  ],
+  "system": "HHWR",
+  "size": {
+   "kind": "pipe",
+   "nps_in": 2
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   9.08,
+   10.21,
+   14.17,
+   12.66
+  ],
+  "total_lf": 46.11
+ }
+}

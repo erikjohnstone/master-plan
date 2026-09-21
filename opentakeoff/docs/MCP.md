@@ -223,7 +223,7 @@ Register the server with your MCP client (any stdio client):
 Never point a client config at `npm start`—npm's banner goes to stdout,
 which is the MCP wire. `node --import tsx` is the whole invocation.
 
-By default the server hands every client all 55 tool schemas at once. Set
+By default the server hands every client all 58 tool schemas at once. Set
 `OPENTAKEOFF_MCP_STAGED_TOOLS=1` in the server's environment to stage the
 surface instead: only the setup tools start enabled, and the agent opens the
 `measure` / `revise` / `handoff` groups on demand with `open_tool_stage` as
@@ -233,7 +233,7 @@ client that honors `tools/list_changed`; leave it unset otherwise.
 
 ## What the agent gets
 
-Fifty-five tools, in the order an agent tends to reach for them:
+Fifty-eight tools, in the order an agent tends to reach for them:
 
 - **Open and orient**—`load_plan`, `sheet_info` (including the sheet's PDF
   layer table—Optional Content Groups with a classified role, confidence,
@@ -295,7 +295,11 @@ Fifty-five tools, in the order an agent tends to reach for them:
   exclude}` to override the sheet's stated layer roles for a call),
   `measure_polygon`, `measure_line`, `measure_surface` (wall SF: an open run
   × the condition's height—the H knob), `place_count` (EA markers, no scale
-  required)—all five of the engine's measure roles—plus `symbol_sweep`
+  required)—all five of the engine's measure roles—plus `resolve_linear_assembly`
+  (**#linear-takeoff**: price a linear shape's own traced run—duct weight/
+  insulation/labor, elbow/transition counts, hangers—as line items against
+  the shipped default assemblies or one supplied inline; read-only, no undo
+  step), `symbol_sweep`
   (marquee ONE example of a repeated plan symbol—a drain, a threshold
   marker—and every placement is found deterministically from the vector
   linework, under rotation and mirroring, scored against a commit bar with
@@ -364,9 +368,11 @@ Fifty-five tools, in the order an agent tends to reach for them:
   canvas's own delete semantics, ported as the spec)
 - **Revise**—`edit_shape` (all five roles), `edit_materials`,
   `edit_condition` (waste %, ×N multiplier, `height_ft`, and the roll-goods
-  `roll_setup` opt-in—the reply echoes the figured order), `delete_shape`,
-  `undo_last`, with `list_shapes` as the mid-session inventory the mutating
-  verbs assume you have
+  `roll_setup` opt-in—the reply echoes the figured order), `edit_run`
+  (#linear-takeoff: patch a linear shape's `run` block—system, per-segment
+  size overrides, per-vertex fitting overrides—by index, recomputing
+  `computed.run`), `delete_shape`, `undo_last`, with `list_shapes` as the
+  mid-session inventory the mutating verbs assume you have
 - **Condition twins**—`duplicate_condition` (the same finish measured
   somewhere else with its own preparation underneath: the twin arrives carrying
   the original's materials and keeps *following* them, so a coverage-rate fix on

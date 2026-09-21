@@ -128,6 +128,63 @@ test("roles map to layers: deduct, hole ring, wall, linear (curved flattens), co
   assert.deepEqual(b.skipped, []);
 });
 
+// #linear-takeoff (WP1.4): a linear shape carrying a `run` block splits into
+// one LWPOLYLINE per contiguous same-size run of segments.
+test("linear with a run block: one LWPOLYLINE per contiguous same-size segment run; unsized falls back to plain -LINEAR", () => {
+  // three straight segments, four vertices: (0,.9)->(.2,.9)->(.4,.9)->(.6,.9)
+  const shape = {
+    id: "l2", sheet_id: SHEET, condition_id: "c3", measure_role: "linear",
+    verts_norm: [[0, 0.9], [0.2, 0.9], [0.4, 0.9], [0.6, 0.9]] as [number, number][],
+    computed: {
+      run: {
+        segments: [
+          { i: 0, lf: 30, size: { kind: "rect" as const, w_in: 12, h_in: 6 }, size_src: "manual" as const },
+          { i: 1, lf: 30, size: { kind: "rect" as const, w_in: 12, h_in: 6 }, size_src: "manual" as const },
+          { i: 2, lf: 30, size_src: "withheld" as const },   // unsized — its own group
+        ],
+        vertices: [], totals_by_size: { "rect:12x6": 60 },
+      },
+    },
+  };
+  const b = buildSheetDxf({ sheet_id: SHEET, dims: DIMS, upp: UPP, shapes: [shape], conditions: CONDS });
+  assert.deepEqual(b.layers, ["OT-RB-4-LINEAR-RECT-12X6", "OT-RB-4-LINEAR"]);
+  const e = entities(b.dxf);
+  const sized = e.find((x) => x.layer === "OT-RB-4-LINEAR-RECT-12X6")!;
+  assert.equal(sized.closed, false);
+  assert.deepEqual(sized.pts, [[0, 10], [30, 10], [60, 10]]);   // vertices 0,1,2 — the two 12x6 segments
+  const plain = e.find((x) => x.layer === "OT-RB-4-LINEAR")!;
+  assert.deepEqual(plain.pts, [[60, 10], [90, 10]]);            // vertices 2,3 — the unsized segment alone
+  assert.equal(b.shapes, 1);
+  assert.deepEqual(b.skipped, []);
+});
+
+test("linear with a run block but no segment ever sized degrades to exactly one plain -LINEAR entity", () => {
+  const shape = {
+    id: "l3", sheet_id: SHEET, condition_id: "c3", measure_role: "linear",
+    verts_norm: [[0, 0.9], [0.2, 0.9], [0.4, 0.9]] as [number, number][],
+    computed: { run: { segments: [{ i: 0, lf: 30, size_src: "withheld" as const }, { i: 1, lf: 30, size_src: "withheld" as const }], vertices: [], totals_by_size: {} } },
+  };
+  const b = buildSheetDxf({ sheet_id: SHEET, dims: DIMS, upp: UPP, shapes: [shape], conditions: CONDS });
+  assert.deepEqual(b.layers, ["OT-RB-4-LINEAR"]);
+  const e = entities(b.dxf);
+  assert.equal(e.length, 1);
+  assert.deepEqual(e[0].pts, [[0, 10], [30, 10], [60, 10]]);
+});
+
+test("linear whose run.segments length doesn't match the shape's own edge count falls back safely to one plain entity (never throws, never mis-slices)", () => {
+  const shape = {
+    id: "l4", sheet_id: SHEET, condition_id: "c3", measure_role: "linear",
+    verts_norm: [[0, 0.9], [0.2, 0.9], [0.4, 0.9]] as [number, number][],
+    // 2 edges here, but the run block (stale from a since-edited shape) claims 5
+    computed: { run: { segments: Array.from({ length: 5 }, (_, i) => ({ i, lf: 10, size_src: "withheld" as const })), vertices: [], totals_by_size: {} } },
+  };
+  const b = buildSheetDxf({ sheet_id: SHEET, dims: DIMS, upp: UPP, shapes: [shape], conditions: CONDS });
+  assert.deepEqual(b.layers, ["OT-RB-4-LINEAR"]);
+  const e = entities(b.dxf);
+  assert.equal(e.length, 1);
+  assert.deepEqual(e[0].pts, [[0, 10], [30, 10], [60, 10]]);
+});
+
 test("nothing drops silently: reconciled deducts, degenerate rings, other sheets, unknown roles", () => {
   const shapes = [
     room,

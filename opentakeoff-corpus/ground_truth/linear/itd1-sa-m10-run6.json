@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+  "source_pdf_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "sheet_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+  "sheet_number": "M1.0",
+  "page": 3,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A sixth real, independent duct segment authored from the same sheet as the sibling `itd1-sa-m10*.json` goldens (M1.0 of the ITD District 1 Laboratory Building), continuing to draw from Run 101's own disclosed reserve on this unusually productive sheet. A real, clean 7.28 LF vertical `14\"x14\"` duct trunk in Lobby 101: `size:{kind:rect,w_in:14,h_in:14}`, confidence 0. A marked crop confirms it visually: a real trunk running from a real branch-tee (feeding a horizontal takeoff with its own damper symbol) down to a real diffuser branch (D-1, 50 CFM, `6\"ø`). The same crop also visibly shows the already-authored `8\"x14\"` duct (`itd1-sa-m10-run2.json`) continuing directly below this segment's own lower boundary -- an independent visual cross-check that the two goldens are correctly adjacent, connected segments of one real system, not overlapping or duplicated. `resolveRunSegments` reproduces the identical single segment and the bench-style seed reproduces the identical trace exactly, confirmed before authoring per this session's own standard practice.",
+  "scope": "A single real 14x14-inch rectangular supply-air (SA) duct trunk segment (7.28 LF) on the ITD District 1 Laboratory Building's own mechanical plan, sheet M1.0, in Lobby 101, from a real branch-tee junction down to a real diffuser branch. Explicitly OUT OF SCOPE: the duct's own continuation past either boundary (including its own direct continuation into the already-authored `8\"x14\"` segment below); the sibling `itd1-sa-m10*.json` goldens on this same sheet; every other one of the real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 29-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "itd1-m10-sa-14x14",
+      "description": "14x14-inch rectangular duct trunk segment in Lobby 101, from a real branch-tee junction to a real diffuser branch.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5354166666666667, 0.20700231481481482],
+        [0.5354166666666667, 0.2638888888888889]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 14, "h_in": 14 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 7.28,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 7.28, "size": { "kind": "rect", "w_in": 14, "h_in": 14 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:14x14": 7.28 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:14x14": 7.28
+  },
+  "total_lf_all_runs": 7.28
+}

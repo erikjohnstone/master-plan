@@ -1,0 +1,47 @@
+{
+ "name": "09-crossing-run",
+ "hardCase": "two runs crossing, no shared vertex",
+ "pdf": "../synthetic/09-crossing-run.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    21.95,
+    14.71
+   ],
+   [
+    12.67,
+    14.71
+   ],
+   [
+    12.67,
+    6.86
+   ],
+   [
+    23.8,
+    6.86
+   ],
+   [
+    23.8,
+    14.73
+   ]
+  ],
+  "system": "SA",
+  "size": {
+   "kind": "rect",
+   "w_in": 10,
+   "h_in": 6
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   9.28,
+   7.85,
+   11.13,
+   7.87
+  ],
+  "total_lf": 36.13
+ }
+}

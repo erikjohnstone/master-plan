@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.linear_refusal_ground_truth.v1",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator)",
+  "date": "2026-09-17",
+  "review_basis": "Each seed is a point known, independently of trace_run, to sit on something that is NOT drawn duct/pipe linework (a title block, a room-label text run, a sheet's own scale callout text, or blank margin whitespace with no ink at all) -- confirmed by the same pdf.ts positionedText / render-crop methods used to author every other ground_truth/linear/*.json file in this directory, before trace_run was ever run against them. This is the labeled negative corpus docs/LINEAR-TRACE-EVAL.md's own 'what this does not score' section named as missing: a real refusal-correctness measurement, not the incidental crossing-run precision case alone.",
+  "scope": "Six cases across the three real PDFs this project's other linear goldens already use. The first four are chosen to be UNAMBIGUOUSLY non-linework (no judgment call about whether a stroke 'counts'): a title block, a room-label text run, a scale callout, blank margin whitespace -- no ink of any kind at the seed. The fifth closes the first slice of a gap this file's own scope explicitly named as missing: a seed ON real linework of an EXCLUDED family, not just a seed with no linework at all -- a keynote/reference balloon symbol's own drawn circular outline, extracted directly from the page's own vector geometry (not guessed from a nearby label position the way the first attempt at this same gap failed to land on anything) and confirmed to be a real, present stroke before ever calling trace_run against it. The sixth closes the second slice of that same gap: a real schedule-table gridline, on `weld-county-mechanical-permit.pdf#6`'s own DUCT INSULATION SCHEDULE, extracted the same direct way and visually confirmed (a marked render crop shows the seed sitting exactly on the horizontal rule between two schedule rows, not on any text). This sheet has no detected drawing scale; `bench/linear.mts`'s own refusal loop previously called `session.setScale(..., { use_detected: true })` unconditionally, which threw (not refused) on a scale-less sheet -- fixed alongside this case (a `try`/`catch` around that one call, since a find-only `trace_run` call never actually needs a confirmed scale to run at all, only to report feet-based fields; `strokes.ts`'s own documented `ftPx=0` fallbacks are exactly the scale-less path). Dimension lines remain untested: no dimension-string text exists on any of this project's own mechanical sheets (dimensions live on the architectural set, not sampled here) -- real, disclosed follow-up work, not silently worked around here.",
+  "cases": [
+    {
+      "note": "Bessemer P101's own title block text (project name / seal area), top-right of the sheet -- text only, no drawn linework anywhere near it.",
+      "source_pdf": "opentakeoff/samples/bessemer-mechanical-bidset.pdf",
+      "sheet_id": "bessemer-mechanical-bidset.pdf#3",
+      "seed_norm": [0.92, 0.05],
+      "expect_status": "refused"
+    },
+    {
+      "note": "ITD M1.2's 'Residency Lab' room-label text run.",
+      "source_pdf": "opentakeoff-corpus/raw/itd-d1-lab-mechanical.pdf",
+      "sheet_id": "itd-d1-lab-mechanical.pdf#5",
+      "seed_norm": [0.4637345679012346, 0.22511574074074075],
+      "expect_status": "refused"
+    },
+    {
+      "note": "Federal M3.1's own 'SCALE 1/8\" = 1'-0\"' callout text in the title block.",
+      "source_pdf": "opentakeoff-corpus/raw/federal-attachment4-mechanical.pdf",
+      "sheet_id": "federal-attachment4-mechanical.pdf#6",
+      "seed_norm": [0.9397907188353413, 0.9270833333333334],
+      "expect_status": "refused"
+    },
+    {
+      "note": "Bessemer P101's own top-left page margin -- blank whitespace, no ink of any kind.",
+      "source_pdf": "opentakeoff/samples/bessemer-mechanical-bidset.pdf",
+      "sheet_id": "bessemer-mechanical-bidset.pdf#3",
+      "seed_norm": [0.02, 0.02],
+      "expect_status": "refused"
+    },
+    {
+      "note": "Weld County M1.0's own circled '2' reference/keynote balloon symbol near the top of the sheet -- a real, drawn stroke of an EXCLUDED family (an annotation symbol, not duct/pipe routing), extracted directly from the page's own vector geometry and confirmed present at this exact coordinate before being used as a seed. (Which numbered keynote entry this specific balloon corresponds to was not independently cross-checked -- the seed's own validity as a real, non-routable stroke does not depend on that identification.)",
+      "source_pdf": "opentakeoff-corpus/raw/weld-county-mechanical-permit.pdf",
+      "sheet_id": "weld-county-mechanical-permit.pdf#7",
+      "seed_norm": [0.5873765432098765, 0.17776620370370372],
+      "expect_status": "refused"
+    },
+    {
+      "note": "Weld County M0.5's own DUCT INSULATION SCHEDULE table -- a real horizontal gridline between two schedule rows (the 'WRAP 2\" 0.75' rows), extracted directly from the page's own vector geometry and confirmed present at this exact coordinate -- visually verified via a marked render crop to sit on the rule itself, not on any of the table's own text -- before being used as a seed. This sheet has no detected drawing scale (`scale_set: false`); the bench's own refusal loop no longer requires one to run this case (see this file's own `scope` field).",
+      "source_pdf": "opentakeoff-corpus/raw/weld-county-mechanical-permit.pdf",
+      "sheet_id": "weld-county-mechanical-permit.pdf#6",
+      "seed_norm": [0.28935185185185186, 0.7652314814814815],
+      "expect_status": "refused"
+    }
+  ]
+}

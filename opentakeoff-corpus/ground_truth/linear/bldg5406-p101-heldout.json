@@ -1,0 +1,60 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/bldg5406-hvac-demo-mechanical.pdf",
+  "source_pdf_sha256": "4f9d17d030d1f9707078ebaf51ccd0ab7ff8dcfa21e13f34dd96dab2f85c3f3b",
+  "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#14",
+  "sheet_number": "P-101",
+  "sheet_title": null,
+  "page": 14,
+  "tier": "held_out",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "bldg5406-hvac-demo--406-hvac-demo-mechanical-p14--full.png",
+    "hash": "a019d8ca6a54aec8dbd475803cfe1709963e43c690ee3764a9621aba9e4adc58"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 held-out-tier authoring pass, 5th entry -- both remaining declared held-out sheets were BLOCKED all session by the symbollabels.ts chase() pathology Run 60 just fixed; this is the first attempt on either since that fix landed)",
+  "date": "2026-09-18",
+  "review_basis": "bldg5406-hvac-demo-mechanical.pdf#14 (sheet P-101) is one of the two declared bldg5406 held-out sheets named in this project's own goal file ('bldg5406-hvac-demo M-101 (p2) and P-101 (p14)') -- its own sibling sheet #2 (M-101) remains unauthored. Previously undoable at all: this sheet's first trace_run call paid a pathological, unbounded cost in symbollabels.ts's chase()/nearDark() leader-line BFS (a hard-capped fix landed this same session, see docs/LINEAR-TRACE-EVAL.md Run 60), which the doc's own priority list explicitly named as the reason these two sheets stayed BLOCKED, not merely unattempted, through Run 59. With that fix landed and validated (zero result changes on the full corpus), this sheet became tractable for the first time (a fresh cold trace_run call now completes in ~0.8s, not indefinitely).\n\nA grid sweep across this sheet's own real plumbing riser diagram (a multi-room lavatory/latrine floor plan, CW/HW/CIRC domestic water piping) found several real, engine-bound size+system candidates. The first tried (a long vertical run reading `size:{kind:pipe,nps_in:1.5}`, `system:CW`, both ends `dead_end`, `size-binding:beside`) was REJECTED before being trusted, this project's own standing discipline: a direct query of this sheet's own real text spans near `CW` showed the trace's own y-range (222.6-373.4) genuinely overlaps BOTH a `3/4\" CW` label (bbox y 209.7-231.5, containing the trace's own forward stop) AND a `1-1/2\" CW` label (bbox y 343.2-370.3) along the SAME continuous drawn line -- the same size-transition-riser-labeling-ambiguity category this corpus's own T2523 M-130 sheet already established as a rejection (a real reducer this crop's own zoom can't resolve, or several coincident parallel pipes drawn as one line -- genuinely unclear, not safe to guess through). Not used.\n\nThe candidate actually used (4.16 LF, `size:{kind:pipe,nps_in:0.75}`, `system:CW`, `size-binding:beside`) was confirmed via marked render crop: a real, rectilinear, three-elbow (all exactly 90 degrees) branch line connects two real plumbing fixtures in room 'LATRINE 112' -- starting near fixture P2 (a lavatory/sink, a real multi-candidate junction, `ambiguous` stop with 3 real candidate directions) -- through two 90-degree elbows -- to fixture P1 (a water closet) -- continuing to a real `branch_joins_main` junction where this branch ties into the sheet's own main vertical `3/4\" CW` riser (the same riser that runs down to a real hose-bibb symbol lower on the sheet). The printed `3/4\" CW` label sits directly beside the relevant segment of this exact drawn line, matching the automatic bind exactly. Both stops are genuine physical features (a real fixture-branch junction and a real branch-to-main tie-in), not arbitrary interior cuts -- the same 'real fitting/junction, not a narrative choice' standard this corpus already applies everywhere else.",
+  "scope": "A single real 3/4\" CW (cold/domestic water) branch line (4.16 LF, three 90-degree elbows) on bldg5406-hvac-demo-mechanical.pdf's own sheet P-101 (page 14), from a real multi-candidate junction at fixture P2 in room LATRINE 112, through fixture P1's own connection, to the real point where this branch joins the sheet's own main CW riser. Explicitly OUT OF SCOPE: the rejected 1-1/2\"/3/4\" CW size-transition riser candidate described in review_basis (a real engine-limitation risk, not a usable golden); the main CW/HW/CIRC riser piping and every other fixture branch on this same dense multi-room sheet; sheet M-101 (page 2, bldg5406-hvac-demo-mechanical.pdf's own other still-unauthored held-out sheet); every other sheet in this same 14-page real project.",
+  "runs": [
+    {
+      "run_id": "bldg5406-p101-cw-075-latrine112",
+      "description": "3/4\" CW (cold water) branch line serving LATRINE 112's own P1/P2 fixtures, from a real multi-candidate fixture junction through two 90-degree elbows to a real branch-joins-main tie-in on the sheet's own CW riser.",
+      "system": "CW",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5708333333333334, 0.6848856209150327],
+        [0.5708333333333334, 0.6879084967320261],
+        [0.5900252525252525, 0.6879084967320261],
+        [0.5900252525252525, 0.734313725490196],
+        [0.5529671717171717, 0.734313725490196]
+      ],
+      "run": {
+        "size_overrides": {
+          "3": { "kind": "pipe", "nps_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 4.16,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 0.1, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.84, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" },
+            { "i": 2, "lf": 1.58, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" },
+            { "i": 3, "lf": 1.63, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" }
+          ],
+          "vertices": [
+            { "i": 1, "kind": "elbow", "angle_deg": 90, "angle_class": "square" },
+            { "i": 2, "kind": "elbow", "angle_deg": 90, "angle_class": "square" },
+            { "i": 3, "kind": "elbow", "angle_deg": 90, "angle_class": "square" }
+          ],
+          "totals_by_size": { "pipe:0.75": 4.15 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:0.75": 4.15 },
+  "total_lf_all_runs": 4.16
+}

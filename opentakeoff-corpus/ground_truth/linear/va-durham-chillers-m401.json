@@ -1,0 +1,93 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/va-durham-chillers-ahu.pdf",
+  "source_pdf_sha256": "8ca2b79d82a7b595c5ad3a7bcfcb64e829b96e20b963c5f507738b6fb3156274",
+  "sheet_id": "va-durham-chillers-ahu.pdf#16",
+  "sheet_number": "M-401",
+  "sheet_title": "MECHANICAL ENLARGED NEW WORK PLANS",
+  "page": 16,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Sixteenth golden, a fresh, previously-untouched VA Durham 'Replace Chillers for AHU 1 & 2' project. A text-anchored scan first found a real, dense multi-pipe rack on sheet MP111 (EX 4\" GLS/GLR, EX 4\" CHWS/CHWR, EX 3\" MPS, EX 2\" CD, EX 4\" HPS all running parallel, closely stacked vertically in plan view) -- REJECTED, not used, because the labels are connected via vertical leaders from above into a tight cluster of 5-7 nearly-adjacent horizontal lines, making confident per-line attribution from a render crop alone genuinely uncertain (the same category of risk this session already declined to force on Carson Valley MS's own roof plan).\n\nThe same physical pipes are ALSO drawn on sheet M-401 as a much cleaner isometric-style riser detail, each real system group given its own clearly separated horizontal run (a real elbow at one end, a real drawn cross-sheet break/continuation symbol referring back to MP111 at the other) -- exactly the discovery method refinement this project's own doctrine favors (prefer a cleaner secondary view over a congested primary one, same principle Run 34 onward already established for wye/tee boundaries). The sheet's own text explicitly discloses THREE systems sharing one drawn line: 'EX 4\" HPS, EX 2\" CD, & EX 3\" MPS STACKED. REFER TO MP111 FOR CONTINUATION.' -- a real, disclosed extension of the two-system stacked-pipe convention `h59-chiller-mp101.json` already established, this time to three systems on the same line.\n\n`trace_run` reaches this exact line cleanly and reproducibly (3.1 LF, `bridged_dash_gap(16)` -- the line is drawn dashed, and the walk correctly bridges 16 real dash gaps along its length) from the real elbow to the real break symbol, confirmed via a marked render crop showing both endpoints sitting exactly on the drawn corner and the break mark. The adjacent 'EX 4\" CHWS & CHWR STACKED' line (the two-system sibling directly above it in the same crop) was tried too, but only ever returned a shorter, partial fragment (2.16 LF, stopping short of the real corner) across a dozen seed positions -- a real, disclosed, not-yet-understood gap in that specific solid (non-dashed) line's own vector continuity, left unused rather than forced. This file's own `sheetInfo` reports empty `layers` and `multiple_scales: true` on every sheet checked -- the same file-wide missing-PDF-layer-names cause already established on NAVFAC and H59, now confirmed on a THIRD independent, unrelated real project. A manual size override is used for each of the three stacked systems, per that same precedent. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result on all three runs. Added as `va-durham-chillers-m401.json`, development tier.",
+  "scope": "A real, existing triple-stacked pipe group (4-inch high-pressure steam HPS, 2-inch condensate drain CD, and 3-inch medium-pressure steam MPS, 3.1 LF each, drawn as one dashed double-line symbol per the sheet's own 'STACKED' annotation) on a VA Durham 'Replace Chillers for AHU 1 & 2' project's own mechanical enlarged new-work plan, sheet M-401, from a real elbow to a real cross-sheet continuation break symbol (referring to sheet MP111). Explicitly OUT OF SCOPE: the pipe's own continuation past the break symbol onto sheet MP111 itself; the adjacent 'EX 4\" CHWS & CHWR STACKED' sibling line in the same crop (tried, only a partial fragment found, not used, real disclosed future work); the dense multi-pipe rack on sheet MP111 itself (tried, rejected for confident-attribution risk, not used); every other run on this real 28-sheet plan set (only sheet 16/M-401 sampled).",
+  "runs": [
+    {
+      "run_id": "va-durham-m401-hps-4in",
+      "description": "4-inch existing high-pressure steam (HPS) pipe, from a real elbow to a real cross-sheet continuation break symbol (referring to sheet MP111), drawn stacked with its CD and MPS pair as one dashed below-grade-style symbol.",
+      "system": "HPS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5983796296296297, 0.29011574074074076],
+        [0.6353174603174603, 0.29011574074074076]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 4 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 3.1,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 3.1, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:4": 3.1 }
+        }
+      }
+    },
+    {
+      "run_id": "va-durham-m401-cd-2in",
+      "description": "2-inch existing condensate drain (CD) pipe, drawn stacked with its HPS and MPS pair (per the sheet's own 'STACKED' annotation), same real elbow-to-break-symbol span as the HPS run.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5983796296296297, 0.29011574074074076],
+        [0.6353174603174603, 0.29011574074074076]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 2 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 3.1,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 3.1, "size": { "kind": "pipe", "nps_in": 2 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:2": 3.1 }
+        }
+      }
+    },
+    {
+      "run_id": "va-durham-m401-mps-3in",
+      "description": "3-inch existing medium-pressure steam (MPS) pipe, drawn stacked with its HPS and CD pair (per the sheet's own 'STACKED' annotation), same real elbow-to-break-symbol span as the HPS run.",
+      "system": "MPS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5983796296296297, 0.29011574074074076],
+        [0.6353174603174603, 0.29011574074074076]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 3 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 3.1,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 3.1, "size": { "kind": "pipe", "nps_in": 3 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:3": 3.1 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:4": 3.1, "pipe:2": 3.1, "pipe:3": 3.1 },
+  "total_lf_all_runs": 9.3
+}

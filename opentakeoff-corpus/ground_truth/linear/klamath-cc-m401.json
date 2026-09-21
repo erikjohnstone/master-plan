@@ -1,0 +1,76 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/klamath-cc-learning-center-mechanical.pdf",
+  "source_pdf_sha256": "ed959f5398e1ebf36eeff94b855234197b2f24fb1c89873ae89674f2916e97b0",
+  "sheet_id": "klamath-cc-learning-center-mechanical.pdf#13",
+  "sheet_number": "M401",
+  "page": 13,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Second sheet authored from the project's own newly-expanded real corpus (GitHub Releases 'corpus'/'corpus_2', ~380 real mechanical/BAS PDFs -- see douglas-county-me4-01.json's own review_basis for how that corpus was found and accessed). This file, unlike the Douglas County one, has NO PDF layers at all on this sheet (`has_vector_linework` yes, `layers: []`) -- an unlayered real sheet, the SAME category as this project's own bessemer/federal/itd sheets, so `mepLayerSignal` reads 'none' and grade (a) layer-name classification never applies here. Found instead via a full-page grid sweep (this project's own established Runs 16/17/22 method), filtering for both-`dead_end` candidates -- but UNLIKE every prior real-corpus sweep this session (which all returned `size undefined`/`stroke-family:unclassified` with no automatic size bind at all), BOTH of this sheet's own candidates came back with a real, engine-bound size AND system (`factors` includes `size-binding:beside` -- a genuine label-association hit, not a guess): `trace_run`'s own automatic bind actually worked here, the first time in this whole real-corpus this session that a size AND system were read directly off a real drawn label without any human intervention. Both candidates are drawn DASHED (the real print convention this sheet uses for its own gas piping specifically, distinct from solid HVAC duct/pipe lines elsewhere on the same sheet) and heavily fragmented into many short print-dash segments, bridged by `walk.ts`'s own `bridgeDashGap` mechanism (Run 2's own fix, from early this session) -- 66 bridges for the first run (re-confirmed against the bench's own actual seed placement, see correction below), 17 for the second; both are real, confirmed via a marked render crop showing the drawn dashes and the printed size/system label directly beside the traced path in each case (a real '1 1/2\" G' callout with a leader arrow for the second run; a real '1/2\" G' callout with a leader arrow for the first). This is this project's own FIRST gas-piping (system 'G') golden -- no prior real or synthetic case in this corpus exercises that system token. `verts_norm` for each run is SIMPLIFIED to its own real elbow vertices (`trace_run`'s own reported `vertices[]` array, all real 90-degree elbows for the first run, none for the second dead-straight run) rather than every one of the ~35-160 raw dash-fragment points the walk itself returns -- matching how every other multi-segment golden in this directory already represents a real shape (meaningful corners, not print-dash noise). CORRECTION (caught by `npm run bench:linear` itself, not assumed): the first run's own end vertex was originally set to where the '1/2\" G' callout's TEXT sits, on the assumption the run reaches a dead end there -- but the bench's own live `session.traceRun()` call (seeded, per `bench/linear.mts`'s own `seedOnLongestSegment`, 40% along this run's own longest leg, exactly as the scorer does it) reported the FORWARD stop as `ambiguous`, not `dead_end`, at a point 177px short of that assumed end vertex (`length_lf` 38.68, not the originally-assumed 45.43). A marked render crop at that exact stop point confirms it is a real three-way junction: this run's own horizontal leg meets a separate vertical branch continuing down past this run's own scope, with the '1/2\" G' callout's own leader-arrow line starting right at that same junction. This project's own established discipline (a golden's own extent IS exactly what a single un-guided `trace_run` call produces, never a human's own farther visual read of where a label sits -- the same rule Douglas County's own two `ambiguous` stops and Weld County's own precedent already apply) means the golden's own 4th/last vertex was corrected to this real junction point, `perimeter_lf` corrected to 38.68, and `size_overrides`'s own key corrected from the segment-0 index to '1' (the true longest-segment index the bench's own scorer keys the size lookup on) -- verified end to end by re-running `bench:linear` after the fix and confirming an exact `45.43`-free, `38.68`-matching score with `sizeMatch: true`.",
+  "scope": "Two real, independent 1/2\" and 1 1/2\" gas (system G) piping runs on Klamath Community College's own M401 sheet. The first (38.68 LF) runs from a real wall-corner dead end, around three real 90-degree elbows near equipment tagged 'MAU-1', to a real ambiguous three-way junction directly beside its own printed '1/2\" G' leader-arrow callout (NOT reaching the callout's own separate continuing branch, which is out of scope -- see review_basis's own correction note). The second (15.49 LF, dead straight) runs between two real, confirmed dead ends along a wall/ceiling line, with its own printed '1 1/2\" G' leader-arrow callout directly beside it. Explicitly OUT OF SCOPE: the vertical branch continuing past the first run's own ambiguous junction; every other duct/pipe run on this real, dense, multi-sheet mechanical set (17 sheets total in this one PDF, only sheet 13/M401 sampled); the MAU-1 equipment itself and whatever it connects to beyond this run's own two ends; every other sheet in this newly-added corpus resource beyond the two sheets (this one and Douglas County's ME4.01) authored so far.",
+  "runs": [
+    {
+      "run_id": "klamath-m401-mau1-gas-half",
+      "description": "1/2\" gas (G) pipe, from a real wall-corner dead end, through three real 90-degree elbows, to a real ambiguous three-way junction directly beside its own printed '1/2\" G' leader-arrow callout, where this run's own horizontal leg meets a separate vertical branch continuing past this run's own scope.",
+      "system": "G",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.43357843137254903, 0.3514520202020202],
+        [0.43357843137254903, 0.23251262626262628],
+        [0.5239174836601307, 0.23251262626262628],
+        [0.5239174836601307, 0.35751262626262625],
+        [0.4877042483660131, 0.35751262626262625]
+      ],
+      "run": {
+        "size_overrides": {
+          "1": { "kind": "pipe", "nps_in": 0.5 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 38.68,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 10.47, "size": { "kind": "pipe", "nps_in": 0.5 }, "size_src": "manual" },
+            { "i": 1, "lf": 12.29, "size": { "kind": "pipe", "nps_in": 0.5 }, "size_src": "manual" },
+            { "i": 2, "lf": 11, "size": { "kind": "pipe", "nps_in": 0.5 }, "size_src": "manual" },
+            { "i": 3, "lf": 4.92, "size": { "kind": "pipe", "nps_in": 0.5 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:0.5": 38.68 }
+        }
+      }
+    },
+    {
+      "run_id": "klamath-m401-gas-oneandhalf",
+      "description": "1 1/2\" gas (G) pipe, a dead-straight run between two real dead ends, with its own printed '1 1/2\" G' callout directly beside it.",
+      "system": "G",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.28225081699346405, 0.3953914141414141],
+        [0.16834150326797387, 0.3953914141414141]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1.5 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 15.49,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 15.49, "size": { "kind": "pipe", "nps_in": 1.5 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1.5": 15.49 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:0.5": 38.68,
+    "pipe:1.5": 15.49
+  },
+  "total_lf_all_runs": 54.17
+}

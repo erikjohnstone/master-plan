@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/salinity-lab-chiller-replacement.pdf",
+  "source_pdf_sha256": "2bd7ebf3c6569e9c3071cac8f272705039428028f6efb49a5fb6ef6836d15f1e",
+  "sheet_id": "salinity-lab-chiller-replacement.pdf#11",
+  "sheet_number": "M201",
+  "page": 11,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Ninth golden authored via a refined mega-scan pass: rather than scanning random archive files, this Run deliberately targeted a handful of never-touched files whose own project NAME describes a narrowly-scoped single-system replacement (boiler, chiller, air-handling) rather than a full multi-discipline building set -- a direct response to Run 30's own disclosed lesson that combined architectural/mechanical/electrical/roofing sets produce a high false-positive rate under blind grid-sweeping. `023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf` (a USDA Agricultural Research Service project, US Salinity Laboratory, University of California Riverside campus) was the first file checked from that targeted batch and initially looked like exactly the clean hit the strategy predicted: a real 6-inch CHWS (chilled water supply) pipe, its own system name matching this project's own title exactly, confirmed via a marked render crop as a real chiller-yard piping run beside its own printed '6\"ø CHWS' label, `size-binding:leader`, two real bridged dash-gaps, on a sheet whose full title block confirms genuine new-construction scope (not the demolition view on the same sheet's own other half).\n\nA real, disclosed, and genuinely interesting engine-behavior finding surfaced before this golden was finalized, though, and directly shaped its final shape: the bench's own `seedOnLongestSegment` convention (seed 40% into whichever consecutive vertex pair is longest, the same logic a real click would most likely land on) picks one of this run's own two ~2ft end segments -- and re-tracing from EITHER of those two positions independently returns only that ~2ft segment alone, both ends `dead_end`, no size or system bind at all (`size_missing`) -- NOT the full run. Only a seed within one of the three short 0.5ft MIDDLE segments (matching this golden's own original discovery seed) walks outward across two real dash-gaps to the full 5.49 LF extent with its automatic CHWS/6in bind. This is a REAL, first-ever-confirmed-on-actual-corpus-data instance of a behavior this project's own `test/linear/walk.test.ts` unit suite already names precisely (\"a LONG solid segment dead-ending near a short one is NOT bridged -- length alone isn't enough once the dead-ending segment reads as a real run\") -- previously only exercised synthetically, now shown to have a real, visible consequence on an actual drawing: a real, physically continuous 6\" CHWS main whose own CAD export happens to be chopped into a long-short-short-short-long chain of abutting sub-paths, where the bench's own honest single-click simulation cannot rediscover the full physical extent from either of its longest-looking segments.\n\nRather than keep the full 5.49 LF claim (which the bench's own honest re-seed cannot reproduce, and would score as a real length MISS rather than a genuine recall gain) or discard the candidate outright, this golden's own scored extent was rebuilt around the ONE ~2ft segment that IS self-consistently reproduced by a bench-style seed within it (re-verified live: seeding 40% into it returns exactly this same two-point, both-`dead_end` result). Because that isolated segment carries no automatic size/system bind on its own, `size`/`system` here are an honest MANUAL read (`origin.method: manual`) taken directly from the parent run's own printed '6\"ø CHWS' label -- the same real label the automatic bind on the fuller walk also read, just not reachable from a seed placed on this specific sub-segment alone.",
+  "scope": "A single real ~2 LF segment of a 6-inch chilled water supply (CHWS) pipe on the US Salinity Laboratory Chiller Replacement project's own Mechanical Yard Floor Plan (New) at sheet M201 -- the one sub-segment of a longer, real, physically continuous CHWS run that a bench-style seed reliably rediscovers on its own (see review_basis for the real engine-behavior finding this reflects). Explicitly OUT OF SCOPE: the rest of the same physical CHWS run (the two short 0.5ft bridging segments and the far ~2ft stub beyond them, real but not independently re-discoverable from a seed placed on THIS segment alone, per the disclosed engine finding); the same sheet's own hatched 'MECHANICAL FLOOR PLAN-MECHANICAL YARD - DEMO' view (existing equipment being removed); the immediately parallel 6\" CHWR (chilled water return) line and every other pipe/equipment item visible in the same crop; every other run on this real 17-sheet plan set (only sheet 11/M201 sampled); every other file discovered promising in the same targeted batch but not yet authored into a golden.",
+  "runs": [
+    {
+      "run_id": "salinity-m201-chws-6in",
+      "description": "6-inch chilled water supply (CHWS) pipe, a real straight vertical segment of a longer physical run in the chiller yard's new-work piping layout, both ends real dead ends -- the one sub-segment of that longer run a bench-style seed reliably rediscovers on its own (see review_basis).",
+      "system": "CHWS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.7047260802469136, 0.40827546296296297],
+        [0.7047260802469136, 0.38744212962962965]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 2,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 2, "size": { "kind": "round", "d_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:6": 2 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "round:6": 2 },
+  "total_lf_all_runs": 2
+}

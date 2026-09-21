@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf",
+  "source_pdf_sha256": "e3d0cc1bc22fd82445079c068872f2877a6c2c9bd37cca59b0b727b1adb8816f",
+  "sheet_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+  "sheet_number": "M-104",
+  "page": 36,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A third real, independent duct segment found on the same sheet as `t2504-sa-m104-riser1.json`/`t2504-sa-m104-riser2.json` (M-104 of the T2504 renovation project), from a wider follow-up sweep of the sheet's remaining 65 (of 75 total) unswept bare `WxH\"` duct callouts. A grid sweep found this real, clean 2.17 LF horizontal duct segment: `size:{kind:rect,w_in:12,h_in:12}`, confidence 0.5, `factors:[\"stroke-family:pen-weight-prior\",\"size-binding:beside\",\"ambiguous_stop\",\"layer-unclassified\",\"scale_unconfirmed\"]`. A marked crop confirms it visually and unambiguously: a real double-line horizontal '12\"x12\"' duct running from a real elbow/riser junction on one end (down from an E1/360 CFM exhaust fan connection) to a real 4-way junction box on the other (splitting into a '12\"x12\" UP' riser toward RTU-5 and a '16\"x12\"' continuation) -- both real, visually-confirmed junction points, matching this corpus's own established ambiguous-stop-at-a-real-junction convention. `resolveRunSegments` reproduces the identical single 2.17 LF segment and a reseed `trace_run` from the same known-good seed against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, and size exactly.\n\nThe same wider sweep also found two genuine wrong-label cases (not authored as goldens): a `10\"x10\"` callout whose nearest traceable duct is actually a `16\"x10\"` run, and a `32\"x8\"` callout whose nearest traceable duct is actually a `14\"x16\"` run -- both real instances of a label binding to a nearby but not-its-own duct, consistent with this corpus's already-catalogued `sizeWrongLabelPct` population, not attempted as goldens. A `30\"x10\"` candidate returned a correctly-sized but trivially short 0.43 LF fragment (an equipment stub) and was skipped as not worth authoring.",
+  "scope": "A single real 12x12-inch rectangular duct segment (2.17 LF) on the T2504 renovation project's own mechanical plan, sheet M-104, from a real elbow/riser junction (down from an E1/360 CFM exhaust fan connection) to a real 4-way junction box (splitting toward a '12\"x12\" UP' riser to RTU-5 and a '16\"x12\"' continuation). Explicitly OUT OF SCOPE: the duct's own continuation past either boundary (the riser up to RTU-5, the 16\"x12\" continuation); the two riser segments authored separately on this same sheet (`t2504-sa-m104-riser1.json`, `t2504-sa-m104-riser2.json`); the two wrong-label candidates and the trivially-short stub noted in review_basis, none authored; every other one of the real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 51-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "t2504-m104-sa-12x12-riser3",
+      "description": "12x12-inch rectangular horizontal duct segment, from a real elbow/riser junction to a real 4-way junction box.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5284232941394316, 0.5372517705874185],
+        [0.5586288306638274, 0.5372517705874185]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 12, "h_in": 12 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 2.17,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 2.17, "size": { "kind": "rect", "w_in": 12, "h_in": 12 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:12x12": 2.17 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:12x12": 2.17
+  },
+  "total_lf_all_runs": 2.17
+}

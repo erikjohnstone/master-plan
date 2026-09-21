@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf",
+  "source_pdf_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+  "sheet_id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3",
+  "sheet_number": null,
+  "page": 3,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (Idaho Transportation Department District 2, Laboratory Heating Upgrades), pulled from the corpus_2 GitHub Release during a sixth batch-survey pass. This sheet's own PDF carries no extractable sheet-number text anywhere (title block fields read blank, top note blocks carry only keyed-notes text) -- `sheet_number` is honestly recorded as `null` rather than guessed, the only golden this session without one.\n\nThis sheet's own boiler-plant piping schematic uses a real, previously-unhandled grammar convention: a trailing `(E)` existing-marker printed AFTER the whole label (`4\"CHWS(E)`, `3\" HWR(E)`, `2 1/2\"HWS(E)`, etc.) -- 20 real instances on this one sheet. Confirmed via direct `parseSize` testing that this format failed to parse AT ALL before a fix (`null` on every sample). This is structurally different from the already-declined LEADING `(E)` prefix convention (West Valley College's own `(E) 6\"ø`, which precedes the whole label and would need a bigger grammar restructuring) -- a TRAILING marker is narrow to fix: `normalizeLabelText` in `sizes.ts` now strips `\\s*\\(E\\)\\s*$` as an early step, before anything else needs to parse past it. Fixed, tested (six new assertions in `sizes.test.ts`, 53->54), and confirmed to cause zero regressions across the full corpus (`bench:linear`'s own aggregate numbers are bit-identical before and after the fix, since no existing golden used this format).\n\nWith the fix in place, a grid sweep of fourteen of this sheet's newly-parseable labels found a real, clean 12.75 LF straight `3\" HWR` (heating hot water return) pipe: `size:{kind:pipe,nps_in:3}`, `systems:[\"HWR\"]`, confidence 0. A marked crop confirms it visually and unambiguously: the '3\" HWR(E)' label's own leader points directly at this real horizontal pipe (a separate, parallel '3\" HWS(E)'-labeled pipe runs just below it in the same crop, confirming this is not a mislabeled duplicate), from a real valve/union assembly near two boilers (B-1, B-2) to a real branch point feeding `2 1/2\"HWR(E)`/`2 1/2\"HWS(E)` continuations. `resolveRunSegments` reproduces the identical single segment and a reseed `trace_run` using the exact `bench:linear`-style seed (`seedOnLongestSegment`, standard practice since Run 95) against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, size, and system exactly.\n\nOne other candidate on this same sheet (a `1 1/4\"` pipe found via an `HWR(E)`-labeled seed) was swept and declined: its own automatic bind read back `systems:[\"HWS\"]`, a real system mismatch against the label used to find it -- likely a twin-pipe crosstalk instance similar to several already-catalogued this session, not authored.",
+  "scope": "A single real 3-inch heating-hot-water-return (HWR) pipe segment (12.75 LF) on the ITD District 2 Laboratory Heating Upgrades project's own boiler-plant piping schematic (unnumbered sheet, page 3), from a real valve/union assembly near two boilers to a real branch point feeding smaller continuations. Explicitly OUT OF SCOPE: the pipe's own continuation past either boundary; the parallel `3\" HWS(E)` pipe running just below it in the same crop; the declined `1 1/4\"` system-crosstalk candidate noted in review_basis; every other one of the 20 real trailing-`(E)`-suffixed labels on this same sheet, not attempted this pass; every other sheet on this real 9-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "itd2-boilerplant-hwr-3in",
+      "description": "3-inch heating-hot-water-return (HWR) pipe segment, from a real valve/union assembly to a real branch point.",
+      "system": "HWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.2324845679012346, 0.46597222222222223],
+        [0.321045524691358, 0.46597222222222223]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 3 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 12.75,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 12.75, "size": { "kind": "pipe", "nps_in": 3 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:3": 12.75 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:3": 12.75
+  },
+  "total_lf_all_runs": 12.75
+}

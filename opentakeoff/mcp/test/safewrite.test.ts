@@ -130,8 +130,12 @@ test("a corrupt file fails CLOSED — unknown is protected, not clobbered", asyn
 // read-only attribute at most), so there the file stays readable and there is no
 // unreadable case to assert. The behavior itself is platform-independent — an
 // unreadable file is not recognizable, so it is not ours, so it is refused.
+// Root is the same story on POSIX: permission bits never restrict root's own
+// reads (no ACL/SELinux involved here), so chmod 000 doesn't withdraw access
+// there either — a real, common CI/container condition, not a Windows-only one.
 test("an unreadable file fails CLOSED", {
-  skip: process.platform === "win32" ? "chmod cannot withdraw read access on Windows" : false,
+  skip: process.platform === "win32" ? "chmod cannot withdraw read access on Windows"
+    : process.getuid?.() === 0 ? "chmod cannot withdraw read access from root" : false,
 }, async () => {
   const d = await dir();
   const unreadable = path.join(d, "locked.json");

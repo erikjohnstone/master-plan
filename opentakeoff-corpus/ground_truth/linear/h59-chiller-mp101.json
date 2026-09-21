@@ -1,0 +1,67 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/h59-chiller-addition.pdf",
+  "source_pdf_sha256": "2201bd5804730aec2d9874950c6b3e4dbae4e73b4d2a43b17a2fadce155cdb20",
+  "sheet_id": "h59-chiller-addition.pdf#10",
+  "sheet_number": "MP101",
+  "page": 10,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Fifteenth golden, a fresh, previously-untouched project this session (`084_SC_H59_N054_FW_Building_112_Chiller_Addition.pdf`, a small 13-sheet chiller-addition set with only two mechanical/piping sheets carrying a detected scale, MP101 and MP102). Found via the text-anchored method: a size/system regex scan of MP101's own real text surfaced a `6\" CHWS` / `6\" CHWR (BELOW)` pair, and a render crop showed a real 'PIPE BELOW GRADE' detail -- an underground chilled-water pipe run drawn as ONE double-line symbol representing a stacked CHWS-over-CHWR pair (explicitly disclosed by the sheet's own '(BELOW)' annotation, a real, common convention for underground utility pairs drawn coincident in plan view), running from a real wall penetration (two green valve symbols) to a second real valve pair partway along the run.\n\n`trace_run` reaches this segment cleanly and consistently across multiple seed positions (7.99 LF, matching the visible span between the two valve symbol pairs) with both ends `ambiguous` at the two real valve locations, confirmed via a marked render crop. This file's own `sheetInfo` reports empty `layers` on every mechanical sheet (the same file-wide missing-PDF-layer-names cause already established on the NAVFAC Cherry Point project this session), which drives the same `stroke-family:unclassified`/`size_missing`/`confidence:0` outcome seen there -- a manual size override is used, consistent with that same established precedent. Because the sheet's own label explicitly discloses TWO stacked pipes sharing this one drawn line (not a single system, unlike every other golden this session), this golden captures BOTH as separate runs sharing the identical verts_norm -- a real, disclosed departure from the usual one-line-one-run convention, matching what an actual takeoff would need to count from this drawing (both a 6-inch CHWS run and a 6-inch CHWR run of the same length). The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result.",
+  "scope": "A real 6-inch chilled-water supply/return (CHWS/CHWR) underground pipe pair (7.99 LF each, drawn as one stacked double-line symbol per the sheet's own 'PIPE BELOW GRADE' / '(BELOW)' convention) on a Building 112 chiller-addition project's own piping plan, sheet MP101, from a real wall-penetration valve pair to a second real valve pair partway along the run. Explicitly OUT OF SCOPE: the pipe's own continuation past the second valve pair into the chiller/heat-exchanger connection shown further right in the same crop; the vertical wall-penetration risers at the near end; every other run on this real 13-sheet plan set (only sheet 10/MP101 sampled); sheet MP102 (1/2\" scale, no size/system text hits found on this pass).",
+  "runs": [
+    {
+      "run_id": "h59-mp101-chws-6in",
+      "description": "6-inch chilled-water supply (CHWS) underground pipe, from a real wall-penetration valve pair to a second real valve pair partway along the run (drawn stacked with its CHWR pair as one below-grade symbol).",
+      "system": "CHWS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.47394179894179894, 0.6614814814814814],
+        [0.4264054232804233, 0.6614814814814814]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 7.99,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 7.99, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 7.99 }
+        }
+      }
+    },
+    {
+      "run_id": "h59-mp101-chwr-6in",
+      "description": "6-inch chilled-water return (CHWR) underground pipe, drawn stacked below its matching CHWS pair as one below-grade symbol (per the sheet's own '(BELOW)' annotation), from the same real wall-penetration valve pair to the same second real valve pair.",
+      "system": "CHWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.47394179894179894, 0.6614814814814814],
+        [0.4264054232804233, 0.6614814814814814]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 7.99,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 7.99, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 7.99 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:6": 15.98 },
+  "total_lf_all_runs": 15.98
+}
