@@ -10,7 +10,9 @@ import { prepareBasWorkflowReplay } from '../src/lib/basWorkflowReplay.ts';
 import { captureBasPoints } from '../src/lib/basWorkflow.ts';
 import { basPointListsSchema } from '../src/lib/basPointLists.ts';
 import { sha256Hex } from '../src/lib/graphKeys.js';
+import { installWebLocksPolyfill } from './helpers/webLocksPolyfill.ts';
 
+installWebLocksPolyfill();
 beforeEach(() => { globalThis.indexedDB = new IDBFactory(); });
 const deferred = () => { let resolve!: () => void; const promise = new Promise<void>(r => { resolve = r; }); return { promise, resolve }; };
 const key = (scope: string, field: string) => `sync:${scope}:${field}`;

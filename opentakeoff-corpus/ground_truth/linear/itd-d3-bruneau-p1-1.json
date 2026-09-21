@@ -1,0 +1,50 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/itd-d3-bruneau-hvac-upgrade-part02.pdf",
+  "source_pdf_sha256": "fafa5c11baf7237ceee9b2500691973249b065a1d186d21ae14c345e93a4489a",
+  "sheet_id": "itd-d3-bruneau-hvac-upgrade-part02.pdf#2",
+  "sheet_number": "P1.1",
+  "page": 2,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Fifth golden authored from the project's own newly-expanded real corpus, and the SECOND from the 'corpus_2' GitHub Release archive Run 25 opened (a different ITD -- Idaho Transportation Department -- district than this project's own existing itd-d1-lab-mechanical.pdf, which is District 1; this one is District 3's own Bruneau maintenance-shed HVAC upgrade, a genuinely different project and PDF, not a duplicate). This particular PDF is itself a 3-part split of a single 20-page original document (source_url convention already established by Run 22's own douglas-county-me4-01.json); only the middle part (pages 8-14 of the original, containing the actual plumbing/mechanical sheets) is committed here, matching this project's own 'pull in only the specific file a golden depends on' discipline.\n\nFound via the same automated batch-sweep method Run 25 established, this time on a sheet where NO automatic size or system bind fired at all (`size:undefined`, `sys:undefined` on every candidate this sheet's own sweep produced) -- unlike every other Run 22-25 golden, this one required the same MANUAL context-read Douglas County's own review_basis already used, not an automatic engine bind. A marked render crop confirms a real, heavily print-fragmented DASHED underground line (53 real dash-gap bridges) crossing a real cleanout symbol (`CO(E)`, 'cleanout, existing' -- a plumbing symbol that exists ONLY on drain/waste/sewer lines, never on a water, gas, or HVAC line, the same strength of universal-convention inference Douglas County's own review_basis already used for its own CD-4-diffuser-implies-supply-air read) with a real printed `4\"(E)` size callout (a half-circle leader symbol pointing directly at this exact line) directly beside it. `system: \"S\"` (sanitary) is this inference, disclosed as an inference rather than a literally-printed abbreviation -- this sheet's own other labels are mostly plain descriptive text or bare size tags (e.g. '1/2\" NON-POTABLE WATER LINE TO ICE MAKER'), not terse system-code tokens, so no drawn 'S' or 'SS' letter exists anywhere on this sheet to point to directly; the cleanout symbol's own universal, single-purpose meaning is the actual basis for the read, not a printed abbreviation match. `size: pipe:4in` IS a direct, literal read of the printed `4\"(E)` callout. Both ends of the single `trace_run` call stop `dead_end` at real wall-corner pipe penetrations (confirmed via the same marked crop); the path's own two interior `tee` vertices (real branch points, each with a real, unwalked `branch_seg` this golden's own scope explicitly excludes) sit exactly where two of this sheet's own real cleanout riser symbols branch up from the buried main -- a real, physically sensible shape, not an artifact: the small 0.67ft jogs at each end represent the pipe's own real vertical rise from the buried run's own drawn reference row up to each wall's own penetration point.",
+  "scope": "A single real 4\" sanitary (existing) underground pipe run (22.67 LF) on ITD District 3's own Bruneau Maintenance Shed HVAC-upgrade project, sheet P1.1 (Plumbing New Work Plan), from a real wall-corner penetration on one side of the storage bay, through two real cleanout branch tees (their own riser branches explicitly out of scope), to a real wall-corner penetration on the other side. Explicitly OUT OF SCOPE: the two cleanout riser branches themselves; every other gas/water/condensate line on this same real, dense plumbing sheet (labeled extensively with its own keyed notes 1-11); every other sheet in this same 3-part-split 20-page original document (only part02's own sheet 2/P1.1 sampled); every other file in the `corpus_2` archive beyond the two now authored from it (this one and ma-town-offices-hvac-upgrades.pdf).",
+  "runs": [
+    {
+      "run_id": "itd-d3-p1-1-sanitary-main",
+      "description": "4\" sanitary (existing) underground pipe, from a real wall-corner penetration, through two real cleanout branch tees, to a real wall-corner penetration on the opposite side of the storage bay.",
+      "system": "S",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.6218364197530865, 0.2946759259259259],
+        [0.6218364197530865, 0.30162037037037037],
+        [0.6172067901234568, 0.30162037037037037],
+        [0.4783179012345679, 0.30162037037037037],
+        [0.47368827160493826, 0.30162037037037037],
+        [0.47368827160493826, 0.2946759259259259]
+      ],
+      "run": {
+        "size_overrides": {
+          "2": { "kind": "pipe", "nps_in": 4 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 22.67,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 0.67, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.67, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" },
+            { "i": 2, "lf": 20, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" },
+            { "i": 3, "lf": 0.67, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" },
+            { "i": 4, "lf": 0.67, "size": { "kind": "pipe", "nps_in": 4 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:4": 22.67 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:4": 22.67 },
+  "total_lf_all_runs": 22.67
+}

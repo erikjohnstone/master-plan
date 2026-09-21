@@ -1,0 +1,51 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf",
+  "source_pdf_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#6",
+  "sheet_number": "MH101",
+  "sheet_title": "AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA A",
+  "page": 6,
+  "tier": "held_out",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "navfac-cherry-point-atc-mechanical--rry-point-atc-mechanical-p6--full.png",
+    "hash": "22e688b0f3f312ec701487eda7c3b859624493f61373918d1aabdd15ac727614"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 held-out-tier authoring pass, 3rd entry)",
+  "date": "2026-09-17",
+  "review_basis": "The third entry off opentakeoff-corpus/reports/LINEAR_HELDOUT.txt's frozen list -- this exact sheet (navfac-cherry-point-atc-mechanical.pdf#6, MH101) was one of that file's own TWO coordinator-chosen sheets, picked STRUCTURALLY (first sheet in the PDF's own MH series) before any trace_run call was made against it, so authoring a golden here now carries no engine-behavior selection bias. Candidate found via a grid-sweep of trace_run seeds near this sheet's own explicit duct-size labels (a much cleaner search than the two prior held-out sheets: every duct callout here already carries its own direct SA/RA/EA system tag, e.g. '8x8 RA', '16/12 SA', '12x10 EA' -- no system-code inference needed, unlike weld-county's or itd-p4's disclosed circumstantial reasoning). The chosen run (8x8 RA, 12.39 LF) reads systems:['RA'] directly from trace_run itself, not annotator inference. A marked render crop (session.viewSheet with ring marks at both endpoints) confirms both ends sit on genuine drawn CAD geometry: the near end (2664.7,1046.9, stop reason 'ambiguous') sits exactly at a real hatched transition/flex-connector fitting where this duct meets a vertical riser; the far end (2887.7,1046.9, stop reason 'ambiguous') sits exactly at a real elbow turning up into a register/riser connection near an 'RG-' (return grille) tag -- both real forks (the walker could continue in more than one direction at each), not narrative stops, the same 'ambiguous, not dead_end' pattern the plan's own §6.3 design anticipates. No named PDF OCG layer exists on this sheet for M-prefixed names (session.sheetInfo()'s own layer list confirmed empty) -- like federal-m41-hhws-pump-stub and itd-p4-ea-duct-stub, this reads confidence:0 / 'stroke-family:unclassified' / 'layer-unclassified', the same lower-confidence code path as those two, not weld-county's cleaner layer-name read. This sheet is considerably denser than the other held-out sheets (53,534 segments) -- several nearby seed sweeps near other size labels on the same sheet landed in tightly-clustered fitting details with sub-1LF reaches and undefined sizes (too small/ambiguous to trust as a clean golden), consistent with this sheet's own real visual density; this candidate was chosen specifically because it sits in a comparatively open, uncluttered run of duct between two identifiable fittings, confirmed by the marked crop showing clean space on both sides of the traced span.",
+  "scope": "The third entry in opentakeoff-corpus/reports/LINEAR_HELDOUT.txt's frozen split (federal-attachment4-mechanical.pdf#7 and itd-d1-lab-mechanical.pdf#4 are already authored). This run is an 8x8 rectangular return-air (RA) duct segment on a dense airport-tower mechanical ductwork plan, from a real transition/flex-connector fitting to a real elbow into a register riser. Explicitly OUT OF SCOPE: the vertical ducts at both ends (up toward 'M41'/FCU-A1, down toward the unrelated '12/8 SA' VAV-A113 branch); every other duct run on this visually dense sheet (dozens of SA/RA/EA branches feeding VAV boxes, FCUs, and terminal registers across the plan); the second remaining navfac coordinator pick (navfac-cherry-point-atc-mechanical.pdf#18, MP101, still declared but unauthored); the other 4 remaining declared-but-unauthored held-out sheets (baker-county-eoc-bidset.pdf#38, bldg5406-hvac-demo-mechanical.pdf#2/#14).",
+  "runs": [
+    {
+      "run_id": "navfac-mh101-ra-duct",
+      "description": "8x8 rectangular return-air (RA) duct segment, from a real transition/flex-connector fitting to a real elbow into a register riser.",
+      "system": "RA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5442606209150327, 0.3304608585858586],
+        [0.5898080065359477, 0.3304608585858586]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 8, "h_in": 8 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 12.39,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 12.39, "size": { "kind": "rect", "w_in": 8, "h_in": 8 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:8x8": 12.39 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:8x8": 12.39
+  },
+  "total_lf_all_runs": 12.39
+}

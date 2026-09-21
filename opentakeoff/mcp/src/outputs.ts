@@ -17,6 +17,7 @@ import { basAssemblyCalculationSchema } from '../../web/src/lib/basAssemblyQuant
 import { basEngineeringSummarySchema } from '../../web/src/lib/basEngineeringReview.ts';
 import { basProjectReviewSchema } from '../../web/src/lib/basProjectReview.ts';
 import { basEvidenceBundleInspectionSchema } from '../../web/src/lib/basEvidenceBundle.ts';
+import { runSizeSchema, computedRunSchema } from '../../web/src/lib/linear/types.ts';
 
 const point = z.tuple([z.number(), z.number()]);
 
@@ -165,6 +166,20 @@ export const compileCorpusTakeoffOutput = {
   service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
+  /** kind control_valves/T-VALVE-01 + export_path only: the filled Siemens
+   * valve mass-sizing template alongside the CSV tabs. rows_written may be
+   * less than source_item_count when a family was out of this template's
+   * hydronic/actuated scope (see excluded_families); per-column coverage
+   * and notes disclose exactly what filled from the schedule vs. was left
+   * blank (PN class / Branch Δp have no source anywhere in this pipeline). */
+  valve_size_template: z.object({
+    path: z.string(),
+    rows_written: z.number().int(),
+    source_item_count: z.number().int(),
+    excluded_families: z.array(z.object({ family: z.string(), count: z.number().int(), reason: z.string() })),
+    coverage: z.record(z.string(), z.object({ filled: z.number().int(), total: z.number().int() })),
+    notes: z.array(z.string()),
+  }).optional(),
 };
 
 const controlPixelBox = z.tuple([z.number(), z.number(), z.number(), z.number()]);
@@ -668,6 +683,7 @@ export const measureSurfaceOutput = {
   area_sf: z.number().describe("length_lf × height_ft — the wall SF committed"),
   npts: z.number().int(),
   shape_id: z.string(),
+  warning: z.string().optional().describe("Mixed-scale warning (#153): a scale note disagreeing with the sheet's sits in the measured region — verify before trusting these numbers"),
 };
 
 /** place_count (#146) — EA markers, one shape per point, scale-free. */
@@ -915,10 +931,81 @@ export const sweepInlineMotifOutput = {
   note: z.string().optional().describe("Present when no scale is committed on this sheet — sizes were compared in image px only"),
 };
 
+/** #linear-takeoff WP1.5: the AUTHORED run block, on the wire — shared by
+ * measure_line and edit_run so a caller reading one shape's state back from
+ * either tool sees the identical shape (never `run` meaning one thing on one
+ * reply and something else on the other). */
+const authoredRunOutput = z.object({
+  system: z.string().optional(),
+  status: z.enum(["new", "existing", "demo"]).optional(),
+  // z.unknown(), not z.record(z.string(), runSizeSchema): web/ and mcp/ each
+  // install their own node_modules/zod (same 3.25.76, never deduped — mcp's
+  // package.json still pins ^3.24.1), so runSizeSchema here is a DIFFERENT
+  // module instance than this file's own `z`. z.record's overload detection
+  // does an instanceof check on its value-type argument that silently fails
+  // across that instance boundary, falls back to treating the call as
+  // z.record(valueType) with z.string() (the intended KEY type) as the
+  // value instead — so every real RunSize object then fails this file's own
+  // reply-shape self-check. runSizeSchema stays the one real contract
+  // (reused successfully everywhere else in this file via plain
+  // `.optional()`/`.nullable()`, which don't hit this instanceof path); this
+  // field is validation-only on our own already-typed reply, so looser is
+  // safe. See size_overrides on AuthoredRun (web/src/lib/linear/types.ts)
+  // for the actual shape: keyed by segment index, one rect/round/oval/pipe
+  // RunSize per key.
+  size_overrides: z.record(z.string(), z.unknown()).optional(),
+  vertex_overrides: z.record(z.string(), z.object({
+    kind: z.string(),
+    dir: z.enum(["up", "down", "both"]).optional(),
+  })).optional(),
+  params: z.object({
+    rise_ft: z.number().optional(),
+    offset_allowance_pct: z.number().optional(),
+    flex_per_diffuser_ft: z.number().optional(),
+  }).optional(),
+});
+
 export const measureLineOutput = {
   length_lf: z.number(),
   npts: z.number().int(),
   shape_id: z.string().optional().describe("Present when condition was passed and the shape committed"),
+  run: authoredRunOutput.optional().describe("#linear-takeoff: the committed shape's authored run block — present when system/size/vertices were passed explicitly, or seeded from a routed condition's defaults"),
+  computed_run: computedRunSchema.optional().describe("#linear-takeoff: present alongside run — the same per-segment/per-vertex read the canvas MEASUREMENTS panel shows"),
+  warning: z.string().optional().describe("Mixed-scale warning (#153): a scale note disagreeing with the sheet's sits in the measured region — verify before trusting these numbers"),
+};
+
+/** edit_run (#linear-takeoff WP1.5): the shape's run block and recomputed
+ * computed.run after the patch — absent `run`/`computed_run` means the
+ * patch cleared every field (the shape is a plain polyline again). */
+export const editRunOutput = {
+  shape_id: z.string(),
+  run: authoredRunOutput.optional().describe("The shape's authored run block after this call — absent when the patch left it empty"),
+  computed_run: computedRunSchema.optional().describe("Recomputed from the result — absent alongside run when the shape has none"),
+};
+
+/** One resolveLinearAssembly line item (#linear-takeoff WP2.5, web/src/lib/
+ * linear/types.ts's LineItem, verbatim). */
+const lineItemSchema = z.object({
+  item: z.string().describe("The line's own name — 'duct_lb', 'insulation_sf', 'elbow', 'transition', 'joint', 'hanger', 'pipe_lf', 'coupling', 'insulation_lf', 'labor_hr'"),
+  qty: z.number(),
+  unit: z.string(),
+  basis: z.enum(["per_ft", "per_vertex", "per_run", "allowance"]),
+  size_key: z.string().optional().describe("runSizeKey of the size this line was resolved for, when it is size-specific"),
+  source_segments: z.array(z.number().int()).optional().describe("Segment indices this line was resolved from"),
+  source_vertices: z.array(z.number().int()).optional().describe("Vertex indices this line was resolved from"),
+  formula: z.string().describe("The exact arithmetic and inputs used — the assembly audit trail (plan §4.2)"),
+  provenance: z.string().describe("Which graded rate table or plan section this line's numbers trace to"),
+  disclosed: z.boolean().optional(),
+});
+
+/** resolve_linear_assembly (#linear-takeoff WP2.5) — plan §8's resolver,
+ * called against one committed linear shape's own computed.run. Read-only:
+ * no shape mutation, no undo step, like takeoff_summary. */
+export const resolveLinearAssemblyOutput = {
+  shape_id: z.string(),
+  assembly_id: z.string().describe("The assembly actually resolved against — 'inline' when the call supplied one directly rather than by id"),
+  family: z.string().nullable().describe("The condition's family — null when the shape carries no condition"),
+  line_items: z.array(lineItemSchema),
 };
 
 /** conditionTotals row (web/src/lib/totals.js) minus presentation fields —
@@ -1006,6 +1093,7 @@ export const exportTakeoffOutput = {
   last_group: z.array(z.unknown()).optional(),
   sheet_tabs: z.array(z.unknown()).optional(),
   sheet_levels: z.object({}).passthrough().optional(),
+  linear_settings: z.object({}).passthrough().optional().describe("#linear-takeoff WP2.4: adopted_pipe_hanger_code/climate_zone/pressure_class_by_system/stick_length_by_material/offset_allowance_pct. Always {} on this surface today — Session does not read an imported project's own linear_settings block into state yet (same status as sheet_levels above)"),
 };
 
 /** import_takeoff (#151) — the merge receipt, field-identical to the app's. */
@@ -1197,10 +1285,11 @@ const materialRow = z.object({
   id: z.string(),
   name: z.string(),
   per: z.number().describe("Coverage rate: basis ÷ per = order quantity"),
-  basis: z.enum(["area", "linear", "count", "seam_lf"]).describe("Which of the condition's totals this row's quantity is computed against — 'seam_lf' is the FIGURED roll-layout seam length (weld rod, seam tape), 0 until the condition carries a roll_setup"),
+  basis: z.enum(["area", "linear", "count", "seam_lf", "vertex", "run"]).describe("Which of the condition's totals this row's quantity is computed against — 'seam_lf' is the FIGURED roll-layout seam length (weld rod, seam tape), 0 until the condition carries a roll_setup. 'vertex'/'run' (#linear-takeoff WP2.3) are a routed condition's own fitting-vertex count and separate-run count"),
   unit: z.string(),
   round: z.boolean().describe("true = round up to whole purchase units (the default — you buy whole bags/buckets)"),
   note: z.string().optional(),
+  hours_per_unit: z.number().optional().describe("#linear-takeoff WP2.3: labor hours per purchase unit"),
   origin_id: z.string().optional().describe("On a twin: the parent row this one follows (the variants.ts family link)"),
   inherited: z.boolean().optional().describe("On a twin: true while the row still follows the family — a patch on it takes it local, split_condition freezes them all"),
 });
@@ -1223,10 +1312,12 @@ const reportMaterialLine = z.object({
   name: z.string(),
   unit: z.string().describe("Purchase unit, e.g. 'gal', 'bag'"),
   per: z.number().describe("Coverage rate — basis units per purchase unit"),
-  basis: z.enum(["area", "linear", "count", "seam_lf"]),
+  basis: z.enum(["area", "linear", "count", "seam_lf", "vertex", "run"]),
   round: z.boolean(),
-  basis_qty: z.number().describe("The condition total this row divides (SF, LF, EA, or figured seam LF — multiplier applied, waste not)"),
+  basis_qty: z.number().describe("The condition total this row divides (SF, LF, EA, figured seam LF, or #linear-takeoff WP2.3's vertex/run count — multiplier applied, waste not)"),
   qty: z.number().describe("Computed order quantity"),
+  hours_per_unit: z.number().optional().describe("#linear-takeoff WP2.3: labor hours per purchase unit, when the row carries one"),
+  hours: z.number().optional().describe("hours_per_unit x qty — present only alongside hours_per_unit"),
 }).passthrough();
 
 /** export_report: the canvas Report's own JSON document (totals.js reportJson,
@@ -1261,6 +1352,17 @@ export const exportReportOutput = {
   units: z.string(),
   display_units: z.string(),
   roll_goods: z.array(z.record(z.unknown())).describe("Roll-goods order rows (#136) — order_lf / rolls / order_qty per roll-goods condition, ×N applied; empty when no condition carries a roll_setup (always the case for a headless session today)"),
+  linear_runs: z.array(z.object({
+    condition_id: z.string(), finish_tag: z.string(), size_key: z.string(),
+    size: runSizeSchema.nullable(), lf: z.number(), lf_net: z.number(),
+  }).passthrough()).describe("#linear-takeoff WP1.4 — one row per (condition, size): the per-size LF breakdown beside the condition's own plain lf total, ×N and waste applied like every other reported quantity; empty when no condition carries a sized run (a plain Linear trace, or one with no segment ever given a size)"),
+  linear_settings: z.object({}).passthrough().describe("#linear-takeoff WP2.4 — the project's adopted-code/climate-zone/pressure-class/stick-length/offset-allowance choices, passed straight through from the canvas's own linear_settings payload key; always {} from a headless MCP session today (Session does not track project settings state yet)"),
+  fittings_and_supports: z.array(z.object({
+    condition_id: z.string(), finish_tag: z.string(), name: z.string(), unit: z.string(),
+    basis: z.enum(["vertex", "run"]), per: z.number(), qty: z.number(),
+    hours_per_unit: z.number().optional(), hours: z.number().optional(),
+    note: z.string(),
+  }).passthrough()).describe("#linear-takeoff WP2.5 — the buy-list rows pulled out of conditions[]'s own materials whose basis is a routed condition's fitting-vertex or separate-run count (elbow brackets, riser clamps, per-run test kits); empty when no condition carries a vertex/run-basis material"),
 };
 
 /** export_marked_pdf — the tool writes the PDF to disk and replies with where
@@ -1301,6 +1403,12 @@ export const editConditionOutput = {
   multiplier: z.number().describe("The condition's quantity multiplier after this write"),
   height_ft: z.number().optional().describe("The condition's wall height after this write — present once set (measure_surface multiplies traced LF by it)"),
   roll_setup: z.object({}).passthrough().optional().describe("The condition's roll-goods setup after this write — present while opted in"),
+  // #linear-takeoff (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md, plan §7.2):
+  // routed-system identity, echoed the same way family/height_ft already are.
+  family: z.string().optional().describe("The condition's assembly family after this write — present once set"),
+  system: z.string().optional().describe("The condition's system tag after this write — present once set"),
+  size: runSizeSchema.optional().describe("The condition's default run size after this write — present once set"),
+  assembly_id: z.string().optional().describe("The condition's assembly id after this write — present once set"),
   roll: z.object({
     condition_id: z.string(), finish_tag: z.string(), material: z.string(),
     roll_width_ft: z.number(), roll_length_ft: z.number(),
@@ -1520,6 +1628,67 @@ export const traceConnectivityOutput = {
   confidence: z.number().describe("Discounted for every disclosed factor below — never a flat 1.0 on a long trace, a bridged gap, or an unclassified layer"),
   factors: z.array(z.string()).describe("Disclosed confidence discounts, e.g. \"layer-unclassified\", \"long-trace(42 hops)\", \"bridged-gap(1)\" — matches confidence.ts's own disclosed-factor doctrine"),
   reason: z.string().optional().describe("dead_end/refused only — why, and what to do about it"),
+};
+
+/** classify_strokes (#linear-takeoff WP3.7, plan §6.2): which stroke
+ * families this sheet's own drawn ink classifies into, before tracing any
+ * of them — a setup/inspection tool, never a prerequisite (trace_run builds
+ * and caches the same classification itself). */
+export const classifyStrokesOutput = {
+  sheet: z.string(),
+  candidate_segments: z.number().int().describe("How many segments survived exclusion (SEG_CLIP/fill-only, annotation/finish-pattern/hidden layer roles, hatch rows, text-box frames, wall-vouched ink) to be classified at all"),
+  families: z.array(z.object({
+    id: z.number().int(),
+    pen: z.number().int().describe("Device pen nibble, 0-15"),
+    dash: z.number().int().describe("Index into the sheet's own dash patterns; 0 = solid"),
+    layer: z.string().optional().describe("OCG layer id, when every member segment shares one"),
+    system: z.enum(["piping", "ductwork", "electrical", "controls", "unknown"]).optional(),
+    confidence: z.number().describe("0-1, stated — never implied. 1.0 only for a real CAD layer name match (plan §6.2 grade a)"),
+    evidence: z.array(z.string()).describe("Which grade(s) this family's classification rests on, e.g. [\"layer-name\"] or [\"pen-weight-prior\"]; [] = no positive evidence at all"),
+    segments: z.number().int().describe("How many candidate segments belong to this family"),
+  })).describe("Every stroke family this sheet's ink separates into — the heaviest/most layer-confident one is usually the duct or pipe pen; trace_run picks whichever family the seed segment actually belongs to, not necessarily this list's first entry"),
+};
+
+/** trace_run (#linear-takeoff WP3.7, plan §6.3/§6.4/§6.6/§6.8): walk the
+ * drawn duct/pipe run under a seed point and report the SAME confidence/
+ * refusal account a canvas trace would. FIND-ONLY by default (no
+ * `shape_id`); `commit: true` mints a real linear shape, `origin.method
+ * "traced"` with the full receipt under `origin.trace`. Two hard refusals
+ * (thrown, not returned — REFUSAL_NO_LINEWORK/REFUSAL_NO_STROKE_FAMILY):
+ * nothing under the seed at all, or nothing on the sheet classifies as
+ * ductwork/piping in the first place. An `ambiguous` stop is NOT a
+ * refusal — it is a real, disclosed result with its own candidate fan. */
+export const traceRunOutput = {
+  sheet: z.string(),
+  seed: z.object({ at: z.tuple([z.number(), z.number()]).describe("The seed snapped onto the nearest candidate segment, image px") }),
+  points: z.array(z.tuple([z.number(), z.number()])).describe("The walked polyline, in travel order, image px"),
+  length_px: z.number(),
+  length_lf: z.number().optional().describe("Present only when the sheet's scale is set — a find-only trace on an unscaled sheet still reports length_px"),
+  size: runSizeSchema.optional().describe("The run's resolved size, from whichever bound label scored highest — absent when no label was reachable (size_missing) or two disagreed (size_withheld; see withheld[])"),
+  systems: z.array(z.string()).optional().describe("System tag(s) riding with the resolved size (two = a multi-service label, e.g. HW/CW), or the stroke family's own classified system when no label bound one"),
+  vertices: z.array(z.object({
+    kind: z.enum(["elbow", "tee", "crossing"]),
+    at: z.tuple([z.number(), z.number()]),
+    turn_deg: z.number().optional().describe("elbow only"),
+    angle_class: z.enum(["45", "90", "custom"]).optional().describe("elbow only"),
+    branch_seg: z.number().int().optional().describe("tee only — the segment index NOT taken"),
+  })).describe("Interior vertices the walk actually passed through, both directions combined"),
+  stops: z.object({
+    forward: z.object({ reason: z.enum(["dead_end", "equipment", "sheet_edge", "riser", "branch_joins_main", "ambiguous", "family_change", "cap"]), at: z.tuple([z.number(), z.number()]) }),
+    backward: z.object({ reason: z.enum(["dead_end", "equipment", "sheet_edge", "riser", "branch_joins_main", "ambiguous", "family_change", "cap"]), at: z.tuple([z.number(), z.number()]) }),
+  }),
+  candidates: z.array(z.object({
+    at: z.tuple([z.number(), z.number()]).describe("Where this candidate continuation starts from the ambiguous node"),
+    angle_deg: z.number(),
+  })).optional().describe("Present only when a stop's reason was \"ambiguous\" — the fan of continuations plan §6.3 says to OFFER, never pick from"),
+  withheld: z.array(z.object({
+    at: z.tuple([z.number(), z.number()]),
+    reads: z.array(z.string()).describe("The disagreeing labels' own raw text, exactly as parsed"),
+    reason: z.string(),
+  })).optional().describe("Present only when two labels landed on the same walked segment and disagreed — size stays unset on this run; view_sheet the point and pick one"),
+  confidence: z.number().describe("min() over whichever named factors have a real numeric grade behind them — see factors"),
+  factors: z.array(z.string()).describe("e.g. \"stroke-family:layer-name\", \"size-binding:beside\", \"size_missing\", \"ambiguous_stop\", \"layer-unclassified\", \"scale_unconfirmed\""),
+  shape_id: z.string().optional().describe("Present when commit:true — the committed linear shape's id"),
 };
 
 /** sheet_context (issue #29): vectors + text + hatch families of one region,

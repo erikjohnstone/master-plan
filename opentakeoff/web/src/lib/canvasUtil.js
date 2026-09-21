@@ -97,6 +97,15 @@ export const instantiateTemplate = (t) => ({
   ...(t.thickness_in != null ? { thickness_in: t.thickness_in } : {}),
   ...(t.laborType != null ? { laborType: t.laborType } : {}),
   ...(t.subfloorType != null ? { subfloorType: t.subfloorType } : {}),
+  // #linear-takeoff WP1.2 (plan §7.2, decision D1): a routed-system
+  // condition — ONE condition per SYSTEM (e.g. "SA", "HHWS"), size lives on
+  // the segment (linear/run.ts), this is only the DEFAULT a manual run
+  // seeds from. Purely additive — a flooring/architectural condition never
+  // carries any of these four fields.
+  ...(t.family != null ? { family: t.family } : {}),
+  ...(t.system != null ? { system: t.system } : {}),
+  ...(t.size ? { size: { ...t.size } } : {}),
+  ...(t.assembly_id != null ? { assembly_id: t.assembly_id } : {}),
   ...(t.roll_setup ? { roll_setup: { ...t.roll_setup } } : {}),   // #136 — deep-copied like grout: a template's roll spec must never be shared by reference
   // instantiateMaterial (lib/materials.js) deep-copies the nested grout
   // geometry — a shallow spread here aliased the CT-1 seed's one grout object
@@ -107,3 +116,10 @@ export const instantiateTemplate = (t) => ({
 // built-in flooring defaults are only the empty-library fallback. Both paths
 // run instantiateTemplate — ONE condition constructor, no drift.
 export const seedConditions = (library) => (library?.length ? library : FLOORING_DEFAULTS).map(instantiateTemplate);
+
+// #linear-takeoff (plan §10.1, WP1.3): "the 12′ roll-width amber does not
+// apply to routed conditions" — a duct/pipe/conduit run has no carpet seam
+// to warn about. system/family are the two WP1.2 fields that mark a
+// condition as a routed system (instantiateTemplate above seeds both
+// together); a flooring/architectural condition never carries either.
+export const isRoutedCond = (c) => !!(c?.system || c?.family);

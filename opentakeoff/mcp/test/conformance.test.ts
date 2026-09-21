@@ -192,7 +192,28 @@ test("every tool: canonical valid call → schema-valid structuredContent mirror
   assert.equal(ocShape.origin.method, "one_click_v1");
   assert.equal(ocShape.origin.reviewed, false, "no human review gate exists here");
   assert.ok(Array.isArray(ocShape.origin.seed_norm));
-  assert.equal(exported.shapes.find((s: any) => s.id === poly.shape_id).origin.method, "manual");
+  const polyShape = exported.shapes.find((s: any) => s.id === poly.shape_id);
+  assert.equal(polyShape.origin.method, "manual");
+  // B-L1: measure_polygon and measure_line used to omit reviewed:false, so an
+  // agent hand-trace imported into the canvas as already-inked instead of
+  // pencil — every other agent commit (one_click_v1 above, symbol_sweep,
+  // agent_v1 derives, cutout_v1) already stamped it; these two didn't.
+  assert.equal(polyShape.origin.reviewed, false, "measure_polygon must not import as already-inked (B-L1)");
+  const lineShape = exported.shapes.find((s: any) => s.id === line.shape_id);
+  assert.equal(lineShape.origin.method, "manual");
+  assert.equal(lineShape.origin.reviewed, false, "measure_line must not import as already-inked (B-L1)");
+
+  // End-to-end proof, not just the origin field in isolation: an
+  // export_takeoff payload from this server, run through the SAME merge the
+  // canvas's Sheet-menu "Import takeoff…" uses, lands every agent-committed
+  // shape PENDING (dashed) in an empty project — never pre-approved ink.
+  const { mergeTakeoffImport } = await import("../../web/src/lib/importTakeoff.js");
+  const { payload: importedPayload, note: importNote } = mergeTakeoffImport({}, exported);
+  assert.equal(importNote.shapes_pending, exported.shapes.length, "every agent-commit shape lands pending on import (B-L1)");
+  assert.ok(
+    importedPayload.shapes.every((s: any) => s.origin?.reviewed === false),
+    "no imported shape is ink on arrival",
+  );
 
   const text = await callOk(client, "read_sheet_text", { sheet: KEY });
   assert.ok(text.items.length >= 4);
@@ -238,6 +259,28 @@ test("every tool: canonical valid call → schema-valid structuredContent mirror
   assert.equal(undone.steps[0].op, "condition");
   const revRow = (await callOk(client, "takeoff_summary")).conditions.find((r: any) => r.finish_tag === "CPT-1");
   assert.deepEqual({ w: revRow.waste_pct, m: revRow.multiplier }, { w: 0, m: 1 }, "undo restores both knobs verbatim");
+
+  // #linear-takeoff (plan §7.2, decision D1): edit_condition's routed-system
+  // identity fields — additive alongside waste/multiplier, echoed the same way,
+  // restored by undo the same way. CPT-1 is a flooring condition in real life,
+  // but the tool doesn't care what family a tag belongs to — these four knobs
+  // are orthogonal to waste/multiplier/roll_setup and never conflict with them.
+  const sysSet = await callOk(client, "edit_condition", { condition: "CPT-1",
+    family: "duct_rect", system: "SA", size: { kind: "rect", w_in: 12, h_in: 6 }, assembly_id: "asm-duct-rect-2wg-r6" });
+  assert.deepEqual(
+    { family: sysSet.family, system: sysSet.system, size: sysSet.size, assembly_id: sysSet.assembly_id },
+    { family: "duct_rect", system: "SA", size: { kind: "rect", w_in: 12, h_in: 6 }, assembly_id: "asm-duct-rect-2wg-r6" },
+  );
+  const sysExported = await callOk(client, "export_takeoff", {});
+  const cptCond = sysExported.conditions.find((c: any) => c.finish_tag === "CPT-1");
+  assert.deepEqual(cptCond.size, { kind: "rect", w_in: 12, h_in: 6 }, "the routed-system identity round-trips through export, not just the reply");
+  await callOk(client, "undo_last", { n: 1 });
+  const sysExportedUndone = await callOk(client, "export_takeoff", {});
+  const cptCondUndone = sysExportedUndone.conditions.find((c: any) => c.finish_tag === "CPT-1");
+  assert.equal(cptCondUndone.family, undefined, "undo removes a freshly-set family/system/size/assembly_id, not just resets waste/multiplier");
+  assert.equal(cptCondUndone.system, undefined);
+  assert.equal(cptCondUndone.size, undefined);
+  assert.equal(cptCondUndone.assembly_id, undefined);
 
   // condition twins (#205): mint → follow → split → exact inverses, then the
   // session goes back to pre-twins state so the later tests see what they expect
@@ -410,6 +453,8 @@ test("schema-invalid arguments: -32602 validation error naming the tool; the ses
   await callViolation(client, "edit_condition", { condition: "CPT-1", waste_pct: -5 });    // negative waste
   await callViolation(client, "edit_condition", { condition: "CPT-1", multiplier: 0 });    // 0 silently means 1 on the canvas — rejected
   await callViolation(client, "edit_condition", { condition: "CPT-1", waste_pct: "ten" }); // wrong type
+  await callViolation(client, "edit_condition", { condition: "CPT-1", size: { kind: "rect", d_in: 8 } }); // #linear-takeoff: d_in belongs to "round", not "rect" — the discriminated union rejects the mismatch
+  await callViolation(client, "edit_condition", { condition: "CPT-1", size: { kind: "hex", w_in: 4 } });  // #linear-takeoff: "hex" isn't one of the four known kinds
 
   // none of that touched the session — a real call still works on the same pair
   const r = await callOk(client, "one_click", { sheet: KEY, x: 600, y: 1084 });
@@ -588,7 +633,7 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   // too, not just "finish"-kind ones, since a real per-code material row
   // routinely lands there when its own column header is drawn once,
   // shared, outside its little box) reads intact end to end.
-  assert.equal(bySurface.EAST.definition.cells["WHITE 962"], "SMOKEY MOUNTAIN AC-18", "the code chains to its material-schedule definition");
+  assert.equal(bySurface.EAST.definition.cells["COLOR"], "SMOKEY MOUNTAIN AC-18", "the code chains to its material-schedule definition");
   for (const f of res.finishes) {
     assert.ok(f.source.sheet && f.source.bbox.x1 > f.source.bbox.x0, `${f.surface} carries a citation`);
   }

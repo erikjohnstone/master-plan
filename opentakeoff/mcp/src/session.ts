@@ -19,6 +19,31 @@ import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
 import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
+import type { RunSize, AuthoredRun, RunVertexKind, LinearCondition, LineItem, AssemblyRecord, AssemblyRule, LinearAssemblySettings } from "../../web/src/lib/linear/types.ts";
+import { resolveRunSegments, type ComputedRun } from "../../web/src/lib/linear/run.ts";
+import { resolveLinearAssembly as resolveLinearAssemblyPure } from "../../web/src/lib/linear/assembly.ts";
+import { SEED_ASSEMBLIES } from "../../web/src/lib/linear/assemblyLibrary.ts";
+// #linear-takeoff WP3 (trace engine, plan §6.2-§6.8) — classify_strokes +
+// trace_run's own pure-lib half. "Canvas and MCP cannot disagree": every one
+// of these is the SAME module TakeoffCanvas.jsx's own Trace mode (WP3.7's
+// canvas half) will import, never a parallel MCP-side reimplementation.
+import { classifyStrokes as classifyStrokesPure, type StrokeClasses, type StrokeFamily } from "../../web/src/lib/linear/strokes.ts";
+import { buildSegmentIndex, nearestSegment, hitTolerancePx, type SegmentIndex } from "../../web/src/lib/linear/index.ts";
+import { walkBothDirections } from "../../web/src/lib/linear/walk.ts";
+import { associateLabel, parseSize, resolveSizeConflicts, type BoundSize } from "../../web/src/lib/linear/sizes.ts";
+import { buildTraceReceipt, REFUSAL_NO_LINEWORK, REFUSAL_NO_STROKE_FAMILY, sizeConflictRefusal, type TraceOrigin, type TraceReceipt } from "../../web/src/lib/linear/receipt.ts";
+import { leaderTerminalPointsForLabel } from "../../web/src/lib/symbollabels.ts";
+
+// #linear-takeoff (WP2.5): the built-in assembly a condition's family
+// resolves to when neither the call nor the condition names one explicitly
+// — one entry per family SEED_ASSEMBLIES actually ships a default for
+// (oval/flex/conduit/cable/tubing have none yet; resolveLinearAssembly
+// errors asking for an explicit assembly_id or inline assembly instead).
+const DEFAULT_ASSEMBLY_ID_BY_FAMILY: Record<string, string> = {
+  duct_rect: "asm-duct-rect-default",
+  duct_round: "asm-duct-round-default",
+  pipe: "asm-pipe-default",
+};
 import { buildBasSourceContext, type BasSourceContext, type BasSourceDocumentInput } from "../../web/src/lib/basSources.ts";
 import { activeBasCapture, mergeBasWorkflows, type BasWorkflow } from "../../web/src/lib/basWorkflow.ts";
 import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src/lib/basNarratives.ts";
@@ -349,7 +374,7 @@ import { applyRuleToProject, type Rule, type RuleShape, type SheetRuleData } fro
 // mints and a seal the canvas mints share ONE implementation of minting,
 // load-gating, and exact-restore inverses.
 import { sanitizeApprovals as sanitizeApprovalsJs, applyApprovalCommand as applyApprovalCommandJs } from "../../web/src/lib/approvals.js";
-import { conditionTotals, grandTotals, sheetTotals, reportJson } from "../../web/src/lib/totals.js";
+import { conditionTotals, grandTotals, sheetTotals, reportJson, linearRunRows, fittingsAndSupportsRows } from "../../web/src/lib/totals.js";
 import { hasRollSetup, mintRollSetup, computeRollTakeoff, rollReportRows, seamLfByShape } from "../../web/src/lib/rollTakeoff.js";
 import { gridPxPerFoot, drawGrid, drawShapes, drawMarks, type Ctx2D, type ToCanvas, type ViewMarks } from "./view.ts";
 
@@ -389,11 +414,21 @@ export interface MaterialRow {
    * FIGURED roll-layout seam length (weld rod, seam tape — where two cuts meet
    * on the floor), not a share of the perimeter: it reads 0 until the
    * condition carries a roll_setup and has committed floor shapes to lay out,
-   * which is the honest answer rather than a guess. */
-  basis: "area" | "linear" | "count" | "seam_lf";
+   * which is the honest answer rather than a guess. "vertex"/"run"
+   * (#linear-takeoff WP2.3) are a routed condition's own totals — every
+   * interior fitting vertex across its shapes, or the count of separate
+   * traced/manual runs — see web/src/lib/totals.js's conditionTotals. */
+  basis: "area" | "linear" | "count" | "seam_lf" | "vertex" | "run";
   unit: string;
   round: boolean;
   note?: string;
+  /** #linear-takeoff WP2.3: labor hours per purchase unit — resolved
+   * through the SAME already-rounded `qty` totals.js computes, not a
+   * separate fractional-quantity path (a materials row buys whole units;
+   * the labor to install them follows that same whole-unit count). Absent
+   * by default — a materials row with no labor content (adhesive, tape)
+   * simply carries no hours field on its resolved report line. */
+  hours_per_unit?: number;
 }
 
 export interface Condition {
@@ -410,6 +445,16 @@ export interface Condition {
    * condition roll goods — material class + the packing engine's spec fields,
    * exactly the object the canvas persists (web/src/lib/rollTakeoff.js). */
   roll_setup?: Record<string, unknown>;
+  // #linear-takeoff WP1.2 (plan §7.2, decision D1): a routed-system
+  // condition — ONE condition per SYSTEM (e.g. "SA", "HHWS"), not per size;
+  // size lives on the segment (linear/run.ts's `run.size_overrides`), this
+  // is only the DEFAULT a manual run seeds from. Additive — a flooring/
+  // architectural condition never carries any of these four fields, mirrors
+  // web/src/lib/canvasUtil.js's instantiateTemplate exactly.
+  family?: string;
+  system?: string;
+  size?: RunSize;
+  assembly_id?: string;
   materials: MaterialRow[];
 }
 
@@ -419,7 +464,7 @@ export interface Condition {
  * after a human affirmed the shape at an explicit review gate — this server
  * has no such gate, so everything it commits is reviewed: false. */
 export interface ShapeOrigin {
-  method: "manual" | "one_click_v1" | "agent_v1" | "symbol_sweep" | "rule_v1" | "cutout_v1";
+  method: "manual" | "one_click_v1" | "agent_v1" | "symbol_sweep" | "rule_v1" | "cutout_v1" | "traced";
   /** Omitted = human. "agent" = the shape was produced by MCP/automation.
    * "rule" = minted by a correction rule's deterministic re-run (#88/#207) —
    * the canvas's own third actor, kept distinct so capture and the marked-set
@@ -537,6 +582,13 @@ export interface ShapeOrigin {
       corroborated_tag?: string;
     };
   };
+  /** trace_run (#linear-takeoff WP3.6, plan §6.8): the full trace receipt —
+   * seed, segments walked, labels read (with bboxes), the seed segment's own
+   * drawn pen width, both directions' stop reasons, and the ambiguous-stop
+   * candidate fan when either stopped that way. `confidence`/
+   * `confidence_factors` above already carry this method's own account;
+   * this is the underlying evidence they're computed from. */
+  trace?: TraceReceipt;
 }
 
 export interface Shape {
@@ -546,8 +598,19 @@ export interface Shape {
   measure_role: MeasureRole;
   verts_norm: [number, number][];
   /** count shapes carry {count} alone (canvas commitCount) — recompute skips
-   * them, so they never grow area fields; every other role carries both. */
-  computed: { area_sf?: number; perimeter_lf?: number; count?: number };
+   * them, so they never grow area fields; every other role carries both.
+   * run (#linear-takeoff WP1.4): only ever present on a `linear` shape that
+   * ALSO carries an authored `run` block — dxf.ts/markedset.js/totals.js all
+   * read it when present. */
+  computed: { area_sf?: number; perimeter_lf?: number; count?: number; run?: ComputedRun };
+  /** The AUTHORED run state (#linear-takeoff WP1.5): system/status/per-segment
+   * size overrides/per-vertex fitting overrides. Written by measure_line (at
+   * commit) and edit_run (after); a project imported from the canvas already
+   * carries one on any shape traced there with the Linear tool. Only ever
+   * present on a `linear` shape, and only when at least one field is set —
+   * mirrors the canvas's own `finalRun` truthiness rule (TakeoffCanvas.jsx's
+   * commitLinear/applySegmentSize) so an empty object never gets stored. */
+  run?: AuthoredRun;
   /** surface_area only: the height this shape was quantified at (canvas
    * commitSurface snapshots the condition's H onto the shape). */
   height_ft?: number;
@@ -726,6 +789,12 @@ interface SheetState {
    * (isError:true, a bare JTS coordinate dump, not the tool's own documented
    * TraceResult shape) instead of a clean, doctrine-consistent refusal. */
   mepGraphNodingError?: string;
+  /** #linear-takeoff WP3.7: stroke classification (strokes.ts) + spatial
+   * index (index.ts), built once and cached like `mepGraph` — classify_strokes
+   * and trace_run share this, so tracing several seeds on one sheet never
+   * repeats the classification pass. undefined = not built yet; null = zero
+   * vector linework (mirrors `mask`/`mepGraph`'s own null convention). */
+  linearIndex?: { classes: StrokeClasses; index: SegmentIndex } | null;
 }
 
 /** sheet_context decimation defaults (issue #29) — declared and stable, never
@@ -798,7 +867,7 @@ export type JournalPayload =
   | { op: "delete"; tool: string; removed: { shape: Shape; index: number }[] }
   | { op: "materials"; tool: string; condition_id: string; before: MaterialRow[]; dropped_before?: string[];
       family?: { condition_id: string; before: MaterialRow[]; dropped_before?: string[] }[] }
-  | { op: "condition"; tool: string; condition_id: string; before: { waste_pct: number; multiplier: number; height_ft?: number; roll_setup?: Record<string, unknown> } }
+  | { op: "condition"; tool: string; condition_id: string; before: { waste_pct: number; multiplier: number; height_ft?: number; roll_setup?: Record<string, unknown>; family?: string; system?: string; size?: RunSize; assembly_id?: string } }
   | { op: "duplicate_condition"; tool: string; condition_id: string; parent_id: string; parent_had_family: boolean }
   | { op: "split_condition"; tool: string; condition_id: string; before: { variant_of?: string; materials?: unknown; materials_dropped?: string[] } }
   | { op: "approval"; tool: string; inverse: ApprovalCommand }
@@ -2031,21 +2100,201 @@ export class Session {
     let shape_id: string | undefined;
     // agent-supplied coordinates are a hand trace by a machine hand: manual
     // method, agent actor — and never reviewed (no human affirmed anything).
-    if (opts.condition) shape_id = this.commit(s, opts.condition, opts.role, verts, { area_sf, perimeter_lf }, { method: "manual", actor: "agent" }).id;
+    // reviewed: false — a hand trace by a machine hand is pencil, never ink.
+    if (opts.condition) shape_id = this.commit(s, opts.condition, opts.role, verts, { area_sf, perimeter_lf }, { method: "manual", actor: "agent", reviewed: false }).id;
     this.flushCommits("measure_polygon");
     const mixed = this.scaleWarningFor(s, verts);
     return { area_sf, perimeter_lf, nverts: verts.length, ...(shape_id ? { shape_id } : {}), ...(mixed ? { warning: mixed } : {}) };
   }
 
-  measureLine(name: string, pts: Point[], opts: { condition?: string }) {
+  measureLine(name: string, pts: Point[], opts: { condition?: string; system?: string; size?: RunSize; vertices?: { i: number; kind: RunVertexKind; dir?: "up" | "down" | "both" }[] }) {
     const s = this.sheet(name);
     if (s.upp == null) throw new UserError(this.scaleGate(s));
+    if (!opts.condition && (opts.system !== undefined || opts.size !== undefined || opts.vertices?.length)) {
+      throw new UserError("system/size/vertices configure the committed shape's run block — pass condition too, or drop them for a plain length preview.");
+    }
     const length_lf = round2(openLen(pts) * s.upp);
     let shape_id: string | undefined;
-    // area_sf stays 0 — the canvas only mints border SF when the condition has a thickness
-    if (opts.condition) shape_id = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "manual", actor: "agent" }).id;
+    let finalRun: AuthoredRun | undefined;
+    let computedRun: ComputedRun | undefined;
+    // area_sf stays 0 — the canvas only mints border SF when the condition has a thickness.
+    // reviewed: false — an agent-drawn line is pencil until a human affirms it,
+    // same as every other agent commit (ShapeOrigin's own invariant, previously
+    // unstamped here — see measure_line/measure_polygon parity).
+    if (opts.condition) {
+      const c = this.conditionFor(opts.condition);
+      const shape = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "manual", actor: "agent", reviewed: false });
+      shape_id = shape.id;
+      // #linear-takeoff (WP1.5): mirrors TakeoffCanvas.jsx's commitLinear —
+      // a routed-system condition (system or family set) seeds this run's
+      // system and segment-0 size from its own defaults; an explicit
+      // system/size here wins outright over the seed (never merged with
+      // it), same "one wins" rule as measure_surface's height_ft.
+      const routed = !!(c.system || c.family);
+      const run: AuthoredRun = {};
+      const system = opts.system !== undefined ? opts.system : routed ? c.system : undefined;
+      const size = opts.size !== undefined ? opts.size : routed ? c.size : undefined;
+      if (system !== undefined) run.system = system;
+      if (size) run.size_overrides = { "0": size };
+      if (opts.vertices?.length) {
+        const vertex_overrides: Record<string, { kind: RunVertexKind; dir?: "up" | "down" | "both" }> = {};
+        for (const v of opts.vertices) vertex_overrides[String(v.i)] = { kind: v.kind, ...(v.dir ? { dir: v.dir } : {}) };
+        run.vertex_overrides = vertex_overrides;
+      }
+      if (Object.keys(run).length) {
+        shape.run = run;
+        finalRun = run;
+        const resolved = resolveRunSegments(pts, s.upp, run);
+        if (resolved) { shape.computed.run = resolved; computedRun = resolved; }
+      }
+    }
     this.flushCommits("measure_line");
-    return { length_lf, npts: pts.length, ...(shape_id ? { shape_id } : {}) };
+    const mixed = this.scaleWarningFor(s, pts);
+    return { length_lf, npts: pts.length, ...(shape_id ? { shape_id } : {}), ...(finalRun ? { run: finalRun } : {}), ...(computedRun ? { computed_run: computedRun } : {}), ...(mixed ? { warning: mixed } : {}) };
+  }
+
+  /** edit_run (#linear-takeoff WP1.5): patch an EXISTING linear shape's
+   * authored `run` block after commit — the MCP-side equivalent of the
+   * canvas's right-click "Set size…" segment menu, generalized to every
+   * AuthoredRun field. Segment/vertex overrides patch by index (a `null`
+   * kind/size clears just that one entry, exactly like the canvas's
+   * applySegmentSize); system/status/params overwrite wholesale, `null`
+   * clearing the field entirely. computed.run is recomputed from the
+   * resulting run block via the same resolveRunSegments call
+   * computeShapeMetrics uses — canvas and MCP can never disagree about the
+   * math because both call the one function in linear/run.ts. */
+  editRun(shape_id: string, patch: {
+    system?: string | null;
+    status?: "new" | "existing" | "demo" | null;
+    segment_sizes?: { i: number; size: RunSize | null }[];
+    vertices?: { i: number; kind: RunVertexKind | null; dir?: "up" | "down" | "both" }[];
+    params?: { rise_ft?: number | null; offset_allowance_pct?: number | null; flex_per_diffuser_ft?: number | null };
+  }) {
+    const i = this.shapes.findIndex((x) => x.id === shape_id);
+    if (i < 0) throw new UserError(`No shape with id ${JSON.stringify(shape_id)}.`);
+    const cur = this.shapes[i];
+    if (cur.measure_role !== "linear") {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} is a ${cur.measure_role} shape — run overrides only apply to linear shapes (measure_line).`);
+    }
+    if (cur.origin?.reviewed === true) {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} was affirmed by a human — reviewed work is ink, not pencil, and cannot be edited by an agent.`);
+    }
+    if (patch.system === undefined && patch.status === undefined && !patch.segment_sizes?.length && !patch.vertices?.length && patch.params === undefined) {
+      throw new UserError("Nothing to change — pass at least one of system, status, segment_sizes, vertices, params.");
+    }
+    const s = this.sheet(cur.sheet_id);
+    if (s.upp == null) throw new UserError(this.scaleGate(s));
+    const before: Shape = structuredClone(cur);
+
+    const run: AuthoredRun = { ...(cur.run || {}) };
+    if (patch.system !== undefined) { if (patch.system === null) delete run.system; else run.system = patch.system; }
+    if (patch.status !== undefined) { if (patch.status === null) delete run.status; else run.status = patch.status; }
+    if (patch.segment_sizes?.length) {
+      const overrides = { ...(run.size_overrides || {}) };
+      for (const seg of patch.segment_sizes) {
+        if (seg.size) overrides[String(seg.i)] = seg.size; else delete overrides[String(seg.i)];
+      }
+      if (Object.keys(overrides).length) run.size_overrides = overrides; else delete run.size_overrides;
+    }
+    if (patch.vertices?.length) {
+      const overrides = { ...(run.vertex_overrides || {}) };
+      for (const v of patch.vertices) {
+        if (v.kind) overrides[String(v.i)] = { kind: v.kind, ...(v.dir ? { dir: v.dir } : {}) }; else delete overrides[String(v.i)];
+      }
+      if (Object.keys(overrides).length) run.vertex_overrides = overrides; else delete run.vertex_overrides;
+    }
+    if (patch.params !== undefined) {
+      const params = { ...(run.params || {}) } as Record<string, number>;
+      for (const [k, v] of Object.entries(patch.params)) {
+        if (v === null || v === undefined) delete params[k]; else params[k] = v;
+      }
+      if (Object.keys(params).length) run.params = params; else delete run.params;
+    }
+    const finalRun = Object.keys(run).length ? run : undefined;
+
+    this.shapes[i] = { ...cur, ...(finalRun ? { run: finalRun } : {}) };
+    if (!finalRun) delete this.shapes[i].run;
+    const pts: Point[] = cur.verts_norm.map(([x, y]) => [x * s.widthPx, y * s.heightPx]);
+    const resolved = finalRun ? resolveRunSegments(pts, s.upp, finalRun) : null;
+    this.shapes[i].computed = { ...cur.computed, ...(resolved ? { run: resolved } : {}) };
+    if (!resolved) delete this.shapes[i].computed.run;
+    this.record({ op: "edit", tool: "edit_run", before });
+
+    return { shape_id, ...(finalRun ? { run: finalRun } : {}), ...(resolved ? { computed_run: resolved } : {}) };
+  }
+
+  /** #linear-takeoff (WP2.5): resolve_linear_assembly's measure-stage body —
+   * the SAME resolveLinearAssembly pure function (web/src/lib/linear/
+   * assembly.ts, WP2.2) the canvas will call, given one committed shape's
+   * own computed.run. Read-only: no shape mutation, no undo step, exactly
+   * like takeoff_summary.
+   *
+   * Assembly lookup is deliberately narrow: this server has no access to
+   * an estimator's own browser-profile assembly library (web/src/lib/
+   * profile.js's IndexedDB-backed section) — that is a real, permanent
+   * boundary (Node has no browser storage to read), not a gap to close.
+   * It resolves against SEED_ASSEMBLIES (the shipped §5.5 defaults,
+   * assemblyLibrary.ts) by id, the condition's own `assembly_id` when the
+   * call omits one, or the family's own built-in default; a genuinely
+   * custom assembly is supplied INLINE on the call instead of by id. */
+  resolveLinearAssembly(shape_id: string, opts: {
+    assembly_id?: string;
+    assembly?: { family: LinearCondition["family"]; name?: string; per_ft?: AssemblyRule[]; per_vertex?: AssemblyRule[]; per_run?: AssemblyRule[]; allowances?: Record<string, unknown>; deduct_fittings?: boolean };
+    pressure_class_in_wg?: number;
+    climate_zone?: LinearAssemblySettings["climate_zone"];
+    adopted_pipe_hanger_code?: LinearAssemblySettings["adopted_pipe_hanger_code"];
+    pipe_service?: string;
+    pipe_hanger_material?: string;
+    pipe_hanger_service?: "mechanical" | "plumbing";
+  }): { shape_id: string; assembly_id: string; family: string | null; line_items: LineItem[] } {
+    const shape = this.shapes.find((x) => x.id === shape_id);
+    if (!shape) throw new UserError(`No shape with id ${JSON.stringify(shape_id)}.`);
+    if (shape.measure_role !== "linear") {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} is a ${shape.measure_role} shape — assembly resolution only applies to linear shapes (measure_line).`);
+    }
+    const run = shape.computed?.run;
+    if (!run) {
+      throw new UserError(`Shape ${JSON.stringify(shape_id)} carries no run block yet — give it sizes with measure_line's own system/size/vertices or edit_run first.`);
+    }
+
+    const cond = this.conditions.find((c) => c.id === shape.condition_id);
+    const condition: LinearCondition = cond
+      ? { family: cond.family as LinearCondition["family"], system: cond.system, size: cond.size, assembly_id: cond.assembly_id, multiplier: cond.multiplier, waste_pct: cond.waste_pct }
+      : {};
+
+    let assembly: AssemblyRecord;
+    let assemblyIdUsed: string;
+    if (opts.assembly) {
+      assembly = {
+        id: "inline", name: opts.assembly.name || "inline assembly", family: opts.assembly.family,
+        per_ft: opts.assembly.per_ft ?? [], per_vertex: opts.assembly.per_vertex ?? [], per_run: opts.assembly.per_run ?? [],
+        ...(opts.assembly.allowances ? { allowances: opts.assembly.allowances as AssemblyRecord["allowances"] } : {}),
+        ...(opts.assembly.deduct_fittings != null ? { deduct_fittings: opts.assembly.deduct_fittings } : {}),
+      };
+      assemblyIdUsed = "inline";
+    } else {
+      const wantId = opts.assembly_id || condition.assembly_id || DEFAULT_ASSEMBLY_ID_BY_FAMILY[condition.family || ""];
+      if (!wantId) {
+        throw new UserError(`No assembly_id given and condition ${JSON.stringify(cond?.finish_tag ?? shape.condition_id)} has no default for family ${JSON.stringify(condition.family ?? null)} — pass assembly_id or an inline assembly.`);
+      }
+      const found = SEED_ASSEMBLIES.find((a) => a.id === wantId);
+      if (!found) {
+        throw new UserError(`Unknown assembly_id ${JSON.stringify(wantId)} — this server only resolves against its built-in defaults (${SEED_ASSEMBLIES.map((a) => a.id).join(", ")}); a custom library entry from the estimator's own browser profile isn't reachable from here yet — pass it inline via the assembly parameter instead.`);
+      }
+      assembly = found;
+      assemblyIdUsed = found.id;
+    }
+
+    const settings: LinearAssemblySettings = {
+      ...(opts.pressure_class_in_wg != null ? { pressure_class_in_wg: opts.pressure_class_in_wg } : {}),
+      ...(opts.climate_zone ? { climate_zone: opts.climate_zone } : {}),
+      ...(opts.adopted_pipe_hanger_code ? { adopted_pipe_hanger_code: opts.adopted_pipe_hanger_code } : {}),
+    };
+    const line_items = resolveLinearAssemblyPure(run, condition, assembly, settings, {
+      pipeService: opts.pipe_service, pipeHangerMaterial: opts.pipe_hanger_material, pipeHangerService: opts.pipe_hanger_service,
+    });
+
+    return { shape_id, assembly_id: assemblyIdUsed, family: condition.family ?? null, line_items };
   }
 
   /** Surface Area — the canvas's Surface tool (commitSurface): an OPEN run
@@ -2068,10 +2317,12 @@ export class Session {
       c.height_ft = opts.height_ft;
     }
     const LF = openLen(pts) * s.upp;
-    const shape = this.commit(s, opts.condition, "surface_area", pts, { area_sf: round2(LF * h), perimeter_lf: round2(LF) }, { method: "manual", actor: "agent" });
+    // reviewed: false — pencil until a human affirms it, same as every agent commit.
+    const shape = this.commit(s, opts.condition, "surface_area", pts, { area_sf: round2(LF * h), perimeter_lf: round2(LF) }, { method: "manual", actor: "agent", reviewed: false });
     shape.height_ft = h;
     this.flushCommits("measure_surface");
-    return { condition: c.finish_tag, height_ft: h, length_lf: round2(LF), area_sf: round2(LF * h), npts: pts.length, shape_id: shape.id };
+    const mixed = this.scaleWarningFor(s, pts);
+    return { condition: c.finish_tag, height_ft: h, length_lf: round2(LF), area_sf: round2(LF * h), npts: pts.length, shape_id: shape.id, ...(mixed ? { warning: mixed } : {}) };
   }
 
   /** derive_base (#148): the estimator's most mechanical derivation — wall
@@ -2757,7 +3008,11 @@ export class Session {
     const s = this.sheet(name);
     const ids = points.map(([x, y], i) =>
       this.commit(s, opts.condition, "count", [[x, y]], { count: 1 },
-        opts.origins?.[i] ? { ...opts.origins[i] } : { method: "manual", actor: "agent" }).id);
+        // reviewed: false on the default (no explicit origin) path — a caller
+        // that DOES pass origins (e.g. an inked symbol-sweep commit) states
+        // its own reviewed value and is trusted, same as every other origin
+        // pass-through in this file.
+        opts.origins?.[i] ? { ...opts.origins[i] } : { method: "manual", actor: "agent", reviewed: false }).id);
     this.flushCommits(opts.tool ?? "place_count");
     const c = this.conditions.find((x) => x.finish_tag === opts.condition)!;
     const ea_total = this.shapes
@@ -3472,6 +3727,226 @@ export class Session {
       }
     }
     return s.mepGraph;
+  }
+
+  /** #linear-takeoff WP3.7: stroke classification + spatial index (WP3.1/
+   * WP3.2), built once per sheet and cached like `ensureMepGraph` — the SAME
+   * `strokes.ts`/`index.ts` the canvas's own Trace mode worker will build
+   * from, so a headless trace and a canvas trace can never classify a
+   * sheet's ink differently. Reuses `rolesFor`'s own layer-role codes and
+   * `mepLayerSignal` exactly like `ensureMepGraph` does — one shared
+   * "which ink is real MEP linework" answer for both connectivity tracing
+   * and duct/pipe tracing, never a second heuristic. undefined = not built
+   * yet; null = zero vector linework (a scan). */
+  private async ensureLinearIndex(s: SheetState): Promise<{ classes: StrokeClasses; index: SegmentIndex } | null> {
+    if (s.linearIndex === undefined) {
+      const geo = await this.ensureGeometry(s);
+      if (!geo.segs.length) { s.linearIndex = null; return null; }
+      if (!s.spans) s.spans = textSpans(s.page);
+      const roleCodes = this.rolesFor(s, geo);
+      const layerSignal = mepLayerSignal(s.layers, geo.layerOf);
+      const mppf = s.upp ? 1 / s.upp : 0;
+      const classes = classifyStrokesPure({
+        segs: geo.segs, meta: geo.meta, roleCodes, layerSignal, ftPx: mppf,
+        subpaths: geo.subpaths, texts: s.spans.map((sp) => ({ x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0 })),
+        dash: geo.dash, lum: geo.lum, strokeRgb: geo.strokeRgb,
+        layerOf: geo.layerOf, layerIds: geo.layerIds, layers: s.layers,
+      });
+      const index = buildSegmentIndex(geo.segs, geo.meta, { candidate: classes.candidate, family: classes.family });
+      s.linearIndex = { classes, index };
+    }
+    return s.linearIndex;
+  }
+
+  /** classify_strokes (#linear-takeoff WP3.7, setup stage): read-only sheet
+   * inspection — which stroke families this sheet's own ink classifies into
+   * (plan §6.2's evidence grades a-d), and how many candidate segments each
+   * one covers. Purely informational: trace_run builds and caches the SAME
+   * index itself, so calling this first is never required, only useful for
+   * seeing what's on a sheet (which pen is the duct pen, is there real CAD
+   * layer evidence) before tracing a seed. */
+  async classifyStrokes(name: string) {
+    const s = this.sheet(name);
+    const li = await this.ensureLinearIndex(s);
+    if (!li) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — stroke classification reads drawn ink; raster-assisted tracing is not yet available here.");
+    }
+    if (!li.classes.families.length) {
+      throw new UserError(REFUSAL_NO_STROKE_FAMILY);
+    }
+    const counts = new Map<number, number>();
+    const fam = li.classes.family;
+    for (let i = 0; i < fam.length; i++) if (fam[i] >= 0) counts.set(fam[i], (counts.get(fam[i]) || 0) + 1);
+    return {
+      sheet: s.key,
+      candidate_segments: li.classes.candidate.reduce((n: number, c) => n + c, 0),
+      families: li.classes.families.map((f) => ({
+        id: f.id, pen: f.pen, dash: f.dash,
+        ...(f.layer ? { layer: f.layer } : {}),
+        ...(f.system ? { system: f.system } : {}),
+        confidence: f.confidence, evidence: f.evidence,
+        segments: counts.get(f.id) || 0,
+      })),
+    };
+  }
+
+  /** trace_run (#linear-takeoff WP3.7, measure stage): walk the drawn duct/
+   * pipe run under a seed point (plan §6.3/§6.4's index+graph+walker),
+   * associate whatever size labels (plan §6.6) land near it, and report the
+   * SAME confidence/refusal account `buildTraceReceipt` (WP3.6) would give
+   * a canvas trace. FIND-ONLY by default; `commit: true` (with `condition`)
+   * mints a real linear shape exactly like `measure_line`'s own commit path
+   * (same `this.commit` call, same `run`/`computed.run` construction) but
+   * stamped `origin.method:"traced"` with the full receipt under
+   * `origin.trace` instead of a manually-clicked polyline's plain
+   * `method:"manual"`. Two hard, pre-walk refusals (plan §6.8, verbatim):
+   * no candidate segment at all under the seed, or a sheet with no stroke
+   * family classified as ductwork/piping in the first place. Everything
+   * past that point — including an `ambiguous` stop — is a real, disclosed
+   * FOUND result, never a refusal: plan §6.3's own doctrine is to offer the
+   * candidate fan, not block on it. */
+  async traceRun(name: string, from: Point, opts: {
+    condition?: string;
+    max_hops?: number;
+    max_length_ft?: number;
+    commit?: boolean;
+  }) {
+    const s = this.sheet(name);
+    const li = await this.ensureLinearIndex(s);
+    if (!li) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — trace manually, or use raster-assisted snapping (plan §6.9, not yet available here).");
+    }
+    if (!li.classes.families.length) {
+      throw new UserError(REFUSAL_NO_STROKE_FAMILY);
+    }
+    if (opts.commit && !opts.condition) {
+      throw new UserError("commit:true needs a condition to commit onto — pass condition, or drop commit for a find-only trace.");
+    }
+    const { index, classes } = li;
+    const geo = await this.ensureGeometry(s);
+    // 11px: the SAME zoom-1 "aim radius" TakeoffCanvas.jsx's own click/
+    // endpoint/segment/intersection snap all share (index.ts's own
+    // hitTolerancePx) — the seed's OWN segment isn't known yet, so there is
+    // no per-segment pen width to widen it with.
+    const hit = nearestSegment(index, from[0], from[1], hitTolerancePx(1, 0));
+    if (!hit) {
+      throw new UserError(REFUSAL_NO_LINEWORK);
+    }
+    const mppf = s.upp ? 1 / s.upp : 0;
+    const maxLengthPx = opts.max_length_ft && mppf ? opts.max_length_ft * mppf : undefined;
+    const walk = walkBothDirections(index, hit.seg, mppf, { dash: geo.dash, layerOf: geo.layerOf }, {
+      maxHops: opts.max_hops, maxLengthPx,
+      pageBounds: { minX: 0, minY: 0, maxX: s.widthPx, maxY: s.heightPx },
+    });
+    const walkedSegs = new Set(walk.segs);
+
+    if (!s.spans) s.spans = textSpans(s.page);
+    const spans = s.spans;
+    const pairs: { span: TextSpan; binding: BoundSize }[] = [];
+    for (const sp of spans) {
+      // #linear-takeoff GATE 3 bug catalogue: leaderTerminalPointsForLabel
+      // (symbollabels.ts) is real work — a whole-sheet CFM-value scan
+      // (airflowValuesFor) plus a spatial leader chase — and associateLabel
+      // below ignores its own `leaderPoints` opt entirely whenever
+      // `parseSize(label.text)` fails, which happens on every non-size span
+      // (room labels, equipment tags, keynotes — the overwhelming majority
+      // on a real sheet). Computing it unconditionally for every one of a
+      // sheet's spans is provably wasted work on every non-size span: the
+      // outcome (`binding === null`) is identical whether or not
+      // `leaderPoints` was ever computed. Confirmed as the dominant
+      // per-sheet-build cost on a real, dense corpus sheet (1034 spans, 25
+      // of them real sizes): 2.3s in this loop alone, almost all of it
+      // spans that could never have used their own leader points anyway.
+      // Skipping the computation for a span that isn't a size in the first
+      // place changes no output, only the cost of producing it.
+      if (!parseSize(sp.str)) continue;
+      const leaderPoints = leaderTerminalPointsForLabel(sp, spans, geo.segs, geo.lum);
+      const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, mppf, { leaderPoints });
+      if (binding) pairs.push({ span: sp, binding });
+    }
+    // #linear-takeoff GATE 3 bug catalogue (docs/LINEAR-TRACE-EVAL.md Run 77):
+    // associateOnRunFallback (sizes.ts) exists and is unit-tested, but is
+    // DELIBERATELY NOT WIRED IN here — see Run 77's own writeup for why:
+    // measured against the real corpus, it fixed 3 genuine no-label cases
+    // but ALSO turned 3 already-hard stacked-multi-system-label cases
+    // (va-durham-chillers-m401-b) from a safe blank into a confidently
+    // WRONG size (an unrelated header pipe's label won by proximity once
+    // orientation was dropped, with nothing left to rule it out). This
+    // project's own standing doctrine (sizes.ts's header: "a wrong MAX read
+    // as a duct size corrupts a real bid") treats that trade as a net loss,
+    // not a net win, regardless of the aggregate accuracy number moving up.
+    const allBindings = pairs.map((p) => p.binding);
+    const spanByBinding = new Map<BoundSize, TextSpan>(pairs.map((p) => [p.binding, p.span] as const));
+    const { conflicts } = resolveSizeConflicts(allBindings);
+    const runConflicts = conflicts.filter((c) => walkedSegs.has(c.seg));
+
+    const familyId = classes.family[hit.seg];
+    const family: StrokeFamily = classes.families[familyId];
+    const scaleConfirmed = !!s.upp && s.scaleConfirmed !== false;
+
+    const origin: TraceOrigin = buildTraceReceipt(index, { seg: hit.seg, x: hit.px, y: hit.py }, walk, family, allBindings, conflicts, {
+      scaleConfirmed,
+      labelText: (b) => spanByBinding.get(b),
+    });
+
+    const bestLabel = origin.trace.labels.find((l) => !l.withheld);
+    const rawCandidates = walk.stops.forward.candidates ?? walk.stops.backward.candidates;
+
+    let shape_id: string | undefined;
+    if (opts.commit && opts.condition) {
+      if (s.upp == null) throw new UserError(this.scaleGate(s));
+      const pts: Point[] = walk.points;
+      const length_lf = round2(walk.length * s.upp);
+      const shape = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "traced", actor: "agent", reviewed: false, confidence: origin.confidence, confidence_factors: origin.confidence_factors, trace: origin.trace });
+      shape_id = shape.id;
+      const run: AuthoredRun = {};
+      if (bestLabel?.systems?.length) run.system = bestLabel.systems.join("/");
+      else if (family.system) run.system = family.system;
+      if (bestLabel?.size) run.size_overrides = { "0": bestLabel.size };
+      if (Object.keys(run).length) {
+        shape.run = run;
+        const resolved = resolveRunSegments(pts, s.upp, run);
+        if (resolved) shape.computed.run = resolved;
+      }
+      this.flushCommits("trace_run");
+    }
+
+    return {
+      sheet: s.key,
+      seed: { at: [round1(hit.px), round1(hit.py)] as [number, number] },
+      points: walk.points.map(([x, y]) => [round1(x), round1(y)] as [number, number]),
+      length_px: round2(walk.length),
+      ...(s.upp ? { length_lf: round2(walk.length * s.upp) } : {}),
+      ...(bestLabel?.size ? { size: bestLabel.size } : {}),
+      ...(bestLabel?.systems?.length ? { systems: bestLabel.systems } : {}),
+      ...(!bestLabel?.systems?.length && family.system ? { systems: [family.system] } : {}),
+      vertices: walk.vertices.map((v) => ({
+        kind: v.kind, at: [round1(v.x), round1(v.y)] as [number, number],
+        ...(v.turnDeg != null ? { turn_deg: round1(v.turnDeg) } : {}),
+        ...(v.angleClass ? { angle_class: v.angleClass } : {}),
+        ...(v.branchSeg != null ? { branch_seg: v.branchSeg } : {}),
+      })),
+      stops: {
+        forward: { reason: walk.stops.forward.reason, at: [round1(walk.stops.forward.x), round1(walk.stops.forward.y)] as [number, number] },
+        backward: { reason: walk.stops.backward.reason, at: [round1(walk.stops.backward.x), round1(walk.stops.backward.y)] as [number, number] },
+      },
+      ...(rawCandidates?.length ? {
+        candidates: rawCandidates.map((c) => ({
+          at: [round1(index.segs[c.seg * 4 + c.end * 2]), round1(index.segs[c.seg * 4 + c.end * 2 + 1])] as [number, number],
+          angle_deg: round1(c.angleDeg),
+        })),
+      } : {}),
+      ...(runConflicts.length ? {
+        withheld: runConflicts.map((c) => ({
+          at: [round1(index.segs[c.seg * 4]), round1(index.segs[c.seg * 4 + 1])] as [number, number],
+          reads: c.candidates.map((cand) => cand.parsed.raw),
+          reason: sizeConflictRefusal(c),
+        })),
+      } : {}),
+      confidence: origin.confidence,
+      factors: origin.confidence_factors,
+      ...(shape_id ? { shape_id } : {}),
+    };
   }
 
   /** trace_connectivity (Phase 4) — which valve belongs to which equipment,
@@ -5730,7 +6205,7 @@ export class Session {
    * the call, restored verbatim on undo (same pattern as editShape's `before`
    * capture, simpler here because there is no per-row provenance to preserve). */
   editMaterials(tag: string, opts: {
-    add?: { name: string; per?: number; basis?: MaterialRow["basis"]; unit?: string; round?: boolean; note?: string }[];
+    add?: { name: string; per?: number; basis?: MaterialRow["basis"]; unit?: string; round?: boolean; note?: string; hours_per_unit?: number }[];
     remove?: string[];
     patch?: { id: string; fields: Partial<Omit<MaterialRow, "id">> }[];
   }) {
@@ -5786,6 +6261,7 @@ export class Session {
         id: uid("mat"), name: a.name.trim(), per: Math.max(0, a.per ?? 0),
         basis: a.basis ?? "area", unit: a.unit ?? "", round: a.round ?? true,
         ...(a.note ? { note: a.note } : {}),
+        ...(a.hours_per_unit != null ? { hours_per_unit: Math.max(0, a.hours_per_unit) } : {}),
       };
       conds = conds.map((x) => (x.id !== cid ? x : { ...x, materials: [...(x.materials || []), row as unknown as VariantRow] }));
       added.push(row.id);
@@ -5868,9 +6344,10 @@ export class Session {
     return { seamByShape: seamLfByShape(byCond) as Map<string, number> };
   }
 
-  editCondition(tag: string, opts: { waste_pct?: number; multiplier?: number; height_ft?: number; roll_setup?: Record<string, unknown> | null }) {
-    if (opts.waste_pct === undefined && opts.multiplier === undefined && opts.height_ft === undefined && opts.roll_setup === undefined) {
-      throw new UserError("Nothing to change — pass at least one of waste_pct, multiplier, height_ft, roll_setup.");
+  editCondition(tag: string, opts: { waste_pct?: number; multiplier?: number; height_ft?: number; roll_setup?: Record<string, unknown> | null; family?: string; system?: string; size?: RunSize; assembly_id?: string }) {
+    if (opts.waste_pct === undefined && opts.multiplier === undefined && opts.height_ft === undefined && opts.roll_setup === undefined
+      && opts.family === undefined && opts.system === undefined && opts.size === undefined && opts.assembly_id === undefined) {
+      throw new UserError("Nothing to change — pass at least one of waste_pct, multiplier, height_ft, roll_setup, family, system, size, assembly_id.");
     }
     const c = this.conditions.find((x) => x.finish_tag === tag);
     if (!c) {
@@ -5880,10 +6357,19 @@ export class Session {
     const before = {
       waste_pct: c.waste_pct, multiplier: c.multiplier, height_ft: c.height_ft,
       roll_setup: c.roll_setup ? structuredClone(c.roll_setup) : undefined,
+      // #linear-takeoff WP1.2: snapshotted the same as roll_setup, so
+      // undo_last restores a routed-system condition's identity verbatim.
+      family: c.family, system: c.system,
+      size: c.size ? { ...c.size } : undefined,
+      assembly_id: c.assembly_id,
     };
     if (opts.waste_pct !== undefined) c.waste_pct = opts.waste_pct;
     if (opts.multiplier !== undefined) c.multiplier = opts.multiplier;
     if (opts.height_ft !== undefined) c.height_ft = opts.height_ft;
+    if (opts.family !== undefined) c.family = opts.family;
+    if (opts.system !== undefined) c.system = opts.system;
+    if (opts.size !== undefined) c.size = { ...opts.size };
+    if (opts.assembly_id !== undefined) c.assembly_id = opts.assembly_id;
     if (opts.roll_setup !== undefined) {
       if (opts.roll_setup === null) {
         delete c.roll_setup; // opt out — the condition is trade-agnostic again
@@ -5914,6 +6400,10 @@ export class Session {
       condition: tag, condition_id: c.id, waste_pct: c.waste_pct, multiplier: c.multiplier,
       ...(c.height_ft !== undefined ? { height_ft: c.height_ft } : {}),
       ...(c.roll_setup ? { roll_setup: c.roll_setup } : {}),
+      ...(c.family !== undefined ? { family: c.family } : {}),
+      ...(c.system !== undefined ? { system: c.system } : {}),
+      ...(c.size ? { size: c.size } : {}),
+      ...(c.assembly_id !== undefined ? { assembly_id: c.assembly_id } : {}),
       ...(roll ? { roll } : {}),
     };
   }
@@ -6055,6 +6545,14 @@ export class Session {
           else c.height_ft = e.before.height_ft;
           if (e.before.roll_setup === undefined) delete c.roll_setup;
           else c.roll_setup = e.before.roll_setup;
+          if (e.before.family === undefined) delete c.family;
+          else c.family = e.before.family;
+          if (e.before.system === undefined) delete c.system;
+          else c.system = e.before.system;
+          if (e.before.size === undefined) delete c.size;
+          else c.size = e.before.size;
+          if (e.before.assembly_id === undefined) delete c.assembly_id;
+          else c.assembly_id = e.before.assembly_id;
         }
         undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 0 });
       } else if (e.op === "duplicate_condition") {
@@ -6441,6 +6939,12 @@ export class Session {
       last_group: [],
       sheet_tabs: [],
       sheet_levels: {},
+      // #linear-takeoff (WP2.4): same "not tracked here yet" status as
+      // sheet_levels above — an imported project's own linear_settings
+      // block is not read into Session state, so a round-trip export
+      // always reads {} on this surface until MCP gains project-settings
+      // state of its own (a follow-up, not this commit's scope).
+      linear_settings: {},
     };
   }
 
@@ -6480,6 +6984,8 @@ export class Session {
       markups: this.markups,
       rfis: [],
       rollGoods: rollReportRows(byCond, rows),
+      linearRuns: linearRunRows(rows),
+      fittingsAndSupports: fittingsAndSupportsRows(rows),
     });
   }
 

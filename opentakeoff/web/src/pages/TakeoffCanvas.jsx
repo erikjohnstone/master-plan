@@ -58,6 +58,7 @@ import {
 import RevisionsPanel from "../components/RevisionsPanel.jsx";
 import BasSyncNotice from "../components/BasSyncNotice.jsx";
 import UserGuide from "../components/UserGuide.jsx";
+import SegmentSizeMenu from "../components/SegmentSizeMenu.jsx";
 import TakeoffsPanel, { clampPanelW, CONDITION_DND_MIME, ConditionAppearanceEditor } from "../components/TakeoffsPanel.jsx";
 import { HATCHES, PALETTE, NO_FILL, HatchPattern, HatchSwatch } from "../components/hatches.jsx";
 import { Icon } from "../brand/icons.jsx";
@@ -109,7 +110,17 @@ import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legen
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
 import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
-import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
+import { labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, leaderTerminalPointsForLabel } from "../lib/symbollabels";
+// #linear-takeoff WP3.7 (canvas half, plan §6.2-§6.8): the SAME pure trace-
+// engine mcp/src/session.ts's classify_strokes/trace_run tools already wrap
+// — "canvas and MCP cannot disagree" (AGENTS.md). nearestSegment/walkBoth
+// Directions/associateLabel/buildTraceReceipt run synchronously on the main
+// thread (plan §6.10's own click-to-walk budget), against an index the
+// linear/worker.ts worker below builds once per (sheet, scale) off-thread.
+import { nearestSegment, hitTolerancePx, deserializeSegmentIndex } from "../lib/linear/index.ts";
+import { walkBothDirections } from "../lib/linear/walk.ts";
+import { associateLabel, parseSize, resolveSizeConflicts } from "../lib/linear/sizes.ts";
+import { buildTraceReceipt, REFUSAL_NO_LINEWORK, REFUSAL_NO_STROKE_FAMILY, sizeConflictRefusal } from "../lib/linear/receipt.ts";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
 // is set) — the owner's call, 2026-08-24: it serves no purpose on the sheet.
@@ -122,6 +133,17 @@ const netPending = new Map();   // req → {resolve}
 let netReq = 0;
 if (netWorker) netWorker.onmessage = (ev) => { const m = ev.data; const p = netPending.get(m.req); if (p) { netPending.delete(m.req); p.resolve(m); } };
 function netCall(msg) { return new Promise((resolve) => { const req = ++netReq; netPending.set(req, { resolve }); netWorker.postMessage({ ...msg, req }); }); }
+// #linear-takeoff WP3.7: the trace engine's own stroke-classification +
+// spatial-index build (linear/worker.ts, WP3.1/WP3.2) — same off-main-thread
+// shape as netWorker/netCall immediately above, deliberately: plan §6.10
+// groups this exact pairing ("stroke classification + R-tree + endpoint
+// hash | worker, once per sheet"), and it is real, if far cheaper, work
+// (no JTS noding) that a live hover/click must not block the page for.
+const traceWorker = typeof Worker !== "undefined" ? new Worker(new URL("../lib/linear/worker.ts", import.meta.url), { type: "module" }) : null;
+const tracePending = new Map();
+let traceReq = 0;
+if (traceWorker) traceWorker.onmessage = (ev) => { const m = ev.data; const p = tracePending.get(m.req); if (p) { tracePending.delete(m.req); p.resolve(m); } };
+function traceCall(msg) { return new Promise((resolve) => { const req = ++traceReq; tracePending.set(req, { resolve }); traceWorker.postMessage({ ...msg, req }); }); }
 import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS } from "../lib/rastermask";
 // PDF layer roles (#85): the pure name→role classifier and the override
 // plumbing shared with the MCP session — the canvas consumes buildMask's
@@ -129,9 +151,11 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 import { buildLayerInfos, effectiveLayerRoles, layerRoleCodes, segRoles, sanitizeLayerOverrides } from "../lib/layers";
 import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../lib/rules";
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
-import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
+import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText, linearRunRows } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
 import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
+import { buildValveSizeExport } from "../lib/valveSizeExport.ts";
+import { fillValveSizeTemplate, VALVE_SIZE_TEMPLATE_PUBLIC_PATH, VALVE_SIZE_TEMPLATE_FILENAME } from "../lib/valveSizeTemplate.ts";
 import {
   reconcileScheduleFamilyWithSweeps,
   reconcileRowsToCsv,
@@ -142,18 +166,21 @@ import { measurementBreakdown } from "../lib/measurementBreakdown.js";
 import { buildSheetDxf, dxfFileName, DXF_MIME } from "../lib/dxf.js";
 import { shapesInZone, shapeCenter } from "../lib/zone.js";
 import { sanitizeSheetLevels } from "../lib/sheetLevels.js";
+import { sanitizeLinearSettings } from "../lib/linear/settings.ts";
 import { sanitizeConditionColumns, sanitizeConditionAttrs, renameColumnValue, columnLabel } from "../lib/conditionColumns.js";
 import { sanitizeShapeLabels, sanitizeShapeLabelsOnShapes, renameShapeLabel, shapeLabelValue } from "../lib/shapeLabels.js";
+import { sanitizeShapesOnLoad } from "../lib/shapeSanitize.ts";
 import { buildMarkedSetPdf, downloadBytes } from "../lib/markedset.js";
 import { loadProfiles } from "../lib/identity.js";
 import { resolveBranding, loadBrandingSelection } from "../lib/branding.js";
-import { starPath, cloudPath, thinStroke, strokePathD, chiselRibbon, buildSnapGrid, nearestSnap, ANGLE_TOL, angleSnap, closedMetrics, openLen, pointInPoly, hitShape, arrowheadPath, distToSeg, reflectVertsNorm, ringSelfIntersects } from "../lib/geometry.js";
+import { starPath, cloudPath, thinStroke, strokePathD, chiselRibbon, buildSnapGrid, nearestSnap, ANGLE_TOL, angleSnap, closedMetrics, openLen, pointInPoly, hitShape, arrowheadPath, distToSeg, reflectVertsNorm, ringSelfIntersects, buildSegGrid, nearestPointOnSegments, nearestIntersection } from "../lib/geometry.js";
 // Drawing style (draft chrome look) — one resolved token object (DS in JSX,
 // dsRef.current in the imperative movers) replaces the hardcoded cobalt/star
 // literals across the in-progress trace, cursor, and selection chrome.
 import { DRAW_STYLES, DRAW_STYLE_IDS, resolveDrawStyle, markerPath, drawDashFor, rgbaFromHex, getDrawStyle, setDrawStyle, onDrawStyleChange } from "../lib/drawStyles.js";
 import { getDraftOutline, setDraftOutline, onDraftOutlineChange } from "../lib/draftOutline.js";
 import { flattenCurve } from "../lib/curve.js";
+import { resolveRunSegments, sizeLabel } from "../lib/linear/run.ts";
 import { flattenArcRing, arcPathD, arcLength } from "../lib/arc.js";
 import { dashArrayFor, boostForDark, clampWeight, snapWeight, LINE_STYLES, LINE_STYLE_IDS, WEIGHT_STEPS } from "../lib/lineStyles.js";
 import { nextRfiNumber } from "../lib/rfi.js";
@@ -225,7 +252,7 @@ import {
   MEASURE_TOOLS, CUT_TOOLS, MARKUP_TOOLS, MARKUP_IDS, HL_INKS, HL_SIZES,
   MARKUP_IMG_MAX, MAX_IMAGE_MARKUP_BYTES, MARKUP_UPLOAD_MAX_BYTES, MARKUP_DECODE_MAX_AREA,
 } from "../lib/canvasConstants.js";
-import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions } from "../lib/canvasUtil.js";
+import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions, isRoutedCond } from "../lib/canvasUtil.js";
 // Tile-pyramid rendering (#86) — pure math in lib/tiles.ts (tested), worker
 // pool in lib/tilePool.ts, DOM/Worker orchestration glue here via one
 // long-lived compositor instance. Replaces the old single-raster base +
@@ -258,6 +285,22 @@ import { tablesOverlappingRegion, bridgeRows } from "../lib/scheduleBridge.ts";
 // Carpet roll width — a run reaching this needs a seam. The live cursor readout
 // turns amber at/past it so the estimator sees where seams fall while tracing.
 const CARPET_ROLL_FT = 12;
+// #linear-takeoff (WP1.3): one glyph per RunVertexKind, drawn as a halo
+// BEHIND the existing corner handle (distinct shape/color, larger radius) so
+// the two never fight for the same pixels — the corner diamond still sits on
+// top, dead center. Kinds are linear/types.ts's RunVertexKind; "end" never
+// appears here (computed.run.vertices is interior-vertex-only, per that
+// type's own doc comment).
+const VERTEX_GLYPH = {
+  elbow: { shape: "dot", color: "#2f6fed" },
+  tee: { shape: "diamond", color: "#e08a1e" },
+  size_change: { shape: "square", color: "#8b5cf6" },
+  crossing: { shape: "star", color: "#6b7280" },
+  riser: { shape: "dot", color: "#1f9d55" },
+  equipment: { shape: "square", color: "#c0392b" },
+  symbol_gap: { shape: "diamond", color: "#9ca3af" },
+  manual: { shape: "dot", color: "#9ca3af" },
+};
 
 // Paint/pick tiers (#116): a filled Area passes hitShape anywhere inside its
 // fill, so in raw creation order an Area drawn over a Counter, Line, or Surface
@@ -401,6 +444,7 @@ export default function TakeoffCanvas() {
   const [pageLabels, setPageLabels] = useState({}); // { pageNum: "A003" } from the title block
   const [sheetGroup, setSheetGroup] = useState([]);   // sheetKeys shown side-by-side; [] = single-sheet mode
   const [sheetLevels, setSheetLevels] = useState({}); // sheetKey → level label ("L1") — persisted (additive `sheet_levels` key); groups the gallery for multi-floor sets
+  const [linearSettings, setLinearSettings] = useState({}); // #linear-takeoff WP2.4: adopted_pipe_hanger_code/climate_zone/pressure_class_by_system/stick_length_by_material/offset_allowance_pct — persisted (additive `linear_settings` key); level heights ride sheetLevels above instead of a second field (plan §7.4)
   const [lastGroup, setLastGroup] = useState([]);     // most recent side-by-side composition — "Regroup" restores it
   const [focusKey, setFocusKey] = useState("");         // panel of the last click — scale/calibrate target in group mode
   // Stitches (#161): persisted match-line composites (lib/stitches.ts) — a
@@ -610,6 +654,15 @@ export default function TakeoffCanvas() {
   }
   const [guideOpen, setGuideOpen] = useState(false);   // the in-app manual overlay (? / the toolbar button)
   const [proposal, setProposal] = useState(null);  // One-Click selection under review: { key, regions: [{kind:'pos'|'neg', seed, poly, area_sf, perim_lf}] } — panel-LOCAL px
+  // #linear-takeoff WP3.7 (canvas Trace mode): a staged single-run trace,
+  // Q-accepted like One-Click's own ⏎-accepted `proposal` above — panel-LOCAL
+  // (hi-res) px points, plus the read size/system/LF/confidence for the chip.
+  const [traceProposal, setTraceProposal] = useState(null);
+  // The live hover preview under the cursor while armed and unstaged —
+  // recomputed on mousemove against the already-built index (synchronous,
+  // plan §6.10's own click-to-walk budget), cleared the moment a proposal
+  // stages or the tool changes.
+  const [traceHover, setTraceHover] = useState(null);
   // ── in-canvas takeoff agent state ──────────────────────────────────────────
   // agentProposals are NOT shapes: committed truth stays committed. Each entry
   // {id, sheet_id, condition_id, measure_role, verts_norm, evidence, seed_norm?,
@@ -628,11 +681,27 @@ export default function TakeoffCanvas() {
   const [ruleOffer, setRuleOffer] = useState(null);   // { deduct, seed, tag }
   const [ruleStage, setRuleStage] = useState(null);   // { rule, candidates, proposed_ts }
   const [agentOpen, setAgentOpen] = useState(false);      // docked right-rail Agent panel
+  // #linear-takeoff (WP1.3): right-click a Linear-shape segment → Set size…
+  // Ephemeral, like ruleStage — nothing commits until Set/Clear dispatches
+  // ONE `run` command. { shapeId, segIndex, x, y, size } | null.
+  const [segMenu, setSegMenu] = useState(null);
+  // #linear-takeoff (WP1.3): Continue mode — defaults true, matching the
+  // Linear tool's actual existing behavior byte-for-byte (finishShape never
+  // touched `tool`, so it already stays armed for the next run). The new
+  // capability is turning it OFF: finishing then reverts to Select, for an
+  // estimator tracing one isolated run who doesn't want the tool to linger.
+  const [linearContinue, setLinearContinue] = useState(true);
   // TakeoffDataPanel — production output for ALL platform workflows:
   // Takeoff tab = finished compiled takeoff; Workflow data = raw aggregate.
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  // The full compile_corpus_takeoff result (kind control_valves) behind the
+  // "Export to HIT" button — lastCorpusTakeoffMeta above is trimmed for the
+  // panel header/stats and drops categories[].items, which buildValveSizeExport
+  // needs. A deliberate, separate click, not bundled into the CSV/Excel/PDF
+  // export cluster or fired automatically on every compile.
+  const [lastControlValveTakeoff, setLastControlValveTakeoff] = useState(null);
   const [basWorkflow, setBasWorkflow] = useState(null);
   const basWorkflowRef = useRef(null);
   basWorkflowRef.current = basWorkflow;
@@ -852,6 +921,10 @@ export default function TakeoffCanvas() {
   const netEngine = true;
   const netCacheRef = useRef(new Map());   // `${sheetKey}:${upp}` → built net
   const netTickRef = useRef(null);          // ticking "reading the walls… N s" timer
+  // #linear-takeoff WP3.7: the trace engine's own per-(sheet,scale) index —
+  // same cache-by-identity shape as netCacheRef immediately above.
+  const traceIndexCacheRef = useRef(new Map());   // `${sheetKey}:${ftPx}` → Promise<{index, families}>
+  const traceTickRef = useRef(null);               // ticking "reading the strokes… N s" timer
   // No mode dial (his call, 2026-08-24: "too technical for users"). A click
   // is a room (walls + doors + drawn finish transitions); ⇧-click is the
   // finish FIELD — grow across the same tile/plank pattern, stop where it
@@ -997,6 +1070,12 @@ export default function TakeoffCanvas() {
   const snapRef = useRef(null);        // current snapped image point (or null)
   const snapGridsRef = useRef(new Map()); // sheetKey → {cell, map} spatial hash of vector endpoints
   const vectorSegsRef = useRef(new Map()); // sheetKey → flat [x1,y1,x2,y2,…] linework segments (One-Click boundary source)
+  // #linear-takeoff (WP1.3): segment/intersection snap's spatial index, built
+  // lazily from vectorSegsRef's own geometry and cached by ARRAY IDENTITY
+  // (not sheetKey) — if a sheet's geometry is ever rebuilt (a fresh vector
+  // extract, a stitch remerge), vectorSegsRef gets a NEW array for that key,
+  // which is automatically a cache miss here; nothing needs to invalidate it.
+  const segGridCacheRef = useRef(new WeakMap());
   const segMetaRef = useRef(new Map());    // sheetKey → per-segment meta bytes (hatch classification input)
   // sheetKey → drawn-figure ranges (SubPath[]): the ink-classification input.
   // Single-panel sheets only — a STITCHED composite merges several sheets'
@@ -1116,6 +1195,7 @@ export default function TakeoffCanvas() {
   // since moved on.
   const toolRef = useRef(tool);
   const proposalRef = useRef(proposal);
+  const traceProposalRef = useRef(null);   // #linear-takeoff WP3.7 — same stale-closure guard as proposalRef
   const hydrated = useRef(false);
   const annotationGenerationRef = useRef(null);
   const annotationConflictRef = useRef(false);
@@ -1878,7 +1958,7 @@ export default function TakeoffCanvas() {
     // `replace` command + reset: hydrate is a whole-array non-edit (no stamps,
     // no counters) and a loaded/restored timeline starts with EMPTY undo/redo
     // stacks — recorded inverses from the replaced project must never fire here.
-    dispatchShape({ type: "replace", shapes: sanitizeShapeLabelsOnShapes(a.shapes || []) }, { reset: true });   // strip a corrupt shape.label at hydrate (identity-preserving); other shape fields untouched
+    dispatchShape({ type: "replace", shapes: sanitizeShapeLabelsOnShapes(sanitizeShapesOnLoad(a.shapes || [])) }, { reset: true });   // sanitizeShapesOnLoad (#linear-takeoff B-L4) drops what cannot be priced/rendered at all (bad role, non-finite/missing verts, wrong id types) BEFORE the label-only sanitizer runs on what survives
     // normalize hydrated markups: legacy workspaces may hold markups with no id
     // (pre-dating the id field) — seed a stable id + default rfi_id so the new
     // select / edit / delete / move / RFI-link flows (all keyed on m.id) work on them.
@@ -1899,6 +1979,10 @@ export default function TakeoffCanvas() {
     // Extracted to sanitizeSheetLevels (lib/sheetLevels.js) so this gate has
     // its own unit tests independent of the reducer.
     setSheetLevels(sanitizeSheetLevels(a.sheet_levels));
+    // additive `linear_settings` key (#linear-takeoff WP2.4): same
+    // else-clear rule as sheet_levels — a loaded snapshot's own settings
+    // govern, never the replaced project's.
+    setLinearSettings(sanitizeLinearSettings(a.linear_settings));
     // additive `layer_overrides` (#85 — per-sheet PDF-layer Wall/Off overrides
     // for the One-Click mask): same else-clear + shape gate as sheet_levels.
     // Masks are a lazy per-sheet cache — drop them so a loaded snapshot's
@@ -2140,6 +2224,7 @@ export default function TakeoffCanvas() {
   useEffect(() => { viewRef.current = view; }, [view]);
   useEffect(() => { toolRef.current = tool; }, [tool]);
   useEffect(() => { proposalRef.current = proposal; }, [proposal]);
+  useEffect(() => { traceProposalRef.current = traceProposal; }, [traceProposal]);
   // Tab hidden ⇒ the voice-deixis aim dies: on return the tracked position
   // predates the refocus (rAF suspended, the pointer may be anywhere), so
   // "this room" must wait for a fresh move — the stale-aim bar (RFC #59).
@@ -2763,7 +2848,7 @@ export default function TakeoffCanvas() {
     // units is additive and diff-only (the sheet_levels convention): imperial —
     // the default — omits the key, so an old imperial project's payload is
     // byte-identical on round-trip; only a metric project carries the field.
-    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
+    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(linearSettings).length ? { linear_settings: linearSettings } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
   };
   // Runtime restore of a saved payload — the Revisions panel's Restore lands
   // here. A runtime load (unlike mount) can interrupt work in
@@ -3006,7 +3091,7 @@ export default function TakeoffCanvas() {
     // state it serializes, so listing buildPayload (a new identity each render)
     // would fire a save on every render instead of only on a real change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units, basWorkflow]);
+  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, linearSettings, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units, basWorkflow]);
   useEffect(() => { saveStateRef.current = saveState; }, [saveState]);
 
   // Flush a pending debounced save on navigate-away (unmount), and warn before a
@@ -3306,6 +3391,10 @@ export default function TakeoffCanvas() {
       // would abandon the points already placed, so this binding can only be
       // an improvement on the one it shadows.
       if (lower === "q" && CURVABLE.has(tool) && poly.length) { setCurveMode((c) => !c); return; }
+      // #linear-takeoff WP3.7: Q accepts the read size on a staged Trace
+      // proposal (goal doc, verbatim) — takes priority over the map lookup
+      // below, which has no `q` binding of its own to shadow.
+      if (lower === "q" && tool === "trace" && traceProposal) { e.preventDefault(); acceptTraceProposal(); return; }
       // Symbol review (#264): while a sweep is under review the keyboard walks
       // the questions — one keystroke per answer, taking priority over tool
       // bindings (stopImmediatePropagation keeps the proposal-Enter handler,
@@ -3336,14 +3425,14 @@ export default function TakeoffCanvas() {
         }
         if (e.key === "Escape") { e.preventDefault(); e.stopImmediatePropagation(); setSweep(null); return; }
       }
-      const map = { v: "select", a: "area", r: "rect", l: "linear", s: "surface", c: "count", d: "deduct", o: "oneclick", k: "check", h: "highlighter", n: "dimension", y: "symbol" };
+      const map = { v: "select", a: "area", r: "rect", l: "linear", s: "surface", c: "count", d: "deduct", o: "oneclick", k: "check", h: "highlighter", n: "dimension", y: "symbol", t: "trace" };
       const t = map[lower];
       if (t) setTool(t);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tool, poly, proposal, agentProposals, activeCond, sheetGroup, sheetKey, shapes, scales]);
+  }, [tool, poly, proposal, traceProposal, agentProposals, activeCond, sheetGroup, sheetKey, shapes, scales]);
   // ^ shapes/scales joined the deps with the agent accept path (the delete-handler
   //   precedent): ⏎ accept dispatches an `add` against the CURRENT array, so a
   //   shapes change with no other dep change must re-subscribe this handler.
@@ -3396,7 +3485,7 @@ export default function TakeoffCanvas() {
         // tool's points, on-screen or hidden
         else if (tool === "calibrate") { setCalib((c) => c.slice(0, -1)); }
         else if (tool === "check") { setCheck((c) => c.slice(0, -1)); }
-      } else if (e.key === "Escape") { if (agentOfferFnsRef.current?.pending()) { agentOfferFnsRef.current.dismiss(); } else if (ocSel) { setOcSel(null); } else if (selVert != null) { setSelVert(null); } else { clearPoly(); setCalib([]); setCheck([]); setCheckStated(""); setScaleGuide(null); selectShape(null); setMarkupDraft(null); setProposal(null); setArmedStamp(null); setScheduleAnchor(null); setSymbolAnchor(null); setImageAnchor(null); setPlacingImageId(null); placeGrabRef.current = null; placeCrossSheetRef.current = null; setAlignPt(null); resetZone(); hlRef.current = null; if (hlPathRef.current) hlPathRef.current.style.display = "none"; } }
+      } else if (e.key === "Escape") { if (segMenu) { setSegMenu(null); } else if (agentOfferFnsRef.current?.pending()) { agentOfferFnsRef.current.dismiss(); } else if (ocSel) { setOcSel(null); } else if (selVert != null) { setSelVert(null); } else { if ((tool === "linear" && poly.length === 0) || (tool === "trace" && !traceProposal)) setTool("select"); /* #linear-takeoff WP1.3/WP3.7: "Esc leaves" — nothing left to cancel, so leave the tool itself */ clearPoly(); setCalib([]); setCheck([]); setCheckStated(""); setScaleGuide(null); selectShape(null); setMarkupDraft(null); setProposal(null); setTraceProposal(null); setTraceHover(null); setArmedStamp(null); setScheduleAnchor(null); setSymbolAnchor(null); setImageAnchor(null); setPlacingImageId(null); placeGrabRef.current = null; placeCrossSheetRef.current = null; setAlignPt(null); resetZone(); hlRef.current = null; if (hlPathRef.current) hlPathRef.current.style.display = "none"; } }
       // ⌘Z: the drawing context wins — mid-trace it still pops the last placed
       // point (with or without ⇧, matching the old behavior byte-for-byte);
       // only with no trace in progress does the command stack engage
@@ -3415,7 +3504,7 @@ export default function TakeoffCanvas() {
     return () => window.removeEventListener("keydown", onKey);
     // approvals is a real dep: ⌘Z's undoShapeCommand closes over it (the
     // family branch), and a stale capture would undo against a pre-seal array.
-  }, [tool, selectedId, selVert, selectedMarkupId, showMarkups, poly, proposal, ocSel, shapes, approvals, sheetKey, groupSig, scales, focusKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tool, selectedId, selVert, selectedMarkupId, showMarkups, poly, proposal, traceProposal, ocSel, shapes, approvals, sheetKey, groupSig, scales, focusKey, segMenu]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The typed "drawing says" value belongs to ONE completed two-point check.
   // The moment the measurement is no longer complete — third-click restart,
@@ -3443,6 +3532,11 @@ export default function TakeoffCanvas() {
     if (prevToolRef.current === "zone" && tool !== "zone") clearPoly();
     prevToolRef.current = tool;
   }, [tool]);
+  // #linear-takeoff (WP1.3): the Set-size popover only opens from the Linear
+  // tool — leaving it (any way: shortcut, toolbar, Escape already closes it
+  // directly) closes an orphaned popover rather than leaving it floating over
+  // whatever tool is now active.
+  useEffect(() => { if (tool !== "linear" && segMenu) setSegMenu(null); }, [tool]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── pointer ────────────────────────────────────────────────────────────────
   function onPointerDown(e) {
@@ -3542,6 +3636,11 @@ export default function TakeoffCanvas() {
     if (tool === "calibrate") setCalib((c) => (c.length >= 2 ? [p] : [...c, p]));
     else if (tool === "check") setCheck((c) => (c.length >= 2 ? [p] : [...c, p]));
     else if (tool === "oneclick") oneClickAt(p, !!(ev && ev.altKey), undefined, !!(ev && ev.shiftKey));
+    // #linear-takeoff WP3.7: a click while armed (and no proposal already
+    // staged — a second click mid-review does nothing, matching One-Click's
+    // own click-inside-a-proposal no-op) stages a trace, never accumulates
+    // points the way area/linear/surface do.
+    else if (tool === "trace" && !traceProposal) traceAt(p);
     // ⌥-click on an area/deduct trace drops a CURVE point (#284): the boundary
     // bends through it instead of turning a corner at it. Every other
     // point-placing tool takes the click as it always has.
@@ -3915,6 +4014,17 @@ export default function TakeoffCanvas() {
     }
     chip.__vals = vals;
   }
+  // #linear-takeoff (WP1.3): the segment/intersection spatial index for ONE
+  // sheet, built on first use and cached by the vectorSegsRef array's own
+  // identity (see segGridCacheRef above). Same SNAP_CELL bucket size as the
+  // endpoint grid — no reason for the two to disagree on tuning.
+  function segGridFor(key) {
+    const segs = vectorSegsRef.current.get(key);
+    if (!segs || !segs.length) return null;
+    let g = segGridCacheRef.current.get(segs);
+    if (!g) { g = buildSegGrid(segs, SNAP_CELL); segGridCacheRef.current.set(segs, g); }
+    return g;
+  }
   function moveCrosshair(e) {
     if (editingRef.current) return;   // inline editor open — no aim crosshair (ref check, never per-mousemove state)
     if (tool === "select" || status !== "ready" || !containerRef.current) return;
@@ -3933,6 +4043,21 @@ export default function TakeoffCanvas() {
         const pt = [hit[0] + sp.xOffset, hit[1]];
         snapRef.current = pt; cur = pt;
         if (snapMarkRef.current) { snapMarkRef.current.setAttribute("d", starPath(pt[0], pt[1], 5.5 / sc)); snapMarkRef.current.style.display = "block"; }
+      } else if (tool === "linear") {
+        // #linear-takeoff (WP1.3): segment + intersection snap, Linear tool
+        // ONLY — beside the endpoint snap above, which still wins when it
+        // hits (every other tool's snap behavior is untouched). Intersection
+        // ranks above a plain mid-span point, matching CAD osnap priority.
+        const segGrid = segGridFor(sp.key);
+        if (segGrid) {
+          const lx = cur[0] - sp.xOffset, ly = cur[1];
+          const spt = nearestIntersection(segGrid, lx, ly, 11 / sc) || nearestPointOnSegments(segGrid, lx, ly, 11 / sc);
+          if (spt) {
+            const pt = [spt[0] + sp.xOffset, spt[1]];
+            snapRef.current = pt; cur = pt;
+            if (snapMarkRef.current) { snapMarkRef.current.setAttribute("d", starPath(pt[0], pt[1], 5.5 / sc)); snapMarkRef.current.style.display = "block"; }
+          }
+        }
       }
     }
 
@@ -4014,7 +4139,7 @@ export default function TakeoffCanvas() {
         const w = Math.abs(cur[0] - a[0]) * liveUpp, h = Math.abs(cur[1] - a[1]) * liveUpp;
         const sf = w * h;
         txt = `${fmtCheckLen(w, units)} × ${fmtCheckLen(h, units)} · ${num(areaVal(sf, units))} ${areaUnit(units)}${units === "metric" ? "" : ` · ${num(sf / 9)} SY`}`;
-        over = w >= CARPET_ROLL_FT - 0.02 || h >= CARPET_ROLL_FT - 0.02;
+        over = !isRoutedCond(aCond) && (w >= CARPET_ROLL_FT - 0.02 || h >= CARPET_ROLL_FT - 0.02);
       } else if (drawing && anchor && liveUpp && !panelActive) {
         // line/polyline: live segment length, ALWAYS (not just under the 45° lock).
         // With a bow open the segment IS the arc, so measure along it — reading
@@ -4023,7 +4148,7 @@ export default function TakeoffCanvas() {
           ? arcLength(poly[poly.length - 2], anchor, cur) * liveUpp
           : Math.hypot(cur[0] - anchor[0], cur[1] - anchor[1]) * liveUpp;
         txt = lock ? `${lock.deg}° · ${fmtCheckLen(len, units)}` : fmtCheckLen(len, units);
-        over = len >= CARPET_ROLL_FT - 0.02;
+        over = !isRoutedCond(aCond) && len >= CARPET_ROLL_FT - 0.02;
       } else if (!panelActive && lock) {
         txt = `${lock.deg}°`;
       } else if (!panelActive && snapRef.current) txt = "snap";
@@ -4066,7 +4191,7 @@ export default function TakeoffCanvas() {
           v.segs.textContent = String(poly.length);
           v.pts.textContent = String(poly.length + 1);
         }
-        over = segLen >= CARPET_ROLL_FT - 0.02;
+        over = !isRoutedCond(aCond) && segLen >= CARPET_ROLL_FT - 0.02;
       } else if (txt) {
         const mode = chipT.chrome + ":row";
         // a row-mode write goes through textContent, which wipes any panel
@@ -4368,6 +4493,11 @@ export default function TakeoffCanvas() {
     // handles on the region under the cursor. Both work in panel-LOCAL px.
     if (ocDragRef.current) { ocDragMove(e); return; }
     if (tool === "oneclick" && proposal && !panRef.current && !pendingClickRef.current) ocHoverUpdate(e);
+    // #linear-takeoff WP3.7: live hover highlight while armed and unstaged —
+    // buildOneClickRegion's own "trace-then-render" precedent, just without a
+    // staged proposal yet. Skipped once a proposal is staged (nothing to
+    // preview past that point) or mid-pan/mid-click.
+    if (tool === "trace" && !traceProposal && !panRef.current && !pendingClickRef.current) traceHoverAt(toImage(e.clientX, e.clientY));
     if (dragRef.current) {
       const d = dragRef.current;
       // dragRef is armed only by selectAt (Select tool), where snapRef is stale
@@ -4540,10 +4670,18 @@ export default function TakeoffCanvas() {
       return;
     }
     if (panRef.current) {
+      // #linear-takeoff (WP1.3): a right-button press that never crossed the
+      // drag threshold is a right-CLICK, not a pan — same 5px screen
+      // threshold as the deferred left-click-vs-drag check above. Right-drag
+      // (panning) is unaffected: this only fires on release, and only when
+      // the pointer never really moved.
+      const wasClick = Math.hypot(e.clientX - panRef.current.sx, e.clientY - panRef.current.sy) < 5;
+      const wasRight = e.button === 2;
       panRef.current = null;
       setTf({ ...tfRef.current });   // sync once at end
       if (containerRef.current) containerRef.current.style.cursor = spaceRef.current ? "grab" : "";
       try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* gone */ }
+      if (wasRight && wasClick && tool === "linear") openSegmentSizeMenu(e.clientX, e.clientY);
     }
   }
 
@@ -4859,16 +4997,69 @@ export default function TakeoffCanvas() {
     if (!activeCond) { setCommitMsg("Pick or add a condition first."); return; }
     // curved: verts stay the clicked CONTROL points (drag one → re-smooths);
     // length always comes from the flattened spline
-    const LF = openLen(curved ? flattenCurve(points) : points) * upp;
+    const curvedPts = curved ? flattenCurve(points) : points;
+    const LF = openLen(curvedPts) * upp;
     const tIn = Number(aCond?.thickness_in) || 0; // borders/feature strips: SF = LF × T/12
+    const computed = { perimeter_lf: +LF.toFixed(2), area_sf: tIn > 0 ? +((LF * tIn) / 12).toFixed(2) : 0 };
+    // #linear-takeoff (plan §7.2, WP1.3): a routed-system condition seeds
+    // every new trace with its own system + default size on segment 0 — the
+    // estimator can still override per segment afterward (right-click a
+    // segment → Set size…). A non-routed condition (flooring etc.) never
+    // gains a `run` block at all — this stays exactly today's plain polyline.
+    const run = isRoutedCond(aCond)
+      ? { ...(aCond.system ? { system: aCond.system } : {}), ...(aCond.size ? { size_overrides: { "0": { ...aCond.size } } } : {}) }
+      : null;
+    if (run && Object.keys(run).length) {
+      const resolved = resolveRunSegments(curvedPts, upp, run);
+      if (resolved) computed.run = resolved;
+    }
     dispatchShape({ type: "add", shapes: [{
       sheet_id: tp.key, condition_id: activeCond, measure_role: "linear",
       ...(curved ? { curved: true } : {}),
       verts_norm: points.map(([x, y]) => [(x - tp.xOffset) / tp.img.w, y / tp.img.h]),
-      computed: { perimeter_lf: +LF.toFixed(2), area_sf: tIn > 0 ? +((LF * tIn) / 12).toFixed(2) : 0 },
+      computed,
+      ...(run && Object.keys(run).length ? { run } : {}),
       ...(activeLabel ? { label: activeLabel } : {}),
       origin: { method: "manual", ...(baked ? { curved: true } : {}) },
     }] });
+  }
+  // #linear-takeoff (WP1.3): right-click a Linear shape's segment → Set size….
+  // Hit-tests every visible linear shape's own segments (each against ITS own
+  // panel/scale — a stitched multi-sheet canvas has one shape per sheet), same
+  // grab-radius convention (8 screen-px) as the corner-handle drag threshold.
+  function openSegmentSizeMenu(clientX, clientY) {
+    const cur = toImage(clientX, clientY);
+    const thr = 8 / tfRef.current.scale;
+    let best = null;
+    for (const s of shapes) {
+      if (s.measure_role !== "linear" || !s.sheet_id) continue;
+      const panel = panelByKey(s.sheet_id);
+      if (!panel?.img?.w) continue;
+      const pts = (s.verts_norm || []).map(([x, y]) => [x * panel.img.w + panel.xOffset, y * panel.img.h]);
+      for (let i = 0; i < pts.length - 1; i++) {
+        const d = distToSeg(cur[0], cur[1], pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]);
+        if (d <= thr && (!best || d < best.dist)) best = { shapeId: s.id, segIndex: i, dist: d };
+      }
+    }
+    if (!best) return;
+    const s = shapes.find((x) => x.id === best.shapeId);
+    const size = s.run?.size_overrides?.[String(best.segIndex)] || s.computed?.run?.segments?.[best.segIndex]?.size || null;
+    setSegMenu({ shapeId: best.shapeId, segIndex: best.segIndex, x: clientX, y: clientY, size });
+  }
+  // Sets or clears (size === null) ONE segment's size override, recomputes
+  // computed.run via the same recomputeShape path every other edit uses, and
+  // dispatches the ONE `run` command (shapeCommands.js) — undo-able, no stamp.
+  function applySegmentSize(shapeId, segIndex, size) {
+    const s = shapes.find((x) => x.id === shapeId);
+    if (!s) return;
+    const overrides = { ...(s.run?.size_overrides || {}) };
+    if (size) overrides[String(segIndex)] = size; else delete overrides[String(segIndex)];
+    const run = { ...(s.run || {}) };
+    if (Object.keys(overrides).length) run.size_overrides = overrides; else delete run.size_overrides;
+    const finalRun = (run.system || run.size_overrides || run.vertex_overrides || run.params || run.status) ? run : undefined;
+    const computed = recomputeShape({ ...s, run: finalRun });
+    dispatchShape({ type: "run", id: shapeId, run: finalRun, computed });
+    setSegMenu(null);
   }
   // Surface Area — trace the wall run in plan; SF = traced LF × the condition's
   // height. The wall-tile "stack" workflow: set tile height once, trace walls.
@@ -5391,6 +5582,200 @@ export default function TakeoffCanvas() {
       : "That space wasn't fully enclosed — a small opening (a doorway or line gap) was sealed to bound it. Review the edge, then ⏎ creates.");
     else if (f.minPassDelta) setCommitMsg(`A passage under ${MIN_PASS_FT} ft wide was treated as not connecting — measuring through it would have added ${Math.round(f.minPassDelta * 100)}% more area. Review that edge, then ⏎ creates.`);
     else setCommitMsg("");
+  }
+  // ── Trace mode (#linear-takeoff WP3.7) ──────────────────────────────────────
+  // Same pure engine mcp/src/session.ts's classify_strokes/trace_run tools
+  // wrap (strokes.ts/index.ts/graph.ts/walk.ts/sizes.ts/receipt.ts) — this
+  // canvas half and the MCP server can never disagree about what a click
+  // traces to. The index (stroke families + spatial structure) builds ONCE
+  // per (sheet, scale) in traceWorker, off the main thread; every actual
+  // query — nearestSegment, walkBothDirections, associateLabel,
+  // buildTraceReceipt — runs synchronously on the main thread against that
+  // built index, matching plan §6.10's own budget split exactly.
+  //
+  // One deliberate, documented simplification for this checkpoint: the
+  // canvas has no per-sheet cache of `dash`/`strokeRgb` yet (only
+  // `vectorSegsRef`/`segMetaRef`/`segLumRef`/`subpathsRef` — dash/strokeRgb
+  // were never read out at the existing extraction call sites). Rather than
+  // touch those heavily-shared call sites for a marginal family-grouping
+  // improvement, this build passes dash/strokeRgb as null — classifyStrokes
+  // groups purely by pen/layer/luminance here, same as a sheet with no
+  // per-segment dash/colour data at all. A real, disclosed limitation, not
+  // a silent one: real corpus sheets separate duct/pipe pens cleanly by
+  // WEIGHT alone (plan §3.1's own findings), so this rarely matters in
+  // practice, and nothing stops a later checkpoint adding those two caches.
+  async function ensureTraceIndex(tp) {
+    const segs = vectorSegsRef.current.get(tp.key);
+    const meta = segMetaRef.current.get(tp.key);
+    if (!segs || !meta) return null;
+    const upp = uppFor(tp.key);
+    const kF = RENDER_SCALE / (renderScalesRef.current.get(tp.key) || RENDER_SCALE);
+    const ftPx = upp ? kF / upp : 0;
+    const ck = `${tp.key}:${ftPx.toFixed(4)}`;
+    let built = traceIndexCacheRef.current.get(ck);
+    if (!built) {
+      if (!traceWorker) return null;
+      const geo = layerGeoRef.current.get(tp.key);
+      const infos = layerInfosRef.current.get(tp.key);
+      const roleCodes = rolesForSheet(tp.key);
+      const layerSignal = mepLayerSignal(infos, geo?.layerOf);
+      const t0 = Date.now();
+      setCommitMsg("Reading this sheet's strokes… 0 s — the first trace on a sheet classifies its linework; the page stays live.");
+      const tick = setInterval(() => setCommitMsg(`Reading this sheet's strokes… ${Math.round((Date.now() - t0) / 1000)} s — the first trace on a sheet classifies its linework; the page stays live.`), 1000);
+      traceTickRef.current = tick;
+      built = traceCall({
+        type: "build", key: ck, segs, meta, roleCodes, layerSignal, ftPx,
+        subpaths: subpathsRef.current.get(tp.key) || null,
+        lum: segLumRef.current.get(tp.key) || null,
+        layerOf: geo?.layerOf || null, layerIds: geo?.layerIds || null, layers: infos || null,
+      }).then((m) => {
+        if (m.error) { traceIndexCacheRef.current.delete(ck); throw new Error(m.error); }
+        const family = m.family ? new Int16Array(m.family) : null;
+        const index = deserializeSegmentIndex(segs, meta, family, m);
+        return { index, families: m.families };
+      }).finally(() => { if (traceTickRef.current === tick) { clearInterval(tick); traceTickRef.current = null; } });
+      traceIndexCacheRef.current.set(ck, built);
+    }
+    return built;
+  }
+  // The shared trace-and-associate core (buildOneClickRegion's own
+  // precedent): hover preview and the staged click both call this, so a
+  // highlighted run and the one that stages can never disagree. `local` is
+  // panel-LOCAL, hi-res (current render scale) px — the click/mousemove
+  // frame; converted to baseline px (the engine's own frame) via `kF`, the
+  // SAME conversion One-Click's net-engine branch already uses. Returns
+  // `{ refusal }` on a hard, pre-walk refusal, else the full account.
+  function runTraceAt(tp, local, bundle) {
+    const { index, families } = bundle;
+    const upp = uppFor(tp.key);
+    const kF = RENDER_SCALE / (renderScalesRef.current.get(tp.key) || RENDER_SCALE);
+    const bx = local[0] * kF, by = local[1] * kF;
+    if (!families.length) return { refusal: REFUSAL_NO_STROKE_FAMILY };
+    const hit = nearestSegment(index, bx, by, hitTolerancePx(tfRef.current.scale, 0));
+    if (!hit) return { refusal: REFUSAL_NO_LINEWORK };
+    const geo = layerGeoRef.current.get(tp.key);
+    const ftPx = upp ? kF / upp : 0;
+    const walk = walkBothDirections(index, hit.seg, ftPx, { dash: null, layerOf: geo?.layerOf || null });
+    const walkedSegs = new Set(walk.segs);
+
+    const spans = textSpansRef.current.get(tp.key) || [];
+    const pairs = [];
+    for (const sp of spans) {
+      // #linear-takeoff GATE 3 bug catalogue: mirrors mcp/src/session.ts's
+      // own traceRun fix, kept in lockstep — leaderTerminalPointsForLabel
+      // is real, non-trivial work, and associateLabel below never uses
+      // `leaderPoints` when `parseSize(label.text)` fails, so computing it
+      // for a non-size span (the overwhelming majority on a real sheet)
+      // changes no output, only its cost.
+      if (!parseSize(sp.str)) continue;
+      const leaderPoints = leaderTerminalPointsForLabel(sp, spans, index.segs, segLumRef.current.get(tp.key) || null);
+      const binding = associateLabel(index, { text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, rotDeg: sp.rot }, ftPx, { leaderPoints });
+      if (binding) pairs.push({ span: sp, binding });
+    }
+    // #linear-takeoff GATE 3 bug catalogue (docs/LINEAR-TRACE-EVAL.md Run 77):
+    // associateOnRunFallback (sizes.ts) exists and is unit-tested, but is
+    // DELIBERATELY NOT WIRED IN here — see mcp/src/session.ts's own
+    // matching comment and Run 77's writeup for why (measured against the
+    // real corpus, it traded 3 fixed no-label cases for 3 NEW confidently-
+    // wrong sizes on an already-hard stacked-multi-system-label sheet).
+    const allBindings = pairs.map((pr) => pr.binding);
+    const spanByBinding = new Map(pairs.map((pr) => [pr.binding, pr.span]));
+    const { conflicts } = resolveSizeConflicts(allBindings);
+    const family = families[index.family ? index.family[hit.seg] : -1];
+    const scaleConfirmed = !!upp && scales[tp.key]?.confirmed !== false;
+    const origin = buildTraceReceipt(index, { seg: hit.seg, x: hit.px, y: hit.py }, walk, family, allBindings, conflicts, {
+      scaleConfirmed, labelText: (b) => spanByBinding.get(b),
+    });
+    const bestLabel = origin.trace.labels.find((l) => !l.withheld);
+    const runConflicts = conflicts.filter((c) => walkedSegs.has(c.seg));
+    // panel-LOCAL hi-res px, for rendering — the inverse of the bx/by conversion above.
+    const points = walk.points.map(([x, y]) => [x / kF, y / kF]);
+    const vertices = walk.vertices.map((v) => ({ ...v, x: v.x / kF, y: v.y / kF }));
+    const length_lf = upp ? +(walk.length * upp).toFixed(2) : null;
+    return { origin, points, vertices, size: bestLabel?.size || null, systems: bestLabel?.systems || (family.system ? [family.system] : []), length_lf, withheld: runConflicts, seedPoint: local };
+  }
+  // Chip text (goal doc: "size · system · LF · fittings ahead") — fittings
+  // ahead is the vertex count the walk actually recorded (elbow/tee/
+  // crossing), the only "what's coming up" signal this stage's walk carries.
+  function traceChipText(res) {
+    const size = res.size ? sizeLabel(res.size) : "size withheld";
+    const sys = res.systems?.length ? res.systems.join("/") : null;
+    const lf = res.length_lf != null ? `${res.length_lf} LF` : null;
+    const fittings = res.vertices.length;
+    return [size, sys, lf, fittings > 0 ? `${fittings} fitting${fittings === 1 ? "" : "s"} ahead` : null].filter(Boolean).join(" · ");
+  }
+  async function traceHoverAt(p) {
+    const tp = panelAt(p[0]);
+    if (!uppFor(tp.key)) { setTraceHover(null); return; }
+    const local = [p[0] - tp.xOffset, p[1]];
+    const bundle = await ensureTraceIndex(tp);
+    if (!bundle) { setTraceHover(null); return; }
+    if (toolRef.current !== "trace" || traceProposalRef.current) return;
+    const res = runTraceAt(tp, local, bundle);
+    if (res.refusal) { setTraceHover(null); return; }
+    setTraceHover({ key: tp.key, points: res.points, chip: traceChipText(res) });
+  }
+  // Click stages a dashed proposal (goal doc). A hard refusal drops to the
+  // manual Linear tool WITH THE SEED KEPT — poly seeds with this exact
+  // click, not cleared, mirroring commitLinear's own "Esc leaves, nothing
+  // to cancel" doctrine in reverse: there IS something to keep going from.
+  async function traceAt(p) {
+    const tp = panelAt(p[0]);
+    const upp = uppFor(tp.key);
+    if (!upp) { setCommitMsg(`Set the scale for ${labelFor(tp)} first.`); return; }
+    if (!activeCond) { setCommitMsg("Pick or add a condition first."); return; }
+    const local = [p[0] - tp.xOffset, p[1]];
+    await ensureTextSpans(tp.key);
+    const bundle = await ensureTraceIndex(tp);
+    if (!bundle) {
+      setCommitMsg("This sheet has no vector linework (likely a scan) — trace manually, or use raster-assisted snapping once available.", "refusal");
+      return;
+    }
+    if (toolRef.current !== "trace") return;   // tool changed while the index/spans awaited
+    const res = runTraceAt(tp, local, bundle);
+    if (res.refusal) {
+      setTraceHover(null);
+      setTool("linear");
+      setPoly([p]);
+      setCommitMsg(`${res.refusal} — or trace it with Linear (L).`, "refusal");
+      return;
+    }
+    setTraceHover(null);
+    setTraceProposal({ key: tp.key, sheet: tp, ...res });
+    const withheldNote = res.withheld.length ? ` — ${sizeConflictRefusal(res.withheld[0])}` : "";
+    const lenNote = res.length_lf != null ? `${res.length_lf} LF` : `${Math.round(openLen(res.points))} px (no scale set)`;
+    setCommitMsg(`Traced ${lenNote}${res.size ? `, ${sizeLabel(res.size)}` : ""}${withheldNote} — Q accepts the read size, Esc discards.`);
+  }
+  // Q-accept (goal doc: "Q accepts the read size") — commits the staged
+  // proposal exactly like measure_line's own routed-condition seed, but
+  // stamped origin.method:"traced" with the FULL receipt riding on
+  // origin.trace, through the SAME dispatchShape gate every other commit
+  // uses. reviewed:false — pencil until the generic Accept pill inks it
+  // (pendingCommitted/acceptPendingShapes, unchanged: any origin.reviewed
+  // === false shape already renders dashed and gates that pill).
+  function acceptTraceProposal() {
+    const tp = traceProposalRef.current;
+    if (!tp) return;
+    const { sheet, points, origin, size, systems } = tp;
+    const upp = uppFor(sheet.key);
+    const run = {};
+    if (systems?.length) run.system = systems.join("/");
+    if (size) run.size_overrides = { "0": size };
+    const computed = { area_sf: 0, perimeter_lf: +(openLen(points) * upp).toFixed(2) };
+    if (Object.keys(run).length) {
+      const resolved = resolveRunSegments(points, upp, run);
+      if (resolved) computed.run = resolved;
+    }
+    dispatchShape({ type: "add", shapes: [{
+      sheet_id: sheet.key, condition_id: activeCond, measure_role: "linear",
+      verts_norm: points.map(([x, y]) => [(x - sheet.xOffset) / sheet.img.w, y / sheet.img.h]),
+      computed,
+      ...(Object.keys(run).length ? { run } : {}),
+      ...(activeLabel ? { label: activeLabel } : {}),
+      origin: { method: "traced", actor: "agent", reviewed: false, confidence: origin.confidence, confidence_factors: origin.confidence_factors, trace: origin.trace },
+    }] });
+    setTraceProposal(null);
+    setCommitMsg("Traced run committed — dashed until you Accept (⌘Z undoes it).");
   }
   // `direct` (voice deixis, RFC #59): { conditionId, label } — the human aimed
   // the crosshair, so the flood COMMITS in one step through settleRegion →
@@ -6377,7 +6762,12 @@ export default function TakeoffCanvas() {
     // kind of geometry. flattenArcRing is the identity on an all-straight trace.
     const drawn = curveIdx.length ? flattenArcRing(poly, curveIdx, false) : poly;
     if (tool === "surface") commitSurface(drawn, curveIdx.length > 0);
-    else if (tool === "linear") commitLinear(drawn, false, curveIdx.length > 0);
+    else if (tool === "linear") {
+      commitLinear(drawn, false, curveIdx.length > 0);
+      // #linear-takeoff (WP1.3): Continue OFF leaves the tool after one run;
+      // Continue ON (the default, today's unchanged behavior) stays armed.
+      if (!linearContinue) setTool("select");
+    }
     else commitPoly(curveIdx.length ? flattenArcRing(poly, curveIdx, true) : poly, tool === "deduct", { curved: curveIdx.length > 0 });
     clearPoly();
   }
@@ -8047,6 +8437,7 @@ export default function TakeoffCanvas() {
         sheet_id: p.key, scale_source: agentStateRef.current.scaleSources[p.key] || "unknown", scale_confirmed: true,
       })),
       sheetLabel: tabLabel, displayUnits: units,
+      linearRuns: linearRunRows(rows),
     });
     const filename = `${exportBaseName()}.report.json`;
     downloadText(filename, JSON.stringify(doc, null, 2), "application/json");
@@ -8105,13 +8496,26 @@ export default function TakeoffCanvas() {
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
-    if (compiled.bas_math || compiled.bas_point_lists) setShowTakeoffData(true);
+    // openPanel: false lets a caller merge this compile's rows into state
+    // WITHOUT popping the modal open yet — agentCompileCorpusTakeoff uses
+    // this for the compile pass so the estimator's first look at the panel
+    // already has reconcile's plan citations merged in, instead of a bare
+    // schedule-only flash that then rewrites itself a few seconds later.
+    const openPanel = meta.openPanel !== false;
+    // Sticky, not overwritten by a later compile of a DIFFERENT kind (e.g. the
+    // embedded_coil_valve_gaps pass that normally follows a valve takeoff in
+    // the same session) — agentTakeoffRows accumulates across every compile,
+    // so the rich valve table stays fully visible long after corpusMeta.kind
+    // has moved on; Export to HIT must not disappear just because the LATEST
+    // compile happened to be something else. Cleared only by onClear below.
+    if (compiled.kind === "control_valves") setLastControlValveTakeoff(compiled);
+    if (openPanel && (compiled.bas_math || compiled.bas_point_lists)) setShowTakeoffData(true);
     if (compiled.bas_workflow) {
       try {
         const next = mergeBasWorkflows(basWorkflowRef.current, compiled.bas_workflow, true);
         basWorkflowRef.current = next;
         setBasWorkflow(next);
-        setShowTakeoffData(true);
+        if (openPanel) setShowTakeoffData(true);
       } catch (error) { setCommitMsg(`Couldn't retain BAS evidence: ${error.message}. Previous saved captures were preserved.`); }
     }
     if (compiled.bas_workflow_error) setCommitMsg(`Couldn't retain BAS evidence: ${compiled.bas_workflow_error}. Existing captures were preserved.`);
@@ -8171,7 +8575,7 @@ export default function TakeoffCanvas() {
         prev.filter((row) => !(row.source_tool === "compile_corpus_takeoff" && row.workflow === workflowName)),
         rows,
       ));
-      setShowTakeoffData(true);
+      if (openPanel) setShowTakeoffData(true);
       // Audit trail on the blueprints: one highlight per schedule table + per tag row.
       void paintCompiledTakeoffHighlights(compiled);
     }
@@ -8216,7 +8620,7 @@ export default function TakeoffCanvas() {
         // CSV/JSON still delivered
       }
     }
-    showCompiledTakeoff(compiled);
+    showCompiledTakeoff(compiled, { openPanel: opts.openPanel !== false });
     return {
       takeoff_id: compiled.takeoff_id,
       kind: compiled.kind,
@@ -8255,6 +8659,21 @@ export default function TakeoffCanvas() {
     };
   }
 
+  // "Export to HIT" — a deliberate, standalone action distinct from the
+  // Takeoff panel's CSV/Excel/PDF cluster: template-fills Siemens' own
+  // "Global Valves" mass-sizing workbook (valveSizeTemplate.ts) from the
+  // last compiled control_valves takeoff, for handoff straight into the
+  // Siemens HIT sizing tool.
+  async function exportControlValveTakeoffToHit() {
+    if (!lastControlValveTakeoff) return;
+    const valveExport = buildValveSizeExport(lastControlValveTakeoff);
+    const templateRes = await fetch(VALVE_SIZE_TEMPLATE_PUBLIC_PATH);
+    if (!templateRes.ok) throw new Error(`template fetch ${templateRes.status}`);
+    const templateBytes = new Uint8Array(await templateRes.arrayBuffer());
+    const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
+    downloadBytes(VALVE_SIZE_TEMPLATE_FILENAME, filled, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  }
+
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
     // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
     // Stream OT_PROGRESS phases into the Agent status/log so a long compile
@@ -8273,7 +8692,46 @@ export default function TakeoffCanvas() {
           + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
       };
     }
-    return finalizeAgentCompiledTakeoff(compiled, opts);
+    // openPanel: false — merge this compile's own rows into state but do NOT
+    // pop the modal open yet. Reconcile (below) runs before the panel is ever
+    // shown, so the estimator's first look at it already has plan citations
+    // merged in — not a bare schedule-only table that then silently rewrites
+    // itself a few seconds later once reconcile catches up (live-reported:
+    // "that first screen still comes up before any cites are attached").
+    const result = await finalizeAgentCompiledTakeoff(compiled, { ...opts, openPanel: false });
+    // No takeoff is "finished" without plan-grounded evidence — leaving
+    // reconcile as a second, optional tool call meant the model routinely
+    // stopped right after compile and wrote its final answer over a
+    // schedule-only takeoff with zero citations (live-verified: asked
+    // explicitly for both in the same prompt, still got 163 valves with no
+    // Compare/Installed Qty pills — the model just didn't chain it).
+    // Reconcile is core to the platform, not an optional extra step, so it
+    // runs HERE unconditionally for every kind, deterministically, the same
+    // way complete_bas_takeoff already bundles its own reconcile pass — never
+    // dependent on the model separately deciding to call
+    // reconcile_schedule_plan.
+    let reconciledRows = false;
+    if (result && !result.error) {
+      try {
+        const reconciled = await fetchProductionReconcileSchedulePlan({ onProgress: reportAgentTakeoffProgress });
+        if (reconciled && !reconciled.error && Array.isArray(reconciled.rows)) {
+          // pushReconcileToTakeoffPanel opens the panel itself once it has
+          // rows to merge — the FIRST time it's shown, both the compiled
+          // schedule fields and the reconciled plan citations are present.
+          pushReconcileToTakeoffPanel(reconciled, null);
+          result.reconcile_rows = reconciled.rows.length;
+          reconciledRows = reconciled.rows.length > 0;
+        }
+      } catch {
+        // The compiled takeoff still stands on its own without citations.
+      }
+    }
+    // Reconcile found nothing to merge (error, or a genuine zero-match
+    // result) — the panel was deliberately held back above, so it must still
+    // open now with whatever the compile itself produced. Never leave a
+    // successful compile silently unopened.
+    if (!reconciledRows) setShowTakeoffData(true);
+    return result;
   }
 
   /** Browser transport for the shared, source-bounded SOO interpreter. Raw
@@ -9371,7 +9829,7 @@ export default function TakeoffCanvas() {
     return { condition_id: c.id, finish_tag: c.finish_tag, ...patch };
   }
 
-  const AGENT_MATERIAL_FIELDS = new Set(["name", "per", "basis", "unit", "round", "note"]);
+  const AGENT_MATERIAL_FIELDS = new Set(["name", "per", "basis", "unit", "round", "note", "hours_per_unit"]);
   function agentEditMaterials(tag, opts = {}) {
     const t = (tag || "").trim();
     if (!t) return { error: "Pass condition — an existing or new finish tag." };
@@ -9384,11 +9842,12 @@ export default function TakeoffCanvas() {
     for (const id of remove) if (!existingIds.has(id)) return { error: `No materials row "${id}" on ${c.finish_tag} — check the current rows first.` };
     for (const pr of patchList) {
       if (!existingIds.has(pr.id)) return { error: `No materials row "${pr.id}" on ${c.finish_tag} — check the current rows first.` };
-      for (const k of Object.keys(pr.fields || {})) if (!AGENT_MATERIAL_FIELDS.has(k)) return { error: `Unknown materials field "${k}" — name/per/basis/unit/round/note only.` };
+      for (const k of Object.keys(pr.fields || {})) if (!AGENT_MATERIAL_FIELDS.has(k)) return { error: `Unknown materials field "${k}" — name/per/basis/unit/round/note/hours_per_unit only.` };
     }
     const minted = add.map((row) => ({
       id: uid("mat"), name: row.name, per: row.per ?? 0, basis: row.basis || "area",
       unit: row.unit || "", round: row.round !== false, ...(row.note ? { note: row.note } : {}),
+      ...(row.hours_per_unit != null ? { hours_per_unit: Math.max(0, row.hours_per_unit) } : {}),
     }));
     const finalRows = [
       ...(c.materials || []).filter((m) => !remove.has(m.id)).map((m) => {
@@ -11717,6 +12176,17 @@ export default function TakeoffCanvas() {
             style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${angleOn ? "var(--cobalt)" : "var(--ink-faint)"}`, background: angleOn ? "var(--cobalt)" : "transparent", color: angleOn ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
             <Icon name="angle" size={15} />45°
           </button>
+          {/* #linear-takeoff (WP1.3): only meaningful while Linear is armed —
+              ON (default) keeps the tool armed for the next run after
+              Enter/double-click finishes one (today's existing behavior,
+              unchanged); OFF returns to Select after each run. */}
+          {tool === "linear" && (
+            <button aria-pressed={linearContinue} onClick={() => setLinearContinue((v) => !v)}
+              title="Continue — stay on the Linear tool after finishing a run, ready for the next one (Esc leaves)"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${linearContinue ? "var(--cobalt)" : "var(--ink-faint)"}`, background: linearContinue ? "var(--cobalt)" : "transparent", color: linearContinue ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
+              Continue
+            </button>
+          )}
         </>)}
         {/* The caption always shows the ACTIVE label (+ the cobalt highlight keyed
             on it) so what a new trace will get is never hidden — even in Select
@@ -12375,6 +12845,24 @@ export default function TakeoffCanvas() {
                             return <rect key={"m" + i} x={mx - ew / 2} y={my - eh / 2} width={ew} height={eh} rx={eh / 2}
                               transform={`rotate(${ang} ${mx} ${my})`} fill={grip} stroke={DS.selection.color} strokeWidth={1.6 / s} />;
                           })}
+                          {/* #linear-takeoff (WP1.3): fitting glyphs for a selected routed run —
+                              read-only today (geometry-derived from computed.run.vertices); drawn
+                              BEFORE the corner handles so they paint as a halo underneath, never on
+                              top. A plain Linear trace with no run block renders nothing extra. */}
+                          {sel.measure_role === "linear" && sel.computed?.run?.vertices?.length > 0 && (
+                            <g>
+                              {sel.computed.run.vertices.map((v) => {
+                                const pt = qs[v.i];
+                                if (!pt) return null;
+                                const glyph = VERTEX_GLYPH[v.kind] || VERTEX_GLYPH.manual;
+                                const d = markerPath(glyph.shape, pt[0], pt[1], 9 / s);
+                                if (!d) return null;
+                                return <path key={"vg" + v.i} d={d} fill={glyph.color} fillOpacity={0.35} stroke={glyph.color} strokeWidth={1.4 / s}>
+                                  <title>{v.kind}{v.angle_deg != null ? ` · ${Math.round(v.angle_deg)}°` : ""}</title>
+                                </path>;
+                              })}
+                            </g>
+                          )}
                           {/* corner handles — click selects (Delete removes just that point), drag moves.
                               The theme's handle glyph (drafting: paper-filled diamond); a "hollow" theme
                               draws the mark unfilled, the selection color as its outline. */}
@@ -12748,6 +13236,51 @@ export default function TakeoffCanvas() {
                       </g>
                       );
                     })}
+                    {/* #linear-takeoff WP3.7: Trace mode's own live hover highlight
+                        (unstaged, follows the cursor) and staged proposal (post-
+                        click, Q-accepts) — panel-LOCAL hi-res px already, same
+                        frame agent proposals render in just above. Distinct
+                        dash/colour from One-Click's own selection so the two
+                        proposal kinds never read as the same thing. */}
+                    {traceHover && traceHover.key === p.key && (() => {
+                      const s = tf.scale;
+                      return (
+                        <g opacity={0.75}>
+                          <polyline points={traceHover.points.map((q) => q.join(",")).join(" ")}
+                            fill="none" stroke="#0a8f5b" strokeWidth={3 / s} strokeDasharray={`${5 / s} ${3 / s}`} strokeLinecap="round" strokeLinejoin="round" />
+                          {traceHover.chip && (() => {
+                            const [cx, cy] = traceHover.points[Math.floor(traceHover.points.length / 2)] || traceHover.points[0];
+                            const w = Math.min(traceHover.chip.length * 6.2, 320) / s, h = 20 / s;
+                            return (
+                              <g transform={`translate(${cx}, ${cy - 14 / s})`}>
+                                <rect x={-w / 2} y={-h} width={w} height={h} rx={h / 3} fill="#0a8f5b" opacity={0.92} />
+                                <text x={0} y={-h / 2} textAnchor="middle" dominantBaseline="central" fontSize={11 / s} fill="#fff">{traceHover.chip}</text>
+                              </g>
+                            );
+                          })()}
+                        </g>
+                      );
+                    })()}
+                    {traceProposal && traceProposal.key === p.key && (() => {
+                      const s = tf.scale;
+                      const chip = traceChipText(traceProposal);
+                      const [cx, cy] = traceProposal.points[Math.floor(traceProposal.points.length / 2)] || traceProposal.points[0];
+                      const w = Math.min(chip.length * 6.2, 320) / s, h = 20 / s;
+                      return (
+                        <g>
+                          <polyline points={traceProposal.points.map((q) => q.join(",")).join(" ")}
+                            fill="none" stroke="#1f3fc7" strokeWidth={3.5 / s} strokeDasharray={`${7 / s} ${4 / s}`} strokeLinecap="round" strokeLinejoin="round" />
+                          <path d={starPath(traceProposal.seedPoint[0], traceProposal.seedPoint[1], 5 / s)} fill="#1f3fc7" stroke="#fff" strokeWidth={1 / s} />
+                          {(traceProposal.vertices || []).map((v, k) => (
+                            <circle key={"tv" + k} cx={v.x} cy={v.y} r={4 / s} fill="#1f3fc7" stroke="#fff" strokeWidth={1 / s} />
+                          ))}
+                          <g transform={`translate(${cx}, ${cy - 16 / s})`}>
+                            <rect x={-w / 2} y={-h} width={w} height={h} rx={h / 3} fill="#1f3fc7" opacity={0.95} />
+                            <text x={0} y={-h / 2} textAnchor="middle" dominantBaseline="central" fontSize={11 / s} fill="#fff">{chip}</text>
+                          </g>
+                        </g>
+                      );
+                    })()}
                     {/* Agent proposals — DASHED pencil pending the accept gate. A
                         finer dash than one-click's selection so the two proposal
                         kinds read apart; the seed star marks the flood seed. The
@@ -13315,7 +13848,7 @@ export default function TakeoffCanvas() {
               );
             })()
           ) : (
-            <div style={{ fontSize: 12.5, opacity: 0.6 }}>{!unitsPerPx ? "Set scale first" : tool === "zone" ? "Trace a region (an apartment, a wing) — ⏎ closes it and lists every condition inside" : !activeCond ? "Pick a condition" : tool === "oneclick" ? "Click inside a room — it selects itself" : tool === "surface" ? "Trace the wall run" : "Click to trace an area"}</div>
+            <div style={{ fontSize: 12.5, opacity: 0.6 }}>{!unitsPerPx ? "Set scale first" : tool === "zone" ? "Trace a region (an apartment, a wing) — ⏎ closes it and lists every condition inside" : !activeCond ? "Pick a condition" : tool === "oneclick" ? "Click inside a room — it selects itself" : tool === "surface" ? "Trace the wall run" : tool === "trace" ? (traceProposal ? "Q accepts the read size — Esc discards" : "Click a drawn duct/pipe line — it reads the run and its size") : "Click to trace an area"}</div>
           )}
           {selShape?.measure_role === "surface_area" && (
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }} title="Height for THIS wall only — full-height tile here, 4-ft wainscot there, same condition. ↺ returns to the condition height.">
@@ -13345,14 +13878,32 @@ export default function TakeoffCanvas() {
               <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.4, opacity: 0.5, marginTop: 8 }}>Measurements</div>
               <div style={{ fontFamily: "var(--f-mono)", fontSize: 11.5, lineHeight: 1.5, marginTop: 2 }}>
                 {tally.map((r) => (
-                  <div key={r.id} style={{ display: "flex", gap: 6, whiteSpace: "nowrap" }}>
-                    <span style={{ opacity: 0.45 }}>{String(r.n).padStart(2, "0")}</span>
-                    <span>
-                      {fl(r.lf)}
-                      {r.role === "wall"
-                        ? <> × {num(heightVal(r.h, units), 2)} {heightUnit(units)} = {fa(r.sf)}</>
-                        : <span style={{ color: "var(--ink-muted)" }}> linear</span>}
-                    </span>
+                  <div key={r.id}>
+                    <div style={{ display: "flex", gap: 6, whiteSpace: "nowrap" }}>
+                      <span style={{ opacity: 0.45 }}>{String(r.n).padStart(2, "0")}</span>
+                      <span>
+                        {fl(r.lf)}
+                        {r.role === "wall"
+                          ? <> × {num(heightVal(r.h, units), 2)} {heightUnit(units)} = {fa(r.sf)}</>
+                          : <span style={{ color: "var(--ink-muted)" }}> linear</span>}
+                      </span>
+                    </div>
+                    {/* #linear-takeoff (WP1.3): per-segment size breakdown — only
+                        present when the shape carries a `run` block (routed
+                        systems); a plain Linear trace renders exactly as before. */}
+                    {r.segments?.length > 0 && (
+                      <div style={{ paddingLeft: 16 }}>
+                        {r.segments.map((seg) => (
+                          <div key={seg.i} style={{ display: "flex", gap: 6, whiteSpace: "nowrap", opacity: 0.8 }}>
+                            <span style={{ opacity: 0.4 }}>·</span>
+                            <span>
+                              {fl(seg.lf)}{" "}
+                              {sizeLabel(seg.size) || <span style={{ color: "var(--c-warning)" }}>unsized</span>}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -13476,6 +14027,8 @@ export default function TakeoffCanvas() {
             onOpenTakeoff={() => setShowTakeoffData(true)}
             takeoffRowCount={finishedTakeoffLineCount}
             takeoffBadgeLabel={lastCorpusTakeoffMeta?.kind === "complete_bas_takeoff" ? takeoffBadgeLabel : null}
+            canExportToHit={!!lastControlValveTakeoff}
+            onExportToHit={exportControlValveTakeoffToHit}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
@@ -13667,6 +14220,8 @@ export default function TakeoffCanvas() {
           rows={agentTakeoffRows}
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}
+          canExportToHit={!!lastControlValveTakeoff}
+          onExportToHit={exportControlValveTakeoffToHit}
           basWorkflow={basWorkflow}
           restoreContext={basRestoreContext}
           basViewState={basViewState}
@@ -13783,7 +14338,7 @@ export default function TakeoffCanvas() {
             setBasWorkflow(updated);
             return updated;
           }}
-          onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); }}
+          onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); setLastControlValveTakeoff(null); }}
           onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
           onRemoveLine={(line) => {
             const ids = new Set(line?.source_ids || []);
@@ -14083,6 +14638,18 @@ export default function TakeoffCanvas() {
       {showAiSettings && <AiSettings onClose={() => setShowAiSettings(false)} />}
       {/* the manual, last in the tree so it sits above every panel and dock */}
       {guideOpen && <UserGuide onClose={() => setGuideOpen(false)} />}
+      {/* #linear-takeoff (WP1.3): the "Set size…" popover, right-click a Linear
+          segment. Keyed on shapeId+segIndex so switching segments remounts a
+          fresh form instead of carrying stale edits over from the last one. */}
+      {segMenu && (
+        <SegmentSizeMenu
+          key={`${segMenu.shapeId}:${segMenu.segIndex}`}
+          x={segMenu.x} y={segMenu.y} size={segMenu.size}
+          onSet={(size) => applySegmentSize(segMenu.shapeId, segMenu.segIndex, size)}
+          onClear={() => applySegmentSize(segMenu.shapeId, segMenu.segIndex, null)}
+          onCancel={() => setSegMenu(null)}
+        />
+      )}
     </div>
   );
 }

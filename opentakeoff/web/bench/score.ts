@@ -7,6 +7,7 @@
 // for probes whose golden answer is "refuse".
 import { pointInPoly } from "../src/lib/geometry.js";
 import type { Point } from "../src/lib/oneclick";
+import type { ComputedRun } from "../src/lib/linear/run.ts";
 
 /** Rasterized IoU of two polygons (cell centers on the union bbox, 1 px grid).
  *  Exact enough for room-scale rings; dependency-free and orientation-proof. */
@@ -507,4 +508,414 @@ export function aggregate(scores: ProbeScore[]): Aggregate {
     correctRefusalRate: refuse.length ? refuse.filter((s) => s.correctRefusal).length / refuse.length : 1,
     knownFails: scores.filter((s) => s.knownFail).length,
   };
+}
+
+// ── #linear-takeoff (WP1.6) — manual-run scoring: parity, determinism, totals.
+// Deliberately NOT the full run-recall/precision/Fréchet/vertex-F1 suite the
+// goal document's §2 describes — that's WP3+'s trace-engine scoring, and has
+// no meaning yet: manual mode never "finds" a run, a person/agent supplies
+// its points outright, so there is nothing to score for recall against. What
+// CAN regress in manual mode is covered here: canvas and MCP computing a
+// different answer for the identical input (parity), the computed LF/size
+// breakdown drifting from the geometry's own analytic truth (totals), and the
+// answer changing under a lossless geometric transform of the same run
+// (determinism) — rotating or translating a polyline must not move its LF by
+// a hair, and scaling it must move LF by exactly that factor.
+
+/** Deep-equality check for two ComputedRun reads of what should be the
+ *  IDENTICAL run — canvas's own resolveRunSegments call and MCP's replied
+ *  computed_run for the same points/scale/run block. Structural, not
+ *  tolerance-based: these two are supposed to be the same object by
+ *  construction (both are the one shared function), so ANY difference is a
+ *  wiring bug (a size seeded differently, a system dropped, an index off by
+ *  one) — never a rounding matter. */
+export function scoreLinearParity(caseName: string, canvas: ComputedRun | null, mcp: ComputedRun | null): { caseName: string; ok: boolean; mismatch?: string } {
+  if (!canvas || !mcp) {
+    if (canvas === mcp) return { caseName, ok: true };
+    return { caseName, ok: false, mismatch: "one side resolved a run and the other didn't" };
+  }
+  const a = JSON.stringify(canvas), b = JSON.stringify(mcp);
+  if (a === b) return { caseName, ok: true };
+  return { caseName, ok: false, mismatch: `canvas computed_run !== MCP computed_run: ${a} vs ${b}` };
+}
+
+/** LF total against the case's analytic truth (the same feet-coordinates the
+ *  synthetic generator drew from) — errFt/errPct should read as pure
+ *  round-to-cent noise, never a real measurement drift. */
+export interface LinearTotalsRow { caseName: string; expectedLf: number; actualLf: number; errFt: number; errPct: number }
+export function scoreLinearTotals(caseName: string, expectedLf: number, actualLf: number): LinearTotalsRow {
+  const errFt = Math.abs(actualLf - expectedLf);
+  return { caseName, expectedLf, actualLf, errFt, errPct: expectedLf > 0 ? errFt / expectedLf : 0 };
+}
+
+/** One determinism probe: the SAME run under a lossless transform of its own
+ *  points (rotate/translate/reverse — LF unchanged; scale — LF scaled by the
+ *  same factor). `expectedLf` is the untransformed case's own actual LF times
+ *  `lfScale` (1 for rotate/translate/reverse, the scale factor otherwise). */
+export interface LinearDeterminismRow { caseName: string; transform: string; expectedLf: number; actualLf: number; errFt: number }
+export function scoreLinearDeterminism(caseName: string, transform: string, expectedLf: number, actualLf: number): LinearDeterminismRow {
+  return { caseName, transform, expectedLf, actualLf, errFt: Math.abs(actualLf - expectedLf) };
+}
+
+export interface LinearAggregate {
+  cases: number;
+  parityFailures: number;
+  maxTotalsErrFt: number;
+  maxTotalsErrPct: number;
+  maxDeterminismErrFt: number;
+}
+export function aggregateLinear(parity: Array<{ ok: boolean }>, totals: LinearTotalsRow[], determinism: LinearDeterminismRow[]): LinearAggregate {
+  return {
+    cases: totals.length,
+    parityFailures: parity.filter((p) => !p.ok).length,
+    maxTotalsErrFt: totals.length ? Math.max(...totals.map((t) => t.errFt)) : 0,
+    maxTotalsErrPct: totals.length ? Math.max(...totals.map((t) => t.errPct)) : 0,
+    maxDeterminismErrFt: determinism.length ? Math.max(...determinism.map((d) => d.errFt)) : 0,
+  };
+}
+
+// ── #linear-takeoff WP3+ — trace-engine scoring (GATE 3). The goal
+// document's own LINEAR BENCH instrument text names the exact method:
+// "run recall / precision (discrete Frechet < 2 pt, length overlap >=
+// 80%)". Distinct from everything above this comment (which scores
+// MANUAL mode — a human/agent supplies the points outright, so there is
+// nothing to "find"): this scores whether `trace_run`, given only a seed
+// point, finds the SAME shape a human already traced.
+//
+// Fréchet distance needs both curves walked in a consistent direction —
+// `trace_run` starts from wherever the seed happens to land and walks
+// both ways, so its own polyline's direction relative to the golden's is
+// arbitrary. `bestFrechetOverlap` below tries both orientations of the
+// traced polyline and keeps whichever scores better, exactly the same
+// "don't let an arbitrary convention fail an otherwise-correct answer"
+// reasoning `walk.ts`'s own `segs` combination already applies elsewhere.
+//
+// A trace that ran LONGER than the golden (over-trace) must not itself
+// fail Fréchet/overlap — that failure mode has its own separate metric
+// (`overTracePct`, scoreLinearTraceRun below) by design, mirroring
+// mep-trace-eval.mjs's own "reach accuracy, refusal correctness and
+// false-confident rate scored apart from each other on purpose" doctrine.
+// So the traced polyline is CLIPPED to the arc-length span between the
+// golden's own two endpoints (each projected onto the trace) before
+// Fréchet/overlap ever compares it to the golden — over-trace beyond
+// that span is invisible to this pair of numbers on purpose.
+import type { Point as GeoPoint } from "../src/lib/oneclick";
+
+function polySegLen(a: GeoPoint, b: GeoPoint): number {
+  return Math.hypot(b[0] - a[0], b[1] - a[1]);
+}
+
+export function polylineLength(poly: GeoPoint[]): number {
+  let s = 0;
+  for (let i = 0; i < poly.length - 1; i++) s += polySegLen(poly[i], poly[i + 1]);
+  return s;
+}
+
+/** Nearest point on polyline `poly` to `pt`, as an arc-length position
+ *  from `poly`'s own start (0) — O(n) over its segments. */
+export function projectOntoPolyline(pt: GeoPoint, poly: GeoPoint[]): { arcLen: number; at: GeoPoint; dist: number } {
+  let best = { arcLen: 0, at: poly[0], dist: Infinity };
+  let acc = 0;
+  for (let i = 0; i < poly.length - 1; i++) {
+    const [x1, y1] = poly[i], [x2, y2] = poly[i + 1];
+    const dx = x2 - x1, dy = y2 - y1;
+    const segLen = Math.hypot(dx, dy);
+    const l2 = dx * dx + dy * dy;
+    let t = l2 ? ((pt[0] - x1) * dx + (pt[1] - y1) * dy) / l2 : 0;
+    t = Math.max(0, Math.min(1, t));
+    const px = x1 + t * dx, py = y1 + t * dy;
+    const dist = Math.hypot(pt[0] - px, pt[1] - py);
+    if (dist < best.dist) best = { arcLen: acc + t * segLen, at: [px, py], dist };
+    acc += segLen;
+  }
+  return best;
+}
+
+/** The point on `poly` at arc-length `arcLen` from its own start, clamped
+ *  to the polyline's own extent. */
+function pointAtArcLen(poly: GeoPoint[], arcLen: number): GeoPoint {
+  let acc = 0;
+  for (let i = 0; i < poly.length - 1; i++) {
+    const segLen = polySegLen(poly[i], poly[i + 1]);
+    if (arcLen <= acc + segLen || i === poly.length - 2) {
+      const t = segLen ? Math.max(0, Math.min(1, (arcLen - acc) / segLen)) : 0;
+      return [poly[i][0] + t * (poly[i + 1][0] - poly[i][0]), poly[i][1] + t * (poly[i + 1][1] - poly[i][1])];
+    }
+    acc += segLen;
+  }
+  return poly[poly.length - 1];
+}
+
+/** Sub-polyline of `poly` spanning arc-lengths [a, b] (a <= b), keeping
+ *  every original vertex strictly inside that span so the clip's own
+ *  shape (elbows included) survives, not just its two new endpoints. */
+export function clipPolyline(poly: GeoPoint[], a: number, b: number): GeoPoint[] {
+  const out: GeoPoint[] = [pointAtArcLen(poly, a)];
+  let acc = 0;
+  for (let i = 0; i < poly.length; i++) {
+    if (acc > a && acc < b) out.push(poly[i]);
+    if (i < poly.length - 1) acc += polySegLen(poly[i], poly[i + 1]);
+  }
+  out.push(pointAtArcLen(poly, b));
+  return out;
+}
+
+/** Perpendicular distance from `p` to the infinite line through `a`-`b`
+ *  (falls back to point-to-point distance when `a === b`). */
+function perpDist(p: GeoPoint, a: GeoPoint, b: GeoPoint): number {
+  const dx = b[0] - a[0], dy = b[1] - a[1];
+  const len = Math.hypot(dx, dy);
+  if (!len) return polySegLen(p, a);
+  return Math.abs(dy * p[0] - dx * p[1] + b[0] * a[1] - b[1] * a[0]) / len;
+}
+
+/** Douglas-Peucker simplification, iterative (an explicit stack, not
+ *  recursion — same reasoning as discreteFrechet below: a long polyline
+ *  must not be able to blow the call stack). Drops a vertex only when its
+ *  own perpendicular deviation from the chord it sits on is <= `tolPx` —
+ *  this exists because discrete Fréchet (below) is a per-VERTEX distance,
+ *  not a per-CURVE one: a golden hand-authored as a straight 2-point run
+ *  compared against a `trace_run` polyline that revisits the SAME straight
+ *  line with several extra, functionally-redundant vertices (a fitting
+ *  symbol's own tiny kinks, a snapped-grid rounding step) reads as a large
+ *  "shape mismatch" under raw discreteFrechet even though the two curves
+ *  are geometrically identical — the DP's own monotone correspondence has
+ *  to walk through every extra vertex on the denser side before it can
+ *  advance on the sparser one, and the worst intermediate gap becomes the
+ *  reported distance. Simplifying both curves to their OWN true corners
+ *  first (a small, fixed tolerance well under the recall gate's own 2px
+ *  Fréchet threshold, so a genuine elbow is never mistaken for noise)
+ *  removes that artifact without weakening what over-trace/shape-mismatch
+ *  scoring is actually for. Caught measuring itd-p4-ea-duct-stub (GATE 3
+ *  held-out tier, 2026-09-17): LF matched exactly (3.02→3.02) yet
+ *  frechetPx read 9.2 — reproduced directly against `discreteFrechet`
+ *  with the exact traced/golden points, confirmed as this artifact (not
+ *  real engine noise), and fixed here rather than left as a documented,
+ *  accepted "engine limitation" that this project's own methodology
+ *  actually caused. */
+export function simplifyPolyline(poly: GeoPoint[], tolPx: number): GeoPoint[] {
+  if (poly.length < 3) return poly;
+  const keep = new Uint8Array(poly.length);
+  keep[0] = 1;
+  keep[poly.length - 1] = 1;
+  const stack: Array<[number, number]> = [[0, poly.length - 1]];
+  while (stack.length) {
+    const [lo, hi] = stack.pop()!;
+    if (hi <= lo + 1) continue;
+    let bestI = -1, bestD = tolPx;
+    for (let i = lo + 1; i < hi; i++) {
+      const d = perpDist(poly[i], poly[lo], poly[hi]);
+      if (d > bestD) { bestD = d; bestI = i; }
+    }
+    if (bestI >= 0) {
+      keep[bestI] = 1;
+      stack.push([lo, bestI], [bestI, hi]);
+    }
+  }
+  return poly.filter((_, i) => keep[i]);
+}
+
+/** Discrete Fréchet distance (Eiter & Mannila 1994) between two point
+ *  sequences — iterative bottom-up DP (not the textbook's own recursive
+ *  form) so a long over-traced polyline can't stack-overflow this. */
+export function discreteFrechet(a: GeoPoint[], b: GeoPoint[]): number {
+  const n = a.length, m = b.length;
+  if (!n || !m) return Infinity;
+  const ca = new Float64Array(n * m);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      const d = Math.hypot(a[i][0] - b[j][0], a[i][1] - b[j][1]);
+      let v: number;
+      if (i === 0 && j === 0) v = d;
+      else if (i === 0) v = Math.max(ca[j - 1], d);
+      else if (j === 0) v = Math.max(ca[(i - 1) * m], d);
+      else v = Math.max(Math.min(ca[(i - 1) * m + j], ca[(i - 1) * m + j - 1], ca[i * m + j - 1]), d);
+      ca[i * m + j] = v;
+    }
+  }
+  return ca[n * m - 1];
+}
+
+export interface TraceShapeMatch {
+  caseName: string;
+  frechetPx: number;
+  lengthOverlapPct: number;   // fraction of the golden's own length within `overlapTolPx` of the clipped trace
+  clippedLenFt: number;
+  goldenLenFt: number;
+}
+
+/** Scores how well a traced polyline reproduces a golden's own SHAPE over
+ *  the golden's own span (see this section's header on why over-trace
+ *  beyond that span is deliberately invisible here). Tries the traced
+ *  polyline both forwards and reversed, keeping whichever orientation
+ *  gives the smaller Fréchet distance — `trace_run`'s own walk direction
+ *  relative to the golden's is arbitrary, not a real mismatch to penalize. */
+// Well under the recall gate's own 2px Fréchet threshold, so a genuine
+// elbow (a real perpendicular deviation an engineer would call a corner)
+// is never simplified away — see simplifyPolyline's own header.
+const SHAPE_SIMPLIFY_TOL_PX = 0.5;
+
+export function scoreTraceShapeMatch(caseName: string, golden: GeoPoint[], traced: GeoPoint[], upp: number, overlapTolFt = 0.5): TraceShapeMatch {
+  const p0 = projectOntoPolyline(golden[0], traced);
+  const p1 = projectOntoPolyline(golden[golden.length - 1], traced);
+  const a = Math.min(p0.arcLen, p1.arcLen), b = Math.max(p0.arcLen, p1.arcLen);
+  const clipped = simplifyPolyline(clipPolyline(traced, a, b), SHAPE_SIMPLIFY_TOL_PX);
+  const simplifiedGolden = simplifyPolyline(golden, SHAPE_SIMPLIFY_TOL_PX);
+  const reversed = [...clipped].reverse();
+  const frechetPx = Math.min(discreteFrechet(simplifiedGolden, clipped), discreteFrechet(simplifiedGolden, reversed));
+
+  const overlapTolPx = overlapTolFt / (upp || 1);
+  const samples = 50;
+  const goldenLenPx = polylineLength(golden);
+  let covered = 0;
+  for (let i = 0; i <= samples; i++) {
+    const at = pointAtArcLen(golden, (goldenLenPx * i) / samples);
+    if (projectOntoPolyline(at, clipped).dist <= overlapTolPx) covered++;
+  }
+  return {
+    caseName, frechetPx,
+    lengthOverlapPct: covered / (samples + 1),
+    clippedLenFt: round2(polylineLength(clipped) * upp),
+    goldenLenFt: round2(goldenLenPx * upp),
+  };
+}
+function round2(n: number): number { return Math.round(n * 100) / 100; }
+
+export interface TraceRunRow {
+  caseName: string;
+  status: "reached" | "refused" | "error";
+  reason?: string;
+  goldenLf: number;
+  tracedLf: number | null;
+  lenErrPct: number | null;
+  overTracePct: number;        // 0 unless the trace ran LONGER than the golden
+  goldenSizeKey: string | null;
+  tracedSizeKey: string | null;
+  sizeMatch: boolean | null;   // null when the golden carries no size to check against
+  shape?: TraceShapeMatch;
+  buildMs?: number;            // present only on this sheet's FIRST trace_run call (cold: index build + query)
+  queryMs?: number;            // present on every call — the warm-query component alone
+}
+
+/** recall: caseName counts as a HIT when reached AND Fréchet < frechetTolPx
+ *  AND length overlap >= overlapPctMin — the goal doc's own "discrete
+ *  Frechet < 2 pt, length overlap >= 80%" criterion, applied per case. */
+export function scoreTraceRecall(rows: TraceRunRow[], frechetTolPx: number, overlapPctMin: number): { hits: number; total: number; recall: number; misses: TraceRunRow[] } {
+  const misses: TraceRunRow[] = [];
+  let hits = 0;
+  for (const r of rows) {
+    const hit = r.status === "reached" && r.shape != null && r.shape.frechetPx < frechetTolPx && r.shape.lengthOverlapPct >= overlapPctMin;
+    if (hit) hits++; else misses.push(r);
+  }
+  return { hits, total: rows.length, recall: rows.length ? hits / rows.length : 0, misses };
+}
+
+/** precision: of the length actually WALKED, what fraction corresponds to
+ *  the golden's own real path? A trace that wanders onto unrelated
+ *  linework (the crossing-run precision case) or over-traces past the
+ *  golden dilutes this; a clean, exact-length trace scores 1.0. Defined
+ *  per case then length-weighted across cases (a 2 ft case's own noise
+ *  should not swing the aggregate as hard as a 40 ft case's real drift). */
+export function scoreTracePrecision(rows: TraceRunRow[]): number {
+  const reached = rows.filter((r) => r.status === "reached" && r.tracedLf != null);
+  if (!reached.length) return 0;
+  let correctSum = 0, tracedSum = 0;
+  for (const r of reached) {
+    const correct = Math.min(r.goldenLf, r.tracedLf!);
+    correctSum += correct;
+    tracedSum += r.tracedLf!;
+  }
+  return tracedSum > 0 ? correctSum / tracedSum : 0;
+}
+
+export interface TraceAggregate {
+  cases: number;
+  recall: number;
+  precision: number;
+  maxLenErrPct: number;
+  meanLenErrPct: number;
+  maxOverTracePct: number;
+  sizeAccuracyPct: number | null;      // length-weighted; null when no case carries a golden size
+  // The plan's own §2 metric spec asks for "size accuracy (exact +
+  // length-weighted, no-label vs wrong-label separated)" — a WRONG size
+  // (trace_run bound something, just not the golden's own value) is a much
+  // worse failure than NO size (trace_run correctly declined to guess, the
+  // UI's own honest "size unknown, verify manually" state) — collapsing
+  // both into one "not a match" bucket, as sizeAccuracyPct alone does,
+  // hides that distinction. Both length-weighted over the same `sized`
+  // population as sizeAccuracyPct; sizeAccuracyPct + sizeWrongLabelPct +
+  // sizeNoLabelPct sum to 1 whenever sizeAccuracyPct is non-null.
+  sizeWrongLabelPct: number | null;
+  sizeNoLabelPct: number | null;
+  maxColdBuildMs: number | null;
+  maxWarmQueryMs: number | null;
+}
+export function aggregateTrace(rows: TraceRunRow[], frechetTolPx: number, overlapPctMin: number): TraceAggregate {
+  const recall = scoreTraceRecall(rows, frechetTolPx, overlapPctMin);
+  const precision = scoreTracePrecision(rows);
+  const reached = rows.filter((r) => r.status === "reached");
+  const lenErrs = reached.map((r) => r.lenErrPct).filter((x): x is number => x != null);
+  const sized = reached.filter((r) => r.sizeMatch != null);
+  const sizeWeightedOk = sized.reduce((a, r) => a + (r.sizeMatch ? r.goldenLf : 0), 0);
+  const sizeWeightedNoLabel = sized.reduce((a, r) => a + (!r.sizeMatch && r.tracedSizeKey == null ? r.goldenLf : 0), 0);
+  const sizeWeightedWrongLabel = sized.reduce((a, r) => a + (!r.sizeMatch && r.tracedSizeKey != null ? r.goldenLf : 0), 0);
+  const sizeWeightedTotal = sized.reduce((a, r) => a + r.goldenLf, 0);
+  const coldMs = rows.map((r) => r.buildMs).filter((x): x is number => x != null);
+  const warmMs = rows.filter((r) => r.buildMs == null).map((r) => r.queryMs).filter((x): x is number => x != null);
+  return {
+    cases: rows.length,
+    recall: recall.recall,
+    precision,
+    maxLenErrPct: lenErrs.length ? Math.max(...lenErrs) : 0,
+    meanLenErrPct: lenErrs.length ? lenErrs.reduce((a, b) => a + b, 0) / lenErrs.length : 0,
+    maxOverTracePct: reached.length ? Math.max(...reached.map((r) => r.overTracePct)) : 0,
+    sizeAccuracyPct: sizeWeightedTotal > 0 ? sizeWeightedOk / sizeWeightedTotal : null,
+    sizeWrongLabelPct: sizeWeightedTotal > 0 ? sizeWeightedWrongLabel / sizeWeightedTotal : null,
+    sizeNoLabelPct: sizeWeightedTotal > 0 ? sizeWeightedNoLabel / sizeWeightedTotal : null,
+    maxColdBuildMs: coldMs.length ? Math.max(...coldMs) : null,
+    maxWarmQueryMs: warmMs.length ? Math.max(...warmMs) : null,
+  };
+}
+
+// ── refusal correctness — a DIFFERENT question from recall/precision
+// above (mirrors mep-trace-eval.mjs's own "reach accuracy, refusal
+// correctness and false-confident rate scored apart from each other on
+// purpose" doctrine): of the seeds a labeled negative corpus says should
+// REFUSE (not on any real drawn duct/pipe linework at all), how many
+// actually did, rather than confidently tracing something? This is the
+// measurement docs/LINEAR-TRACE-EVAL.md's own "what this does not score"
+// section named as missing — `scoreTracePrecision` above only ever sees
+// cases seeded ON a real golden run, so it can never surface a seed that
+// should have refused outright but didn't.
+export interface RefusalRow {
+  caseName: string;
+  correct: boolean;      // true iff trace_run actually refused
+  gotStatus: "refused" | "reached";
+}
+export function scoreRefusalCorrectness(rows: RefusalRow[]): { correct: number; total: number; rate: number; misses: RefusalRow[] } {
+  const misses = rows.filter((r) => !r.correct);
+  return { correct: rows.length - misses.length, total: rows.length, rate: rows.length ? (rows.length - misses.length) / rows.length : 0, misses };
+}
+
+/** Guided multi-hop continuation (linear/guidedWalk.ts) — a SEPARATE,
+ *  reported-only measurement from `scoreTraceRecall`'s own single-call
+ *  recall, never blended into it: plan §6.3's own design intent for an
+ *  `ambiguous` stop is "offer the candidate fan, not block on it," and
+ *  this asks whether that fan actually contains the golden's own real
+ *  continuation — a different question than "did one unguided call reach
+ *  the golden," with its own separate hit rate. `bench/linear.mts`'s own
+ *  `guidedMultiHopTrace` drives the actual multi-call Session loop (it
+ *  needs a live Session, which this file's own scoring functions never
+ *  touch); this just tallies its results. */
+export interface GuidedHopRow {
+  caseName: string;
+  hops: number;
+  status: "reached_golden_end" | "miss_no_matching_candidate" | "miss_hop_cap" | "refused";
+  reason?: string;
+  points: Point[];
+}
+export function aggregateGuidedHops(rows: GuidedHopRow[]): { total: number; reachedGoldenEnd: number; rate: number; misses: GuidedHopRow[]; maxHops: number } {
+  const misses = rows.filter((r) => r.status !== "reached_golden_end");
+  const maxHops = rows.reduce((m, r) => Math.max(m, r.hops), 0);
+  return { total: rows.length, reachedGoldenEnd: rows.length - misses.length, rate: rows.length ? (rows.length - misses.length) / rows.length : 0, misses, maxHops };
 }

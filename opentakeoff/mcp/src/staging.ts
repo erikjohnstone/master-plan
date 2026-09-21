@@ -16,11 +16,12 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
   setup: [
     "load_plan", "sheet_info", "set_scale", "sheet_graph", "list_tags", "resolve_tag",
     "find_schedule", "query_table", "analyze_control_schematics", "read_sheet_text", "find_text", "sheet_context", "view_sheet",
+    "classify_strokes",
   ],
   measure: [
-    "one_click", "detect_rooms", "measure_polygon", "cut_out", "measure_line",
+    "one_click", "detect_rooms", "measure_polygon", "cut_out", "measure_line", "resolve_linear_assembly",
     "measure_surface", "place_count", "count_marks", "symbol_sweep", "sweep_schedule_row",
-    "project_takeoff", "compile_corpus_takeoff", "reconcile_schedule_plan", "derive_base", "derive_transitions", "trace_connectivity",
+    "project_takeoff", "compile_corpus_takeoff", "reconcile_schedule_plan", "derive_base", "derive_transitions", "trace_connectivity", "trace_run",
     "match_reference_symbol", "find_legend_symbols", "sweep_inline_motif",
   ],
   revise: [
@@ -28,7 +29,7 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
     "bas_scope_review",
     "bas_drawing_review",
     "bas_issue_review",
-    "list_shapes", "delete_shape", "edit_shape", "edit_materials", "edit_condition",
+    "list_shapes", "delete_shape", "edit_shape", "edit_materials", "edit_condition", "edit_run",
     "duplicate_condition", "split_condition", "undo_last", "annotate",
     "list_annotations", "link_annotation", "mark_verdict", "delete_verdict",
   ],

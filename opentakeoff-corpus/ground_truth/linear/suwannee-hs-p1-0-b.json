@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/suwannee-hs-courtyard.pdf",
+  "source_pdf_sha256": "8d1d0d6b48faf1b89b97a257ce94976a8fc69385a55b9e10353743feafd09702",
+  "sheet_id": "suwannee-hs-courtyard.pdf#12",
+  "sheet_number": "P-1.0",
+  "page": 12,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Twenty-fourth golden, a guided continuation of Run 34's own `suwannee-hs-p1-0.json` past its real elbow (Run 34's own explicit disclosed future-work note names this exact diagonal as a candidate). Seeded directly on the diagonal segment visible in the same wide crop Run 34 already used: `trace_run` reaches a real 2.73 LF diagonal segment, same '2 1/2\" ø CD' label printed directly on this exact drawn segment (visually confirmed via a marked render crop), from the real elbow (matching Run 34's own upper boundary exactly) to a real fitting/coupling mark where this pipe ties into a keynote-tagged connection alongside 'EXISTING STORM PIPE TO REMAIN'. No automatic size bind accompanied this specific call (`size_missing` -- the nearby label's own beside-association didn't trigger here, unlike Run 34's own lower segment), so size is declared manually, matching the label's own printed text exactly. Both ends report `ambiguous`, not `dead_end`: the elbow (multiple real candidate directions, matching Run 34's own upper stop) and the coupling point (ten real candidates across several angles -- a genuine multi-element real junction where the CD riser, a keynote leader line, and a valve/tag symbol all converge). This is the SECOND real-corpus case this session (after Run 34) where both of a golden's own stops are genuine `ambiguous` reflecting real drawing complexity rather than an engine misread, and the first real, disclosed instance of the guided-continuation opportunity Run 34 itself named as untried -- used here as a second, separate boundary-to-boundary golden (matching the Douglas County/ITD-D3/Run-34 tee-bounded convention) rather than folded into Run 34's own already-scored extent.",
+  "scope": "A single real 2 1/2-inch condensate drain (CD) pipe segment (2.73 LF) on Suwannee High School's own Courtyard Enclosure plumbing plan, sheet P-1.0, from the real elbow already forming `suwannee-hs-p1-0.json`'s own upper boundary to a real fitting/coupling point where the pipe connects toward an existing storm-pipe tie-in. Explicitly OUT OF SCOPE: `suwannee-hs-p1-0.json`'s own already-scored riser segment below this elbow; the existing storm pipe itself, and the keynote/valve symbols at the coupling point; every other pipe/fixture visible in the same crop; every other run on this real 31-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "suwannee-p10b-cd-2.5in-diag",
+      "description": "2 1/2-inch condensate drain (CD) pipe, a real diagonal segment from Run 34's own elbow to a real fitting/coupling point tying into an existing storm-pipe connection.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.7633294753086419, 0.33998842592592593],
+        [0.7854552469135803, 0.3131944444444445]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 2.5 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 2.73,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 2.73, "size": { "kind": "round", "d_in": 2.5 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:2.5": 2.73 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "round:2.5": 2.73 },
+  "total_lf_all_runs": 2.73
+}

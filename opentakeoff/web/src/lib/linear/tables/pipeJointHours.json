@@ -1,0 +1,16 @@
+{
+  "table_grade": "M",
+  "table_source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md B3 — 'Approximate MCAA-style joint hours (ship as editable defaults, [M] — order of magnitude, not licensed values)'.",
+  "note": "LAW L10 / D6: these are deliberately NOT the licensed MCAA WebLEM / Wendes labor-unit tables — order-of-magnitude engine defaults only, every cell user-editable, and the profile's own CSV import (schema: family,size_key,joint_type,unit,hours,source; MCAA WebLEM export layout first) is how an estimator supplies their own licensed units instead.",
+  "joint_types": ["threaded_steel", "solder_copper", "press_copper", "grooved", "butt_weld"],
+  "rows": [
+    { "nps_in": 0.75, "hours": [0.30, 0.20, 0.10, null, null] },
+    { "nps_in": 1,    "hours": [0.35, 0.25, 0.10, null, null] },
+    { "nps_in": 1.5,  "hours": [0.45, 0.35, 0.12, 0.35, 0.90] },
+    { "nps_in": 2,    "hours": [0.55, 0.45, 0.13, 0.40, 1.10] },
+    { "nps_in": 3,    "hours": [0.85, 0.65, 0.11, 0.55, 2.00] },
+    { "nps_in": 4,    "hours": [1.10, 0.85, 0.20, 0.65, 2.60] },
+    { "nps_in": 6,    "hours": [null, 1.20, 0.35, 0.90, 3.80] }
+  ],
+  "lookup_rule": "nps_in <= 0.75 uses the 0.75 row (the source table's own '1/2-3/4' band); larger sizes look up the nearest row at or above the requested NPS, same convention as the hanger-spacing tables."
+}

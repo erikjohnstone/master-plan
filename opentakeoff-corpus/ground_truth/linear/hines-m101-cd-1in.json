@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/hines-finance-center-renovation.pdf",
+  "source_pdf_sha256": "68c28727f909317f22b4accb0927f0559c5308376c772421838bb2290cf1f8e8",
+  "sheet_id": "hines-finance-center-renovation.pdf#14",
+  "sheet_number": null,
+  "page": 14,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "A fresh, previously-untouched real project this session: a VA Hines Finance Center renovation set. A text-anchored scan across 14 pre-checked sheets (scale and seg-count confirmed before investing time, learning from an earlier same-day dead end) found many real `1\" CD` (condensate drain) callouts on sheet #14 alone, alongside `2\" MPS` (medium-pressure steam) and small `1/2\" CW`/`1/2\" HW` domestic-water callouts on other sheets. Seeded near one of the more isolated `1\" CD` labels; `trace_run` reached a clean, real automatic bind matching it exactly.\n\nConfirmed via marked render crop: the traced 2.23 LF segment is a real, solid, straight horizontal pipe line running from a real wall-penetration hatch boundary (a genuine `dead_end` physical termination) to the point where the printed `1\" CD` label's own text begins -- the drafter's real drawn extent, not an arbitrary cut. The backward end (at the wall hatch) reads `ambiguous`, not `dead_end`, reflecting the real drawn geometry at that specific point (the hatch boundary area carries more than one candidate direction) rather than an engine misread. A nearby `D1` floor-drain callout and its own leader arrow sit just below this run but are not physically connected to the traced line itself -- explicitly not part of this run's own scope. No size-transition or parallel-pipe ambiguity risk was found on this specific run (unlike two other real candidates rejected elsewhere this same session on different projects): the label sits directly beside a single, isolated, unambiguous line.",
+  "scope": "A single real 1\" CD (condensate drain) pipe stub (2.23 LF) on the Hines Finance Center renovation project's own sheet (page 14), from a real wall-penetration boundary to the real drawn extent ending at its own printed size label. Explicitly OUT OF SCOPE: the nearby D1 floor-drain callout and its own leader arrow (not connected to this drawn line); every other `1\" CD`/`2 1/2\" CD`/`1 1/4\" CD` condensate run on this same dense sheet (over a dozen further candidates, not individually verified); the `2\" MPS` steam piping and `1/2\" CW`/`1/2\" HW` domestic water piping found on other sheets in this same project, not attempted; every other sheet in this real multi-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "hines-p14-cd-1in-stub",
+      "description": "1\" CD (condensate drain) pipe stub, from a real wall-penetration hatch boundary to the drawn extent at its own printed size label.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.7566302910052911, 0.4492129629629629],
+        [0.7665839947089947, 0.4492129629629629]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 2.23,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 2.23, "size": { "kind": "pipe", "nps_in": 1 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1": 2.23 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:1": 2.23 },
+  "total_lf_all_runs": 2.23
+}

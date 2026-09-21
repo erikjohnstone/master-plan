@@ -1,0 +1,46 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/sdsu-eng-sciences-part03.pdf",
+  "source_pdf_sha256": "156316ee82ec32656b88b0e2c8350987f4252002d3bd0ce4b1bbccdd4a7375d0",
+  "sheet_id": "sdsu-eng-sciences-part03.pdf#28",
+  "sheet_number": "M-201N",
+  "page": 28,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Seventh golden authored from the project's own newly-expanded real corpus, this time via a genuinely new discovery METHOD: a single large automated scan run unattended across 20 previously-untouched files from BOTH GitHub Release archives in one pass (survey each file's sheets for a detected scale and a segment count safely below the pathology threshold Runs 24-25 established, time a single center-point trace on each qualifying sheet as a live pathology guard before committing to a full sweep, then grid-sweep only the sheets that pass). This one scan found real hits across SEVERAL files at once (SDSU, St. Louis VA, MSU Reid Hall, Orange County, and others) -- a real step up in throughput over Runs 22-27's own one-sheet-at-a-time method.\n\nA real, explicitly REJECTED candidate from this SAME scan is worth disclosing plainly, not silently dropped: `05_MO_VA_StLouis_AHU_VAV_Replacement` sheet MH204 produced a 33.70 LF `30x36 RA` duct with a genuine, correct automatic bind (`size-binding:leader`, matching a real printed '30x36 RA' callout exactly) -- but a marked render crop showed the ENTIRE surrounding area covered by a large red-hatched overlay explicitly labeled 'NOT IN SCOPE' in bold red text. The duct itself is real, correctly labeled, and correctly read by the engine -- but a real estimator looking at this drawing would never take it off, since the drawing itself explicitly excludes this area from the renovation contract's own scope of work. Using it as a golden would validate a technically-correct engine read that no real takeoff would ever include. A new, disclosable category distinct from Runs 25's legend-sample and Run 26's civil-annotation-leader false positives: a real, in-scope-looking duct that the drawing's own explicit scope annotation excludes.\n\nThe candidate actually used (this golden): a real 36x20 EA (exhaust air) duct riser on SDSU's own Engineering Sciences Complex schematic-design mechanical sheet, confirmed via a marked render crop as a real, dash-fragmented (13 real dash-gap bridges) duct running from a real branch point in a private-office ceiling space, through two real 90-degree elbows, down into a real mechanical shaft -- directly beside this sheet's own printed '36x20 EA UP' / '36x20 EA UP/DN' leader-arrow callouts (both labels visible in the same crop, confirming the size/system read). No 'NOT IN SCOPE' overlay or other scope-exclusion marking appears anywhere near this run.",
+  "scope": "A single real 36x20 exhaust-air (EA) duct riser segment (10.45 LF) on SDSU's own Engineering Sciences Complex 100% schematic-design mechanical sheet M-201N, from a real branch point in a private-office ceiling space, through two real 90-degree elbows, to a real dead end at the mechanical shaft this run's own printed 'UP/DN' callout identifies as a riser continuing further (the continuation itself, both up and down past this run's own two dead ends, is out of scope). Explicitly OUT OF SCOPE: the REJECTED 'NOT IN SCOPE'-overlay candidate on a different file described in review_basis; the mechanical shaft's own other equipment, flues, and HWR/HWS piping visible in the same crop; every other duct/pipe run on this large, real, multi-part 157-page schematic-design set (only sheet 28/M-201N of part03 sampled); every other file discovered promising in this same large automated scan but not yet authored into a golden.",
+  "runs": [
+    {
+      "run_id": "sdsu-m201n-ea-36x20",
+      "description": "36x20 exhaust-air (EA) duct riser, from a real branch point in a private-office ceiling space, through two real 90-degree elbows, to a real dead end at a mechanical shaft (the riser's own printed 'UP/DN' callout marks the real continuation beyond this run's own scope).",
+      "system": "EA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.6350033068783069, 0.2911111111111111],
+        [0.6350033068783069, 0.3111111111111111],
+        [0.6215939153439154, 0.3111111111111111],
+        [0.6215939153439154, 0.3063425925925926]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 36, "h_in": 20 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 10.45,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 4.8, "size": { "kind": "rect", "w_in": 36, "h_in": 20 }, "size_src": "manual" },
+            { "i": 1, "lf": 4.51, "size": { "kind": "rect", "w_in": 36, "h_in": 20 }, "size_src": "manual" },
+            { "i": 2, "lf": 1.14, "size": { "kind": "rect", "w_in": 36, "h_in": 20 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:36x20": 10.45 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "rect:36x20": 10.45 },
+  "total_lf_all_runs": 10.45
+}

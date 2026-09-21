@@ -1,0 +1,48 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/ma-town-offices-hvac-upgrades.pdf",
+  "source_pdf_sha256": "773577742f331a03ca3859ab8e2fcde13764e9c09c1b37574e94242f12b3857c",
+  "sheet_id": "ma-town-offices-hvac-upgrades.pdf#12",
+  "sheet_number": "H3.0",
+  "page": 12,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-17",
+  "review_basis": "Fourth golden authored from the project's own newly-expanded real corpus, and the FIRST from its second GitHub Release archive ('corpus_2', a separate ~264-PDF resource this checkpoint had not yet opened -- found the same way as 'corpus' itself, listed among this same repo's own Releases). Found via an automated batch sweep across several small, previously-untouched files in this new archive, filtering directly for the fastest, most reliable real signal this session has established: a both-`dead_end` seed that ALSO comes back with a real, engine-bound size (any automatic bind, not yet knowing which kind) -- three real hits turned up across two files in one pass, all investigated and visually verified before any was trusted, two explicitly REJECTED and disclosed here rather than silently dropped:\n\n1) REJECTED: `024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf` sheet M000 (12.26 LF, `2\" HWS` pipe, `size-binding:beside`) -- a marked crop showed the seed had landed on the SHEET'S OWN SYMBOLS/LEGEND sample line (the literal legend entry illustrating what a '2\" HWS' pipe-size/system tag looks like), not a real routed pipe on any floor plan at all. `trace_run` read the printed label correctly -- the failure is that a legend's own example line is real drawn ink with a real nearby label, so nothing in the seed or the read was wrong, yet the resulting 'length' is an arbitrary legend-box artifact, not a real quantity. A genuinely new failure category for this project's own disclosed record, distinct from Finding 6 (real non-MEP linework) since a legend page isn't excluded by any existing stroke-family or wall-vouch check -- worth flagging for a future refusal-corpus addition, not attempted here.\n2) REJECTED: `083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf` sheet H2.0 (25.75 LF, `6\"O SA` round duct, `size-binding:beside`) -- a marked crop showed both of `trace_run`'s own reported dead ends sit only 9px apart (the same physical riser's own two rails), meaning the walk went UP one rail of a double-line round duct symbol, around a small connector/damper detail at the top, and back DOWN the other rail -- the same 'both rails of one riser, not two ends of one run' trap `weld-county-m1-0.json`'s own review_basis already named and worked around by seeding on a single rail deliberately. This auto-discovered seed did the opposite (walked both), so its own 'length' roughly double-counts one real, shorter riser drop. Not used; a clean one-rail reseed on this same real duct riser is real, disclosed future work, not attempted this pass.\n\n3) ACCEPTED (this golden): the SAME `083_MA...` PDF's own sheet H3.0, a real refrigerant-piping run on a literal `m-pipe` PDF layer (a lowercase, informally-named but genuinely real layer -- confirmed via direct `sheetInfo` layer inspection, 110 segments), `stroke-family:layer-name` grade. Both ends confirmed via a marked render crop as real physical stops: the forward end sits exactly at a real FCU-4 fan-coil-unit connection point; the backward end sits at a real riser-up symbol (a black circle, matching this same sheet's own printed note 'RS&RL UP TO ROOF, CONNECT TO HP-1/HP-2/HP-3 ACCORDINGLY' for the continuation beyond this golden's own scope). The run's own size (round 0.75in) is confirmed by a real printed `3/4\"O` callout with a literal leader line pointing directly at this run's own longest segment -- the same segment `size_overrides` keys to (index 2, the bench's own `seedOnLongestSegment` convention). `run.system` is left as the engine's own literal, verified read (`piping`) rather than a more specific guess (`RL`/`RS`) this project's own doctrine would call unconfirmed: the nearby printed context (`RS&RL`, `2 PIPE REFNET HEADER`) makes 'a refrigerant line' a safe read, but which SPECIFIC line (suction vs. liquid) of the pair is genuinely unclear from this crop alone -- `piping` is the real, disclosed value `trace_run` itself produced from the real `m-pipe` layer name, not a fabricated nicer-sounding label, matching this project's own 'trust and disclose the engine's real output, don't invent a cleaner one' discipline.",
+  "scope": "A single real 3/4\" refrigerant-piping branch run (29.35 LF) on a Massachusetts town-offices HVAC-upgrade project's own H3.0 sheet, from a real FCU-4 fan-coil-unit connection, through three real 45-degree elbows around a corridor corner, to a real riser-up point continuing to roof-mounted heat pump units (out of this golden's own scope). Explicitly OUT OF SCOPE: the continuing refrigerant riser up to the roof HP-1/HP-2/HP-3 units; the two REJECTED candidates described in review_basis (a legend/symbols sample line and a double-line duct riser walked on both rails); every other pipe/duct run on this real, dense, 17-sheet mechanical set (only sheet 12/H3.0 sampled); every other file in this newly-opened 'corpus_2' GitHub Release resource beyond this one PDF.",
+  "runs": [
+    {
+      "run_id": "ma-h3-0-fcu4-refrig-branch",
+      "description": "3/4\" refrigerant piping branch, from a real FCU-4 fan-coil-unit connection, through three real 45-degree elbows, to a real riser-up point continuing to roof-mounted heat pump units.",
+      "system": "piping",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.3084297839506173, 0.5706597222222223],
+        [0.3084297839506173, 0.6177662037037037],
+        [0.30516975308641975, 0.6226851851851852],
+        [0.24390432098765433, 0.6226851851851852],
+        [0.24064429012345678, 0.6177662037037037]
+      ],
+      "run": {
+        "size_overrides": {
+          "2": { "kind": "round", "d_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 29.35,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 9.04, "size": { "kind": "round", "d_in": 0.75 }, "size_src": "manual" },
+            { "i": 1, "lf": 1.33, "size": { "kind": "round", "d_in": 0.75 }, "size_src": "manual" },
+            { "i": 2, "lf": 17.64, "size": { "kind": "round", "d_in": 0.75 }, "size_src": "manual" },
+            { "i": 3, "lf": 1.34, "size": { "kind": "round", "d_in": 0.75 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:0.75": 29.35 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "round:0.75": 29.35 },
+  "total_lf_all_runs": 29.35
+}

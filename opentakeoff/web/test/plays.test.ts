@@ -31,6 +31,36 @@ test("conditionFromPlay mints fresh ids and defaults", () => {
   assert.equal(c.materials[0].name, "Thinset");
 });
 
+test("playFromCondition/conditionFromPlay round-trip a routed-system condition's family/system/size/assembly_id (#linear-takeoff WP1.2)", () => {
+  const size = { kind: "rect", w_in: 12, h_in: 6 };
+  const play: any = playFromCondition("SA 12x6", {
+    id: "cnd-real", finish_tag: "SA 12x6", color: "#123456", hatch: "solid", waste_pct: 10,
+    family: "duct_rect", system: "SA", size, assembly_id: "asm-duct-rect-2wg-r6",
+    materials: [],
+  }, mint("play"));
+  assert.equal(play.family, "duct_rect");
+  assert.equal(play.system, "SA");
+  assert.deepEqual(play.size, size);
+  assert.equal(play.assembly_id, "asm-duct-rect-2wg-r6");
+
+  const c: any = conditionFromPlay(play, "SA 16x8", mint("cnd"), mint("mat"));
+  assert.equal(c.family, "duct_rect");
+  assert.equal(c.system, "SA");
+  assert.deepEqual(c.size, size);
+  assert.ok(c.size !== play.size, "size is deep-copied, never aliased across conditions");
+  assert.equal(c.assembly_id, "asm-duct-rect-2wg-r6");
+});
+
+test("playFromCondition: a flooring condition with none of the routed-system fields never gains them", () => {
+  const play: any = playFromCondition("LVT std", {
+    id: "cnd-1", finish_tag: "LVT-1", color: "#123456", hatch: "plank", waste_pct: 8, materials: [],
+  }, mint("play"));
+  assert.equal(play.family, undefined);
+  assert.equal(play.system, undefined);
+  assert.equal(play.size, undefined);
+  assert.equal(play.assembly_id, undefined);
+});
+
 test("upsertPlay replaces by name", () => {
   const a = { id: "1", name: "X", color: "#1" };
   const b = { id: "2", name: "X", color: "#2" };

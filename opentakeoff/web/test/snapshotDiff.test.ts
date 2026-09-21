@@ -24,6 +24,35 @@ const payload = (conditions: any[], shapes: any[]) => ({ conditions, shapes });
 const floorShape = (id: string, condition_id: string, sheet_id: string, area_sf: number) =>
   ({ id, condition_id, sheet_id, measure_role: "floor_area", computed: { area_sf } });
 
+// ── 0. sizes (#linear-takeoff WP1.4) — per-size LF deltas ───────────────────
+
+const cond1 = { id: "c1", finish_tag: "SA-1", color: "#123456", multiplier: 1, waste_pct: 0, materials: [] };
+const runShape = (lf: number) => ({
+  id: "s1", sheet_id: "plan.pdf", condition_id: "c1", measure_role: "linear",
+  computed: {
+    perimeter_lf: lf,
+    run: { segments: [{ i: 0, lf, size: { kind: "pipe", nps_in: 2 }, size_src: "manual" }], vertices: [], totals_by_size: { "pipe:2": lf } },
+  },
+});
+
+test("sizes: absent (empty array) for a condition with no sized run on either side", () => {
+  const d = diffSnapshots(payload([cond1], [floorShape("s1", "c1", "plan.pdf", 100)]), payload([cond1], [floorShape("s1", "c1", "plan.pdf", 100)]));
+  assert.deepEqual(d.conditions[0].sizes, []);
+});
+
+test("sizes: a size's LF change reports 'changed' with a/b/delta; added/removed at the extremes", () => {
+  const changed = diffSnapshots(payload([cond1], [runShape(20)]), payload([cond1], [runShape(35)]));
+  assert.deepEqual(changed.conditions[0].sizes, [{ size_key: "pipe:2", size: { kind: "pipe", nps_in: 2 }, lf: 20, lf_b: 35, delta: 15, status: "changed" }]);
+
+  const added = diffSnapshots(payload([cond1], []), payload([cond1], [runShape(20)]));
+  assert.equal(added.conditions[0].sizes[0].status, "added");
+  assert.equal(added.conditions[0].sizes[0].lf_b, 20);
+
+  const removed = diffSnapshots(payload([cond1], [runShape(20)]), payload([cond1], []));
+  assert.equal(removed.conditions[0].sizes[0].status, "removed");
+  assert.equal(removed.conditions[0].sizes[0].lf, 20);
+});
+
 // ── 1. self-compare ──────────────────────────────────────────────────────────
 
 test("self-compare is identical: every status unchanged, all deltas zero", () => {

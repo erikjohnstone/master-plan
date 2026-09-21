@@ -1,0 +1,81 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff/samples/bessemer-mechanical-bidset.pdf",
+  "source_pdf_sha256": "b9005d383c6ebd42477b505f039e965fc5acc19cf31f1ee71a3de3eb095a70e5",
+  "sheet_id": "bessemer-mechanical-bidset.pdf#3",
+  "sheet_number": "P101",
+  "sheet_title": "FIRST FLOOR PLUMBING PLAN",
+  "page": 3,
+  "tier": "development",
+  "render_hash": {
+    "algo": "sha256",
+    "renderer": "mcp/scripts/graph-render.mjs --all (page.renderPng(0.5))",
+    "file": "bessemer--ssemer-mechanical-bidset-p3--full.png",
+    "hash": "d821be439de98ec6c6c27fe8bce13e392b276144327b07f0de91d6d4b6e010ce"
+  },
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP1.7 autonomous coordinator; WP3.8 'ground truth v2' pass added the SAN riser run below)",
+  "date": "2026-09-17",
+  "review_basis": "Hand-traced in the running canvas app's Linear tool (manual mode, scale confirmed from the plan's own '1/4\" = 1'-0\"' note) via a Playwright-driven browser session against the rendered PDF. Before tracing, every text label on this sheet was extracted via pdf.ts's positionedText and cross-referenced against zoomed render crops to locate the pipe-size tick marks ('1 1/4\"ø', '1\"ø') printed directly on the run, confirming both the run's extent and its size-change point independently of the click coordinates used to trace it. WP3.8 added the SAN riser run: its own dedicated '3\" SAN UP' leader was located in a zoomed render crop first, then traced live with the Linear tool's snap engine locking onto the same fitting-cluster vertices the leader points between, and cross-checked against the app's own real-world coordinate readout (both endpoints read x=54'7\", confirming a true vertical run) before committing. NOTE added post-WP3.8 (linear-trace-eval.mjs, after walk.ts's dash-gap continuation fix): the CW main golden's own drawn line does NOT dead-end anywhere near its own chosen stop point. Once trace_run could follow the dash-dot line's real print-flattened gaps (previously it dead-ended after 1.63 LF, well short of even discovering this), a seed on this run walks a much longer real trunk -- roughly 35 LF each way before hitting a genuine `ambiguous` junction, passing FIVE real tee branches along the way this golden's own extent doesn't count. This golden's own 3-vertex/18.96 LF extent remains a real, correctly hand-traced representative SPAN of that trunk (still valid for bench/linear.mts's manual-mode parity/totals purposes, and for a human tracing this exact region by hand) -- but it is NOT a fair single-call trace_run comparison target for length/over-trace scoring: the human's own stop point (\"the main turns 90° and drops into a riser\") is a real, meaningful judgment call, not a hard geometric dead end the walker could independently discover without a human/agent choosing which of several ambiguous branches to continue through, exactly the plan's own §6.3 \"offer the candidate fan\" design intent. docs/LINEAR-TRACE-EVAL.md documents this as a distinct finding from the dash-gap fix itself.",
+  "scope": "P101 is dense domestic plumbing (SAN/V/CW/HW branches to every fixture, largely short vertical UP/DN stubs) with no hydronic (HHWS/HHWR) piping anywhere on the sheet. WP1.7 asked for a representative run here, not an exhaustive trace of the sheet; WP3.8's 'ground truth v2' pass adds ONE more representative run rather than closing the gap exhaustively. The CW main golden is ONE domestic cold-water (CW) distribution main: traced from its origin at the 1¼\" water-service riser drop (labeled '1¼\" CW DN TO WATER SERVICE. COORDINATE WITH FIRE SPRINKLER RISER.') east through an explicit reduction to 1\" nominal pipe size, stopping at the point the main turns 90° and drops into a vertical branch riser serving a fixture group. The SAN riser golden added in WP3.8 is exactly the kind of run the original scope deferred: a single vertical UP branch, the 3\" sanitary stack running between two fixture-connection clusters near the FD-1/WB-1 fixtures, labeled '3\" SAN UP' with its own dedicated leader (distinct from the '2\" SAN UP'/'2\" SAN DN' labels at each cluster, which describe the fittings themselves, not this straight run). Explicitly still OUT OF SCOPE: the parallel HW (hot water) main on the same sheet, every OTHER SAN and V run (this sheet has dozens of near-identical UP/DN stubs), and the fixture-cluster fittings at each end of the traced SAN riser -- a full branch/fitting-level trace of this sheet is left for a later, broader ground-truth pass.",
+  "runs": [
+    {
+      "run_id": "bessemer-p101-cw-main",
+      "description": "Domestic cold-water (CW) distribution main, from the 1¼\" water-service riser junction east to the branch-riser corner near the unit's kitchen/bath fixture group.",
+      "system": "CW",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5130892405506493, 0.400923495072427],
+        [0.5426180848557671, 0.400923495072427],
+        [0.6447660129334711, 0.400923495072427]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1.25 },
+          "1": { "kind": "pipe", "nps_in": 1 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 18.96,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 4.25, "size": { "kind": "pipe", "nps_in": 1.25 }, "size_src": "manual" },
+            { "i": 1, "lf": 14.71, "size": { "kind": "pipe", "nps_in": 1 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1.25": 4.25, "pipe:1": 14.71 }
+        }
+      }
+    },
+    {
+      "run_id": "bessemer-p101-san-riser",
+      "description": "3\" sanitary (SAN) vertical riser (UP), running between two fixture-connection clusters near the FD-1/WB-1 fixtures.",
+      "system": "SAN",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.379334693689684, 0.4549659246137918],
+        [0.379334693689684, 0.5256484301872173]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 3 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 6.79,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 6.79, "size": { "kind": "pipe", "nps_in": 3 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:3": 6.79 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:1.25": 4.25,
+    "pipe:1": 14.71,
+    "pipe:3": 6.79
+  },
+  "total_lf_all_runs": 25.75
+}

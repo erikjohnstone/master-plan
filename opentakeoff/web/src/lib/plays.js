@@ -4,7 +4,12 @@
 // are saved; applying a play mints a fresh condition. Pure list/shape helpers
 // are separated from the storage wrappers so they stay node-testable.
 const KEY = "opentakeoff_plays";
-const COND_KEEP = ["finish_tag", "color", "fill", "hatch", "height_ft", "thickness_in", "waste_pct"];
+const COND_KEEP = [
+  "finish_tag", "color", "fill", "hatch", "height_ft", "thickness_in", "waste_pct",
+  // #linear-takeoff WP1.2: a routed-system play remembers its family/system/
+  // size/assembly the same as it remembers height/thickness — additive only.
+  "family", "system", "size", "assembly_id",
+];
 const MAT_KEEP = ["name", "kind", "per", "basis", "unit", "round", "note", "grout"];
 
 const pick = (obj, keys) => {
@@ -31,6 +36,10 @@ export function conditionFromPlay(play, finishTag, mintCondId, mintMatId) {
     ...(play.height_ft != null ? { height_ft: play.height_ft } : {}),
     ...(play.thickness_in != null ? { thickness_in: play.thickness_in } : {}),
     ...(play.waste_pct != null ? { waste_pct: play.waste_pct } : {}),
+    ...(play.family != null ? { family: play.family } : {}),
+    ...(play.system != null ? { system: play.system } : {}),
+    ...(play.size ? { size: { ...play.size } } : {}),
+    ...(play.assembly_id != null ? { assembly_id: play.assembly_id } : {}),
     materials: (play.materials || []).map((m) => ({ id: mintMatId(), ...m })),
   };
 }

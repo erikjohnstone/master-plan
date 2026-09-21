@@ -20,6 +20,7 @@
 
 import { conditionTotals, sheetTotals, roundSheetRow, hasMultipliers, BY_SHEET_BASE_NOTE } from "./totals.js";
 import { approvalInk, approvalTally, APPROVAL_R } from "./approvals.js";
+import { sizeLabel } from "./linear/run.ts";
 
 // The cover's author line (#314), pure for the node runner: named authors
 // sorted, unattributed counted last, null when NO shape carries an author so
@@ -197,7 +198,7 @@ function hatchLines(poly, style) {
   return out;
 }
 
-function shapeChip(shape, cond, M = false) {
+export function shapeChip(shape, cond, M = false) {
   const cp = shape.computed || {};
   const tag = cond?.finish_tag || "";
   const uA = (sf) => (M ? sf * 0.09290304 : sf);
@@ -207,7 +208,15 @@ function shapeChip(shape, cond, M = false) {
     case "floor_area": return `${tag} · ${num(uA(cp.area_sf || 0))} ${AU}`;
     case "deduct": return `-${num(uA(cp.area_sf || 0))} ${AU} deduct`;
     case "surface_area": return `${tag} · ${num(uA(cp.area_sf || 0))} ${AU} wall`;
-    case "linear": return `${tag} · ${num(uL(cp.perimeter_lf || 0))} ${LU}`;
+    case "linear": {
+      // #linear-takeoff (WP1.4): a uniform-size run (every sized segment
+      // shares one key) appends its size — "SA-1 · 18.2 LF 12x6"; a mixed-
+      // size or unsized run stays exactly today's plain "tag · LF" chip.
+      const sizeKeys = cp.run ? Object.keys(cp.run.totals_by_size || {}) : [];
+      const uniform = sizeKeys.length === 1 ? cp.run.segments?.find((sg) => sg.size)?.size : null;
+      const sz = uniform ? sizeLabel(uniform) : null;
+      return `${tag} · ${num(uL(cp.perimeter_lf || 0))} ${LU}${sz ? ` ${sz}` : ""}`;
+    }
     default: return "";
   }
 }

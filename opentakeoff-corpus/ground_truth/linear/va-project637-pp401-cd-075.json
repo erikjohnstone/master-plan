@@ -1,0 +1,49 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/va-project637-ehrm-infrastructure.pdf",
+  "source_pdf_sha256": "e5ef0c5cdc460ef1db960ff713d68c545968d355d59abdca63a730ec20fb3b58",
+  "sheet_id": "va-project637-ehrm-infrastructure.pdf#66",
+  "sheet_number": "47-PP401",
+  "page": 66,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "A fresh, previously-untouched real project this session: a VA (Bldg 47, Asheville NC) EHRM Infrastructure renovation set, sheet 47-PP401 (page 66) carrying many individually-scattered `3/4\"`/`1\"`/`1 1/4\" CD` (condensate drain) callouts and a couple of `1/2\" CW` domestic-water callouts, unlike the tightly-paired parallel supply/return racks this session has already learned to distrust on other sheets. A grid sweep of eleven of these labels found six real, size-bound `trace_run` hits; five of the six carried a non-standard `custom`-class elbow angle (52.8, 65.3, 62.8, 61.2, 33.9 degrees) -- this session's own established red flag for a leader-line mistrace, matching the same pathology already confirmed twice more this same day on two different fresh projects -- and were set aside without individual crop verification, this sheet's own drafting convention evidently favoring diagonal `CD` leader stubs near its labels.\n\nThe one candidate WITHOUT that red flag (13.57 LF, `pipe:0.75`, `CD`, `dead_end`/`ambiguous`, one genuine 90-degree elbow) was confirmed via marked render crop: a real, straight, solid black vertical pipe drop running from a real ceiling-penetration point (the forward `dead_end`, at a red-hatched fire-rated wall/ceiling boundary) straight down through two office rooms' own wall lines, through one real 90-degree elbow, to the point where it joins the sheet's own main horizontal condensate header (the backward `ambiguous` stop, a real branch-into-header tie-in feeding an IDU indoor fan-coil unit below, not an arbitrary cut). The sheet's own printed `3/4\" CD` label sits directly beside this exact run via its own short diagonal leader, which was checked separately and confirmed to terminate on the SAME horizontal header near the tie-in point, not on some other, different line -- unlike this same day's two rejected leader-line candidates on other projects, this label's own leader and the traced pipe agree on which line is real.",
+  "scope": "A single real 3/4\" CD (condensate drain) branch line (13.57 LF, one 90-degree elbow) on VA Project 637's own sheet 47-PP401 (page 66), from a real ceiling-penetration dead end down to the real point where it ties into the sheet's own main condensate header serving an IDU fan-coil unit. Explicitly OUT OF SCOPE: five other `CD`/`CW` candidates found on this same sheet, all carrying a non-standard elbow angle and set aside as likely leader-line mistraces without individual verification (a real, disclosed opportunity for a more careful future pass, not confirmed rejections); every other `CD`/`CW` label on this same dense sheet not swept at all; every other sheet in this real 559-sheet project.",
+  "runs": [
+    {
+      "run_id": "va637-pp401-cd-075-ceiling-drop",
+      "description": "3/4\" CD (condensate drain) branch line, from a real ceiling-penetration dead end through one 90-degree elbow to a real branch-into-header tie-in feeding an IDU fan-coil unit.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.2015873015873016, 0.5771759259259259],
+        [0.20624338624338624, 0.5771759259259259],
+        [0.20624338624338624, 0.5750462962962963],
+        [0.20624338624338624, 0.5271064814814815]
+      ],
+      "run": {
+        "size_overrides": {
+          "2": { "kind": "pipe", "nps_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 13.57,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 1.56, "size_src": "withheld" },
+            { "i": 1, "lf": 0.51, "size_src": "withheld" },
+            { "i": 2, "lf": 11.51, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" }
+          ],
+          "vertices": [
+            { "i": 1, "kind": "elbow", "angle_deg": 90, "angle_class": "square" }
+          ],
+          "totals_by_size": { "pipe:0.75": 11.51 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:0.75": 11.51 },
+  "total_lf_all_runs": 13.57
+}

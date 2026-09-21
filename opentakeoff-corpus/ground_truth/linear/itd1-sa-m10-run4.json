@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+  "source_pdf_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "sheet_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+  "sheet_number": "M1.0",
+  "page": 3,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A fourth real, independent duct segment authored from the same sheet as `itd1-sa-m10.json`/`itd1-sa-m10-run2.json`/`itd1-sa-m10-run3.json` (M1.0 of the ITD District 1 Laboratory Building), continuing to draw from Run 101's own disclosed reserve of bench-seed-verified candidates on this unusually productive sheet. A real, clean 7.99 LF horizontal `16\"x16\"` duct: `size:{kind:rect,w_in:16,h_in:16}`, confidence 0. A marked crop confirms it visually: a real duct running from a real SAV (smoke/air valve) actuator assembly to a real diffuser-box branch collar. `resolveRunSegments` reproduces the identical single segment and the bench-style seed reproduces the identical trace exactly, confirmed before authoring per this session's own standard practice.",
+  "scope": "A single real 16x16-inch rectangular supply-air (SA) duct segment (7.99 LF) on the ITD District 1 Laboratory Building's own mechanical plan, sheet M1.0, from a real SAV actuator assembly to a real diffuser-box branch collar. Explicitly OUT OF SCOPE: the duct's own continuation past either boundary; the sibling `itd1-sa-m10*.json` goldens on this same sheet; every other one of the real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 29-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "itd1-m10-sa-16x16",
+      "description": "16x16-inch rectangular duct segment, from a real SAV actuator assembly to a real diffuser-box branch collar.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.4653742283950617, 0.5225115740740741],
+        [0.42374614197530863, 0.5225115740740741]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 16, "h_in": 16 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 7.99,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 7.99, "size": { "kind": "rect", "w_in": 16, "h_in": 16 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:16x16": 7.99 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:16x16": 7.99
+  },
+  "total_lf_all_runs": 7.99
+}

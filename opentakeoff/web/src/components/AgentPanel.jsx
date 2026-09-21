@@ -204,9 +204,23 @@ export default function AgentPanel({
   fmtArea, onRun, onStop, onResetChat, onOpenCitation, onAccept, onReject, onAcceptAll, acceptableCount, onRejectAll,
   onOpenSettings, onClose,
   onOpenTakeoff, takeoffRowCount = 0, takeoffBadgeLabel = null,
+  canExportToHit = false, onExportToHit,
   runHistory = [], historyOpen = false, onToggleHistory,
 }) {
   const [draft, setDraft] = useState("");
+  const [hitBusy, setHitBusy] = useState(false);
+  const [hitErr, setHitErr] = useState("");
+  const runExportToHit = async () => {
+    setHitErr("");
+    setHitBusy(true);
+    try {
+      await onExportToHit?.();
+    } catch (e) {
+      setHitErr(e?.message || String(e));
+    } finally {
+      setHitBusy(false);
+    }
+  };
   const revealDrawing = useRevealDrawing();
   const openCitation = citation => { revealDrawing(); onOpenCitation(citation); };
   const [showSteps, setShowSteps] = useState(false);
@@ -236,6 +250,10 @@ export default function AgentPanel({
   const visibleProgress = useMemo(() => progress.slice(-VISIBLE_PROGRESS_LIMIT), [progress]);
   const hasAssistant = thread.some((m) => m.role === "assistant");
   const canFollowUp = hasAssistant && !running;
+  // Export to HIT tracks the latest compiled control-valve takeoff, not any
+  // one chat message — show it once, on the most recent answer, not stacked
+  // under every older bubble that happens to also be from the assistant.
+  const lastAssistantIndex = thread.reduce((acc, m, idx) => (m.role === "assistant" ? idx : acc), -1);
 
   useEffect(() => {
     // Collapsing the drawer on a clean finish is right; doing it after a
@@ -359,19 +377,46 @@ export default function AgentPanel({
                     {m.text}
                   </div>
                 )}
-                {m.role === "assistant" && takeoffAccessAvailable(m.takeoffRows, takeoffBadgeLabel) && typeof onOpenTakeoff === "function" && (
-                  <button
-                    type="button"
-                    onClick={onOpenTakeoff}
-                    style={{
-                      marginTop: 8, padding: "5px 10px", border: "1px solid var(--ink-faint)",
-                      background: "var(--paper)", color: "var(--cobalt)", cursor: "pointer",
-                      fontSize: 11.5, fontWeight: 650, fontFamily: "var(--f-mono)",
-                      letterSpacing: "0.06em", textTransform: "uppercase",
-                    }}
-                  >
-                    Open Takeoff{takeoffBadgeLabel ? ` · ${takeoffBadgeLabel}` : ` · ${m.takeoffRows}`}
-                  </button>
+                {m.role === "assistant" && (takeoffAccessAvailable(m.takeoffRows, takeoffBadgeLabel) || (canExportToHit && i === lastAssistantIndex)) && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+                    {takeoffAccessAvailable(m.takeoffRows, takeoffBadgeLabel) && typeof onOpenTakeoff === "function" && (
+                      <button
+                        type="button"
+                        onClick={onOpenTakeoff}
+                        style={{
+                          padding: "5px 10px", border: "1px solid var(--ink-faint)",
+                          background: "var(--paper)", color: "var(--cobalt)", cursor: "pointer",
+                          fontSize: 11.5, fontWeight: 650, fontFamily: "var(--f-mono)",
+                          letterSpacing: "0.06em", textTransform: "uppercase",
+                        }}
+                      >
+                        Open Takeoff{takeoffBadgeLabel ? ` · ${takeoffBadgeLabel}` : ` · ${m.takeoffRows}`}
+                      </button>
+                    )}
+                    {/* Cites render right here (AgentAnswer above, Sources drawer
+                        below) — the chat answer is a persistent, docked surface
+                        that outlives the Takeoff modal being closed, so Export to
+                        HIT has to live here too, not only inside that modal. */}
+                    {canExportToHit && i === lastAssistantIndex && (
+                      <button
+                        type="button"
+                        onClick={runExportToHit}
+                        disabled={hitBusy}
+                        title="Fill the Siemens Global Valves mass-sizing template (HIT) from this compiled valve takeoff."
+                        style={{
+                          padding: "5px 10px", border: "1px solid var(--cobalt)",
+                          background: "var(--cobalt)", color: "var(--paper-bright)", cursor: "pointer",
+                          fontSize: 11.5, fontWeight: 650, fontFamily: "var(--f-mono)",
+                          letterSpacing: "0.06em", textTransform: "uppercase",
+                        }}
+                      >
+                        {hitBusy ? "…" : "Export to HIT"}
+                      </button>
+                    )}
+                  </div>
+                )}
+                {m.role === "assistant" && i === lastAssistantIndex && hitErr && (
+                  <div style={{ marginTop: 6, color: "var(--c-danger)", fontSize: 11.5 }}>Export to HIT: {hitErr}</div>
                 )}
               </div>
             ))}

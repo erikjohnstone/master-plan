@@ -105,6 +105,46 @@ test("symbol_sweep / connectivity / scale_refuse intents are phrase-robust", () 
   assert.match(scale.nextMove || "", /set_scale|refuse/i);
 });
 
+test("linear_run: a routed system's own LF/length is its own workflow, distinct from the scale-refusal test (#linear-takeoff)", () => {
+  // The exact string above ("Refuse installed duct length on an unscaled
+  // sheet — set_scale first") is EXPLICITLY about the refusal behavior
+  // (unscaled + set_scale) and must stay scale_refuse — re-asserted here so
+  // a future edit to either bucket can't silently swap them.
+  assert.equal(
+    classifyTakeoffIntent("Refuse installed duct length on an unscaled sheet — set_scale first"),
+    "scale_refuse",
+  );
+  // These mention "scale" only in passing (the run IS at some scale) or not
+  // at all — before this fix they fell into scale_refuse purely for
+  // co-occurring with an LF-ish word; now they get their own workflow.
+  assert.equal(classifyTakeoffIntent("Trace the supply duct run and report its length in LF"), "linear_run");
+  assert.equal(classifyTakeoffIntent("Measure the pipe length on M101 once it's scaled"), "linear_run");
+  assert.equal(classifyTakeoffIntent("What is the installed length of the CHWS piping on this sheet?"), "linear_run");
+  assert.equal(classifyTakeoffIntent("Trace the BAS trunk cable and give me its length"), "linear_run");
+  // Not a routed system — an architectural/flooring LF ask stays scale_refuse
+  // (unchanged from before this fix), since #linear-takeoff scopes only
+  // duct/pipe/conduit/cable/tubing/trunk runs.
+  assert.equal(
+    classifyTakeoffIntent("What is the wall base linear feet on this sheet? Calibrate the scale first."),
+    "scale_refuse",
+  );
+
+  const run = advanceTakeoffWorkflow("linear_run", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], "Trace the supply duct run and report its length in LF");
+  assert.ok(run.allowedTools?.includes("measure_line"));
+  assert.ok(run.allowedTools?.includes("trace_connectivity"));
+  assert.match(run.nextMove || "", /measure_line|trace_connectivity/i);
+  assert.match(run.nextMove || "", /never invent/i, "honestly disclaims the size/vertex/assembly engine that doesn't exist yet");
+
+  const answered = advanceTakeoffWorkflow("linear_run", [
+    { name: "sheet_graph", out: { sheets: [] } },
+    { name: "set_scale", out: { upp: 0.02778 } },
+    { name: "measure_line", out: { length_lf: 18.2 } },
+  ], "Trace the supply duct run and report its length in LF");
+  assert.equal(answered.phase, "answer");
+});
+
 test("complete set HVAC/BAS/valve goals route to corpus compile", () => {
   const hvac = readFileSync(
     new URL("../../../opentakeoff-corpus/takeoffs/T-HVAC-01-navfac-equipment/prompt.txt", import.meta.url),

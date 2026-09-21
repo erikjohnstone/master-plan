@@ -63,6 +63,14 @@
 //             gesture, not a parent edit — and nothing counts. `restore`
 //             (undo of a draw, or an explicit delete of the reconciled
 //             deduct) unmints the deduct and puts the parent back verbatim.
+//   run       #linear-takeoff (WP1.3) — patches a linear shape's AUTHORED
+//             `run` block (right-click a segment → Set size…). NO stamp —
+//             takeoff metadata, not a re-authored trace, same contract as
+//             label/rollcut. `computed` is CALLER-SUPPLIED (recomputeShape
+//             has the dims/upp/cond context this pure module doesn't) and
+//             spliced in verbatim, exactly like the geom case's `computed` —
+//             never derived here. `restore` puts the prior `run` + `computed`
+//             back verbatim (undo is a full snapshot swap, not a re-diff).
 // ─────────────────────────────────────────────────────────────────────────────
 import { mintUuid, nowIso, stampEdit, authorName } from "./provenance.js";
 import { assignShapeLabel } from "./shapeLabels.js";
@@ -86,6 +94,7 @@ export const PROVENANCE_POLICY = {
   review: "origin.reviewed → true + accepted_ts per still-pending shape; restore puts the prior origin back verbatim",
   ruleApply: "add semantics (created_at + id mint per shape, ONE undo entry per batch); caller-built rule_v1 origin carries rule_id + seed_shape_id",
   cutout: "#137 — mints the deduct (id + created_at) AND patches its parent's verts_norm/verts_norm_holes/computed as ONE undo entry; parent patch stamps nothing, nothing counts; restore unmints the deduct and reverts the parent verbatim. `runs` carries the OPEN-RUN half of the same ring — wall tile and base are polylines, so the deduct CLIPS them (patch + mint the far side of a middle cut + delete a run swallowed whole) inside this one entry, and a ring that crosses only runs mints no deduct at all",
+  run: "#linear-takeoff (WP1.3) — no stamp (takeoff metadata, not a re-authored trace); `computed` is caller-supplied (recomputeShape context), never derived in here; restore puts the prior run + computed back verbatim",
   rollcut: "#136 — NO stamp: a manual roll-cut override (slide/resize/reorder/reset) writes LAYOUT metadata (shape.roll_layout) over the shape, never its geometry or provenance; a row without roll_layout clears the key; `prev` (grab-time rows) builds the inverse when a live preview already wrote the final state",
 };
 
@@ -280,6 +289,25 @@ export function applyShapeCommand(shapes, cmd) {
         next = shapes;
         for (const id of cmd.ids) next = assignShapeLabel(next, id, cmd.value);
       }
+      return { shapes: next, inverse };
+    }
+    case "run": {
+      // #linear-takeoff (WP1.3): one shape's authored `run` block, patched
+      // whole (the caller — recomputeShape's dims/upp/cond context — builds
+      // the next run object AND its freshly-derived `computed`; this is a
+      // pure splice, mirroring how the geom case treats caller-supplied
+      // `computed`). Deliberately no stamp, same contract as label/rollcut.
+      const targetId = cmd.restore ? cmd.restore.id : cmd.id;
+      let inverse = null;
+      const next = shapes.map((s) => {
+        if (s.id !== targetId) return s;
+        const nextRun = cmd.restore ? cmd.restore.run : cmd.run;
+        const nextComputed = cmd.restore ? cmd.restore.computed : cmd.computed;
+        inverse = { type: "run", restore: { id: s.id, run: s.run, computed: s.computed } };
+        const out = { ...s, computed: nextComputed };
+        if (nextRun === undefined) delete out.run; else out.run = nextRun;
+        return out;
+      });
       return { shapes: next, inverse };
     }
     case "delete": {

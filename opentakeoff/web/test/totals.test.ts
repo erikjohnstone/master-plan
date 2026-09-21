@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 // totals.js is plain JS (allowJs); the tsx loader resolves it from the .ts test.
-import { conditionTotals, materialsSummary, verticalWallSf, sheetTotals, reportJson } from "../src/lib/totals.js";
+import { conditionTotals, materialsSummary, verticalWallSf, sheetTotals, reportJson, linearRunRows, fittingsAndSupportsRows, fittingsAndSupportsSummary, totalsToCsv } from "../src/lib/totals.js";
 
 const area = (id: string, sf: number) => ({ condition_id: id, measure_role: "floor_area", computed: { area_sf: sf } });
 const lin = (id: string, lf: number) => ({ condition_id: id, measure_role: "linear", computed: { perimeter_lf: lf } });
@@ -129,12 +129,19 @@ test("reportJson: v1 key set pinned — top level, sheets[], markups[], by_sheet
   // shape_labels + by_label appended after it (#112, additive-only, always
   // emitted); units + display_units appended after that (metric display port —
   // quantities stay RAW feet, the export says which system the user was
-  // reading); roll_goods appended last (#136, always emitted, empty without
-  // roll-goods conditions)
+  // reading); roll_goods appended (#136, always emitted, empty without
+  // roll-goods conditions); linear_runs appended (#linear-takeoff WP1.4,
+  // always emitted, empty without sized routed runs); linear_settings
+  // appended (#linear-takeoff WP2.4, always emitted, {} without one set);
+  // fittings_and_supports appended last (#linear-takeoff WP2.5, always
+  // emitted, empty without a vertex/run-basis material)
   assert.deepEqual(Object.keys(j),
-    ["schema", "project_name", "generated_with", "sheets", "conditions", "by_sheet", "totals", "materials", "markups", "rfis", "condition_columns", "shape_labels", "by_label", "units", "display_units", "roll_goods"]);
+    ["schema", "project_name", "generated_with", "sheets", "conditions", "by_sheet", "totals", "materials", "markups", "rfis", "condition_columns", "shape_labels", "by_label", "units", "display_units", "roll_goods", "linear_runs", "linear_settings", "fittings_and_supports"]);
   assert.equal(j.display_units, "imperial");
   assert.deepEqual(j.roll_goods, []);   // #136 — always emitted; empty when nothing carries a roll_setup
+  assert.deepEqual(j.linear_runs, []);  // #linear-takeoff WP1.4 — always emitted; empty when nothing carries a sized run
+  assert.deepEqual(j.linear_settings, {});  // #linear-takeoff WP2.4 — always emitted; {} when nothing set
+  assert.deepEqual(j.fittings_and_supports, []);  // #linear-takeoff WP2.5 — always emitted; empty when nothing carries a vertex/run-basis material
   // rfis[] appends after markups (additive v1); linked_markups/linked_sheets derived
   assert.deepEqual(Object.keys(j.rfis[0]),
     ["id", "number", "subject", "question", "status", "to", "priority", "cost_impact", "schedule_impact",
@@ -175,6 +182,77 @@ test("reportJson: roll_goods rides through verbatim; a non-array coerces to [] (
   const rows = [{ condition_id: "ct", finish_tag: "CPT-1", material: "carpet", roll_width_ft: 12, roll_length_ft: 0, direction: "ns", cuts: 3, order_lf: 46.5, rolls: 1, order_qty: 62, order_unit: "sy", oversize: false }];
   assert.deepEqual(reportJson({ rollGoods: rows }).roll_goods, rows);
   assert.deepEqual(reportJson({ rollGoods: "corrupt" as any }).roll_goods, []);
+});
+
+test("reportJson: linear_runs rides through verbatim; a non-array coerces to [] (#linear-takeoff WP1.4)", () => {
+  const rows = [{ condition_id: "ct", finish_tag: "SA-1", size_key: "rect:12x6", size: { kind: "rect", w_in: 12, h_in: 6 }, lf: 20.5, lf_net: 20.5 }];
+  assert.deepEqual(reportJson({ linearRuns: rows }).linear_runs, rows);
+  assert.deepEqual(reportJson({ linearRuns: "corrupt" as any }).linear_runs, []);
+});
+
+test("reportJson: linear_settings rides through verbatim; a non-object coerces to {} (#linear-takeoff WP2.4)", () => {
+  const settings = { adopted_pipe_hanger_code: "upc313_3", climate_zone: "cz5_8", offset_allowance_pct: 5 };
+  assert.deepEqual(reportJson({ linearSettings: settings }).linear_settings, settings);
+  assert.deepEqual(reportJson({}).linear_settings, {});
+  assert.deepEqual(reportJson({ linearSettings: "corrupt" as any }).linear_settings, {});
+  assert.deepEqual(reportJson({ linearSettings: [1, 2] as any }).linear_settings, {});
+});
+
+test("reportJson: fittings_and_supports rides through verbatim; a non-array coerces to [] (#linear-takeoff WP2.5)", () => {
+  const rows = [{ condition_id: "ct", finish_tag: "SA-1", name: "Gasket kit", unit: "kit", basis: "vertex", per: 1, qty: 3, note: "" }];
+  assert.deepEqual(reportJson({ fittingsAndSupports: rows }).fittings_and_supports, rows);
+  assert.deepEqual(reportJson({ fittingsAndSupports: "corrupt" as any }).fittings_and_supports, []);
+});
+
+test("conditionTotals: a shape with no run block never gains `sizes` — byte-identical to before WP1.4", () => {
+  const rows = conditionTotals([{ id: "c", finish_tag: "CPT-1", waste_pct: 0 }], [lin("c", 20)]);
+  assert.ok(!("sizes" in rows[0]), "a plain linear trace carries no `sizes` key at all");
+});
+
+test("conditionTotals: sizes sums totals_by_size across a condition's shapes, multiplier and waste applied, with a representative RunSize object per key", () => {
+  const size12x6 = { kind: "rect", w_in: 12, h_in: 6 };
+  const size2in = { kind: "pipe", nps_in: 2 };
+  const runShape = (lf1: number, lf2: number) => ({
+    condition_id: "c", measure_role: "linear", computed: {
+      perimeter_lf: lf1 + lf2,
+      run: {
+        segments: [{ i: 0, lf: lf1, size: size12x6, size_src: "manual" }, { i: 1, lf: lf2, size: size2in, size_src: "manual" }],
+        vertices: [], totals_by_size: { "rect:12x6": lf1, "pipe:2": lf2 },
+      },
+    },
+  });
+  const rows = conditionTotals(
+    [{ id: "c", finish_tag: "SA-1", waste_pct: 10, multiplier: 2 }],
+    [runShape(10, 5), runShape(4, 1)],   // two shapes, same two sizes — sums across shapes
+  );
+  const sizes = rows[0].sizes.sort((a: any, b: any) => a.size_key.localeCompare(b.size_key));
+  assert.deepEqual(sizes.map((s: any) => s.size_key), ["pipe:2", "rect:12x6"]);
+  const pipe = sizes.find((s: any) => s.size_key === "pipe:2");
+  assert.deepEqual(pipe.size, size2in);
+  assert.equal(pipe.lf, 12);       // (5+1) × mult 2
+  assert.equal(pipe.lf_net, 13.2); // × waste 1.1
+  const rect = sizes.find((s: any) => s.size_key === "rect:12x6");
+  assert.deepEqual(rect.size, size12x6);
+  assert.equal(rect.lf, 28);       // (10+4) × mult 2
+  assert.equal(rect.lf_net, 30.8); // × waste 1.1
+});
+
+test("linearRunRows: flattens conditionTotals' sizes into one row per (condition, size); rows with none contribute nothing", () => {
+  const rows = conditionTotals(
+    [{ id: "c1", finish_tag: "SA-1", waste_pct: 0 }, { id: "c2", finish_tag: "CPT-1", waste_pct: 0 }],
+    [
+      { condition_id: "c1", measure_role: "linear", computed: { perimeter_lf: 10, run: { segments: [{ i: 0, lf: 10, size: { kind: "pipe", nps_in: 2 }, size_src: "manual" }], vertices: [], totals_by_size: { "pipe:2": 10 } } } },
+      lin("c2", 40),   // plain trace, no run block
+    ],
+  );
+  const out = linearRunRows(rows);
+  assert.equal(out.length, 1);
+  assert.deepEqual(out[0], { condition_id: "c1", finish_tag: "SA-1", size_key: "pipe:2", size: { kind: "pipe", nps_in: 2 }, lf: 10, lf_net: 10 });
+});
+
+test("linearRunRows: empty/null input is safe", () => {
+  assert.deepEqual(linearRunRows([]), []);
+  assert.deepEqual(linearRunRows(null as any), []);
 });
 
 test("reportJson: by_sheet rows serialize round2-ed — incl. ea — with key order intact", () => {
@@ -316,4 +394,119 @@ test("conditionTotals: reconciled deduct never double-subtracts; legacy deduct s
     { id: "d2", condition_id: "c1", measure_role: "deduct", verts_norm: [], computed: { area_sf: 5 } },
   ] as any);
   assert.equal(rows[0].floor_sf, 85, "90 − 5 (legacy only); a double-deduct would read 75");
+});
+
+// #linear-takeoff (WP2.3): "vertex" and "run" materials bases — every
+// interior fitting vertex across a condition's routed shapes, and the
+// count of separate traced/manual runs, each scaled by the condition's own
+// multiplier exactly like every other basis total above.
+function runShapeWithVertices(vertexCount: number) {
+  return {
+    condition_id: "sa", measure_role: "linear", computed: {
+      perimeter_lf: 10,
+      run: {
+        segments: [{ i: 0, lf: 10, size: { kind: "rect", w_in: 12, h_in: 6 }, size_src: "manual" }],
+        vertices: Array.from({ length: vertexCount }, (_, i) => ({ i: i + 1, kind: "elbow", angle_deg: 90, angle_class: "square" })),
+        totals_by_size: { "rect:12x6": 10 },
+      },
+    },
+  };
+}
+
+test("conditionTotals: materials basis 'vertex' divides against the total fitting-vertex count across the condition's runs", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", materials: [{ id: "m", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true }] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2), runShapeWithVertices(1)]); // 3 vertices total
+  assert.equal(rows[0].materials[0].basis_qty, 3);
+  assert.equal(rows[0].materials[0].qty, 3);
+});
+
+test("conditionTotals: materials basis 'run' divides against the count of separate traced/manual runs, not vertices or LF", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", materials: [{ id: "m", name: "Test kit", per: 1, basis: "run", unit: "kit", round: true }] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2), runShapeWithVertices(0), lin("sa", 40)]); // 2 shapes with a run block; the plain trace carries none
+  assert.equal(rows[0].materials[0].basis_qty, 2);
+});
+
+test("conditionTotals: vertex and run bases scale with the condition multiplier, same as every other basis", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", multiplier: 3, materials: [
+    { id: "mv", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true },
+    { id: "mr", name: "Test kit", per: 1, basis: "run", unit: "kit", round: true },
+  ] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2)]);
+  assert.equal(rows[0].materials[0].basis_qty, 6);  // 2 vertices × 3
+  assert.equal(rows[0].materials[1].basis_qty, 3);  // 1 run × 3
+});
+
+// #linear-takeoff (WP2.5): "Fittings & supports" buy-list rows — the subset
+// of a condition's materials whose basis is vertex/run, pulled out of the
+// general materials list. fittingsAndSupportsRows/Summary read the SAME
+// already-resolved rows conditionTotals computed above.
+test("fittingsAndSupportsRows: only vertex/run-basis materials appear, area/linear/count/seam_lf ones do not", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", materials: [
+    { id: "mv", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true },
+    { id: "mr", name: "Test kit", per: 1, basis: "run", unit: "kit", round: true },
+    { id: "ma", name: "Duct board", per: 32, basis: "area", unit: "sheet", round: true },
+  ] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2)]);
+  const fs = fittingsAndSupportsRows(rows);
+  assert.deepEqual(fs.map((r: any) => r.name).sort(), ["Gasket kit", "Test kit"]);
+  const gasket = fs.find((r: any) => r.name === "Gasket kit")!;
+  assert.equal(gasket.basis, "vertex");
+  assert.equal(gasket.qty, rows[0].materials.find((m: any) => m.name === "Gasket kit").qty);
+  assert.equal(gasket.condition_id, "sa");
+  assert.equal(gasket.finish_tag, "SA-1");
+});
+
+test("fittingsAndSupportsRows: hours_per_unit/hours ride through when set, absent otherwise", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", materials: [
+    { id: "mv", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true, hours_per_unit: 0.25 },
+    { id: "mr", name: "Test kit", per: 1, basis: "run", unit: "kit", round: true },
+  ] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2)]);
+  const fs = fittingsAndSupportsRows(rows);
+  const gasket = fs.find((r: any) => r.name === "Gasket kit")!;
+  assert.equal(gasket.hours_per_unit, 0.25);
+  assert.equal(gasket.hours, 0.5); // 2 vertices × 0.25
+  const test_ = fs.find((r: any) => r.name === "Test kit")!;
+  assert.equal("hours_per_unit" in test_, false);
+  assert.equal("hours" in test_, false);
+});
+
+test("fittingsAndSupportsSummary: same-named rows sum across conditions; hours sum only when any contributor carries one", () => {
+  const conds = [
+    { id: "sa", finish_tag: "SA-1", materials: [{ id: "mv", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true, hours_per_unit: 0.25 }] },
+    { id: "oa", finish_tag: "OA-1", materials: [{ id: "mv2", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true, hours_per_unit: 0.25 }] },
+  ];
+  const rows = conditionTotals(conds, [
+    { ...runShapeWithVertices(2), condition_id: "sa" },
+    { ...runShapeWithVertices(1), condition_id: "oa" },
+  ]);
+  const combined = fittingsAndSupportsSummary(rows);
+  assert.equal(combined.length, 1);
+  assert.equal(combined[0].name, "Gasket kit");
+  assert.equal(combined[0].qty, 3); // 2 + 1
+  assert.equal(combined[0].hours, 0.75); // 0.5 + 0.25
+});
+
+test("totalsToCsv: vertex/run-basis coverage labels read 'vertex'/'run', not the 'SF' fallback (#linear-takeoff WP2.5)", () => {
+  const conds = [{ id: "sa", finish_tag: "SA-1", materials: [
+    { id: "mv", name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", round: true },
+    { id: "mr", name: "Test kit", per: 1, basis: "run", unit: "kit", round: true },
+  ] }];
+  const rows = conditionTotals(conds, [runShapeWithVertices(2)]);
+  const csv = totalsToCsv(rows);
+  assert.ok(csv.includes("1 kit / 1 vertex"), "vertex-basis coverage reads 'vertex', not 'SF'");
+  assert.ok(csv.includes("1 kit / 1 run"), "run-basis coverage reads 'run', not 'SF'");
+});
+
+test("conditionTotals: hours_per_unit resolves through the SAME rounded qty, and is absent from a row that never set it", () => {
+  const conds = [{ id: "c", finish_tag: "CPT-1", materials: [
+    { id: "m1", name: "Adhesive", per: 100, basis: "area", unit: "gal", round: true, hours_per_unit: 0.5 },
+    { id: "m2", name: "Tape", per: 50, basis: "area", unit: "roll", round: true },
+  ] }];
+  const rows = conditionTotals(conds, [area("c", 250)]); // ceil(250/100) = 3
+  const withHours = rows[0].materials.find((m: any) => m.name === "Adhesive");
+  assert.equal(withHours.hours_per_unit, 0.5);
+  assert.equal(withHours.hours, 1.5); // 3 x 0.5
+  const withoutHours = rows[0].materials.find((m: any) => m.name === "Tape");
+  assert.ok(!("hours_per_unit" in withoutHours) && !("hours" in withoutHours));
 });

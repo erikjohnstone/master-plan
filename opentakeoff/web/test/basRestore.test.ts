@@ -10,7 +10,9 @@ import { sha256Hex } from '../src/lib/graphKeys.js';
 import { localStore, createLocalStore, emptyAnnotations, metaGet, metaPut } from '../src/lib/store.js';
 import { annotationGeneration } from '../src/lib/annotationGeneration.js';
 import { BAS_SOURCE_CHUNK_BYTES, basSourceChunkKey } from '../src/lib/basSourceStorage.js';
+import { installWebLocksPolyfill } from './helpers/webLocksPolyfill.ts';
 
+installWebLocksPolyfill();
 beforeEach(() => { globalThis.indexedDB = new IDBFactory(); });
 const bundle = 'c'.repeat(64);
 const points = basPointListsSchema.parse({ schema_version: 'bas_point_lists_v1', rule_version: 'point_observations_1',

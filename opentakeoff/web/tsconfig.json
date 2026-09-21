@@ -13,6 +13,11 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    /* #linear-takeoff (WP2.1): rates.ts imports its graded rate tables as
+       tables/*.json (data, not code — a JSON diff review is what a reviewer
+       actually wants for a numbers-only table, and it can't accidentally
+       carry executable logic). */
+    "resolveJsonModule": true,
 
     /* The geometry libs (.ts) are type-checked strictly; the canvas stays .jsx.
        allowJs keeps them interoperable; checkJs stays off so loose JSX is fine. */

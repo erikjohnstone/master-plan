@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
+  "source_pdf_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+  "sheet_id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#33",
+  "sheet_number": "M201.0",
+  "page": 33,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A real, clean 10.84 LF horizontal `1\"MPS` (medium-pressure steam) pipe segment on the VA Expand Sterile Processing project's own M201.0 sheet: `size:{kind:pipe,nps_in:1}`, `systems:[\"MPS\"]`, confidence 0. A marked wide crop confirms it visually: the pipe runs from a real valve/reducer assembly (tagged `1-`, adjacent to a `T` thermostat/actuator symbol) to a real branch-tee junction that feeds a `3/4\"MPS` takeoff up to unit heater UH-E and continues rightward through a header toward a `1 1/4\"MPS` transition connecting to AHU-3. The label `1\"MPS` is printed directly on the traced pipe, and the system attribution is unambiguous at this specific location (no adjacent parallel pipe with a conflicting label competing for the same 'beside' binding). `resolveRunSegments` reproduces the identical single segment (10.84 LF, pipe:1) and the bench-style `seedOnLongestSegment` seed reproduces the identical trace exactly, confirmed before authoring per this session's own standard practice. This same review pass surfaced four other, weaker candidates on the same project (M200.0 and this M201.0 sheet) that were examined and explicitly declined rather than force-authored: (1) on M200.0, MPS/CWR/CWS labels near a busy tee all bind the engine's 'beside' size logic to the same physical pipe, reading back system 'MPS' regardless of which of the three differently-labeled seeds was used -- a twin/triple-pipe crosstalk case; (2) on M200.0, a `2\"HWR`-labeled seed at (3883,1745) whose own traced path visually sits on the neighboring `2\"HWS`-labeled line per a marked crop -- HWS/HWR crosstalk; (3) on M200.0, a `1\"HWR`-labeled seed at (2632,1282) whose traced path appears to cross a real size transition from 1\" to 3/4\" pipe without the engine detecting the change -- declined out of caution, not confirmed either way; (4) on this M201.0 sheet, a `2mps` candidate at (2935.7,2666.9) showing genuine seed-position instability -- different nearby seed offsets within the same +/-20px sweep radius produced different results (7.21 LF at 2\" vs. 3.25 LF at 3/4\") -- declined as unstable rather than a simple crosstalk case. None of these four are represented in this golden; only the one clean, unambiguous MPS segment above is authored here.",
+  "scope": "A single real 1-inch nominal MPS (medium-pressure steam) pipe segment (10.84 LF) on the VA Expand Sterile Processing project's own mechanical plan, sheet M201.0, running from a real valve/reducer assembly to a real branch-tee junction. Explicitly OUT OF SCOPE: the pipe's own continuation past either boundary (including the 3/4\"MPS branch to UH-E and the 1 1/4\"MPS transition toward AHU-3); the four declined candidates described above (MPS/CWR/CWS crosstalk and a 1\"/3/4\" transition on M200.0; an unstable 2mps candidate on this same M201.0 sheet); every other real duct/pipe-size callout on this same sheet or on M200.0, not attempted this pass; every other sheet on this real plan set.",
+  "runs": [
+    {
+      "run_id": "expand-sterile-mps-1in",
+      "description": "1-inch nominal MPS pipe segment from a real valve/reducer assembly to a real branch-tee junction feeding UH-E and AHU-3.",
+      "system": "MPS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.4964616402116402, 0.45],
+        [0.4642030423280423, 0.45]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 1 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 10.84,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 10.84, "size": { "kind": "pipe", "nps_in": 1 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:1": 10.84 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:1": 10.84
+  },
+  "total_lf_all_runs": 10.84
+}

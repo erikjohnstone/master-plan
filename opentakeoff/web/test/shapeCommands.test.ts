@@ -58,7 +58,7 @@ function roundTrip(shapes: any[], cmd: any) {
 // ── policy completeness ──────────────────────────────────────────────────────
 
 test("every applied command type has a PROVENANCE_POLICY row; unknown types throw", () => {
-  for (const t of ["add", "geom", "reassign", "label", "delete", "replace", "cutout"]) {
+  for (const t of ["add", "geom", "reassign", "label", "delete", "replace", "cutout", "run"]) {
     assert.ok(t in PROVENANCE_POLICY, `policy row missing for ${t}`);
   }
   assert.throws(() => applyShapeCommand([], { type: "resize" } as any), /PROVENANCE_POLICY/);
@@ -366,6 +366,33 @@ test("label: assigns/clears with assignShapeLabel semantics and NO provenance st
   // clear an existing label (empty value removes the key, never leaves \"\")
   const cleared = roundTrip(shapes, { type: "label", ids: [tagged.id], value: "" });
   assert.ok(!("label" in cleared.shapes[1]));
+});
+
+// ── run (#linear-takeoff WP1.3 — right-click a segment → Set size…) ─────────
+
+test("run: patches the authored run block AND the caller-supplied computed, NO provenance stamp, round-trips exactly", () => {
+  const linear = { ...manualShape("shp-r1"), measure_role: "linear", computed: { perimeter_lf: 20, area_sf: 0 } };
+  const run = { size_overrides: { "0": { kind: "pipe", nps_in: 2 } } };
+  const computed = { perimeter_lf: 20, area_sf: 0, run: { segments: [{ i: 0, lf: 20, size: { kind: "pipe", nps_in: 2 }, size_src: "manual" }], vertices: [], totals_by_size: { "pipe:2": 20 } } };
+  const fwd = roundTrip([linear], { type: "run", id: linear.id, run, computed });
+  assert.deepEqual(fwd.shapes[0].run, run);
+  assert.deepEqual(fwd.shapes[0].computed, computed);
+  assert.ok(!("updated_at" in fwd.shapes[0]), "setting a segment size is takeoff metadata, not an edit — nothing stamps");
+  assert.deepEqual(fwd.shapes[0].origin, { method: "manual" });
+});
+
+test("run: clearing back to no run block deletes the key entirely, never leaves run: undefined", () => {
+  const run = { size_overrides: { "0": { kind: "round", d_in: 8 } } };
+  const withRun = { ...manualShape("shp-r2"), measure_role: "linear", run, computed: { perimeter_lf: 10, area_sf: 0, run: { segments: [], vertices: [], totals_by_size: {} } } };
+  const cleared = roundTrip([withRun], { type: "run", id: withRun.id, run: undefined, computed: { perimeter_lf: 10, area_sf: 0 } });
+  assert.ok(!("run" in cleared.shapes[0]));
+  assert.deepEqual(cleared.shapes[0].computed, { perimeter_lf: 10, area_sf: 0 });
+});
+
+test("run: a shape id with no match is a safe no-op (inverse restores nothing meaningful, forward leaves shapes untouched)", () => {
+  const linear = { ...manualShape("shp-r3"), measure_role: "linear", computed: { perimeter_lf: 5, area_sf: 0 } };
+  const res = applyShapeCommand([linear], { type: "run", id: "shp-ghost", run: { system: "SA" }, computed: {} });
+  assert.deepEqual(res.shapes, [linear]);
 });
 
 // ── delete ───────────────────────────────────────────────────────────────────

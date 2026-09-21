@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/health-science-center-3809.pdf",
+  "source_pdf_sha256": "fd9c467277371faa673004d1d8dd10bb0916193fd5ed82d3e7777935d3265f39",
+  "sheet_id": "health-science-center-3809.pdf#33",
+  "sheet_number": "PL1.2",
+  "page": 33,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "A fresh, previously-untouched real project this session: a ME BGS Health Science Center project, sheet PL1.2 (page 33, plumbing) carrying three individually-scattered `3/4\" CD` (condensate drain) callouts, each with its own directional note (`DN TO AC-1`, `DN TO (E) MOP SINK`), not tightly-paired mechanical-room piping. A local grid sweep of the three found one real, size-bound `trace_run` hit (25.71 LF, `pipe:0.75`, `CD`, `dead_end`/`dead_end`, zero elbows -- a perfectly straight single segment).\n\nConfirmed via marked render crop: the traced line is a real, solid, straight horizontal condensate line with its own printed `3/4\" CD` label sitting DIRECTLY centered on top of the line itself (no offset leader at all, the cleanest possible label-to-ink binding this session has seen), running between two real T-junctions -- a vertical drop on the left labeled separately (`3/4\" CD DN TO AC-1`, its own diagonal leader visibly terminating on that OTHER, different vertical segment, not this one) and a vertical drop on the right at a valve/tee symbol labeled separately again (`3/4\" CD DN TO (E) MOP SINK`, its own diagonal leader likewise confirmed to terminate on that different, lower vertical segment). Both of this run's own real dead ends sit exactly on the real ink; neither neighboring label's leader crosses or touches the traced horizontal segment itself, ruling out the leader-line mislabeling risk multiple other candidates were rejected for this same day.",
+  "scope": "A single real 3/4\" CD (condensate drain) horizontal branch line (25.71 LF, zero elbows) on the Health Science Center project's own sheet PL1.2 (page 33), between two real T-junctions (a drop from AC-1 above, a drop to an existing mop sink below), each fed by its own separately-labeled vertical segment explicitly OUT OF SCOPE for this run. Also out of scope: every other CD/plumbing callout on this same 59-sheet real project, not swept.",
+  "runs": [
+    {
+      "run_id": "healthsci-pl12-cd-075-ac1-to-mopsink",
+      "description": "3/4\" CD (condensate drain) horizontal branch line between a real T-junction dropping from AC-1 and a real T-junction dropping to an existing mop sink, both drops explicitly out of scope.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.5061838624338625, 0.6191666666666668],
+        [0.6209490740740741, 0.6191666666666668]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 25.71,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 25.71, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:0.75": 25.71 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:0.75": 25.71 },
+  "total_lf_all_runs": 25.71
+}

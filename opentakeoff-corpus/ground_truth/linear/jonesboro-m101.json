@@ -1,0 +1,42 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/jonesboro-heat-pump-part01.pdf",
+  "source_pdf_sha256": "127a66b8bb59aba3945aa4d586f6cb069486a4312cb43446c397fb4fccf5a884",
+  "sheet_id": "jonesboro-heat-pump-part01.pdf#3",
+  "sheet_number": "M-101",
+  "page": 3,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Twenty-first golden, a fresh, previously-untouched Maine BGS heat-pump-upgrade project (a small, multi-part file; only the first part's own two mechanical sheets carry vector linework). A text-anchored scan of sheet M-101 found abundant real `3/4\" CD` / `1\" CD` condensate-drain callouts serving several ductless indoor units (IU-19, IU-12, and others). A render crop showed a real, clean horizontal `3/4\" CD` main running along a corridor, with several real tee take-offs down to individual unit traps (drawn as circled 'T' symbols) -- a legible, uncluttered real mechanical plan, a clear step down in complexity from the VA Durham sheet this session's own most recent goldens came from.\n\n`trace_run` reaches this horizontal main cleanly (17.05 LF, matching the visible span) with a real `dead_end` at the left end (a real wall-penetration stub connecting to a `3/4\" CD RISE` vertical drop near room UTIL-007, confirmed via marked crop) and a real `ambiguous` stop at the right end (a real elbow into a leader-connected fitting near indoor unit IU-12, a genuine fork). This project's own sheets, like several others already established this session, carry no PDF layer names, driving the same automatic-bind miss; a manual size override is used. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result.",
+  "scope": "A single real 3/4-inch condensate-drain (CD) pipe main (17.05 LF) on a Maine BGS heat-pump-upgrade project's own first-floor mechanical plan, sheet M-101, from a real wall-penetration stub near room UTIL-007 to a real elbow/fitting fork near indoor unit IU-12. Explicitly OUT OF SCOPE: the `3/4\" CD RISE` vertical drop the left end connects to; the real tee take-offs along the main's own length feeding individual unit traps; the fork's own continuation past the right end; the separate refrigerant liquid/suction (L/S) piping run shown parallel below this main (a different system, not attempted this pass); sheet M-102 and every other sheet on this real multi-part plan set.",
+  "runs": [
+    {
+      "run_id": "jonesboro-m101-cd-0.75in",
+      "description": "3/4-inch condensate-drain (CD) pipe main, from a real wall-penetration stub to a real elbow/fitting fork near indoor unit IU-12.",
+      "system": "CD",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.3814814814814815, 0.43709490740740736],
+        [0.49990354938271603, 0.43709490740740736]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 0.75 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 17.05,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 17.05, "size": { "kind": "pipe", "nps_in": 0.75 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:0.75": 17.05 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:0.75": 17.05 },
+  "total_lf_all_runs": 17.05
+}

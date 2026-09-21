@@ -1,0 +1,13 @@
+{
+  "table_grade": "M",
+  "table_source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A1 — 'Widely used simplified spec schedule' (e.g. MSU 23 31 13): https://ipf.msu.edu/sites/default/files/2018-08/CS_TEC_2004_233113_METAL_DUCTS.PDF",
+  "note": "Deliberately NOT a reconstruction of SMACNA's own pressure-class/gauge tables (LAW L10 — no licensed SMACNA table values ship). This is a widely-used generic spec pattern for rectangular duct gauge by longest side, independent of pressure class, shipped as an editable engine default — never labeled 'SMACNA' to a user.",
+  "bands": [
+    { "max_longest_side_in": 12, "gauge": 26 },
+    { "max_longest_side_in": 30, "gauge": 24 },
+    { "max_longest_side_in": 54, "gauge": 22 },
+    { "max_longest_side_in": 84, "gauge": 20 },
+    { "max_longest_side_in": 96, "gauge": 18 },
+    { "max_longest_side_in": null, "gauge": 16 }
+  ]
+}

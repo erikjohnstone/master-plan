@@ -5,12 +5,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import ToolMenu from "./ToolMenu.jsx";
-import { conditionTotals, grandTotals, sheetTotals, sheetGroupedRows, labelGroupedRows, authorGroupedRows, sheetLabelGroupedRows, round2, totalsToCsv, downloadText, materialsSummary, reportJson, hasMultipliers, BY_SHEET_BASE_NOTE } from "../lib/totals.js";
+import { conditionTotals, grandTotals, sheetTotals, sheetGroupedRows, labelGroupedRows, authorGroupedRows, sheetLabelGroupedRows, round2, totalsToCsv, downloadText, materialsSummary, reportJson, hasMultipliers, BY_SHEET_BASE_NOTE, linearRunRows, fittingsAndSupportsRows } from "../lib/totals.js";
 import { TABLE_PROFILE, CSV_PROFILE, colGetter, customColProfile, specColProfile, laborColProfile, rollColProfile, partitionRowsBy, forceIncludeGroupCol, loadColPrefs, saveColPrefs, loadGroupBy, saveGroupBy, visibleCols, floorPerimeterLf, applyUnits } from "../lib/reportColumns.js";
 import { rollReportRows, seamLfByShape } from "../lib/rollTakeoff.js";
 import { areaVal, areaUnit, lenVal, lenUnit } from "../lib/units";
 import { columnLabel } from "../lib/conditionColumns.js";
 import { shapeLabelValue } from "../lib/shapeLabels.js";
+import { sizeLabel } from "../lib/linear/run.ts";
 import { loadTemplates, saveTemplate, deleteTemplate, renameTemplate, mergeTemplates, overwriteTemplates } from "../lib/reportTemplates.js";
 import { canSyncTemplates, pushTemplatesToDrive, loadTemplatesFromDrive } from "../lib/reportTemplatesSync.js";
 import { useGoogleAuth } from "../lib/google/AuthContext.jsx";
@@ -85,6 +86,10 @@ export default function ReportPanel({ projectName, onProjectName, conditions, sh
   const bySheet = useMemo(() => sheetTotals(conditions, shapes), [conditions, shapes]);
   const g = useMemo(() => grandTotals(rows), [rows]);
   const matSummary = useMemo(() => materialsSummary(rows), [rows]);
+  // #linear-takeoff (WP1.4): per-(condition, size) LF rows — empty for a
+  // project with no sized routed runs, same additive-presence rule the
+  // "Supporting materials" section already follows for matSummary.
+  const linearRuns = useMemo(() => linearRunRows(rows), [rows]);
   const [showContribute, setShowContribute] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   // whether the Marked Set PDF carries the markups. Default on; ORTHOGONAL to the
@@ -317,7 +322,7 @@ export default function ReportPanel({ projectName, onProjectName, conditions, sh
   const baseName = (projectName || "takeoff").replace(/[^\w.-]+/g, "_");
   const exportCsv = () => downloadText(`${baseName}.csv`, totalsToCsv(rows, projectName, bySheet, sheetLabel, csvCols, ctx, byLabelExport.length ? byLabelExport : null, brand.brandName, units), "text/csv");
   const exportJson = () => downloadText(`${baseName}.json`,
-    JSON.stringify(reportJson({ projectName, rows, bySheet, scaleInfo, markups, rfis, sheetLabel, conditionColumns, attrsByCond, shapeLabels, byLabel: byLabelExport, displayUnits: units, rollGoods: rollReportRows(rollByCond, rows) }), null, 2),
+    JSON.stringify(reportJson({ projectName, rows, bySheet, scaleInfo, markups, rfis, sheetLabel, conditionColumns, attrsByCond, shapeLabels, byLabel: byLabelExport, displayUnits: units, rollGoods: rollReportRows(rollByCond, rows), linearRuns: linearRunRows(rows), fittingsAndSupports: fittingsAndSupportsRows(rows) }), null, 2),
     "application/json");
   const exportRfisCsv = () => downloadText(`${baseName}_rfis.csv`, rfisToCsv(rfis, markups, projectName, sheetLabel, brand.brandName), "text/csv");
   const exportRfisJson = () => downloadText(`${baseName}_rfis.json`,
@@ -922,6 +927,35 @@ export default function ReportPanel({ projectName, onProjectName, conditions, sh
               ))}
               <br />Each quantity = measured {`{area / linear / count}`} ÷ your coverage rate, rounded up to whole units.
             </p>
+          </div>
+        )}
+        {/* #linear-takeoff (WP1.4): per-size LF, project-wide — present only
+            when at least one shape anywhere carries a sized run; a project
+            with only plain Linear traces (every one before WP1.1 existed,
+            and every non-routed trace today) never renders this section. */}
+        {linearRuns.length > 0 && (
+          <div style={{ maxWidth: 980, margin: "26px auto 0" }}>
+            <h3 style={{ fontFamily: "var(--f-display)", fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink)", margin: "0 0 10px", paddingBottom: 5, borderBottom: "1.25px solid var(--ink)" }}>Linear runs</h3>
+            <table style={{ width: "100%", borderCollapse: "collapse", background: "var(--paper-bright)", border: "1px solid var(--ink-faint)" }}>
+              <thead>
+                <tr>
+                  <th style={{ ...th, textAlign: "left" }}>Finish</th>
+                  <th style={{ ...th, textAlign: "left" }}>Size</th>
+                  <th style={th}>{LU}</th>
+                  <th style={th}>{LU} net</th>
+                </tr>
+              </thead>
+              <tbody>
+                {linearRuns.map((r, i) => (
+                  <tr key={i}>
+                    <td style={{ ...td, textAlign: "left" }}>{r.finish_tag}</td>
+                    <td style={{ ...td, textAlign: "left", color: "var(--ink-muted)" }}>{sizeLabel(r.size) || r.size_key}</td>
+                    <td style={{ ...td, fontWeight: 700 }}>{sheetNum(lenVal(r.lf, units))}</td>
+                    <td style={{ ...td, color: "var(--ink-muted)" }}>{sheetNum(lenVal(r.lf_net, units))}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
         {/* optional parent credit (unused — resolveBranding never emits credit) */}

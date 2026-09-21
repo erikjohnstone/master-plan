@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/094_FL_Orange_County_Regional_History_Center_HVAC.pdf",
+  "source_pdf_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+  "sheet_id": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4",
+  "sheet_number": "M-102",
+  "page": 4,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (Orange County Regional History Center HVAC, Florida), pulled from the corpus_2 GitHub Release during the same low-intensity corpus-hunting pass as e2508-gas-m103.json. Screened for image coverage first, per this same pass's own Run 86 finding on a different sheet (a hybrid raster-background sheet elsewhere in this pass's own search): this sheet reads `imgRatio` effectively 0 (real vector CAD, not a scanned background), safe to sweep.\n\nA text-anchor scan of M-102 found abundant real chilled-water callouts using a labeling convention new to this grammar: `2\"CHWS&R`, `3\"CHWS&R`, `2 1/2\"CHWS&R`, `8\"CHWS&R` -- an `&` combined-system separator (one drawn twin-pipe run described as one 'supply-and-return' callout) alongside the ALREADY-supported `/` separator (`CWS/R`), and additionally missing the space between the inch mark and the system token entirely in the real extracted text (`2\"CHWS&R`, not `2\" CHWS&R` -- confirmed a real pdf.js extraction artifact from tight CAD kerning, not a typo in the source drawing, by testing the exact extracted string directly). Both gaps fixed this pass in `sizes.ts`: `&` added alongside `/` in `PIPE_RE`'s own trailing multi-system group and in `splitSystems`, and a new `normalizeLabelText` step inserts the missing space after a closing quote when immediately followed by a letter (before either regex ever sees the string) -- four new tests added, full corpus-wide test suites reproduce their exact pre-existing baselines with zero new failures.\n\n`trace_run` reaches this 2.5-inch run cleanly (16.93 LF, `size-binding:beside`) and -- like `e2508-gas-m103.json` two entries prior -- the automatic bind SUCCEEDS post-fix: `size:{kind:pipe,nps_in:2.5}`, `systems:[\"CHWS\",\"R\"]`, matching the `2 1/2\"CHWS&R` label printed directly beside the traced twin-pipe pair (visually confirmed via marked crop: a clean horizontal corridor run alongside a labeled `30x30` duct, with real valve/union symbols at both ends). Both `ambiguous` stops carry a real two-candidate fan each (confirmed via the raw `trace_run` response's own `candidates` array, not just visual inspection this time) -- the left end sits at a real valve/tee symbol with two genuine drawn directions (98.7°/257.5°), the right end sits at a real reducing-coupling symbol where the same corridor's own pipe size changes onward to `3\"CHWS&R` (confirmed as the boundary this call's own single-size scope should stop at, not continue through). A reseed from the same coordinate against the freshly re-loaded, already-committed raw PDF reproduced the identical points, length, size, and system read.",
+  "scope": "A single real 2 1/2-inch chilled water supply-and-return (CHWS/R, one drawn twin-pipe pair) run (16.93 LF) on the Orange County Regional History Center HVAC project's own mechanical plan, sheet M-102, from a real valve/tee symbol to a real reducing-coupling symbol where the same corridor's pipe size changes onward to 3-inch. Explicitly OUT OF SCOPE: the continuation past either end (the same corridor's own `2\"CHWS&R` and `3\"CHWS&R` neighboring segments, both real, different-sized continuations of the same twin-pipe main); the `30x30` duct running parallel in the same crop; every other CHWS&R run on this same sheet (several further `2\"`/`3\"`/`4\"`/`8\"` segments, not attempted this pass) and sheet M-103's own continuation of the same piping system; a rejected candidate on this same sheet (a seed near an `8\"CHWS&R` label produced a 40,018 LF cap/cap hatching-mistrace, the corpus's own recognized pathology, not used); every other sheet on this real 9-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "ochc-m102-chwsr-2.5in",
+      "description": "2 1/2-inch chilled water supply-and-return (CHWS/R) twin-pipe run, from a real valve/tee symbol to a real reducing-coupling symbol where the corridor's own pipe size changes onward to 3-inch.",
+      "system": "CHWS/R",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.4363095238095238, 0.39599537037037036],
+        [0.38591269841269843, 0.39599537037037036]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 2.5 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 16.93,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 16.93, "size": { "kind": "pipe", "nps_in": 2.5 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:2.5": 16.93 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "pipe:2.5": 16.93
+  },
+  "total_lf_all_runs": 16.93
+}

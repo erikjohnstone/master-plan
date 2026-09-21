@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf",
+  "source_pdf_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+  "sheet_id": "053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf#6",
+  "sheet_number": "MH102",
+  "page": 6,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (VA Renovate/Expand Emergency Room System), pulled from the corpus_2 GitHub Release during a fifth batch-survey pass (also covering 044_NY, 054_NV, 056_NY, 057_US -- none swept this pass; 054_NV's own MH101/MH102 sheets were screened but only offered a single repeated `24\"ø EA` label, not pursued). Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.01 on this sheet, real vector CAD.\n\nSheet MH102's text scan found 82 already-parseable bare round-duct callouts (`6ø RA`, `12ø SA`, `16ø SA`, etc. -- the `Nø SYS` format with a space before the system suffix, already fully supported, no grammar change needed). A grid sweep of seventeen of them found this real, clean 6.36 LF straight `16ø SA` round duct: `size:{kind:round,d_in:16}`, `systems:[\"SA\"]`, confidence 0.5. A marked crop confirms it visually and unambiguously: a real double-line round duct labeled '16ø SA' directly on the run, from a real reducer/transition splice on one end (down to a `14ø SA` continuation) to a real branch tee on the other (splitting toward a VAV terminal box below and a diagonal `16ø SA` continuation) -- both real, visually-confirmed junction/transition points, matching this corpus's own established ambiguous-stop-at-a-real-junction convention.\n\nApplying this session's own Run 94/95 lesson: verified using the EXACT `bench:linear` seeding convention (`seedOnLongestSegment` -- 40% along the run's only segment, computed by hand) rather than an arbitrary working coordinate. That bench-style seed reproduced the identical trace exactly, and `resolveRunSegments` reproduces the identical single 6.36 LF segment. A reseed `trace_run` from that same bench-style coordinate against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, size, and system.\n\nOther candidates swept on this same sheet but not authored: a `6ø RA` run whose forward stop reads `family_change` (a real, disclosed different-stroke-family transition, e.g. into flex duct or a different construction, not attempted as a golden this pass); an `18ø RA`-labeled seed whose own automatic bind reported the SAME trace and length as the separately-labeled `8ø RA` seed nearby (both landing on the same physical duct segment near a dense multi-branch tee -- a real label-crosstalk instance at a busy junction, disclosed, not authored).",
+  "scope": "A single real 16-inch round supply-air (SA) duct segment (6.36 LF) on the Emergency Room renovation project's own mechanical plan, sheet MH102, from a real reducer/transition splice (down to a 14-inch continuation) to a real branch tee (splitting toward a VAV terminal box and a diagonal continuation). Explicitly OUT OF SCOPE: the duct's own continuation past either boundary (the 14-inch run, the VAV branch, the diagonal continuation); the `family_change` and label-crosstalk candidates noted in review_basis, neither authored; every other one of the 82 real duct-size callouts found on this same sheet, not attempted this pass; every other sheet on this real 12-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "er-mh102-sa-16in",
+      "description": "16-inch round supply-air (SA) duct segment, from a real reducer/transition splice to a real branch tee.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.507175925925926, 0.46206018518518516],
+        [0.5261078042328042, 0.46206018518518516]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 16 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 6.36,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 6.36, "size": { "kind": "round", "d_in": 16 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:16": 6.36 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "round:16": 6.36
+  },
+  "total_lf_all_runs": 6.36
+}

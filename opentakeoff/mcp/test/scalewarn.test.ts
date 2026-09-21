@@ -51,3 +51,40 @@ test("live wiring: a normal room on the single-scale sample plan carries no mixe
   const m: any = s.measurePolygon(KEY, [[100, 100], [200, 100], [200, 200], [100, 200]], { role: "floor_area" });
   assert.equal(m.warning, undefined);
 });
+
+test("live wiring: measure_line and measure_surface now carry the SAME mixed-scale check measure_polygon already had (B-L2)", async () => {
+  const s = new Session();
+  await s.loadPlan(PLAN);
+  // The bundled demo plan's own title block reads "SCALE: 1/4\" = 1'-0\"" with
+  // its text-item baseline start at real image-px (1730,1348) — probed
+  // directly off the PDF text layer (positionedText), the same point
+  // textItemsInRegion hit-tests against. Adopt a DIFFERENT scale deliberately
+  // (1/8\" instead of the sheet's own 1/4\"), so a region touching that point
+  // is a real, live disagreement — not a synthetic mixedScaleWarning() call.
+  s.setScale(KEY, { label: '1/8" = 1\'-0"' });
+
+  // A 4-point rectangle straddling the note's baseline point — non-degenerate
+  // in both axes, so expandForScaleNotes's own reach (proportional to the
+  // measured region's size) has room to grow toward it in y.
+  const rect: [number, number][] = [[1725, 1343], [1740, 1343], [1740, 1353], [1725, 1353]];
+  const poly: any = s.measurePolygon(KEY, rect, { role: "floor_area" });
+  assert.ok(poly.warning, "measure_polygon still warns on a real disagreeing note");
+  assert.match(poly.warning, /1\/4/);
+
+  // An open 2-point run must also have SOME extent in both axes for
+  // expandForScaleNotes to reach downward at all (a perfectly horizontal or
+  // vertical 2-point bbox is degenerate in one axis and never expands there
+  // — expandForScaleNotes itself, unmodified here, still applies identically
+  // through measure_line/measure_surface now that they call it).
+  const diag: [number, number][] = [[1725, 1343], [1740, 1348]];
+
+  // B-L2 fix: measure_line was silent here before this commit
+  const line: any = s.measureLine(KEY, diag, { condition: "SCALEWARN-LINE" });
+  assert.ok(line.warning, "measure_line now warns on the same disagreeing note (B-L2)");
+  assert.match(line.warning, /1\/4/);
+
+  // B-L2 fix: measure_surface was silent here before this commit
+  const surf: any = s.measureSurface(KEY, diag, { condition: "SCALEWARN-SURFACE", height_ft: 8 });
+  assert.ok(surf.warning, "measure_surface now warns on the same disagreeing note (B-L2)");
+  assert.match(surf.warning, /1\/4/);
+});

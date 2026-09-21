@@ -179,6 +179,8 @@ export default function TakeoffDataPanel({
   rows = [],
   projectName = "",
   corpusMeta = null,
+  canExportToHit = false,
+  onExportToHit,
   basWorkflow = null,
   basViewState,
   onBasViewStateChange,
@@ -327,6 +329,20 @@ export default function TakeoffDataPanel({
   const [busy, setBusy] = useState("");
   const [err, setErr] = useState("");
   const [jumpFamily, setJumpFamily] = useState("");
+  const [hitBusy, setHitBusy] = useState(false);
+  const [hitErr, setHitErr] = useState("");
+
+  const runExportToHit = async () => {
+    setHitErr("");
+    setHitBusy(true);
+    try {
+      await onExportToHit?.();
+    } catch (e) {
+      setHitErr(e?.message || String(e));
+    } finally {
+      setHitBusy(false);
+    }
+  };
 
   const lines = useMemo(() => compileAgentTakeoff(rows), [rows]);
 
@@ -560,6 +576,17 @@ export default function TakeoffDataPanel({
           <button type="button" onClick={() => runExport("pdf")} disabled={exportDisabled || !!busy}
             title={corpusMeta?.bas_math ? completeBasRun ? "Consolidated takeoff rows. Use Export BAS JSON for reviewed engineering results." : "Original schedule rows only. Use Export BAS JSON for engineering results." : undefined}
             style={{ ...btnStyle, marginTop: 4 }}>{busy === "pdf" ? "…" : corpusMeta?.bas_math && !completeBasRun ? "Rows PDF" : "PDF"}</button>
+          {canExportToHit && (
+            <button type="button" onClick={runExportToHit} disabled={hitBusy}
+              title="Fill the Siemens Global Valves mass-sizing template (HIT) from this compiled valve takeoff — a separate .xlsx from the takeoff exports above."
+              style={{
+                ...btnStyle, marginTop: 4, marginLeft: 10, paddingLeft: 24,
+                borderLeft: "1px solid var(--ink-faint)",
+                color: "var(--paper-bright)", background: "var(--cobalt)", borderColor: "var(--cobalt)",
+              }}>
+              {hitBusy ? "…" : "Export to HIT"}
+            </button>
+          )}
           </>}
           {!evidenceTab && typeof onClear === "function" && (
             <button type="button" onClick={onClear} disabled={!rows.length && !corpusMeta?.bas_math}
@@ -597,6 +624,9 @@ export default function TakeoffDataPanel({
 
         {err && (
           <div style={{ padding: "8px 20px", color: "var(--c-danger)", fontSize: "var(--fs-s)" }}>{err}</div>
+        )}
+        {hitErr && (
+          <div style={{ padding: "8px 20px", color: "var(--c-danger)", fontSize: "var(--fs-s)" }}>Export to HIT: {hitErr}</div>
         )}
 
         {/* Family jump strip — contractor scanning by schedule */}

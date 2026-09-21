@@ -1,0 +1,67 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/t2523-replace-boilers-phase2.pdf",
+  "source_pdf_sha256": "c919f1e49505d0c381f92ce14850c6999d8dd4f07955133a33b74e2b97151902",
+  "sheet_id": "t2523-replace-boilers-phase2.pdf#11",
+  "sheet_number": "M-122",
+  "page": 11,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Eleventh golden, found via the same text-anchored discovery method as Run 34's own golden: reading a sheet's own real text for a size/system callout, then looking at a render crop, before ever attempting a coordinate search. `013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf` (a Missouri Army National Guard project, 1107th Theater Aviation Sustainment Maintenance Group, Springfield, MO -- explicitly a narrow-scope 'Replace Boilers' project, matching Run 31's own targeting refinement) sheet M-122 ('PARTIAL MECHANICAL PLAN - AREA C-3') is a real, sparse, legible new-construction mechanical plan showing real HHWS/HHWR (heating hot water supply/return) piping serving three AHU units (7030A, 7010A, 7015A) fed from a boiler plant.\n\nA real text search for `HHWR`/`HHWS` found several candidates; the two used here are a matched parallel 6-inch HHWS/HHWR riser pair, both real automatic binds (`size-binding:beside`, `pipe:6in`), each with one clean `dead_end` and one `ambiguous` stop. A marked render crop confirms both real physical boundaries directly: the `dead_end` end (top) sits exactly on a real drawn break-line symbol with the sheet's own printed 'REFER TO M-121 SHEET FOR CONTINUATION' leader pointing directly at it -- a real, disclosed cross-sheet continuation boundary, the same convention this project's own goldens already use for cut/continuation points. The `ambiguous` end (bottom) sits exactly at a real elbow where the vertical riser turns to run horizontally along a header serving multiple downstream AHU branch connections (each individually labeled '6\"') -- a genuine real fork, not an engine misread, the same category Run 34's own golden established as a legitimate scope boundary. Both runs' own bench-style reseed (40% into the single segment, the bench's own `seedOnLongestSegment` convention) was independently re-verified live and reproduces each result identically.",
+  "scope": "Two real 6-inch heating hot water pipe risers (a matched HHWS/HHWR supply/return pair, ~74-76 LF each) on a Missouri National Guard boiler-replacement project's own Partial Mechanical Plan - Area C-3, sheet M-122, each from a real cross-sheet continuation break-line (top) to a real elbow into a multi-branch AHU header (bottom). Explicitly OUT OF SCOPE: the continuation of both pipes onto sheet M-121 (real, disclosed, printed on the sheet itself, not sampled here); the header's own downstream 6\" branch connections to AHU-7030A and the other AHU units past each riser's own elbow; the smaller 3\"/4\" HHWS/HHWR branches visible in the same crop feeding AHU-7010A and AHU-7015A; every other run on this real 28-sheet plan set (only sheet 11/M-122 sampled); every other candidate this file's own text search surfaced but not yet authored into a golden.",
+  "runs": [
+    {
+      "run_id": "t2523-m122-hhws-6in",
+      "description": "6-inch heating hot water supply (HHWS) pipe riser, from a real cross-sheet continuation break-line (referring to sheet M-121) to a real elbow into a multi-branch AHU header.",
+      "system": "HHWS",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.3698480672801254, 0.5618554916803068],
+        [0.3698480672801254, 0.1572448567358884]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 75.85,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 75.85, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 75.85 }
+        }
+      }
+    },
+    {
+      "run_id": "t2523-m122-hhwr-6in",
+      "description": "6-inch heating hot water return (HHWR) pipe riser, from a real cross-sheet continuation break-line (referring to sheet M-121) to a real elbow into a multi-branch AHU header, running parallel to this golden's own HHWS run.",
+      "system": "HHWR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.37620523446762283, 0.1572448567358884],
+        [0.37620523446762283, 0.5518387631509569]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 73.97,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 73.97, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 73.97 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:6": 149.82 },
+  "total_lf_all_runs": 149.82
+}

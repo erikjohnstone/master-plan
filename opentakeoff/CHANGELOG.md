@@ -1,5 +1,104 @@
 # Changelog
 
+- Add Siemens Valve Size Template (`Valve_Size_Template_US_Global.xlsx`) export
+  from the production control-valve takeoff (`compile_corpus_takeoff`
+  kind `control_valves`/T-VALVE-01, the same Session+ODL pipeline MCP and the
+  UI's production CLI both call). `valveSizeTemplate.ts` fills the original
+  workbook byte-level — DomainValues/Constants lookup sheets, defined names,
+  data-validation dropdowns and both protection elements untouched, only the
+  ValveTable data rows written; `valveSizeExport.ts` maps schedule cells onto
+  the template's 12 columns (Unit No./Location/System/Ports/PN class/Line
+  Size/Design flow rate/Consumer Δp/Branch Δp/Tolerance/Positioning
+  Signal/Operating Voltage), computing Consumer Δp from printed GPM+Cv via
+  (GPM/Cv)^2 where both parse cleanly, and leaving PN class/Branch Δp always
+  blank (no source anywhere in the schedule data — a spec-book field, not a
+  drawing one). Wired into `compile_corpus_takeoff`'s existing `export_path`
+  (MCP + UI) and a standalone `export-valve-size-template.mjs` CLI. Real runs
+  through the full production pipeline (VectorGrid enabled, `OPENTAKEOFF_VECTORGRID`
+  on by default) against navfac-cherry-point-atc: 163/163 rows, matching
+  T-VALVE-01's own frozen truth exactly. Unit No./System/Line Size/Design flow
+  rate/Consumer Δp (computed) 100%, Location 98%; Ports/PN class/Branch
+  Δp/Tolerance/Positioning Signal/Operating Voltage 0% — that schedule prints
+  no Configuration+fail-position, control-signal, or pressure-class columns at
+  all, confirmed against the table's own raw header list, not a mapping bug.
+  (An earlier verification pass run without the VectorGrid sidecar wired up
+  undercounted this same set by 21 rows and wrongly read as a pipeline
+  regression; with VectorGrid — the actual production table engine — enabled,
+  the count matches truth exactly.)
+
+- **Linear takeoff: trace engine, stage 3 — the local run graph.** Adds
+  `web/src/lib/linear/graph.ts`: given one point, classifies what the node
+  there looks like (end / collinear join / elbow / tee / crossing /
+  ambiguous) from its welded-end and interior-crossing candidates, for the
+  eventual walker to consume one frontier at a time. Deliberately not
+  `arrangement.ts` — that module builds the whole sheet's planar
+  subdivision up front, exactly the "global noding" this path rules out;
+  welding here is local to one point and lazy, materializing nothing until
+  asked. One new dependency,
+  [robust-predicates](https://github.com/mourner/robust-predicates)
+  (Unlicense) — its adaptive-precision `orient2d` is used for the one test
+  in this module where naive floating-point orientation math is known to
+  flip sign from catastrophic cancellation: whether a point sits exactly
+  on a segment's interior at near-zero distance (the crossing test).
+  Coarser angle-band decisions (the 8°/30°/150° thresholds plan §6.3
+  names) use plain trigonometry — those tolerances are wide enough that
+  ordinary floating point is in no danger of getting them wrong. Still no
+  caller — the walker (next) and the canvas/MCP surfaces (later) are what
+  will actually invoke this.
+
+- **Linear takeoff: trace engine, stage 2 — segment spatial index.** Adds
+  `web/src/lib/linear/index.ts` (exact nearest-segment/box/endpoint queries
+  over a sheet's candidate MEP linework) and `worker.ts` (stroke
+  classification + index build, off the main thread, per plan §6.10's own
+  performance budget). Two new runtime dependencies:
+  [Flatbush](https://github.com/mourner/flatbush) (ISC) over segment bboxes
+  and [KDBush](https://github.com/mourner/kdbush) (ISC) over segment
+  endpoints, both storing their index as a single transferable
+  `ArrayBuffer` — the reason they were chosen over the in-house hash grids
+  already in `geometry.js` (`buildSegGrid`/`buildSnapGrid`), which
+  structured-clone on every worker round trip AND silently cap each grid
+  cell (64 segments / 40 points), dropping real candidates on dense
+  linework rather than merely slowing down. `jsts` (already a dependency,
+  and the only other spatial-index option already in the tree) was not
+  used: the goal doc is explicit that this path runs "NO global noding, NO
+  JTS" — jsts's `STRtree` still requires the noding-heavy setup this stage
+  exists specifically to avoid. The trace engine itself is still inert on
+  every project (`prefs.js`'s `traceModeEnabled()`, default OFF); this is
+  infrastructure with no caller yet.
+
+- **Linear takeoff: "Fittings & supports" buy list.** The Excel report
+  workbook gains a `Fittings & supports` tab (canvas and MCP `export_report`
+  alike, via the shared `reportWorkbook`/`reportJson` functions) — the
+  buy-list rows pulled out of a routed condition's own vertex/run-basis
+  materials (elbow brackets, riser clamps, per-run test kits), per condition
+  then a combined buy list, with Hours columns when a row carries
+  `hours_per_unit`. Omitted entirely, like `Linear runs`, when nothing on the
+  project carries one. `export_report`'s `opentakeoff.report.v1` gains a
+  matching additive `fittings_and_supports` block. Also fixes a real gap in
+  the existing Materials CSV/XLSX sections: a vertex- or run-basis row's
+  coverage label read the `"SF"` fallback instead of `"vertex"`/`"run"`,
+  left over from the basis itself shipping one checkpoint before its own
+  coverage-label case did.
+
+- **Linear takeoff (duct, pipe, BAS runs) — manual mode, MCP 0.9.79.** A
+  `measure_line` shape can now carry a sized, fitted `run`: `measure_line`
+  accepts `system`/`size`/`vertices` (seeded from a routed condition's own
+  defaults when omitted) and echoes the committed shape's `run` plus its
+  derived `computed_run`; `edit_run` patches an existing linear shape's
+  segment sizes and vertex kinds by index after the fact. `edit_materials`
+  rows gain basis `"vertex"`/`"run"` (a routed condition's own fitting-
+  vertex count or separate-run count) and an optional `hours_per_unit`.
+  The new `resolve_linear_assembly` tool prices one committed run's
+  `computed_run` — duct weight/insulation/labor, elbow/transition counts,
+  hangers — as line items against the shipped default assemblies (plan
+  §5.5's own graded rate tables) or a one-off assembly supplied inline;
+  read-only, no undo step. `export_report`'s `opentakeoff.report.v1` gains
+  additive `linear_runs` (per-size LF) and `linear_settings` blocks. The
+  canvas gained a matching Linear trace tool, per-segment sizing, and an
+  estimator-profile assembly library seeded with the same defaults —
+  canvas and MCP resolve the identical shared function, so the numbers
+  can never disagree between them.
+
 - Harden shared control-schematic discovery and SOO binding against horizontal
   detail titles, rotated title-block copies, adjacent authored sequence sheets,
   project-word collisions and generic non-control schematics. Add nine

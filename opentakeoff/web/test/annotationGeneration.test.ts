@@ -5,7 +5,9 @@ import assert from 'node:assert/strict';
 import { localStore, createLocalStore, ANN_SCHEMA, emptyAnnotations, metaGet, metaPut } from '../src/lib/store.js';
 import { annotationGeneration, attachAnnotationGeneration, isAnnotationConflict } from '../src/lib/annotationGeneration.js';
 import { createSyncStore } from '../src/lib/sync/syncStore.js';
+import { installWebLocksPolyfill } from './helpers/webLocksPolyfill.ts';
 
+installWebLocksPolyfill();
 beforeEach(() => { globalThis.indexedDB = new IDBFactory(); });
 const first = '00000000-0000-4000-8000-000000000001';
 const second = '00000000-0000-4000-8000-000000000002';

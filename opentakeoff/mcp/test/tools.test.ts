@@ -69,7 +69,12 @@ async function captureStderr(fn: () => Promise<void>): Promise<string> {
 // derive_base takes shape ids and lineal feet — same reasoning.
 // import_takeoff takes a file path — same reasoning.
 // delete_verdict takes a record id — same reasoning.
-const NO_COORDS = new Set(["undo_last", "edit_materials", "edit_condition", "export_report", "export_marked_pdf", "export_dxf", "link_annotation", "list_shapes", "derive_base", "import_takeoff", "delete_verdict", "duplicate_condition", "split_condition", "apply_rules"]);
+// edit_run (#linear-takeoff) takes a shape id plus segment/vertex INDICES —
+// no image-px points cross it — same reasoning.
+// resolve_linear_assembly (#linear-takeoff WP2.5) takes a shape id and
+// pricing options, reading the shape's own already-committed run — no
+// image-px points cross it either — same reasoning.
+const NO_COORDS = new Set(["undo_last", "edit_materials", "edit_condition", "edit_run", "resolve_linear_assembly", "export_report", "export_marked_pdf", "export_dxf", "link_annotation", "list_shapes", "derive_base", "import_takeoff", "delete_verdict", "duplicate_condition", "split_condition", "apply_rules"]);
 
 test("tools/list: exactly TOOL_NAMES, each described with the coordinate contract", async () => {
   const client = await pair();
@@ -1354,6 +1359,30 @@ test("edit_materials: add/remove/patch, minted-on-touch, all-or-nothing, undo re
   const exported = await call(client, "export_takeoff", {});
   const cond = exported.data.conditions.find((c: any) => c.finish_tag === "CPT-1");
   assert.equal(cond.materials.length, 0, "undo restored the pre-add state");
+});
+
+// #linear-takeoff (WP2.3): basis gains "vertex"/"run", rows gain hours_per_unit.
+test("edit_materials: basis 'vertex'/'run' and hours_per_unit round-trip through add/patch", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: PLAN });
+
+  const added = await call(client, "edit_materials", { condition: "SA-1", add: [
+    { name: "Gasket kit", per: 1, basis: "vertex", unit: "kit", hours_per_unit: 0.25 },
+    { name: "Test kit", per: 1, basis: "run", unit: "kit" },
+  ] });
+  assert.equal(added.isError, false);
+  const gasket = added.data.materials.find((m: any) => m.name === "Gasket kit");
+  assert.equal(gasket.basis, "vertex");
+  assert.equal(gasket.hours_per_unit, 0.25);
+  const test_ = added.data.materials.find((m: any) => m.name === "Test kit");
+  assert.equal(test_.basis, "run");
+  assert.equal("hours_per_unit" in test_, false, "a row that never set hours_per_unit carries no such field");
+
+  const patched = await call(client, "edit_materials", { condition: "SA-1", patch: [
+    { id: test_.id, fields: { hours_per_unit: 0.5 } },
+  ] });
+  assert.equal(patched.isError, false);
+  assert.equal(patched.data.materials.find((m: any) => m.id === test_.id).hours_per_unit, 0.5);
 });
 
 // ── annotations (#114) — the agent half of markup.condition_id (#112) ────────

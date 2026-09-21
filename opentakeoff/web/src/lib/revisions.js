@@ -39,6 +39,27 @@ function deltasOf(fields, a, b) {
 }
 const anyVisible = (fields, deltas) => fields.some((f) => visible(f, deltas[f]));
 
+// #linear-takeoff (WP1.4): per-size LF deltas — COND_FIELDS' flat numeric
+// deltasOf can't carry this (conditionTotals' `sizes` is an array keyed by
+// size, not a single number), so this is a parallel helper, unioning the
+// size keys on both sides. [] when neither side's row carries any `sizes`
+// at all — a project with no sized routed runs sees no new field appear
+// anywhere in the diff.
+function sizeDeltas(ra, rb) {
+  const aMap = new Map((ra?.sizes || []).map((s) => [s.size_key, s]));
+  const bMap = new Map((rb?.sizes || []).map((s) => [s.size_key, s]));
+  if (!aMap.size && !bMap.size) return [];
+  const out = [];
+  for (const key of new Set([...aMap.keys(), ...bMap.keys()])) {
+    const av = aMap.get(key), bv = bMap.get(key);
+    const aLf = av?.lf || 0, bLf = bv?.lf || 0;
+    const delta = round2(bLf - aLf);
+    const status = av && bv ? (visible("lf", delta) ? "changed" : "unchanged") : bv ? "added" : "removed";
+    out.push({ size_key: key, size: (bv || av).size, lf: aLf, lf_b: bLf, delta, status });
+  }
+  return out;
+}
+
 // A lone-side row only counts as added/removed if there is anything on it —
 // a shapeless seeded condition that exists in one revision and not the other
 // diffs as unchanged, never as a fabricated add/remove.
@@ -129,7 +150,10 @@ export function diffTakeoffs(a, b) {
     if (ra && rb) status = anyVisible(COND_FIELDS, deltas) ? "changed" : "unchanged";
     else if (rb) status = hasSubstance(COND_FIELDS, rb) ? "added" : "unchanged";
     else status = hasSubstance(COND_FIELDS, ra) ? "removed" : "unchanged";
-    return { key, finish_tag: (rb || ra).finish_tag, color: (rb || ra).color, status, a: ra, b: rb, deltas };
+    // sizes APPENDS after deltas (additive-only, matching this module's own
+    // convention) — empty for every condition where neither side carries a
+    // sized run.
+    return { key, finish_tag: (rb || ra).finish_tag, color: (rb || ra).color, status, a: ra, b: rb, deltas, sizes: sizeDeltas(ra, rb) };
   });
 
   const shA = perSheet(a?.conditions, a?.shapes), shB = perSheet(b?.conditions, b?.shapes);

@@ -4990,6 +4990,373 @@ resolves B-32, whose own remaining defects (title fabrication,
 misclassification, and this newly-found duplicate-content issue) are
 distinct, unrelated code paths still open.
 
+### B-44 — a real data row silently drops out of `sheetgraph.ts`'s own in-house table extractor whenever a far-right cell's ordinary font-height jitter outranks a much larger true left-right position gap in the row's own reading-order sort, undercounting D04's VAV schedule and (originally, wrongly, blamed on a different, non-running backend for D05/D09's rooftop unit schedule — see the correction below) (NOT FIXED — root cause now fully traced and confirmed by a working, corpus-tested fix; reverted because it exposes a separate, pre-existing table-candidate-arbitration bug elsewhere in the same file — see GOAL.md's own shared-path rule)
+
+**Where:** `federal-attachment4-mechanical.pdf#16` (`VOLUME CONTROL BOX
+SCHEDULE`, D04's own fixture) and `baker-county-eoc-bidset.pdf#41`
+(`PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)`, D05's own
+fixture — the identical PDF T-VALVE-01/T-HVAC-01 and the linear-takeoff
+held-out tier already use elsewhere in this corpus). Found chasing
+`npm test`'s own `demoD04`/`demoD05`/`demoD09` regression failures
+during a GATE 3 guard-green pass.
+
+**D04, measured exactly, not estimated.** `VOLUME CONTROL BOX SCHEDULE`
+extracts 55 of 58 real rows; `VAV-16`, `VAV-17`, and `VAV-43` are the
+three missing. Direct `textSpans()` extraction confirms all three are
+ordinary, well-formed rows: same tag-column x-range (`x0=2371.7`), same
+25.9pt row pitch, same 17-cell shape as their own immediate, correctly-
+extracted neighbors (`VAV-15`/`VAV-18`, `VAV-42`/`VAV-44`) — nothing
+about their own printed geometry is anomalous. `VAV-16` and `VAV-17`
+happen to share byte-identical cell values (a real, ordinary coincidence
+— two same-size boxes), which is the only structural thing that
+distinguishes them from their neighbors.
+
+**D05/D09, measured exactly.** The `PACKAGED ROOFTOP AIR CONDITIONING
+UNIT SCHEDULE`'s own title text is a real, single, correctly-extracted
+span (`findText` returns it once, cleanly) — the table simply never
+becomes a `ScheduleTable` at all; `graph.tables` has zero entries with
+any region overlapping its own real geometry. That geometry is real and
+ruled: 201 vector segments confirmed spanning `x:[645,3662]`, with
+horizontal rules at `y=423/631/678/725` running the table's own FULL
+width (14 contiguous collinear segments each). But the header band
+between `y=423` and `y=631` (208pt) is UNEVEN across columns: the
+`SERVICE`/`MANUFACTURER`/`MODEL`/`NOMINAL`/`SUPPLY AIR` column group has
+no internal divider (one tall header cell), while the
+`COOLING`/`GAS HEATER`/`EXHAUST`/`SUPPLY AIR FAN` column group has two
+further dividers at `y=470` and `y=517` (a genuine 3-tier sub-header) —
+both real, both correct, on the SAME physical table.
+
+**CORRECTION (2026-09-19), scope note:** the fix described below is
+confirmed, by direct A/B measurement, to explain and repair ONLY the
+D04 shape above (a real row's own key cell mis-selected out of a
+correctly-banded set of tokens) — it does NOT touch whether a table is
+found at ALL. WP1's own `federal-mech.compile.json` check, run both
+before and after the fix, shows `BOILER`/`EXPANSION_TANK` (both a
+whole-family, whole-table-vanish shape exactly like D05/D09's own
+rooftop schedule here) sitting at 0 of 2 UNCHANGED by the fix — direct,
+measured proof that D05/D09's own whole-table disappearance is a
+SEPARATE mechanism from D04's row-drop, not the same bug's second face
+the way the original (vectorgrid-attributed) write-up assumed. D05/D09
+almost certainly belong with B-45's own whole-table-vanish shape below
+instead — not re-confirmed against baker-county-eoc-bidset.pdf#41
+directly this pass, so left catalogued here rather than reassigned on
+an unconfirmed assumption, but a future pass should check that directly
+before doing any further work under this entry's own name.
+
+**CORRECTION (2026-09-19): the root cause below was wrong.** Everything
+in the paragraph that follows — `vectorgrid_rpc.py`'s `extract_grid`,
+`_axis`, `_span`, `SANITY_MIN_FILL` — describes a real mechanism in a
+real file, but not the one that produced D04/D05/D09's own numbers in
+THIS environment. Directly checked via `graph.notes` (the diagnostic
+field naming which extraction layer ran per sheet): vectorgrid never
+successfully runs here at all — every attempt on every sheet fails
+identically with `ModuleNotFoundError: No module named 'pdfplumber'`
+(`sidecar/vectorgrid_rpc.py` imports `bakeoff/celltext.py`, which
+imports `pdfplumber` at module scope; that package is not installed in
+this environment). The prior write-up reasoned convincingly from the
+Python source's own docstrings and this file's own B-20 precedent
+without first confirming that code path actually executes — a real
+process failure this correction exists to name plainly, not just fix
+quietly. The corpus has THREE independent table-extraction backends
+with graceful fallback (Python vectorgrid → Java OpenDataLoader-PDF →
+an in-house TypeScript text-span clustering pass in
+`web/src/lib/sheetgraph.ts`); direct testing (feeding
+`federal-attachment4-mechanical.pdf#16` to each backend independently)
+confirms neither Python nor Java produces D04's own VAV table at all —
+the THIRD backend, `sheetgraph.ts`'s own `bandDataRows`, is the one
+actually running and actually producing the buggy output. The real
+mechanism, traced to the exact line:
+
+`bandDataRows` (`web/src/lib/sheetgraph.ts`, ~line 4880) clusters a
+sheet's text spans into rows (`clusterRows`), then for each row bands
+the tokens inside this table's own column range and reads `banded[0]` —
+the array's first element — as the row's KEY cell (the tag `rowKeyOf`
+checks). That array comes from `joinGraphSpans` (`equiptags.ts`), whose
+own final step sorts EVERY row it is given by `(y0, x0)` — top edge
+first, left edge second — a sort built for `joinGraphSpans`'s OTHER,
+cross-row callers, and coincidentally also correct for a QUARTER-TURNED
+schedule's own row (there, one physical row's cells share nearly the
+same x and fan out across y, so y0 legitimately carries the reading
+order). For an ORDINARY horizontal row it is wrong: two cells on the
+same visual baseline routinely have slightly different top-edge y0 from
+ordinary font/glyph-height variance — nothing anomalous, just different
+type sizes in adjacent cells. Measured exactly on `VAV-16`'s own row
+(`federal-attachment4-mechanical.pdf#16`): the row's real key cell,
+`VAV-16` (`x=2371.7, y=691.7`), sits beside a far-right cell containing
+generic template boilerplate text, `"BUILDING XX"` (`x=5503.7,
+y=687.4`) — 3132px away in x, but only 4.3px "higher" in y0 (a taller
+font, not a different line). `(y0, x0)` sorts the y0-smaller cell first
+regardless of how far away it sits in x, so `banded[0]` became
+`"BUILDING XX"`, `rowKeyOf` correctly refused to read it as a tag, and
+the ENTIRE row — VAV-16's own real cell data included — silently folded
+into the orphan pool instead of minting a row. `VAV-17`/`VAV-43` fail
+the identical way on the same sheet; `CONDENSING_UNIT`'s own missing
+rows on the same document reduce to the same mechanism.
+
+**A fix was designed, implemented, and corpus-tested — then reverted.**
+Re-sorting each row's own banded tokens by whichever axis they actually
+spread across (x when a row's own x-spread exceeds its y-spread, y
+otherwise — preserving the quarter-turned case exactly while fixing the
+ordinary case) is a 15-line change confined to `bandDataRows`. Measured
+directly against `federal-mech.compile.json` (WP1's own reviewed key):
+before, 114 of 128 items, with `FCU` 6/7, `VAV` 55/58, `CONDENSING_UNIT`
+2/6, `GRD` 21/23 all short; after, 124/128 — `FCU` 7/7, `VAV` 58/58,
+`CONDENSING_UNIT` 6/6 (all four missing units recovered, not just the
+two named above), `GRD` 23/23, all exactly matching truth. `BOILER` and
+`EXPANSION_TANK` stayed at 0/2 before and after, unchanged by this fix —
+real, direct confirmation that the whole-table-vanishing shape (B-45,
+below) is a genuinely SEPARATE mechanism from this one, not the same bug
+wearing two faces.
+
+But the fix does not ship, because of what it unlocks elsewhere. Once a
+row is no longer wrongly dropped, some OTHER table on a DIFFERENT sheet
+whose own "weak" extraction under one vocabulary (`finish`/`equipment`)
+used to fail with zero rows for the exact same reason now succeeds —
+and this corpus's existing, deliberately-written cross-kind dedup logic
+(`buildSheetGraph`'s own by-title collision pass, and
+`extractReferenceTableAt`'s own "already claimed by a real pass" skip)
+was tuned against a DIFFERENT known corpus case
+(`itd-d1-lab-mechanical.pdf#12`'s own SNORKEL HOOD SCHEDULE) where a
+structurally-driven `reference`-kind read is ALWAYS the worse one against
+a real vocabulary hit. Patching the dedup pass to prefer whichever
+candidate is genuinely richer (gated so the original SNORKEL HOOD
+protection still holds) fixed the newly-exposed collision
+(`bldg5406-hvac-demo-mechanical.pdf#6`'s own quarter-turned FAN
+SCHEDULE, which the row-order fix legitimately unlocks a real, complete
+`reference`-kind read of) — but then caused a DIFFERENT real regression
+two levels away (`navfac-cherry-point-atc-mechanical.pdf#42`'s own
+`BOILER SCHEDULE`, `B-A1`/`B-A2`, silently dropped from `graph.tables`
+entirely via what is very likely the SAME "bogus reference-kind title"
+failure mode this file's own `extractReferenceTableAt` comments already
+describe for the SNORKEL HOOD case, now reachable from a second
+direction). Two independent, careful patches to this arbitration layer
+each fixed their own targeted case and broke a different one — real
+evidence the shared-path table-candidate arbitration in `sheetgraph.ts`
+is more tightly tuned to its existing corpus cases than a local patch
+can safely extend, not that the row-order fix itself is unsound. Per
+this file's own standing rule (revert, don't force, a change that
+regresses the corpus), the full three-part patch (row-order fix +
+dedup richness gate + claim-coverage threshold) was reverted in full;
+`sheetgraph.ts` is back at its pre-session state. The row-order fix
+alone (without the two arbitration patches) passes the full corpus
+regression suite except this entry's own `D07` — meaning it is CLOSE to
+shippable, but "guard-green minus one test" is still not guard-green,
+and shipping the row-order fix without addressing what it unlocks would
+just trade this entry's own bug for a documented one.
+
+**Why this is disclosed without a fix.** The real work remaining is not
+another local patch to `bandDataRows` — that function is now correctly
+understood and its own fix is sound in isolation — but a genuine,
+corpus-wide-tested pass through `sheetgraph.ts`'s own cross-kind
+table-candidate arbitration (the by-title dedup in `buildSheetGraph`,
+and `extractReferenceTableAt`'s own "already claimed" skip), verifying
+EVERY existing corpus case that logic was tuned against (SNORKEL HOOD
+named explicitly; there may be others un-named in comments) still
+resolves correctly under a richness-aware rule, before the row-order fix
+that exposes the need for that rule can safely ship alongside it. Not
+attempted here under this session's own no-guessing-at-fixes-under-time-
+pressure rule — two iterations already showed the failure mode is real
+and not confined to one pairing.
+
+**Consequence:** GATE 3's own `guard-green` criterion
+(`opentakeoff-corpus/goals/LINEAR_TAKEOFF.md`) stays unmet on the mcp
+side specifically because of `demoD04`/`demoD05`/`demoD09` (D04
+undercounts `vav_count` by 3; D05/D09 both fail identically on
+`"packaged rooftop schedule must remain extractable"`) — three separate-
+looking `npm test` failures that are one root cause, not three.
+
+### B-45 — a whole schedule table (`CHW CONTROL VALVE SCHEDULE`, Building M) vanishes from its own sheet while its immediate physical sibling (`HHW CONTROL VALVE SCHEDULE`, same building, same sheet) extracts correctly, undercounting T-HVAC-01/T-VALVE-01 by 19 of their own 21-item gap (NOT FIXED — found, traced, disclosed; also corrects this file's own stale "What is working" claim below)
+
+**Where:** `navfac-cherry-point-atc-mechanical.pdf#47`. Found chasing
+`npm test`'s own `takeoffHvac01`/`takeoffValve01` regression failures
+during the same GATE 3 guard-green pass as B-44 — both tests assert
+`CHW_CONTROL_VALVE.count === 64` / `HHW_CONTROL_VALVE.count === 99`
+(`opentakeoff-corpus/takeoffs/T-VALVE-01-navfac-control-valves/truth.json`);
+both currently read 45 and 97.
+
+**Measured exactly, not estimated.** Truth's own 19 missing CHW tags
+(`CV-AHU-M1-CHW`, `CV-CRAH-M1A/1B/2A/2B-CHW`, `CV-CH-C-MT1/MT2`,
+`CV-CHW-BP-M`, `CV-DOAH-M1-CHW`, `CV-FCU-M1A/1B/2A/2B/3/4A/4B/5/6/7-CHW`
+— 19 of 19) all carry `sheet_id: "...#47"`, `table_title: "CHW CONTROL
+VALVE SCHEDULE"`, and an IDENTICAL `bbox_px` left edge (`x0=1709.52`) at
+a perfectly regular 34.56pt row pitch — one coherent, physically real
+sub-table. `graph.tables` has ZERO entries whose title matches `/CHW
+CONTROL VALVE/i` anywhere near sheet `#47` (the two that DO exist,
+`region`s `[3460…4442,485…1337]` and `[3639…4492,1424…2379]`, both carry
+`{sheet}` on `#44` and `#49` respectively — different, unrelated
+Building-A and Building-T instances of the same recurring caption).
+Sheet `#47` itself is NOT a blackout page (B-28's own "whole page, zero
+tables" shape ruled out directly): it yields 8 OTHER real tables,
+including `HHW CONTROL VALVE SCHEDULE` (33 rows, Building M) — its own
+immediate physical neighbor, almost certainly the side-by-side column
+block sharing the same schedule region, extracted essentially correctly
+(33 of 35 real HHW-M rows; `M112`/`M113` are the small residual 2-item
+gap, and 31 of the 33 extracted rows carry a truncated tag lacking the
+expected `CV-`/`-HHW` wrap — `CUH-M1` instead of `CV-CUH-M1-HHW` — a
+separate, likely-simple tag-formatting defect in
+`web/src/lib/corpusTakeoff.mjs`'s own valve-naming logic, not traced
+further this pass since it does not move any of the two failing tests'
+own asserted `.count` numbers).
+
+**New evidence (2026-09-19), a real lead not previously checked.**
+Read this page's own raw PDF text directly (`pdf.ts`'s own `textSpans`,
+independent of any extraction pipeline) rather than only `graph.tables`'
+own output. `CHW CONTROL VALVE SCHEDULE`'s own title span is real, single,
+and well-formed (`x0=1723.9, y0=280.4, x1=2380.7`), and its own data rows
+directly beneath it are ordinary, complete, and correctly tagged
+(`CV-AHU-M1-CHW`, `CV-CRAH-M1A-CHW`, … starting at `y0=410.7`, same
+25.9-34.5pt-scale row pitch as every other schedule on this document) —
+nothing about the SOURCE PDF is malformed or unusual. But
+`HHW CONTROL VALVE SCHEDULE`'s own title span sits on the EXACT SAME
+line — `x0=600, y0=280.4, x1=1256.8` — CHW and HHW are printed as two
+independent, physically SIDE-BY-SIDE schedules sharing one title row,
+CHW to the right of HHW with roughly a 470pt gap between them. And
+`graph.tables`' own surviving `HHW CONTROL VALVE SCHEDULE` entry has a
+detected `region` of `[417.6, 280.4, 2418.6, 1647.6]` — its own
+right edge (`x1=2418.6`) lands just 38pt past CHW's own title's right
+edge (`x1=2380.7`), and its own `y0` (`280.4`) is CHW's title's `y0`
+EXACTLY. That is far too precise a coincidence to be unrelated: HHW's
+own detected table region, as extracted, already reaches out far enough
+to physically cover essentially the whole of CHW's own column space,
+title included — the same general SHAPE as B-44's own confirmed
+mechanism (two spans on the exact same logical row/line getting
+clustered or bounded together across a real but unrelated gap), here
+manifesting as whole-column consumption rather than a single
+mis-selected cell. Column-level confirmation: HHW's own extracted
+`anchors` are `MARK(x=486.6)`, `FLOWRATE VALVE GPM(x=844.15)`,
+`SIZE(x=967.7)`, `NOTES(x=1400.05)`, `GPM(x=1978.65)` — five columns,
+all sitting comfortably to the LEFT of CHW's own title (`x0=1709.52` per
+truth's own `bbox_px`, matching CHW's own raw `VALVE MARK` header token
+at `x=1749.8` closely) — so HHW's own COLUMN detection did not
+literally re-read CHW's own cells as extra HHW columns; the two tables'
+own column grids stay genuinely distinct even though their outer
+`region` boxes overlap. This narrows the mechanism specifically to
+whatever computes/uses a table's own bounding `region` (title-hunt or
+boundary detection) rather than the column/anchor or row-banding logic
+`bandDataRows`/`columnStarts` already cover — a real, useful distinction
+B-44's own investigation did not need to make, since that bug never
+touched region computation at all.
+
+**Not yet identified: the exact function that consumes CHW's own
+title/header block once HHW's own region is computed to cover it** — the
+`extractTableAt`/`findHeaderRow` chain (`sheetgraph.ts`) is the right
+place to keep looking (same file, same general "title-hunt walks a row
+and reads more of it than one table's own share" family as B-44's
+`joinGraphSpans` mechanism), but this was not traced to a specific
+line the way B-44 now is, and — given B-44's own precedent this same
+session, where a clean local fix cascaded into a corpus-wide dedup
+regression two levels away — should not be assumed shippable in
+isolation even once found.
+
+**Relationship to already-catalogued bugs.** Not B-28 (whose own fixed
+mechanism — a same-SHEET, same-title, same-row-key collision in
+`collapseEquivalentPrimaryTables`'s dedup identity — requires a same-
+titled rival ON THE SAME SHEET; the CHW-M table's own siblings are on
+different sheets entirely, `#44`/`#49`, and no second `CHW CONTROL
+VALVE SCHEDULE` claims sheet `#47`). Not B-25 (transposed-layout) or a
+page-role blackout (`#47` produces 8 real tables). Closest in shape to
+B-16/B-32's own "two side-by-side blocks, one consumed by the other's
+own face-weld" family, but not traced to the exact consuming mechanism
+under this pass's own time budget.
+
+**CORRECTION (2026-09-19):** the "vectorgrid's own `shapely
+polygonize_full` face-finder" guess two paragraphs up, and the "start
+from `#47`'s own raw vectorgrid RPC reply" suggestion just below, both
+assumed vectorgrid is the code path actually producing this sheet's
+extraction — confirmed FALSE this pass (see B-44's own correction):
+vectorgrid never successfully runs in this environment at all
+(`ModuleNotFoundError: No module named 'pdfplumber'` on every sheet,
+every attempt). B-44's own root cause (a `bandDataRows`/`joinGraphSpans`
+row-reading-order defect in `web/src/lib/sheetgraph.ts`) is CONFIRMED
+NOT to explain this entry — the same session that traced it also showed
+directly, by A/B measurement, that fixing it leaves a whole-table-vanish
+case (WP1's own `BOILER`/`EXPANSION_TANK`, the same shape as this
+entry's own CHW-M) completely unchanged. So this entry's own consuming
+mechanism remains genuinely unidentified, on the in-house
+`sheetgraph.ts` path rather than vectorgrid, likely somewhere in the
+same family as B-44's shared extractor (`extractAllTables`/
+`extractTableAt`/the reference-kind pass) rather than the Python
+sidecar — but WHICH function, and why it drops a whole ruled, correctly-
+titled table while its immediate physical sibling survives, was not
+re-traced this pass.
+
+**Why this is disclosed without a fix:** the exact consuming mechanism
+(title-collision vs. region-containment vs. something else in
+`sheetgraph.ts`'s own extraction/dedup path) was traced only to
+"CHW-M's own real, ruled geometry produces no table object at all while
+its physical neighbor does," not to a specific function and line the
+way B-44 now is — shipping a guess at the boundary between two real,
+adjacent tables risks exactly the kind of confidently-wrong table-region
+change this file's own standing rule exists to prevent, on the same
+shared, corpus-wide extraction engine B-44 traces (`sheetgraph.ts`, now
+correctly named — not the Python sidecar). A future pass should start
+from `#47`'s own raw `sheetgraph.ts` extraction trace for this one page
+(`graph.notes`, and direct `extractAllTables`/`extractReferenceTableAt`
+calls the way B-44's own investigation used), checked directly against
+both the CHW-M and HHW-M regions' own token/row lists, before touching
+any shared code.
+
+**This corrects a stale claim in this file's own "What is working"
+section below:** written 2026-09-13/14 against this exact document
+(`64 CHW + 99 HHW control valves`), that claim does not currently hold —
+whether it never held under `corpusTakeoff.mjs`'s own strict per-
+category counting (a different, stricter measurement than whatever
+produced the original claim) or genuinely regressed since, was not
+determined this pass; either way, the honest current count is 45/97,
+not 64/99, and the section below is corrected accordingly rather than
+left to mislead a future reader.
+
+### B-46 — the sixth, previously-unlooked-at `npm test` failure (WP1's own keyed-compile acceptance) is confirmed to be MORE instances of B-44 and B-45, not a new bug — one engineering investment, not six separate ones (CONFIRMED — same root causes as B-44/B-45, not independently investigated further)
+
+**Where:** `federal-mech.compile.json` (`federal-attachment4-mechanical.pdf`, the same document D04's own `VAV-16`/`17`/`43` gap already names), one of three sets `crossCorpusWorkflow.test.mjs`'s own `"WP1 keyed compile acceptance on ≥2 non-NAVFAC sets"` currently fails on (the other two, `bldg5406-hvac-demo.compile.json` and `itd-d1-lab.compile.json`, were not individually re-checked this pass).
+
+**Measured exactly.** The reviewed key (base `compile.json` plus
+`cross-set-compile-reviewed-corrections.json`'s own overlay) expects
+128 total HVAC items; the compiler currently returns 114, a 14-item gap
+spread across SIX separate families, not one: `FCU` (6 vs 7), `VAV`
+(55 vs 58 — the exact same 3-row gap D04's own entry already names),
+`CONDENSING_UNIT` (2 vs 6 — a MAJORITY of the real units missing),
+`BOILER` (0 vs 2 — the entire family, not a partial miss), `GRD`
+(21 vs 23), and `EXPANSION_TANK` (0 vs 2 — again the entire family).
+Direct inspection of `graph.tables` confirms the same two shapes
+already catalogued, not a third: `"AIR-COOLED CONDENSING UNIT
+SCHEDULE"` exists and extracts, but with only 2 of 6 real rows (`CU-4`,
+`CU-6`) — B-44's own partial-row-axis-phantom-split shape; no table
+titled `BOILER` or `EXPANSION` appears anywhere in `graph.tables` at
+all — B-45's own whole-table-vanishes shape, on a THIRD real
+document now (`baker-county-eoc-bidset.pdf#47` was B-45's own
+original case), confirming that mechanism generalizes rather than
+being specific to one sheet's own layout.
+
+**Why this matters for prioritization, not just completeness.** Five
+of the six `npm test` failures this session's own guard-green pass
+found (`D04`, `D05`, `D09`, `T-HVAC-01`, `T-VALVE-01`) were already
+traced to B-44 or B-45. This entry confirms the sixth (`WP1`) is
+ALSO the same two root causes, on a different document, not a
+distinct defect needing its own investigation — matching this file's
+own opening rule ("Fix nothing listed here without reading 'How these
+connect' first... fixing them individually would produce three patches
+where one structural change belongs"). **Correction (2026-09-19):**
+B-44's own fix does not live in `vectorgrid_rpc.py` — see its entry's
+own correction — but the claim here still holds under the corrected
+mechanism: a real fix to `sheetgraph.ts`'s own `bandDataRows` row-
+reading-order (B-44, now built and corpus-tested, held back only by
+what it exposes elsewhere) and whatever causes a real, ruled,
+correctly-titled table to produce zero candidates alongside a correctly-
+extracting sibling (B-45) would very likely close ALL SIX of this
+session's own `npm test` failures at once, not six separate ones —
+raising the value of that engineering investment considerably above
+what either entry's own individual writeup implied on its own, though
+still the same scope of work: careful, corpus-wide-tested changes to
+the single shared face-extraction engine every ruled table in this
+corpus depends on, not a quick patch.
+
+**Not fixed, not further investigated this pass** — the other two WP1
+sets (`bldg5406-hvac-demo`, `itd-d1-lab`) were not individually broken
+down the way `federal-mech` was here; a future pass confirming they
+ALSO reduce to B-44/B-45 (rather than assuming it) would complete this
+entry's own claim with the same rigor.
+
 ---
 
 ## What is working
@@ -5003,8 +5370,12 @@ against — compiled **333 items across 22 populated categories** with correct m
 - 28 FCUs, 25 VAVs, 4 boilers; air-cooled chillers (`CH-A1`) separated from heat-recovery
   chillers (`CH-MT1`)
 - 18 pumps with discipline vocabulary intact: `HRHWP`, `PCHWP`, `SCHWP`, `PHHWP`, `SHHWP`
-- 64 CHW + 99 HHW control valves named by served equipment (`CV-AHU-A1-CHW`,
-  `CV-FCU-A8-A-HHW`) — the valve-to-equipment relationship survives, which is the hard part
+- control valves named by served equipment (`CV-AHU-A1-CHW`, `CV-FCU-A8-A-HHW`) — the
+  valve-to-equipment relationship survives, which is the hard part. **Correction
+  (2026-09-19, see B-45):** this line originally claimed 64 CHW + 99 HHW, matching
+  this same document's own frozen truth; the current, honestly-measured count is 45
+  CHW + 97 HHW — B-45's own whole-table CHW-M dropout accounts for 19 of the 21-item
+  gap, with a further, separate small residual open on the HHW side.
 - air separators (`AS-CHW-M1`) separated from expansion tanks (`ET-CHW-MT1`); humidifiers
   from dehumidifiers
 - building segmentation (`-M-`/`-T-`/`-A-`) consistent across every family

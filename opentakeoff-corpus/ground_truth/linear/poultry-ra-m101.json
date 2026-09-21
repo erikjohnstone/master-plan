@@ -1,0 +1,48 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf",
+  "source_pdf_sha256": "a0271a5e3afa993cd58f4c263431a253a604092b43563c14b4c316cdda6c653f",
+  "sheet_id": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#10",
+  "sheet_number": "M-101",
+  "page": 10,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (USDA ARS U.S. National Poultry Research Center, Georgia), pulled from the corpus_2 GitHub Release during the same low-intensity corpus-hunting pass as e2508-gas-m103.json/ochc-chwsr-m102.json. Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.00 on this sheet, real vector CAD, safe to sweep.\n\nA text-anchor scan of M-101 found abundant real round-duct callouts (`20\"Ø`, `18\"Ø`, `16\"Ø`, `14\"Ø`, `12\"Ø`, `6\"Ø`, etc.) parsing cleanly with no grammar changes needed this pass (bare round-duct labels with no trailing system token, already-supported by `ROUND_RE`'s own optional system group). `trace_run` reaches a real 10.77 LF horizontal double-line round duct segment cleanly, and the automatic bind succeeds: `size:{kind:round,d_in:12}`, with `systems:[\"ductwork\"]` sourced from this sheet's own real CAD layer-name evidence (`stroke-family:layer-name`, confidence 0.5 -- the highest-confidence real-corpus size bind this session, since most others read `stroke-family:unclassified`). Confirmed via marked crop: a real double-line duct drawn with its own '12\"Ø' label printed directly on the run, from a real return-air-grille box connection (RAG-1, tag 385) to a real smooth-radius elbow turning down into a branch feeding two further round takeoffs below (RAG-1 tags visible in the same crop). Both `ambiguous` stops carry a real multi-candidate fan confirmed directly in the raw `trace_run` response's own `candidates` array (not just visual read): the grille-box end and the elbow end (3 real candidates there -- the elbow's own two branch takeoffs plus a near-straight continuation past it). A reseed from the same coordinate against the freshly re-loaded, already-committed raw PDF reproduced identical points, length, size, and system.",
+  "scope": "A single real 12-inch round return-air (RA) duct segment (10.77 LF) on the USDA ARS National Poultry Research Center's own mechanical plan, sheet M-101, from a real RAG-1 return-air-grille box connection to a real smooth-radius elbow turning down into a two-way branch feeding further round takeoffs. Explicitly OUT OF SCOPE: the branch's own continuation past the elbow (the two round takeoffs it feeds, and the near-straight third candidate direction at that same junction); the parallel `16\"Ø` supply-air duct running directly above this run in the same crop; every other round-duct run and SAG-1/RAG-1/EAG-1 grille connection on this same dense mechanical sheet (dozens of further candidates, not attempted this pass); every other sheet on this real 25-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "poultry-m101-ra-12in",
+      "description": "12-inch round return-air (RA) duct segment, from a real RAG-1 grille-box connection to a real elbow turning down into a two-way branch.",
+      "system": "RA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.313695987654321, 0.4373263888888889],
+        [0.32822145061728397, 0.4373263888888889],
+        [0.3365547839506173, 0.4373263888888889],
+        [0.35108024691358025, 0.4373263888888889]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 12 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 10.77,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 4.18, "size": { "kind": "round", "d_in": 12 }, "size_src": "manual" },
+            { "i": 1, "lf": 2.4, "size": { "kind": "round", "d_in": 12 }, "size_src": "manual" },
+            { "i": 2, "lf": 4.18, "size": { "kind": "round", "d_in": 12 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:12": 10.76 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "round:12": 10.76
+  },
+  "total_lf_all_runs": 10.77
+}

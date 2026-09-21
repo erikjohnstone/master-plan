@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf",
+  "source_pdf_sha256": "44cf96ab39e43346bc18edb0916a5f5b6c8d0d00c0692c38ffd0c1f8066c7a1d",
+  "sheet_id": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#7",
+  "sheet_number": "M-403",
+  "page": 7,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A genuinely fresh real project (ASC Open -- Associated Schools of Construction -- Mechanical Competition, LAMBDA Project entry, an 83-sheet real student design-build competition submission), pulled from the corpus_2 GitHub Release during the same low-intensity corpus-hunting pass as this session's other Run 83/87/89/90 goldens. Screened for image coverage first per Run 86's own established check: `imgRatio` reads 0.00 on this sheet, real vector CAD, safe to sweep.\n\nA text-anchor scan of M-403 found abundant real rectangular and round SA/RA duct callouts already in a fully-supported grammar (`18\"x18\" SA`, `24\"x18\" SA`, `18\"ø SA`, etc. -- no grammar change needed this pass). A grid sweep of several found a real, clean 18.52 LF straight `18\"x18\" SA` main duct segment: `size:{kind:rect,w_in:18,h_in:18}`, `systems:[\"SA\"]`, confidence 0 (lower than most of this session's other automatic binds, since both of its own stops are real `ambiguous` size-transition points rather than a clean dead_end/leader terminus -- `factors` read `[\"stroke-family:unclassified\",\"size-binding:beside\",\"ambiguous_stop\",\"layer-unclassified\",\"scale_unconfirmed\"]`). A marked crop confirms it visually and unambiguously: a plain, single-line straight duct run with its own `18\"x18\" SA` label centered directly on it, bounded on the left by a real size-down transition into an `18\"x12\" SA` branch and on the right by a real size-up transition into a `24\"x18\" SA` continuation -- both real, visually confirmed size-change points, matching this corpus's own established size-transition-riser-labeling-ambiguity boundary convention (see Douglas County/ITD-D3's own precedent), not an engine misread. This is one of the visually cleanest real candidates found this session (a simple straight duct with no elbow, no leader, no equipment clutter in the crop) despite its lower reported confidence score, which reflects the ambiguous-transition factor rather than any doubt about the trace itself. `resolveRunSegments` reproduces the identical single 18.52 LF segment and a reseed `trace_run` from a fresh coordinate against the freshly re-loaded, already-committed raw PDF reproduces identical points, length, size, and system exactly.\n\nA near-identical duct (same size, same 18.52 LF length, same ambiguous/ambiguous stop pattern) also appears on this project's own MD403 schematic-diagram sheet (page 35) -- almost certainly the same design element shown twice (a floor plan and a companion riser/duct diagram, a normal convention in a competition submission set) -- so only the M-403 floor-plan instance is used here to avoid authoring two goldens for what is effectively the same real duct run.",
+  "scope": "A single real 18x18-inch rectangular supply-air (SA) duct segment (18.52 LF) on the LAMBDA Project's own mechanical floor plan, sheet M-403, bounded on both ends by real, visually-confirmed size-transition points (a size-down splice into an 18\"x12\" SA branch on one end, a size-up splice into a 24\"x18\" SA continuation on the other). Explicitly OUT OF SCOPE: both adjoining differently-sized duct segments past each transition; the same duct's own apparent second appearance on this project's MD403 schematic-diagram sheet (page 35, not authored as a separate golden -- see review_basis); every other SA/RA/CHW/HHW run on this same dense 83-sheet competition set, not attempted this pass.",
+  "runs": [
+    {
+      "run_id": "lambda-m403-sa-18x18",
+      "description": "18x18-inch rectangular supply-air (SA) duct segment, a straight run bounded on both ends by real size-transition splices.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.2594158496732026, 0.48235479797979797],
+        [0.3274918300653595, 0.48235479797979797]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 18, "h_in": 18 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 18.52,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 18.52, "size": { "kind": "rect", "w_in": 18, "h_in": 18 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:18x18": 18.52 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:18x18": 18.52
+  },
+  "total_lf_all_runs": 18.52
+}

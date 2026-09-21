@@ -12,6 +12,7 @@
 // record (surface height / linear thickness defaults).
 import { closedMetrics, openLen, polyWithHolesMetrics } from "./geometry.js";
 import { flattenCurve } from "./curve.js";
+import { resolveRunSegments } from "./linear/run.ts";
 
 export function computeShapeMetrics(s, dims, upp, cond) {
   const pts = (s.verts_norm || []).map(([nx, ny]) => [nx * dims.w, ny * dims.h]);
@@ -29,9 +30,21 @@ export function computeShapeMetrics(s, dims, upp, cond) {
     return { area_sf: +(LF * h).toFixed(2), perimeter_lf: +LF.toFixed(2) };
   }
   if (s.measure_role === "linear") {
-    const LF = openLen(s.curved ? flattenCurve(pts) : pts) * u;
+    const curvedPts = s.curved ? flattenCurve(pts) : pts;
+    const LF = openLen(curvedPts) * u;
     const tIn = Number(cond?.thickness_in) || 0;
-    return { perimeter_lf: +LF.toFixed(2), area_sf: tIn > 0 ? +((LF * tIn) / 12).toFixed(2) : 0 };
+    const computed = { perimeter_lf: +LF.toFixed(2), area_sf: tIn > 0 ? +((LF * tIn) / 12).toFixed(2) : 0 };
+    // #linear-takeoff (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md WP1.1):
+    // additive only — a linear shape with no `run` block (every shape ever
+    // committed before this existed, and every plain Linear-tool trace
+    // today) computes EXACTLY the two fields above, byte-identical to
+    // before this file changed. `computed.run` only appears when the shape
+    // actually carries an authored `run` block.
+    if (s.run) {
+      const run = resolveRunSegments(curvedPts, u, s.run);
+      if (run) computed.run = run;
+    }
+    return computed;
   }
   // #137 — a shape carrying verts_norm_holes (a reconciled Cut Out) nets its
   // hole(s) out of area and adds their boundary into perimeter, so a later

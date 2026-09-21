@@ -1,0 +1,13 @@
+{
+  "table_grade": "V",
+  "table_source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A2/A5.",
+  "hr_per_lb": { "value": 0.023, "note": "44 lb/hr galvanized low-pressure duct", "source": "https://www.wendes.com/blog/methods-for-calculating-ductwork-labor/" },
+  "lf_per_man_day": {
+    "rect": { "value": 20, "source": "https://mepacademy.com/sheet-metal-field-labor-productivity/" },
+    "round": { "value": 40, "source": "https://mepacademy.com/sheet-metal-field-labor-productivity/" }
+  },
+  "fitting_weight_factor": { "value": 1.40, "note": "40% fitting weight factor, standard office building", "source": "https://thevirtualestimation.com/blog/hvac-estimating-explained-ductwork-equipment-controls-commissioning/" },
+  "seam_joint_allowance": { "value": 1.15, "note": "SMACNA-attributed seam/flange/reinforcement allowance per a vendor calculator, not a licensed SMACNA value", "source": "https://calcformula.com/duct-weight-calculator/" },
+  "scrap_pct": { "value": 10, "note": "field-fabricated / complex fittings / lined sections can justify 15%+", "source": "https://hvacestimatingservices.org/ductwork-estimating-services/" },
+  "elbow_labor_multiplier": { "value": 2.5, "grade": "M", "note": "rule of thumb, unverified: an elbow ≈ 2-3× the labor of an equal-length straight section", "source": "plans/03-research/02-mep-linear-estimating-math-and-standards.md A5" }
+}

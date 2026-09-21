@@ -14,6 +14,7 @@ __pycache__/
 venv/
 server/.venv/
 .venv-bas/
+.venv-sidecar/
 bas_engine/build/
 bas_engine/*.egg-info/
 bas_engine/.mypy_cache/

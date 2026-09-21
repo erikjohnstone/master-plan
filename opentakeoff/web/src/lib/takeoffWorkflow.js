@@ -14,7 +14,7 @@
  * hardcode sheet numbers, building names, or locked counts.
  */
 
-/** @typedef {"complete_bas_takeoff"|"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"schedule_plan_reconcile"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
+/** @typedef {"complete_bas_takeoff"|"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"schedule_plan_reconcile"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"linear_run"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
@@ -209,18 +209,34 @@ export function classifyTakeoffIntent(goal) {
     return "symbol_sweep";
   }
 
+  // Real-world installed qty / measure that must refuse when the sheet is unscaled
+  // — versus a routed system's own LF (#linear-takeoff, opened 2026-09-16):
+  // these used to be the SAME bucket ("installed length|LF|measure|duct
+  // length" co-occurring with any "scale" word), which routed a plain
+  // "trace this duct run for its LF" ask into the scale-gate demonstration
+  // workflow instead of a linear-measurement one, just because it mentioned
+  // scale in passing. Only an EXPLICIT refusal/gate phrase — not any
+  // co-occurring "scale" word — still means "this goal is testing the gate."
+  // Checked BEFORE connectivity below: a length/LF ask on a routed system is
+  // an unambiguous linear-measurement signal that "trace the duct" alone
+  // (connectivity's own trigger) does not carry — a goal with no such
+  // length/LF/measure word never reaches this block (lengthAsk stays false)
+  // and falls through to connectivity exactly as before.
+  const explicitScaleRefusal = /\b(?:unscaled|no\s+scale|set_scale|scale\s+first)\b/i.test(g);
+  const lengthAsk = /\b(?:installed\s+(?:qty|quantity|length)|linear\s+feet|\bLF\b|measure|duct\s+length|pipe\s+length|length)\b/i.test(g);
+  const routedSystem = /\b(?:duct(?:work)?|pipe|piping|conduit|cable|tubing|trunk)\b/i.test(g);
+  if (lengthAsk && routedSystem && !explicitScaleRefusal) {
+    return "linear_run";
+  }
+  if (explicitScaleRefusal || (lengthAsk && /\b(?:scale|refuse|calibrat)\b/i.test(g))) {
+    return "scale_refuse";
+  }
+
   // Valve↔equipment (or pipe/duct) connectivity via drawn linework — not proximity.
   if (/\bconnectivity\b/i.test(g)
     || (/\btrace\b/i.test(g) && /\b(?:valve|pipe|duct|equipment|connect)\b/i.test(g)
       && !/\bpoints?\s*list\b/i.test(g))) {
     return "connectivity";
-  }
-
-  // Real-world installed qty / measure that must refuse when the sheet is unscaled.
-  if (/\b(?:unscaled|no\s+scale|set_scale|scale\s+first)\b/i.test(g)
-    || (/\b(?:installed\s+(?:qty|quantity|length)|linear\s+feet|\bLF\b|measure|duct\s+length)\b/i.test(g)
-      && /\b(?:scale|refuse|calibrat)\b/i.test(g))) {
-    return "scale_refuse";
   }
 
   // Named HVAC schedule-family takeoffs (pump, CRAH, diffuser, …) — phrase
@@ -542,8 +558,18 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     name === "query_table" && !out?.error && args?.row_key != null).length;
   const hasCorpusCompile = log.some(({ name, out }) =>
     name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
+  // A compile_corpus_takeoff call now reconciles schedule-vs-plan itself
+  // (agentCompileCorpusTakeoff chains it deterministically and stamps
+  // reconcile_rows on its own result) — that satisfies grounding exactly
+  // like a standalone reconcile_schedule_plan call. Without this, the phase
+  // gates below never saw it (callLog only holds actual tool calls, not
+  // compile's internal fetch), so the model was forced through a redundant,
+  // per-MARK sweep_schedule_row loop even after the compile had already
+  // grounded everything in one bulk pass — live-observed taking 7+ minutes
+  // of individual tag sweeps after a compile that itself finished in ~1.
   const hasReconcile = log.some(({ name, out }) =>
-    name === "reconcile_schedule_plan" && !out?.error && Array.isArray(out?.rows));
+    (name === "reconcile_schedule_plan" && !out?.error && Array.isArray(out?.rows))
+    || (name === "compile_corpus_takeoff" && !out?.error && Number.isFinite(out?.reconcile_rows)));
   const hasSweep = log.some(({ name, out }) =>
     name === "sweep_schedule_row" && !out?.error);
   const titleScanCount = log.filter(({ name, out, args }) => {
@@ -597,8 +623,10 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
       };
     }
     // Pillar C: points / valve / damper takeoffs need plan paint on served marks —
-    // schedule scrape alone is incomplete.
-    if (intent === "corpus_bas" || intent === "corpus_valves") {
+    // schedule scrape alone is incomplete. That grounding is now satisfied by
+    // the compile's own automatic reconcile (hasReconcile, above) — skip the
+    // spot_cites/paint detour entirely when it already ran.
+    if ((intent === "corpus_bas" || intent === "corpus_valves") && !hasReconcile) {
       if (rowKeyCites < 1) {
         return {
           phase: "spot_cites",
@@ -631,6 +659,19 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         nextMove: intent === "corpus_bas"
           ? "Emit the points takeoff from compile totals (AI/AO/BI/BO, alarm/trend when printed), list served_equipment joins, and cite painted plan marks. Disclose SOO/schematic-only gaps — never invent points or plan qty."
           : "Emit the valve/damper takeoff from compile totals with contractor columns, installed plan qty from sweeps, and painted cites. Never invent plan qty.",
+        blockReason: null,
+      };
+    }
+    if (intent === "corpus_bas" || intent === "corpus_valves") {
+      // hasReconcile true: the compile already grounded every tag in one bulk
+      // pass (Installed Qty / Compare / Symbol / Tag / diagram evidence are
+      // already in the panel) — do not re-derive that per-MARK.
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: intent === "corpus_bas"
+          ? "The compile already reconciled schedule vs. plan. Emit the points takeoff from compile totals and its reconcile_rows, and cite the already-painted plan marks. Do not re-sweep tags that reconcile already grounded."
+          : "The compile already reconciled schedule vs. plan. Emit the valve/damper takeoff from compile totals and its reconcile_rows, with contractor columns and the already-grounded installed plan qty. Do not re-sweep tags that reconcile already grounded.",
         blockReason: null,
       };
     }
@@ -1038,6 +1079,42 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         phase: "answer",
         allowedTools: null,
         nextMove: "Report the walked status with cites. If ambiguous, name every candidate — never pick one. If refused, copy the tool reason.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "linear_run") {
+    // #linear-takeoff (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md): a routed
+    // system's own LF — duct, pipe, conduit, cable, tubing. The dedicated
+    // engine (click-to-trace, size/vertex/fitting resolution, assemblies)
+    // does not exist yet; this routes the goal honestly to what IS real
+    // today rather than the scale-gate-demonstration workflow it used to
+    // fall into just for mentioning "scale."
+    const allowed = [
+      "list_sheets", "sheet_graph", "set_scale", "measure_line", "one_click",
+      "trace_connectivity", "symbol_sweep", "sweep_schedule_row", "highlight_citation",
+    ];
+    const hasScale = (callLog || []).some(({ name, out }) =>
+      name === "set_scale" && out && !out.error);
+    const hasMeasure = (callLog || []).some(({ name, out }) =>
+      ["measure_line", "trace_connectivity"].includes(name) && out && !out.error);
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (!hasScale && !hasMeasure) {
+        return {
+          phase: "survey",
+          allowedTools: allowed,
+          nextMove: "Call set_scale before any real-world length. Trace an open run with measure_line for its LF, "
+            + "or follow drawn pipe/duct linework from a seed with trace_connectivity. "
+            + "No dedicated size/vertex/fitting/assembly resolution exists yet — never invent a size, fitting, "
+            + "or per-foot/per-vertex/per-run quantity beyond what these tools actually return.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Report the measured LF and cite. If a tool refused for missing scale, copy that refusal verbatim.",
         blockReason: null,
       };
     })());

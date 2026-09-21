@@ -1,0 +1,43 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf",
+  "source_pdf_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#14",
+  "sheet_number": "MH121",
+  "sheet_title": "ATCT - MECHANICAL DUCTWORK PLAN - FLR 1",
+  "page": 14,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Fourteenth golden, a THIRD sheet mined from the same NAVFAC Cherry Point ATC Tower project (development goldens now on MH102 and MH121, held-out on MH101 -- all three deliberately different sheets). This is the tower's own diagonal-footprint floor 1 ductwork plan. A wide render crop near an exhaust fan (EF-T1) showed a real, clean 6-inch round exhaust-air (EA) duct connector: a diagonal segment from a real elbow at the fan's own round duct connection down to a second real elbow where it turns to run horizontally toward another branch.\n\n`trace_run` reaches this segment cleanly (6.37 LF, matching the visible diagonal run in the crop) with BOTH ends `ambiguous` at the two real elbows (each a genuine direction change, not an engine misread -- confirmed via a marked render crop showing both endpoints sitting exactly on the drawn corners). Unlike this project's other rejected pipe candidates this session (MP104, M-301, both `stroke-family:unclassified`), this segment's own stroke family resolved to `pen-weight-prior` with `confidence:0.5` -- a partial improvement, but `size_missing` still applies (this project's own file-wide blank-layer-names cause, already established by the MH102 golden, continues to block automatic size/system binding even where stroke classification itself partially succeeds). A manual size override is used, following the same file-specific precedent `navfac-mh101-heldout.json` and `navfac-mh102.json` both already established. The run's own bench-style reseed (40% into its single segment) was independently re-verified live and reproduces the identical result.",
+  "scope": "A single real 6-inch round exhaust-air (EA) duct connector (6.37 LF) on the NAVFAC Cherry Point ATC Tower project's own Mechanical Ductwork Plan - Floor 1, sheet MH121, from a real elbow at exhaust fan EF-T1's own duct connection to a real elbow where the duct turns to run horizontally toward another branch. Explicitly OUT OF SCOPE: the horizontal duct run beyond the second elbow; the fan connection and grille assembly at EF-T1 itself; every other run on this real 75-sheet plan set (only sheet 14/MH121 sampled, in addition to the pre-existing held-out sheet 6/MH101 and this session's own sheet 7/MH102); this file's own two other rejected candidates this session (an unbound chilled-water pipe run on sheet MP104, and an unbound chilled-water main on a mechanical-room section, sheet M-301) -- both real, disclosed, not used.",
+  "runs": [
+    {
+      "run_id": "navfac-mh121-ea-duct",
+      "description": "6-inch round exhaust-air (EA) duct connector, from a real elbow at exhaust fan EF-T1's own duct connection to a real elbow turning toward another branch.",
+      "system": "EA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.3333333333333333, 0.5950126262626263],
+        [0.3002450980392157, 0.5437815656565657]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "round", "d_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 6.37,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 6.37, "size": { "kind": "round", "d_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "round:6": 6.37 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "round:6": 6.37 },
+  "total_lf_all_runs": 6.37
+}

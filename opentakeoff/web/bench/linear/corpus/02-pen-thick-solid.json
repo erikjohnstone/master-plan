@@ -1,0 +1,52 @@
+{
+ "name": "02-pen-thick-solid",
+ "hardCase": "pen-weight (thick)",
+ "pdf": "../synthetic/02-pen-thick-solid.pdf",
+ "page": 1,
+ "scale": 2,
+ "ptPerFt": 48,
+ "run": {
+  "points_ft": [
+   [
+    18.76,
+    11.74
+   ],
+   [
+    18.76,
+    24.49
+   ],
+   [
+    33.1,
+    24.49
+   ],
+   [
+    33.1,
+    12.27
+   ],
+   [
+    23.61,
+    12.27
+   ],
+   [
+    23.61,
+    24.97
+   ]
+  ],
+  "system": "SA",
+  "size": {
+   "kind": "rect",
+   "w_in": 16,
+   "h_in": 8
+  }
+ },
+ "expected": {
+  "segment_lf": [
+   12.76,
+   14.34,
+   12.22,
+   9.49,
+   12.69
+  ],
+  "total_lf": 61.5
+ }
+}

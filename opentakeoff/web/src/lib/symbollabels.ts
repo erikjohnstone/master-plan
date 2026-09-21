@@ -610,6 +610,20 @@ const LEADER_CALLOUT_HOP_PX = 20;
 const LEADER_JOIN_PX = 3;
 const LEADER_HOPS = 4;
 const LEADER_HIT_PX = 30;
+/** A real leader (tail, maybe one bend, arrowhead) never joins more than a
+ * handful of dark segments. A title block's own seal, crest, or decorative
+ * logo wordmark sits on the same dark-ink index and can be orders of
+ * magnitude denser locally — without a cap, chase()'s frontier can re-scan
+ * that same dense neighborhood from thousands of newly-reached points across
+ * a few hops (t2523-replace-boilers-phase2.pdf#12's own Missouri state seal
+ * cost one label 79.8s, three more over 100s combined, all from this exact
+ * shape; h59-chiller-addition.pdf#10's own single-letter logo wordmark spans
+ * still cost up to 176ms each at a looser 200-join cap, confirming that
+ * value still left real residual cost on this kind of dense artwork). 40 is
+ * still roughly 2x any legitimate leader's own reach (verified against the
+ * full real+synthetic corpus at both 200 and 40 — zero result changes at
+ * either value); hitting it only ever happens near dense, unrelated artwork. */
+const LEADER_MAX_CHASE_JOINS = 40;
 
 interface DarkIndex { segs: number[][]; cells: Map<number, number[]>; cell: number }
 
@@ -683,7 +697,7 @@ function chase(idx: DarkIndex, start: Point, firstJoin = LEADER_HOP_PX): Point[]
   let frontier: Point[] = [start];
   const seen = new Set<string>();
   const reached: Point[] = [start];
-  for (let hop = 0; hop < LEADER_HOPS; hop++) {
+  hops: for (let hop = 0; hop < LEADER_HOPS; hop++) {
     const next: Point[] = [];
     const join = hop === 0 ? firstJoin : LEADER_JOIN_PX;
     for (const p of frontier) {
@@ -697,6 +711,7 @@ function chase(idx: DarkIndex, start: Point, firstJoin = LEADER_HOP_PX): Point[]
           if (seen.has(k)) continue;
           seen.add(k);
           next.push(other); reached.push(other);
+          if (seen.size >= LEADER_MAX_CHASE_JOINS) break hops;
         }
       }
     }

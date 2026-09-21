@@ -1,0 +1,44 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+  "source_pdf_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "sheet_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#3",
+  "sheet_number": "M1.0",
+  "page": 3,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- low-intensity corpus-hunting pass, user-directed holding action)",
+  "date": "2026-09-18",
+  "review_basis": "A seventh real, independent duct segment authored from the same sheet as the sibling `itd1-sa-m10*.json` goldens (M1.0 of the ITD District 1 Laboratory Building), completing Run 101's own disclosed reserve of bench-seed-verified candidates on this unusually productive sheet (the one remaining candidate, a 0.53 LF stub, was too short to be worth authoring). A real, clean 5.02 LF vertical `12\"x12\"` duct in Material Lab 118: `size:{kind:rect,w_in:12,h_in:12}`, confidence 0. A marked crop confirms it visually: a real duct running between two real diffuser-branch takeoffs (both feeding D-3, 360 CFM x2, `12\"ø`, via flex connectors) and a real SAV/HC valve connection above. `resolveRunSegments` reproduces the identical single segment and the bench-style seed reproduces the identical trace exactly, confirmed before authoring per this session's own standard practice. This is the seventh and last golden authored from this one sheet this session; its own real reserve of easy, bench-seed-verified candidates is now exhausted at the sample size actually swept (nineteen of the sheet's own 56 real callouts) -- a wider sweep of the remaining ~37 callouts was not attempted, so further real candidates may still exist on this sheet, just not pursued this pass.",
+  "scope": "A single real 12x12-inch rectangular supply-air (SA) duct segment (5.02 LF) on the ITD District 1 Laboratory Building's own mechanical plan, sheet M1.0, in Material Lab 118, between two real diffuser-branch takeoffs and a real SAV/HC valve connection. Explicitly OUT OF SCOPE: the duct's own continuation past either boundary; the sibling `itd1-sa-m10*.json` goldens on this same sheet; the declined 0.53 LF stub candidate; the ~37 real duct-size callouts on this same sheet not yet swept at all; every other sheet on this real 29-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "itd1-m10-sa-12x12b",
+      "description": "12x12-inch rectangular duct segment in Material Lab 118, between two real diffuser-branch takeoffs and a real SAV/HC valve connection.",
+      "system": "SA",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.39861111111111114, 0.7136863425925926],
+        [0.39861111111111114, 0.6744502314814815]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "rect", "w_in": 12, "h_in": 12 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 5.02,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 5.02, "size": { "kind": "rect", "w_in": 12, "h_in": 12 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "rect:12x12": 5.02 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": {
+    "rect:12x12": 5.02
+  },
+  "total_lf_all_runs": 5.02
+}

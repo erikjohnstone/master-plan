@@ -14,6 +14,9 @@ import { prepareBasWorkflowReplay, BAS_WORKFLOW_REPLAY_RULE } from '../src/lib/b
 import { readBasSnapshotPlan } from '../src/lib/basSnapshot.ts';
 import { canonicalBasJson } from '../src/lib/basCanonical.ts';
 import { basSnapshotLifecycleExport } from '../src/lib/basSnapshotLifecycle.ts';
+import { installWebLocksPolyfill } from './helpers/webLocksPolyfill.ts';
+
+installWebLocksPolyfill();
 beforeEach(() => { globalThis.indexedDB = new IDBFactory(); setActiveStore(); });
 const declaration = { operation_id: uuid(975), reviewer: 'Controlled browser unit test', reason: 'No real PDF or real operator approval', declared_at: '2026-09-10T20:00:00.000Z' };
 async function noCalculationTransport(_url: unknown, request: RequestInit = {}) {

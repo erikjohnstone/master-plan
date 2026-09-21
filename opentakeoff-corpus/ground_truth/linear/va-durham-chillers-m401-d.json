@@ -1,0 +1,49 @@
+{
+  "schema": "opentakeoff.linear_takeoff_ground_truth.v1",
+  "source_pdf": "opentakeoff-corpus/raw/va-durham-chillers-ahu.pdf",
+  "source_pdf_sha256": "8ca2b79d82a7b595c5ad3a7bcfcb64e829b96e20b963c5f507738b6fb3156274",
+  "sheet_id": "va-durham-chillers-ahu.pdf#16",
+  "sheet_number": "M-401",
+  "sheet_title": "MECHANICAL ENLARGED NEW WORK PLANS",
+  "page": 16,
+  "tier": "development",
+  "annotator": "claude-sonnet-5 (opentakeoff-corpus/goals/LINEAR_TAKEOFF.md GATE 3 autonomous coordinator -- new-corpus pass, user-directed)",
+  "date": "2026-09-18",
+  "review_basis": "Nineteenth golden, a fourth candidate on the same rich VA Durham sheet M-401 -- this one the most structurally complex real capture of this whole session: a genuine multi-vertex 6-inch glycol-return (GLR) pipe run with a real TEE branch partway along its length (not at either endpoint), two real 90-degree elbows, and a TRUE `dead_end` at BOTH physical extremities -- the cleanest possible stop-pair, with no `ambiguous` reasoning to second-guess anywhere in the path. Found via a grid sweep around several `GLR` text anchors on the same sheet (a `6\" GLR PUMP HEADER` anchor near this same run's own top label), after two nearby candidates on this pass were checked and correctly rejected first: a `6\" GLR PUMP HEADER` label whose own leader arrow (the annotation line connecting the label text to its check-valve symbol) was itself mistakenly traced by `trace_run` as if it were a real pipe -- confirmed via a tightly-zoomed marked crop showing the 'traced' segment sitting exactly on the leader arrow, not on the real (vertical) pipe visible just beside it, a genuine engine false-positive in the same `Finding 6` family this session's own doc already tracks (real, drawn, non-MEP-intent linework read with confidence) -- and a cluster of isolated AHU-2 connection-point symbols (individual valve icons with no drawn pipe run between them at all) that had no linear run to trace in the first place.\n\n`trace_run` reaches the real run cleanly (17.56 LF total across 4 segments, `points`: a vertical drop through the pump manifold, a real tee where a branch ties in, a short elbow-to-elbow jog, then a long vertical run up to a header near the sheet's own printed `6\" GLR` label) with `dead_end` confirmed at both the bottom (near VFD equipment) and the top (near the header) via a marked render crop showing the full path matches the visible dashed pipe exactly, including its real tee and both elbows. This file's own file-wide missing-PDF-layer-names cause applies here too -- a manual size override is used. The run's own bench-style reseed (40% into its own LONGEST segment, the bench's own convention) was independently re-verified live and reproduces the identical 5-point path.",
+  "scope": "A single real 6-inch existing glycol-return (GLR) pipe run (17.55 LF across 4 segments, one real tee and two real elbows) on the same VA Durham 'Replace Chillers for AHU 1 & 2' project's own mechanical enlarged new-work plan, sheet M-401, from a real dead-end near VFD equipment at the bottom, through a real tee branch and two elbows, to a real dead-end near a header at the top. Explicitly OUT OF SCOPE: the real tee's own branch line partway along the run; two rejected candidates from the same pass (a mistraced text-leader-arrow near a different `6\" GLR PUMP HEADER` label, and a cluster of isolated AHU-2 connection symbols with no drawn pipe run), both real, disclosed, not used; every other run on this real 28-sheet plan set.",
+  "runs": [
+    {
+      "run_id": "va-durham-m401d-glr-6in",
+      "description": "6-inch existing glycol-return (GLR) pipe run with a real tee branch and two real elbows, from a real dead-end near VFD equipment to a real dead-end near a header.",
+      "system": "GLR",
+      "measure_role": "linear",
+      "origin": { "method": "manual" },
+      "verts_norm": [
+        [0.555241402116402, 0.3739351851851852],
+        [0.555241402116402, 0.3577314814814815],
+        [0.555241402116402, 0.35217592592592595],
+        [0.5780588624338624, 0.35217592592592595],
+        [0.5780588624338624, 0.11328703703703703]
+      ],
+      "run": {
+        "size_overrides": {
+          "0": { "kind": "pipe", "nps_in": 6 }
+        }
+      },
+      "computed": {
+        "perimeter_lf": 17.55,
+        "run": {
+          "segments": [
+            { "i": 0, "lf": 0.97, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" },
+            { "i": 1, "lf": 0.33, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" },
+            { "i": 2, "lf": 1.92, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" },
+            { "i": 3, "lf": 14.33, "size": { "kind": "pipe", "nps_in": 6 }, "size_src": "manual" }
+          ],
+          "totals_by_size": { "pipe:6": 17.55 }
+        }
+      }
+    }
+  ],
+  "totals_by_size_all_runs": { "pipe:6": 17.55 },
+  "total_lf_all_runs": 17.55
+}
