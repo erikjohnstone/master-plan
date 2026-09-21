@@ -472,6 +472,22 @@ export const AGENT_TOOL_DEFS = [
     input_schema: { type: "object", properties: {}, required: [] },
   },
   {
+    name: "list_tags",
+    description: "The set-wide DRAWN-TAG census: every equipment/device tag the text layer recognizes on every sheet, any role — not just the ones a schedule row already names. Answers 'count every FCU tag' and 'which drawn tags have no schedule row', which sheet_graph's own table index cannot. Each hit carries its identity key (hyphen/space-insensitive — 'P-1'/'P1' share one key), its instance-stripped family, and how it was recognized (a plain match, a CAD glyph-split rejoin, a stacked prefix-over-number bubble, a key-free compound run, or a run carrying an authored count multiplier). Excludes by default: text sitting inside a schedule table's own region (a row/column label, not a drawn field instance — pass include_tables:true) and sheet-number cross-reference callouts (pass include_callouts:true). Filter with sheet/family/key/role; omit all four for the whole set. Disclosure only — a plan-role hit here is a drawn LOCATION, never proof of installed quantity.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string", description: "Restrict to one loaded sheet key." },
+        family: { type: "string", description: "Restrict to one instance-stripped family, e.g. 'FCU', 'VAV-E'." },
+        key: { type: "string", description: "Restrict to one exact identity, e.g. 'FCU-1' — hyphen/space-insensitive." },
+        role: { type: "string", enum: ["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"], description: "Restrict to one sheet role." },
+        include_tables: { type: "boolean", description: "Include text sitting inside a schedule table's own region." },
+        include_callouts: { type: "boolean", description: "Include sheet-number cross-reference callouts." },
+      },
+      required: [],
+    },
+  },
+  {
     name: "resolve_tag",
     description: "Resolve one tag (a room number OR an equipment/schedule mark, e.g. '134', 'CV-3' for a control valve, or 'VAV-12' for a variable-air-volume box) against the sheet graph's tables: returns the schedule row(s) it's defined by, with citations (which sheet, which cell). Refuses with a reason rather than guessing when the tag isn't found, is ambiguous, or the row states nothing usable. Call sheet_graph first if you haven't already this run.",
     input_schema: {
@@ -1068,6 +1084,13 @@ export async function executeAgentTool(ctx, name, args) {
 
       case "sheet_graph":
         return await ctx.sheetGraph();
+
+      case "list_tags":
+        if (typeof ctx.listTags !== "function") return { error: "list_tags is not wired in this session." };
+        return await ctx.listTags({
+          sheet: args.sheet || null, family: args.family || null, key: args.key || null, role: args.role || null,
+          include_tables: args.include_tables === true, include_callouts: args.include_callouts === true,
+        });
 
       case "resolve_tag": {
         const tag = (args.tag || "").trim();

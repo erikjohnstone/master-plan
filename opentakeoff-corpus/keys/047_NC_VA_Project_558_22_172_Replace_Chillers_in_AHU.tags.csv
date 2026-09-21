@@ -1,0 +1,53 @@
+sheet,tag,role,in_table,note
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#11,AHU-1,plan,false,"Rectangle equipment-footprint glyph east of Building 18 on the mechanical site plan, labeled AHU-1. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#11,AHU-2,plan,false,"Rectangle equipment-footprint glyph west of the chiller/tank cluster, labeled AHU-2. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#11,CH-1,plan,false,"Hatched-cylinder chiller glyph (12-circle grid pattern) labeled CH-1, next to GST-1. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#11,CH-2,plan,false,"Second identical chiller glyph labeled CH-2, adjacent to CH-1. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#11,GST-1,plan,false,"Small tank/circle glyph labeled GST-1, left of CH-1/CH-2. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,AS-1,plan,false,Air separator — underlined tag beside a small circular device symbol in the glycol/piping equipment cluster near the chillers.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,CH-1,plan,false,New chiller #1 — underlined tag directly beside the drawn tube-bundle chiller symbol on the roof plan.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,CH-2,plan,false,"New chiller #2 — underlined tag beside the second chiller symbol, adjacent to CH-1."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,ET-1,plan,false,Expansion tank — underlined tag beside a small circular device symbol next to AS-1.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,EX AHU-1,plan,false,"Existing AHU-1 unit outline, labeled/underlined directly on the roof plan (and referenced again in the small 'EX Piping Along EX AHU-1' schematic detail at the top of the sheet — same physical unit, listed once)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,EX AHU-2,plan,false,"Existing AHU-2 unit outline, labeled/underlined directly on the roof plan (also referenced in the 'EX Piping Along EX AHU-2' schematic detail — same unit, listed once)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,GST-1,plan,false,Glycol feed/storage tank — underlined tag beside a drawn tank-shaped symbol.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,ODU-1,plan,false,Underlined tag beside a rectangular device symbol (deaerator/outdoor dosing unit) in the same equipment cluster.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#15,P-804,plan,false,Pump — underlined tag with leader line to a circular pump/valve-actuator symbol near coded-note hexagon '1'.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,EX AHU-2,plan,false,"Large rectangle labeled 'EX AHU-2' at plan left, the existing AHU-2 footprint (EX = existing). Core id AHU-2. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,EX. MCC-N,plan,false,Rectangle glyph at bottom right labeling the existing motor control center referenced in coded note 1 (MCC-N). Core id MCC-N. Unique instance.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,PGCP-1,plan,false,"Small dashed box with leader arrow, propylene glycol control panel. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,PGCP-2,plan,false,"Second small dashed box with leader arrow, adjacent to PGCP-1. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,RX ACCH-1,plan,false,"Second dashed demolition box, larger, right of the unistrut pump rack, with keynote bubbles 2/3. Core id ACCH-1. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,RX ACCH-2,plan,false,"Dashed demolition box (existing air-cooled chiller #2 to be removed, RX = remove existing) with keynote bubbles 2/3 above it. Core id ACCH-2. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,RX GST,plan,false,Dashed demolition circle (existing glycol storage tank to be removed) at far right of the roof plan. Unique instance.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,SGCP #1,plan,false,"Leader arrow into the 3rd of 4 pump symbols inside the dashed unistrut-rack box. Unique instance, literal text differs from SGCP-1 (space+# vs hyphen)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,SGCP #2,plan,false,Leader arrow into the 2nd of 4 pump symbols in the same rack. Unique instance.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,SGCP-1,plan,false,"Small dashed box with leader arrow near top, distinct from the SGCP #1/#2 tags below (different literal text, different glyph). Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,SGCP-2,plan,false,"Second small dashed box with leader arrow, below SGCP-1. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,UNIT PUMP A,plan,false,"Leader arrow into the 4th (rightmost) pump symbol in the unistrut rack, naming the physical pump unit. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#24,UNIT PUMP B,plan,false,Leader arrow into the 1st (leftmost) pump symbol in the same rack. Unique instance.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,AHU-2,plan,false,"Existing air handling unit, large rectangular box symbol, roof plan (view 1 / 1-EP101)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,CH-1,plan,false,"Chiller unit, coil-grid box symbol, roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,CH-2,plan,false,"Chiller unit, coil-grid box symbol, roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,DS ODU-1,plan,false,"Disconnect switch bracket symbol next to VFD-P-3, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,EX. MCC-N,plan,false,"Existing motor control center panel box near stair/roof access, arrow-labeled 'EX. MCC-N' (text spans show 'EX. MCC' + '-' + 'N' as one label)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,GMU-1,plan,false,"Equipment unit referenced by arrow into the sensor circle area between IDU-1/IDU-2, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,GST-1,plan,false,"Storage tank symbol (circle glyph) between AHU-2/ODU-1, roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,HPM,plan,false,"Electrical panel box (dark-filled rectangle) at bottom of enlarged roof plan, distinct panel object (also referenced in coded note 7 as 'PANEL HPM')."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,IDU-1,plan,false,"Indoor unit box symbol (mini-split style), enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,IDU-2,plan,false,"Indoor unit box symbol, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,LPM,plan,false,"Bare 'LPM' arrow-labels the white-outlined panel box adjacent to HPM (the panel object itself, distinct from the LPM-# circuit callouts below)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,ODU-1,plan,false,"Outdoor condensing unit, box/cross-hatch symbol, roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,P-1,plan,false,"Pump glyph, top row of enlarged roof plan (view 3)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,P-2,plan,false,"Pump glyph, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,P-3,plan,false,"Pump glyph, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,TLPM,plan,false,"Box-with-'T' transformer symbol labeled TLPM (with hex keynote 8 beside it), enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,TS IDU-1,plan,false,"Sensor/thermostat circle glyph overlapping IDU-1 symbol, labeled 'TS IDU-1' (S subscript P beside it)."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,TS IDU-2,plan,false,Sensor/thermostat circle glyph overlapping IDU-2 symbol.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,VFD-P-1,plan,false,"VFD box symbol below pumps, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,VFD-P-2,plan,false,"VFD box symbol, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#25,VFD-P-3,plan,false,"VFD box symbol, enlarged roof plan."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#5,AHU-2,plan,false,"Drawn as 'AHU-2 (E)' labeling a hatched equipment-footprint box on the roof/dunnage framing plan (existing AHU-2). '(E)' is the standard existing-condition suffix used throughout this sheet on structural members too, not part of the tag id. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#5,CH-1,plan,false,"Labels a hatched chiller footprint box on the plan, matches coded note 6 (chiller). Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#5,CH-2,plan,false,"Second hatched chiller footprint box, adjacent to CH-1. Unique instance."
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#5,GST-1,plan,false,Labels a circular tank glyph between the two structural columns near CH-1/CH-2; matches coded note 7 (propylene glycol storage tank). Unique instance.

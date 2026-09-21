@@ -1,0 +1,55 @@
+sheet,tag,role,in_table,note
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-1-18,plan,false,"Existing VAV/terminal-unit box symbol on ductwork, left plan, with leader line to text label. Not in the pipeline's hint but a real drawn equipment tag."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-1-19,plan,false,"Existing terminal unit box symbol, left plan."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-1-20,plan,false,"Existing terminal unit box symbol, left plan, text rotated vertically in PDF (reconstructed by reading a same-x column of spans top-to-bottom as (E)VTU1-1-20)."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-1-21,plan,false,"Existing terminal unit box symbol, left plan, with leader arrow."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-7-10,plan,false,"Existing terminal unit box symbol, right plan, vertical text column reconstructed from stacked spans."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-7-11,plan,false,"Existing terminal unit box symbol, right plan, vertical text column."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-7-12,plan,false,"Existing terminal unit box symbol, right plan, vertical text column."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-7-15,plan,false,"Existing terminal unit box symbol, right plan, vertical text column, next to the new FCU1-7-2 box."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-7-8,plan,false,"Existing terminal unit box symbol, right plan, near Agent Cashier room."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,(E)VTU1-7-9,plan,false,"Existing terminal unit box symbol, right plan."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,BT,plan,false,Small boxed sensor/transmitter-type abbreviation (base station transmitter per note 4); repeatable device-type mark — listed once.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,FCU1-1-1,plan,false,"New fan coil unit, bold-outlined box symbol with leader arrow, left plan (TR-1A-138). Matches pipeline hint family FCU1."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,FCU1-7-2,plan,false,"New fan coil unit, bold-outlined box symbol, right plan (TR-1A-208). Matches pipeline hint family FCU1."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,T,plan,false,"Small boxed sensor-type abbreviation (temperature sensor per note 3); repeatable device-type mark, appears on both plans — listed once."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,TH,plan,false,"Small boxed instrument-symbol abbreviation (temperature/humidity sensor) tied to keynote circle 1/2; repeatable device-type mark, appears on both plans on this sheet — listed once."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#10,TM,plan,false,Small boxed device-type abbreviation appearing twice per plan (likely a rack/monitor tap); repeatable device-type mark — listed once.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,(E)VTU1-3-15,plan,false,"Existing terminal-unit box symbol, right plan, near Security 1B-192."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,(E)VTU1-3-18,plan,false,"Existing terminal-unit box symbol, right plan."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,(E)VTU1-3-19,plan,false,"Existing terminal-unit box symbol, right plan."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,(E)VTU1-5-10,plan,false,"Existing terminal-unit box symbol, left plan, near Lounge 1B-116."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,(E)VTU1-5-11,plan,false,"Existing terminal-unit box symbol, left plan."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,BT,plan,false,Repeatable boxed sensor/transmitter-type abbreviation — listed once.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,FCU1-3-4,plan,false,"New fan coil unit, bold box symbol, right plan (TR-1B-190). Matches pipeline hint family FCU1."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,FCU1-5-3,plan,false,"New fan coil unit, bold box symbol, left plan (TR-1B-118). Matches pipeline hint family FCU1."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,T,plan,false,Repeatable boxed sensor-type abbreviation — listed once.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,TH,plan,false,"Repeatable boxed sensor-type abbreviation, appears on both plans — listed once."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#11,TM,plan,false,"Repeatable boxed device-type abbreviation, appears twice per plan — listed once."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,(E)CTU2-4-12,plan,false,"Existing terminal-unit box symbol, plan 3, vertical duct riser near Elec 2B-198."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,(E)CTU2-4-13,plan,false,"Existing terminal-unit box symbol, plan 3."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,(E)CTU2-4-15,plan,false,"Existing terminal-unit box symbol, plan 3, near Signal 2B-201."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,(E)CTU2-4-16,plan,false,"Existing terminal-unit box symbol, plan 3."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,(E)CTU2-6-19,plan,false,"Existing terminal-unit box symbol (CTU family, distinct from VTU), plan 2, at end of ductwork run."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,(E)VTU2-1-11,plan,false,"Existing terminal-unit box symbol, plan 1, top of duct riser."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,(E)VTU2-1-7,plan,false,"Existing terminal-unit box symbol, plan 1, at bottom of duct run."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,BT,plan,false,Repeatable boxed sensor/transmitter-type abbreviation — listed once.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,FCU2-1-7,plan,false,"New fan coil unit, bold box symbol, plan 1 (TR-2A-136). Matches pipeline hint family FCU2."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,FCU2-4-16,plan,false,"New fan coil unit, bold box symbol, plan 3 (TR-2B-199). Matches pipeline hint family FCU2 (3rd instance)."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,FCU2-6-19,plan,false,"New fan coil unit, bold box symbol, plan 2 (TR-2B-146). Matches pipeline hint family FCU2."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,T,plan,false,Repeatable boxed sensor-type abbreviation — listed once.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,TH,plan,false,"Repeatable boxed sensor-type abbreviation, appears on all 3 plans — listed once."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#12,TM,plan,false,Repeatable boxed device-type abbreviation — listed once.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#13,BT,plan,false,Repeatable boxed sensor/transmitter-type abbreviation.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#13,FCU3-1-17,plan,false,"New fan coil unit, bold box symbol, single plan (TR-3A-150), third floor. Matches pipeline hint family FCU3, only instance on sheet."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#13,T,plan,false,Repeatable boxed sensor-type abbreviation.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#13,TH,plan,false,Repeatable boxed sensor-type abbreviation.
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#13,TM,plan,false,"Repeatable boxed device-type abbreviation, appears twice — listed once."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#15,FCU1-1-1,plan,false,"Same physical fan coil unit as on page 10, shown again on this MP401 piping (chilled-water) plan for TR-1A-138. Bold box symbol with CHS/CHR piping leaders."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#15,FCU1-7-2,plan,false,"Same physical fan coil unit as on page 10, shown on the MP401 piping plan for TR-1A-208."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#16,FCU1-3-4,plan,false,"Same physical fan coil unit as on page 11, shown on the MP402 piping plan for TR-1B-190."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#16,FCU1-5-3,plan,false,"Same physical fan coil unit as on page 11, shown on this MP402 piping plan for TR-1B-118."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#17,FCU2-1-7,plan,false,"Fan coil unit box symbol with piping leader (1"" CHS/CHR, shutoff valves) drawn just outside room TR 2A-136 on the enlarged piping plan 'TR-2A-136 - PIPING PLAN'. Text is vertically stacked in the PDF text layer as separate spans ('7','-','1','-','FCU2') reading bottom-to-top as FCU2-1-7; confirmed against rendered image where the box clearly reads 'FCU2-1-7'. This is a unique equipment instance, not a schedule/type mark."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#18,FCU2-4-16,plan,false,"Fan coil unit box symbol on the right-hand plan 'TR - 2B - 199 - HVAC PLAN', located between rooms ELEC 2B-198 and TR 2B-199, fed by 1"" CHS/CHR piping with shutoffs. Text layer has stacked spans ('16','-','4','-','FCU2') reading FCU2-4-16 bottom-to-top; confirmed visually as 'FCU2-4-16' printed vertically on the box."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#18,FCU2-6-19,plan,false,"Fan coil unit box symbol on the left-hand plan 'TR - 2B -146 - HVAC PLAN', located near room SIGNAL 2B-144, with leader label 'FCU2-6-19' pointing at the box and a piping run (1"" CHS/CHR) feeding it. Confirmed in text layer as horizontally-adjacent spans 'FCU2','-','6','-','19' at the same y-coordinate, and visually in the rendered crop."
+045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#19,FCU3-1-17,plan,false,"Fan coil unit box symbol with piping leader (2"" CHR/CHS reducing to 1"", shutoffs) drawn just outside room TR 3A-150 on plan 'TR - 3A-150 - HVAC PLAN'. Text layer has vertically stacked spans ('17','-','1','-','FCU3') reading FCU3-1-17 bottom-to-top; confirmed visually as 'FCU3-1-17' on the box, matching the family FCU3 hint."

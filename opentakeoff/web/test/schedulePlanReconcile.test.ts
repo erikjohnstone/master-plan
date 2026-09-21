@@ -14,12 +14,15 @@ import {
   reconcileRowsToCsv,
   attachDiagramCorroboration,
   rowIdentityTag,
+  servedEquipmentTag,
+  unscheduledTagsAndAliasCandidates,
 } from "../src/lib/schedulePlanReconcile.mjs";
 import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
 } from "../src/lib/takeoffWorkflow.js";
+import { markKey } from "../src/lib/markid.ts";
 
 
 test("row identity prefers VALVE MARK over UNIT MARK (Pillar C valve join)", () => {
@@ -65,6 +68,196 @@ test("row identity prefers VALVE MARK over UNIT MARK (Pillar C valve join)", () 
     rows.map((r) => r.tag).sort(),
     ["CV-CUH-A1-HHW", "CV-FCU-A1-HHW"].sort(),
   );
+});
+
+// WP3 seam: session.ts's tagOccurrencesOnSheet and countMarks now both
+// filter spans with markid.ts's spanAnswersFor, and this module's row_id/
+// scopeIdentity now canonicalize with markid.ts's markKey — one identity
+// rule shared by all three production callers, in place of three
+// independent ad hoc canon functions that could (and did) disagree. This
+// exercises the real production row builder, not the shared primitive in
+// isolation: a hyphen/space twin of the SAME device (a duplicate/
+// continuation extract, the Douglas HP-20 shape this dedup exists for)
+// must collapse to one row; a genuinely different device (a different
+// digit) must not.
+test("WP3 seam: reconcile row_id/scopeIdentity use markKey — hyphen/space twins collapse, digit differences stay distinct", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "set.pdf#10",
+        title: { text: "HHW CONTROL VALVE SCHEDULE" },
+        kind: "equipment",
+        rows: [
+          {
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+            },
+          },
+          {
+            // Twin spelling of the row above (space instead of hyphen) — under
+            // the old whitespace-only canon this stayed a DIFFERENT row_id
+            // ("CV-CUH-A1-HHW" keeps its hyphens, "CVCUHA1HHW" does not);
+            // markKey strips both, so this is the identity fix under test.
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV CUH A1 HHW" },
+            },
+          },
+          {
+            // A genuinely different device (digit differs) must never merge.
+            key: "CUH-A10",
+            cells: {
+              "UNIT MARK": { text: "CUH-A10" },
+              "VALVE MARK": { text: "CV-CUH-A10-HHW" },
+            },
+          },
+        ],
+      },
+    ],
+  };
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HHW_CONTROL_VALVE");
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.equal(rows.length, 2, `twin spellings of one device must collapse to one row, got tags: ${JSON.stringify(rows.map((r) => r.tag))}`);
+  const keys = rows.map((r) => markKey(r.tag)).sort();
+  assert.deepEqual(keys, [markKey("CV-CUH-A1-HHW"), markKey("CV-CUH-A10-HHW")].sort());
+  assert.equal(new Set(rows.map((r) => r.row_id)).size, 2);
+});
+
+test("servedEquipmentTag: reads UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED, never the row's own VALVE MARK header", () => {
+  assert.equal(servedEquipmentTag({ cells: { "UNIT MARK": { text: "CUH-A1" } } }), "CUH-A1");
+  assert.equal(servedEquipmentTag({ cells: { SERVES: { text: "AHU-A1" } } }), "AHU-A1");
+  assert.equal(servedEquipmentTag({ cells: { "SERVED EQUIPMENT": { text: "FCU-A2" } } }), "FCU-A2");
+  assert.equal(servedEquipmentTag({ cells: { "EQUIPMENT SERVED": { text: "DOAH-A1" } } }), "DOAH-A1");
+  assert.equal(servedEquipmentTag({ cells: { "VALVE MARK": { text: "CV-CUH-A1-HHW" } } }), null);
+  assert.equal(servedEquipmentTag({ cells: {} }), null);
+});
+
+// WP5 seam: a row's own identity (a VALVE MARK) with zero drawn occurrences
+// anywhere still gets located via the UNIT MARK it serves, using the real
+// production row builder against a synthetic graph.tags census (WP2's own
+// DrawnTag shape) — not just the servedEquipmentTag helper in isolation.
+test("WP5 seam: served-equipment location grade — a row with no drawn VALVE MARK is located via its drawn UNIT MARK", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "set.pdf#10",
+        title: { text: "HHW CONTROL VALVE SCHEDULE" },
+        kind: "equipment",
+        rows: [
+          {
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+            },
+          },
+        ],
+      },
+    ],
+    // CV-CUH-A1-HHW (the row's own identity) is never drawn; CUH-A1 (the
+    // served unit named in UNIT MARK) is drawn once on a plan sheet.
+    tags: [
+      {
+        sheet: "set.pdf#12", role: "plan", text: "CUH-A1", key: "CUHA1", family: "CUH-A",
+        bbox: [10, 20, 60, 40], rot: 0, source: "exact", multiplier: 1,
+        in_table: null, sheet_callout: false,
+      },
+    ],
+  };
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HHW_CONTROL_VALVE");
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.equal(rows.length, 1);
+  const [row] = rows;
+  assert.equal(row.tag, "CV-CUH-A1-HHW");
+  assert.equal(row.installed_qty, null, "served-equipment location is never installed quantity");
+  assert.equal(row.status, "SCHEDULE_ONLY");
+  assert.equal(row.installed_evidence_grade, "located_via_served_equipment");
+  assert.equal(row.served_equipment_cites?.length, 1);
+  assert.equal(row.served_equipment_cites[0].tag, "CUH-A1");
+  assert.equal(row.served_equipment_cites[0].sheet, "set.pdf#12");
+  assert.equal(row.served_equipment_cites[0].role, "plan");
+  assert.deepEqual(row.served_equipment_cites[0].bbox, { x0: 10, y0: 20, x1: 60, y1: 40 });
+});
+
+test("WP5 seam: a row whose own VALVE MARK IS drawn never gets a served-equipment cite", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "set.pdf#10",
+        title: { text: "HHW CONTROL VALVE SCHEDULE" },
+        kind: "equipment",
+        rows: [
+          {
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+            },
+          },
+        ],
+      },
+    ],
+    tags: [
+      {
+        sheet: "set.pdf#12", role: "plan", text: "CV-CUH-A1-HHW", key: "CVCUHA1HHW", family: "CV-CUH-HHW",
+        bbox: [1, 2, 3, 4], rot: 0, source: "exact", multiplier: 1,
+        in_table: null, sheet_callout: false,
+      },
+      {
+        sheet: "set.pdf#12", role: "plan", text: "CUH-A1", key: "CUHA1", family: "CUH-A",
+        bbox: [10, 20, 60, 40], rot: 0, source: "exact", multiplier: 1,
+        in_table: null, sheet_callout: false,
+      },
+    ],
+  };
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HHW_CONTROL_VALVE");
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].served_equipment_cites, undefined, "the row's own mark IS drawn — never fall back to the served unit");
+  assert.notEqual(rows[0].installed_evidence_grade, "located_via_served_equipment");
+});
+
+const tagFixture = (over: Record<string, unknown>) => ({
+  sheet: "set.pdf#1", role: "plan", text: "X", key: "X", family: "X",
+  bbox: [0, 0, 1, 1], rot: 0, source: "exact", multiplier: 1,
+  in_table: null, sheet_callout: false, ...over,
+});
+
+test("unscheduledTagsAndAliasCandidates: sheet callouts never count as unscheduled tags or alias candidates", () => {
+  const graph = {
+    tables: [{ rows: [{ key: "FCU-1", cells: { MARK: { text: "FCU-1" } } }] }],
+    tags: [
+      tagFixture({ text: "FCU-1", key: "FCU1" }),
+      tagFixture({ text: "CSF-CHW-M1", key: "CSFCHWM1" }),
+      tagFixture({ text: "M-501", key: "M501", sheet_callout: true }),
+    ],
+  };
+  const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
+  assert.deepEqual(unscheduled_tags.map((t: any) => t.text), ["CSF-CHW-M1"], "FCU-1 has a schedule row; the sheet callout is excluded outright");
+  assert.ok(!alias_candidates.some((c) => c.drawn === "M501" || c.nearest_row_key === "M501"));
+});
+
+test("unscheduledTagsAndAliasCandidates: worked examples — one-letter substitution qualifies, a digit insert never does", () => {
+  const graph = {
+    tables: [
+      { rows: [{ key: "CV-CH-C-MT1", cells: { "VALVE MARK": { text: "CV-CH-C-MT1" } } }] },
+      { rows: [{ key: "FCU-1", cells: { MARK: { text: "FCU-1" } } }] },
+    ],
+    tags: [
+      tagFixture({ text: "CV-CH-C-MT1", key: "CVCHCMT1" }),
+      tagFixture({ text: "CV-CH-H-MT-1", key: "CVCHHMT1" }),
+      tagFixture({ text: "FCU-1", key: "FCU1" }),
+      tagFixture({ text: "FCU-10", key: "FCU10" }),
+    ],
+  };
+  const { alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
+  const byDrawn = Object.fromEntries(alias_candidates.map((c) => [c.drawn, c]));
+  assert.equal(byDrawn.CVCHHMT1?.nearest_row_key, "CVCHCMT1", "one letter substitution (C vs H) is a candidate");
+  assert.equal(byDrawn.FCU10, undefined, "FCU-1 vs FCU-10 inserts a digit — never a candidate");
+  for (const c of alias_candidates) assert.equal(c.distance, 1);
 });
 
 test("familyNeedleFromSpecs: CONTROL_DAMPER / MOTORIZED DAMPER aliases (WP7.2)", () => {
@@ -509,9 +702,12 @@ test("family reconciliation preserves independently reused marks by authored dra
     { kind: "equipment", sheet: "set.pdf#47", drawing_group: "MTRACON", title: { text: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE" }, rows: [row()] },
   ] };
   const needle = { label: "GRD", titleRe: /GRILLE.*REGISTER.*DIFFUSER/i };
+  // row_id is `${sheet}::${markKey(tag)}` (WP3: one identity rule) — built
+  // from markKey, not a hyphen-preserving literal, so this stays correct
+  // however markKey's own canonical spelling evolves.
   const sweeps = new Map([
-    ["set.pdf#44::CD-1", { installedQty: 32, placementCount: 32, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
-    ["set.pdf#47::CD-1", { installedQty: 24, placementCount: 21, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
+    [`set.pdf#44::${markKey("CD-1")}`, { installedQty: 32, placementCount: 32, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
+    [`set.pdf#47::${markKey("CD-1")}`, { installedQty: 24, placementCount: 21, installedQtyBasis: "symbol_fingerprint", installedEvidenceGrade: "symbol_geometry", geometryVerified: true, itemStatus: "resolved" }],
   ]);
   const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweeps);
   assert.equal(rows.length, 2);

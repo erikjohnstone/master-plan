@@ -1,0 +1,65 @@
+sheet,tag,role,in_table,note
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-10,plan,false,"(E) FC-10 — dashed leader from 'T' sensor glyph pointing to a duct/equipment run; unique unit. Verified via crop; symbol is a thermostat-style glyph feeding the FC, not a bare label."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-26,plan,false,DEMO (E) FC-26 — leader line down into the mechanical-room duct/equipment cluster in the shaded 'AREA OF WORK'; unique unit being demoed. Also referenced by keyed notes 1/3.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-27,plan,false,"DEMO (E) FC-27 — leader line into the same mechanical-room cluster as FC-26, distinct unit; also tagged with keyed notes 1/3."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-3,plan,false,(E) FC-3 — leader-line callout from a wall diffuser/fan-coil symbol with a duct riser; unique existing fan-coil unit being demolished.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-4,plan,false,(E) FC-4 — dashed leader from a 'T' thermostat glyph to fan-coil symbol at ceiling duct branch; unique unit.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-5,plan,false,"(E) FC-5 — dashed leader from 'T' glyph to fan-coil symbol; unique unit, mirrors FC-4 across the corridor."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-7,plan,false,(E) FC-7 — leader from 'T' sensor glyph; unique existing fan-coil unit.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,FC-8,plan,false,(E) FC-8 — leader from 'T' sensor glyph in adjacent office; unique unit.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,PNL 8B,plan,false,"(E) PNL 8B — panel symbol near stairwell, same wall run as BH2/BP2; unique panel."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,PNL BH2,plan,false,(E) PNL BH2 — electrical panel symbol (small rectangle) directly labeled at a wall; unique panel.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,PNL BP2,plan,false,(E) PNL BP2 — panel symbol stacked directly below PNL BH2 on same wall; unique panel.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,AC-1,plan,false,"Text is '(E) AC-1', underlined; existing AC unit with arrow leader to equipment symbol. Not in pipeline hint list."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,CD-4,plan,false,"Repeatable ceiling-diffuser type/schedule mark, appears 4x on this sheet with different CFM values (160, 175, 110, 110) and duct sizes (10x10, 8x8, 8x8, 8x8) -- same type tag, listed once per repeatable-mark rule."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,CH-1,plan,false,"New chiller, boxed tag '2 | CH-1' next to chiller unit outline, keynote 2 references RG/RL to indoor unit. Unique instance mark."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,EH-20,plan,false,Boxed unique tag 'EH-20 | 1' over hatched electric-heater symbol; thermostat 'T (EH)' nearby serves it (not itself a tag).
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-10,plan,false,Underlined unique fan-coil-unit tag centered in room.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-13,plan,false,"Text is '(E) FC-13', underline under 'FC-13' portion; existing fan coil unit, arrow leader from a curved-arrow return symbol. NOT in pipeline's family hint list despite matching the FC- pattern -- looks like a pipeline miss."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-3,plan,false,"Underlined unique fan-coil-unit tag centered in room, new unit (no (E) prefix)."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-30,plan,false,"Text is '(E) FC-30', underline under 'FC-30'; existing fan coil unit box near (E) CU. Also not in pipeline hint list."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-7,plan,false,"Underlined unique fan-coil-unit tag centered in room, near (E) AC-1."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-10A,plan,false,Boxed unique tag '1 | HP-10A' with leader/underline pointing to hatched heat-pump unit symbol.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-10B,plan,false,Boxed unique tag '1 | HP-10B' with leader pointing to hatched heat-pump unit symbol near (E) CU.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-20A,plan,false,Boxed unique tag 'HP-20A | 1' over hatched heat-pump unit symbol in the courthouse space.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-20B,plan,false,Boxed unique tag '1 | HP-20B' with leader pointing to hatched heat-pump unit symbol.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-30,plan,false,Boxed unique tag '1 | HP-30' next to equipment/riser.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,PNL 8A,plan,false,Electrical panel tag '(E) PNL 8A' next to small panel symbol.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,PNL 8E,plan,false,Electrical panel tag '(E) PNL 8E' next to hatched panel symbol on wall.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,PNL BBP-BH,plan,false,"Electrical panel tag '(E) PNL BBP-BH', drawn twice (two stacked rows, each with its own small panel-symbol rectangle) with identical literal text -- treated as one tag per markKey identity rule, not two. Not in pipeline hint (pipeline hint list has no panel tags at all)."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,PNL BH1,plan,false,Electrical panel tag '(E) PNL BH1' next to hatched panel symbol on wall.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,PNL BP1,plan,false,Electrical panel tag '(E) PNL BP1' next to hatched panel symbol on wall.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,PNL M,plan,false,Electrical panel tag '(E) PNL M' next to small panel symbol.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) FC-10,plan,false,"Existing fan coil unit, unique instance, mid-left area."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) FC-3,plan,false,"Existing fan coil unit, unique instance, hatched-box symbol with leader, top-left room near grid A/1-2."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) FC-4,plan,false,"Existing fan coil unit, unique instance, symbol with dashed leader and thermostat (T) nearby."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) FC-5,plan,false,"Existing fan coil unit, unique instance."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) FC-7,plan,false,"Existing fan coil unit, unique instance, lower-left area."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) FC-8,plan,false,"Existing fan coil unit, unique instance, adjacent to FC-7."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) PNL 8B,plan,false,"Existing panel, unique instance, near stair/corridor."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) PNL BH2,plan,false,"Existing electrical/controls panel, unique instance mark; equipment type explicitly allowed (panel)."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,(E) PNL BP2,plan,false,"Existing panel, unique instance, directly below (E) PNL BH2."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,BC-30,plan,false,"Unit tag (baseboard/blower-coil type), unique instance, hatched box symbol, left of the DOAS-30/DH-30 cluster."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-2,plan,false,"Ceiling cassette unit, unique instance."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-3,plan,false,"Ceiling cassette unit, unique instance."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-5,plan,false,"Ceiling cassette unit, unique instance."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-6,plan,false,"Ceiling cassette unit, unique instance."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-7,plan,false,"Ceiling cassette unit, unique instance."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-8-1,plan,false,"Ceiling-cassette unit (per Keyed Note 6, 'ceiling cassette'), unique instance, hatched box with leader; underlined callout with adjacent keyed-note bubbles '1' and '6' (excluded, those are keynote refs)."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-8-4,plan,false,"Ceiling cassette unit, unique instance."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CD-4,plan,false,"Ceiling diffuser type mark drawn on plan next to a register symbol, with duct size '8x8' and CFM '130' beside it (size/CFM excluded, only 'CD-4' counted); repeatable schedule-type mark, appears once on this sheet."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,DH-30,plan,false,"Dehumidifier(?) unit tag, unique instance, hatched box symbol."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,DOAS-30,plan,false,"Dedicated outdoor air unit, unique instance; drawn once on plan (hatched box, leader) and again as the title of its own small schematic/detail box ('DOAS-30' with bubble '1/ME4.02' and a FRONT VIEW airflow diagram) elsewhere on the same sheet -- same physical unit, counted once."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,AH-30-8,plan,false,AH-30-8 — leader arrow directly into a hatched cylindrical air-handler/coil-section symbol in the mechanical closet; unique air-handling unit. Matches pipeline hint family AH-30. Also carries keyed-note refs 1/3 and callout '2'.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,CC-8-9,plan,false,CC-8-9 — leader arrow into a hatched square control-component symbol above the AHU; unique controls device. Matches pipeline hint family CC-8. Carries electrical keyed-note ref 1 and note 3.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,CD-3,plan,false,"CD-3 — repeatable ceiling-diffuser type mark, leader-labeling a 12x12 diffuser symbol ('260' CFM); only one instance on this sheet but is the same repeatable-schedule type as CD-4 elsewhere in the set."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,CD-4,plan,false,"CD-4 — repeatable ceiling-diffuser type mark: literal tag 'CD-4' appears twice, each leader-labeling a distinct 16x16 diffuser symbol ('300' CFM) at different plan locations; listed once as a type mark per the repeatable-tag rule."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,FC-1,plan,false,(E) FC-1 — leader from 'T' sensor glyph feeding ceiling diffuser cluster; unique fan-coil unit.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,FC-11,plan,false,(E) FC-11 — leader from 'T' glyph; unique unit.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,FC-12,plan,false,(E) FC-12 — dashed leader from 'T' glyph near corridor/stair; unique unit.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,FC-2,plan,false,(E) FC-2 — dashed leader from 'T' glyph; unique fan-coil unit in NW room.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,FC-6,plan,false,(E) FC-6 — dashed leader from 'T' glyph between rooms; unique unit.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,FC-9,plan,false,(E) FC-9 — dashed leader from 'T' glyph; unique unit serving room with 14/10SL diffuser run.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,PNL 8D,plan,false,(E) PNL 8D — panel glyph further down the same wall near stair; unique panel.
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,PNL BH3,plan,false,"(E) PNL BH3 — small rectangular panel glyph on wall, directly labeled; unique panel."
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,PNL BP3,plan,false,(E) PNL BP3 — panel glyph stacked below BH3 on same wall; unique panel.

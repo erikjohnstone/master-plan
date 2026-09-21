@@ -1,0 +1,26 @@
+loaded in 2432 ms
+graph in 57318 ms; sheets=65 tables=21
+
+== sheet roles == {"unknown":16,"legend":2,"detail":11,"schedule":9,"demolition":1,"plan":19,"elevation":7}
+== schedule keys == {"equipment_row":13} total 13
+
+== census == spans=18895 label-tokens(all)=789 equip-shaped(outside tables)=207 in 57573 ms
+label tokens, ALL, by sheet role: {"unknown":117,"legend":13,"detail":55,"schedule":277,"demolition":1,"plan":276,"elevation":50}
+label tokens, OUTSIDE table regions, by sheet role: {"unknown":117,"legend":13,"detail":55,"schedule":145,"demolition":1,"plan":276,"elevation":50}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":5,"planOnly":6,"otherOnly":1,"both":1}   e.g. CD-1: plan=9 other=0 | RG-1: plan=7 other=0 | EG-1: plan=1 other=0 | E1: plan=0 other=6 | E2: plan=0 other=0 | P1: plan=1 other=0
+
+== drawn equip-shaped keys: 83; with a schedule key: 4; WITHOUT any schedule key: 79 ==
+  sample unscheduled: PT-3x25, PT-2x6, HB-1x5, RD-1x5, FCU-1x4, ERV-01x4, EWH-2x4, EWH-1x4, CU-2x4, CU-1x4, FD-1x4, C-1x4, C-7x4, C-12x4, C-4x4, A-3x3, FCU-2x3, RTU-1x3, RTU-2x3, EF-1x3, HB-2x3, WH-1x3, L-1x3, WC-1x3, ACT-1x2
+
+== FCU == schedule keys=0 (unit_mark=0, equipment_row=0); distinct FCU tags drawn outside tables=2; total FCU tag occurrences=7 (3 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  RTU-1            REFUSED (6 ms): No schedule row "RTU-1" in the set — tables found: reference on baker-county-eoc-bidset.pdf#4 (6 rows: 2022 OREGON STRUCTURAL SPECIALTY CODE, 2022 OREGON MECHANICAL SPECIALTY CODE, 2023 OREGON ELECTRICAL SPECIALTY CODE, 
+  FCU-1            found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=46 146 ms
+  CD-1             found=11 basis=tag_attached_vector occurrences=9 text_only=3 skipped=46 23 ms
+
+done in 57751 ms

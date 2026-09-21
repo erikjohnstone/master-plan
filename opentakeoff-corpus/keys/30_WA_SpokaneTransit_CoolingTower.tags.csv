@@ -1,0 +1,49 @@
+sheet,tag,role,in_table,note
+30_WA_SpokaneTransit_CoolingTower.pdf#10,BOILER 1,detail,false,"""(N) BOILER#1"" labeled on boiler section views and isometric on the Sections & Elevations sheet."
+30_WA_SpokaneTransit_CoolingTower.pdf#10,BOILER 2,detail,false,"""(E) BOILER #2"" labeled on the isometric view, Sections & Elevations sheet."
+30_WA_SpokaneTransit_CoolingTower.pdf#11,BOILER 1,schematic,false,"Boiler box labeled ""BOILER #1"" in the Hot Water Plant system diagram."
+30_WA_SpokaneTransit_CoolingTower.pdf#11,BOILER 2,schematic,false,"Boiler box labeled ""BOILER #2"" in the Hot Water Plant system diagram."
+30_WA_SpokaneTransit_CoolingTower.pdf#11,HX-1,schematic,false,Heat exchanger symbol labeled HX-1 in the same system diagram.
+30_WA_SpokaneTransit_CoolingTower.pdf#11,P-1,schematic,false,Heating water pump symbol labeled P-1 in the Hot Water Plant system diagram.
+30_WA_SpokaneTransit_CoolingTower.pdf#11,P-2,schematic,false,Heating water pump symbol labeled P-2 in the Hot Water Plant system diagram.
+30_WA_SpokaneTransit_CoolingTower.pdf#11,P-6,schematic,false,Condenser water pump symbol labeled P-6 in the system diagram.
+30_WA_SpokaneTransit_CoolingTower.pdf#11,ST-2,schematic,false,New cooling tower symbol labeled ST-2 in the DOAS/Condenser Water Plant system diagram (Sequence of Operation sheet).
+30_WA_SpokaneTransit_CoolingTower.pdf#12,DM1,schematic,false,"Combustion-air damper motor symbol labeled DM1, appears in both the HP-2 and HP-3 thru 6 water-source heat pump reference diagrams (sheet marked reference only, no work)."
+30_WA_SpokaneTransit_CoolingTower.pdf#12,VL03,schematic,false,Valve symbol labeled VL03 in the same reference-only heat pump diagrams.
+30_WA_SpokaneTransit_CoolingTower.pdf#13,BOILER 1,schematic,false,"""BOILER-1"" labels a boiler box in the Boiler Piping Schematic."
+30_WA_SpokaneTransit_CoolingTower.pdf#13,BOILER 2,schematic,false,"""(E)BOILER-2"" labels a boiler box in the Boiler Piping Schematic."
+30_WA_SpokaneTransit_CoolingTower.pdf#13,CT-1,detail,false,"Labels the cooling tower symbol in the ""Cooling Tower Detail"" and again in the ""Isometric View"" on the Mechanical Details sheet."
+30_WA_SpokaneTransit_CoolingTower.pdf#13,P-1,schematic,false,"""(E)P-1"" labels a pump symbol in the Boiler Piping Schematic."
+30_WA_SpokaneTransit_CoolingTower.pdf#13,P-2,schematic,false,"""(E)P-2"" labels a pump symbol in the Boiler Piping Schematic."
+30_WA_SpokaneTransit_CoolingTower.pdf#2,BOILER 1,schedule,true,Row in Gas-Fired Hydronic Boiler Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CT-1,schedule,true,Row in Closed Cooling Tower Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#2,P-1,schedule,true,Row in HVAC Pump Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#2,P-2,schedule,true,Row in HVAC Pump Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#2,P-6,schedule,true,Row in HVAC Pump Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#2,VFD-1,schedule,true,Row in Variable Frequency Drive Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#2,VFD-2,schedule,true,Row in Variable Frequency Drive Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#2,VFD-3,schedule,true,Row in Variable Frequency Drive Schedule table.
+30_WA_SpokaneTransit_CoolingTower.pdf#3,BOILER 1,plan,false,"""(E) BOILER 1"" text labeled directly next to the existing boiler symbol in the Boiler Room, basement demo plan. Confirmed via textSpans at x0=2915,y0=1800."
+30_WA_SpokaneTransit_CoolingTower.pdf#3,BOILER 2,plan,false,"""(E) BOILER 2"" labeled next to the second existing boiler symbol. textSpans x0=3242,y0=1834."
+30_WA_SpokaneTransit_CoolingTower.pdf#4,HX-2,plan,false,"""(E) HX-2"" labels the existing heat exchanger/air separator symbol. Split spans ""(E) HX""+""-""+""2"" at x0~2786/2834/2839,y0~2051."
+30_WA_SpokaneTransit_CoolingTower.pdf#4,MULTIZONE #3,plan,false,"""(E) MULTIZONE #3"" labels an existing multizone AHU box drawn on the mezzanine demo plan. textSpans x0=3075,y0=874."
+30_WA_SpokaneTransit_CoolingTower.pdf#4,MULTIZONE #4,plan,false,"""(E) MULTIZONE #4"" labels a second existing multizone AHU box. textSpans x0=3075,y0=1252."
+30_WA_SpokaneTransit_CoolingTower.pdf#4,P-6,plan,false,"""(E) P-6"" labeled next to the existing condenser water pump box, mezzanine demo plan. Split spans ""(E) P""+""-""+""6"" at x0~2459/2495/2500,y0~1955."
+30_WA_SpokaneTransit_CoolingTower.pdf#5,CT-2,plan,false,"""(E) CT-2"" labels the existing cooling tower that remains, roof demo plan. Split spans at x0~3010/3056/3061,y0~1923."
+30_WA_SpokaneTransit_CoolingTower.pdf#5,CU-1,plan,false,"""(E) CU-1"" labels an existing condensing unit on the roof demo plan. Split spans ""(E) CU""+""-""+""1"" at x0~3059/3107/3112,y0~1542."
+30_WA_SpokaneTransit_CoolingTower.pdf#6,BOILER 1,plan,false,"""(N) BOILER 1"" labeled next to the new boiler symbol on the basement new-work plan. textSpans x0=2424,y0=1995."
+30_WA_SpokaneTransit_CoolingTower.pdf#6,BOILER 2,plan,false,"""(E) BOILER 2"" (existing, remains) labeled again on the new-work plan. textSpans x0=3181,y0=1907."
+30_WA_SpokaneTransit_CoolingTower.pdf#6,P-1,plan,false,"New heating water pump box labeled P-1 in the Pump Room. textSpans x0=2503,y0=2741."
+30_WA_SpokaneTransit_CoolingTower.pdf#6,P-2,plan,false,"New heating water pump box labeled P-2 in the Pump Room. textSpans x0=2510,y0=2933."
+30_WA_SpokaneTransit_CoolingTower.pdf#6,VFD-1,plan,false,"New VFD box labeled VFD-1 mounted near P-1. textSpans x0=2515,y0=2574."
+30_WA_SpokaneTransit_CoolingTower.pdf#6,VFD-2,plan,false,"New VFD box labeled VFD-2 mounted near P-2. textSpans x0=2576,y0=2574."
+30_WA_SpokaneTransit_CoolingTower.pdf#7,HX-2,plan,false,"""(E) HX-2"" labels the existing heat exchanger, mezzanine new-work plan. textSpans x0~2724/2771/2776,y0~2027."
+30_WA_SpokaneTransit_CoolingTower.pdf#7,MULTIZONE #3,plan,false,"""(E) MULTIZONE #3"" repeated on the new-work plan. textSpans x0=3012,y0=850."
+30_WA_SpokaneTransit_CoolingTower.pdf#7,MULTIZONE #4,plan,false,"""(E) MULTIZONE #4"" repeated on the new-work plan. textSpans x0=3012,y0=1228."
+30_WA_SpokaneTransit_CoolingTower.pdf#7,P-6,plan,false,"""(N) P-6"" labels the new condenser water pump on the mezzanine new-work plan. Split spans ""(N) P""+""-""+""6"" at x0~2396/2433/2438,y0~1931."
+30_WA_SpokaneTransit_CoolingTower.pdf#7,VFD-3,plan,false,"New VFD box labeled VFD-3 for the new condenser water pump P-6. textSpans x0=2396,y0=2091."
+30_WA_SpokaneTransit_CoolingTower.pdf#8,CT-1,plan,false,"""(N) CT-1"" labels the new cooling tower symbol on the roof new-work plan. textSpans x0=2270,y0=2627."
+30_WA_SpokaneTransit_CoolingTower.pdf#8,CT-2,plan,false,"""(E) CT-2"" (existing tower, remains) repeated on the roof new-work plan. textSpans x0=2280,y0=1814."
+30_WA_SpokaneTransit_CoolingTower.pdf#8,CU-1,plan,false,"""(E) CU-1"" repeated on the roof new-work plan. textSpans x0=2872,y0=1634."
+30_WA_SpokaneTransit_CoolingTower.pdf#9,CT-1,detail,false,"""(N) CT-1"" repeated across section-view and isometric-view callouts on the Sections & Elevations sheet (not a plan view)."
+30_WA_SpokaneTransit_CoolingTower.pdf#9,CT-2,detail,false,"""(E) CT-2"" repeated across section/isometric callouts, Sections & Elevations sheet."

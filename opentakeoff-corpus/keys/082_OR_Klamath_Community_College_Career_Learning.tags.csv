@@ -1,0 +1,168 @@
+sheet,tag,role,in_table,note
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,CH-1,plan,false,drawn on hydronic sector-A plan next to chiller symbol
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,DOAS-1,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,DOAS-3,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-01,plan,false,"unique split-system fan coil, MDF"
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-101,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-102,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-103,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-104,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-105,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-106,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-107,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-108,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-109,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,FC-204,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,HP-01,plan,false,drawn next to split heat pump symbol
+082_OR_Klamath_Community_College_Career_Learning.pdf#10,MUA-1,plan,false,drawn next to make-up air unit symbol
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,DOAS-2,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,DOAS-4,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-02,plan,false,unique split-system fan coil
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-201,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-202,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-203,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-206,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-207,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-208,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-209,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,FC-210,plan,false,unique instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#11,HP-2,plan,false,"drawn literally as HP-2, near Fire Riser 167"
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,AS-1,plan,false,unique air separator instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,B-1,plan,false,unique boiler instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,B-2,plan,false,unique boiler instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,BP-1,plan,false,unique pump instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,BP-2,plan,false,unique pump instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,BT-1,plan,false,unique buffer tank instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,CH-1,plan,false,drawn next to 4-module chiller box symbol in boiler room enlarged plan
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,CHP-1,plan,false,unique chilled water pump instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,CHP-2,plan,false,unique chilled water pump instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,HP-01,plan,false,drawn next to split-system outdoor unit near chiller
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,HP-1,plan,false,drawn literally as HP-1 near VFD/control panel area; likely same physical pump as schedule's HWP-1 but drawn with a different literal mark - recorded as-drawn
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,HP-2,plan,false,drawn literally as HP-2 adjacent to HP-1; likely same physical pump as schedule's HWP-2 - recorded as-drawn
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,HS-1,plan,false,unique hydraulic separator instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,HX-1,plan,false,unique heat exchanger instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,MUA-1,plan,false,drawn next to make-up air unit symbol
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,SP-1,plan,false,unique snowmelt pump instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#12,SP-2,plan,false,unique snowmelt pump instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#13,B-1,plan,false,"unique boiler instance, gas plan"
+082_OR_Klamath_Community_College_Career_Learning.pdf#13,B-2,plan,false,"unique boiler instance, gas plan"
+082_OR_Klamath_Community_College_Career_Learning.pdf#13,MUA-1,plan,false,drawn on Enlarged Gas plan next to make-up air unit symbol
+082_OR_Klamath_Community_College_Career_Learning.pdf#13,WH-1,plan,false,"unique water heater instance, Custodial Closet"
+082_OR_Klamath_Community_College_Career_Learning.pdf#13,WH-2,plan,false,"unique water heater instance, Enlarged Gas Sector B sub-plan, Storage 204"
+082_OR_Klamath_Community_College_Career_Learning.pdf#13,WH-3,plan,false,unique water heater instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,B-1,schematic,false,hexagon-symbol tag (boiler)
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,B-2,schematic,false,hexagon-symbol tag
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,BP-1,schematic,false,hexagon-symbol tag
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,BP-2,schematic,false,hexagon-symbol tag
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,ET-1,schematic,false,hexagon-symbol tag (expansion tank)
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,HS-1,schematic,false,hexagon-symbol tag (Hydraulic Separator)
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,HWP-1,schematic,false,hexagon-symbol tag on Hot Water Piping Diagram; text split across two spans 'HWP'+'1'
+082_OR_Klamath_Community_College_Career_Learning.pdf#14,HWP-2,schematic,false,hexagon-symbol tag
+082_OR_Klamath_Community_College_Career_Learning.pdf#15,AS-1,schematic,false,hexagon-symbol tag (air separator)
+082_OR_Klamath_Community_College_Career_Learning.pdf#15,CH-1,schematic,false,hexagon-symbol tag on Chilled Water Piping Diagram
+082_OR_Klamath_Community_College_Career_Learning.pdf#15,CHWP-1,schematic,false,hexagon-symbol tag (chilled water pump)
+082_OR_Klamath_Community_College_Career_Learning.pdf#15,CHWP-2,schematic,false,hexagon-symbol tag
+082_OR_Klamath_Community_College_Career_Learning.pdf#15,ET-2,schematic,false,"hexagon-symbol tag (expansion tank, chilled water side)"
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,B-1,schedule,true,Hot Water Condensing Boiler schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,B-2,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,CH-1,schedule,true,Air Cooled Chiller schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,DOAS-1,schedule,true,Dedicated Outdoor Air System schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,DOAS-2,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,DOAS-3,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,DOAS-4,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,ET-1,schedule,true,Expansion Tank - Vertical Bladder schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-101,schedule,true,Fan Coil Units schedule row; unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-102,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-103,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-104,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-105,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-106,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-107,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-108,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-109,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-201,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-202,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-203,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-204,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-206,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-207,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-208,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-209,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,FC-210,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#2,KEF-1,schedule,true,Kitchen grease exhaust fan schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,AS-1,schedule,true,Air Separator schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,BP-1,schedule,true,Primary HW pump schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,BP-2,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,CHP-1,schedule,true,Hydronic Pumps schedule row (Chilled Water)
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,CHP-2,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,EG-1,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,EH-1,schedule,true,Electric Heater schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,EH-2,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,EH-3,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,FC-01,schedule,true,Split system indoor fan coil schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,FC-02,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,HP-01,schedule,true,Split System Heat Pump schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,HP-02,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,HS-1,schedule,true,Hydraulic Separator schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,HWP-1,schedule,true,Secondary HW pump schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,HWP-2,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,HX-1,schedule,true,Heat Exchanger schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,LR-1,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,LS-1,schedule,true,Air Distribution device-type schedule row; repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,LV-1,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,LV-2,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,MAU-1,schedule,true,Make Up Air Unit schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,RG-1,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,RG-2,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,SD-1,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,SD-2,schedule,true,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,SP-1,schedule,true,Snowmelt pump schedule row
+082_OR_Klamath_Community_College_Career_Learning.pdf#3,SP-2,schedule,true,unique instance mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,CH-1,plan,false,"drawn next to chiller box symbol, utility court, confirmed via textSpans"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,DOAS-1,plan,false,unique DOAS unit tag with leader
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,DOAS-3,plan,false,unique DOAS unit tag with leader
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,EG-1,plan,false,"repeatable exhaust grille type mark, many occurrences, listed once"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,EG-3,plan,false,"exhaust grille type mark, single occurrence on this page near hallway"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-01,plan,false,"unique split-system fan coil, MDF 121"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-101,plan,false,"unique fan coil instance, Classroom 135"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-102,plan,false,"unique instance, Classroom 137"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-103,plan,false,"unique instance, Classroom 140"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-104,plan,false,"unique instance, Classroom 142"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-105,plan,false,"unique instance, Classroom 132"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-106,plan,false,"unique instance, Classroom 130"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-107,plan,false,"unique instance, Classroom 127"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-108,plan,false,"unique instance, Classroom 125"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-109,plan,false,"unique instance, Shared Office 118 area"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,FC-204,plan,false,unique fan coil instance
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,HP-01,plan,false,drawn next to split-system outdoor unit symbol
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,LR-1,plan,false,repeatable linear-slot return type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,LS-1,plan,false,repeatable linear-slot supply type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,LV-1,plan,false,repeatable louver type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,LV-2,plan,false,repeatable louver type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,MUA-1,plan,false,drawn next to make-up air unit symbol
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,RG-1,plan,false,"repeatable return grille type mark, many occurrences, listed once"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,SD-1,plan,false,"repeatable supply diffuser type mark, ~20+ occurrences on this page, listed once"
+082_OR_Klamath_Community_College_Career_Learning.pdf#5,SD-2,plan,false,repeatable supply diffuser type 2 mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,DOAS-2,plan,false,unique DOAS unit tag
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,DOAS-4,plan,false,unique DOAS unit tag
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,EG-1,plan,false,"repeatable type mark, listed once"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,EH-2,plan,false,"unique electric heater, Fire Riser 167"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,EH-3,plan,false,"unique electric heater, Vestibule 100"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-02,plan,false,"unique split-system fan coil, MDF 203 area"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-201,plan,false,"unique instance, Classroom 157"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-202,plan,false,"unique instance, Break Room 172"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-203,plan,false,"unique instance, Large Conference 209"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-206,plan,false,"unique instance, Classroom 159"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-207,plan,false,"unique instance, KCC CR 206"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-208,plan,false,"unique instance, KCC CR 205"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-209,plan,false,"unique instance, Classroom 164"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,FC-210,plan,false,"unique instance, Classroom 161"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,HP-2,plan,false,drawn literally as HP-2 (not HP-02) near Fire Riser 167
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,LR-1,plan,false,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,LS-1,plan,false,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,LV-1,plan,false,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,LV-2,plan,false,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,RG-1,plan,false,"repeatable type mark, listed once"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,SD-1,plan,false,"repeatable type mark, many occurrences, listed once"
+082_OR_Klamath_Community_College_Career_Learning.pdf#6,SD-2,plan,false,repeatable type mark
+082_OR_Klamath_Community_College_Career_Learning.pdf#7,KEF-1,plan,false,kitchen exhaust fan tag drawn on roof plan next to its symbol/duct riser

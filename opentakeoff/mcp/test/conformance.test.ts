@@ -840,7 +840,9 @@ test("compile_corpus_takeoff / query_table / count_marks / project_takeoff / rec
 
   const marks = await callOk(client, "count_marks", { marks: ["X-1"] });
   assert.equal(marks.total, 0);
-  assert.equal(marks.marks[0].mark, "X-1");
+  // Echoed as markKey's canonical spelling (WP3: one identity rule) — the
+  // hyphen is drafting variation, not identity, so "X-1" comes back "X1".
+  assert.equal(marks.marks[0].mark, "X1");
   assert.equal(marks.marks[0].unscheduled, true);
 
   const project = await callOk(client, "project_takeoff", {});
@@ -939,6 +941,64 @@ test("symbol_sweep scope 'set' and sweep_schedule_row: replies round-trip their 
   // refusals: reason + fix, never a guess
   assert.match(await callErr(client, "sweep_schedule_row", { tag: "T9" }), /cannot be geometrically anchored .* never guessed from text alone/);
   assert.match(await callErr(client, "sweep_schedule_row", { tag: "ZZ" }), /No schedule row "ZZ" .* tables found/);
+});
+
+// WP4: a mark that is not drawn on any PLAN sheet, but IS drawn on a
+// schematic/legend/detail sheet, discloses that occurrence instead of
+// throwing. HRHWP-MT1 is a real PUMP SCHEDULE row on navfac-cherry-point —
+// the plan's own named example (plans/03-drawing-tag-recognition-audit.md
+// §3.5) of one of the 93 marks this changes from a bare refusal to a cited
+// disclosure.
+test("sweep_schedule_row: a mark drawn only on non-plan sheets discloses reference_tags instead of refusing (WP4, real navfac data)", async () => {
+  const client = await pair();
+  const NAVFAC = fileURLToPath(new URL(
+    "../../../opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf", import.meta.url,
+  ));
+  await callOk(client, "load_plan", { path: NAVFAC });
+  const r = await callOk(client, "sweep_schedule_row", { tag: "HRHWP-MT1" });
+  assert.deepEqual(z.object(sweepScheduleRowOutput).parse(r), r, "schema states every returned field — nothing stripped, including status/reference_tags");
+  assert.equal(r.status, "reference_only");
+  assert.equal(r.found, 0);
+  assert.equal(r.anchor, null);
+  assert.ok(r.reference_tags?.length >= 1, "at least one non-plan drawn occurrence disclosed");
+  for (const rt of r.reference_tags) {
+    assert.notEqual(rt.role, "plan");
+    assert.ok(rt.sheet && rt.text);
+  }
+  assert.match(r.note, /not drawn on any plan sheet/);
+
+  // The same disclosure folds into reconcile_schedule_plan as SCHEDULE_ONLY
+  // with a citation, never a thrown ERROR row.
+  const reconciled = await callOk(client, "reconcile_schedule_plan", { family: "PUMP", tags: ["HRHWP-MT1"] });
+  const row = reconciled.rows.find((x: any) => x.tag === "HRHWP-MT1");
+  assert.ok(row, "HRHWP-MT1 still produces a reconcile row");
+  assert.equal(row.status, "SCHEDULE_ONLY");
+  assert.equal(row.installed_qty, null);
+  assert.ok(row.reference_tag_cites?.length >= 1);
+
+  // WP6: unscheduled_tags/alias_candidates are whole-set review lists,
+  // present regardless of the family/tags scope this call used — the
+  // plan's own named navfac examples (§3.7), except CV-HHW-BP-M/
+  // CV-HHW-BP-T: both are all-letter marks with no digit anywhere
+  // (markKey "CVHHWBPM"/"CVHHWBPT"), and tagIndex.ts's own isValidKey gate
+  // (plans §3.1's letter+digit rule, already committed in WP2) means
+  // neither ever enters graph.tags at all — confirmed directly against the
+  // raw PDF spans (the text IS drawn cleanly as "CV-HHW-BP-M"/"CV-HHW-BP-T",
+  // isEquipTag itself accepts both; isValidKey is the deliberate, stricter,
+  // universal gate every buildTagIndex pass shares). Structurally
+  // unreachable through graph.tags, not a WP6 defect — see PROGRESS.md.
+  assert.deepEqual(z.object(reconcileSchedulePlanOutput).parse(reconciled), reconciled, "schema states every returned field — nothing stripped, including unscheduled_tags/alias_candidates");
+  const unscheduledTexts = new Set(reconciled.unscheduled_tags.map((t: any) => t.text));
+  for (const expected of ["CSF-CHW-M1", "CSF-HHW-A1"]) {
+    assert.ok(unscheduledTexts.has(expected), `unscheduled_tags should list ${expected}`);
+  }
+  assert.ok(!unscheduledTexts.has("CV-HHW-BP-M") && !unscheduledTexts.has("CV-HHW-BP-T"), "digit-free marks never reach graph.tags at all (isValidKey), so this stays false rather than silently start passing if that gate ever changes");
+  assert.ok(!reconciled.unscheduled_tags.some((t: any) => /^M-\d{3}$/.test(t.text)), "no M-501-style sheet-callout text in unscheduled_tags");
+  const aliasPair = reconciled.alias_candidates.find((c: any) =>
+    (c.drawn === "CVCHCMT1" && c.nearest_row_key === "CVCHHMT1")
+    || (c.drawn === "CVCHHMT1" && c.nearest_row_key === "CVCHCMT1"));
+  assert.ok(aliasPair, "alias_candidates should pair CV-CH-C-MT1 <-> CV-CH-H-MT-1");
+  assert.equal(aliasPair.distance, 1);
 });
 
 // dimension annotation (0.9.20): the annotate reply's schema covers the new

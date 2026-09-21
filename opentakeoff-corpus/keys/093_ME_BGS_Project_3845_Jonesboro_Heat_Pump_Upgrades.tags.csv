@@ -1,0 +1,57 @@
+sheet,tag,role,in_table,note
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#10,P1,plan,false,"New 400A service panel P1, tagged directly at its symbol/leader point on the Electrical Site Plan (view 1, textSpan 'P1' at x0=3626.9,y0=893.3, adjacent to 'NEW 400A, 240V/120V, 1PH, 3W SERVICE PANEL P1'). Also re-labeled 'SERVICE RATED PANEL P1' inside the New Work One-Line Diagram box (a schematic view on the same sheet) — same physical unit, listed once."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#10,P2,plan,false,"Existing panel P2, tagged at its symbol/leader point on the same Electrical Site Plan (textSpan 'P2' at x0=3553.7,y0=824.9, next to 'NEW 200A FEEDER TO REFEED EXISTING PANEL P2'). Also re-labeled 'EXISTING PANEL P2' inside both the Existing and New Work One-Line Diagram boxes lower on the sheet (schematic views) — same unit, listed once."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,DWH-1,plan,false,"Domestic water heater tag, basement mechanical room, next to equipment glyph and condensate-pump note."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,EBB-1,plan,false,"Electric baseboard heater type mark, underlined, appears at ~5 different room locations (verified via crop next to a baseboard rectangle glyph) — repeatable type mark, listed once."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,EBB-2,plan,false,"Electric baseboard heater type mark (different size/type from EBB-1), appears at ~5 locations across both plans — repeatable type mark, listed once."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-1,plan,false,"Indoor unit (heat pump) tag, underlined, next to indoor-unit wall symbol; unique instance mark."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-10,plan,false,"Indoor unit tag, basement plan, next to unit symbol."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-11,plan,false,"Indoor unit tag, basement plan (Break rm), next to unit symbol."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-12,plan,false,"Indoor unit tag, basement plan, next to unit symbol."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-13,plan,false,"Indoor unit tag, verified via zoomed crop: underlined 'IU-13' directly beside a hatched wall-mounted indoor-unit glyph."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-14,plan,false,"Indoor unit tag, verified via zoomed crop next to matching unit glyph."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-15,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-16,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-17,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-18,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-19,plan,false,"Indoor unit tag, basement plan, next to unit symbol."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-2,plan,false,"Indoor unit tag next to unit symbol, first floor plan."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-20,plan,false,"Indoor unit tag, basement plan, next to unit symbol."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-3,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-4,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-5,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-6,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-7,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-8,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,IU-9,plan,false,Indoor unit tag next to unit symbol.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,OU-1,plan,false,"Outdoor (condensing) unit tag, exterior symbol, unique instance."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,OU-2,plan,false,"Outdoor unit tag, exterior symbol."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,OU-3,plan,false,"Outdoor unit tag, exterior symbol."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,P1,plan,false,"New electrical service panel, tag underlined directly beside the panel glyph (verified via zoomed crop) plus 'NEW SERVICE PANEL P1' leader label."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#11,P2,plan,false,"Existing panel, identified only via leader-arrow label 'EXISTING PANEL P2' pointing directly at a panel glyph (no separate underlined on-symbol tag like P1 has) — included as it names one specific physical panel."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,EBB-1,plan,false,"Electric baseboard heater, repeatable type mark - identical literal tag EBB-1 drawn on 3 separate small rectangular baseboard glyphs (near rooms 101/109, VEST 107, VEST 124/125A)."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,EBB-2,plan,false,"Electric baseboard heater, repeatable type mark - literal tag EBB-2 drawn on 2 separate baseboard glyphs (near BATHROOM 114/UTIL 113, and near WILDLIFE OFF 103/CLO F33)."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-1,plan,false,"Indoor (heat pump) unit, unique instance mark, drawn on hatched rectangular indoor-unit glyph in FISHERIES FILES & SEASONAL (122) area."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-13,plan,false,Indoor unit glyph near WILDLIFE OFF (101).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-14,plan,false,Indoor unit glyph near WILDLIFE OFF (102).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-15,plan,false,Indoor unit glyph near WARDEN SERVICE (109).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-16,plan,false,Indoor unit glyph near MEDIA (105A).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-17,plan,false,Indoor unit glyph near CORRIDOR (106)/CONFERENCE RM (105).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-18,plan,false,Indoor unit glyph near VEST (107)/OFF SUPPLIES (108).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-2,plan,false,Indoor unit glyph near DMR OFF (117).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-3,plan,false,Indoor unit glyph near DMR OFF (118).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-4,plan,false,Indoor unit glyph near DMR MP OFF (119).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-5,plan,false,"Indoor unit glyph adjacent to IU-1, near FISHERIES FILES & SEASONAL (122)."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-6,plan,false,Indoor unit glyph near FISHERIES OFF (123).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-7,plan,false,"Indoor unit glyph near FISHERIES OFF (121), by the OU-1/OU-2 pad."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-8,plan,false,Indoor unit glyph near FISHERIES OFF (125).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,IU-9,plan,false,Indoor unit glyph near DMR SHELLFISH & SEASONAL (120).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,OU-1,plan,false,"Outdoor unit glyph on poured-concrete equipment pad (M-503/M-501 detail refs), lower unit of stacked OU-1/OU-2 pair."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,OU-2,plan,false,"Outdoor unit glyph, upper unit of the same equipment pad as OU-1."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,OU-3,plan,false,Outdoor unit glyph on its own poured-concrete pad at far left (near WILDLIFE OFF 103).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#4,T,plan,false,"Thermostat/sensor symbol - a circled 'T' glyph repeated ~20 times across the plan (confirmed by zoomed crop showing a plain circle-with-T, no other characters, at each closet/room boundary). Treated as a repeatable controls-sensor type mark per the 'sensor' equipment category in the rules; flagging as a judgment call since it is a single bare letter rather than a hyphenated code like the other examples."
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#9,OU-1,schedule,true,Heat Pump Outdoor Unit 1 (OU = 'HEAT PUMP OUTDOOR UNIT' per M-001 abbreviations). Appears as the Circuit Description text for circuits 1/3 in the 'Branch Panel: P1' schedule table on this sheet. Unique instance mark.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#9,OU-2,schedule,true,Heat Pump Outdoor Unit 2. Circuit Description for circuits 2/4 in the same Branch Panel P1 schedule. Unique instance mark.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#9,OU-3,schedule,true,Heat Pump Outdoor Unit 3. Circuit Description for circuits 5/7 in the same schedule. Unique instance mark.
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#9,P1,schedule,true,Electrical branch panel P1 — this is the subject/title of the schedule table itself ('Branch Panel: P1'). Unique instance mark for a real panel (confirmed again on page 10's site plan/one-line diagrams).
+093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#9,P2,schedule,true,"Electrical panel P2, referenced as the downstream panel fed by circuits 39/40 ('PANEL P2') in the same schedule table. Unique instance mark."

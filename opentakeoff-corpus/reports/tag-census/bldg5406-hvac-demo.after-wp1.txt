@@ -1,0 +1,26 @@
+loaded in 736 ms
+graph in 19720 ms; sheets=20 tables=15
+
+== sheet roles == {"plan":4,"detail":2,"schematic":4,"schedule":5,"unknown":3,"legend":1,"demolition":1}
+== schedule keys == {"equipment_row":19} total 19
+
+== census == spans=3749 label-tokens(all)=181 equip-shaped(outside tables)=60 in 19741 ms
+label tokens, ALL, by sheet role: {"plan":62,"detail":2,"schematic":30,"schedule":43,"unknown":37,"legend":6,"demolition":1}
+label tokens, OUTSIDE table regions, by sheet role: {"plan":62,"detail":2,"schematic":30,"schedule":19,"unknown":34,"legend":6,"demolition":1}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":1,"planOnly":12,"otherOnly":0,"both":6}   e.g. AHU-1: plan=2 other=1 | VAV-1: plan=1 other=0 | VAV-2: plan=1 other=0 | VAV-3: plan=1 other=0 | VAV-4: plan=1 other=0 | VAV-5: plan=1 other=0
+
+== drawn equip-shaped keys: 43; with a schedule key: 18; WITHOUT any schedule key: 25 ==
+  sample unscheduled: EWH-1x3, AS-1x2, UC-50x1, EF-4x1, EF-1x1, EF-5x1, M-101x1, M-501x1, M-502x1, M-503x1, M-601x1, M-602x1, M-901x1, M-903x1, M-904x1, FD-1x1, P-001x1, PD-101x1, P-101x1, P-102x1, P-501x1, P-502x1, P-601x1, P-901x1, P-902x1
+
+== FCU == schedule keys=0 (unit_mark=0, equipment_row=0); distinct FCU tags drawn outside tables=0; total FCU tag occurrences=0 (0 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  AHU-1            found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=18 90 ms
+  EF-2             REFUSED (2 ms): Schedule row "EF-2" (FAN SCHEDULE on bldg5406-hvac-demo-mechanical.pdf#6) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is dr
+  CH-1             found=1 basis=tag_attached_vector occurrences=1 text_only=0 skipped=18 4 ms
+
+done in 19838 ms

@@ -24,6 +24,17 @@ test("isEquipTag: letter-led hyphenated marks in; English compounds out", () => 
   }
 });
 
+test("isEquipTag: existing/new/relocated status parens don't hide the tag underneath", () => {
+  for (const ok of ["BOILER-1(E)", "CUH-1(E)", "C-1(E)", "(N)AHU-2", "CUH-1(R)", "AHU-1(D)"]) {
+    assert.equal(isEquipTag(ok), true, ok);
+  }
+  // The status code itself must still look like a status code (1-3 letters)
+  // — a parenthetical note is not this shape's job to admit.
+  for (const no of ["BOILER-1(EXISTING)", "(E)", "(EX)FIRST-FLOOR"]) {
+    assert.equal(isEquipTag(no), false, no);
+  }
+});
+
 test("joinHyphenatedTags: CAD glyph splits reassemble; compounds and neighbours stay split", () => {
   const h = 10;
   const gap = 2; // < 0.35 * 10

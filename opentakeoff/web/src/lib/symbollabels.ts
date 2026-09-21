@@ -294,18 +294,30 @@ const STACKED_SPACE_PREFIXES = new Set([
  * hyphen, although the tag is one visual identity. Reassemble only a tightly
  * centered, immediately stacked pair whose result is a valid equipment tag.
  * The union box is retained so downstream tests prove attachment to the
- * complete local tag block. */
-function stackedEquipmentTagTokens(spans: LabelSpan[]): LabelSpan[] {
+ * complete local tag block. Exported so a caller with access to every sheet
+ * in a set (tagIndex.ts's buildTagIndex) can pool raw candidates ACROSS
+ * sheets before the family-evidence filter below runs — a real hexagon-tag
+ * convention often draws exactly one instance per sheet, spread across many
+ * different sheets, and the per-sheet-only filter would reject every one of
+ * them despite the family being genuinely, repeatedly demonstrated. */
+export function rawStackedEquipmentTagCandidates(spans: LabelSpan[]): LabelSpan[] {
   const candidates: LabelSpan[] = [];
   for (const top of spans) {
     const prefix = top.str.trim().toUpperCase();
-    if (!/^[A-Z]{1,4}$/.test(prefix) || STACKED_SPACE_PREFIXES.has(prefix) || (top.rot ?? 0) !== 0) continue;
+    if (!/^[A-Z]{1,4}$/.test(prefix) || STACKED_SPACE_PREFIXES.has(prefix)) continue;
     const th = Math.max(top.y1 - top.y0, 1);
     const tcx = (top.x0 + top.x1) / 2;
+    const topRot = top.rot ?? 0;
+    // A rotated hexagon tag (a vertical duct run drawn with its label
+    // turned 90°) still stacks its runs as a simple vertical column in
+    // absolute page space — only the glyphs inside each run are sideways —
+    // so the y/x geometry below is unaffected by rotation. Require the
+    // pair to share one rotation, though: mixing an unrotated span with a
+    // rotated one nearby is a coincidence, never one divided tag.
     const suffix = spans
       .filter((candidate) => {
         const raw = candidate.str.trim();
-        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== 0) return false;
+        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== topRot) return false;
         const ch = Math.max(candidate.y1 - candidate.y0, 1);
         if (Math.max(th, ch) > 1.35 * Math.min(th, ch)) return false;
         const gap = candidate.y0 - top.y1;
@@ -317,29 +329,85 @@ function stackedEquipmentTagTokens(spans: LabelSpan[]): LabelSpan[] {
           && isEquipTag(`${prefix}-${raw}`);
       })
       .sort((a, b) => a.y0 - b.y0 || Math.abs((a.x0 + a.x1) / 2 - tcx) - Math.abs((b.x0 + b.x1) / 2 - tcx))[0];
-    if (!suffix) continue;
-    candidates.push({
-      ...top,
-      str: `${prefix}-${suffix.str.trim()}`,
-      x0: Math.min(top.x0, suffix.x0),
-      y0: Math.min(top.y0, suffix.y0),
-      x1: Math.max(top.x1, suffix.x1),
-      y1: Math.max(top.y1, suffix.y1),
-      family: prefix,
-      text_height_px: Math.min(th, Math.max(suffix.y1 - suffix.y0, 1)),
-    });
+    if (suffix) {
+      candidates.push({
+        ...top,
+        str: `${prefix}-${suffix.str.trim()}`,
+        x0: Math.min(top.x0, suffix.x0),
+        y0: Math.min(top.y0, suffix.y0),
+        x1: Math.max(top.x1, suffix.x1),
+        y1: Math.max(top.y1, suffix.y1),
+        family: prefix,
+        text_height_px: Math.min(th, Math.max(suffix.y1 - suffix.y0, 1)),
+      });
+    }
+
+    // Some drawings draw the same divided hexagon tag with the instance
+    // number ABOVE the prefix instead ("M107" over "VAV", reading bottom-
+    // to-top as VAV-M107) — the mirror image of the prefix-over-number
+    // layout above. Only which span sits on top changes; the same tight
+    // centering/height-match gates and the same isEquipTag + family
+    // evidence rule (applied to `candidates` below) still gate this pass.
+    // A bare I/O type code (AI/AO/DI/DO) under a plain point number is
+    // stackedBasPointTagTokens's own convention (a BAS point bubble, not an
+    // equipment tag) — leave that exact combination to it so the two passes
+    // don't both reconstruct the same divided run.
+    const above = /^(?:AI|AO|DI|DO)$/.test(prefix) ? undefined : spans
+      .filter((candidate) => {
+        const raw = candidate.str.trim();
+        if (!/^[A-Z]{0,2}\d{1,3}[A-Z]?$/.test(raw.toUpperCase()) || (candidate.rot ?? 0) !== topRot) return false;
+        const ch = Math.max(candidate.y1 - candidate.y0, 1);
+        if (Math.max(th, ch) > 1.35 * Math.min(th, ch)) return false;
+        const gap = top.y0 - candidate.y1;
+        const ccx = (candidate.x0 + candidate.x1) / 2;
+        const xGate = 0.3 * Math.max(top.x1 - top.x0, th);
+        return gap >= -0.1 * Math.max(th, ch)
+          && gap <= 0.8 * Math.max(th, ch)
+          && Math.abs(ccx - tcx) <= xGate
+          && isEquipTag(`${prefix}-${raw}`);
+      })
+      .sort((a, b) => b.y1 - a.y1 || Math.abs((a.x0 + a.x1) / 2 - tcx) - Math.abs((b.x0 + b.x1) / 2 - tcx))[0];
+    if (above) {
+      candidates.push({
+        ...top,
+        str: `${prefix}-${above.str.trim()}`,
+        x0: Math.min(top.x0, above.x0),
+        y0: Math.min(top.y0, above.y0),
+        x1: Math.max(top.x1, above.x1),
+        y1: Math.max(top.y1, above.y1),
+        family: prefix,
+        text_height_px: Math.min(th, Math.max(above.y1 - above.y0, 1)),
+      });
+    }
   }
-  const perFamily = new Map<string, number>();
-  for (const candidate of candidates) {
-    const family = candidate.family!;
-    perFamily.set(family, (perFamily.get(family) ?? 0) + 1);
-  }
-  const demonstratedFamilies = new Set(joinHyphenatedTags(spans).flatMap((span) => {
+  return candidates;
+}
+
+/** A family independently demonstrated as a real, explicit single-run
+ * hyphenated equipment tag ("HWP-3" printed as one span) somewhere among
+ * `spans` — used both as this sheet's own evidence and, pooled across
+ * sheets, as a set's cross-sheet evidence. Exported for the same pooling
+ * reason as rawStackedEquipmentTagCandidates above. */
+export function hyphenatedEquipmentFamilies(spans: LabelSpan[]): Set<string> {
+  return new Set(joinHyphenatedTags(spans).flatMap((span) => {
     const raw = span.str.trim().toUpperCase();
     if (/\s/.test(raw) || !isEquipTag(raw)) return [];
     const family = canonicalLabelFamily(raw);
     return family !== canonicalLabel(raw) ? [family] : [];
   }));
+}
+
+/** `extraFamilyEvidence`: families already admitted elsewhere in the SET
+ * (pooled across every sheet — see rawStackedEquipmentTagCandidates's own
+ * doc comment) — ORed into this sheet's own evidence rule below. */
+function stackedEquipmentTagTokens(spans: LabelSpan[], extraFamilyEvidence?: ReadonlySet<string>): LabelSpan[] {
+  const candidates = rawStackedEquipmentTagCandidates(spans);
+  const perFamily = new Map<string, number>();
+  for (const candidate of candidates) {
+    const family = candidate.family!;
+    perFamily.set(family, (perFamily.get(family) ?? 0) + 1);
+  }
+  const demonstratedFamilies = hyphenatedEquipmentFamilies(spans);
   // A short two-letter pair can arise accidentally in ordinary annotations
   // (the corpus caught PH above 1 beside a roof-drain assembly). Require the
   // drawing to demonstrate a stacked family twice, or independently print
@@ -349,7 +417,8 @@ function stackedEquipmentTagTokens(spans: LabelSpan[]): LabelSpan[] {
   // cannot establish that they name mechanical equipment.
   return candidates.filter((candidate) =>
     (perFamily.get(candidate.family!) ?? 0) >= 2
-    || demonstratedFamilies.has(canonicalLabel(candidate.family!)));
+    || demonstratedFamilies.has(canonicalLabel(candidate.family!))
+    || (extraFamilyEvidence?.has(candidate.family!) ?? false));
 }
 
 /** Some BAS schematics draw a divided point bubble with the point number on
@@ -395,9 +464,16 @@ function stackedBasPointTagTokens(spans: LabelSpan[]): LabelSpan[] {
 
 const LABEL_TOKEN_CACHE = new WeakMap<LabelSpan[], LabelSpan[]>();
 
-export function labelTokens(spans: LabelSpan[]): LabelSpan[] {
-  const cached = LABEL_TOKEN_CACHE.get(spans);
-  if (cached) return cached;
+/** `extraStackedFamilyEvidence`: a set-wide pool of families already
+ * admitted as a genuine divided equipment tag ELSEWHERE in the same set
+ * (see stackedEquipmentTagTokens's own doc comment) — optional, and never
+ * cached, since it varies call to call for the same `spans` array only
+ * when a caller (buildTagIndex) actually supplies one. */
+export function labelTokens(spans: LabelSpan[], extraStackedFamilyEvidence?: ReadonlySet<string>): LabelSpan[] {
+  if (!extraStackedFamilyEvidence) {
+    const cached = LABEL_TOKEN_CACHE.get(spans);
+    if (cached) return cached;
+  }
   const joined = joinHyphenatedTags(spans);
   const exactRuns = new Map<string, number>();
   for (const span of joined) {
@@ -435,7 +511,7 @@ export function labelTokens(spans: LabelSpan[]): LabelSpan[] {
     // words remain excluded above.
     return isBareInstrument(t) ? { ...s, family: t } : s;
   });
-  const stacked = stackedEquipmentTagTokens(spans);
+  const stacked = stackedEquipmentTagTokens(spans, extraStackedFamilyEvidence);
   const stackedPoints = stackedBasPointTagTokens(spans);
   // A divided block's component runs can themselves be token-shaped. Once
   // TT over 4 or CU over B1 establishes TT-4/CU-B1, do not also offer the
@@ -443,13 +519,13 @@ export function labelTokens(spans: LabelSpan[]): LabelSpan[] {
   const consumedByStackedEquipment = (token: LabelSpan): boolean => stacked.some((block) => {
     const suffix = block.str.split("-").at(-1);
     const text = token.str.trim().toUpperCase();
-    const midY = (block.y0 + block.y1) / 2;
     const contained = token.x0 >= block.x0 && token.x1 <= block.x1
       && token.y0 >= block.y0 && token.y1 <= block.y1;
-    return contained && (
-      (text === suffix && token.y0 >= midY)
-      || (text === canonicalLabel(block.family ?? "") && token.y1 <= midY)
-    );
+    // Containment inside the merged box (the union of exactly the prefix's
+    // and suffix's own two small runs) is already tight enough — a
+    // top/bottom half check would assume the prefix-over-number order and
+    // wrongly under-suppress the mirrored number-over-prefix layout.
+    return contained && (text === suffix || text === canonicalLabel(block.family ?? ""));
   });
   const consumedByStackedPoint = (token: LabelSpan): boolean => stackedPoints.some((block) => {
     const number = block.str.split("-").at(-1);
@@ -468,7 +544,7 @@ export function labelTokens(spans: LabelSpan[]): LabelSpan[] {
     !consumedByStackedEquipment(token) && !consumedByStackedPoint(token));
   const tokens = [...unconsumedOrdinary, ...inlineAirflowFamilyTokens(spans), ...stacked, ...stackedPoints]
     .sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
-  LABEL_TOKEN_CACHE.set(spans, tokens);
+  if (!extraStackedFamilyEvidence) LABEL_TOKEN_CACHE.set(spans, tokens);
   return tokens;
 }
 

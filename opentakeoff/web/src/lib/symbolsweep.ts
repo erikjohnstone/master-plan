@@ -71,6 +71,8 @@
 import {
   fitAffine, decomposeAffine, affineWithinBounds, gatherCorrespondences, DEFAULT_AFFINE_BOUNDS,
 } from "./symbolAffine.ts";
+import { isEquipTag } from "./equiptags.ts";
+import { LABEL_TOKEN_RE } from "./symbollabels.ts";
 
 export type Point = [number, number];
 
@@ -2903,6 +2905,39 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     out.push({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] });
   }
   return out;
+}
+
+/**
+ * The key-free cousin of `compoundTagOcc` above (tagIndex.ts §3.3 WP2): a
+ * SET-WIDE census does not have a schedule row's own key to test a run
+ * against, so it needs its own way to recognize the SAME real compound
+ * shape ("R1 /C-11", "E1/C-2") from the run alone. The run's LEAD — its
+ * text up to the first delimiter (a slash or whitespace) — is the mark;
+ * it is accepted only when that lead independently passes `isEquipTag` or
+ * `LABEL_TOKEN_RE` (the same two shapes labelTokens/equiptags already
+ * trust), exactly mirroring `compoundTagOcc`'s own two guards: a real
+ * token boundary right after the lead (here: a delimiter must exist at
+ * all) and a delimiter shape that is not a dotted numeric sheet-number
+ * suffix ("P1.01", "S3.1", "M1.21" never split at their own decimal point
+ * — there is no whitespace/slash there for the lead regex to find in the
+ * first place, and a lead followed by " .5" is rejected explicitly below,
+ * for the same reason compoundTagOcc's own delimiter check exists: a short
+ * key must never be credited with a sheet-number fragment as if it were a
+ * compound instance). Returns the lead (the tag identity), or null.
+ */
+export function compoundRunLeadTag(str: string): string | null {
+  const t = (str || "").trim().toUpperCase().replace(/[‐-―−]/g, "-");
+  if (!t) return null;
+  const m = t.match(/^([A-Z0-9-]+)([\s/].*)$/);
+  if (!m) return null;
+  const [, lead, restRaw] = m;
+  if (!(isEquipTag(lead) || LABEL_TOKEN_RE.test(lead))) return null;
+  const rest = restRaw.replace(/^[\s/]+/, "");
+  if (!rest) return null;
+  // dotted numeric suffix (sheet number) is never a compound instance
+  if (/^\.\d/.test(rest)) return null;
+  if (!/^[A-Z0-9]/.test(rest)) return null;
+  return lead;
 }
 
 /**

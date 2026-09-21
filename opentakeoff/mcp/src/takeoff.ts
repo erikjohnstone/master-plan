@@ -25,12 +25,15 @@ import type { Point } from "../../web/src/lib/oneclick.ts";
 import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../web/src/lib/sheetgraph.ts";
 import {
   reconcileRowsFromTakeoffItems,
+  unscheduledTagsAndAliasCandidates,
   summarizeReconcile,
   reconcileScheduleFamilyWithSweeps,
   attachDiagramCorroboration,
   familyNeedleFromSpecs,
   rowIdentityTag,
+  servedEquipmentTag,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
+import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
 import { HVAC_FAMILY_SPECS, isBasPointsListTable } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
@@ -108,9 +111,31 @@ export interface TakeoffItem {
     reason?: string;
     hold?: unknown;
   }>;
+  /** Every non-plan drawn occurrence of this tag (schematic/legend/detail/
+   * etc) — a citation only, never installed evidence. Present only when
+   * sweep_schedule_row returned status: "reference_only" (not drawn on any
+   * plan sheet, but located and cited elsewhere). */
+  reference_tags?: Array<{
+    sheet: string;
+    role: string;
+    bbox: { x0: number; y0: number; x1: number; y1: number };
+    text: string;
+  }>;
+  /** Present only when this item's own mark (e.g. a VALVE MARK) has zero
+   * drawn occurrences anywhere — every drawn occurrence of the UNIT MARK/
+   * SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED mark it names instead, so the
+   * row can still be located and reviewed. A citation, never installed
+   * evidence; sweepScheduleRow still refuses to count the served unit as
+   * this item's own mark. */
+  served_equipment_cites?: Array<{
+    tag: string;
+    sheet: string;
+    role: string;
+    bbox: { x0: number; y0: number; x1: number; y1: number };
+  }>;
   /** What proves the installed quantity; never inferred from the schedule. */
   quantity_basis?: "symbol_fingerprint" | "tag_attached_vector" | "exact_plan_tag" | "explicit_installation_note" | null;
-  installed_evidence_grade?: "symbol_geometry" | "explicit_installation_note" | "tag_text_only" | "mixed_geometry_and_tag_text" | "unverified";
+  installed_evidence_grade?: "symbol_geometry" | "explicit_installation_note" | "tag_text_only" | "mixed_geometry_and_tag_text" | "located_via_served_equipment" | "unverified";
   geometry_verified?: boolean;
   /** Search coverage returned by the shared row sweep. */
   search_scope?: "exhaustive" | "tagged_only" | "explicit_note_set" | null;
@@ -502,6 +527,30 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         }
         item.tag = alias;
       }
+      // Not drawn on any plan sheet, but sweep_schedule_row still located
+      // and cited it elsewhere (schematic/legend/detail/etc) instead of
+      // throwing (WP4). This is disclosure, not a geometric search result —
+      // r.anchor is null and r.sheets is an all-zero placeholder, so skip
+      // the generic quantity/evidence logic below entirely rather than let
+      // it default into a false "symbol_fingerprint" reading of zero.
+      if (r.status === "reference_only") {
+        item.status = "refused";
+        item.reason = "drawn on schematic/legend sheets only";
+        item.reference_tags = (r.reference_tags || []).map((rt: any) => ({
+          sheet: rt.sheet, role: rt.role, bbox: rt.bbox, text: rt.text,
+        }));
+        item.search_scope = r.search_scope === "tagged_only" ? "tagged_only" : r.search_scope === "exhaustive" ? "exhaustive" : null;
+        item.unlabeled_audit_complete = r.unlabeled_audit_complete ?? null;
+        item.plan_search_complete = r.complete !== false;
+        out.stats.refused++;
+        out.items.push(item);
+        processedRows++;
+        opts.onProgress?.({
+          phase: "reconcile_row", state: "done", tag: item.tag, processed: processedRows,
+          elapsed_ms: Math.round(performance.now() - started), status: item.status,
+        });
+        return;
+      }
       const quantityBasis = r.anchor?.grounding_basis ?? "symbol_fingerprint";
       const matchedLocations = (r.sheets || []).flatMap((ps: any) =>
         (ps.matches || []).flatMap((m: any) => Array.from({ length: m.multiplier ?? 1 }, () => ({
@@ -594,6 +643,38 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         return;
       }
       const ft = classifyError(msg);
+      // Served-equipment location grade (WP5): this item's own mark has zero
+      // drawn occurrences anywhere (the only way this specific throw fires,
+      // per WP4's reference_only intercept above) — but the schedule row may
+      // name the unit it serves in a separate column, and THAT mark may be
+      // drawn. Never a substitute identity, never installed quantity —
+      // sweepScheduleRow still refuses to count the served unit as this
+      // item's own mark — only a location to review the row from.
+      if (ft === "SYMBOL_FALSE_NEGATIVE") {
+        const servedTag = servedEquipmentTag(row);
+        const servedCites = servedTag
+          ? tagIndexFor(graph.tags ?? [], servedTag)
+            .filter((dt) => !dt.sheet_callout && !dt.in_table)
+            .map((dt) => ({
+              tag: servedTag, sheet: dt.sheet, role: dt.role,
+              bbox: { x0: dt.bbox[0], y0: dt.bbox[1], x1: dt.bbox[2], y1: dt.bbox[3] },
+            }))
+          : [];
+        if (servedCites.length) {
+          item.status = "refused";
+          item.reason = msg;
+          item.served_equipment_cites = servedCites;
+          item.installed_evidence_grade = "located_via_served_equipment";
+          out.stats.refused++;
+          out.items.push(item);
+          processedRows++;
+          opts.onProgress?.({
+            phase: "reconcile_row", state: "done", tag: item.tag, processed: processedRows,
+            elapsed_ms: Math.round(performance.now() - started), status: item.status,
+          });
+          return;
+        }
+      }
       item.status = ft === "SYMBOL_FALSE_NEGATIVE"
         || ft === "AMBIGUOUS_ROW_KEY"
         || ft === "CROSS_SHEET_ASSOCIATION_FAILURE"
@@ -1013,6 +1094,8 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   summary: ReturnType<typeof summarizeReconcile>;
   takeoff_stats: PlanSetTakeoff["stats"];
   family_filter: string | null;
+  unscheduled_tags: ReturnType<typeof unscheduledTagsAndAliasCandidates>["unscheduled_tags"];
+  alias_candidates: ReturnType<typeof unscheduledTagsAndAliasCandidates>["alias_candidates"];
 }> {
   const family = opts.family ? String(opts.family).trim() : null;
   const tags = opts.tags?.length ? opts.tags.map((t) => String(t).trim()).filter(Boolean) : null;
@@ -1022,6 +1105,9 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   // reference-kind grille tables never matched "GRD" in equipment_type/title.
   if (family) {
     const graph = await session.graphForPipeline();
+    // WP6: two review lists, whole-set regardless of family scope — neither
+    // changes any quantity.
+    const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
     // takeoff_stats is whole-set-sweep bookkeeping (buildPlanSetTakeoff's own
     // stats) that a family-scoped reconcile never computes — declared
@@ -1037,6 +1123,8 @@ export async function reconcileSchedulePlan(session: Session, opts: {
         summary: summarizeReconcile([]),
         family_filter: family,
         takeoff_stats: emptyStats,
+        unscheduled_tags,
+        alias_candidates,
       };
     }
     const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -1047,9 +1135,14 @@ export async function reconcileSchedulePlan(session: Session, opts: {
       sweepAll: !tags?.length && opts.familySweepAll !== false,
     });
     const rows = attachDiagramCorroboration(scoped.rows, graph.control_schematics || await session.controlSchematics());
-    return { ...scoped, rows, summary: summarizeReconcile(rows), takeoff_stats: emptyStats };
+    return {
+      ...scoped, rows, summary: summarizeReconcile(rows), takeoff_stats: emptyStats,
+      unscheduled_tags, alias_candidates,
+    };
   }
 
+  const graph = await session.graphForPipeline();
+  const { unscheduled_tags, alias_candidates } = unscheduledTagsAndAliasCandidates(graph);
   const takeoff = await buildPlanSetTakeoff(session, {
     categories: opts.categories ?? null,
     evaluationFast: opts.evaluationFast,
@@ -1082,5 +1175,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     summary: summarizeReconcile(rows),
     takeoff_stats: takeoff.stats,
     family_filter: familyFilter,
+    unscheduled_tags,
+    alias_candidates,
   };
 }

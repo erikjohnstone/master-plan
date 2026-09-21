@@ -1,0 +1,92 @@
+sheet,tag,role,in_table,note
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,AHU-1 (E),plan,false,AHU box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,B-1 (E),plan,false,"Boiler box, same caveat."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,B-2 (E),plan,false,"Boiler box, electrical new-work plan E2.01A. No extractable text layer; read visually."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CH-1 (E),plan,false,Chiller box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CH-2 (E),plan,false,Chiller box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CH-3,plan,false,"New chiller, detailed chiller graphic on left with adjacent 'CHILLER #3 CONTROLLER/VFD' box."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CHP-1 (E),plan,false,"Pump box, with 'CHP-1 VFD' label below."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CHP-2 (E),plan,false,"Pump box, with 'CHP-2 VFD' label below."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CHP-3 (E),plan,false,"Pump box, with 'CHP-3 VFD' label below."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CTWP-1 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CTWP-2 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,CTWP-3 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,TSP-MCC,plan,false,"Panel label, top-right (existing switchgear room outline)."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,TSP-PP1 (E),plan,false,"4000A switchboard, bottom-left of plan."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,TSP-PP2,plan,false,"New 2000A MCB switchboard box, top-right."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#10,XPT (E),plan,false,Expansion tank symbol.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#11,TSP-PP,plan,false,"Label on ONCOR 2000KVA utility transformer box, electrical new-work plan E2.01B (Area B)."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#11,TSP-PP MAIN,plan,false,Switchboard box label.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#11,TSP-PP2,plan,false,"'2000A SERVICE DISC. SW. TSP-PP2' box label, left side of plan."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,CH-1,schematic,false,Load/breaker label on one-line diagram (small text among many similar breaker callouts).
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,CH-2,schematic,false,Load/breaker label on one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,CH-3,schematic,false,Load/breaker label on one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,CHP-1,schematic,false,Load/breaker label on one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,CHP-2,schematic,false,Load/breaker label on one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,CHP-3,schematic,false,Load/breaker label on one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,TSP-MCC,schematic,false,Switchboard block in one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,TSP-PP,schematic,false,Switchboard block in one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,TSP-PP1,schematic,false,"Switchboard block in electrical one-line/riser diagram (E4.00) - a schematic, not a physical floor plan."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#12,TSP-PP2,schematic,false,Switchboard block in one-line diagram.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,AHU-1 (E),plan,false,Existing air handling unit box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,B-1 (E),plan,false,"Existing boiler box, same sheet."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,B-1 VFD (R),plan,false,"VFD for boiler 1, marked to-be-relocated."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,B-2 (E),plan,false,"Existing boiler box, label directly on/next to symbol. Demolition plan (M1.01A)."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,B-2 VFD,plan,false,"VFD for boiler 2, leader to small box symbol."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CH-1 (E),plan,false,"Existing chiller box, adjacent to CH-2."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CH-2 (E),plan,false,Existing chiller box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CHP-1 (E),plan,false,Chilled water pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CHP-2 (E),plan,false,Chilled water pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CHP-3 (E),plan,false,Chilled water pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CTWP-1 (E),plan,false,Condenser/cooling-tower water pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CTWP-2 (E),plan,false,"Pump box, same row as CTWP-1/3."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,CTWP-3 (E),plan,false,"Pump box, same row."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,VFD CHP-2 (D),plan,false,"VFD for CHP-2, marked demolish."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,VFD CHP-3 (D),plan,false,"VFD for CHP-3, marked demolish."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#3,XPT (E),plan,false,"Expansion tank, circle symbol near Spirotherm filter."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,AHU-1 (E),plan,false,Existing AHU box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,B-1 (E),plan,false,"Same boiler, M2.01A."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,B-1 VFD (R),plan,false,"Relocated VFD label + box, left margin."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,B-2 (E),plan,false,"Same boiler, new-work plan M2.01A."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,B-2 VFD (R),plan,false,"Relocated VFD label + box, left margin."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CC-1,plan,false,"New cooling coil, keynote 7 references it; drawn near AHU-1 symbol."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CH-1 (E),plan,false,Existing chiller box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CH-2 (E),plan,false,Existing chiller box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CH-3,plan,false,"NEW chiller being added by this project - the primary scope item, drawn with detailed chiller graphic on left side of plan."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CHP-1 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CHP-2 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CHP-3 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CTWP-1 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CTWP-2 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,CTWP-3 (E),plan,false,Pump box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,VFD CHP-1,plan,false,New VFD label below CHP-1 box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,VFD CHP-2,plan,false,New VFD label below CHP-2 box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,VFD CHP-3,plan,false,New VFD label below CHP-3 box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#4,XPT (E),plan,false,"Expansion tank, circle symbol."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,AHU-01 (E),schematic,false,"AHU box in separate AHU-01 chilled control diagram, bottom right of M8.01."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,CH-1 (E),schematic,false,"Chiller box, control diagram."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,CH-2 (E),schematic,false,"Chiller box, control diagram."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,CH-3,schematic,false,"New chiller box in control diagram, labeled CH-3."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,CT-1 (E),schematic,false,"Cooling tower box in chilled/condenser water control diagram (M8.01), not a floor plan."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,CT-2 (E),schematic,false,"Cooling tower box, control diagram."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,CT-3 (E),schematic,false,"Cooling tower box, control diagram."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#5,CT-4 (E),schematic,false,"Cooling tower box, control diagram."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#6,CC-1,schedule,true,"Row in Cooling Coil Schedule table (M9.01), MARK column."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#6,CH-3,schedule,true,"Row in Water Cooled Chiller Schedule table, MARK column; also relabeled on the Chiller Connection Detail drawing on same sheet (detail, not table)."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,AHU-1 (E),plan,false,"AHU box, no text layer, read visually."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,B-1 (E),plan,false,"Boiler box, same caveat: no extractable text layer on this sheet."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,B-2 (E),plan,false,"Electrical demolition plan E1.01A, same boiler box as mechanical sheets. textSpans() returns 0 spans for this page - all sheet text (including this tag) is vector/curve-drawn, not extractable text, confirmed visually only."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CH-1 (E),plan,false,"Chiller box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CH-2 (E),plan,false,"Chiller box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CHP-1 (E),plan,false,"Pump box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CHP-2 (E),plan,false,"Pump box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CHP-3 (E),plan,false,"Pump box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CTWP-1 (E),plan,false,"Pump box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CTWP-2 (E),plan,false,"Pump box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,CTWP-3 (E),plan,false,"Pump box, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,TSP-MCC,plan,false,"Switchgear/MCC panel label near tall equipment room outline, top-right of plan; panel is a listed equipment type in the task's tag definition."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,TSP-PP1 (E),plan,false,"4000A switchboard label, bottom-left of plan."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#8,XPT (E),plan,false,"Expansion tank symbol, no text layer."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#9,TSP-MCC,plan,false,"Label on ONCOR 1500KVA utility transformer box, electrical demo plan E1.01B (Area B). No other mechanical equipment on this excerpt - it is a separate room with only transformers/panels."
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#9,TSP-PP,plan,false,Label on ONCOR 2000KVA utility transformer box.
+29_TX_JPS_Hospital_CentralPlant_Chiller.pdf#9,TSP-PP MAIN,plan,false,Switchboard box label inside the small room.

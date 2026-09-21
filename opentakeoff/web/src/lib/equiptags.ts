@@ -26,17 +26,26 @@ const canon = (s: string) => (s || "").trim().toUpperCase().replace(/[–—−]
 
 /**
  * Multi-hyphen equipment tags: letter-led, hyphen-separated alphanumeric
- * segments — PCHWP-MT1, CUH-T1, CV-CHW-BP-T, AHU-1.
+ * segments — PCHWP-MT1, CUH-T1, CV-CHW-BP-T, AHU-1. A period reads as the
+ * same separator (some sheets hexagon-callout an equipment list row as
+ * "EQ.11" rather than "EQ-11", sometimes inconsistently on the very same
+ * sheet) — the shape is what matters, not which punctuation mark draws it.
  *
  * A two-segment tag must contain a digit so hyphenated English
  * ("FIRST-FLOOR", "SEE-NOTE") never reads as a tag. Three or more short
  * segments are abbreviation-stacks and are accepted without a digit.
  */
 export function isEquipTag(raw: string): boolean {
-  const t = canon(raw);
+  // Renovation/retrofit sheets bracket a tag's status with a one-to-three
+  // letter code in parens — "BOILER-1(E)" (existing), "(N)AHU-2" (new),
+  // "CUH-1(R)" (relocated) — without changing which asset it names. Strip
+  // it before judging the shape so the tag underneath still reads; the
+  // ORIGINAL text (parens included) is what gets stored and matched, so
+  // this only widens which spans are recognized as a tag at all.
+  const t = canon(raw).replace(/^\([A-Z]{1,3}\)/, "").replace(/\([A-Z]{1,3}\)$/, "");
   if (t.length < 3 || t.length > MAX_TAG_LEN) return false;
-  if (!t.includes("-")) return false;
-  const parts = t.split("-");
+  if (!/[-.]/.test(t)) return false;
+  const parts = t.split(/[-.]/);
   if (parts.length < 2 || parts.length > MAX_SEGS) return false;
   if (!/^[A-Z]{1,8}$/.test(parts[0])) return false;
   for (let i = 1; i < parts.length; i++) {
@@ -88,7 +97,20 @@ function mergeBoxes<T extends TagBox>(run: T[]): T {
 export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
   const items = spans.filter((s) => piece(s));
   if (items.length < 2) return items;
-  const ordered = [...items].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+  // A hyphen glyph's own box commonly sits a point or two above/below the
+  // letters and digits beside it (it draws at vertical-center height, not
+  // baseline-to-cap-height like a letter) — sorting by raw y0 can then place
+  // it before the character it should follow ("R","-","2" bounding-box y0s
+  // of 1087.6, 1086.2, 1087.6 sort as "-","R","2"), corrupting left-to-right
+  // order and silently breaking the join below. Only treat two spans as
+  // different rows when their vertical centers differ by more than a real
+  // row's worth of height; same-row spans always sort by x.
+  const ordered = [...items].sort((a, b) => {
+    const cyA = (a.y0 + a.y1) / 2, cyB = (b.y0 + b.y1) / 2;
+    const h = Math.max(a.y1 - a.y0, b.y1 - b.y0, 1);
+    const rowDiff = cyA - cyB;
+    return Math.abs(rowDiff) > h * EQUIP_JOIN_ROW_K ? rowDiff : a.x0 - b.x0;
+  });
   const out: T[] = [];
   const used = new Set<number>();
   for (let i = 0; i < ordered.length; i++) {

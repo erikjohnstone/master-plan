@@ -192,7 +192,20 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
 
   if (name === "sweep_schedule_row") {
     const tag = data.tag || args.tag || null;
-    if (typeof data.found === "number") {
+    if (data.status === "reference_only") {
+      // Not drawn on any plan sheet, but cited elsewhere (schematic/legend/
+      // detail/etc) instead of refused outright. A citation, never an
+      // installed-quantity row — kept in its own field so it never folds
+      // into installed_quantity/tagged_plan_quantity accounting.
+      for (const ref of data.reference_tags || []) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "reference_tag", value: ref.text,
+          sheet_id: ref.sheet, table_title: data.row?.table || null,
+          bbox_px: ref.bbox, source_tool: name,
+          note: `Drawn on a ${ref.role} sheet — a schematic/legend/reference drawing, never installed work.`,
+        }));
+      }
+    } else if (typeof data.found === "number") {
       const quantityBasis = data.anchor?.grounding_basis || "symbol_fingerprint";
       const firstMatch = (data.sheets || []).flatMap((sheet) =>
         (sheet.matches || []).map((match) => ({ sheet: sheet.sheet, match })))[0] || null;
@@ -382,6 +395,24 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
           evidence_title: diagramCite.title || null,
           evidence_binding_status: diagramCite.schedule_binding_status || null,
           note: "Authored diagram tag corroboration only; not installed quantity.",
+        }));
+      }
+      for (const refCite of row.reference_tag_cites || []) {
+        if (!refCite?.sheet || !refCite?.bbox) continue;
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "reference_tag", value: refCite.text || tag,
+          sheet_id: refCite.sheet, table_title: scheduleTitle,
+          bbox_px: refCite.bbox, source_tool: name,
+          note: `Drawn on a ${refCite.role} sheet — a schematic/legend/reference drawing, never installed work.`,
+        }));
+      }
+      for (const servedCite of row.served_equipment_cites || []) {
+        if (!servedCite?.sheet || !servedCite?.bbox) continue;
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "served_equipment_tag", value: servedCite.tag,
+          sheet_id: servedCite.sheet, table_title: scheduleTitle,
+          bbox_px: servedCite.bbox, source_tool: name,
+          note: `This row's own mark is not drawn anywhere; located via the unit it serves, drawn on a ${servedCite.role} sheet. Never installed evidence for this row's own mark.`,
         }));
       }
     }
@@ -1667,6 +1698,8 @@ export function compileAgentTakeoff(rows = []) {
         plan_tag_bbox_px: null,
         plan_tag_binding_status: null,
         diagram_cites: [],
+        reference_tag_cites: [],
+        served_tag_cites: [],
         table_title: null,
         workflows: new Set(),
         status: null,
@@ -1846,6 +1879,32 @@ export function compileAgentTakeoff(rows = []) {
         }
       }
       if (row.note) g.notes.push(row.note);
+    } else if (field === "reference_tag") {
+      if (row.sheet_id && row.bbox_px) {
+        const identity = `${row.sheet_id}\0${JSON.stringify(row.bbox_px)}`;
+        if (!g.reference_tag_cites.some((cite) => cite.identity === identity)) {
+          g.reference_tag_cites.push({
+            identity,
+            sheet_id: row.sheet_id,
+            bbox_px: row.bbox_px,
+            text: row.value || tag,
+            note: row.note || null,
+          });
+        }
+      }
+    } else if (field === "served_equipment_tag") {
+      if (row.sheet_id && row.bbox_px) {
+        const identity = `${row.sheet_id}\0${JSON.stringify(row.bbox_px)}`;
+        if (!g.served_tag_cites.some((cite) => cite.identity === identity)) {
+          g.served_tag_cites.push({
+            identity,
+            sheet_id: row.sheet_id,
+            bbox_px: row.bbox_px,
+            served_tag: row.value || null,
+            note: row.note || null,
+          });
+        }
+      }
     } else if (!SKIP_ATTR.has(field) && !SKIP_ATTR.has(fieldU) && row.value != null && String(row.value).trim() !== "") {
       // Prefer first non-empty; later richer tools can overwrite empty.
       if (g.attrs[field] == null || String(g.attrs[field]).trim() === "") {
@@ -1864,6 +1923,7 @@ export function compileAgentTakeoff(rows = []) {
       if (row.bbox_px) g.plan_bbox_px = row.bbox_px;
       g.status = g.status || "located";
     } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag" && field !== "plan_tag_observation" && field !== "diagram_tag"
+      && field !== "reference_tag" && field !== "served_equipment_tag"
       // A valve compile's plan_paint hint is emitted BEFORE the tag's quantity
       // row and only says which schedule to prefer when re-sweeping; letting it
       // win "first row sets schedule_sheet_id" handed every Schedule row cite a
@@ -1979,6 +2039,8 @@ export function compileAgentTakeoff(rows = []) {
       plan_tag_binding_status: g.plan_tag_binding_status || null,
       plan_bbox_px: g.plan_bbox_px || null,
       diagram_cites: g.diagram_cites.map(({ identity: _identity, ...cite }) => cite),
+      reference_tag_cites: g.reference_tag_cites.map(({ identity: _identity, ...cite }) => cite),
+      served_tag_cites: g.served_tag_cites.map(({ identity: _identity, ...cite }) => cite),
       schedule_sheet_id: g.schedule_sheet_id || g.sheet_id || null,
       table_title: g.table_title,
       status: g.status || null, // blank Status column is noise — only set when real

@@ -1,0 +1,10 @@
+sheet,tag,role,in_table,note
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#20,EXF-1,plan,false,"Hexagonal equipment tag ('EXF' over '1') next to a box/fan symbol labeled '(ON ROOF)' near the bottom of the building plan; exhaust fan, unique instance mark."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#20,MAU-1,plan,false,"Hexagonal equipment tag ('MAU' over '1') next to a box/fan symbol labeled '(ON ROOF)' near the center of the building plan; make-up air unit, unique instance mark."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#22,DM,plan,false,"Damper motor, small rectangular box glyph. Occurs twice on the plan (near L-1 and near L-2), each tagging a separate physical damper actuator, but the literal tag text is identical both times with no distinguishing suffix, so treated as one repeatable type mark, listed once."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#22,EF-3,plan,false,"Exhaust fan, hexagon glyph, bottom-left wall of building (unique instance mark)."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#22,EF-4,plan,false,"Exhaust fan, hexagon glyph, top-left wall of building (unique instance mark)."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#22,L-1,plan,false,"Louver, hexagon glyph, top wall near electrical panel (unique instance mark)."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#22,L-2,plan,false,"Louver, hexagon glyph, bottom-right wall near electrical panel; also referenced by name in Drawing Note 6 text (unique instance mark)."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#22,UH-1,plan,false,"Unit heater, hexagon glyph, lower-right interior area (unique instance mark)."
+097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#22,UH-2,plan,false,"Unit heater, hexagon glyph, upper-left interior area (unique instance mark)."

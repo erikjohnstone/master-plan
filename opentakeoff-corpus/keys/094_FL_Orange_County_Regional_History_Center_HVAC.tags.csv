@@ -1,0 +1,25 @@
+sheet,tag,role,in_table,note
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,AHU-04,plan,false,"Unique air-handling-unit box, roof level, confirmed by rendered box glyph + textSpans label."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,AHU-05,plan,false,"Unique AHU box on roof, confirmed."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,AHU-06,plan,false,"Unique AHU box on roof, confirmed."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,AHU-07,plan,false,"Unique AHU box on roof, confirmed."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,AHU-08,plan,false,"Unique AHU box near the chiller/pump cluster, confirmed."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,AS,plan,false,"Air separator: pump-like circle glyph labeled 'AS' just below/left of P-1/P-2 in the CHW piping run, confirmed by crop. Single instance on this sheet."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,CH-2,plan,false,"Chiller box (3-circle compressor glyph) labeled CH-2, confirmed by crop."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,CT-1,plan,false,"Cooling tower, circular glyph labeled CT-1, confirmed."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,FCU-1,plan,false,"Fan coil unit box inside the elevator machine room enclosure, confirmed by crop."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,G,plan,false,"LOW CONFIDENCE / borderline: single letter 'G' in a small square box with a leader to a round vent/damper glyph next to the stairwell 'DN' symbol (roof relief/gravity vent). Same ambiguity as 'M' — short, no hyphen/number, no on-sheet legend confirming it as an instance tag vs. a generic vent-type code."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,M,plan,false,"LOW CONFIDENCE / borderline: single letter 'M' in a small square box with a leader to a round damper-like glyph in the AHU duct run near grid area (top-left of the AHU cluster). Reads like a motorized-damper type designator rather than a unique equipment instance tag (no hyphen/number, no visible legend on this sheet defining 'M'). Included per the rule's explicit 'damper' example, but flagged as uncertain — could reasonably be excluded as a generic drafting symbol rather than a schedule/instance tag."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,P-1,plan,false,"Pump glyph (circle-with-dot) labeled P-1 in the chiller-plant piping cluster, confirmed by crop."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#4,P-2,plan,false,"Second pump glyph labeled P-2, adjacent to P-1, confirmed by crop."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,AHU-4,plan,false,"Unique AHU box, same physical unit as 'AHU-04' on sheet M-102 but the literal text on THIS sheet has no leading zero. Also appears as an EQUIP row in the 'TEMPERATURE & HUMIDITY GUIDELINES' schedule table lower on this same sheet (that occurrence would be in_table:true; recorded here once per the identity rule, with this dual context noted)."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,AHU-5,plan,false,Unique AHU box. Also repeated as an EQUIP row in the temperature/humidity schedule table on this sheet.
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,AHU-6,plan,false,Unique AHU box. Also repeated as an EQUIP row in the temperature/humidity schedule table on this sheet.
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,AHU-7,plan,false,Unique AHU box. Also repeated (twice) as EQUIP rows in the temperature/humidity schedule table on this sheet.
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,AHU-8,plan,false,Unique AHU box inside the 'PHASE 1' dashed scope box. Also repeated as an EQUIP row in the temperature/humidity schedule table on this sheet.
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,CH-2,plan,false,Chiller box (4-circle glyph) labeled CH-2 inside the 'PHASE 1' box. Also repeated as an EQUIP row in the temperature/humidity schedule table on this sheet.
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,CT-1,plan,false,"Cooling tower circular glyph, inside the 'PHASE 3' dashed scope box."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,CU-1,plan,false,"Condensing unit — circular glyph labeled CU-1 directly below CH-2 inside the 'PHASE 1' box, confirmed by crop. Not present on sheet M-102 (page 4)."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,FCU-1,plan,false,"Fan coil unit box inside the elevator machine room enclosure, same as sheet M-102."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,G,plan,false,"LOW CONFIDENCE / borderline, same symbol as on page 4: single letter 'G' boxed with a leader to a round vent/damper glyph next to the stairwell 'DN' icon. Included with the same caveat as page 4's G/M."
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#5,TX,plan,false,"Transformer: appears TWICE as identical boxed 'TX' glyphs feeding the temporary skid-mounted air-cooled chiller in the 'PHASE 3' area (confirmed by crop) — treated as one repeatable type mark per the identity rule, not two separate instance tags, since neither occurrence carries a distinguishing suffix."

@@ -1,0 +1,28 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+loaded in 2470 ms
+graph in 102246 ms; sheets=75 tables=91
+
+== sheet roles == {"legend":1,"schedule":12,"plan":26,"detail":9,"elevation":3,"schematic":23,"unknown":1}
+== schedule keys == {"equipment_row":318,"valve_mark":158} total 476
+
+== census == spans=34494 label-tokens(all)=3561 equip-shaped(outside tables)=1114 in 102741 ms
+label tokens, ALL, by sheet role: {"legend":14,"schedule":926,"plan":1106,"detail":89,"elevation":21,"schematic":1357,"unknown":48}
+label tokens, OUTSIDE table regions, by sheet role: {"legend":14,"schedule":111,"plan":1106,"detail":89,"elevation":21,"schematic":895,"unknown":32}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":149,"planOnly":0,"otherOnly":9,"both":0}   e.g. CV-CUH-A1-HHW: plan=0 other=0 | CV-HHW-BP-A1: plan=0 other=1 | CV-DOAH-A1-HHW: plan=0 other=0 | CV-DOAH-A2-HHW: plan=0 other=0 | CV-FCU-A1-HHW: plan=0 other=0 | CV-FCU-A2-HHW: plan=0 other=0
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":3,"planOnly":160,"otherOnly":91,"both":64}   e.g. AHU-A1: plan=2 other=3 | AHU-A2: plan=2 other=2 | DOAH-A1: plan=2 other=3 | DOAH-A2: plan=2 other=3 | FCU-A1: plan=2 other=0 | FCU-A2: plan=2 other=0
+
+== drawn equip-shaped keys: 301; with a schedule key: 239; WITHOUT any schedule key: 62 ==
+  sample unscheduled: M-501x21, M-301x12, M-509x11, M-510x9, M-311x8, M-508x7, M-401x5, M-321x5, CSF-CHW-M1x5, CSF-CHW-A1x4, CSF-HHW-M1x4, M-411x3, M-421x3, CSF-HHW-A1x3, CV-HHW-BP-Mx3, CV-HHW-BP-Tx3, MEN-146x2, MEN-142x2, CV-CHW-BP-Ax2, CV-CHW-BP-Mx2, HHWC-DOAH-T1x2, OUT-OF-THEx2, M-001x1, M-002x1, TG-10x1
+
+== FCU == schedule keys=75 (unit_mark=0, equipment_row=42); distinct FCU tags drawn outside tables=44; total FCU tag occurrences=88 (84 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  FCU-A1           found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=49 1733 ms
+  CV-FCU-A1-CHW    REFUSED (27 ms): Schedule row "CV-FCU-A1-CHW" (CHW CONTROL VALVE SCHEDULE on navfac-cherry-point-atc-mechanical.pdf#44) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from te
+  HRHWP-MT1        REFUSED (13 ms): Schedule row "HRHWP-MT1" (PUMP SCHEDULE on navfac-cherry-point-atc-mechanical.pdf#45) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the 
+
+done in 104516 ms

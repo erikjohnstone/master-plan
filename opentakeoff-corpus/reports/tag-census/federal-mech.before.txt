@@ -1,0 +1,26 @@
+loaded in 1469 ms
+graph in 36674 ms; sheets=24 tables=19
+
+== sheet roles == {"plan":4,"legend":2,"detail":3,"schedule":11,"unknown":1,"elevation":3}
+== schedule keys == {"equipment_row":115} total 115
+
+== census == spans=13789 label-tokens(all)=1574 equip-shaped(outside tables)=706 in 37023 ms
+label tokens, ALL, by sheet role: {"plan":170,"legend":218,"detail":303,"schedule":850,"unknown":29,"elevation":4}
+label tokens, OUTSIDE table regions, by sheet role: {"plan":170,"legend":218,"detail":303,"schedule":645,"unknown":29,"elevation":4}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":21,"planOnly":9,"otherOnly":4,"both":81}   e.g. AHU-1: plan=2 other=11 | RF-1: plan=0 other=2 | RF-2: plan=0 other=2 | SF-1: plan=0 other=2 | SF-2: plan=0 other=2 | CH-1: plan=1 other=3
+
+== drawn equip-shaped keys: 214; with a schedule key: 94; WITHOUT any schedule key: 120 ==
+  sample unscheduled: T-1x11, CSR-1x10, SS-1x10, B-1x8, CI-1x8, AX-1x8, B-2x7, T-4x7, CSR-2x7, SS-2x7, CORR-2x6, CORR-1x6, CORR-3x6, V-2x6, T-2x6, T-3x6, T-5x6, T-6x6, AX-3x6, T-7x6, H-1x6, FCU-1x5, V-1x5, VAV-43x4, VAV-17x4
+
+== FCU == schedule keys=0 (unit_mark=0, equipment_row=0); distinct FCU tags drawn outside tables=1; total FCU tag occurrences=5 (1 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  CH-1             REFUSED (86 ms): Schedule row "CH-1" has 1 exact plan-tag occurrence, but none owns distinctive adjacent or leader-connected vector geometry. The tag is retained for review; installed quantity remains unknown.
+  ET-1             REFUSED (4 ms): No schedule row "ET-1" in the set — tables found: reference on federal-attachment4-mechanical.pdf#14 (0 rows: ) | equipment on federal-attachment4-mechanical.pdf#14 (1 rows: AHU-1) | equipment on federal-attachment4-mech
+  AHU-1            found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=20 242 ms
+
+done in 37356 ms

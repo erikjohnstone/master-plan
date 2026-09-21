@@ -1,0 +1,337 @@
+sheet,tag,role,in_table,note
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,AC-1,plan,false,"Package/AC equipment icon inside CONTROL ROOM (D200), unique"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,DOAS-1,plan,false,"Rounded-rectangle equipment box glyph, dedicated outside air unit, right side of plan; multiple keynotes (8,9,10,11,12) reference it but tag itself is drawn once"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,E12- 70,plan,false,"Type-E12 exhaust register callout, CFM 70, single occurrence, comb-symbol lower-left"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,EG2- 925,plan,false,"Type-EG2 exhaust grille callout, CFM 925, appears 12 times on X-box symbols throughout pod exhaust risers - most frequent repeatable mark on sheet"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,FCU-1,plan,false,"Fan coil unit box glyph, top-right of plan, keynote 13 references installing this FCU"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,M400,plan,false,"Motorized-damper callout (triangular arrow + pentagon tag) on pod exhaust riser ducts; identical literal 'M400' at 4 different physical dampers, always paired with a circled keynote number (1,2,4,15) referencing the general/plan-notes list"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,M801,plan,false,"Motorized-damper callout, same glyph family as M400 but different value, at STAFF RR (D203) exhaust duct penetration, paired with keynote 6"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-1-1,plan,false,Underlined callout with leader arrow to a manual/motorized balancing-damper (X-box) symbol on duct branch serving pod 1 riser 1
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-1-2,plan,false,"Same pattern as PED-1-1, second riser for pod 1"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-2-1,plan,false,"Damper callout, pod 2 riser 1"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-2-2,plan,false,"Damper callout, pod 2 riser 2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-3-1,plan,false,"Damper callout, pod 3 riser 1 (near VAV-1-3)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-3-2,plan,false,"Damper callout, pod 3 riser 2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-4-1,plan,false,"Damper callout, pod 4 riser 1"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-4-2,plan,false,"Damper callout, pod 4 riser 2, near CONTROL ROOM/stair"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-5-1,plan,false,"Damper callout, pod 5 riser 1"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-5-2,plan,false,"Damper callout, pod 5 riser 2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-6-1,plan,false,"Damper callout, pod 6 riser 1, lower-right near D253/D254"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,PED-6-2,plan,false,"Damper callout, pod 6 riser 2, near CORRIDOR/room 201"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,R7- 440,plan,false,"Type-R7 return grille callout, CFM 440, single occurrence"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,R7- 540,plan,false,"Type-R7 return grille callout, CFM 540, single occurrence"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,R7- 550,plan,false,"Type-R7 return grille callout, CFM 550, single occurrence"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,R8- 600,plan,false,"Type-R8 return grille callout, CFM 600, single occurrence, X-box symbol"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,R8- 690,plan,false,"Type-R8 return grille callout, CFM 690, single occurrence"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,R9- 900,plan,false,"Type-R9 return grille callout, CFM 900, single occurrence, comb/louver-style symbol lower-right"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S1- 135,plan,false,"Type-S1 register callout, CFM 135, single occurrence in CONTROL ROOM area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S1- 140,plan,false,"Diffuser/register type-S1 callout with design CFM 140, drawn twice on identical square (X-box) diffuser symbol; literal repeats exactly so listed once per this literal"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S1- 225,plan,false,"Type-S1 register callout, CFM 225, appears twice (identical literal) on X-box diffuser symbols"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S12- 50,plan,false,"Type-S12 register callout, CFM 50, appears 3 times (chevron/comb-symbol diffusers), lower plan area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S2- 300,plan,false,"Type-S2 register callout, CFM 300, appears 3 times on X-box diffuser symbols"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S2- 325,plan,false,"Type-S2 register callout, CFM 325, appears twice"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S2- 350,plan,false,"Type-S2 register callout, CFM 350, appears twice"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S2- 375,plan,false,"Type-S2 register callout, CFM 375, appears twice"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,S3- 400,plan,false,"Type-S3 register callout, CFM 400, appears twice on X-box diffuser symbols"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,VAV-1-1,plan,false,"Unique VAV terminal box glyph (rounded rectangle) directly on plan, top row near cells D211/D212"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,VAV-1-2,plan,false,"Unique VAV box glyph, top row near cells D221/D222"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,VAV-1-3,plan,false,Unique VAV box glyph near D230/D231
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,VAV-1-4,plan,false,Unique VAV box glyph near D240
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,VAV-1-5,plan,false,Unique VAV box glyph near D253/D254
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,VAV-1-6,plan,false,"Unique VAV box glyph near stair/corridor, lower-left area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,VAV-1-7,plan,false,"Unique VAV box glyph, lower-left area near VAV-1-6"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#11,GEF-1,plan,false,"General exhaust fan symbol (small box with 'X'/vent glyph) on the roof plan at grid ~A5/B5 area, with tag 'GEF-1' in a callout box and a circled '1' referencing Plan Note 1 ('INSTALL EXHAUST FAN ON ROOF IN APPROXIMATE LOCATION SHOWN...'). Verified in textSpans at x0=1647.1,y0=3124.2. Unique instance mark (roof fan #1)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#11,GEF-2,plan,false,"Second general exhaust fan symbol on the roof plan (near grid 4/A-B), tag 'GEF-2' in a callout box with circled '1' referencing the same Plan Note 1. Verified in textSpans at x0=2607.1,y0=3515.2. Unique instance mark (roof fan #2), distinct physical unit from GEF-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#12,PEF-1,plan,false,"Roof-mounted power exhaust fan symbol (circle) on POD ROOF PLAN - MECHANICAL (M230C), tag box with leader line. Unique instance mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#12,PEF-2,plan,false,"Same as PEF-1, distinct roof exhaust fan symbol at grid B/16."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#12,PEF-3,plan,false,Distinct roof exhaust fan symbol between grids B-C/14-16.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#12,PEF-4,plan,false,Distinct roof exhaust fan symbol at grid B/13-14.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#12,PEF-5,plan,false,Distinct roof exhaust fan symbol at grid B-C/12-13.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#12,PEF-6,plan,false,Distinct roof exhaust fan symbol at grid A-B/12.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,AC-3,plan,false,"Interior AC unit tag, box callout near LOCKER A118, referenced by keynote 4 (install at 7'-6"" AFF)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,ACCU-3,plan,false,"Associated condensing unit tag, box callout with leader arrow pointing off-plan (roof/grade), near SHERIFF'S A139/DETECTIVE A136-137, referenced by keynote 5."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,CUH-2,plan,false,"Cabinet unit heater tag, box callout near SALLYPORT C100 stair."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,CUH-4,plan,false,"Cabinet unit heater tag, box callout near VESTIBULE A100."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-2-1,plan,false,"Unique VAV terminal box tag, rectangular callout with leader to equipment glyph near CELL C104-107 supply run."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-2-13,plan,false,Unique VAV box tag near JAIL COMMANDER C124/RR A104.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-2-2,plan,false,Unique VAV box tag near CELL C113 / SALLYPORT 090.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-2-3,plan,false,Unique VAV box tag near DAYROOM C114/C119.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-2-4,plan,false,Unique VAV box tag near CORRIDOR C102/JAIL COMMANDER C124.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-2-6,plan,false,Unique VAV box tag near SALLYPORT C100.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-2-7,plan,false,Unique VAV box tag near DISPATCH C126A.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-1,plan,false,Unique VAV box tag near STOR. A144/DEPUTY offices.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-10,plan,false,Unique VAV box tag near DETECTIVE A137.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-11,plan,false,Unique VAV box tag near DETECTIVE A136.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-12,plan,false,Unique VAV box tag near CORRIDOR A130.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-13,plan,false,Unique VAV box tag near EVIDENCE A134/TRANSFER VESTIBULE A133.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-14,plan,false,Unique VAV box tag near BREAK ROOM A120.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-15,plan,false,Unique VAV box tag near INTERVIEW A132.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-16,plan,false,Unique VAV box tag near SEC/FILE A123.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-17,plan,false,Unique VAV box tag near WORKOUT A122/CORRIDOR A110.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-18,plan,false,Unique VAV box tag near JAIL COMMANDER C124 (crosses Unit 2/4 boundary in plan).
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-2,plan,false,Unique VAV box tag near LOBBY A127/ADMIN A126.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-21,plan,false,"Unique VAV box tag near CORRIDOR A110, far right edge of Unit A piping run."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-3,plan,false,Unique VAV box tag near CONFERENCE A143.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-4,plan,false,Unique VAV box tag near LOBBY A127.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-5,plan,false,Unique VAV box tag near WORK A129.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-6,plan,false,Unique VAV box tag near DEPUTY A146.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-7,plan,false,Unique VAV box tag near CHIEF DEPUTY A141.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-8,plan,false,Unique VAV box tag near CONFERENCE A140.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,VAV-4-9,plan,false,Unique VAV box tag near SHERIFF'S A139.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,AC-3,plan,false,"AC unit, boxed, near AC-3/IT room bottom-left."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,AC-4,plan,false,"AC unit, boxed, near jail commander area."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,AC-5,plan,false,"Boxed tag drawn on a rooftop-mounted unit; a second, underlined leader-style 'AC-5' callout appears nearby pointing to the same unit's piping hookup -- one physical unit, listed once."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,AC-6,plan,false,"AC unit, boxed, near DOAS-2/electrical C168."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,ACCU-4,plan,false,"Air-cooled condensing unit, boxed tag."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,ACCU-5,plan,false,"Air-cooled condensing unit, boxed tag (adjacent keynote bubble '5' is a separate keynote reference, excluded)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,ACCU-6,plan,false,"Air-cooled condensing unit, boxed tag."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,AHU-4,plan,false,"Air handling unit, boxed, large unit near HCP-4."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,AS-1,plan,false,"Air separator, boxed."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,B-1,plan,false,"Booster/circulation pump, boxed, near AS-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,B-2,plan,false,"Booster/circulation pump, boxed, near AS-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,CH-1,plan,false,"Chiller, boxed tag near top of sheet."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,CH-2,plan,false,"Chiller, boxed tag near top of sheet."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,CUH-3,plan,false,"Cabinet unit heater, boxed."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,CUH-5,plan,false,"Cabinet unit heater, boxed, near laundry/sallyport."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,DOAS-2,plan,false,"Dedicated outdoor air system, boxed, large unit near FCU-2/B-1/B-2."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,DOAS-3,plan,false,"Dedicated outdoor air system, boxed, near kitchen area."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,ET-1,plan,false,"Expansion tank, boxed."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,ET-2,plan,false,"Expansion tank, boxed."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,FCU-2,plan,false,"Fan coil unit; appears as a boxed equipment tag near B-1/B-2, and again underlined next to a thermostat 'T' circle nearby -- same physical unit's two callouts, listed once."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,FCU-3,plan,false,"Fan coil unit; appears as a boxed equipment tag near AHU-4, and again underlined next to a thermostat 'T' circle nearby -- same physical unit's two callouts, listed once."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,FD,plan,false,"Repeatable fire-damper symbol tag: a circled 'FD' callout appears at least twice (near sallyports B101/B100), drawn in the same light-gray weight as background architectural linework but naming a real mechanical device (fire damper) -- listed once as a repeatable type mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HCP-2,plan,false,"Heating circulation pump, boxed (keynote bubble '6' nearby is a separate keynote reference, excluded)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HCP-3,plan,false,"Heating circulation pump, boxed, near kitchen/cook's office."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HCP-4,plan,false,"Heating circulation pump, boxed, near AHU-4 (keynote bubble '6' nearby excluded)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HRC-1,plan,false,"Heat recovery chiller unit, boxed."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HRCP-1A,plan,false,"Heat recovery circulation pump, underlined leader tag near HRC-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HRCP-1B,plan,false,"Heat recovery circulation pump, underlined leader tag near HRC-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HRCP-2A,plan,false,"Heat recovery circulation pump, underlined leader tag near HRC-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HRCP-2B,plan,false,"Heat recovery circulation pump, underlined leader tag near HRC-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HWP-1,plan,false,"Heating water pump, boxed, one of a duplex pair drawn near ET-1/AS-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,HWP-2,plan,false,"Heating water pump; its text label sits almost exactly on top of the HWP-1 label in the render (duplex pump pair, two pump glyphs drawn) but is present as a distinct textSpan at (3764.6,1137.7) vs HWP-1 at (3778.8,1133.9)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-10,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-11,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-12,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-13,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-14,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-15,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-16,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-17,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-18,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-19,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-2,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-20,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-21,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-22,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-23,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-25,plan,false,"VAV box, unique instance (note: no VAV-2-24 on this sheet, presumably on an adjacent unit's sheet)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-26,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-27,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-28,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-29,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-30,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-31,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-4,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-5,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-7,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-2-9,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-4-17,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-4-18,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-4-19,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-4-20,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,VAV-4-21,plan,false,"VAV box, unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,AC-2,plan,false,"AC unit tag box with leader arrow to equipment symbol near grid C-D/11, next to hexagon keynote '4' (excluded)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,ACCU-1,plan,false,Air-cooled condensing unit tag box with leader arrow to equipment symbol near grid A.1/13-14. Unique instance.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,ACCU-2,plan,false,Distinct condensing unit tag box with leader near grid D/12.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,ACCU-4,plan,false,"Distinct condensing unit tag box with leader near grid A.1/11, outside building line (sallyport area)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,CUH-1,plan,false,Cabinet unit heater tag box with leader near grid A.1/11 (Sallyport C170 area). Unique instance.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,DOAS-1,plan,false,"Dedicated outdoor air system unit, large rectangle labeled directly on the equipment near grid C-D/16. Unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,FCU-1,plan,false,"Fan coil unit label (underlined text) adjacent to a circled 'T' (generic thermostat symbol, no ID of its own, excluded) near grid B/D16.8-17. Unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,HCP-1,plan,false,"Heating-coil circulation pump symbol near grid B/D17, tag box with leader line. Unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,VAV-1-8,plan,false,Verified by zoomed crop: the tag box literally reads 'VAV-1-8' as one single tag (not a family 'VAV-1' plus a separate number '8') with leader to one VAV box symbol near grid A/12-13. Treated as one unique instance mark.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,AC-1,plan,false,"AC unit box symbol in the Control Room (D200), with keynote 4 leader below it referencing ceiling-mounted AC unit installation. Unique instance mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,DOAS-1,plan,false,"Dedicated outside air unit, drawn as a labeled rectangle east of the 2-bed cell block near gridline D/16. Unique instance mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,FCU-1,plan,false,"Fan coil unit box with leader line into the Mechanical room (D109), near gridline C/D-18. Unique instance mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,VAV-1-1,plan,false,"VAV box tag in rectangular callout box with leader/tap into duct near D212/D213 cells. Unique instance mark (part of numbered VAV-1-n series, each a distinct physical unit)."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,VAV-1-2,plan,false,"VAV box callout near D221/D222 cells, same series as VAV-1-1. Unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,VAV-1-3,plan,false,VAV box callout near D231/D232 cells. Unique instance.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,VAV-1-4,plan,false,VAV box callout near D241/D242 cells. Unique instance.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,VAV-1-5,plan,false,VAV box callout near D252/D253 cells. Unique instance.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,VAV-1-6,plan,false,"VAV box callout near Staff RR (D203) / stair area, bottom-left of plan. Unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,VAV-1-7,plan,false,"VAV box callout at far left edge near corridor/stair, bottom-left of plan. Unique instance."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#27,AS-2,detail,false,"Small equipment box glyph labeled 'AS-2' (air separator) in Detail 11 'M-Detail - Glycol Fill System - Glycol Tank and Expansion Tank1', tied into the CWR line near the pressure switch/triple-duty valve schematic. Verified in textSpans at x0=4880.6,y0=2883.5. Unique instance mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#27,CH-1,detail,false,"Equipment box glyph labeled 'CH-1' (Chiller 1) in Detail 8 'M-Detail - Air Cooled Chiller1', connected to CWR/CWS piping with a two-position control valve. Verified in textSpans at x0=4390.3,y0=1466.3. Unique instance mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#27,CH-2,detail,false,"Second equipment box glyph labeled 'CH-2' (Chiller 2) directly below CH-1 in the same detail, same piping schematic. Verified in textSpans at x0=4390.3,y0=1780.5. Unique instance mark, distinct physical chiller from CH-1."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#27,HRC-1,detail,false,"Equipment box glyph labeled 'HRC-1' (heat recovery chiller) in Detail 9 'M-Detail - Heat Recovery Chiller1', shown with HWS/HWR/CWR/CWS piping and a two-position control valve. Verified in textSpans at x0=799.4,y0=3663.7. Unique instance mark."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,AC-3,plan,false,Boxed equipment tag near LOCKER/AC-3 area (small AC/fan-coil unit); confirmed in crop
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,ACCU-3,plan,false,Boxed outdoor condensing-unit tag with small unit glyph near sallyport wall; confirmed in crop
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,CUH-2,plan,false,"Cabinet unit heater tag, boxed callout near sallyport"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,CUH-4,plan,false,"Cabinet unit heater tag, boxed callout near vestibule A100"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,E1,plan,false,Repeatable exhaust register type tag 'E1- 170' near JAIL COMMANDER
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,E12,plan,false,"Repeatable exhaust register type tag 'E12- <cfm>' (E12-50/60/70), confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,E6,plan,false,"Repeatable exhaust register type tag 'E6- 65', confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,E7,plan,false,"Repeatable exhaust register type tag 'E7- 80', confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,E8,plan,false,"Repeatable exhaust register type tag 'E8- 265', confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,JEF-1,plan,false,"Jail exhaust fan, boxed callout with small square glyph; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,JEF-2,plan,false,"Jail exhaust fan, boxed callout; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,JEF-3,plan,false,"Jail exhaust fan, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,JEF-4,plan,false,"Jail exhaust fan, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,R1,plan,false,"Repeatable return-grille type tag 'R1- <cfm>' (R1-75/90/100/115/120/200/215), confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,R2,plan,false,Repeatable return-grille type tag 'R2- <cfm>' (R2-250/300)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,R3,plan,false,Repeatable return-grille type tag 'R3- 400'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,R4,plan,false,"Repeatable return-grille type tag 'R4- <cfm>' (R4-600/620/735), confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,S0,plan,false,"Repeatable diffuser/register type tag drawn as 'S0- <cfm>' next to diffuser glyphs (e.g. S0-40, S0-45, S0-60); CFM suffix is a design value, not part of tag identity, listed once per type"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,S1,plan,false,"Repeatable diffuser type tag 'S1- <cfm>', many occurrences (S1-75/90/100/110/115/120/125/200) next to square diffuser glyphs"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,S12,plan,false,Repeatable diffuser type tag 'S12- <cfm>' (S12-20/30/40/50)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,S2,plan,false,Repeatable diffuser type tag 'S2- <cfm>' (S2-230/240/255/305/310/320)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,S6,plan,false,Repeatable diffuser type tag 'S6- 35'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SE16,plan,false,Repeatable diffuser type tag 'SE16- 115'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SE2,plan,false,"Repeatable diffuser type tag 'SE2- <cfm>' (SE2-100, SE2-170)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SE3,plan,false,Repeatable diffuser type tag 'SE3- 260'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SG1,plan,false,"Repeatable diffuser/grille type tag 'SG1- <cfm>' (SG1-60, SG1-200)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SS1,plan,false,"Repeatable diffuser type tag 'SS1- <cfm>' (SS1-75, SS1-120)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SS15,plan,false,"Repeatable diffuser type tag 'SS15- <cfm>' (SS15-60/65), row of cell supply diffusers, confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SS16,plan,false,"Repeatable diffuser type tag 'SS16- <cfm>' (SS16-80/85/115), confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,SS2,plan,false,Repeatable diffuser type tag 'SS2- <cfm>' (SS2-230/255/320)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-1,plan,false,"VAV box, boxed callout with leader, over cells C104-C107 row"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-13,plan,false,"VAV box, boxed callout near JAIL COMMANDER"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-2,plan,false,"VAV box, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-3,plan,false,"VAV box, boxed callout, dayroom C114 area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-4,plan,false,"VAV box, boxed callout, dayroom C119/C124 area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-5,plan,false,"VAV box, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-6,plan,false,"VAV box, boxed callout, sallyport area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-2-7,plan,false,"VAV box, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-1,plan,false,"VAV box, boxed callout, lower unit area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-10,plan,false,"VAV box, boxed callout, detective area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-11,plan,false,"VAV box, boxed callout, detective/soft inter. area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-12,plan,false,"VAV box, boxed callout, evidence area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-13,plan,false,"VAV box, boxed callout, transfer vestibule area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-14,plan,false,"VAV box, boxed callout, break room area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-15,plan,false,"VAV box, boxed callout, workout area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-16,plan,false,"VAV box, boxed callout, sec/file area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-17,plan,false,"VAV box, boxed callout, sec/file area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-18,plan,false,"VAV box, boxed callout, jail lobby/corridor area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-2,plan,false,"VAV box, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-3,plan,false,"VAV box, boxed callout, STOR./A144 area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-4,plan,false,"VAV box, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-5,plan,false,"VAV box, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-6,plan,false,"VAV box, boxed callout, deputy area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-7,plan,false,"VAV box, boxed callout"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-8,plan,false,"VAV box, boxed callout, conference A140 area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,VAV-4-9,plan,false,"VAV box, boxed callout, sheriff's area; confirmed in crop"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,AC-3,plan,false,"Unique wall-mount AC unit, boxed callout with leader to unit near RR A118"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,AC-4,plan,false,"Unique AC unit, boxed callout with leader to unit near corridor"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,AC-5,plan,false,Unique AC unit near mechanical/electrical room
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,AC-6,plan,false,Unique AC unit near boiler B-1/B-2 area
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,ACCU-4,plan,false,"Unique air-cooled condensing unit, boxed callout with leader to rooftop-mounted glyph"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,ACCU-5,plan,false,"Unique ACCU, boxed callout with leader to unit glyph near HRC-1/HRC-2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,ACCU-6,plan,false,"Unique ACCU, boxed callout with leader to unit glyph"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,AHU-4,plan,false,"Unique air handling unit, boxed callout on equipment outline near Jail Lobby"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,AS-1,plan,false,"Found in text near ELECTRICAL C167 room; label overlaps adjacent room-name text so the exact leader/glyph could not be visually isolated at this zoom, but text pattern (short prefix-number, mechanical room location) matches the other confirmed unique equipment tags"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,B-1,plan,false,"Boiler, boxed callout with leader to boiler glyph near FCU-2/DOAS-2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,B-2,plan,false,"Boiler, boxed callout with leader to second boiler glyph"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,BF-1,plan,false,"Bath/exhaust fan, boxed callout with leader to ceiling symbol, unit B bottom detail"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,BF-2,plan,false,"Bath/exhaust fan, boxed callout with leader to ceiling symbol"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,BF-3,plan,false,"Bath/exhaust fan, boxed callout with leader to ceiling symbol"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,BF-4,plan,false,"Bath/exhaust fan, boxed callout with leader to ceiling symbol"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,CH-1,plan,false,"Unique unit (cabinet/chiller-type), boxed callout with leader to hexagon-marked glyph at column G/11"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,CH-2,plan,false,"Unique unit, boxed callout with leader to hexagon-marked glyph at column J'/11"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,CUH-3,plan,false,"Cabinet unit heater, boxed callout with leader to unit glyph near sallyport C164"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,CUH-5,plan,false,"Cabinet unit heater, boxed callout with leader to unit glyph near sallyport B129"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,DOAS-2,plan,false,"Dedicated outside air unit, boxed callout on equipment outline near coil pull/mechanical room"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,DOAS-3,plan,false,"Dedicated outside air unit, boxed callout on equipment outline near kitchen area, with fan glyphs above/below"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,E1,plan,false,"Repeatable exhaust register type mark; 'E1- <cfm>' (75/100/150/170), fan/register glyph confirmed near ACCU-4 area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,E12,plan,false,Repeatable exhaust register type mark; 'E12- <cfm>' (50/60/70)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,E13,plan,false,Repeatable exhaust register type mark; 'E13- 100'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,ECG1,plan,false,"Repeatable exhaust/transfer ceiling grille type mark; 'ECG1- 1200', leader to two-bar transfer-grille glyph confirmed near VAV-2-2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,EG3,plan,false,"Repeatable exhaust-grille type mark; 'EG3- <cfm>' (80/85/110), bowtie/duct-mounted grille glyph confirmed on cell-row branch ducts"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,ET-1,plan,false,"Expansion tank, boxed callout with leader to round tank glyph near electrical room"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,ET-2,plan,false,"Expansion tank, boxed callout with leader to round tank glyph near HRC-1/HRC-2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,FCU-2,plan,false,"Fan coil unit, boxed callout on equipment outline near boilers B-1/B-2"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,FCU-3,plan,false,"Fan coil unit, boxed callout on equipment outline in mechanical closet B107"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,HCP-2,plan,false,"Heating coil pump, boxed callout with leader to pump glyph near coil pull area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,HRC-1,plan,false,"Heat-recovery core/unit, boxed callout with leader to glyph near ACCU-5/ACCU-6"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,HRC-2,plan,false,"Heat-recovery core/unit, boxed callout on equipment outline"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,HWP-1,plan,false,"Hot water pump, boxed callout with leader to pump glyph near AC-5"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,HWP-2,plan,false,"Hot water pump, boxed callout with leader to second pump glyph"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,IRH-1,plan,false,"Infrared radiant heater (matches keynote 1), boxed callout with leader to ceiling symbol, unit B bottom detail"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,IRH-2,plan,false,"Infrared radiant heater, boxed callout with leader to ceiling symbol"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,JEF-5,plan,false,"Jail exhaust fan, boxed callout with leader to duct-mounted fan symbol"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,JEF-6,plan,false,"Jail exhaust fan, boxed callout with leader to duct-mounted fan symbol"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,LV-1,plan,false,"Louver, boxed/underlined callout with leader to wall louver glyph, unit B bottom detail"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,R2,plan,false,"Repeatable return-register type mark; 'R2- 250', leader confirmed to small square glyph near VAV-4-17 area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,R3,plan,false,"Repeatable return-register type mark; 'R3- 400', leader confirmed to round symbol near VAV-4-17"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S0,plan,false,Repeatable register type mark; 'S0- 55'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S1,plan,false,Repeatable register type mark; 'S1- 100' (x3)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S12,plan,false,Repeatable register type mark; 'S12- <cfm>' (20/25/30/40)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S13,plan,false,Repeatable register type mark; 'S13- 80'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S14,plan,false,Repeatable register type mark; 'S14- 75'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S15,plan,false,Repeatable register type mark; 'S15- 150'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S2,plan,false,Repeatable register type mark; 'S2- 230'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,S4,plan,false,Repeatable register type mark; 'S4- 700'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE0,plan,false,Repeatable exhaust/return grille type mark; 'SE0- 55'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE10,plan,false,Repeatable grille type mark; 'SE10- 660/670'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE12,plan,false,Repeatable grille type mark; 'SE12- 70'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE13,plan,false,"Repeatable grille type mark; 'SE13- <cfm>' (80/100/125/130/140), symbol confirmed near medical corridor"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE15,plan,false,Repeatable grille type mark; 'SE15- 70'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE16,plan,false,Repeatable grille type mark; 'SE16- 95/100/110'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE2,plan,false,Repeatable grille type mark; 'SE2- <cfm>' (100/150/160/175/210/215)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE3,plan,false,Repeatable grille type mark; 'SE3- 280/365'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE4,plan,false,Repeatable grille type mark; 'SE4- 455'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE7,plan,false,Repeatable grille type mark; 'SE7- <cfm>' (100/125/200)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE8,plan,false,Repeatable grille type mark; 'SE8- 255'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SE9,plan,false,Repeatable grille type mark; 'SE9- 505'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS0,plan,false,"Repeatable supply-diffuser type mark; drawn on many diffuser glyphs across the plan as 'SS0- <cfm>' (e.g. SS0-25, SS0-50, SS0-55, SS0-60); CFM suffix is per-instance airflow, not part of the type identity, so counted once"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS1,plan,false,Repeatable supply-diffuser type mark; appears as 'SS1- <cfm>' many times (75/100/125/150/175/225) on square diffuser glyphs
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS12,plan,false,"Repeatable supply-diffuser type mark; 'SS12- <cfm>' (25/30/50/70), square diffuser glyph with leader confirmed"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS13,plan,false,"Repeatable supply-diffuser type mark; 'SS13- <cfm>' (75/80/90/100), diamond/box glyph confirmed"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS14,plan,false,Repeatable supply-diffuser type mark; 'SS14- 250'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS15,plan,false,"Repeatable supply-diffuser type mark; 'SS15- <cfm>' (55/60/65/70) drawn on square cross-hatched diffuser glyph, confirmed via close-up crop over cell row"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS16,plan,false,Repeatable supply-diffuser type mark; 'SS16- 80/90'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS2,plan,false,Repeatable supply-diffuser type mark; appears as 'SS2- <cfm>' (230/235/240)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS3,plan,false,Repeatable supply-diffuser type mark; 'SS3- 415'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS6,plan,false,Repeatable supply-diffuser type mark; 'SS6- 60'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS7,plan,false,Repeatable supply-diffuser type mark; 'SS7- 200/205'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS8,plan,false,Repeatable supply-diffuser type mark; 'SS8- 230'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,SS9,plan,false,Repeatable supply-diffuser type mark; 'SS9- 400' repeated at kitchen area
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-10,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-11,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-12,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-13,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-14,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-15,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-16,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-17,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-18,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-19,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-2,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-20,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-21,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-22,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-23,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-25,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-26,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-27,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-28,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-29,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-30,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-31,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-5,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-7,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-2-9,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-4-17,plan,false,"Unique VAV box, boxed callout on plan, workout/corridor area"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-4-18,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-4-19,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-4-20,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,VAV-4-21,plan,false,"Unique VAV box, boxed callout on plan"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,AC-2,plan,false,"Unique instance mark, boxed callout for an air-conditioning unit near SECURITY room D108."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,ACCU-1,plan,false,"Unique instance mark, boxed callout with hexagon 5 leader pointing to a condensing-unit glyph near SS1/D100 area."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,ACCU-2,plan,false,"Unique instance mark, boxed callout with hexagon 5 leader pointing to a condensing-unit glyph near grid 12/AC-2."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,ACCU-4,plan,false,"Unique instance mark, boxed callout with arrow pointing to condensing-unit glyph near corridor C169/sallyport C170 at bottom of sheet."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,CUH-1,plan,false,"Unique instance mark for a cabinet unit heater, boxed callout with hexagon 9 leader near corridor/sallyport, grid 11."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,DOAS-1,plan,false,"Unique instance mark for dedicated outdoor air system unit, boxed callout on exterior wall (grid ~D/16-17), with plan-note hexagon 5 leader beside it."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,SE15,plan,false,Repeatable diffuser/register type mark drawn as 'SE15- 70' (tag + CFM) on a square exhaust register symbol near corridor D103/CUH-1 area.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,SE2,plan,false,"Repeatable diffuser/register type mark drawn as 'SE2- 130' (tag + CFM) on a round/duct-mounted exhaust register symbol adjacent to SE15, same cluster near D103."
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,SS1,plan,false,Repeatable diffuser/register type mark drawn as 'SS1- 130' (tag + CFM) on a square supply-air register symbol; occurs twice on this sheet (near D100/secured corridor and again near D101/janitor stair area) — listed once.
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,VAV-1-8,plan,false,"Unique instance mark for a VAV box, boxed callout with arrow leader pointing to the VAV box symbol on the vertical supply riser near corridor D101/grid 12."

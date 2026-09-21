@@ -1,0 +1,41 @@
+sheet,tag,role,in_table,note
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1104,plan,false,Fan Terminal Unit tag with leader arrow pointing into Cafeteria/Kitchen area (near room 144/145); unique instance mark.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1201,plan,false,FTU tag with leader tick at room boundary near Clerk Typist III / Open Workspace; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1202,plan,false,FTU tag near Clerk Typist III cluster; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1203,plan,false,FTU tag near LT. office 136; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1204,plan,false,FTU tag near Captain office 132; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1205,plan,false,FTU tag near Clerk room 111; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1206,plan,false,FTU tag near Sergeant office 108; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1207,plan,false,FTU tag near Conference room 104; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1208,plan,false,FTU tag near Men's Toilet 1 / Corridor 124; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,FTU-1209,plan,false,FTU tag near Men's Toilet 2 / Radio Room; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,LP2A,plan,false,Electrical panel tag drawn directly on its gray panel-box symbol in Electrical Room 120; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,LP2B,plan,false,"Electrical panel tag on adjacent gray panel-box symbol, Electrical Room 120; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,RP2,plan,false,Receptacle panel tag on gray panel-box symbols (two ganged boxes) in Electrical Room 120; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,T-2,plan,false,Transformer tag on boxed symbol in Electrical Room 120; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,UP1,plan,false,"Panel/disconnect tag on gray box symbol feeding the UPS, Electrical Room 120; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#19,UPS,plan,false,"UPS unit tag on its own boxed symbol, Electrical Room 120; unique instance, distinct from UP1's panel box."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,ATS,plan,false,"Automatic Transfer Switch tag next to diamond keynote '1', Electrical Room 154 area; matches the explicitly allowed 'transfer switch' equipment category; unique instance (only one seen on this sheet)."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,DP1,plan,false,Distribution/disconnect panel tag next to a small triangular disconnect-switch symbol near FTU-n110's conduit run; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,ELP1,plan,false,"Emergency lighting panel tag on gray panel-box symbol, Electrical Room 154; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,ERP1,plan,false,"Emergency receptacle panel tag on gray panel-box symbol, Electrical Room 154; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FD,plan,false,"Fire Damper — small circle symbols labeled 'FD' at duct/wall penetrations, seen at least twice (Toilet 1 room 152, and again near FTU-n111); a repeatable type mark labeling many identical fixtures of the same type, so listed once."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-1102,plan,false,"FTU box symbol with leader, near Supply/Storage 163; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-1103,plan,false,"FTU box symbol with leader, near Building/Ground Maintenance 162; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-1104,plan,false,"FTU box symbol with leader, near Cafeteria/Kitchen 144-145; unique instance. Same physical unit also appears (as a bold callout) on the adjoining Area-1 sheet page 19 near the same Cafeteria room, since the two 'Area 1'/'Area 2' power-plan sheets overlap at this shared corner of the building; recorded independently on each sheet per the per-page ground-truth instructions."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-1106,plan,false,"FTU box symbol with leader, near Lockable File Storage 166/Chair Storage 169; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-1107,plan,false,"FTU box symbol with leader, near Evidence Storage/Troop Meeting Room boundary; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-1108,plan,false,"FTU box symbol with leader, south of FTU-1107; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-n110,plan,false,"FTU box symbol with leader arrow and circuit callout 'LP1-19,21,23', near Road Office 151/Interview 155; unique instance. 'n' infix likely denotes a distinct new/renumbered unit from the 110x series."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-n111,plan,false,"FTU box symbol with leader and circuit callout 'LP1-25,27,29', near Toilet 1/152; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-n112,plan,false,"FTU box symbol with leader and circuit callout 'LP1-31,33,35', near Sergeant office 149; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,FTU-n113,plan,false,"FTU box symbol with leader and circuit callout 'LP1-38,40,42', near Sergeant office 147/148; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,LP1,plan,false,"Lighting panel tag on gray panel-box symbol, Electrical Room 154; the same panel is referenced repeatedly by many circuit-breaker callouts elsewhere on the sheet ('LP1-19,21,23', 'LP1-25,27,29', etc.) feeding the various FTU/VAV units, but it is a single physical panel, so listed once as a unique instance mark, not once per circuit reference."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,RP1,plan,false,Receptacle panel tag on gray panel-box symbol in Electrical Room 154; unique instance.
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,T-1,plan,false,"Transformer tag on boxed symbol, Electrical Room 154; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,T-E,plan,false,"Transformer tag (existing) on boxed symbol, Electrical Room 154; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,VAV-1101,plan,false,"VAV box, rectangular symbol with leader arrow, near Toilet 1/Lockable File Storage; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,VAV-1102,plan,false,"VAV box, elongated rectangular symbol with leader arrow, in Automobile Service Garage area; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#20,VAV-1103,plan,false,"VAV box, elongated rectangular symbol with leader arrow, near Evidence Storage 170; unique instance."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#21,RTU-1,plan,false,"Unique instance tag with leader line pointing to a rooftop unit equipment glyph (hatched rectangular unit) on the roof power plan, near disconnect/circuit callout LP1-80,82,84."
+020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf#21,RTU-2,plan,false,"Unique instance tag with leader line pointing to a second, distinct rooftop unit equipment glyph on the same roof power plan, near disconnect/circuit callout LP2A-43,45,47."

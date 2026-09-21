@@ -3,7 +3,9 @@
 // it performs additional room/tag/row-symbol scoring; table-recall is the
 // recall-tier check (does the pipeline find a table at all, independent of
 // whether it scores it right) and is cheap/no-op until a *.tables.csv key
-// exists for a set.
+// exists for a set; tag-eval (plans/03-drawing-tag-recognition-audit.md
+// §3.8, WP7) is the same recall-tier discipline applied to graph.tags —
+// cheap/no-op until a *.tags.csv key exists for a set.
 //
 //   node --import tsx scripts/corpus-eval.mjs <corpus-dir> [setId ...] [--report]
 import { spawn } from "node:child_process";
@@ -48,6 +50,7 @@ try {
     run("takeoff + reference", "takeoff-eval.mjs", [...args, "--with-reference"]),
     run("sheet graph", "graph-eval.mjs", args.filter((arg) => arg !== "--with-reference")),
     run("table recall", "table-recall-eval.mjs", args.filter((arg) => arg !== "--with-reference" && arg !== "--report")),
+    run("tag census", "tag-eval.mjs", args.filter((arg) => arg !== "--with-reference" && arg !== "--report")),
   ]);
   console.error(`\n=== complete corpus evaluation finished in ${((performance.now() - started) / 1000).toFixed(1)}s ===`);
 } catch (error) {

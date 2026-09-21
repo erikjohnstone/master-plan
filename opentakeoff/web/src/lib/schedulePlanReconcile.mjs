@@ -7,6 +7,8 @@
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
+import { markKey } from "./markid.ts";
+import { tagIndexFor } from "./tagIndex.ts";
 
 /** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
 
@@ -376,6 +378,120 @@ export function rowIdentityTag(row, identityHeaderRe = null) {
 }
 
 /**
+ * The unit a row's own device SERVES (or is served BY), when the schedule
+ * names it in a separate column — a valve row's own identity is the VALVE
+ * MARK, but UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED name the
+ * host unit that is actually drawn on the plan. Neighbour of
+ * rowIdentityTag: same header-scan shape, a different header set, and
+ * genuinely a different mark — never a substitute identity for the row.
+ * @param {object} row
+ * @returns {string|null}
+ */
+export function servedEquipmentTag(row) {
+  for (const [header, cell] of Object.entries(row?.cells || {})) {
+    if (!/^(UNIT\s*MARK|SERVES|SERVED\s*EQUIPMENT|EQUIPMENT\s*SERVED)$/i.test(String(header || "").trim())) continue;
+    const t = String(cell?.text || "").trim();
+    if (t) return t;
+  }
+  return null;
+}
+
+/**
+ * True only when `a`/`b` (already markKey-canonicalized, upper-case,
+ * hyphen/space-stripped) are exactly one edit apart AND the edited
+ * character is a letter on every side it appears — a substitution swaps
+ * one letter for another, an insert/delete adds/removes one letter. An
+ * edit that touches a digit (inserts, deletes, or changes one) never
+ * qualifies: "FCU1" vs "FCU10" differs by inserting the digit "0", so it
+ * is never an alias candidate — see WP6's own worked examples.
+ * @param {string} a
+ * @param {string} b
+ * @returns {boolean}
+ */
+function letterEditDistanceOne(a, b) {
+  if (a === b) return false;
+  const la = a.length;
+  const lb = b.length;
+  if (Math.abs(la - lb) > 1) return false;
+  const LETTER = /[A-Z]/;
+  if (la === lb) {
+    let diffIndex = -1;
+    let diffCount = 0;
+    for (let i = 0; i < la; i++) {
+      if (a[i] !== b[i]) {
+        diffCount++;
+        if (diffCount > 1) return false;
+        diffIndex = i;
+      }
+    }
+    if (diffCount !== 1) return false;
+    return LETTER.test(a[diffIndex]) && LETTER.test(b[diffIndex]);
+  }
+  const shorter = la < lb ? a : b;
+  const longer = la < lb ? b : a;
+  let i = 0;
+  while (i < shorter.length && shorter[i] === longer[i]) i++;
+  const extra = longer[i];
+  for (let j = i; j < shorter.length; j++) {
+    if (shorter[j] !== longer[j + 1]) return false;
+  }
+  return LETTER.test(extra);
+}
+
+/**
+ * WP6: two review lists, neither changes any quantity.
+ * `unscheduled_tags` — every drawn tag occurrence (WP2's graph.tags, sheet
+ * callouts excluded) whose key never appears as any schedule row's own
+ * identity anywhere in the set (row.key and rowIdentityTag(row), each
+ * split on compound "/" marks, the same way countMarks and the family
+ * reconcile builder already split them).
+ * `alias_candidates` — for every distinct drawn key, the nearest distinct
+ * schedule-row key at letterEditDistanceOne, if any — a likely typo/OCR
+ * spelling drift between the schedule and the drawing, or between two
+ * schedule rows themselves, surfaced for human review only.
+ * @param {{tables?: object[], tags?: object[]}} graph
+ * @returns {{unscheduled_tags: object[], alias_candidates: {drawn: string, nearest_row_key: string, distance: number}[]}}
+ */
+export function unscheduledTagsAndAliasCandidates(graph) {
+  const rowKeys = new Set();
+  for (const table of graph?.tables || []) {
+    for (const row of table.rows || []) {
+      for (const raw of [row?.key, rowIdentityTag(row)]) {
+        if (!raw) continue;
+        for (const part of markKey(raw).split("/").filter(Boolean)) rowKeys.add(part);
+      }
+    }
+  }
+  const drawnTags = (graph?.tags || []).filter((t) => !t.sheet_callout);
+  // Wire shape (bbox tuple → object, optional fields omitted rather than
+  // null) matches Session.listTags exactly, so both surfaces agree.
+  const unscheduled_tags = drawnTags.filter((t) => !rowKeys.has(t.key)).map((t) => ({
+    sheet: t.sheet, role: t.role, text: t.text, key: t.key, family: t.family,
+    bbox: { x0: t.bbox[0], y0: t.bbox[1], x1: t.bbox[2], y1: t.bbox[3] },
+    ...(t.rot ? { rot: t.rot } : {}),
+    source: t.source,
+    ...(t.multiplier > 1 ? { multiplier: t.multiplier } : {}),
+    ...(t.in_table ? { in_table: t.in_table } : {}),
+    ...(t.sheet_callout ? { sheet_callout: true } : {}),
+  }));
+  const distinctDrawnKeys = [...new Set(drawnTags.map((t) => t.key))].sort();
+  const sortedRowKeys = [...rowKeys].sort();
+  const alias_candidates = [];
+  for (const drawn of distinctDrawnKeys) {
+    let nearest = null;
+    for (const rowKey of sortedRowKeys) {
+      if (drawn === rowKey) continue;
+      if (letterEditDistanceOne(drawn, rowKey)) {
+        nearest = rowKey;
+        break;
+      }
+    }
+    if (nearest) alias_candidates.push({ drawn, nearest_row_key: nearest, distance: 1 });
+  }
+  return { unscheduled_tags, alias_candidates };
+}
+
+/**
  * Build reconcile rows from buildPlanSetTakeoff items (installed sweep path).
  * @param {Array<object>} items TakeoffItem[]
  * @param {Array<object>} [failures] TakeoffFailure[]
@@ -510,6 +626,8 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
         ...(loc.reason ? { reason: loc.reason } : {}),
         ...(loc.hold ? { hold: loc.hold } : {}),
       })),
+      ...(item.reference_tags?.length ? { reference_tag_cites: item.reference_tags } : {}),
+      ...(item.served_equipment_cites?.length ? { served_equipment_cites: item.served_equipment_cites } : {}),
       reason: qtyStatus.reason || item.reason || fail?.detail
         || (tagTextOnly
           ? `Exact plan tag text was found ${taggedPlanQty} time${taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
@@ -728,7 +846,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         }
         // Parity with compile uniqueFamily — continuation / duplicate extracts
         // of the same MARK must not inflate reconcile rows (Douglas HP-20).
-        const canon = String(tag).toUpperCase().replace(/\s+/g, "");
+        const canon = markKey(tag);
         const tableFamily = title.toUpperCase().replace(/[^A-Z0-9]/g, "") || table.kind || "(untitled)";
         const rowId = `${table.sheet}::${canon}`;
         const scopeIdentity = `${canon}\0${tableFamily}\0${table.drawing_group || "(unscoped)"}`;
@@ -739,10 +857,33 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
         const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
         const reportedInstalledQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;
-        const installedEvidenceGrade = sweep.installedEvidenceGrade
-          || (sweep.installedQtyBasis === "symbol_fingerprint" || sweep.installedQtyBasis === "tag_attached_vector" ? "symbol_geometry"
-            : sweep.installedQtyBasis === "explicit_installation_note" ? "explicit_installation_note"
-              : sweep.installedQtyBasis === "exact_plan_tag" ? "tag_text_only" : "unverified");
+        // Served-equipment location grade (WP5): a row's own mark (often a
+        // VALVE MARK) sometimes has zero drawn occurrences anywhere — the
+        // schedule names the valve, but only the UNIT it serves is ever
+        // actually labeled on the drawings. Look up the served mark's own
+        // drawn occurrences directly from the tag index. This never
+        // substitutes for the row's own identity and never counts as
+        // installed quantity — sweepScheduleRow still refuses to count the
+        // served unit as the valve — it only locates the row for review.
+        const ownDrawn = tagIndexFor(graph.tags ?? [], tag).some((dt) => !dt.sheet_callout && !dt.in_table);
+        let servedEquipmentCites = [];
+        if (!ownDrawn) {
+          const servedTag = servedEquipmentTag(row);
+          if (servedTag) {
+            servedEquipmentCites = tagIndexFor(graph.tags ?? [], servedTag)
+              .filter((dt) => !dt.sheet_callout && !dt.in_table)
+              .map((dt) => ({
+                tag: servedTag, sheet: dt.sheet, role: dt.role,
+                bbox: { x0: dt.bbox[0], y0: dt.bbox[1], x1: dt.bbox[2], y1: dt.bbox[3] },
+              }));
+          }
+        }
+        const installedEvidenceGrade = servedEquipmentCites.length
+          ? "located_via_served_equipment"
+          : sweep.installedEvidenceGrade
+            || (sweep.installedQtyBasis === "symbol_fingerprint" || sweep.installedQtyBasis === "tag_attached_vector" ? "symbol_geometry"
+              : sweep.installedQtyBasis === "explicit_installation_note" ? "explicit_installation_note"
+                : sweep.installedQtyBasis === "exact_plan_tag" ? "tag_text_only" : "unverified");
         const installedQty = installedEvidenceGrade === "symbol_geometry"
           || installedEvidenceGrade === "explicit_installation_note"
           ? reportedInstalledQty
@@ -787,6 +928,8 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           plan_cites: sweep.planCites || [],
           plan_tag_cites: sweep.planTagCites || [],
           plan_candidate_cites: sweep.planCandidateCites || [],
+          ...(sweep.referenceTagCites?.length ? { reference_tag_cites: sweep.referenceTagCites } : {}),
+          ...(servedEquipmentCites.length ? { served_equipment_cites: servedEquipmentCites } : {}),
           reason: qtyStatus.reason || sweep.reason
             || (installedEvidenceGrade === "tag_text_only"
               ? `Exact plan tag text was found ${sweep.taggedPlanQty ?? 0} time${sweep.taggedPlanQty === 1 ? "" : "s"}, but matching symbol geometry was not verified. Installed quantity remains unknown pending geometric or human review.`
@@ -885,6 +1028,36 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         preferSheet: row.schedule_cite?.sheet ?? null,
         preferTitle: row.schedule_cite?.title ?? null,
       });
+      // Not drawn on any plan sheet, but sweep_schedule_row still located it
+      // on a schematic/legend/detail/etc sheet and disclosed the citation
+      // instead of throwing (WP4). This is not a geometric search result —
+      // skip the generic anchor/sheets handling below entirely, since
+      // r.anchor is null and r.sheets is an all-zero placeholder (nothing
+      // was actually swept). installedQty stays null: text never proves
+      // installation.
+      if (r.status === "reference_only") {
+        sweepByTag.set(row.row_id || row.tag, {
+          installedQty: null,
+          installedQtyBasis: null,
+          installedEvidenceGrade: "unverified",
+          geometryVerified: false,
+          searchScope: r.search_scope || null,
+          unlabeledAuditComplete: r.unlabeled_audit_complete ?? null,
+          planSearchComplete: r.complete !== false,
+          itemStatus: "refused",
+          reason: "drawn on schematic/legend sheets only",
+          referenceTagCites: (r.reference_tags || []).map((rt) => ({
+            sheet: rt.sheet, role: rt.role, bbox: rt.bbox, text: rt.text,
+          })),
+        });
+        processed++;
+        opts.onProgress?.({
+          phase: "reconcile_row", state: "done", tag: row.tag, processed, total,
+          elapsed_ms: Math.round(performance.now() - started),
+          status: "refused",
+        });
+        continue;
+      }
       const installedQtyBasis = r.anchor?.grounding_basis || "symbol_fingerprint";
       const matchedCites = (r.sheets || []).flatMap((ps) =>
         (ps.matches || []).flatMap((m) => Array.from({ length: m.multiplier ?? 1 }, () => ({

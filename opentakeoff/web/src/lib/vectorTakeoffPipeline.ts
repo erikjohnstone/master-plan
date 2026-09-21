@@ -194,7 +194,18 @@ function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): 
   // evidence of absence. Keep the broader legacy title/language hook below
   // the role gate: only a spatially assembled printed caption expands routing.
   if (sheetHasPointsListCaption(ctx.spans)) return true;
-  if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
+  // A real control-schematic sheet routinely titles itself "… CONTROL
+  // SCHEMATIC AND POINTS LIST" — the points list literally shares the
+  // schematic's own title. Before `schematic` existed as a role such a
+  // sheet read `legend` (a real BAS points-list schedule found live on
+  // navfac-cherry-point-atc, previously reached only through this
+  // fallback's legend/unknown allowance) and this check let it through;
+  // once `schematic` became its own, correctly-named role, the SAME sheet
+  // stopped qualifying here and its points list silently dropped out of
+  // the compile (found live: T-BAS-01's frozen row count fell from 122 to
+  // 26). `schematic` belongs in this allowance for exactly the reason
+  // `legend`/`unknown` are already here.
+  if (ctx.role !== "legend" && ctx.role !== "unknown" && ctx.role !== "schematic") return false;
   if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
   if (hooks.sheetHasDrawingIndexTitle?.(ctx.key)) return true;
   return sheetHasScheduleLanguage(ctx.spans);
@@ -437,7 +448,7 @@ async function runL45OcrAssist(
 /** True when this sheet is one L3.5 would look at at all. */
 function topologyEligible(ctx: VectorSheetContext): boolean {
   if (!ctx.segs?.length) return false;
-  return ctx.role === "plan" || ctx.role === "demolition" || ctx.role === "unknown";
+  return ctx.role === "plan" || ctx.role === "demolition" || ctx.role === "schematic" || ctx.role === "unknown";
 }
 
 /** Runs topology for one sheet and returns the milliseconds it cost. */

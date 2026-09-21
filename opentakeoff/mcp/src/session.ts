@@ -13,6 +13,7 @@ import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHan
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
 import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
@@ -355,7 +356,9 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, canonicalLabelFamily, LABEL_TOKEN_RE, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
+import { markKey, spanAnswersFor } from "../../web/src/lib/markid.ts";
+import { isEquipTag } from "../../web/src/lib/equiptags.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -2767,9 +2770,6 @@ export class Session {
     if (!graph.available) {
       throw new UserError("This set has no text layer (a scan) — the census reads drawn tag text, so it cannot run. Marquee one device with symbol_sweep instead.");
     }
-    const canon = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
-    const MARK_RE = /^[A-Z]{1,3}-?\d{1,3}[A-Z]?$/;
-
     // mark vocabulary: stated, or read off the schedule tables' row keys —
     // a compound key ("R1 / E1") contributes each of its marks
     type RowCite = { sheet: string; key: string; table: string };
@@ -2777,16 +2777,16 @@ export class Session {
     for (const tb of graph.tables) {
       const table = tb.title?.text || `${tb.kind} schedule`;
       for (const row of tb.rows) {
-        for (const part of canon(row.key).split("/").filter(Boolean)) {
+        for (const part of markKey(row.key).split("/").filter(Boolean)) {
           if (!rowCite.has(part)) rowCite.set(part, { sheet: tb.sheet, key: row.key, table });
         }
       }
     }
     let marks: string[];
     if (opts.marks?.length) {
-      marks = [...new Set(opts.marks.map(canon).filter(Boolean))];
+      marks = [...new Set(opts.marks.map(markKey).filter(Boolean))];
     } else {
-      marks = [...rowCite.keys()].filter((k) => MARK_RE.test(k)).sort();
+      marks = [...rowCite.keys()].filter((k) => isEquipTag(k) || LABEL_TOKEN_RE.test(k)).sort();
       if (!marks.length) {
         throw new UserError('No mark-shaped schedule row keys in the set to census — state the marks yourself: count_marks { marks: ["S1", "R1"] }.');
       }
@@ -2837,7 +2837,7 @@ export class Session {
       for (const m of marks) {
         const rec = perMark.get(m)!;
         for (const sp of sh.spans) {
-          if (canon(sp.str) !== m) continue;
+          if (!spanAnswersFor(sp.str, m, marks)) continue;
           const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
           const h = Math.max(sp.y1 - sp.y0, 6);
           if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
@@ -3994,18 +3994,18 @@ export class Session {
    * loadPlan clears it whenever the document set changes. */
   private tagOccurrenceCache = new Map<string, Map<string, TagOcc[]>>();
 
-  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false): TagOcc[] {
+  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false, vocab: readonly string[] = []): TagOcc[] {
     let byKey = this.tagOccurrenceCache.get(sh.key);
     if (!byKey) {
       byKey = new Map();
       this.tagOccurrenceCache.set(sh.key, byKey);
     }
-    const cacheKey = allowFamilyQuorum ? `${key}\0family-quorum` : key;
+    const cacheKey = (allowFamilyQuorum ? `${key}\0family-quorum` : key) + (vocab.length ? `\0${[...vocab].sort().join(",")}` : "");
     const cached = byKey.get(cacheKey);
     if (cached) return cached;
     if (!sh.spans) sh.spans = textSpans(sh.page);
     const exact = sh.spans
-      .filter((sp) => sp.str.trim().toUpperCase() === key)
+      .filter((sp) => spanAnswersFor(sp.str, key, vocab))
       .map((sp) => ({
         cx: (sp.x0 + sp.x1) / 2,
         cy: (sp.y0 + sp.y1) / 2,
@@ -4492,7 +4492,7 @@ export class Session {
       }
     }
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
-      this.tagOccurrencesOnSheet(sh, key, airDeviceTable);
+      this.tagOccurrencesOnSheet(sh, key, airDeviceTable, tableSiblingKeys);
     // Plan-drawn form may keep spaces / omit revision prefixes while the
     // schedule row.key is glued (`NATUK1` vs plan `ATU K1` — Hurlburt). Prefer
     // any identity form that is actually drawn before refusing no-plan-tag.
@@ -4563,6 +4563,55 @@ export class Session {
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
     if (!totalOcc) {
+      // Not drawn on any PLAN sheet — but a schematic/legend/detail/etc
+      // occurrence still locates and cites the mark. Disclose it instead of
+      // refusing outright: text never proves installation, so this never
+      // becomes a count, but it beats a bare "not found".
+      const refTags = tagIndexFor(graph.tags ?? [], t)
+        .filter((dt) => dt.role !== "plan" && !dt.sheet_callout && !dt.in_table);
+      if (refTags.length) {
+        const roles = [...new Set(refTags.map((dt) => dt.role))].sort();
+        const cells: Record<string, string> = {};
+        for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+        const cellCitations = Object.fromEntries(Object.entries(r.cells).map(([header, cell]) => [
+          header,
+          { text: cell.text, bbox: Session.wireBox(cell.bbox) },
+        ]));
+        const firstCell = r.cells[Object.keys(r.cells)[0]];
+        return {
+          tag: t,
+          search_scope: opts.evaluationFast ? "tagged_only" as const : "exhaustive" as const,
+          unlabeled_audit_complete: false,
+          row: {
+            sheet: tb.sheet,
+            table,
+            key: t,
+            ...(drawingGroupScope ? { drawing_group: drawingGroupScope } : {}),
+            cells,
+            cell_citations: cellCitations,
+            citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
+          },
+          tag_citations: [],
+          anchor: null,
+          found: 0,
+          sheets: planSheets.map((sh) => ({
+            sheet: sh.key,
+            found: 0,
+            matches: [],
+            withheld: [],
+            excluded: [],
+            text_only: [],
+            candidates: { considered: 0, dropped: 0 },
+            complete: true,
+            elapsed_ms: 0,
+          })),
+          complete: true,
+          skipped,
+          status: "reference_only" as const,
+          reference_tags: refTags.map((dt) => ({ sheet: dt.sheet, role: dt.role, bbox: Session.wireBox(dt.bbox), text: dt.text })),
+          note: `The mark "${t}" is not drawn on any plan sheet, but ${refTags.length} occurrence${refTags.length === 1 ? "" : "s"} of it appear${refTags.length === 1 ? "s" : ""} on ${roles.join(", ")} sheet(s) — schematic/legend/reference drawings, disclosed below as citations, never installed work.`,
+        };
+      }
       const markNote = ownMarks.size > 1 ? ` Tried every mark of this compound key (${[...ownMarks].join(", ")}) — none is drawn on any plan sheet.` : "";
       throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone.${markNote} If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
     }
@@ -6980,7 +7029,7 @@ export class Session {
         let segs: number[] | undefined;
         if (spans.some((t) => /^\d{1,2}$/.test(t.str.trim()))) {
           const role = classifySheetRole({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
-          if (role === "plan" || role === "schedule" || role === "demolition" || role === "unknown") {
+          if (role === "plan" || role === "schedule" || role === "demolition" || role === "schematic" || role === "unknown") {
             if (vecBudget <= 0) skippedHeavy++;
             else if (s.geo) { segs = s.geo.segs; vecBudget -= segs.length / 4; }
             else {
@@ -7951,6 +8000,43 @@ export class Session {
       ...(g.revisions.length ? { revisions: g.revisions.map((r) => ({ rev: r.rev, sheet: r.sheet, bbox: Session.wireBox(r.bbox), ...(r.drawn ? { drawn: true } : {}) })) } : {}),
       ...(notes.length ? { notes } : {}),
       counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
+    };
+  }
+
+  /** The set-wide drawn-tag census (plans/03-drawing-tag-recognition-audit.md
+   * §3.3 WP2), filtered. Excludes table-region row labels and sheet-callout
+   * cross-references by default — both real, drawn text, neither a device
+   * instance — pass `include_tables`/`include_callouts` to see them anyway.
+   * Refusal-honest like resolve_tag/find_schedule: a scan has no sheet graph
+   * to census at all, never a silent empty list. */
+  async listTags(opts: {
+    sheet?: string | null;
+    family?: string | null;
+    key?: string | null;
+    role?: string | null;
+    include_tables?: boolean;
+    include_callouts?: boolean;
+  } = {}) {
+    const g = await this.ensureGraph();
+    if (!g.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, not empty.");
+    const wantKey = opts.key ? markKey(opts.key) : null;
+    const wantFamily = opts.family ? canonicalLabelFamily(opts.family.trim().toUpperCase()) : null;
+    let tags = g.tags ?? [];
+    if (opts.sheet) tags = tags.filter((t) => t.sheet === opts.sheet);
+    if (opts.role) tags = tags.filter((t) => t.role === opts.role);
+    if (wantKey) tags = tags.filter((t) => t.key === wantKey);
+    if (wantFamily) tags = tags.filter((t) => t.family === wantFamily);
+    if (!opts.include_tables) tags = tags.filter((t) => !t.in_table);
+    if (!opts.include_callouts) tags = tags.filter((t) => !t.sheet_callout);
+    return {
+      tags: tags.map((t) => ({
+        sheet: t.sheet, role: t.role, text: t.text, key: t.key, family: t.family,
+        bbox: Session.wireBox(t.bbox), ...(t.rot ? { rot: t.rot } : {}),
+        source: t.source, ...(t.multiplier > 1 ? { multiplier: t.multiplier } : {}),
+        ...(t.in_table ? { in_table: t.in_table } : {}),
+        ...(t.sheet_callout ? { sheet_callout: true } : {}),
+      })),
+      count: tags.length,
     };
   }
 

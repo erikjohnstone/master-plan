@@ -1,0 +1,90 @@
+sheet,tag,role,in_table,note
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,AHU-1,plan,false,"Air handling unit box symbol, Mechanical 122 room, Level One plan, unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,AHU-2,plan,false,"Air handling unit box symbol, Mechanical 122 room, Level One plan, unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,CH-1,plan,false,"Air-cooled chiller box symbol (outside, keynote 10/11/12 area), Level One plan, unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,CWP-1,plan,false,"Chilled water pump symbol, Mechanical 122 room, Level One plan, unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,CWP-2,plan,false,"Chilled water pump symbol, Mechanical 122 room, Level One plan, unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,D10,plan,false,"Ceiling diffuser type tag (D10 over CFM, e.g. D10/230) on diffuser glyphs; occurs ~6x across both rooms, listed once as repeatable type."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,D12,plan,false,"Ceiling diffuser type tag (D12 over CFM, e.g. D12/400) on diffuser glyphs; occurs ~7x, listed once as repeatable type."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,D6,plan,false,"Ceiling diffuser type/size tag (D6 over CFM value, e.g. D6/50) drawn on square diffuser glyph; repeatable type mark, one occurrence on this sheet."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,D8,plan,false,"Ceiling diffuser type tag (D8 over CFM, e.g. D8/250) on diffuser glyphs; occurs 2x, listed once as repeatable type."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,DP,plan,false,Duct-mounted differential pressure sensor symbol box labeled DP near AHU-2 per key note 17; one occurrence.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,EDH-1,plan,false,Electric duct heater tag; appears once on Attic plan and once on Level One plan (near Shower 109/Toilet 110) - same duct-mounted unit serving through both levels.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,EDH-2,plan,false,"Electric duct heater tag near Corridor 115, Level One plan (two adjacent leader labels for same unit)."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,EDH-3,plan,false,"Electric duct heater tag; appears near Lab 3/119 and again near IT/COMM 120 - two leader-label instances for what appears to be duct heaters along the same run (kept as one tag per the identical literal; if genuinely two physical units, both share this label)."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,EDH-4,plan,false,"Electric duct heater tag near Lab 1/107, Level One plan; appears twice (near D12/400 diffuser and again near corridor) for same unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,EDH-5,plan,false,"Electric duct heater tag near Lab 3/119 - Lab 4/118 area, Level One plan; appears twice for same unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,EF-5,plan,false,"Exhaust fan tag on roof-mounted fan symbol, Attic/Mezzanine plan (grid 2-3), unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,EF-6,plan,false,"Exhaust fan tag on roof-mounted fan symbol, Attic/Mezzanine plan (grid 4-5), unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,F12/12,plan,false,"Floor register type tag (F12/12 over CFM=200) near VAV-1-7/AHU-1; repeatable type, one occurrence."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,H18/18,plan,false,"High sidewall return/transfer grille type tag (size-encoded, over CFM e.g. H18/18 / 800) on square grille glyphs; occurs 7x, listed once as repeatable type."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,H6/6,plan,false,"High sidewall grille type tag (H6/6 over CFM=50) on grille glyph near Corridor 115; repeatable type, one occurrence."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,H8,plan,false,"High sidewall grille type tag (H8 over CFM=220) near D6 grille; repeatable type, one occurrence."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,L6/6,plan,false,"Low sidewall/transfer grille type tag (L6/6 over CFM=50, TYP OF 4) near Toilet 111; repeatable type, one occurrence."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,M,plan,false,"Damper/valve actuator (motor) symbol box labeled M, drawn on existing damper near AHU-1 and AHU-2 per key note 14 (provide actuator on existing damper); repeatable type mark, ~2-3 occurrences, listed once."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,T,plan,false,"Wall/duct-mounted temperature sensor (thermostat) symbol box labeled T, drawn repeatedly next to VAV boxes and EDH units per key note 5 (replace zone/duct/pipe sensors); repeatable type mark, ~11 occurrences, listed once."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,VAV-1-1,plan,false,"VAV terminal box tag near Office 101, Level One plan; drawn twice (box + duct run label) for same physical unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,VAV-1-2,plan,false,"VAV terminal box tag near Office 102/Corridor 103, Level One plan; appears twice for same unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,VAV-1-3,plan,false,VAV terminal box tag; appears once on Attic plan (duct run) and once on Level One plan near Toilet 105/Janitor 106 - same physical unit serving both levels.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,VAV-1-4,plan,false,"VAV terminal box tag near Corridor 114, Level One plan; appears twice for same unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,VAV-1-5,plan,false,"VAV terminal box tag near Lounge 117/Office 116, Level One plan; appears twice for same unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,VAV-1-6,plan,false,"VAV terminal box tag near IT/COMM 120, Level One plan; appears twice for same unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#15,VAV-1-7,plan,false,"VAV terminal box tag near Corridor 115/AHU-1 area, Level One plan; appears twice for same unit."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,AHU-1,schedule,true,Section header row of the 'BUILDING AIR BALANCE' schedule table (Air Handling Unit 1 room list). Not drawn on the roof plan itself. Unique instance.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,AHU-2,schedule,true,Section header row of the 'BUILDING AIR BALANCE' schedule table (Air Handling Unit 2 room list). Not drawn on the roof plan itself. Unique instance.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EDH-1,schedule,true,"VAV/EDH column entry under AHU-2 table, appears 3x (rooms 112, 113, 115); listed once."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EDH-2,schedule,true,"VAV/EDH column entry for Lab 1 (107), first of two EDH units serving that room."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EDH-3,schedule,true,VAV/EDH column entry for Lab 3 (119).
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EDH-4,schedule,true,"VAV/EDH column entry for Lab 1 (107), second of two EDH units serving that room."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EDH-5,schedule,true,VAV/EDH column entry for Lab 4 (118).
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EF-1,plan,false,"Roof-mounted exhaust fan, drawn as equipment box glyph on Roof-Mechanical Plan (C1), with keynote 2 leader (fume hood exhaust fan). Unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EF-2,plan,false,"Roof-mounted exhaust fan, drawn as equipment box glyph on Roof-Mechanical Plan, adjacent to EF-1/EF-3. Unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,EF-3,plan,false,"Roof-mounted exhaust fan, drawn as equipment box glyph on Roof-Mechanical Plan, adjacent to EF-1/EF-2. Unique instance."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,VAV-1-1,schedule,true,VAV/EDH column entry in air-balance schedule for Office 101. Unique instance mark; each VAV-1-x numbers a distinct VAV box.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,VAV-1-2,schedule,true,VAV/EDH column entry for Office 102.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,VAV-1-3,schedule,true,"VAV/EDH column entry, appears 3x (rooms 103, 114, Attic) — same physical VAV box serving multiple spaces; listed once."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,VAV-1-4,schedule,true,VAV/EDH column entry for Office 116.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,VAV-1-5,schedule,true,VAV/EDH column entry for Lounge 117.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,VAV-1-6,schedule,true,"VAV/EDH column entry, appears 2x (rooms 120 IT, 121 Storage/PI Lab); listed once."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#16,VAV-1-7,schedule,true,"VAV/EDH column entry, appears 2x (rooms 122 Mechanical, 123 Electrical); listed once."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#27,A2,plan,false,"Same kind of circular view-title bubble, labeling 'LIGHTING PLAN - FIRST FLOOR'. Excluded for the same reason as C2."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#27,C2,plan,false,"Circular drawing-view title bubble labeling the 'LIGHTING PLAN - ATTIC' view (bottom-left of that view, at the view title line). It is a view/detail reference bubble, not an equipment tag drawn on/next to equipment. Excluded."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#27,S-2 (switch subscript),plan,false,"Letter 'S' (wall switch symbol) with a small subscript '2' appears many times across the first-floor lighting plan (e.g. near x=1858/y=2842, x=1897/y=2915, x=2490/y=3134, etc.), denoting a two-way/multi-location switch wiring designation. This is a lighting-switch control designation on a pure electrical lighting sheet, not mechanical/plumbing/controls equipment (fan, pump, valve, VAV, damper, sensor tied to HVAC, etc.) per the task's equipment definition. Excluded as out of scope for this equipment-tag ground truth, consistent with there being no HVAC/plumbing/controls equipment shown on this sheet at all."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,CH-1,plan,false,"New chiller #1 near Mechanical 122/Electrical 123, with circled 'E' and keynote box '4' (NEMA 3R 400A/3P fused disconnect at new chiller #1 note — ties directly to CH-1). Unique instance mark. textSpans x0=3656.2,y0=3451.8."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EDH-2,plan,false,"Electric duct heater near Toilet 110/Janitor 106, with circled 'E' and keynote box '3' (fused disconnect at duct heater note). Unique instance mark. textSpans x0=2571.9,y0=2989.6."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EDH-3,plan,false,"Electric duct heater near IT/Comm 120, with circled 'E' and keynote box '3'. Unique instance mark. textSpans x0=2501.4,y0=3347.3."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EDH-4,plan,false,"Electric duct heater near Corridor 114, with circled 'E' and keynote box '3'. Unique instance mark. textSpans x0=1835.3,y0=3213.5."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EDH-5,plan,false,"Electric duct heater near Corridor 115/IT-Comm area, with circled 'E' and keynote box '3'. Unique instance mark. textSpans x0=2046.7,y0=3310.2."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EF-1,plan,false,"Exhaust fan on roof power plan (C1 POWER PLAN - ROOF); circled 'E' symbol above tag text, unique instance mark. Confirmed exact string in textSpans at x0=1986.6,y0=1578.5."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EF-2,plan,false,"Exhaust fan on roof power plan, adjacent to keynote box '2' (VFD/disconnect note). Unique instance mark. textSpans x0=2130.5,y0=1578.5."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EF-3,plan,false,"Exhaust fan on roof power plan, third of three roof fans shown. Unique instance mark. textSpans x0=2273.4,y0=1578.5."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EF-5,plan,false,"Exhaust fan on first-floor power plan near Toilet 103/Office; circled 'E' symbol beside tag. Unique instance mark. textSpans x0=1475.5,y0=2738.1."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#29,EF-6,plan,false,"Exhaust fan on first-floor power plan near Shower 109/Corridor; circled 'E' symbol beside tag. Unique instance mark. textSpans x0=2897.7,y0=2770.2."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,AHU-1,plan,false,"(E)-prefixed AHU rectangle glyph in Mechanical 122; also LP1 schedule ckt 3 'AHU-1 MECHANICAL 122' and LP3 schedule ckt 36 'AHU-1, AHU-2 VFD CONTROLS MECH 122'."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,AHU-2,plan,false,(E)-prefixed AHU rectangle glyph; also LP1 schedule ckt 4 'AHU-2 MECHANICAL 122' and LP3 schedule ckt 36.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,CH-1,schedule,true,"MDP panel schedule ckt 19-23 (400A breaker) load description 'CHILLER CH-1'; a unique chiller instance mark, present only as schedule text on this sheet (no chiller glyph drawn here)."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,CWP-1,plan,false,"Chilled water pump #1 box glyph, tied to key note 1 ('replace power connection for new chilled water pumps #1 & #2'). Not found in any panel schedule text on this sheet."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,CWP-2,plan,false,"Chilled water pump #2 box glyph, key note 1."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EDH-1,plan,false,(E)-prefixed electric duct heater box glyph in Mechanical 122; also LP3 schedule ckt 10 'EDH-1 MECHANICAL 122'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EDH-2,schedule,true,LP3 schedule ckt 15 'EDH-2 LAB 1 107'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EDH-3,schedule,true,LP3 schedule ckt 27 'EDH-3 LAB 3 119'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EDH-4,schedule,true,LP3 schedule ckt ~4 'EDH-4 LAB 4 118'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EDH-5,schedule,true,LP3 schedule ckt 33 'EDH-5 LAB 4 118'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EF-1,plan,false,"Exhaust fan box glyph, Mechanical 122 enlarged plan; also referenced in LP2 schedule ckt 9 load description 'VFD STARTER EF-1'."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EF-2,plan,false,Exhaust fan box glyph; also LP2 schedule ckt 11 'VFD STARTER EF-2 & EF-3'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,EF-3,plan,false,Exhaust fan box glyph; also LP2 schedule ckt 11 'VFD STARTER EF-2 & EF-3'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,ELP,plan,false,Existing panel symbol/label in Electrical 123; also panel-schedule title 'EXISTING PANEL ELP SCHEDULE'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,LP1,plan,false,Existing panel symbol/label; also panel-schedule title 'EXISTING PANEL LP1 SCHEDULE'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,LP2,plan,false,"Existing panel symbol/label; also panel-schedule title 'EXISTING PANEL LP2 SCHEDULE' (bottom-left schedule on sheet); also feeds circuit labels 'LP2-7,9,11' and 'LP2-10,12,14' on the plan (those are homerun/circuit callouts, not separate tags)."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,LP3,plan,false,Existing panel symbol/label; also panel-schedule title 'EXISTING PANEL LP3 SCHEDULE' (bottom-right schedule).
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,MDP,plan,false,"Existing panel symbol/label (hatched box) in Electrical 123 on the enlarged plan; also the title of the top-left panel schedule 'EXISTING PANEL MDP SCHEDULE' on this sheet (schedule title, not a row)."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VAV-1-1,schedule,true,LP3 panel schedule ckt 1 load description 'VAV-1-1 OFFICE 101'. Not drawn as a glyph anywhere on this sheet's small enlarged plan (RMS 122 & 123 only covers rooms 122/123).
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VAV-1-2,schedule,true,LP3 schedule ckt 9 'VAV-1-2 CORRIDOR 103'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VAV-1-3,schedule,true,LP3 schedule ckt ~19/20 'VAV-1-3 CORRIDOR 114'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VAV-1-4,schedule,true,LP3 schedule ckt ~5/6 'VAV-1-4 OFFICE 116'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VAV-1-5,schedule,true,LP3 schedule ckt 30 'VAV-1-5 LOUNGE 117'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VAV-1-6,plan,false,(E)-prefixed VAV box glyph in Mechanical 122; also LP3 schedule ckt 32 'VAV-1-6 MECHANICAL 122'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VAV-1-7,plan,false,(E)-prefixed VAV box glyph; also LP3 schedule ckt 14 'VAV-1-7 MECHANICAL 122'.
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#30,VFD,plan,false,"Box glyph above EF-1/2/3 in the 'ENLARGED POWER PLAN RMS 122 & 123' (Mechanical 122); represents the VFD starter cabinet for the exhaust fans. Corresponds to 'VFD STARTER EF-1' (LP2 sched. ckt 9) and 'VFD STARTER EF-2 & EF-3' (LP2 sched. ckt 11), and 'AHU-1, AHU-2 VFD CONTROLS MECH 122' (LP3 sched. ckt 36). Listed once as the generic label drawn on the plan."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#8,C3/AE201,plan,false,"Same kind of section/detail reference symbol (right side of plan, near gridline 6) pointing to sheet AE201. Excluded for the same reason as D3/AE301."
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#8,D3/AE301,plan,false,"Diamond-shaped building-section/detail reference symbol (appears twice, near gridline 4, top and bottom of plan) pointing to detail D3 on sheet AE301. This is a drawing cross-reference callout, not an equipment tag — it names no mechanical/plumbing/controls equipment, it is drawn as a plain flag/diamond with no equipment glyph. Excluded."

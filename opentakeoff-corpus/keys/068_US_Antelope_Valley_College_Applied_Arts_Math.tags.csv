@@ -1,0 +1,28 @@
+sheet,tag,role,in_table,note
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#11,B-1,plan,false,"Hexagon tag ('B' over '1', labeled 'MAX OP WT=672#') on the boiler symbol in the 'Partial Foundation Plan' view (view A/S201) — the same boiler tag introduced on sheet ME201 (page 5), now shown for anchorage/foundation purposes. Confirmed via zoomed crop (pt-space crop 1700,500,1050,450 @ scale4)."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E) FACP,plan,false,Solid-black Fire Alarm Control Panel symbol on the Partial Floor Plan. No numeric suffix (only one FACP); borderline but fits explicit 'panel' category.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E) PANEL 'A',plan,false,Solid-black electrical panel symbol labeled '(E) PANEL A' in the Electrical Room A120 sub-view (view 2 on this sheet). Unique instance.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E) PANEL 'C',plan,false,"Solid-black panel symbol near the transformer/administration building corner, Partial Floor Plan view. Unique instance."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E) PANEL 'CP',plan,false,Adjacent solid-black panel symbol next to Panel 'C'. Unique instance.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E)BAS,plan,false,"Two adjacent boxes labeled '(E)BAS' (existing Building Automation System cabinets/panels) near the existing pumps. Identical literal text for two physical cabinets of the same type -> repeatable type mark, listed once."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E)P-1,plan,false,"Existing pump designation, appears on the '(E)PUMP SWITCHES' row of 4 boxes (switch for existing pump 1, reused for new pump per notes). No separate existing pump icon for P-1 remains on this sheet (already superseded by new P-1), but the tag itself is drawn once as a switch label."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E)P-2,plan,false,"Existing pump/switch designation, same switch row as P-1."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E)P-3,plan,false,"Existing pump, drawn twice: once as an equipment box with pump-circle icon (retained pump), once as a switch-row label. Same literal tag both times -> counted once."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,(E)P-4,plan,false,"Existing pump, drawn twice (equipment box + switch-row label), same as P-3."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,AS-1,plan,false,Hexagon tag ('AS' over '1') on new air separator symbol. Unique instance.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,B-1,plan,false,"Hexagon equipment tag (top line 'B', bottom line '1') on the new HHW boiler symbol, Partial Floor Plan view 1. Unique instance mark."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,DCBFP,plan,false,Rectangle-boxed label on existing double-check backflow preventer (a valve assembly) in the gas/water service run. No numeric suffix (only one on sheet); borderline but fits the 'valve' equipment category.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,ET-1,plan,false,Hexagon tag ('ET' over '1') on new expansion tank symbol. Unique instance.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,GR-1,plan,false,"Hexagon tag ('GR' over '1') on new gas regulator symbol, far left of plan. Unique instance."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,P-1,plan,false,Hexagon tag ('P' over '1') on lower new pump symbol; notes call out 'NEW PUMPS P-1 AND P-2'. Unique instance.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#5,P-2,plan,false,Hexagon tag ('P' over '2') on upper new pump symbol. Unique instance.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E) FACP,plan,false,"Solid-black Fire Alarm Control Panel symbol. Borderline (no numeric suffix) but fits 'panel' category, same as page 5."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E) PANEL 'A',plan,false,"Electrical Room A120 sub-view (view 2), solid-black panel symbol. Unique instance."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E) PANEL 'C',plan,false,"Solid-black panel symbol, Partial Floor Plan view (view 1)."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E) PANEL 'CP',plan,false,Adjacent solid-black panel symbol next to Panel 'C'.
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E)BAS,plan,false,"Two boxes labeled '(E)BAS' near the existing pumps -- repeatable type mark, listed once."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E)P-1,plan,false,"Existing pump, labeled near a small circle/valve symbol at top of the demo plan, plus again on the switch row at bottom. Same literal tag -> counted once."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E)P-2,plan,false,"Existing pump, same pattern as P-1 (symbol + switch-row label)."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E)P-3,plan,false,"Existing pump box with circle icon, plus switch-row label."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,(E)P-4,plan,false,"Existing pump box with circle icon, plus switch-row label."
+068_US_Antelope_Valley_College_Applied_Arts_Math.pdf#9,DCBFP,plan,false,"Boxed label on the existing backflow preventer valve assembly, same device referenced on page 5."

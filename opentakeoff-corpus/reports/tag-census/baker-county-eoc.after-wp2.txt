@@ -1,0 +1,28 @@
+Warning: Please use the `legacy` build in Node.js environments.
+Warning: Please use the `legacy` build in Node.js environments.
+loaded in 2443 ms
+graph in 86024 ms; sheets=65 tables=41
+
+== sheet roles == {"unknown":15,"legend":2,"detail":10,"schedule":9,"demolition":1,"plan":19,"elevation":6,"schematic":3}
+== schedule keys == {"equipment_row":35} total 35
+
+== census == spans=18895 label-tokens(all)=789 equip-shaped(outside tables)=140 in 86211 ms
+label tokens, ALL, by sheet role: {"unknown":115,"legend":13,"detail":55,"schedule":277,"demolition":1,"plan":276,"elevation":38,"schematic":14}
+label tokens, OUTSIDE table regions, by sheet role: {"unknown":115,"legend":13,"detail":55,"schedule":48,"demolition":1,"plan":276,"elevation":38,"schematic":14}
+
+== schedule keys -> drawn text occurrences outside tables, per kind ==
+  valve_mark     {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  unit_mark      {"none":0,"planOnly":0,"otherOnly":0,"both":0}   e.g. 
+  equipment_row  {"none":6,"planOnly":25,"otherOnly":0,"both":4}   e.g. RTU-1: plan=2 other=1 | RTU-2: plan=2 other=1 | ERV-01: plan=2 other=0 | CD-1: plan=9 other=0 | RG-1: plan=7 other=0 | EG-1: plan=1 other=0
+
+== drawn equip-shaped keys: 76; with a schedule key: 25; WITHOUT any schedule key: 51 ==
+  sample unscheduled: PT-2x6, C-1x4, C-7x4, C-12x4, C-4x4, A-3x2, ACT-1x2, GL-1x2, GL-4x2, CPTT-1x2, RF-1x2, RF-2x2, RT-1x2, WH-1x2, C-50x2, AP-1x2, TYPEA-3x1, B-3888x1, B-353x1, B-301x1, B-682x1, LZWS-LRPBM28Kx1, TLX-1x1, WIRES-200x1, GYP-3x1
+
+== FCU == schedule keys=2 (unit_mark=0, equipment_row=2); distinct FCU tags drawn outside tables=2; total FCU tag occurrences=3 (3 on plan-role sheets)
+
+== sweep_schedule_row sample (evaluationFast + verifyTaggedGeometry) ==
+  RTU-1            found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=46 154 ms
+  FCU-1            found=1 basis=tag_attached_vector occurrences=2 text_only=0 skipped=46 28 ms
+  CD-1             found=11 basis=tag_attached_vector occurrences=9 text_only=3 skipped=46 19 ms
+
+done in 86414 ms

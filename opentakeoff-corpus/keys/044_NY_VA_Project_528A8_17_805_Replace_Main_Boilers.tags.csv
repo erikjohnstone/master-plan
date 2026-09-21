@@ -1,0 +1,441 @@
+sheet,tag,role,in_table,note
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,B-1,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,B-2,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,B-3,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,BOILER #1,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,BOILER #2,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,BOILER #3,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,BOILER #4,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EV-1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EV-2.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EV-2.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EV-3.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EV-3.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EV-4,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EXISTING PRV-1,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,HX-1,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,HX-2,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,MUA-1,plan,false,makeup air unit / PRV skid box on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,PRV-19A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,PRV-22A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,PRV-24A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-01,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-02,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-03,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-04,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-05,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-06,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-1,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,ST-2,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,T-1,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,T-15,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,T-17,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,T-2,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,T-6,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,T-7,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,T-8,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,UH-3,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,UH-4,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#1,UH-5,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,CP-1,plan,false,condensate pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,CV-3,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,CV-4,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,CV-5,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,FT-1,plan,false,flash tank symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,P-1,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,P-2,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,P-3,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,PSV-4,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,ST-56,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,ST-57,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,ST-58,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,WM-1,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,WM-3,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#10,WM-4,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,B-1,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,B-2,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,B-3,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,B-4,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,BOILER 1,plan,false,new boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,BOILER 2,plan,false,new boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,BOILER 3,plan,false,new boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,BOILER 4,plan,false,new boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EV-1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EV-2.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EV-2.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EV-3.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EV-3.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EV-4,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,FT-1,plan,false,flash tank symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-1,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-10,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-11,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-12,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-13,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-14,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-15,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-16A,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-16B,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-17,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-18,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-19,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-2,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-20,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-22,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-23,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-24,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-3,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-4,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-5,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-6,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-7,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,GV-9,plan,false,new main steam header gate valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,MUA-1,plan,false,makeup air unit box on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PRV-19,plan,false,new single pressure reducing valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PRV-22A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PRV-24A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PRV-25,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PRV-26,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PSV-1,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PSV-2,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,PSV-3,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-1,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-2,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-3,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-4,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-5,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-6,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-7,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SM-8,plan,false,new steam meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-1,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-15,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-17,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-2,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-35,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-36,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-37,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-50,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-51,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-52,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-53,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-54,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-55,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-56,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-57,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-58,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-59,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-60,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,ST-61,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SWH-1,plan,false,steam water heater unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,SWH-2,plan,false,steam water heater unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,T-6,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,T-7,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,T-8,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,UH-3,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,UH-4,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#11,UH-5,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,B-1,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,B-2,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,B-3,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,B-4,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,BDS-1,plan,false,blowdown separator tank symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,CP-1,plan,false,condensate pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,CV-3,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,CV-4,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,CV-5,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,FHX-1,plan,false,new feedwater heat exchanger box symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,FHX-2,plan,false,new feedwater heat exchanger box symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,FT-1,plan,false,flash tank symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,FWP-1,plan,false,feedwater pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,FWP-2,plan,false,feedwater pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,FWP-3,plan,false,feedwater pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,PSV-4,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,ST-56,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,ST-57,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,ST-58,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-1,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-2,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-3,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-4,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-5,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-6,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-7,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#12,WM-8,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#13,DT-1,plan,false,"diesel tank symbol, diesel oil systems piping/riser diagram"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#13,FOP-3&4,plan,false,"existing summer boiler fuel oil pump symbol, fuel oil piping/riser diagram"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#15,"CV-9,10,11",detail,false,"check valve symbol group in generic boiler-flow-diagram detail (MI-402, detail 1)"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#15,SRV-1,detail,false,"safety relief valve symbol in generic boiler-flow-diagram detail (MI-402, detail 1)"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,CV-3,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,CV-4,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,CV-5,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,HX-1,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,HX-2,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,P-1,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,P-2,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,P-3,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,P-4,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#2,P-5,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,B-1,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,B-2,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,B-3,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,BOILER #1,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,BOILER #2,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,BOILER #3,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,BOILER #4,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EV-1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EV-2.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EV-2.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EV-3.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EV-3.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EV-4,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,MUA-1,plan,false,makeup air unit / PRV skid box on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,PRV-19A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,PRV-22A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,PRV-24A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-01,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-02,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-03,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-04,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-05,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-06,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-1,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,ST-2,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,T-1,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,T-15,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,T-17,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,T-2,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,T-6,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,T-7,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,T-8,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,UH-3,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,UH-4,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#3,UH-5,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,CV-3,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,CV-4,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,CV-5,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,P-1,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,P-2,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,P-3,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,P-4,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#4,P-5,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,B-1,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,B-2,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,B-3,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,BOILER #1,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,BOILER #2,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,BOILER #3,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,BOILER #4,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EV-1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EV-2.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EV-2.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EV-3.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EV-3.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EV-4,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,FT-1,plan,false,flash tank symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-13,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-14,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-16A,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-16B,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-17,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-18,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-19,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-22,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-23,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,GV-24,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,MUA-1,plan,false,makeup air unit / PRV skid box on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,PRV-19A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,PRV-22A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,PRV-24A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,PRV-25,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,PRV-26,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,PSV-1,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,PSV-2,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-01,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-02,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-03,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-04,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-05,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-06,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-35,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-36,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-37,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-50,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-51,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-52,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-53,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-54,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-56,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-57,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-58,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-59,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-60,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,ST-61,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,SWH-1,plan,false,steam water heater unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,SWH-2,plan,false,steam water heater unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-1,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-15,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-17,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-18,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-2,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-6,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-7,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,T-8,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,UH-3,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,UH-4,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#5,UH-5,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,CP-1,plan,false,condensate pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,CV-3,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,CV-4,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,CV-5,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,FT-1,plan,false,flash tank symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,P-1,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,P-2,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,P-3,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,PSV-4,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,WM-1,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,WM-3,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#6,WM-4,plan,false,water meter symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,B-1,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,B-2,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,B-3,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,BOILER #1,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,BOILER #2,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,BOILER #3,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,BOILER #4,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EV-1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EV-2.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EV-2.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EV-3.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EV-3.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EV-4,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,MUA-1,plan,false,makeup air unit box on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,PRV-19A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,PRV-22A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,PRV-24A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,ST-01,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,ST-02,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,ST-03,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,ST-04,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,ST-05,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,ST-06,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,T-1,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,T-15,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,T-17,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,T-2,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,T-6,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,T-7,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#7,T-8,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,CV-3,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,CV-4,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,CV-5,plan,false,check valve symbol
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,P-1,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,P-2,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#8,P-3,plan,false,pump symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,B-1,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,B-2,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,B-3,plan,false,boiler feed/label symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,BOILER #1,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,BOILER #2,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,BOILER #3,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,BOILER #4,plan,false,boiler unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EV-1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EV-2.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EV-2.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EV-3.1,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EV-3.2,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EV-4,plan,false,valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EXISTING PRV-2,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,EXISTING PRV-3,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,FT-1,plan,false,flash tank symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-13,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-14,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-16A,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-16B,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-17,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-18,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-19,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-22,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-23,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,GV-24,plan,false,gate valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,HX-3,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,HX-4,plan,false,heat exchanger symbol (box) on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,MUA-1,plan,false,makeup air unit box on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,PRV-19A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,PRV-22A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,PRV-24A/B,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,PRV-25,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,PRV-26,plan,false,pressure reducing valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,PSV-1,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,PSV-2,plan,false,pressure safety/relief valve symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-01,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-02,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-03,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-04,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-05,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-06,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-35,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-36,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-37,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-50,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-51,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-52,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-53,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-54,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-56,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-57,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-58,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-59,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-60,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,ST-61,plan,false,steam trap symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,SWH-1,plan,false,steam water heater unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,SWH-2,plan,false,steam water heater unit symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,T-1,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,T-15,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,T-17,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,T-2,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,T-6,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,T-7,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,T-8,plan,false,trap/drip-leg symbol on riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,UH-3,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,UH-4,plan,false,unit heater symbol (box) on steam riser diagram
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#9,UH-5,plan,false,unit heater symbol (box) on steam riser diagram

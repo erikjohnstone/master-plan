@@ -23,6 +23,7 @@
 import { ROOM_LABEL_RE } from "./detectRooms";
 import { isEquipTag, joinGraphSpans } from "./equiptags";
 import type { ControlSchematicResult } from "./controlSchematic.ts";
+import { buildTagIndex, type DrawnTag } from "./tagIndex.ts";
 import { extractSequenceNarratives, type NarrativeSequenceBlock } from "./sequenceNarrative.ts";
 import { nearbyDrawingIndexCaptionText, nearbyScheduleCaption } from "./scheduleLanguageScan.ts";
 
@@ -37,7 +38,7 @@ export interface GraphSpan { str: string; x: number; y: number; w: number; h: nu
  * delta-triangle hunt. Text-only callers omit it and lose only that lane. */
 export interface SheetSpans { key: string; sheet_number?: string | null; spans: GraphSpan[]; segs?: ArrayLike<number> }
 
-export type SheetRole = "plan" | "schedule" | "legend" | "detail" | "elevation" | "demolition" | "unknown";
+export type SheetRole = "plan" | "schedule" | "legend" | "detail" | "elevation" | "demolition" | "schematic" | "unknown";
 export type Bbox = [number, number, number, number];
 export interface Evidence { sheet: string; text: string; bbox: Bbox }
 
@@ -251,6 +252,40 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   { re: /^(?=.*\b(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\b)(?=.*\bENLARGED\b)(?=.*\bPLANS?\b)/, role: "plan", conf: 0.85 },
   { re: SCHEDULE_TITLE_RE, role: "schedule", conf: 0.85 },
   { re: /SCHEDULE/, role: "schedule", conf: 0.5 },
+  // Control/DDC schematics, riser and flow diagrams, and sequence-of-
+  // operation sheets — a real MEP-set role distinct from a plan, a
+  // schedule, or a legend: text-heavy, no plan-scale linework, but real
+  // equipment/point tags DO get drawn there (stacked prefix-over-number
+  // bubbles) and belong in the tag census (§3.3) even though they are
+  // never installed-work evidence (§3.5, §3.6 sweeps still gate on
+  // role === "plan" only). Above the bare /LEGEND/ signal below: a real
+  // control schematic sheet routinely also carries a cross-reference note
+  // to the set's OWN mechanical legend sheet ("REFER TO DRAWING MI700 FOR
+  // MECHANICAL CONTROLS LEGEND") — confirmed live, navfac-cherry-point-atc
+  // pages 52–66 (MI702…MI732), 14 real schematic sheets that previously
+  // misclassified as `legend` purely from that reference note winning at
+  // equal confidence.
+  //
+  // A bare "SCHEMATIC" alone is real title vocabulary ("AHU SCHEMATIC",
+  // "CONTROL SCHEMATIC SYMBOLS") but the SAME word also appears in a
+  // standard, general AEC general-note disclaimer found on countless real
+  // MEP sets industry-wide, not this one: "PIPING SHOWN ON DRAWINGS IS
+  // SCHEMATIC IN NATURE AND …" — found live, navfac-cherry-point-atc's own
+  // cover sheet. A title is a noun phrase; that disclaimer is a predicate
+  // ("X IS/ARE SCHEMATIC"), a real, general grammatical distinction, not a
+  // corpus-specific exclusion — negative lookbehind excludes exactly that
+  // shape without narrowing any real title.
+  //
+  // A second, real false positive found the same way (federal-mech's own
+  // title-block phase stamp, printed on multiple real sheets): "SCHEMATIC
+  // DESIGN" is the standard AIA project-PHASE name (Schematic Design /
+  // Design Development / Construction Documents), never a drawing's own
+  // role-defining title — found live clobbering a real "HVAC ZONE LEGEND"
+  // title and three real "… ELEVATION" titles that each previously, if
+  // weakly, classified correctly. Negative lookahead excludes exactly the
+  // 2-word phase-name phrase; no real schematic-diagram sheet in this
+  // convention is ever titled "<X> SCHEMATIC DESIGN".
+  { re: /(?<!\bIS\s)(?<!\bARE\s)\bSCHEMATIC\b(?!\s+DESIGN)|CONTROL(?:S)?\s+DIAGRAM|FLOW\s+DIAGRAM|RISER\s+DIAGRAM|PIPING\s+DIAGRAM|SEQUENCE\s+OF\s+OPERATION|\bDDC\b.*(?:DIAGRAM|SCHEMATIC|NETWORK)/, role: "schematic", conf: 0.8 },
   { re: /LEGEND/, role: "legend", conf: 0.5 },
   // A trailing "NUMBER" turns this into a reference-symbol legend ENTRY
   // ("ELEVATION NUMBER" — the callout label defining what an elevation
@@ -301,7 +336,22 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
 // one bare unit word — so the PER branch alone is widened to require 2+
 // words after PER, leaving SEE/REFER/NOTED/AS SHOWN/"REFER TO" (each
 // already safe at their original, shorter reach) unchanged.
-const REFERENCE_RE = /^(SEE|REFER|NOTED|AS SHOWN)\b|REFER TO|^PER\b(?:\s+\S+){2,}/;
+//
+// A cross-reference note's SECOND HALF can itself trip a role signal once
+// pdf.js splits the run: "SEE M-001 FOR MECHANICAL LEGEND, ABBREVIATIONS
+// AND SYMBOLS" arrives as two spans, "SEE M-" and "001 FOR MECHANICAL
+// LEGEND, ABBREVIATIONS…" — the first half is caught by the SEE/REFER
+// branches above, but the second half starts with a bare sheet-number
+// fragment ("001") and reads clean to the LEGEND/ABBREVIATIONS/SYMBOLS
+// role signals below (confirmed live, navfac-cherry-point-atc pages
+// 52–66: 14 real control-schematic sheets misclassified `legend` this
+// way). Two real, general shapes, neither a corpus-specific hardcode:
+// (1) "FOR <=3 words> LEGEND/ABBREVIATIONS/SYMBOLS/NOTES" anywhere in the
+// run is always a cross-reference to another sheet's own legend, never a
+// role-defining title; (2) a run starting with a bare 3-digit fragment
+// followed by "FOR" is the tail of a split sheet-number cross-reference,
+// never a title in its own right.
+const REFERENCE_RE = /^(SEE|REFER|NOTED|AS SHOWN)\b|REFER TO|^PER\b(?:\s+\S+){2,}|\bFOR\s+(?:[A-Z]+\s+){0,3}(?:LEGEND|ABBREVIATIONS|SYMBOLS|NOTES)\b|^\d{3}\s+FOR\b/;
 
 export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
   const hits: Array<{ role: SheetRole; conf: number; span: GraphSpan }> = [];
@@ -8356,6 +8406,11 @@ export interface SheetGraph {
   vector_topology?: Record<string, SheetTopologySummary>;
   /** Last vector pipeline run report (L0–L5 + L4.5 OCR/VLM assist). */
   vector_pipeline?: VectorPipelineReport;
+  /** The set-wide drawn-tag census (plans/03-drawing-tag-recognition-audit.md
+   * §3.3 WP2) — every recognised tag on every sheet, any role. Use
+   * `planTags(graph)` / `referenceTags(graph)` (tagIndex.ts) rather than
+   * filtering this array directly. */
+  tags?: DrawnTag[];
 }
 
 /** Apply source-backed caption evidence to an already-extracted table when
@@ -8391,7 +8446,7 @@ export function stripBasPointSectionHeadingRows(table: ScheduleTable): number {
 
 export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const withText = sheets.filter((s) => s.spans.length > 0);
-  if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [] };
+  if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [], tags: [] };
   const notes: string[] = [];
   const sequenceNarratives = extractSequenceNarratives(withText);
 
@@ -9121,6 +9176,16 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     return entry;
   });
 
+  // The set-wide drawn-tag census (§3.3 WP2) — same withText sheets, the
+  // final reconciled tables (continuations already merged, off-sheet
+  // duplicates already dropped), and the exact sheet-number vocabulary
+  // roomTags itself already trusts for its own callout exclusion above.
+  const tags = buildTagIndex(withText, tables, [...sheetNumbers]);
+  const untabledScheduleTokens = tags.filter((t) => t.role === "schedule" && t.in_table?.title === null).length;
+  if (untabledScheduleTokens) {
+    notes.push(`${untabledScheduleTokens} label token(s) on schedule-role sheet(s) sit outside every extracted table region — table-region coverage is incomplete on this set; treated as schedule content in the tag census, never counted as a drawn plan tag`);
+  }
+
   return {
     available: true,
     sheets: outSheets,
@@ -9132,6 +9197,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     revisions,
     sequence_narratives: sequenceNarratives,
     notes,
+    tags,
   };
 }
 

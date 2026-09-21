@@ -4,75 +4,75 @@
     {
       "id": "bessemer",
       "gc": "unknown (public federal-style bid set)",
-      "project": "Bessemer mechanical bid set — apartment building electric heat / exhaust / register schedules",
+      "project": "Bessemer mechanical bid set \u2014 apartment building electric heat / exhaust / register schedules",
       "root": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff/samples",
       "files": [
         "bessemer-mechanical-bidset.pdf"
       ],
-      "provenance": "Already committed in-repo (samples/bessemer-mechanical-bidset.pdf) as the project's pinned small demo/fixture sample. Source lineage: a public federal-style residential mechanical bid set (Iron Belle Apartments, Bucknell Enterprises, Bessemer MI — U.P. Engineers & Architects). Redistribution terms not independently re-verified for this corpus entry beyond its existing in-repo status; treat as the one pre-existing exception, not a precedent."
+      "provenance": "Already committed in-repo (samples/bessemer-mechanical-bidset.pdf) as the project's pinned small demo/fixture sample. Source lineage: a public federal-style residential mechanical bid set (Iron Belle Apartments, Bucknell Enterprises, Bessemer MI \u2014 U.P. Engineers & Architects). Redistribution terms not independently re-verified for this corpus entry beyond its existing in-repo status; treat as the one pre-existing exception, not a precedent."
     },
     {
       "id": "itd-d1-lab",
       "gc": "Miller Stauffer Architects / Musgrove Engineering",
-      "project": "D-1 Testing Laboratory, 600 W Prairie Ave, Coeur d'Alene, ID 83814 — HVAC bid set, 5/13/2024 (Idaho Transportation Department non-highway construction project)",
+      "project": "D-1 Testing Laboratory, 600 W Prairie Ave, Coeur d'Alene, ID 83814 \u2014 HVAC bid set, 5/13/2024 (Idaho Transportation Department non-highway construction project)",
       "files": [
         "itd-d1-lab-mechanical.pdf"
       ],
-      "note": "Real drawn valve/damper diversity — richest VALVE text density of the 3 new sets (353 hits) with distinct GATE VALVE / BALL VALVE / CHECK VALVE / BUTTERFLY vocabulary all present, plus a real, dense HVAC floor plan (sheet M1.0, hexagonal diffuser/damper symbols, ductwork, a real 'LAB EQUIPMENT LIST' schedule).",
-      "provenance": "Downloaded 2026-08-26 from a public, no-login apps.itd.idaho.gov URL (Idaho Transportation Department's own non-highway construction projects PDF archive), posted for open competitive bidding. NOT independently confirmed as public-domain or licensed for redistribution beyond the bidding purpose it was posted for — the drawings are a private AE firm's (Miller Stauffer Architects / Musgrove Engineering) work product, not a government-authored work; a state agency posting it for bidders does not itself grant a redistribution license. Kept OUTSIDE the git repo for exactly this reason, used here for local measurement/testing only, never republished."
+      "note": "Real drawn valve/damper diversity \u2014 richest VALVE text density of the 3 new sets (353 hits) with distinct GATE VALVE / BALL VALVE / CHECK VALVE / BUTTERFLY vocabulary all present, plus a real, dense HVAC floor plan (sheet M1.0, hexagonal diffuser/damper symbols, ductwork, a real 'LAB EQUIPMENT LIST' schedule).",
+      "provenance": "Downloaded 2026-08-26 from a public, no-login apps.itd.idaho.gov URL (Idaho Transportation Department's own non-highway construction projects PDF archive), posted for open competitive bidding. NOT independently confirmed as public-domain or licensed for redistribution beyond the bidding purpose it was posted for \u2014 the drawings are a private AE firm's (Miller Stauffer Architects / Musgrove Engineering) work product, not a government-authored work; a state agency posting it for bidders does not itself grant a redistribution license. Kept OUTSIDE the git repo for exactly this reason, used here for local measurement/testing only, never republished."
     },
     {
       "id": "federal-mech",
       "gc": "unknown (federal solicitation attachment)",
-      "project": "A federal-government facility mechanical set — richest VAV/AHU density of the 3 new sets (VAV×371, AHU×61, BOILER×93, CHILLER×26)",
+      "project": "A federal-government facility mechanical set \u2014 richest VAV/AHU density of the 3 new sets (VAV\u00d7371, AHU\u00d761, BOILER\u00d793, CHILLER\u00d726)",
       "files": [
         "federal-attachment4-mechanical.pdf"
       ],
-      "note": "VAV/AHU-heavy design — the category this corpus specifically needed. 24 sheets, ~511K vector segments.",
-      "provenance": "Downloaded 2026-08-26 from a public, no-login imlive.s3.amazonaws.com URL (a bid-document hosting service federal agencies commonly use for solicitation attachments), posted for open competitive bidding. Same redistribution caveat as itd-d1-lab above — not independently confirmed as public-domain; kept external, local-use only."
+      "note": "VAV/AHU-heavy design \u2014 the category this corpus specifically needed. 24 sheets, ~511K vector segments.",
+      "provenance": "Downloaded 2026-08-26 from a public, no-login imlive.s3.amazonaws.com URL (a bid-document hosting service federal agencies commonly use for solicitation attachments), posted for open competitive bidding. Same redistribution caveat as itd-d1-lab above \u2014 not independently confirmed as public-domain; kept external, local-use only."
     },
     {
       "id": "navfac-cherry-point-atc",
       "gc": "unknown (NAVFAC federal solicitation attachment)",
-      "project": "NAVFAC FY20 P-228 ATC Tower & Air Operations Building, MCAS Cherry Point, NC — a Marine Corps Air Station air-traffic-control tower/air-ops building, a building type distinct from every other set in this corpus",
+      "project": "NAVFAC FY20 P-228 ATC Tower & Air Operations Building, MCAS Cherry Point, NC \u2014 a Marine Corps Air Station air-traffic-control tower/air-ops building, a building type distinct from every other set in this corpus",
       "files": [
         "navfac-cherry-point-atc-mechanical.pdf"
       ],
-      "note": "The densest real HVAC/BAS set in this corpus: 75 sheets, EVERY page confirmed real vector text (63,630 total text items, ~848/page). Beats every existing set's own density on every metric — AHU×254, VAV×386, BOILER×130, CHILLER×226, PUMP×313, VALVE×319, DAMPER×255. Sheet M-603 'AIR OPS - MECHANICAL SCHEDULES' carries a real AIR COOLED CHILLER SCHEDULE and FAN SCHEDULE; also carries real BAS/DDC points content (AI/AO/BI/BO tags, points schedules) — this corpus's own real prior gap on the 'BAS' half of HVAC/BAS. Sourced specifically to replace weld-county-permit (below, retired) as an active corpus member: a genuinely vector-CAD set proving the pipeline, not a raster-embedded one. Sanity-loaded through the real pipeline before being added: 75/75 sheets, 46 equipment-kind + 5 reference tables extracted with zero crashes.",
-      "provenance": "Downloaded 2026-08-28 from a public, no-login imlive.s3.amazonaws.com URL (the same federal solicitation-attachment hosting pattern as the existing federal-mech entry), posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets — not independently confirmed as public-domain; kept external, local-use only."
+      "note": "The densest real HVAC/BAS set in this corpus: 75 sheets, EVERY page confirmed real vector text (63,630 total text items, ~848/page). Beats every existing set's own density on every metric \u2014 AHU\u00d7254, VAV\u00d7386, BOILER\u00d7130, CHILLER\u00d7226, PUMP\u00d7313, VALVE\u00d7319, DAMPER\u00d7255. Sheet M-603 'AIR OPS - MECHANICAL SCHEDULES' carries a real AIR COOLED CHILLER SCHEDULE and FAN SCHEDULE; also carries real BAS/DDC points content (AI/AO/BI/BO tags, points schedules) \u2014 this corpus's own real prior gap on the 'BAS' half of HVAC/BAS. Sourced specifically to replace weld-county-permit (below, retired) as an active corpus member: a genuinely vector-CAD set proving the pipeline, not a raster-embedded one. Sanity-loaded through the real pipeline before being added: 75/75 sheets, 46 equipment-kind + 5 reference tables extracted with zero crashes.",
+      "provenance": "Downloaded 2026-08-28 from a public, no-login imlive.s3.amazonaws.com URL (the same federal solicitation-attachment hosting pattern as the existing federal-mech entry), posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets \u2014 not independently confirmed as public-domain; kept external, local-use only."
     },
     {
       "id": "bldg5406-hvac-demo",
       "gc": "unknown (federal solicitation attachment)",
-      "project": "Building 5406 — mechanical HVAC demolition + new-work set, an apparent military NDI/radiography-lab-type facility (exact base unconfirmed from the excerpt)",
+      "project": "Building 5406 \u2014 mechanical HVAC demolition + new-work set, an apparent military NDI/radiography-lab-type facility (exact base unconfirmed from the excerpt)",
       "files": [
         "bldg5406-hvac-demo-mechanical.pdf"
       ],
-      "note": "20 real vector-text sheets (of 22 total, 2 trailing blank). Sheet M-601 'MECHANICAL SCHEDULES' carries a real AIR TERMINAL BOX SCHEDULE (VAV-1..9, TRANE/VCEF, real CFM/reheat-MBH/electric-heater-kW/DDC-controls columns) and a FAN SCHEDULE (EF-1, GREENHECK). Thinner than navfac-cherry-point-atc but a solid, genuinely different real set. HONEST, DISCLOSED FINDING from its own sanity-load: the current pipeline extracts ZERO tables from it (0 of the real schedules confirmed present by direct inspection) — a real, not-yet-diagnosed gap, kept in the corpus specifically BECAUSE it's real signal, not smoothed over before adding.",
-      "provenance": "Downloaded 2026-08-28 from a public, no-login imlive.s3.amazonaws.com URL, same hosting pattern as navfac-cherry-point-atc and the existing federal-mech entry, posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets — kept external, local-use only."
+      "note": "20 real vector-text sheets (of 22 total, 2 trailing blank). Sheet M-601 'MECHANICAL SCHEDULES' carries a real AIR TERMINAL BOX SCHEDULE (VAV-1..9, TRANE/VCEF, real CFM/reheat-MBH/electric-heater-kW/DDC-controls columns) and a FAN SCHEDULE (EF-1, GREENHECK). Thinner than navfac-cherry-point-atc but a solid, genuinely different real set. HONEST, DISCLOSED FINDING from its own sanity-load: the current pipeline extracts ZERO tables from it (0 of the real schedules confirmed present by direct inspection) \u2014 a real, not-yet-diagnosed gap, kept in the corpus specifically BECAUSE it's real signal, not smoothed over before adding.",
+      "provenance": "Downloaded 2026-08-28 from a public, no-login imlive.s3.amazonaws.com URL, same hosting pattern as navfac-cherry-point-atc and the existing federal-mech entry, posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
     },
     {
       "id": "baker-county-eoc",
       "gc": "unknown",
-      "project": "Baker County Sheriff's Office — new ~3,863 SF Operations Center addition (communications room, expanded 911 dispatch), 3410 K Street, Baker City, OR 97814 — verified directly from the set's own title-sheet text this session, not assumed from the filename alone",
+      "project": "Baker County Sheriff's Office \u2014 new ~3,863 SF Operations Center addition (communications room, expanded 911 dispatch), 3410 K Street, Baker City, OR 97814 \u2014 verified directly from the set's own title-sheet text this session, not assumed from the filename alone",
       "files": [
         "baker-county-eoc-bidset.pdf"
       ],
-      "note": "MAJOR real find (accuracy-hardening plan, this session): the FIRST and ONLY set in this corpus confirmed to carry a real architectural ROOM FINISH SCHEDULE (sheet #27, 13 real rows, headers NUMBER/ROOM/FLOOR/BASE/WALLS FINISH by direction) — every other set in this corpus (bessemer included) is mechanical-only with zero room-finish content (ledger item 8). 65 sheets total, 18 real plan-role sheets, 189 real rooms already resolved by sheet_graph. Wired into sets.json (ledger item 10's own 'S' step) but a real, visually-verified `.csv` room-finish key has NOT been built yet — that's the real, actionable next step this finding unblocks.",
-      "provenance": "Present in the corpus raw/ directory already (triaged in an earlier session, before this one's own context) — exact download date/source URL not recorded and not independently re-verified this session; the real project content itself (address, scope, sheet count) WAS directly read and confirmed from the PDF's own title sheet this session, not merely assumed from the filename. Same redistribution caveat as this corpus's other non-bessemer sets applies by default (a real, likely-private AE firm's bid-set work product, posted for competitive bidding, not confirmed public-domain) until a real source URL is recovered or re-confirmed."
+      "note": "MAJOR real find (accuracy-hardening plan, this session): the FIRST and ONLY set in this corpus confirmed to carry a real architectural ROOM FINISH SCHEDULE (sheet #27, 13 real rows, headers NUMBER/ROOM/FLOOR/BASE/WALLS FINISH by direction) \u2014 every other set in this corpus (bessemer included) is mechanical-only with zero room-finish content (ledger item 8). 65 sheets total, 18 real plan-role sheets, 189 real rooms already resolved by sheet_graph. Wired into sets.json (ledger item 10's own 'S' step) but a real, visually-verified `.csv` room-finish key has NOT been built yet \u2014 that's the real, actionable next step this finding unblocks.",
+      "provenance": "Present in the corpus raw/ directory already (triaged in an earlier session, before this one's own context) \u2014 exact download date/source URL not recorded and not independently re-verified this session; the real project content itself (address, scope, sheet count) WAS directly read and confirmed from the PDF's own title sheet this session, not merely assumed from the filename. Same redistribution caveat as this corpus's other non-bessemer sets applies by default (a real, likely-private AE firm's bid-set work product, posted for competitive bidding, not confirmed public-domain) until a real source URL is recovered or re-confirmed."
     },
     {
       "id": "itd-d1-lab-raster",
       "gc": "Miller Stauffer Architects / Musgrove Engineering",
-      "project": "The SAME real D-1 Testing Laboratory HVAC plan sheet (M1.0) as itd-d1-lab, above — SYNTHETICALLY flattened to an image-only page (mcp/scripts/make-corpus-raster-variant.mjs, the same technique make-scan-fixture.mjs uses for the repo's own bundled raster fixture): zero vector linework, zero text layer, real HVAC drafting density in the pixels. Built, not sourced — no separate real scanned MEP set was found; this exercises the honest has_vector_linework:false fallback path against genuinely dense real content instead of a generic floor plan.",
+      "project": "The SAME real D-1 Testing Laboratory HVAC plan sheet (M1.0) as itd-d1-lab, above \u2014 SYNTHETICALLY flattened to an image-only page (mcp/scripts/make-corpus-raster-variant.mjs, the same technique make-scan-fixture.mjs uses for the repo's own bundled raster fixture): zero vector linework, zero text layer, real HVAC drafting density in the pixels. Built, not sourced \u2014 no separate real scanned MEP set was found; this exercises the honest has_vector_linework:false fallback path against genuinely dense real content instead of a generic floor plan.",
       "files": [
         "itd-d1-lab-raster.pdf"
       ],
-      "provenance": "Derived locally from itd-d1-lab-mechanical.pdf (same source, same caveat) — never itself downloaded from anywhere. Kept external for the same reason as its source."
+      "provenance": "Derived locally from itd-d1-lab-mechanical.pdf (same source, same caveat) \u2014 never itself downloaded from anywhere. Kept external for the same reason as its source."
     },
     {
       "id": "12_MT_MSU_ReidHall_Renovation",
-      "project": "Bulk corpus document 12_MT_MSU_ReidHall_Renovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 12_MT_MSU_ReidHall_Renovation \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "12_MT_MSU_ReidHall_Renovation.pdf"
       ],
@@ -81,7 +81,7 @@
     },
     {
       "id": "24_IA_JohnsonCounty_Courthouse",
-      "project": "Bulk corpus document 24_IA_JohnsonCounty_Courthouse — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 24_IA_JohnsonCounty_Courthouse \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "24_IA_JohnsonCounty_Courthouse.pdf"
       ],
@@ -90,7 +90,7 @@
     },
     {
       "id": "27_WA_ColvilleTribes_Hatchery_Lab",
-      "project": "Bulk corpus document 27_WA_ColvilleTribes_Hatchery_Lab — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 27_WA_ColvilleTribes_Hatchery_Lab \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "27_WA_ColvilleTribes_Hatchery_Lab.pdf"
       ],
@@ -99,7 +99,7 @@
     },
     {
       "id": "16_NV_CarsonValleyMS_HVAC_Replacement",
-      "project": "Bulk corpus document 16_NV_CarsonValleyMS_HVAC_Replacement — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 16_NV_CarsonValleyMS_HVAC_Replacement \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "16_NV_CarsonValleyMS_HVAC_Replacement.pdf"
       ],
@@ -108,7 +108,7 @@
     },
     {
       "id": "13_MI_MSU_LifeSciences_LabRenovation",
-      "project": "Bulk corpus document 13_MI_MSU_LifeSciences_LabRenovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 13_MI_MSU_LifeSciences_LabRenovation \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "13_MI_MSU_LifeSciences_LabRenovation.pdf"
       ],
@@ -117,7 +117,7 @@
     },
     {
       "id": "03_FL_HurlburtField_ChildDevCenter",
-      "project": "Bulk corpus document 03_FL_HurlburtField_ChildDevCenter — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 03_FL_HurlburtField_ChildDevCenter \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "03_FL_HurlburtField_ChildDevCenter.pdf"
       ],
@@ -126,7 +126,7 @@
     },
     {
       "id": "08_ME_BGS_Augusta_EastCampus_Renovation",
-      "project": "Bulk corpus document 08_ME_BGS_Augusta_EastCampus_Renovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 08_ME_BGS_Augusta_EastCampus_Renovation \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "08_ME_BGS_Augusta_EastCampus_Renovation.pdf"
       ],
@@ -135,7 +135,7 @@
     },
     {
       "id": "15_IA_IowaState_Biorenewables_Lab",
-      "project": "Bulk corpus document 15_IA_IowaState_Biorenewables_Lab — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 15_IA_IowaState_Biorenewables_Lab \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "15_IA_IowaState_Biorenewables_Lab.pdf"
       ],
@@ -144,7 +144,7 @@
     },
     {
       "id": "09_ME_BGS_KennebecValleyCC_Renovation",
-      "project": "Bulk corpus document 09_ME_BGS_KennebecValleyCC_Renovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "project": "Bulk corpus document 09_ME_BGS_KennebecValleyCC_Renovation \u2014 Vol1 (bulk/HVAC_BAS_Plan_Sets)",
       "files": [
         "09_ME_BGS_KennebecValleyCC_Renovation.pdf"
       ],
@@ -153,7 +153,7 @@
     },
     {
       "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
-      "project": "Bulk corpus document 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf"
       ],
@@ -162,7 +162,7 @@
     },
     {
       "id": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
-      "project": "Bulk corpus document 078_US_CP25028_MSU_Union_Sparty_Store_Renovations — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 078_US_CP25028_MSU_Union_Sparty_Store_Renovations \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf"
       ],
@@ -171,7 +171,7 @@
     },
     {
       "id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
-      "project": "Bulk corpus document 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf"
       ],
@@ -180,7 +180,7 @@
     },
     {
       "id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
-      "project": "Bulk corpus document 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf"
       ],
@@ -189,7 +189,7 @@
     },
     {
       "id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
-      "project": "Bulk corpus document 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf"
       ],
@@ -198,7 +198,7 @@
     },
     {
       "id": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
-      "project": "Bulk corpus document 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf"
       ],
@@ -207,7 +207,7 @@
     },
     {
       "id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
-      "project": "Bulk corpus document 041_IL_VA_Project_537_17_115_Sterile_Processing — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 041_IL_VA_Project_537_17_115_Sterile_Processing \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf"
       ],
@@ -216,7 +216,7 @@
     },
     {
       "id": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
-      "project": "Bulk corpus document 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf"
       ],
@@ -225,7 +225,7 @@
     },
     {
       "id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
-      "project": "Bulk corpus document 073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf"
       ],
@@ -234,7 +234,7 @@
     },
     {
       "id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
-      "project": "Bulk corpus document 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf"
       ],
@@ -243,7 +243,7 @@
     },
     {
       "id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
-      "project": "Bulk corpus document 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf"
       ],
@@ -252,7 +252,7 @@
     },
     {
       "id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
-      "project": "Bulk corpus document 009_FL_USDA_APHIS_Plant_Inspection_Station_Building — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 009_FL_USDA_APHIS_Plant_Inspection_Station_Building \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf"
       ],
@@ -261,7 +261,7 @@
     },
     {
       "id": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
-      "project": "Bulk corpus document 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf"
       ],
@@ -270,25 +270,844 @@
     },
     {
       "id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
-      "project": "Bulk corpus document 062_ID_ITD_District_1_Laboratory_Building_Mechanical — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "project": "Bulk corpus document 062_ID_ITD_District_1_Laboratory_Building_Mechanical \u2014 Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
       "files": [
         "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf"
       ],
       "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
       "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "tinker-afb-iwcs-controls",
+      "project": "Tinker AFB, OK \u2014 \"Design & Implement Monitoring & Control System for IWCS, B62516\" (solicitation WWYK240146), 72 ABW Civil Engineer Directorate. Controls-only set (level switches, monitoring points), the BAS/controls half of HVAC/BAS this corpus has repeatedly flagged as thin.",
+      "files": [
+        "tinker-afb-iwcs-controls.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) to carry a tag-eval key (keys/tinker-afb-iwcs-controls.tags.csv): a per-sheet plan-role tag census found real, confirmed IW-LS-# (level switch) drawn tags across 10 of its 31 sheets. Already used separately (before this registration) for a distinct SOO/sequence-of-operation ground truth at ground_truth/sequences/tinker-afb-iwcs.json \u2014 that mechanism and this one are independent; this entry only adds it to the takeoff/reference/graph/tag-eval scored-set registry, where it previously had no entry at all.",
+      "provenance": "Downloaded from a public federal solicitation attachment hosting service, posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only. SHA-256 ffbae6e626baa25c4c2a1ab033ab596e647a5d3903853ecc07b4f8db297f854a (per PROGRESS.md's earlier, independent human review of this same file)."
+    },
+    {
+      "id": "01_NY_VA_Northport_Dialysis_100CD",
+      "project": "632-17-107 Renovate Dialysis - Northport VAMC, 100% Complete Construction Documents (Drawings 01) \u2014 Northport, NY (VA medical center - dialysis suite renovation, U.S. Department of Veterans Affairs)",
+      "files": [
+        "01_NY_VA_Northport_Dialysis_100CD.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 162 sheets. VA medical center - dialysis suite renovation \u2014 632-17-107 Renovate Dialysis - Northport VAMC, 100% Complete Construction Documents (Drawings 01). HVAC terms found: AHU, BAS, CFM, CHILLED WATER, CONTROLS, DIFFUSER, DUCT, ERV, GRILLE, HOT WATER, HVAC, MECHANICAL, PLENUM, REGISTER, SUPPLY AIR, THERMOSTAT, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/94f73ffec75245de989e4802427f1f7e/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/620c2a19335f4a358591e8acf1c41e6e/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "02_UT_FAA_Ogden_AirTrafficControlTower",
+      "project": "FAA Airport Traffic Control Tower (ATCT) Final Standard Design Drawings V1.1 - issued for Ogden-Hinckley Airport (OGD) ATCT \u2014 Ogden, UT (FAA national standard design) (Airport air traffic control tower, Federal Aviation Administration (DOT))",
+      "files": [
+        "02_UT_FAA_Ogden_AirTrafficControlTower.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 116 sheets. Airport air traffic control tower \u2014 FAA Airport Traffic Control Tower (ATCT) Final Standard Design Drawings V1.1 - issued for Ogden-Hinckley Airport (OGD) ATCT. HVAC terms found: AHU, BAS, CFM, CHILLER, CONTROLS, DUCT, ERV, EXHAUST FAN, HVAC, MECHANICAL. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/b5796a12604e4e54adb966d2f3ae02cc/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/f4264ca417854b169b35d3da5a5b4624/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "04_NV_VA_LasVegas_CentralUtilityPlant",
+      "project": "593-22-350 Improve Central Utility Plant - Southern Nevada Healthcare System \u2014 Las Vegas, NV (Central utility plant (chillers/boilers), U.S. Department of Veterans Affairs)",
+      "files": [
+        "04_NV_VA_LasVegas_CentralUtilityPlant.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 76 sheets. Central utility plant (chillers/boilers) \u2014 593-22-350 Improve Central Utility Plant - Southern Nevada Healthcare System. HVAC terms found: BAS, BOILER, CHILLED WATER, CHILLER, CONTROLS, DDC, DUCT, ERV, HVAC, MECHANICAL, RTU. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/01cba2b4891644b5aaded72bfbb3ad29/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/305f801473c84957b724414a7717cb0d/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+      "project": "657-18-115JC Replace Various Air Handling Units and Variable Air Volume Boxes - John Cochran Division (100% Bid Documents, 67 sheets) \u2014 St. Louis, MO (VA medical center - AHU/VAV replacement, U.S. Department of Veterans Affairs)",
+      "files": [
+        "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 67 sheets. VA medical center - AHU/VAV replacement \u2014 657-18-115JC Replace Various Air Handling Units and Variable Air Volume Boxes - John Cochran Division (100% Bid Documents, 67 sheets). HVAC terms found: AHU, BAS, CFM, CHILLED WATER, CONTROLS, DDC, DUCT, ERV, EXHAUST FAN, FAN COIL, HVAC, MECHANICAL, PLENUM, RETURN AIR, RTU, SUPPLY AIR, THERMOSTAT, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/43087c4a233d4faca15febbbbd3d40fc/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/6fe79f35fb94455d948a023688a1c43c/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "06_MO_NatlGuard_JeffCity_CST_Addition",
+      "project": "T2147-01 Jefferson City Readiness Center - Civil Support Team Building Addition \u2014 Jefferson City, MO (National Guard readiness center addition (full multi-discipline set), Missouri Office of Administration, Division of Facilities Management, Design and Construction / Missouri National Guard)",
+      "files": [
+        "06_MO_NatlGuard_JeffCity_CST_Addition.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 85 sheets. National Guard readiness center addition (full multi-discipline set) \u2014 T2147-01 Jefferson City Readiness Center - Civil Support Team Building Addition. HVAC terms found: BAS, CFM, CONTROLS, DIFFUSER, DUCT, EXHAUST FAN, FAN COIL, GRILLE, HVAC, MECHANICAL, RETURN AIR, SUPPLY AIR, VRF. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_T2147-01%20-%20Final%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "07_MO_MSHP_TroopB_HVAC_Boilers_Controls",
+      "project": "R2511-01 Replace HVAC & Boilers/Pumps/Controls - MSHP Troop B Headquarters \u2014 Macon, MO (State police headquarters office, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "07_MO_MSHP_TroopB_HVAC_Boilers_Controls.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 41 sheets. State police headquarters office \u2014 R2511-01 Replace HVAC & Boilers/Pumps/Controls - MSHP Troop B Headquarters. HVAC terms found: BOILER, CONTROLS, HVAC, MECHANICAL, RTU. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_R2511-01%20Final%20Bid%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "10_MO_Hawthorn_PsychHospital_HVAC",
+      "project": "M2506-01 Replace HVAC & Mechanical Room Doors - Hawthorn Children's Psychiatric Hospital \u2014 St. Louis, MO (Children's psychiatric hospital, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "10_MO_Hawthorn_PsychHospital_HVAC.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 9 sheets. Children's psychiatric hospital \u2014 M2506-01 Replace HVAC & Mechanical Room Doors - Hawthorn Children's Psychiatric Hospital. HVAC terms found: AHU, BAS, CFM, CONDENSING UNIT, CONTROLS, DDC, DUCT, ERV, EXHAUST FAN, FAN COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, RETURN AIR, SPLIT SYSTEM, SUPPLY AIR, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_M2506-01%20Final%20Bid%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "11_CA_SDSU_EngSciences_Complex_100SD",
+      "project": "SDSU Engineering & Interdisciplinary Sciences Complex - 100% Schematic Design (full A/S/M/E/P set) \u2014 San Diego, CA (university research/laboratory building, San Diego State University (released via ASC Regions 6 & 7 competition archive))",
+      "files": [
+        "11_CA_SDSU_EngSciences_Complex_100SD.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 157 sheets. university research/laboratory building \u2014 SDSU Engineering & Interdisciplinary Sciences Complex - 100% Schematic Design (full A/S/M/E/P set). HVAC terms found: AHU, BAS, CHILLED WATER, CHILLER, CONTROLS, DIFFUSER, DUCT, ERV, EXHAUST FAN, HVAC, MECHANICAL, PLENUM, RETURN AIR, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://asc67.org/ASC_Previous_Problems/Open/IP/2017/2015-05-08-SDSU-IES-%20100%20SD%20Drawings.pdf), posted for open competitive bidding / public procurement (https://asc67.org/ASC_Previous_Problems/Open/IP/2017/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+      "project": "Klamath CC Community Learning Center - Mechanical Drawings (Addendum 4) \u2014 Klamath Falls, OR (community college, Klamath Community College)",
+      "files": [
+        "14_OR_KlamathCC_LearningCtr_Mechanical.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 17 sheets. community college \u2014 Klamath CC Community Learning Center - Mechanical Drawings (Addendum 4). HVAC terms found: BAS, BOILER, CFM, CHILLED WATER, CHILLER, CONTROLS, DDC, DIFFUSER, DUCT, ERV, EXHAUST FAN, FAN COIL, GRILLE, HOT WATER, HVAC, MECHANICAL, PLENUM, REGISTER, RETURN AIR, SPLIT SYSTEM, SUPPLY AIR, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.klamathcc.edu/_documents/rfp/KCC%20CLC%20-%20ADD4%20-%20Mechanical%20Drawings.pdf), posted for open competitive bidding / public procurement (https://www.klamathcc.edu/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "17_FL_SuwanneeHS_Courtyard_100CD",
+      "project": "Suwannee High School Courtyard Renovation - 100% CD for Bid \u2014 Live Oak, FL (public high school, Suwannee County School Board)",
+      "files": [
+        "17_FL_SuwanneeHS_Courtyard_100CD.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 31 sheets. public high school \u2014 Suwannee High School Courtyard Renovation - 100% CD for Bid. HVAC terms found: AHU, BAS, CFM, DUCT, ERV, MECHANICAL, RTU. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://digitalbell-bucket.s3.amazonaws.com/2FF5FA75-5056-907D-8DC1-33747B24FA5E.pdf), posted for open competitive bidding / public procurement (https://www.suwannee.k12.fl.us/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
+      "project": "Baker Middle School HVAC & Electrical Modifications - Full Drawing Bid Set \u2014 Baker City, OR (K-12 school, Baker School District 5J (OR))",
+      "files": [
+        "18_OR_BakerMS_HVAC_Electrical_FullSet.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 26 sheets. K-12 school \u2014 Baker Middle School HVAC & Electrical Modifications - Full Drawing Bid Set. HVAC terms found: AHU, BAS, DUCT, ERV, GRILLE, HVAC, MECHANICAL, PLENUM, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://s3.amazonaws.com/scschoolfiles/3040/attachment_d_-_bms_hvac_full_drawing_bid_set_dated_03-03-2022.pdf), posted for open competitive bidding / public procurement (https://www.baker5j.org/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "19_CA_VistaUSD_DataCenter",
+      "project": "North Avenue Data Center Bid Drawings \u2014 Vista, CA (School district facility / data center, Vista Unified School District)",
+      "files": [
+        "19_CA_VistaUSD_DataCenter.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 24 sheets. School district facility / data center \u2014 North Avenue Data Center Bid Drawings. HVAC terms found: BAS, CFM, CONDENSING UNIT, DIFFUSER, DUCT, ERV, EXHAUST FAN, HVAC, MECHANICAL. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://resources.finalsite.net/images/v1704732849/vistausdorg/gbooqmvjb2a51l6kfkdz/V23240780B-NorthAvenueDataCenterBid-Drawings.pdf), posted for open competitive bidding / public procurement (https://www.vistausd.org/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "20_TX_JudsonISD_MEP_Upgrades_Pkg6",
+      "project": "JISD MEP Upgrades Package VI - Bid Issue Drawings (Woodlake Hills MS et al.) \u2014 San Antonio / Converse, TX (K-12 school, Judson Independent School District)",
+      "files": [
+        "20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 13 sheets. K-12 school \u2014 JISD MEP Upgrades Package VI - Bid Issue Drawings (Woodlake Hills MS et al.). HVAC terms found: AHU, BAS, CFM, CONTROLS, DDC, DUCT, ERV, EXHAUST FAN, HOT WATER, HVAC, MECHANICAL, RETURN AIR, RTU, THERMOSTAT, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://files-backend.assets.thrillshare.com/documents/asset/uploaded_file/5591/Jisd/f419a409-c191-47a5-aa5b-6ead6585cb5c/25-04-JISD-MEP-Upgrades-Pkg-VI-Bid-Issue-DRAWINGS.pdf?disposition=inline), posted for open competitive bidding / public procurement (https://www.judsonisd.org/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "21_VA_OrangeCounty_PublicSafetyBldg",
+      "project": "Orange County Public Safety Building - Issued for Construction Drawings (FY19) \u2014 Orange, Virginia (Public safety building / EOC, Orange County, VA)",
+      "files": [
+        "21_VA_OrangeCounty_PublicSafetyBldg.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 128 sheets. Public safety building / EOC \u2014 Orange County Public Safety Building - Issued for Construction Drawings (FY19). HVAC terms found: AHU, BAS, CFM, DUCT, ERV, EXHAUST FAN, GRILLE, HOT WATER, HVAC, MECHANICAL, THERMOSTAT, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://orangecountyva.gov/DocumentCenter/View/2451), posted for open competitive bidding / public procurement (https://orangecountyva.gov/bids.aspx?bidID=57). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "22_GA_Valdosta_FireStation8_100CD",
+      "project": "Fire Station #8 Site Improvements and Building Renovation - 100% CD Drawing Set \u2014 Valdosta, Georgia (Fire station, City of Valdosta, GA)",
+      "files": [
+        "22_GA_Valdosta_FireStation8_100CD.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 84 sheets. Fire station \u2014 Fire Station #8 Site Improvements and Building Renovation - 100% CD Drawing Set. HVAC terms found: BAS, CONDENSING UNIT, DIFFUSER, DUCT, ERV, GRILLE, HVAC, MECHANICAL, PLENUM, REGISTER, RTU, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.valdostacity.com/sites/default/files/uploads/depts/engineering/admin/fs8-psf_100cd_set.pdf), posted for open competitive bidding / public procurement (https://www.valdostacity.com/engineering). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "23_GA_MaconBibb_RecreationCenter",
+      "project": "North Macon Park Recreation Center Renovation & Addition \u2014 Macon, GA (municipal recreation center, Macon-Bibb County Recreation Department)",
+      "files": [
+        "23_GA_MaconBibb_RecreationCenter.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 44 sheets. municipal recreation center \u2014 North Macon Park Recreation Center Renovation & Addition. HVAC terms found: BAS, DUCT, ERV, EXHAUST FAN, FAN COIL, GRILLE, HOT WATER, HVAC, MECHANICAL, RTU, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.maconbibb.us/wp-content/uploads/2016/06/Attachment-C-Drawings.pdf), posted for open competitive bidding / public procurement (https://www.maconbibb.us/procurement/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+      "project": "Douglas County Courthouse HVAC Replacement - Bid Drawings (2241) \u2014 Waterville, Washington (County courthouse HVAC/DDC, Douglas County, WA)",
+      "files": [
+        "25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 23 sheets. County courthouse HVAC/DDC \u2014 Douglas County Courthouse HVAC Replacement - Bid Drawings (2241). HVAC terms found: BAS, BOILER, CFM, CHILLER, CONTROLS, DDC, DIFFUSER, DUCT, ERV, GRILLE, HVAC, MECHANICAL, PLENUM, RETURN AIR, SUPPLY AIR, THERMOSTAT, VRF. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.douglascountysheriff.org/DocumentCenter/View/7751), posted for open competitive bidding / public procurement (https://www.douglascountysheriff.org/bids.aspx). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "26_CA_TransbayTower_Mechanical_64Sheets",
+      "project": "Transbay Tower (Salesforce Tower) - Mechanical Drawings, 2018 ASC Integrated Project problem \u2014 San Francisco, CA (high-rise office tower / transit center, Associated Schools of Construction Regions 6 & 7 (public education release))",
+      "files": [
+        "26_CA_TransbayTower_Mechanical_64Sheets.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 64 sheets. high-rise office tower / transit center \u2014 Transbay Tower (Salesforce Tower) - Mechanical Drawings, 2018 ASC Integrated Project problem. HVAC terms found: AHU, BAS, BOILER, CFM, CHILLED WATER, CHILLER, CONTROLS, DIFFUSER, DUCT, ERV, EXHAUST FAN, FAN COIL, GRILLE, HOT WATER, HVAC, MECHANICAL, PLENUM, REGISTER, RETURN AIR, SUPPLY AIR, THERMOSTAT, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://asc67.org/ASC_Previous_Problems/Open/IP/2018/Drawings/Mechanical%20Drawings.pdf), posted for open competitive bidding / public procurement (https://asc67.org/competition.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "28_WA_KCHA_PublicHousing_HVAC",
+      "project": "Brittany Park HVAC Upgrades \u2014 Normandy Park, WA (public housing / multifamily residential, King County Housing Authority)",
+      "files": [
+        "28_WA_KCHA_PublicHousing_HVAC.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 9 sheets. public housing / multifamily residential \u2014 Brittany Park HVAC Upgrades. HVAC terms found: BAS, CFM, CONDENSING UNIT, CONTROLS, DDC, DIFFUSER, DUCT, ERV, EXHAUST FAN, GRILLE, HVAC, MECHANICAL, PLENUM, REGISTER, RETURN AIR, SUPPLY AIR, THERMOSTAT, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.kcha.org/Portals/0/PDF/Business/RequestFiles/68aadffb-c61f-4286-96a3-366da1098b7e.pdf), posted for open competitive bidding / public procurement (https://www.kcha.org/business/bids). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "29_TX_JPS_Hospital_CentralPlant_Chiller",
+      "project": "JPS Main Central Plant Chiller Addition \u2014 Fort Worth, TX (public hospital central utility plant, JPS Health Network (Tarrant County Hospital District))",
+      "files": [
+        "29_TX_JPS_Hospital_CentralPlant_Chiller.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 13 sheets. public hospital central utility plant \u2014 JPS Main Central Plant Chiller Addition. HVAC terms found: AHU, BAS, BOILER, CFM, CHILLED WATER, CHILLER, CONTROLS, DDC, DIFFUSER, DUCT, ERV, FAN COIL, HOT WATER, HVAC, MECHANICAL, RETURN AIR, SUPPLY AIR, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.jpshealthnet.org/sites/default/files/2021-03/JPS%20Main%20Central%20Plant%20Chiller%20Addition_%20Drawings,%202021-03-05.pdf), posted for open competitive bidding / public procurement (https://www.jpshealthnet.org/about/business-opportunities). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "30_WA_SpokaneTransit_CoolingTower",
+      "project": "STA Cooling Tower Replacement - Mechanical Bid Set \u2014 Spokane, WA (transit maintenance facility, Spokane Transit Authority)",
+      "files": [
+        "30_WA_SpokaneTransit_CoolingTower.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol1 (\"corpus\" release, HVAC_BAS_Plan_Sets.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets/). 14 sheets. transit maintenance facility \u2014 STA Cooling Tower Replacement - Mechanical Bid Set. HVAC terms found: AHU, BAS, BOILER, CFM, CHILLED WATER, CONTROLS, DDC, DIFFUSER, DUCT, ERV, EXHAUST FAN, FAN COIL, GRILLE, HOT WATER, HVAC, MECHANICAL, REGISTER, RETURN AIR, RTU, SUPPLY AIR, THERMOSTAT, VAV. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.spokanetransit.com/files/content/STA_Cooling_Tower_Mechanical_07-06-21_Bid_Set.pdf), posted for open competitive bidding / public procurement (https://www.spokanetransit.com/procurement). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+      "project": "T2504-03 Interior and Exterior Renovation, Jefferson Barracks Readiness Center \u2014 St. Louis, MO (National Guard readiness center / armory, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 51 sheets. National Guard readiness center / armory \u2014 T2504-03 Interior and Exterior Renovation, Jefferson Barracks Readiness Center. HVAC terms found: AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HOT WATER, HVAC, MAKEUP AIR, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, VAV. BAS/controls terms found: BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, ENERGY MANAGEMENT, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, AIRFLOW MONITOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_T2504-03%20-%20Final%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+      "project": "U2607-01 Interior Renovations, C Wing Updates, St. Louis Veterans Home \u2014 St. Louis, MO (veterans long-term-care / healthcare facility, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 37 sheets. veterans long-term-care / healthcare facility \u2014 U2607-01 Interior Renovations, C Wing Updates, St. Louis Veterans Home. HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BMS, SEQUENCE OF OPERATION; CONTROLS, DAMPER, OCCUPIED, SENSOR, SETPOINT, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_U2607-01%20-%20Final%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+      "project": "WWYK240146 - Design & Implement Monitoring & Control System for IWCS, Bldg. 62516 \u2014 Tinker AFB, OK (federal industrial / utility plant, U.S. Air Force - Tinker AFB)",
+      "files": [
+        "010_US_WWYK240146_Design_Implement_Monitoring_Control.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 31 sheets. federal industrial / utility plant \u2014 WWYK240146 - Design & Implement Monitoring & Control System for IWCS, Bldg. 62516. HVAC terms found: AHU, AIR HANDL, CFM, DIFFUSER, DUCT, ERV, EXHAUST FAN, MECHANICAL, PUMP, REGISTER, RTU. BAS/controls terms found: BACNET, SEQUENCE OF OPERATION; CONTROLS, SENSOR, SETPOINT, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/9c067a1c5dd346dd9db90231b986556d/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/98afe5e9cae74c03a40fba105b86ce95/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "011_IL_VA_Hines_Finance_Center_Renovation",
+      "project": "VA Hines Finance Center Renovation - construction drawings \u2014 Hines, IL (federal office building, U.S. Department of Veterans Affairs - Hines)",
+      "files": [
+        "011_IL_VA_Hines_Finance_Center_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 29 sheets. federal office building \u2014 VA Hines Finance Center Renovation - construction drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV, VRF. BAS/controls terms found: BACNET, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINT LIST, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/2addbfca35cb4676936b7d496bc57216/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/861f151571f643fba0d9cc5760d69dc7/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+      "project": "M2430-01 Chiller Upgrade - Center for Behavioral Medicine \u2014 Kansas City, MO (Psychiatric hospital / behavioral health facility, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 29 sheets. Psychiatric hospital / behavioral health facility \u2014 M2430-01 Chiller Upgrade - Center for Behavioral Medicine. HVAC terms found: AHU, AIR HANDL, BOILER, CHILLED WATER, CHILLER, COOLING TOWER, DIFFUSER, DUCT, ERV, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RETURN AIR, RTU, SUPPLY AIR. BAS/controls terms found: BACNET, BUILDING AUTOMATION, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SET POINT, SETPOINT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_M2430-01%20Final%20Bid%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
+      "project": "T2523-01 Replace Boilers Phase 2, Building 29, Missouri National Guard AVCRAD \u2014 Springfield, MO (National Guard aviation maintenance depot / central plant, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 28 sheets. National Guard aviation maintenance depot / central plant \u2014 T2523-01 Replace Boilers Phase 2, Building 29, Missouri National Guard AVCRAD. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RETURN AIR, RTU, SUPPLY AIR, VAV. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, EMCS, ENERGY MANAGEMENT, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/T2523-01%20100%20IFB%20Construction%20documents_20260615.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+      "project": "USDA Forest Service Missoula Fire Sciences Laboratory Mechanical Upgrade - Mechanical drawings M0.1-M9.7 \u2014 Missoula, Montana (federal fire-science research laboratory (combustion labs, wind tunnel, high-bay), USDA Forest Service / Rocky Mountain Research Station)",
+      "files": [
+        "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 28 sheets. federal fire-science research laboratory (combustion labs, wind tunnel, high-bay) \u2014 USDA Forest Service Missoula Fire Sciences Laboratory Mechanical Upgrade - Mechanical drawings M0.1-M9.7. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, VAV. BAS/controls terms found: BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/6a5981329f76bee3b7c55b05f8f8204e/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/7a6e1906118796f91e699384a0e458c8/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+      "project": "P-095 Replace Submarine Pier 3 - Utility Services Building, Mechanical (2021) \u2014 Naval Station Norfolk, Norfolk, VA (utility services building / gatehouse (waterfront industrial), NAVFAC Mid-Atlantic, Department of the Navy)",
+      "files": [
+        "015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 27 sheets. utility services building / gatehouse (waterfront industrial) \u2014 P-095 Replace Submarine Pier 3 - Utility Services Building, Mechanical (2021). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RETURN AIR, SPLIT SYSTEM, SUPPLY AIR, VAV. BAS/controls terms found: BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://imlive.s3.amazonaws.com/Federal%20Government/ID339311631294575036508388223381846014544/1614696dwg18of22_MECH-BUILD.pdf), posted for open competitive bidding / public procurement (https://imlive.s3.amazonaws.com/Federal%20Government/ID339311631294575036508388223381846014544/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+      "project": "USDA-ARS U.S. National Poultry Research Center, Building 1 Room P111 Renovation - Attachment 5 Drawings \u2014 Athens, Georgia (federal agricultural research laboratory / BSL-2 poultry research lab, USDA Agricultural Research Service)",
+      "files": [
+        "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 25 sheets. federal agricultural research laboratory / BSL-2 poultry research lab \u2014 USDA-ARS U.S. National Poultry Research Center, Building 1 Room P111 Renovation - Attachment 5 Drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, RTU, SPLIT SYSTEM, TERMINAL UNIT, VAV, VRF. BAS/controls terms found: BACNET, BMS, DDC, SEQUENCE OF OPERATION; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/fa01d0ffb98a44b6a726d4051b81259c/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/0402233f986e4b20859fbb9166dca96c/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+      "project": "Eglin AFB Building XX - Contract Documents (01/04/2019), Mechanical drawings \u2014 Eglin AFB, FL (federal office / secure facility, U.S. Air Force (design: SmithGroup MEP-FP))",
+      "files": [
+        "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 24 sheets. federal office / secure facility \u2014 Eglin AFB Building XX - Contract Documents (01/04/2019), Mechanical drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BMS, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, LONWORKS, MODBUS, POINT LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://imlive.s3.amazonaws.com/Federal%20Government/ID66990768310963037007432025819233376360/Attachment%204%20-%20Drawings%2006%20Mechanical.pdf), posted for open competitive bidding / public procurement (https://imlive.s3.amazonaws.com/Federal%20Government/ID66990768310963037007432025819233376360/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
+      "project": "R2415-01 HVAC System Upgrades - MSHP Troop C Headquarters \u2014 Weldon Spring, MO (State police headquarters office, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 22 sheets. State police headquarters office \u2014 R2415-01 HVAC System Upgrades - MSHP Troop C Headquarters. HVAC terms found: AIR HANDL, CHILLER, DUCT, DUCTWORK, ERV, FAN COIL, HVAC, MECHANICAL, REHEAT, RTU, TERMINAL UNIT, VAV. BAS/controls terms found: ATC, AUTOMATIC TEMPERATURE, BMS, TEMPERATURE CONTROL; CONTROLS, INTERLOCK, OCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_R2415-01%20-%20Final%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "021_XX_Laboratory_building_mechanical_drawings_lab",
+      "project": "Laboratory building mechanical drawings (2019) - lab AHUs, fume-hood/high-plume exhaust, BAS sequences and control diagrams; solicitation attachment '6-Lab-Mechanical' \u2014 United States (installation not named on sheets) (research laboratory, Federal solicitation attachment (agency not named on sheets))",
+      "files": [
+        "021_XX_Laboratory_building_mechanical_drawings_lab.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 19 sheets. research laboratory \u2014 Laboratory building mechanical drawings (2019) - lab AHUs, fume-hood/high-plume exhaust, BAS sequences and control diagrams; solicitation attachment '6-Lab-Mechanical'. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, COOLING COIL, DUCT, ERV, EXHAUST FAN, FAN COIL, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: ATC, BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, POINT LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, AIRFLOW MONITOR, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://imlive.s3.amazonaws.com/Federal%20Government/ID65813056147648126587105300654053798462/_6-Lab-Mechanical.pdf), posted for open competitive bidding / public procurement (https://imlive.s3.amazonaws.com/Federal%20Government/ID65813056147648126587105300654053798462/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+      "project": "Chiller Replacement at U.S. Salinity Laboratory (USDA-ARS) \u2014 Riverside, CA (federal research laboratory, USDA Agricultural Research Service)",
+      "files": [
+        "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 17 sheets. federal research laboratory \u2014 Chiller Replacement at U.S. Salinity Laboratory (USDA-ARS). HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CHILLER, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, SUPPLY AIR. BAS/controls terms found: BACNET, CONTROL SCHEMATIC; CO2, CONTROL VALVE, CONTROLLER, DAMPER, SENSOR, SET POINT, THERMOSTAT, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/cf07e68f33a14ad7a21df1b32c0bfd26/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/37c6a3102a4648daa09bac88da0bb8de/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+      "project": "E2508-01 Replace Steam Heating Units, Missouri School for the Deaf \u2014 Fulton, MO (state residential school / institutional campus, Missouri Office of Administration, Division of Facilities Management, Design and Construction)",
+      "files": [
+        "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 15 sheets. state residential school / institutional campus \u2014 E2508-01 Replace Steam Heating Units, Missouri School for the Deaf. HVAC terms found: CFM, DIFFUSER, DUCT, DUCTWORK, ERV, GRILLE, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, VAV. BAS/controls terms found: BACNET, CONTROL DIAGRAM, DDC, DIRECT DIGITAL; CO2, CONTROL VALVE, CONTROLS, DAMPER, OCCUPIED, SENSOR, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://oa.mo.gov/sites/default/files/bid-opportunities/_E2508-01%20-%20Final%20Plans.pdf), posted for open competitive bidding / public procurement (https://oa.mo.gov/facilities/bid-opportunities/bid-listing-electronic-plans). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+      "project": "Renovation of Building 615 - Final Design Plans (Aug 2019), mechanical sheets M-501..M-506 of a 191-sheet set; contract W9126G19B3286 \u2014 Joint Base San Antonio - Fort Sam Houston, TX (military office/institutional renovation, U.S. Army Corps of Engineers (design: Kenall + FNI))",
+      "files": [
+        "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 9 sheets. military office/institutional renovation \u2014 Renovation of Building 615 - Final Design Plans (Aug 2019), mechanical sheets M-501..M-506 of a 191-sheet set; contract W9126G19B3286. HVAC terms found: AHU, BOILER, CFM, CHILLED WATER, CHILLER, COOLING COIL, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, RETURN AIR, SPLIT SYSTEM, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, POINT LIST, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://imlive.s3.amazonaws.com/Federal%20Government/ID46323489404326785893539132317036395166/B615_Final_Design_Plans_Aug_12_2019_Sheet_-136_-144__of_191.pdf), posted for open competitive bidding / public procurement (https://imlive.s3.amazonaws.com/Federal%20Government/ID46323489404326785893539132317036395166/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "029_ME_BGS_Project_3548_MEANG_Building_493_Boiler",
+      "project": "BGS Project 3548 MEANG Building 493 Boiler Replacement \u2014 Maine (Dept. of Defense, Veterans & Emergency Management) (Air National Guard facility, Maine DAFS, Bureau of General Services)",
+      "files": [
+        "029_ME_BGS_Project_3548_MEANG_Building_493_Boiler.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 7 sheets. Air National Guard facility \u2014 BGS Project 3548 MEANG Building 493 Boiler Replacement. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, SUPPLY AIR, VAV. BAS/controls terms found: BMS, CONTROL SEQUENCE, DDC; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.maine.gov/dafs/bgs/sites/maine.gov.dafs.bgs/files/inline-files/3548_Drawings_DVEM.pdf), posted for open competitive bidding / public procurement (https://www.maine.gov/dafs/bgs/business-opportunities). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+      "project": "VA EHRM Infrastructure Upgrades Construction - Syracuse (Attachment 6, Mechanical drawings, 93 sheets) \u2014 Syracuse, NY (healthcare / VA medical center, U.S. Department of Veterans Affairs - Syracuse VAMC)",
+      "files": [
+        "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 93 sheets. healthcare / VA medical center \u2014 VA EHRM Infrastructure Upgrades Construction - Syracuse (Attachment 6, Mechanical drawings, 93 sheets). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, EMCS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7d7cb96240f348bcb4a510be05e767c8/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/c426963069284709beab70e94806253e/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "032_PA_Construct_EHRM_Infrastructure_Upgrades",
+      "project": "Construct EHRM Infrastructure Upgrades - Corporal Michael J. Crescenz VA Medical Center (Drawings 8 of 11 - Mechanical) \u2014 Philadelphia, PA (VA medical center (hospital) infrastructure upgrade, U.S. Department of Veterans Affairs)",
+      "files": [
+        "032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 85 sheets. VA medical center (hospital) infrastructure upgrade \u2014 Construct EHRM Infrastructure Upgrades - Corporal Michael J. Crescenz VA Medical Center (Drawings 8 of 11 - Mechanical). HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BMS, CONTROL SEQUENCE, SEQUENCE OF OPERATION; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/d35acb46361645a9b7e5f6ceedaebf13/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/c29c624ecd014e989c64c8cb025a5e64/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "033_MN_VA_Project_656_18_301_Construct_Replace",
+      "project": "VA Project 656-18-301 - Construct/Replace Building 51 MEP Systems (Issue for Bid, 80 sheets) \u2014 St. Cloud, MN (healthcare / VA health care system building, U.S. Department of Veterans Affairs - St. Cloud VAHCS)",
+      "files": [
+        "033_MN_VA_Project_656_18_301_Construct_Replace.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 80 sheets. healthcare / VA health care system building \u2014 VA Project 656-18-301 - Construct/Replace Building 51 MEP Systems (Issue for Bid, 80 sheets). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, EMCS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/98550e9eab7840609c5f139156dcea27/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/2c6b026f34f64508978a21cbb11f9f8b/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+      "project": "VA Project 637-22-700 - EHRM Infrastructure Upgrades (Drawings Volume III) \u2014 Asheville, NC (healthcare / VA medical center, U.S. Department of Veterans Affairs - Charles George VAMC)",
+      "files": [
+        "034_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 70 sheets. healthcare / VA medical center \u2014 VA Project 637-22-700 - EHRM Infrastructure Upgrades (Drawings Volume III). HVAC terms found: AIR HANDL, BOILER, DUCT, ERV, FAN COIL, HOT WATER, MECHANICAL, PUMP, SPLIT SYSTEM. BAS/controls terms found: BMS, SEQUENCE OF OPERATION; CONTROL VALVE, CONTROLS, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/9d8bd300d229484ca60209f643db7254/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/05c449abe73f48f19210989d7b0cd554/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "035_AR_564_19_101_Construct_New_Water_Storage",
+      "project": "564-19-101 Construct New Water Storage Facility - Veterans Health Care System of the Ozarks \u2014 Fayetteville, AR (Hospital campus utility / pump house, U.S. Department of Veterans Affairs)",
+      "files": [
+        "035_AR_564_19_101_Construct_New_Water_Storage.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 67 sheets. Hospital campus utility / pump house \u2014 564-19-101 Construct New Water Storage Facility - Veterans Health Care System of the Ozarks. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CONDENSING UNIT, DIFFUSER, DUCT, ERV, FAN COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, STATIC PRESSURE, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/147198149a64479b9d9f2e61dcd966d2/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/ba3547605c29485eaa270b8330540583/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+      "project": "VA Project 502-21-222 - EHRM Infrastructure Upgrades (Volume 3 drawings, 63 sheets) \u2014 Pineville, LA (healthcare / VA medical center, U.S. Department of Veterans Affairs - Alexandria VAHCS)",
+      "files": [
+        "036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 63 sheets. healthcare / VA medical center \u2014 VA Project 502-21-222 - EHRM Infrastructure Upgrades (Volume 3 drawings, 63 sheets). HVAC terms found: AHU, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, EMCS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/19578ea8fbbf45b9a819ded19e8e6d6f/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/04d7ad209d62489b809164ba7c98f785/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+      "project": "VA Project 598-19-118 \u2014 Replace 21 Air Handling Units and Chiller for AHU-18 (revised design drawings) \u2014 North Little Rock, AR (Central Arkansas Veterans Healthcare System) (hospital \u2014 hospital-wide AHU and chiller replacement, U.S. Department of Veterans Affairs)",
+      "files": [
+        "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 60 sheets. hospital \u2014 hospital-wide AHU and chiller replacement \u2014 VA Project 598-19-118 \u2014 Replace 21 Air Handling Units and Chiller for AHU-18 (revised design drawings). HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CHILLER, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, GRILLE, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, SUPPLY AIR, TERMINAL UNIT. BAS/controls terms found: CONTROL DIAGRAM, DDC, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/fbcbcfa6d7cf4e16bdc226e2e12cbe4e/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/7a3a53c5209f4dc3bbf588da3944cd23/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+      "project": "VA Project 637-22-700 - EHRM Infrastructure Upgrades (Drawings Volume IV - mechanical/controls) \u2014 Asheville, NC (healthcare / VA medical center, U.S. Department of Veterans Affairs - Charles George VAMC)",
+      "files": [
+        "038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 54 sheets. healthcare / VA medical center \u2014 VA Project 637-22-700 - EHRM Infrastructure Upgrades (Drawings Volume IV - mechanical/controls). HVAC terms found: AHU, BOILER, CFM, CHILLER, CONDENSING UNIT, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HVAC, MECHANICAL, PUMP, REGISTER, REHEAT, RETURN AIR, SPLIT SYSTEM, SUPPLY AIR, VAV. BAS/controls terms found: BMS, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SETPOINT, THERMOSTAT, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/0a7a42189bd4457ead827c75df6e059c/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/05c449abe73f48f19210989d7b0cd554/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
+      "project": "VA Project 580-22-201 - Replace and Upgrade Building Automation System (solicitation 36C25625R0043) \u2014 Houston, TX (healthcare / campus-wide BAS, U.S. Department of Veterans Affairs - Michael E. DeBakey VAMC)",
+      "files": [
+        "039_TX_VA_Project_580_22_201_Replace_and_Upgrade.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 48 sheets. healthcare / campus-wide BAS \u2014 VA Project 580-22-201 - Replace and Upgrade Building Automation System (solicitation 36C25625R0043). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV, VRF. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, FRONT END, MODBUS, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/a0043e08e89a41469a529edf69c2f136/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/bfe4000112cf4dedae0cb86b314adac4/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+      "project": "VA Solicitation 36C77623B0051 \u2014 Expand Sterile Processing Service (SPS), drawings 6 of 8 \u2014 North Chicago, IL (Captain James A. Lovell Federal Health Care Center) (hospital \u2014 sterile processing expansion, U.S. Department of Veterans Affairs)",
+      "files": [
+        "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 48 sheets. hospital \u2014 sterile processing expansion \u2014 VA Solicitation 36C77623B0051 \u2014 Expand Sterile Processing Service (SPS), drawings 6 of 8. HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR. BAS/controls terms found: ATC, AUTOMATIC TEMPERATURE, BACNET, CONTROL DIAGRAM, DDC, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/1037b1a78d7d46e49040143595dc73d2/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/2043ed6e48184504a00ced42beb9a9ee/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+      "project": "VA Project 673-21-151 \u2014 Replace Air Handling Units, Building 1 \u2014 Tampa, FL (James A. Haley Veterans' Hospital) (hospital \u2014 air handling unit replacement, U.S. Department of Veterans Affairs)",
+      "files": [
+        "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 33 sheets. hospital \u2014 air handling unit replacement \u2014 VA Project 673-21-151 \u2014 Replace Air Handling Units, Building 1. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, FRONT END, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/1e7367790b0f45cebcbd5c2b2959dc0d/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/ (SAM.gov contract opportunity attachment)). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+      "project": "VA Project 528A8-17-805 - Replace Main Boilers (Mechanical, Part B - controls/flow diagrams) \u2014 Albany, NY (healthcare / central boiler plant, U.S. Department of Veterans Affairs - Albany Stratton VAMC)",
+      "files": [
+        "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 31 sheets. healthcare / central boiler plant \u2014 VA Project 528A8-17-805 - Replace Main Boilers (Mechanical, Part B - controls/flow diagrams). HVAC terms found: BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, HOT WATER, HVAC, MAKEUP AIR, MECHANICAL, PLENUM, PUMP, RTU, SUPPLY AIR. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, MODBUS, POINTS LIST, SEQUENCE OF OPERATION; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/27832f3749b54413ae7fd6f464a1a1b9/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/e03a81bd70d44407a4138b3f324f1550/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
+      "project": "VA Project 516-21-107 - EHRM Infrastructure Upgrades, Lee County VA Healthcare Center \u2014 Cape Coral, FL (healthcare / outpatient clinic, U.S. Department of Veterans Affairs)",
+      "files": [
+        "045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 31 sheets. healthcare / outpatient clinic \u2014 VA Project 516-21-107 - EHRM Infrastructure Upgrades, Lee County VA Healthcare Center. HVAC terms found: AHU, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/da1319acffbb4a40a0779908772853a2/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/03a6ed68404247b7b867bff36337a082/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "046_MI_Veterinary_Medical_Center_Replace_Elevators_3",
+      "project": "Veterinary Medical Center Replace Elevators 3 and 4 (CP25044) - Drawings \u2014 East Lansing, MI (university veterinary medical center (health sciences), Michigan State University Infrastructure Planning and Facilities)",
+      "files": [
+        "046_MI_Veterinary_Medical_Center_Replace_Elevators_3.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 29 sheets. university veterinary medical center (health sciences) \u2014 Veterinary Medical Center Replace Elevators 3 and 4 (CP25044) - Drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR. BAS/controls terms found: BACNET, BUILDING AUTOMATION, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SETPOINT, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://ipf.msu.edu/sites/default/files/2026-03/CP25044%20Drawings.pdf), posted for open competitive bidding / public procurement (https://ipf.msu.edu/plan-room). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+      "project": "VA Project 558-22-172 \u2014 Replace Chillers in AHU 1 and AHU 2 \u2014 Durham, NC (Durham VA Medical Center) (hospital \u2014 central AHU/chiller replacement, U.S. Department of Veterans Affairs)",
+      "files": [
+        "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 28 sheets. hospital \u2014 central AHU/chiller replacement \u2014 VA Project 558-22-172 \u2014 Replace Chillers in AHU 1 and AHU 2. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MAKEUP AIR, MECHANICAL, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, TERMINAL UNIT, VAV, VRF. BAS/controls terms found: BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/59a5f593114b42698dec60cf52a6b824/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/485a1beb808b474f9019afc653e58f4b/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+      "project": "VA Project 528A8-17-805 - Replace Main Boilers (Mechanical, Part A) \u2014 Albany, NY (healthcare / central boiler plant, U.S. Department of Veterans Affairs - Albany Stratton VAMC)",
+      "files": [
+        "048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 28 sheets. healthcare / central boiler plant \u2014 VA Project 528A8-17-805 - Replace Main Boilers (Mechanical, Part A). HVAC terms found: BOILER, CHILLED WATER, CHILLER, DUCT, DUCTWORK, ERV, EXHAUST FAN, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, RTU, SPLIT SYSTEM. BAS/controls terms found: BMS, DDC; ACTUATOR, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, SENSOR, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/7bd005d62174487c887c55d574237801/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/e03a81bd70d44407a4138b3f324f1550/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+      "project": "VA Solicitation 36C77623B0051 \u2014 Expand Sterile Processing Service (SPS), drawings 5 of 8 \u2014 North Chicago, IL (Captain James A. Lovell Federal Health Care Center) (hospital \u2014 sterile processing expansion, U.S. Department of Veterans Affairs)",
+      "files": [
+        "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 27 sheets. hospital \u2014 sterile processing expansion \u2014 VA Solicitation 36C77623B0051 \u2014 Expand Sterile Processing Service (SPS), drawings 5 of 8. HVAC terms found: AHU, CFM, DUCT, DUCTWORK, ERV, HOT WATER, HVAC, MECHANICAL, PUMP. BAS/controls terms found: ATC, AUTOMATIC TEMPERATURE, BMS, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, SETPOINT, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/c739dc90454b485b9e0efc933c2687a5/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/2043ed6e48184504a00ced42beb9a9ee/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+      "project": "VA Project 537-17-115 \u2014 Sterile Processing Service (SPS) Construction, Phase 4 bid drawings \u2014 Chicago, IL (Jesse Brown VA Medical Center) (hospital \u2014 sterile processing department renovation, U.S. Department of Veterans Affairs)",
+      "files": [
+        "050_IL_VA_Project_537_17_115_Sterile_Processing.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 25 sheets. hospital \u2014 sterile processing department renovation \u2014 VA Project 537-17-115 \u2014 Sterile Processing Service (SPS) Construction, Phase 4 bid drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, EMCS, ENERGY MANAGEMENT, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/ee07b3a0c64b441d84bb505c3f87ef8f/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/a757bed899294b0abfe4eb6d0adec22f/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
+      "project": "VA Project 537-17-115 \u2014 Sterile Processing Service (SPS) Construction, Phase 2 bid drawings \u2014 Chicago, IL (Jesse Brown VA Medical Center) (hospital \u2014 sterile processing department renovation, U.S. Department of Veterans Affairs)",
+      "files": [
+        "052_IL_VA_Project_537_17_115_Sterile_Processing.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 17 sheets. hospital \u2014 sterile processing department renovation \u2014 VA Project 537-17-115 \u2014 Sterile Processing Service (SPS) Construction, Phase 2 bid drawings. HVAC terms found: AHU, AIR HANDL, DIFFUSER, DUCT, ERV, FAN COIL, GRILLE, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, RTU, SUPPLY AIR, VAV. BAS/controls terms found: BMS, BUILDING AUTOMATION, ENERGY MANAGEMENT; DAMPER, INTERLOCK, OCCUPIED, SENSOR, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/3e88e2e177304ad18b643b80eccf1500/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/a757bed899294b0abfe4eb6d0adec22f/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+      "project": "Renovate/Expand Emergency Room System, VA project 580-17-101 - 100% Construction Documents, Mechanical (March 2019), solicitation 36C25619R0072 \u2014 Michael E. DeBakey VA Medical Center, 2002 Holcombe Blvd, Houston, TX (hospital emergency department, U.S. Department of Veterans Affairs (design: Apogee Consulting Group))",
+      "files": [
+        "053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 12 sheets. hospital emergency department \u2014 Renovate/Expand Emergency Room System, VA project 580-17-101 - 100% Construction Documents, Mechanical (March 2019), solicitation 36C25619R0072. HVAC terms found: AHU, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINT LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://imlive.s3.amazonaws.com/Federal%20Government/ID323690375303852298667825292234186860839/36C25619R0072-009.pdf), posted for open competitive bidding / public procurement (https://imlive.s3.amazonaws.com/Federal%20Government/ID323690375303852298667825292234186860839/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "054_NV_VA_Project_654_212_Design_Build_Central",
+      "project": "VA Project 654-212 - Design-Build Central Utilities Plant (Mechanical 30x42 drawings) \u2014 Reno, NV (healthcare / central utility plant, U.S. Department of Veterans Affairs - VA Sierra Nevada HCS)",
+      "files": [
+        "054_NV_VA_Project_654_212_Design_Build_Central.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 12 sheets. healthcare / central utility plant \u2014 VA Project 654-212 - Design-Build Central Utilities Plant (Mechanical 30x42 drawings). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV, VRF. BAS/controls terms found: BACNET, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/2261018602f445a29254be4901e719c9/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/6daa7ba90ec445de8c0d35d0aaa5af52/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "055_US_VA_Project_673_20_107_EHRM_Infrastructure",
+      "project": "VA Project 673-20-107 - EHRM Infrastructure Upgrades, Addendum 1 combined drawings \u2014 Tampa, FL (healthcare / VA medical center, U.S. Department of Veterans Affairs - James A. Haley VAMC)",
+      "files": [
+        "055_US_VA_Project_673_20_107_EHRM_Infrastructure.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 11 sheets. healthcare / VA medical center \u2014 VA Project 673-20-107 - EHRM Infrastructure Upgrades, Addendum 1 combined drawings. HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, MECHANICAL, PLENUM, PUMP, REHEAT, RETURN AIR, SUPPLY AIR. BAS/controls terms found: CONTROL DIAGRAM, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/ed3ea28f857c411b996b272d5c598537/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/cf5e137d9e0346e49daca8069647eab3/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
+      "project": "VA Project 632-19-106 - Renovate Pharmacy Spaces (Mechanical/HVAC sheets 31-36 of 52) \u2014 Northport, NY (healthcare / hospital pharmacy, U.S. Department of Veterans Affairs - Northport VAMC)",
+      "files": [
+        "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 6 sheets. healthcare / hospital pharmacy \u2014 VA Project 632-19-106 - Renovate Pharmacy Spaces (Mechanical/HVAC sheets 31-36 of 52). HVAC terms found: AHU, AIR HANDL, CFM, COOLING COIL, DUCT, ERV, PUMP, REHEAT, SUPPLY AIR, VAV. BAS/controls terms found: AUTOMATIC TEMPERATURE, BMS, CONTROL DIAGRAM, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/27f5ec679e484a2aae65d31c4525c4b3/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/1ab5c40a56814c6c96e778c88d8ed3cc/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "057_US_VA_Project_626_15_106_Upgrade_Energy",
+      "project": "VA Project 626-15-106 \u2014 Upgrade Energy Management System (EMS/DDC) Infrastructure \u2014 Nashville, TN (Tennessee Valley Healthcare System) (VA medical center campus \u2014 building automation / EMS upgrade, U.S. Department of Veterans Affairs)",
+      "files": [
+        "057_US_VA_Project_626_15_106_Upgrade_Energy.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 6 sheets. VA medical center campus \u2014 building automation / EMS upgrade \u2014 VA Project 626-15-106 \u2014 Upgrade Energy Management System (EMS/DDC) Infrastructure. HVAC terms found: AHU, AIR HANDL, BOILER, CHILLER, DUCT, ERV, MECHANICAL, PUMP, RTU. BAS/controls terms found: BACNET, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT; CONTROLS. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/096fa067fcea43c89c107ce94aed230f/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/d9ffb951724447a18c966426b14b31c1/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+      "project": "Lawrence Berkeley National Laboratory Building 59 NERSC Facility Upgrade II (NFU2) - full bid drawing set \u2014 Berkeley, California (national laboratory high-performance computing facility / central plant and mechanical upgrade, US DOE / Lawrence Berkeley National Laboratory)",
+      "files": [
+        "058_CA_Lawrence_Berkeley_National_Laboratory_Building.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 311 sheets. national laboratory high-performance computing facility / central plant and mechanical upgrade \u2014 Lawrence Berkeley National Laboratory Building 59 NERSC Facility Upgrade II (NFU2) - full bid drawing set. HVAC terms found: AHU, CFM, COOLING TOWER, DIFFUSER, DUCT, ERV, EXHAUST FAN, GRILLE, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, RTU, SUPPLY AIR. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, MODBUS, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://sam.gov/api/prod/opps/v3/opportunities/resources/files/aba7f8cc431a43a5a9d11efa57b9c8c4/download?api_key=null&status=archived), posted for open competitive bidding / public procurement (https://sam.gov/opp/2315d45d106a418095a5dbe4bdc71978/view). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+      "project": "Harrison Hall Extruder Lab 132 Renovation \u2014 Bozeman, MT (laboratory/research, Montana State University Planning, Design & Construction)",
+      "files": [
+        "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 21 sheets. laboratory/research \u2014 Harrison Hall Extruder Lab 132 Renovation. HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BMS, BUILDING AUTOMATION, CONTROL SCHEMATIC, DDC, SEQUENCES OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.montana.edu/pdc/projects/23-0871%20Plans.pdf), posted for open competitive bidding / public procurement (https://www.montana.edu/pdc/projects/bids.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit",
+      "project": "Leon Johnson Hall Room 346 Renovation - Permit Set (Classroom Improvements 23-0828) \u2014 Bozeman, MT (university science/laboratory building renovation, Montana State University Planning, Design & Construction)",
+      "files": [
+        "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 20 sheets. university science/laboratory building renovation \u2014 Leon Johnson Hall Room 346 Renovation - Permit Set (Classroom Improvements 23-0828). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RETURN AIR, RTU, SUPPLY AIR, VAV. BAS/controls terms found: BMS, CONTROL SEQUENCE, ENERGY MANAGEMENT, SEQUENCE OF OPERATION; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.montana.edu/pdc/projects/addendum/2024-11-19_MSU_Leon%20Johnson%20346_Permit_Combined.pdf), posted for open competitive bidding / public procurement (https://www.montana.edu/pdc/projects/bids.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+      "project": "Barnard Hall 111 Lithography Lab Renovation \u2014 Bozeman, MT (laboratory/research, Montana State University Planning, Design & Construction)",
+      "files": [
+        "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 17 sheets. laboratory/research \u2014 Barnard Hall 111 Lithography Lab Renovation. HVAC terms found: AIR HANDL, BOILER, CFM, CHILLED WATER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RETURN AIR, SUPPLY AIR. BAS/controls terms found: BACNET, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.montana.edu/pdc/projects/25-1223%20Plans.pdf), posted for open competitive bidding / public procurement (https://www.montana.edu/pdc/projects/bids.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "068_US_Antelope_Valley_College_Applied_Arts_Math",
+      "project": "Antelope Valley College Applied Arts & Math/Engineering Renovations - bid drawings \u2014 Lancaster, CA (community college applied arts / math-engineering classroom & lab renovation, Antelope Valley Community College District)",
+      "files": [
+        "068_US_Antelope_Valley_College_Applied_Arts_Math.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 11 sheets. community college applied arts / math-engineering classroom & lab renovation \u2014 Antelope Valley College Applied Arts & Math/Engineering Renovations - bid drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, SUPPLY AIR, VAV. BAS/controls terms found: BACNET, BMS, DDC; ACTUATOR, DAMPER, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.avc.edu/sites/default/files/Drawings.pdf), posted for open competitive bidding / public procurement (https://www.avc.edu/purchasing-and-contracts/rfpbiddocsarchives). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+      "project": "ITD District 2 Laboratory Heating Upgrades (FM22701 Re-Bid) - Plans \u2014 Lewiston, ID (ITD District 2) (state materials testing laboratory building, Idaho Transportation Department)",
+      "files": [
+        "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 9 sheets. state materials testing laboratory building \u2014 ITD District 2 Laboratory Heating Upgrades (FM22701 Re-Bid) - Plans. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REHEAT, RETURN AIR, RTU, SUPPLY AIR. BAS/controls terms found: BACNET, BUILDING AUTOMATION, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://apps.itd.idaho.gov/Apps/NonHwyConstructionProjects/PDFS/FM22701%20RE-BID%20-%20Plans.pdf), posted for open competitive bidding / public procurement (https://itd.idaho.gov/facility-bidding/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "071_ME_BGS_Project_3809_Health_Science_Center",
+      "project": "BGS Project 3809 Health Science Center Renovations, Southern Maine Community College \u2014 South Portland, ME (community college health-science teaching labs, Maine DAFS, Bureau of General Services)",
+      "files": [
+        "071_ME_BGS_Project_3809_Health_Science_Center.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 59 sheets. community college health-science teaching labs \u2014 BGS Project 3809 Health Science Center Renovations, Southern Maine Community College. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, VAV. BAS/controls terms found: AUTOMATIC TEMPERATURE, BMS, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.maine.gov/dafs/bgs/sites/maine.gov.dafs.bgs/files/inline-files/3809_Drawings_MCCS.pdf), posted for open competitive bidding / public procurement (https://www.maine.gov/dafs/bgs/business-opportunities). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "072_CA_CA07_2627_West_Valley_College_Science_Math",
+      "project": "CA07-2627 West Valley College Science & Math STEM Classroom HVAC Upgrades - DSA drawing set \u2014 Saratoga, CA (community college science & math (STEM) building HVAC renovation, West Valley-Mission Community College District)",
+      "files": [
+        "072_CA_CA07_2627_West_Valley_College_Science_Math.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 38 sheets. community college science & math (STEM) building HVAC renovation \u2014 CA07-2627 West Valley College Science & Math STEM Classroom HVAC Upgrades - DSA drawing set. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV, VRF. BAS/controls terms found: BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, EMCS, ENERGY MANAGEMENT; ACTUATOR, AIRFLOW MONITOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.wvm.edu/forms-documents/general-services/bids/CA07-2627_WV_STEM_Classroom_HVAC_Upgrades/01-122588_DWG_A.pdf), posted for open competitive bidding / public procurement (https://www.wvm.edu/services/general/construction.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+      "project": "West Valley College STEM Classroom HVAC Upgrades (CA23-2526) - Drawings \u2014 Saratoga, CA (community college STEM building HVAC + EMCS/DDC upgrade, West Valley-Mission Community College District)",
+      "files": [
+        "074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 35 sheets. community college STEM building HVAC + EMCS/DDC upgrade \u2014 West Valley College STEM Classroom HVAC Upgrades (CA23-2526) - Drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, SUPPLY AIR, TERMINAL UNIT, VAV, VRF. BAS/controls terms found: ATC, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, EMCS, ENERGY MANAGEMENT; ACTUATOR, AIRFLOW MONITOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.wvm.edu/forms-documents/general-services/bids/CA23-2526-WV-STEM-classroom-HVAC-upgrades/01-122588_DWG_A.pdf), posted for open competitive bidding / public procurement (https://www.wvm.edu/services/general/bids.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "075_MT_Renne_Library_Innovation_Learning_Studio",
+      "project": "Renne Library Innovation Learning Studio \u2014 Bozeman, MT (university library, Montana State University Planning, Design & Construction)",
+      "files": [
+        "075_MT_Renne_Library_Innovation_Learning_Studio.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 31 sheets. university library \u2014 Renne Library Innovation Learning Studio. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, VAV. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, DDC, POINTS LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.montana.edu/pdc/projects/25-1257%20Plans%20-%20revised.pdf), posted for open competitive bidding / public procurement (https://www.montana.edu/pdc/projects/bids.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+      "project": "Miller Dining Auxiliaries Offices HVAC Upgrades (Project 24-1099) \u2014 Bozeman, MT (university dining/office building HVAC + DDC controls upgrade, Montana State University Planning, Design & Construction)",
+      "files": [
+        "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 26 sheets. university dining/office building HVAC + DDC controls upgrade \u2014 Miller Dining Auxiliaries Offices HVAC Upgrades (Project 24-1099). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MAKEUP AIR, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, SUPPLY AIR, VAV, VRF. BAS/controls terms found: ATC, AUTOMATIC TEMPERATURE, BACNET, BMS, BUILDING AUTOMATION, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.montana.edu/pdc/projects/24-1099%20Plans.pdf), posted for open competitive bidding / public procurement (https://www.montana.edu/pdc/projects/bids.html). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "080_CA_Contra_Costa_College_Science_Center_Conference",
+      "project": "Contra Costa College Science Center Conference Room 241 Conversion (C-4016) - Bid Set \u2014 San Pablo, CA (community college science center renovation, Contra Costa Community College District)",
+      "files": [
+        "080_CA_Contra_Costa_College_Science_Center_Conference.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 23 sheets. community college science center renovation \u2014 Contra Costa College Science Center Conference Room 241 Conversion (C-4016) - Bid Set. HVAC terms found: CFM, DIFFUSER, DUCT, DUCTWORK, ERV, GRILLE, MECHANICAL, PLENUM, PUMP, REGISTER, SUPPLY AIR, VAV. BAS/controls terms found: BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, SEQUENCE OF OPERATION; CO2, DAMPER, SENSOR, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://webapps.4cd.edu/apps/files/purchasing/misc/C-4016%20BID%20SET%20DRAWINGS.pdf), posted for open competitive bidding / public procurement (https://webapps.4cd.edu/apps/purchasingviewbids/default.aspx). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "082_OR_Klamath_Community_College_Career_Learning",
+      "project": "Klamath Community College Career & Learning Center (CLC) - combined bid & permit mechanical drawings \u2014 Klamath Falls, OR (community college career/technical learning center - HVAC + DDC/BAS, Klamath Community College)",
+      "files": [
+        "082_OR_Klamath_Community_College_Career_Learning.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 19 sheets. community college career/technical learning center - HVAC + DDC/BAS \u2014 Klamath Community College Career & Learning Center (CLC) - combined bid & permit mechanical drawings. HVAC terms found: AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MAKEUP AIR, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR. BAS/controls terms found: BACNET, BMS, BUILDING AUTOMATION, CONTROL SEQUENCE, DDC, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.klamathcc.edu/_documents/rfp/KCC%20CLC_BID%20AND%20PERMIT%20DRAWINGS_COMBINED_MECHANICAL.pdf), posted for open competitive bidding / public procurement (https://www.klamathcc.edu/about/business-office/rfp). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+      "project": "Town Offices / Facilities HVAC System Upgrades - Drawings \u2014 Andover, Massachusetts (Municipal building HVAC upgrade, Town of Andover, MA)",
+      "files": [
+        "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 17 sheets. Municipal building HVAC upgrade \u2014 Town Offices / Facilities HVAC System Upgrades - Drawings. HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, VAV. BAS/controls terms found: AUTOMATIC TEMPERATURE, CONTROL SCHEMATIC, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://andoverma.gov/DocumentCenter/View/9763/18504421-Drawings), posted for open competitive bidding / public procurement (https://andoverma.gov/bids.aspx). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "084_SC_H59_N054_FW_Building_112_Chiller_Addition",
+      "project": "H59-N054-FW Building 112 Chiller Addition - project drawings (2021) \u2014 Greenville Technical College, Greenville, SC (higher-education building / central chilled water plant, Greenville Technical College (SC State Engineer project H59-N054-FW))",
+      "files": [
+        "084_SC_H59_N054_FW_Building_112_Chiller_Addition.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 13 sheets. higher-education building / central chilled water plant \u2014 H59-N054-FW Building 112 Chiller Addition - project drawings (2021). HVAC terms found: AHU, BOILER, CHILLED WATER, CHILLER, COOLING TOWER, DIFFUSER, DUCT, ERV, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, RTU, TERMINAL UNIT. BAS/controls terms found: BACNET, BUILDING AUTOMATION, CONTROL SEQUENCE, MODBUS, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CONTROL VALVE, CONTROLLER, CONTROLS, INTERLOCK, SENSOR, SET POINT, SETPOINT, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.gvltec.edu/purchasing/attachments/H59-N054-FW-Bldg-112-Chiller-Project-Drawings.pdf), posted for open competitive bidding / public procurement (https://www.gvltec.edu/purchasing/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "086_CA_Contra_Costa_College_Early_Learning_Center",
+      "project": "Contra Costa College Early Learning Center HVAC Controls Conversion (C-1224) - Mechanical Drawings, Addendum 2 \u2014 San Pablo, CA (community college building - DDC/BACnet controls conversion, Contra Costa Community College District)",
+      "files": [
+        "086_CA_Contra_Costa_College_Early_Learning_Center.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 8 sheets. community college building - DDC/BACnet controls conversion \u2014 Contra Costa College Early Learning Center HVAC Controls Conversion (C-1224) - Mechanical Drawings, Addendum 2. HVAC terms found: COOLING COIL, DIFFUSER, DUCT, ERV, EXHAUST FAN, GRILLE, HVAC, MECHANICAL, RETURN AIR, SUPPLY AIR, VAV. BAS/controls terms found: BACNET, CONTROL DIAGRAM, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://webapps.4cd.edu/apps/files/purchasing/misc/06.%20Drawings%2023059%20CCC%20ELC%20Controls%20Conversion%20-%20M.pdf), posted for open competitive bidding / public procurement (https://webapps.4cd.edu/apps/purchasingviewbids/default.aspx). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "087_US_Contra_Costa_College_Chiller_Replacement",
+      "project": "Contra Costa College 2017 Chiller Replacement - mechanical drawing binder \u2014 San Pablo, CA (community college central plant / chiller replacement, Contra Costa Community College District)",
+      "files": [
+        "087_US_Contra_Costa_College_Chiller_Replacement.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 7 sheets. community college central plant / chiller replacement \u2014 Contra Costa College 2017 Chiller Replacement - mechanical drawing binder. HVAC terms found: AHU, BOILER, CHILLED WATER, CHILLER, COOLING TOWER, DIFFUSER, ERV, PUMP. BAS/controls terms found: BMS, DDC; ACTUATOR, CONTROL VALVE, CONTROLS, DAMPER, SENSOR, SET POINT, SETPOINT, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://webapps.4cd.edu/apps/files/purchasing/misc/2017%20Chiller%20Replace%20M%20Binder.pdf), posted for open competitive bidding / public procurement (https://webapps.4cd.edu/apps/purchasingviewbids/default.aspx). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+      "project": "Phoenix Sky Harbor International Airport - PHX Sky Train Stage 2, Rental Car Center (RCC) Station, Package B04, Volume 6 - Mechanical / Electrical / Plumbing / Fire Protection / Communications, Issued for Construction (260 sheets) \u2014 Phoenix, Arizona (airport / transit - automated people mover station and airport terminal facility, City of Phoenix Aviation Department (Phoenix Sky Harbor International Airport))",
+      "files": [
+        "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 260 sheets. airport / transit - automated people mover station and airport terminal facility \u2014 Phoenix Sky Harbor International Airport - PHX Sky Train Stage 2, Rental Car Center (RCC) Station, Package B04, Volume 6 - Mechanical / Electrical / Plumbing / Fire Protection / Communications, Issued for Construction (260 sheets). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR, VAV, VRF. BAS/controls terms found: ATC, AUTOMATIC TEMPERATURE, BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, DDC, DIRECT DIGITAL, ENERGY MANAGEMENT, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://asc67.org/ASC_Previous_Problems/R7/Commercial/2022%20Region%207%20Commercial%20Problem%20HP/Problem%20Statement%20Attachments/X.0.1%20-%20RCC%20Station%20-%20Mech_Elec_Plumb_Fire_Comm_Art%20Wall_Mass%20Not.pdf), posted for open competitive bidding / public procurement (https://asc67.org/ASC_Previous_Problems/R7/Commercial/2022%20Region%207%20Commercial%20Problem%20HP/Problem%20Statement%20Attachments/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "089_FL_Airport_Terminal_and_Hangar_Development",
+      "project": "Airport Terminal and Hangar Development - Release for Bid drawings (Nov 2021), AVCON project 2019.028.01 \u2014 DeFuniak Springs Municipal Airport, Walton County, FL (airport passenger terminal and hangar, City of DeFuniak Springs (engineer: AVCON, Inc.))",
+      "files": [
+        "089_FL_Airport_Terminal_and_Hangar_Development.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 177 sheets. airport passenger terminal and hangar \u2014 Airport Terminal and Hangar Development - Release for Bid drawings (Nov 2021), AVCON project 2019.028.01. HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, SPLIT SYSTEM, SUPPLY AIR, VAV, VRF. BAS/controls terms found: CONTROL SEQUENCE, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://dominguezdesign-build.com/wp-content/uploads/2022/05/Release-for-Bid-Drawings-DFS-Terminal-and-Hangar-Development-11-1-2021-1.pdf), posted for open competitive bidding / public procurement (https://dominguezdesign-build.com/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+      "project": "Guaranteed Rate Field HVAC/AHU Renovation Phase XI - Addendum 01 drawings (11/15/2021) \u2014 333 West 35th Street, Chicago, IL (major league ballpark (large assembly / commercial), Illinois Sports Facilities Authority)",
+      "files": [
+        "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 26 sheets. major league ballpark (large assembly / commercial) \u2014 Guaranteed Rate Field HVAC/AHU Renovation Phase XI - Addendum 01 drawings (11/15/2021). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, VAV, VRF. BAS/controls terms found: BUILDING AUTOMATION, DDC, POINTS LIST, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.isfauthority.com/wp-content/uploads/2021/11/HVAC-AHU-Renovation-Phase-XI-Addendum-01-11.15.21.pdf), posted for open competitive bidding / public procurement (https://www.isfauthority.com/doing-business/construction). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+      "project": "Guaranteed Rate Field HVAC/AHU Renovation Phase IX - Issued for Bid drawings (10/07/2019) \u2014 333 West 35th Street, Chicago, IL (major league ballpark (large assembly / commercial), Illinois Sports Facilities Authority)",
+      "files": [
+        "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 13 sheets. major league ballpark (large assembly / commercial) \u2014 Guaranteed Rate Field HVAC/AHU Renovation Phase IX - Issued for Bid drawings (10/07/2019). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT. BAS/controls terms found: AUTOMATIC TEMPERATURE, BUILDING AUTOMATION, CONTROL SEQUENCE, DDC, DIRECT DIGITAL, POINTS LIST, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.isfauthority.com/wp-content/uploads/2019/10/HVAC-AHU-Renovation-Phase-IX-Drawings-10.08.19.pdf), posted for open competitive bidding / public procurement (https://www.isfauthority.com/doing-business/construction). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+      "project": "BGS Project 3845 Jonesboro Heat Pump Upgrades (Dept. of Inland Fisheries & Wildlife) \u2014 Jonesboro, ME (state regional office / operations building, Maine DAFS, Bureau of General Services)",
+      "files": [
+        "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 11 sheets. state regional office / operations building \u2014 BGS Project 3845 Jonesboro Heat Pump Upgrades (Dept. of Inland Fisheries & Wildlife). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, RTU, SUPPLY AIR, VAV, VRF. BAS/controls terms found: ATC, AUTOMATIC TEMPERATURE, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.maine.gov/dafs/bgs/sites/maine.gov.dafs.bgs/files/inline-files/3845_Drawings_DIFW.pdf), posted for open competitive bidding / public procurement (https://www.maine.gov/dafs/bgs/business-opportunities). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+      "project": "Orange County Regional History Center HVAC/Mechanical - Contract Y15-770 Drawings \u2014 Orlando, Orange County, FL (county museum / civic center building, Orange County, Florida (Procurement Division))",
+      "files": [
+        "094_FL_Orange_County_Regional_History_Center_HVAC.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 9 sheets. county museum / civic center building \u2014 Orange County Regional History Center HVAC/Mechanical - Contract Y15-770 Drawings. HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BMS, DDC, DIRECT DIGITAL, SEQUENCE OF OPERATION; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, OCCUPIED, SENSOR, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (http://apps.ocfl.net/orangebids/Bid_Plans.asp?PrinterFriendly=1&FN=Y15-770Drawings.pdf&OID=138041&ID=10102&Visitor=Guest&OrangeBids=&Plans=1&ViewOnly=1), posted for open competitive bidding / public procurement (https://apps.ocfl.net/orangebids/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+      "project": "JVWTP Washwater Reclaim Pump Station #2 HVAC Upgrades (Project No. 4387) - Drawings \u2014 Herriman, UT (water treatment plant - washwater reclaim pump station (municipal water utility), Jordan Valley Water Conservancy District)",
+      "files": [
+        "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 8 sheets. water treatment plant - washwater reclaim pump station (municipal water utility) \u2014 JVWTP Washwater Reclaim Pump Station #2 HVAC Upgrades (Project No. 4387) - Drawings. HVAC terms found: CFM, CHILLED WATER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HOT WATER, HVAC, MECHANICAL, PUMP, RETURN AIR, RTU, SUPPLY AIR. BAS/controls terms found: ATC, BACNET, BMS, BUILDING AUTOMATION, CONTROL DIAGRAM, POINTS LIST, SEQUENCE OF OPERATION; ACTUATOR, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, SENSOR, SETPOINT, STATIC PRESSURE, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://jvwcd.gov/file/084dd88c-9732-47eb-ba19-bbeed83a69c5/4387Drawings.pdf), posted for open competitive bidding / public procurement (https://jvwcd.gov/public/projects). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+      "project": "Vermillion County Jail - Mechanical Bid Set Construction Documents (Drawings) \u2014 Newport, Vermillion County, IN (county jail / correctional facility - mechanical and DDC controls, Vermillion County Commissioners (Indiana))",
+      "files": [
+        "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 36 sheets. county jail / correctional facility - mechanical and DDC controls \u2014 Vermillion County Jail - Mechanical Bid Set Construction Documents (Drawings). HVAC terms found: AHU, AIR HANDL, BOILER, CFM, CHILLED WATER, CHILLER, CONDENSING UNIT, COOLING COIL, COOLING TOWER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PLENUM, PUMP, REGISTER, REHEAT, RETURN AIR, RTU, SUPPLY AIR, TERMINAL UNIT, VAV. BAS/controls terms found: BACNET, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, POINT LIST, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, UNOCCUPIED, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.hannigbidding.com/download.php?pid=75&type=Drawings&name=Mechanical_Vermillion_County-Bid_Set_Construction_Documents_Drawings-3.pdf), posted for open competitive bidding / public procurement (https://www.hannigbidding.com/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
+      "project": "JVWTP Chemical Buildings HVAC Upgrades (Project No. 4348) - Construction Documents \u2014 Herriman, UT (water treatment plant - chemical feed buildings (municipal water utility), Jordan Valley Water Conservancy District)",
+      "files": [
+        "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 25 sheets. water treatment plant - chemical feed buildings (municipal water utility) \u2014 JVWTP Chemical Buildings HVAC Upgrades (Project No. 4348) - Construction Documents. HVAC terms found: CFM, CHILLED WATER, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HOT WATER, HVAC, MAKEUP AIR, MECHANICAL, PUMP, RETURN AIR, RTU, SUPPLY AIR. BAS/controls terms found: ATC, CONTROL DIAGRAM, CONTROL SEQUENCE, SEQUENCE OF OPERATION; ACTUATOR, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, OCCUPIED, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, VARIABLE FREQUENCY, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://jvwcd.gov/file/cb82c701-b100-4ed5-9c59-8a82e24ded8f/4348-Drawings.pdf), posted for open competitive bidding / public procurement (https://jvwcd.gov/public/projects). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+      "project": "ITD D3 Bruneau Maintenance Shed HVAC Upgrade (FM32616) - Bid Drawings \u2014 Bruneau, ID (public works / highway maintenance shed - vehicle maintenance facility, Idaho Transportation Department)",
+      "files": [
+        "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 20 sheets. public works / highway maintenance shed - vehicle maintenance facility \u2014 ITD D3 Bruneau Maintenance Shed HVAC Upgrade (FM32616) - Bid Drawings. HVAC terms found: AHU, AIR HANDL, CFM, CHILLED WATER, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, FAN COIL, GRILLE, HEATING COIL, HOT WATER, HVAC, MECHANICAL, PUMP, RETURN AIR, RTU, SPLIT SYSTEM, SUPPLY AIR. BAS/controls terms found: CONTROL DIAGRAM, CONTROL SCHEMATIC, CONTROL SEQUENCE, DDC, SEQUENCE OF OPERATION, SEQUENCES OF OPERATION, TEMPERATURE CONTROL; ACTUATOR, CO2, CONTROL VALVE, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SET POINT, SETPOINT, STATIC PRESSURE, THERMOSTAT, VFD. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://apps.itd.idaho.gov/Apps/NonHwyConstructionProjects/PDFS/ITB%20-%20FM32616%20-%20ITD%20D3%20Bruneau%20Maintenance%20Shed%20HVAC%20Upgrade%20Bid%20Drawings.pdf), posted for open competitive bidding / public procurement (https://itd.idaho.gov/facility-bidding/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "100_OH_Butler_Tech_RTU_Welding_Source_Capture",
+      "project": "Butler Tech RTU / Welding Source Capture Installation \u2014 Butler County, OH (career technical school, Butler Technology & Career Development Schools)",
+      "files": [
+        "100_OH_Butler_Tech_RTU_Welding_Source_Capture.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up) from the corpus's own Vol2 (\"corpus_2\" release, HVAC_BAS_Plan_Sets_Vol2.zip) GitHub release (erikjohnstone/master-plan releases, downloaded + sha256-verified against the release asset digest, extracted to opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/). 7 sheets. career technical school \u2014 Butler Tech RTU / Welding Source Capture Installation. HVAC terms found: AHU, AIR HANDL, CFM, CONDENSING UNIT, COOLING COIL, DIFFUSER, DUCT, DUCTWORK, ERV, EXHAUST FAN, GRILLE, HVAC, MECHANICAL, PUMP, REGISTER, RETURN AIR, RTU, VAV. BAS/controls terms found: AUTOMATIC TEMPERATURE, SEQUENCE OF OPERATION, TEMPERATURE CONTROL; CO2, CONTROLLER, CONTROLS, DAMPER, INTERLOCK, SENSOR, SET POINT, SETPOINT, THERMOSTAT. No tag-eval/takeoff/reference/rowsym key exists yet for this set; corpus-eval prints it as unlabelled until one is authored.",
+      "provenance": "Downloaded from a public, unauthenticated source (https://www.butlertech.org/wp-content/uploads/2022/03/PROJECT-DRAWINGS.pdf), posted for open competitive bidding / public procurement (https://www.butlertech.org/). Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only."
+    },
+    {
+      "id": "tarrant-county-mechanical",
+      "project": "Tarrant County (TX) mechanical bid package \u2014 a genuine no-drawn-equipment-tags document, kept as a true-negative fixture",
+      "files": [
+        "tarrant-county-mechanical.pdf"
+      ],
+      "note": "Registered 2026-09-18 (plans/03-drawing-tag-recognition-audit.md WP7 follow-up). The raw PDF (and its opentakeoff/web/public/ mirror) already existed in-repo from earlier work but had never been added to this registry, so no eval script could ever resolve or score it. 8 pages. WP7's own independent verification workflow swept all 8 pages by render + textSpans cross-check and confirmed the pipeline's own zero-tag census is correct \u2014 a genuine schedule/legend/detail-only bid package with no equipment drawn on any plan view, not a recognizer blind spot. keys/tarrant-county-mechanical.tags.csv is intentionally header-only (0 data rows) to record this true-negative finding.",
+      "provenance": "Original acquisition source/date not documented before this registration; the PDF was already committed in-repo under opentakeoff-corpus/raw/ and opentakeoff/web/public/ prior to this catalogue entry."
     }
   ],
   "retired": [
     {
       "id": "weld-county-permit",
       "gc": "unknown (AutoCAD-plotted permit set)",
-      "project": "Weld County, Colorado — mechanical permit set (RTU-heavy: RTU×20, VAV×13, DAMPER×31)",
+      "project": "Weld County, Colorado \u2014 mechanical permit set (RTU-heavy: RTU\u00d720, VAV\u00d713, DAMPER\u00d731)",
       "files": [
         "weld-county-mechanical-permit.pdf"
       ],
-      "note": "Smallest of the original 3 new real sets (8 sheets, ~63K segments) — rooftop-unit-heavy, a device family the other two barely mention.",
-      "provenance": "Downloaded 2026-08-26 from a public, no-login www.weld.gov URL (Weld County's own purchasing-department document archive), posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets — kept external, local-use only.",
-      "retired_reason": "2026-08-28: retired from the ACTIVE vector-PDF corpus — every real equipment schedule on this set (RTU/fan/heater/split-system/condensing-unit) lives on 2 RASTER-EMBEDDED sheets (confirmed via zero find_text hits despite a crisp-looking render — a high-DPI scan can look clean while carrying no real text at all), making it a poor fit for a corpus meant to prove/harden a VECTOR-PDF (real embedded text+geometry) pipeline. Real ground-truth keys (keys/weld-county-permit.{takeoff,reference,rowsym}.csv) and the eval scores they produced (3.8% takeoff exact, 16.7% reference, 0.0% rowsym recall) are KEPT, not deleted — this set is the intended first real member of a future OCR/raster-specific corpus, not discarded. The raw PDF stays in raw/ for that future use; it is simply no longer in the active `sets` list above. CORRECTION (same day, after independent verification): this note originally claimed the set's own remaining RTU1-x-H 'LOCAL VAV BOX SCHEDULE' gap was 'a real vector-text sub-schedule... fixed in production code' — that claim was written before the fix was actually verified and turned out to be WRONG. Direct, rigorous re-diagnosis (pdf.js operator-list inspection showing a real paintImageXObject at that exact table's bbox, plus re-rendering that bbox to confirm pixel-for-pixel) proved this table is ALSO a raster-embedded picture, not vector text — the same underlying limitation as the set's other 2 raster sheets, just a small inset on a plan-role sheet. The real fix shipped instead: `rasterScheduleNotes` (mcp/src/session.ts) now also fires on any sheet, any role, whose single largest embedded image clears a 1% area floor (`RASTER_SOLO_IMG_MIN_FRAC`, web/src/lib/rastermask.ts) — a small pasted-picture table now gets honestly named wherever it appears, not just on schedule-role sheets failing a whole-sheet threshold. weld-county-permit's own eval scores are correctly UNCHANGED by this fix (the data was never recoverable); the value is the general disclosure capability, verified against the full corpus with zero regressions."
+      "note": "Smallest of the original 3 new real sets (8 sheets, ~63K segments) \u2014 rooftop-unit-heavy, a device family the other two barely mention.",
+      "provenance": "Downloaded 2026-08-26 from a public, no-login www.weld.gov URL (Weld County's own purchasing-department document archive), posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets \u2014 kept external, local-use only.",
+      "retired_reason": "2026-08-28: retired from the ACTIVE vector-PDF corpus \u2014 every real equipment schedule on this set (RTU/fan/heater/split-system/condensing-unit) lives on 2 RASTER-EMBEDDED sheets (confirmed via zero find_text hits despite a crisp-looking render \u2014 a high-DPI scan can look clean while carrying no real text at all), making it a poor fit for a corpus meant to prove/harden a VECTOR-PDF (real embedded text+geometry) pipeline. Real ground-truth keys (keys/weld-county-permit.{takeoff,reference,rowsym}.csv) and the eval scores they produced (3.8% takeoff exact, 16.7% reference, 0.0% rowsym recall) are KEPT, not deleted \u2014 this set is the intended first real member of a future OCR/raster-specific corpus, not discarded. The raw PDF stays in raw/ for that future use; it is simply no longer in the active `sets` list above. CORRECTION (same day, after independent verification): this note originally claimed the set's own remaining RTU1-x-H 'LOCAL VAV BOX SCHEDULE' gap was 'a real vector-text sub-schedule... fixed in production code' \u2014 that claim was written before the fix was actually verified and turned out to be WRONG. Direct, rigorous re-diagnosis (pdf.js operator-list inspection showing a real paintImageXObject at that exact table's bbox, plus re-rendering that bbox to confirm pixel-for-pixel) proved this table is ALSO a raster-embedded picture, not vector text \u2014 the same underlying limitation as the set's other 2 raster sheets, just a small inset on a plan-role sheet. The real fix shipped instead: `rasterScheduleNotes` (mcp/src/session.ts) now also fires on any sheet, any role, whose single largest embedded image clears a 1% area floor (`RASTER_SOLO_IMG_MIN_FRAC`, web/src/lib/rastermask.ts) \u2014 a small pasted-picture table now gets honestly named wherever it appears, not just on schedule-role sheets failing a whole-sheet threshold. weld-county-permit's own eval scores are correctly UNCHANGED by this fix (the data was never recoverable); the value is the general disclosure capability, verified against the full corpus with zero regressions."
     }
   ]
 }

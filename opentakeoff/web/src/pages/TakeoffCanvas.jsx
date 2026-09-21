@@ -277,6 +277,9 @@ import { computeShapeMetrics, needsMetrics } from "../lib/shapeMetrics.js";
 import { fmtCheckLen, parseLenInput, checkVerdict, M_PER_FT, areaVal, areaUnit, lenVal, lenUnit, calInputToFeet, heightVal, heightUnit, heightInputToFeet, heightStep, dimInputStr, dimLabel } from "../lib/units";
 import * as panelGeom from "../lib/panelGeometry.js";
 import { buildSheetGraph, resolveTag as resolveGraphTag } from "../lib/sheetgraph.ts";
+import { tagIndexFor } from "../lib/tagIndex.ts";
+import { markKey } from "../lib/markid.ts";
+import { canonicalLabelFamily } from "../lib/symbollabels.ts";
 import { tablesOverlappingRegion, bridgeRows } from "../lib/scheduleBridge.ts";
 
 // Carpet roll width — a run reaching this needs a seam. The live cursor readout
@@ -8280,6 +8283,37 @@ export default function TakeoffCanvas() {
     };
   }
 
+  // list_tags — the set-wide drawn-tag census (plans/03-drawing-tag-
+  // recognition-audit.md §3.3 WP2). g.tags is already the SAME census
+  // (buildSheetGraph, the shared path) whichever graph source answered
+  // ensureAgentGraph (production Session+ODL or the local geometric
+  // fallback) — this filters it with the exact same tagIndexFor/markKey/
+  // canonicalLabelFamily the MCP server's Session.listTags uses, so canvas
+  // and MCP can never disagree on what a filter means.
+  async function agentListTags(opts = {}) {
+    const g = await ensureAgentGraph();
+    if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable, not empty." };
+    const wantKey = opts.key ? markKey(opts.key) : null;
+    const wantFamily = opts.family ? canonicalLabelFamily(opts.family.trim().toUpperCase()) : null;
+    let tags = g.tags ?? [];
+    if (opts.sheet) tags = tags.filter((t) => t.sheet === opts.sheet);
+    if (opts.role) tags = tags.filter((t) => t.role === opts.role);
+    if (wantKey) tags = tagIndexFor(tags, wantKey);
+    if (wantFamily) tags = tags.filter((t) => t.family === wantFamily);
+    if (!opts.include_tables) tags = tags.filter((t) => !t.in_table);
+    if (!opts.include_callouts) tags = tags.filter((t) => !t.sheet_callout);
+    return {
+      tags: tags.map((t) => ({
+        sheet: t.sheet, role: t.role, text: t.text, key: t.key, family: t.family,
+        bbox: wireBox(t.bbox), ...(t.rot ? { rot: t.rot } : {}),
+        source: t.source, ...(t.multiplier > 1 ? { multiplier: t.multiplier } : {}),
+        ...(t.in_table ? { in_table: t.in_table } : {}),
+        ...(t.sheet_callout ? { sheet_callout: true } : {}),
+      })),
+      count: tags.length,
+    };
+  }
+
   async function agentAnalyzeControlSchematics() {
     const g = await ensureAgentGraph();
     if (!g?.__production) {
@@ -9859,6 +9893,7 @@ export default function TakeoffCanvas() {
       setScale: agentSetScale,
       takeoffSummary: agentTakeoffSummary,
       sheetGraph: agentSheetGraph,
+      listTags: agentListTags,
       resolveTag: agentResolveTag,
       findSchedule: agentFindSchedule,
       queryTable: agentQueryTable,

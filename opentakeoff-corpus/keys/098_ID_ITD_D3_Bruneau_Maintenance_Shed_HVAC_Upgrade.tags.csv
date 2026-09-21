@@ -1,0 +1,16 @@
+sheet,tag,role,in_table,note
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,CO,plan,false,"Vehicle-exhaust CO sensor, drawn as a small circle glyph directly below/adjacent to each NO2 sensor; appears twice (left and right bay walls) -> listed once as repeatable type mark."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,EF-1,plan,false,"Exhaust fan hexagon tag near louver/roof symbol at top-right of building, paired with UH-3/A-37."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,EF-2,plan,false,"Exhaust fan hexagon tag next to a fan/motor glyph in storage bays area, right instance (mirrors SF-1's fan symbol)."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,FC-1,plan,false,"Fan coil hexagon tag, bottom-left near Office/PA-17,19 circuit."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,FC-2,plan,false,"Fan coil hexagon tag, upper-left near Conference Room."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,GD-1,plan,false,Gravity damper hexagon tag near the vehicle exhaust sensor cluster (NO2/CO) on the left bay wall; only one instance found (no mirrored GD on the right wall).
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,HP-1,plan,false,"Heat pump hexagon tag, lower-left near Office (adjacent 30/2/3R breaker note and A-33 circuit)."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,HP-2,plan,false,"Heat pump hexagon tag, upper-left near Conference Room (adjacent 30/2/3R breaker note and A-35 circuit)."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,NO2,plan,false,"Vehicle-exhaust NO2 sensor, drawn as a small circle glyph on the bay wall; same tag appears twice (left and right bay walls, keyed note 7) labeling two physical sensors of the same type -> listed once as repeatable type mark."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,SF-1,plan,false,"Supply fan hexagon tag next to a fan/motor glyph (circle with 'M', keyed notes 5/8/10 nearby) in the storage bays area, left instance."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,UH-1,plan,false,Unit heater hexagon tag near top-left roof vent/thermostat cluster; unique physical unit heater instance (drawn as hexagon split 'UH' over '1').
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,UH-2,plan,false,"Unit heater hexagon tag in Office area, distinct physical unit from UH-1."
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,UH-3,plan,false,Unit heater hexagon tag at upper-right roof vent cluster (near A-37/EF-1).
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,UH-4,plan,false,Unit heater hexagon tag at lower-right (near A-37/EF-2/UH-4 diamond cluster).
+098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf#18,WH-1,plan,false,Existing water heater tag '(E) WH-1' next to a triangular fixture symbol near the Restroom.

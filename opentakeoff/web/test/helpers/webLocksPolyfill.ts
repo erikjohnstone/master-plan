@@ -93,7 +93,14 @@ function createLocksPolyfill() {
  *  before each test so one test's held lock can never bleed into the next. */
 export function installWebLocksPolyfill(): void {
   beforeEach(() => {
-    const nav = globalThis.navigator as unknown as { locks?: unknown };
-    nav.locks = createLocksPolyfill();
+    // A plain assignment throws on Node 24+, where `navigator.locks` is
+    // already defined as a getter-only accessor (Node 22 had no such
+    // property at all, so assignment worked there). defineProperty
+    // overwrites either shape.
+    Object.defineProperty(globalThis.navigator, "locks", {
+      value: createLocksPolyfill(),
+      configurable: true,
+      writable: true,
+    });
   });
 }

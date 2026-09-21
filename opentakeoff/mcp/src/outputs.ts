@@ -93,7 +93,7 @@ const projectTakeoffItem = z.object({
     hold: z.unknown().optional(),
   })).optional(),
   quantity_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
-  installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "unverified"]).optional(),
+  installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "located_via_served_equipment", "unverified"]).optional(),
   geometry_verified: z.boolean().optional(),
   search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
   unlabeled_audit_complete: z.boolean().nullable().optional(),
@@ -359,6 +359,25 @@ export const controlSchematicOutput = {
   exclusions: z.array(z.string()),
 };
 
+/** WP2's DrawnTag, on the wire — shared by list_tags and
+ * reconcile_schedule_plan's unscheduled_tags so both surfaces agree on the
+ * one shape. Defined here (ahead of the shared `wireBox` const further
+ * down this file) so reconcileSchedulePlanOutput below can reference it
+ * without a temporal-dead-zone error at module load. */
+const drawnTagWire = z.object({
+  sheet: z.string(),
+  role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"]),
+  text: z.string().describe("As drawn, joined/reconstructed"),
+  key: z.string().describe("markKey identity — hyphen/space-insensitive, so 'P-1'/'P1'/'P 1' share one key"),
+  family: z.string().describe("canonicalLabelFamily — the instance-stripped family (VAV-E-101 → VAV-E)"),
+  bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }),
+  rot: z.number().optional().describe("Run direction in degrees, clockwise, when nonzero"),
+  source: z.enum(["exact", "joined", "stacked", "compound", "count_prefixed"]).describe("How this tag was recognized: a plain single-run match, a CAD glyph-split rejoin, a stacked prefix-over-number bubble, a key-free compound run ('R1 /C-11'), or a run carrying an authored count multiplier ('TYP 8', '(8)')"),
+  multiplier: z.number().int().positive().optional().describe("An authored drafting multiplier beside this tag ('TYP 8', '(8)'); omitted when 1"),
+  in_table: z.object({ sheet: z.string(), title: z.string().nullable() }).optional().describe("Present when this text sits inside a schedule table's own region (a row/column label, never a drawn field instance) — omitted only with include_tables:true"),
+  sheet_callout: z.boolean().optional().describe("true when this text equals one of the set's own sheet numbers — a cross-reference callout, never a device tag — omitted only with include_callouts:true"),
+});
+
 /** Schedule ↔ plan reconciliation table (contractor columns + cites). */
 export const reconcileSchedulePlanOutput = {
   family_filter: z.string().nullable(),
@@ -400,7 +419,7 @@ export const reconcileSchedulePlanOutput = {
     observed_plan_qty: z.number().int().nullable().optional()
       .describe("Grounded placements observed so far; differs from installed_qty only when an incomplete search makes this a floor, not a releasable total"),
     installed_qty_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag", "explicit_installation_note"]).nullable().optional(),
-    installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "unverified"]).optional(),
+    installed_evidence_grade: z.enum(["symbol_geometry", "explicit_installation_note", "tag_text_only", "mixed_geometry_and_tag_text", "located_via_served_equipment", "unverified"]).optional(),
     geometry_verified: z.boolean().optional(),
     search_scope: z.enum(["exhaustive", "tagged_only", "explicit_note_set"]).nullable().optional(),
     unlabeled_audit_complete: z.boolean().nullable().optional(),
@@ -450,8 +469,19 @@ export const reconcileSchedulePlanOutput = {
       grounding_basis: z.literal("exact_authored_diagram_tag"),
       schedule_binding_status: z.enum(["bound", "ambiguous", "unbound"]),
     })).optional(),
+    reference_tag_cites: z.array(z.object({
+      sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }), text: z.string(),
+    })).optional().describe("Every non-plan drawn occurrence of this row's mark (schematic/legend/detail/etc) — a citation, never installed evidence; present only when sweep_schedule_row returned status: reference_only"),
+    served_equipment_cites: z.array(z.object({
+      tag: z.string(), sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }),
+    })).optional().describe("Present only when this row's own mark (e.g. a VALVE MARK) has zero drawn occurrences anywhere — every drawn occurrence of the UNIT MARK/SERVES/SERVED EQUIPMENT/EQUIPMENT SERVED mark it names instead, so the row can still be located and reviewed. A citation, never installed evidence; sweep_schedule_row still refuses to count the served unit as the row's own mark"),
     reason: z.string().nullable().optional(),
   })),
+  unscheduled_tags: z.array(drawnTagWire).optional()
+    .describe("WP6: every drawn tag occurrence (sheet callouts excluded) whose key never appears as any schedule row's own identity anywhere in the set. A review list — never changes any row's quantity or status."),
+  alias_candidates: z.array(z.object({
+    drawn: z.string(), nearest_row_key: z.string(), distance: z.literal(1),
+  })).optional().describe("WP6: for every distinct drawn key, the nearest schedule-row key exactly one letter-edit away (never a digit edit), when one exists — a likely typo/OCR spelling drift between the drawing and the schedule, or between two schedule rows. A review list — never changes any row's quantity or status."),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
 };
@@ -1418,7 +1448,7 @@ export const sheetGraphOutput = {
   available: z.boolean().describe("false = the set has no text layer (a scan) — the graph degrades to unavailable, never half-populates"),
   sheets: z.array(z.object({
     sheet: z.string(),
-    role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "unknown"]),
+    role: z.enum(["plan", "schedule", "legend", "detail", "elevation", "demolition", "schematic", "unknown"]),
     confidence: z.number().describe("0..1; mixed title signals halve it, a bare sheet-number convention stays under 0.5"),
     evidence: wireEvidence.optional(),
     building: z.string().optional().describe("The sheet's building context, when it names exactly one (BUILDING A / BLDG 2)"),
@@ -1442,6 +1472,11 @@ export const sheetGraphOutput = {
     .describe("Every delta-triangle / REV-tag marker the set carries — text markers ('Δ2', 'REV 2') and DRAWN deltas (a bare digit inside a triangle of linework, drawn: true) — where one sits, the ink changed under that revision. Markers on a schedule row or room bubble also attach there (and ride resolve_tag). A revision CLOUD is arc-chain linework these detectors do not read — absence here is not absence of revisions"),
   notes: z.array(z.string()).optional().describe("Named gaps found while indexing (e.g. a continuation whose rows could not be aligned) — the graph refuses silently dropping anything"),
   counts: z.object({ rooms: z.number().int(), unmatched_tags: z.number().int().optional(), schedules: z.number().int().describe("LOGICAL tables — a schedule continued across sheets counts once"), callouts: z.number().int() }),
+};
+
+export const listTagsOutput = {
+  tags: z.array(drawnTagWire),
+  count: z.number().int(),
 };
 
 export const resolveTagOutput = {
@@ -1527,7 +1562,7 @@ export const sweepScheduleRowOutput = {
     occurrences: z.number().int().describe("Drawn occurrences of the tag across all plan sheets"),
     grounding_basis: z.enum(["symbol_fingerprint", "tag_attached_vector", "exact_plan_tag"]).optional()
       .describe("Whether installed evidence came from a repeated symbol fingerprint, an exact tag directly assigned to distinctive adjacent/leader-connected vector geometry, or only exact plan-tag text. exact_plan_tag is review-only, never installed quantity; repeated drawing references are disclosed as redundant_view"),
-  }),
+  }).nullable().describe("null only when status is reference_only — the mark is not drawn on any plan sheet, so there is nothing to anchor a fingerprint to"),
   found: z.number().int().describe("Matches carrying the row's own tag — the honest count, across every plan sheet"),
   sheets: z.array(z.object({
     sheet: z.string(),
@@ -1563,6 +1598,11 @@ export const sweepScheduleRowOutput = {
   ea_total: z.number().optional(),
   note: z.string().optional(),
   warning: z.string().optional().describe("Present when the per-sheet work cap dropped candidates"),
+  status: z.enum(["reference_only"]).optional()
+    .describe("Present only when the mark is not drawn on any plan sheet but IS drawn elsewhere (schematic/legend/detail/etc) — a disclosed citation, never a refusal and never installed quantity"),
+  reference_tags: z.array(z.object({
+    sheet: z.string(), role: z.string(), bbox: wireBox, text: z.string(),
+  })).optional().describe("status: reference_only only — every non-plan drawn occurrence of this mark, for citation"),
 };
 
 /** trace_connectivity (Phase 4 of the HVAC/BAS maturity plan) — which valve

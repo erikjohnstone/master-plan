@@ -1,0 +1,21 @@
+sheet,tag,role,in_table,note
+bessemer-mechanical-bidset.pdf#3,FD-1,plan,false,"Floor Drain type tag, boxed callout with leader to floor-drain symbol. Appears 4 times on this sheet (two upper units, two lower units) - same repeatable type/schedule mark, listed once."
+bessemer-mechanical-bidset.pdf#3,WB-1,plan,false,"Washer Box type tag, boxed callout with leader to fixture symbol near the central chase. Appears once on this sheet."
+bessemer-mechanical-bidset.pdf#4,FD-1,plan,false,"Floor Drain type tag, boxed callout with leader to floor-drain symbol. Appears 4 times on this sheet (two upper units, two lower units) - same repeatable type/schedule mark, listed once."
+bessemer-mechanical-bidset.pdf#4,WB-1,plan,false,"Washer Box type tag, boxed callout with leader to fixture symbol near the central chase. Appears once on this sheet."
+bessemer-mechanical-bidset.pdf#6,EBB-1,plan,false,"Electric baseboard heater #1 — bold double-line wall-mounted glyph in Unit 103 mechanical closet, leader line up to underlined tag. Unique instance mark (EBB-1..4 each a distinct physical unit)."
+bessemer-mechanical-bidset.pdf#6,EBB-2,plan,false,Electric baseboard heater #2 — bold glyph near Unit 102 kitchen/hallway wall.
+bessemer-mechanical-bidset.pdf#6,EBB-3,plan,false,Electric baseboard heater #3 — bold glyph in hallway near stairs.
+bessemer-mechanical-bidset.pdf#6,EBB-4,plan,false,Electric baseboard heater #4 — bold glyph near Entry.
+bessemer-mechanical-bidset.pdf#6,EF-1,plan,false,"Exhaust fan, bold square equipment glyph with leader line, in Unit 103 kitchen area, connected to keynote 1 (owner-provided hood duct)."
+bessemer-mechanical-bidset.pdf#6,EWH-1,plan,false,"Electric water heater, bold equipment glyph on wall in Unit 102 bath, leader line down to tag."
+bessemer-mechanical-bidset.pdf#6,HP-1,plan,false,"Heat pump unit, bold equipment box glyph with duct connection in Unit 103 living room, underlined tag with leader-free direct label; General Note 4 says 'HP-1 is typical of all units' so only one instance is drawn/labeled on this sheet."
+bessemer-mechanical-bidset.pdf#6,SR-1,plan,false,"Supply register/diffuser type mark (round duct diffuser glyph with arrow), repeated ~7x across Unit 103 and Unit 102 rooms with different CFM values (145/160/55/75 CFM) but same tag — schedule-type mark, listed once."
+bessemer-mechanical-bidset.pdf#6,SR-2,plan,false,"Supply register type mark, 2 instances (0 CFM) in Unit 102 living room — schedule-type mark, listed once."
+bessemer-mechanical-bidset.pdf#6,T,plan,false,"Thermostat symbol: circled 'T' with dashed leader line to the electric baseboard heater (EBB) it controls; verified by cropping the PDF render at 3 locations (near MECHANICAL closet/EBB-1, near Unit 102 kitchen/EBB-2, near hallway/EBB-3) — genuine control-device glyph, not a grid/sheet letter. Treated as a repeatable type tag, listed once."
+bessemer-mechanical-bidset.pdf#6,TG-1,plan,false,"Transfer grille type mark, 6 instances across bedrooms (145/160 CFM, HIGH/LOW pairs) — schedule-type mark, listed once."
+bessemer-mechanical-bidset.pdf#6,TG-2,plan,false,"Transfer grille type mark, 4 instances (635 CFM) in Unit 102 living room — schedule-type mark, listed once."
+bessemer-mechanical-bidset.pdf#7,EBB-5,plan,false,"Electric baseboard heater tag next to hatched baseboard symbol in the MECHANICAL closet, with leader/underline callout. Unique instance mark."
+bessemer-mechanical-bidset.pdf#7,EBB-6,plan,false,Electric baseboard heater tag next to hatched baseboard symbol in the LAUNDRY ROOM area. Unique instance mark.
+bessemer-mechanical-bidset.pdf#7,EBB-7,plan,false,Electric baseboard heater tag next to hatched baseboard symbol in the corridor/stair area. Unique instance mark.
+bessemer-mechanical-bidset.pdf#7,EBB-8,plan,false,Electric baseboard heater tag next to hatched baseboard symbol at bottom of stair/corridor near grid line A. Unique instance mark.

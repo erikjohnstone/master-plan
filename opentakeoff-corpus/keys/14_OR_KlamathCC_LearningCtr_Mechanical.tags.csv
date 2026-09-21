@@ -1,0 +1,223 @@
+sheet,tag,role,in_table,note
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,CH-1,plan,false,"M311 First Floor Sector A Hydronic plan, chiller symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,DOAS-1,plan,false,"M311 plan, DOAS symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,DOAS-3,plan,false,"M311 plan, DOAS symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-01,plan,false,"M311 plan, split-system indoor unit symbol, MDF room"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-101,plan,false,"M311 plan, fan coil symbol with CHS/CHR/HWS/HWR piping callouts"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-102,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-103,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-104,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-105,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-106,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-107,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-108,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-109,plan,false,"M311 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,HP-01,plan,false,"M311 plan, split-system outdoor unit symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,MAU-1,plan,false,"M311 plan, make-up air unit symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,DOAS-2,plan,false,"M312 plan, DOAS symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,DOAS-4,plan,false,"M312 plan, DOAS symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-02,plan,false,"M312 plan, split-system indoor unit symbol, MDF (KCC) room 203"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-201,plan,false,"M312 First Floor Sector B Hydronic plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-202,plan,false,"M312 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-203,plan,false,"M312 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-206,plan,false,"M312 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-207,plan,false,"M312 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-208,plan,false,"M312 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-209,plan,false,"M312 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-210,plan,false,"M312 plan, fan coil symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,HP-2,plan,false,"M312 plan, split-system outdoor unit symbol (drawn HP-2, schedule HP-02)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,AS-1,plan,false,"M320 plan, air separator symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,B-1,plan,false,"M320 plan, boiler symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,B-2,plan,false,"M320 plan, boiler symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,BP-1,plan,false,"M320 plan, primary HW pump symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,BP-2,plan,false,"M320 plan, primary HW pump symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,BT-1,plan,false,"M320 plan, buffer tank symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,CH-1,plan,false,"M320 Boiler Room Enlarged plan, chiller box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,CHP-1,plan,false,"M320 plan, chilled water pump symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,CHP-2,plan,false,"M320 plan, chilled water pump symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HP-01,plan,false,"M320 plan, split-system outdoor unit symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HP-1,plan,false,"M320 plan, pump symbol near HX-1/HS-1; drawn as HP-1 but schedule has no HP-1 row (Hydronic Pumps schedule has HWP-1/HWP-2 in this location instead) - possible drafting label inconsistency, flagged as literal drawn tag"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HP-2,plan,false,"M320 plan, pump symbol near HX-1/HS-1; drawn as HP-2, likely same naming inconsistency as HP-1 (probably HWP-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HS-1,plan,false,"M320 plan, hydraulic separator hexagon symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HX-1,plan,false,"M320 plan, heat exchanger symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,MAU-1,plan,false,"M320 plan, make-up air unit box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,SP-1,plan,false,"M320 plan, snowmelt pump symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,SP-2,plan,false,"M320 plan, snowmelt pump symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,B-1,plan,false,"M401 plan, boiler symbol at gas connection"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,B-2,plan,false,"M401 plan, boiler symbol at gas connection"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,MAU-1,plan,false,"M401 Enlarged Gas plan, make-up air unit box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,WH-1,plan,false,"M401 plan, water heater symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,WH-2,plan,false,"M401 Enlarged Gas Sector B plan, water heater symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,WH-3,plan,false,"M401 plan, water heater symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,B-1,schematic,false,"M501 diagram, boiler schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,B-2,schematic,false,"M501 diagram, boiler schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,BP-1,schematic,false,"M501 diagram, primary HW pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,BP-2,schematic,false,"M501 diagram, primary HW pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,ET-1,schematic,false,"M501 diagram, expansion tank schematic symbol (bottom right, near boilers)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,ET-3,schematic,false,"M501 diagram, expansion tank schematic symbol (top, snowmelt feed)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,GMU-2,schematic,false,"M501 diagram, glycol makeup unit/feed tank schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,HS-1,schematic,false,"M501 diagram, hydraulic separator schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,HWP-1,schematic,false,"M501 diagram, secondary HW pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,HWP-2,schematic,false,"M501 diagram, secondary HW pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,HX-1,schematic,false,"M501 Hot Water Piping Diagram, heat exchanger schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,PF-2,schematic,false,"M501 diagram, pot feeder schematic symbol (hot water)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,SP-1,schematic,false,"M501 diagram, snowmelt pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#14,SP-2,schematic,false,"M501 diagram, snowmelt pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#15,AS-1,schematic,false,"M502 diagram, air separator schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#15,CH-1,schematic,false,"M502 Chilled Water Piping Diagram, chiller schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#15,CHP-1,schematic,false,"M502 diagram, chilled water pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#15,CHP-2,schematic,false,"M502 diagram, chilled water pump schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#15,ET-2,schematic,false,"M502 diagram, expansion tank schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#15,GMU-1,schematic,false,"M502 diagram, glycol makeup unit schematic symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#15,PF-1,schematic,false,"M502 diagram, pot feeder schematic symbol (chilled water)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,B-1,schedule,true,Hot Water Condensing Boiler schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,B-2,schedule,true,Hot Water Condensing Boiler schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,CH-1,schedule,true,Air Cooled Chiller schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-1,schedule,true,Dedicated Outdoor Air System schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-2,schedule,true,Dedicated Outdoor Air System schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-3,schedule,true,Dedicated Outdoor Air System schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,DOAS-4,schedule,true,Dedicated Outdoor Air System schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-101,schedule,true,Fan Coil Units schedule row (M002)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-102,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-103,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-104,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-105,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-106,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-107,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-108,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-109,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-201,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-202,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-203,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-204,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-206,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-207,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-208,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-209,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,FC-210,schedule,true,Fan Coil Units schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2,KEF-1,schedule,true,Exhaust Fans schedule row (kitchen grease hood)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,AS-1,schedule,true,Hydronic Accessories schedule row (air separator)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,BP-1,schedule,true,Hydronic Pumps schedule row (primary HW)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,BP-2,schedule,true,Hydronic Pumps schedule row (primary HW)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,BT-1,schedule,true,Hydronic Accessories schedule row (buffer tank)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,CHP-1,schedule,true,Hydronic Pumps schedule row (chilled water)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,CHP-2,schedule,true,Hydronic Pumps schedule row (chilled water)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,EG-1,schedule,true,"Air Distribution schedule row, repeatable type mark (exhaust grille)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,EH-1,schedule,true,Electric Heaters schedule row (boiler room)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,EH-2,schedule,true,Electric Heaters schedule row (fire riser)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,EH-3,schedule,true,Electric Heaters schedule row (vestibule)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ET-1,schedule,true,"Hydronic Accessories schedule row (expansion tank, chilled water)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ET-2,schedule,true,"Hydronic Accessories schedule row (expansion tank, hot water)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,ET-3,schedule,true,"Hydronic Accessories schedule row (expansion tank, snowmelt)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,FC-01,schedule,true,"Split System Heat Pumps schedule row (indoor unit, MDF room)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,FC-02,schedule,true,"Split System Heat Pumps schedule row (indoor unit, MDF room)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,GMU-1,schedule,true,"Hydronic Accessories schedule row (glycol makeup, chilled water)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,GMU-2,schedule,true,"Hydronic Accessories schedule row (glycol makeup, snowmelt)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HP-01,schedule,true,"Split System Heat Pumps schedule row (outdoor unit, serves FC-01)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HP-02,schedule,true,"Split System Heat Pumps schedule row (outdoor unit, serves FC-02)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HS-1,schedule,true,Hydronic Accessories schedule row (hydraulic separator)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HWP-1,schedule,true,Hydronic Pumps schedule row (secondary HW)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HWP-2,schedule,true,Hydronic Pumps schedule row (secondary HW)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,HX-1,schedule,true,Heat Exchanger schedule row
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,LR-1,schedule,true,"Air Distribution schedule row, repeatable type mark (linear return slot)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,LS-1,schedule,true,"Air Distribution schedule row, repeatable type mark (linear supply slot)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,LV-1,schedule,true,"Air Distribution schedule row, repeatable type mark (louver)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,LV-2,schedule,true,"Air Distribution schedule row, repeatable type mark (louver)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,MAU-1,schedule,true,Make Up Air Units schedule row (kitchen)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,PF-1,schedule,true,"Hydronic Accessories schedule row (pot feeder, chilled water)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,PF-2,schedule,true,"Hydronic Accessories schedule row (pot feeder, hot water)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,RG-1,schedule,true,"Air Distribution schedule row, repeatable type mark (return grille)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,RG-2,schedule,true,"Air Distribution schedule row, repeatable type mark (return grille)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SD-1,schedule,true,"Air Distribution schedule row, repeatable type mark (supply diffuser)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SD-2,schedule,true,"Air Distribution schedule row, repeatable type mark (supply diffuser)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SP-1,schedule,true,Hydronic Pumps schedule row (snowmelt)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3,SP-2,schedule,true,Hydronic Pumps schedule row (snowmelt)
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-1,plan,false,"Mezzanine plan, DOAS box symbol at Sector A riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-2,plan,false,"Mezzanine plan, DOAS box symbol at Sector B riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-3,plan,false,"Mezzanine plan, DOAS box symbol at Sector A riser (co-located w/ DOAS-1)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-4,plan,false,"Mezzanine plan, DOAS box symbol at Sector B riser (co-located w/ DOAS-2)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-101,plan,false,"Mechanical Mezzanine overview plan (M202), box symbol + leader in Sector A run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-102,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-103,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-104,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-105,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-106,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-107,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-108,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-109,plan,false,"Mezzanine plan, box symbol on Sector A duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-201,plan,false,"Mezzanine plan, box symbol on Sector B (diamond building) duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-202,plan,false,"Mezzanine plan, box symbol on Sector B duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-203,plan,false,"Mezzanine plan, box symbol on Sector B duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-206,plan,false,"Mezzanine plan, box symbol on Sector B duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-207,plan,false,"Mezzanine plan, box symbol on Sector B duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-208,plan,false,"Mezzanine plan, box symbol on Sector B duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-209,plan,false,"Mezzanine plan, box symbol on Sector B duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-210,plan,false,"Mezzanine plan, box symbol on Sector B duct run"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,CH-1,plan,false,"M211 First Floor Sector A HVAC plan, chiller symbol near mechanical yard"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,EG-1,plan,false,"M211 plan, repeatable exhaust grille symbol (many instances)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,EG-3,plan,false,"M211 plan, larger exhaust grille symbol near kitchen (16x10, 430cfm)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,EH-1,plan,false,"M211 plan, electric heater symbol in Boiler room 149"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-01,plan,false,"M211 plan, split-system indoor unit box symbol in MDF room 121"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-101,plan,false,"M211 plan, fan coil box symbol, classroom 135"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-102,plan,false,"M211 plan, fan coil box symbol, classroom 137"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-103,plan,false,"M211 plan, fan coil box symbol, classroom 140"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-104,plan,false,"M211 plan, fan coil box symbol, classroom 142"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-105,plan,false,"M211 plan, fan coil box symbol, classroom 132"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-106,plan,false,"M211 plan, fan coil box symbol, classroom 130"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-107,plan,false,"M211 plan, fan coil box symbol, classroom 127"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-108,plan,false,"M211 plan, fan coil box symbol, classroom 125"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-109,plan,false,"M211 plan, fan coil box symbol, work area/shared office"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-204,plan,false,"M211 plan, fan coil box symbol in kitchen area"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,HP-01,plan,false,"M211 plan, split-system outdoor unit symbol near CH-1/MAU-1"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,LV-1,plan,false,"M211 plan, wall louver symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,LV-2,plan,false,"M211 plan, wall louver symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,MAU-1,plan,false,"M211 plan, make-up air unit symbol above kitchen"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,RG-1,plan,false,"M211 plan, repeatable return grille symbol (many instances)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,SD-1,plan,false,"M211 plan, repeatable supply diffuser symbol (many instances, listed once)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,SD-2,plan,false,"M211 plan, repeatable supply diffuser symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,EG-1,plan,false,"M212 plan, repeatable exhaust grille symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,EH-2,plan,false,"M212 plan, electric heater symbol near fire riser 167"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,EH-3,plan,false,"M212 plan, electric heater symbol near vestibule 100"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-02,plan,false,"M212 plan, split-system indoor unit box symbol, MDF (KCC) room 203"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-201,plan,false,"M212 First Floor Sector B HVAC plan, fan coil box symbol, classroom 157"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-202,plan,false,"M212 plan, fan coil box symbol, break room 172"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-203,plan,false,"M212 plan, fan coil box symbol, large conference 209"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-206,plan,false,"M212 plan, fan coil box symbol, classroom 159"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-207,plan,false,"M212 plan, fan coil box symbol, classroom 132-area B"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-208,plan,false,"M212 plan, fan coil box symbol, KCC CR 205"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-209,plan,false,"M212 plan, fan coil box symbol, classroom 164"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-210,plan,false,"M212 plan, fan coil box symbol, classroom 161"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,HP-2,plan,false,"M212 plan, split-system outdoor unit symbol near fire riser 167 (drawn as HP-2; schedule lists it as HP-02)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,LR-1,plan,false,"M212 plan, repeatable linear return slot symbol (entry canopy)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,LS-1,plan,false,"M212 plan, repeatable linear supply slot symbol (entry canopy)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,LV-1,plan,false,"M212 plan, repeatable wall louver symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,LV-2,plan,false,"M212 plan, repeatable wall louver symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,RG-1,plan,false,"M212 plan, repeatable return grille symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,SD-1,plan,false,"M212 plan, repeatable supply diffuser symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,SD-2,plan,false,"M212 plan, repeatable supply diffuser symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,DOAS-1,plan,false,"M213 plan, DOAS box symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,DOAS-3,plan,false,"M213 plan, DOAS box symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-101,plan,false,"M213 Mezzanine Sector A (larger scale) plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-102,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-103,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-104,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-105,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-106,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-107,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-108,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-109,plan,false,"M213 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-204,plan,false,"M213 plan, fan coil box symbol (kitchen exhaust duct end)"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,LV-1,plan,false,"M213 plan, wall louver symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,LV-2,plan,false,"M213 plan, wall louver symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,DOAS-2,plan,false,"M214 plan, DOAS box symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,DOAS-4,plan,false,"M214 plan, DOAS box symbol at riser"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-201,plan,false,"M214 Mezzanine Sector B (larger scale) plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-202,plan,false,"M214 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-203,plan,false,"M214 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-206,plan,false,"M214 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-207,plan,false,"M214 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-208,plan,false,"M214 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-209,plan,false,"M214 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-210,plan,false,"M214 plan, fan coil box symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,LV-1,plan,false,"M214 plan, wall louver symbol"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,LV-2,plan,false,"M214 plan, wall louver symbol"
