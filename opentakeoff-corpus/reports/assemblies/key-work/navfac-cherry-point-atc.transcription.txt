@@ -161,7 +161,7 @@ END
 # VARIABLE AIR VOLUME TERMINAL BOX (M-602): 27 series fan-powered boxes (the census title;
 # no "SCHEDULE" prints). SERVED BY names the upstream air handler, not an area. MAX and
 # MIN PRIMARY AIRFLOW key cfm_max and cfm_min; FAN AIRFLOW, the series fan's own
-# airflow, has no attribute in this vocabulary (catalogue AS-12). The HOT WATER HEATING
+# airflow, has no attribute in this vocabulary (catalogue AS-13). The HOT WATER HEATING
 # COIL DATA block keys heat_type hw and the coil's hw_* attributes (CAPACITY as hw_mbh, as
 # federal-mech's VAV key does; HHW INLET SIZE as hw_conn_in). Every row cites notes 1-5:
 # 1 "PROVIDE WITH 120V/60HZ/1PH CONTROL VOLTAGE TRANSFORMER."; 2 "PROVIDE WITH UNIT MOUNTED

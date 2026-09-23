@@ -7,7 +7,8 @@ Branch `claude/affectionate-darwin-316fwo` (the goal's BRANCH line names
 here). Coordinator only, one heavy job at a time. Bug catalogue:
 `ASSEMBLIES_BUG_CATALOGUE.md`. Reports: `reports/assemblies/`.
 
-**Gates passed:** none yet. **Now:** WP0 (baseline + harness + HIT fix).
+**Gates passed:** GATE 0 (2026-09-23; dev is below the TRUTH size target, a ceiling
+demonstrated in AS-7). **Now:** WP1 (canonical attribute schema).
 
 **SETUP — environment (2026-09-23).** Node 24.21.0 unpacked from the npm
 `node-linux-x64` package (nvm and nodejs.org are unreachable); one root
@@ -65,6 +66,81 @@ the starter library (INPUT 4, due at GATE 4); 2–3 real partner jobs with what
 was entered downstream, plus unseen PDFs for the NEW-DOCUMENT TESTs (INPUT
 5); network access for `drive.google.com` / `drive.usercontent.google.com`
 so the bulk corpus can be staged (AS-2).
+
+**WP0.1 — census (9cc1dcf; `reports/assemblies/00-baseline.{json,md}`).** 23 of the
+121 registered sets are present here (AS-2); all 23 measured, 0 errored.
+Controls-relevant equipment: 19/23 sets, 783 schedule rows. Points-list rows:
+2/23 sets. Control-valve rows: 7/23 sets, 291 rows. Hydronic coils inside
+equipment schedules: 376, of them 183 with no scheduled valve. One command:
+`cd opentakeoff/mcp && node --import tsx scripts/assemblies-baseline.mjs ../../opentakeoff-corpus`.
+Reproducible: a no-cache re-run of bessemer, 024 and 094 at 63ad081 matched
+the committed census in every field except `ms`.
+
+**WP0.2 — frozen split (9cc1dcf; `reports/assemblies/01-split.{json,md}`),
+seed 20260923.** Dev 11 documents; held-out 6 documents and 26 drawn tables
+(≤30 rows each). Dev falls short of ≥12 documents / ≥300 instances: the
+present population cannot reach it without choosing the split by its outcome
+(AS-7, ceiling demonstrated).
+
+**WP0.3 — keys: all 17 documents keyed from renders, 89/89 required tables,
+every claimed row.** Each key's `#` header states its scope, the seed and
+what is not counted; each transcription (`reports/assemblies/key-work/`) is
+expanded mechanically by `mcp/scripts/assemblies-key-transcribe.mjs`, and
+every table has a second read (4x; independent MuPDF re-renders for the
+last four documents).
+
+| Side | Documents | Tables | Instances | Keyed values | Printed |
+|---|---|---|---|---|---|
+| dev | 11 | 63 | 244 | 5,280 | 2,053 |
+| held-out | 6 | 26 | 91 | 2,068 | 1,008 |
+
+Largest keys: federal-mech (dev, 96 instances), navfac (held-out, 74),
+itd-d1-lab (dev, 37), 031 (dev, 29). Dev covers every family group TRUTH
+names: VAV 71, AHU/DOAS/RTU 20, FCU 12, pump 30, fan 30, UH/CUH 22, boiler
+6, chiller 3, cooling tower 1, HX 2, ERV 2, humidifier 2 (thin for the last
+five). Held-out has no HX or ERV instance, a property of the frozen draw.
+Two claimed tables print no instance of their family and carry a
+table-level line (031's architectural EQUIPMENT SCHEDULE as FAN; 060's
+structural anchorage schedule as DUCT_MOUNTED_COIL; AS-9).
+`mcp/test/assembliesKeys.test.mjs` (in `npm test`, 10 tests) checks the
+helper, reproduces `01-split.json` from its seed, requires every committed
+key to equal its transcription's expansion byte for byte, and bounds every
+key to its frozen scope (table × family, the held-out row cap).
+
+**WP0.4 — HIT export (5bd74f2; report b09f8b7,
+`reports/assemblies/00-hit-export-before-after.{json,md}`).** CoilDP
+(column H) is now blank: navfac's 163 rows had it filled before and 0 after,
+with the valve's own (GPM/Cv)² reported in the notes as "valve Δp (derived)"
+on all 163. Tolerance accepts only {10,20,30,40,50}. Positioning Signal comes
+only from printed signal text: navfac and itd-d1-lab print none (163 and 10
+rows blank, disclosed). itd-d1-lab's 10 rows changed in no column. MCP 0.9.81.
+
+**Catalogue at GATE 0:** AS-7 (dev-size ceiling), AS-8 (printed keyed-family
+schedules the compile does not claim), AS-9 (claimed tables with no
+instance), AS-10 (printed titles not taken), AS-11 and AS-13 (drawing
+inconsistencies a join or normalizer must survive), AS-12 and AS-13
+(printed selectors the frozen key vocabulary cannot hold, for WP1).
+
+**Not done, on purpose:** redrawing or reordering the split to reach 12 dev
+documents (AS-7); keying printed schedules the compile does not claim (they
+are outside the population; AS-8 lists them); editing any committed key.
+
+**GATE 0 guard: no new failure (AS-1).**
+- web: nothing under `web/` changed after the post-WP0.4 run at 6e0e632.
+  That run: typecheck and lint exit 0 (0 errors, 3 warnings); `npm test`
+  3,529 tests, 3,513 pass, the same 3 failures as SETUP (the +2 are WP0.4's
+  export tests); every bench and the build exit 0.
+- mcp at 0b13beb: typecheck exit 0; `npm test` 443 tests, 324 pass, 5 fail,
+  114 skipped (SETUP: 433 / 314 / 5 / 114; the +10 are the key tests), and
+  the 5 failures are the SETUP five; `check:tool-count` passes (61 tools).
+  The AS-6 watchdog stopped the conformance worker's two idle sidecars after
+  its tests reported.
+- corpus-eval: WP0 changed `web/src/lib/valveSizeExport.ts` and description
+  text in `mcp/src/tools.ts` and `outputs.ts`. None of them is in the import
+  graph of any corpus-eval scorer (takeoff-eval, graph-eval,
+  table-recall-eval, tag-eval: 163 modules), so WP0 cannot have moved its
+  metrics. The loop's first corpus-eval run, the baseline WP1 and later
+  compare against, is recorded here when it finishes.
 
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real

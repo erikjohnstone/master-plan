@@ -302,3 +302,76 @@ edited. So these printed values have no attribute, and are typed "-":
 holds (every *keyed* attribute maps to exactly one canonical attribute). The
 new attributes stay unscored against the current keys; a later key tier
 (AS-2) can include them.
+
+---
+
+## AS-13 — what keying navfac and the WP1 unit review added to AS-11 and AS-12 (OPEN — this goal, WP1 and WP2)
+
+**Found:** 2026-09-23, WP0.3, keying the held-out document navfac
+(`key-work/navfac-cherry-point-atc.transcription.txt`), and WP1, reviewing
+every key line's unit against the canonical schema. This entry extends AS-11
+(drawing inconsistencies) and AS-12 (vocabulary gaps).
+
+**Drawing inconsistencies (extends AS-11):**
+- **AIR COOLED HEAT RECOVERY CHILLER SCHEDULE (M-611, page 45):** both rows
+  print HEAT RECOVERY EWT 130 and LWT 110. That is the reverse of a condenser
+  bundle, which heats water; the same sheet's boilers print ENT 110 / LVG
+  130.
+  - The key keeps the printed values. The cells are unambiguously the
+    bundle's entering and leaving temperatures; only their order contradicts
+    physics.
+  - This differs from 12_MT (AS-11), where the header *groups* (air vs.
+    water) were misassigned, so the key read those cells by their evident
+    identity.
+  - A normalizer's physics check should flag such a row, never silently swap
+    it.
+- **The same schedule's notes 6 and 8** name the chiller's pumps "PCWHPs",
+  "HRHWPs" and "HRWPs"; the pump schedule prints PCHWP-MT1/2 and
+  HRHWP-MT1/2.
+- **DOAH-T1 (M-622, page 49)** prints VOLTS/PH/Hz "460/60/30" (the text layer
+  agrees). No reading gives a phase, so the key has volts 460 and phase "?".
+  The CRAH schedule on M-621 prints "460/60/3" under V/HZ/PH, which is the
+  likely intent.
+- **FAN (QTY) H.P. cells in two orders under the same header wording:**
+  - M-601 prints "(2) @ 10.0" (the count in parentheses);
+  - M-621 and M-622 print "1 (5.0)" and "1 (1.5)" (the HP in parentheses).
+
+  A normalizer cannot take the parenthesized number as the count from the
+  header alone; a decimal is never a count.
+- **HUMIDIFIER SCHEDULE (M-602)** heads its capacity "LB/HR" over "(MBH)". The
+  same engineer's M-621 schedule prints plain "LB/HR" for the same 1.9 kW
+  units, so the key reads lb/hr.
+- **DOAH-T1's row carries two units' data.** Its DUCT MOUNTED HEATING COIL
+  block is a separately tagged coil: note 2 names it HHWC-DOAH-T1, and the HHW
+  control valve schedule lists it under that mark at 1.2 GPM, this block's
+  flow. DOAH-T1's own valve carries 2.6 GPM, the preheat coil's flow.
+- **The two parts of the DEDICATED OUTDOOR AIR UNIT SCHEDULE** are titled
+  "1 OF 1" and "2 OF 2".
+- **bessemer's FAN SCHEDULE** heads EF-1's static pressure "EXT. SP. (FT)"
+  and prints 0.25. That is 3 in. w.c., implausible for a bath exhaust fan, so
+  the header likely means inches. The key keeps 0.25 ft as printed. The WP1
+  schema converts feet of water to inches (×12) the same way for a key and a
+  normalizer, and never guesses that a header's unit is wrong.
+
+**Vocabulary gaps (extends AS-12):**
+- **A fan-powered terminal's own fan airflow:** navfac's VAV FAN AIRFLOW
+  (CFM), 27 rows. cfm_max and cfm_min are primary airflows.
+- **A dehumidifier's moisture capacity:** navfac CAPACITY PINTS/HR, six rows.
+- **Motor power printed in watts under an HP header.** The key holds
+  motor_hp in W where every cell prints watts (navfac UH-M1, CUH-T1/T2, as
+  in 12_MT and federal-mech). It holds "?" where one column mixes HP and W
+  (navfac FCU-M3 "85 W", FCU-M5 "225 W"), because a key column carries one
+  unit. WP1 should give motor power one canonical attribute with a unit, so
+  both forms become scorable.
+- **A CRAH's fan motor count** (GENERIC_HVAC has no fan count).
+- **A heat recovery chiller's compressor kW.** Both compressor kW and unit
+  power kW print; the key uses unit power as kw_input.
+
+**For the attribute scorer (WP2):**
+- A value a pipeline reports for a unit the key does not list, from inside
+  a keyed table, must not score as invented when that unit is printed.
+- Example: HHWC-DOAH-T1, decomposed from DOAH-T1's row, should be out of key
+  scope, like a value cited from an unkeyed table.
+- A unit that is not printed at all stays invented. The scorer needs a rule
+  that tells the two apart (the row's cells, or the table's notes, name the
+  unit), fixed before any normalizer output is scored.
