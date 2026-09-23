@@ -1,0 +1,717 @@
+# itd-d1-lab.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/itd-d1-lab.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M5.0 (page 12), M5.1 (page 13), M5.2 (page 14) and M5.3 (page 15) of the ITD D-1 Testing Laboratory HVAC bid set (Musgrove Engineering), every claimed keyed-family table of this dev document.
+#   itd-d1-lab-mechanical.pdf#12 | PUMP SCHEDULE | PUMP | all 4 printed rows | render: page 12 crop 158,925,1085,272 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 158,1185,800,105 at 3x; second read at 4x with MuPDF (bands 160-216, 446-560 and 608-722) of every row's GPM, head, HP and RPM
+#   itd-d1-lab-mechanical.pdf#12 | EXHAUST FAN SCHEDULE | FAN | all 6 printed rows | render: page 12 crop 1287,1190,1088,332 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1287,1515,1000,120 at 3x in 2 tiles, the end of note 2's first line re-rendered at 4x with MuPDF (crop 2050,1515,350,125); second read at 4x with MuPDF (bands 1289-1346, 1585-1726 and 1765-1816) of every row's CFM, ESP, RPM and watts
+#   itd-d1-lab-mechanical.pdf#13 | CONDENSING HOT WATER BOILER SCHEDULE | BOILER | all 2 printed rows | render: page 13 crop 161,78,1086,187 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 161,262,1090,155 at 3x in 3 tiles; second read at 4x with MuPDF (bands 163-220, 505-724 and 792-886) of both rows' EWT, LWT, flow, input and output
+#   itd-d1-lab-mechanical.pdf#13 | HOT WATER REHEAT COIL SCHEDULE | DUCT_MOUNTED_COIL | all 9 printed rows | render: page 13 crop 161,414,1086,415 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 161,826,800,135 at 3x; second read at 4x with MuPDF (bands 163-220, 360-454, 567-680 and 872-922) of every row's capacity, CFM, EWT, LWT, GPM and runout size
+#   itd-d1-lab-mechanical.pdf#13 | HUMIDIFIER SCHEDULE | HUMIDIFIER | all 1 printed row | render: page 13 crop 1287,144,1085,150 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1287,290,1090,100 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+#   itd-d1-lab-mechanical.pdf#13 | LAB EXHAUST FAN SCHEDULE | FAN | all 1 printed row | render: page 13 crop 1287,393,1140,155 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1287,548,1140,185 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+#   itd-d1-lab-mechanical.pdf#14 | ELECTRIC HEATER SCHEDULE | UNIT_HEATER | all 9 printed rows | render: page 14 crop 201,65,1085,437 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 201,500,900,160 at 3x; second read at 4x with MuPDF (bands 203-260, 543-592, 633-727 and 768-817) of every row's CFM, HP, kW and V/Ø
+#   itd-d1-lab-mechanical.pdf#14 | SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS) | FCU | the 1 printed row, its indoor unit (F-1) | render: page 14 crop 201,941,1085,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 201,1090,1000,120 at 3x in 2 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+#   itd-d1-lab-mechanical.pdf#14 | SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS) | CONDENSING_UNIT | the 1 printed row, its outdoor unit (CU-1) | render: page 14 crop 201,941,1085,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 201,1090,1000,120 at 3x in 2 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+#   itd-d1-lab-mechanical.pdf#14 | DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE | FCU | the 1 printed row, its indoor unit (DFC-1) | render: page 14 crop 1298,900,1087,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1298,1048,1090,168 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+#   itd-d1-lab-mechanical.pdf#14 | DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE | CONDENSING_UNIT | the 1 printed row, its outdoor unit (DCU-1) | render: page 14 crop 1298,900,1087,152 at 3x in 3 tiles (SYMBOL column repeated) and notes crop 1298,1048,1090,168 at 3x in 3 tiles; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop)
+#   itd-d1-lab-mechanical.pdf#15 | AIR HANDLING UNIT SCHEDULE | AHU | all 1 printed row | render: page 15 crop 209,207,2040,157 at 3x in 5 tiles (SYMBOL column repeated) and notes crop 209,362,1000,155 at 3x in 2 tiles; second read at 4x with MuPDF (bands 211-260, 440-492, 602-644, 755-806, 1106-1202, 1704-1746 and 1911-1989) of supply CFM, HP/QTY, DX total, gas input and output, final filter, unit V/PH and minimum O.S.A. CFM
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, weights, efficiencies, static and total pressures other than a fan's external static, air-side temperatures, sound data, dimensions, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# itd-d1-lab: 12 table(s), 37 instance(s), 689 keyed attribute value(s) (283 printed, 406 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,area_served,BOILER PUMP ( B-1 ),,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,gpm,27,gpm,CAPACITY / FLOW (GPM),printed '27.0'
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,head_ft,15,ft,CAPACITY / HEAD (FT),printed '15.0'
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,motor_hp,0.5,hp,MOTOR / HP,
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,rpm,1750,rpm,MOTOR / RPM,"printed '1,750'"
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,vfd,,,"NOTE 3, where the row's REMARKS cite it: PROVIDE WITH INTEGRAL VARIABLE SPEED DRIVE",blank cell
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,pump_arrangement,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,glycol_pct,0,%,"NOTE 4, where the row's REMARKS cite it: CAPACITY BASED ON 100% WATER",author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,volts,115,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-1,PUMP,phase,1,,MOTOR / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,area_served,BOILER PUMP ( B-2 ),,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,gpm,27,gpm,CAPACITY / FLOW (GPM),printed '27.0'
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,head_ft,15,ft,CAPACITY / HEAD (FT),printed '15.0'
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,motor_hp,0.5,hp,MOTOR / HP,
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,rpm,1750,rpm,MOTOR / RPM,"printed '1,750'"
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,vfd,,,"NOTE 3, where the row's REMARKS cite it: PROVIDE WITH INTEGRAL VARIABLE SPEED DRIVE",blank cell
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,pump_arrangement,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,glycol_pct,0,%,"NOTE 4, where the row's REMARKS cite it: CAPACITY BASED ON 100% WATER",author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,volts,115,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,BP-2,PUMP,phase,1,,MOTOR / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,area_served,HOT WATER LOOP,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,gpm,46,gpm,CAPACITY / FLOW (GPM),
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,head_ft,40,ft,CAPACITY / HEAD (FT),
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,motor_hp,1,hp,MOTOR / HP,printed '1.0'
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,rpm,3768,rpm,MOTOR / RPM,"printed '3,768'"
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,vfd,yes,,"NOTE 3, where the row's REMARKS cite it: PROVIDE WITH INTEGRAL VARIABLE SPEED DRIVE",author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,pump_arrangement,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,glycol_pct,0,%,"NOTE 4, where the row's REMARKS cite it: CAPACITY BASED ON 100% WATER",author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,volts,208,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-1,PUMP,phase,3,,MOTOR / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,area_served,HOT WATER LOOP,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,gpm,46,gpm,CAPACITY / FLOW (GPM),
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,head_ft,40,ft,CAPACITY / HEAD (FT),
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,motor_hp,1,hp,MOTOR / HP,printed '1.0'
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,rpm,3768,rpm,MOTOR / RPM,"printed '3,768'"
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,vfd,yes,,"NOTE 3, where the row's REMARKS cite it: PROVIDE WITH INTEGRAL VARIABLE SPEED DRIVE",author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,pump_arrangement,,,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,glycol_pct,0,%,"NOTE 4, where the row's REMARKS cite it: CAPACITY BASED ON 100% WATER",author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,volts,208,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,PUMP SCHEDULE,HWP-2,PUMP,phase,3,,MOTOR / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,area_served,RESTROOM 102,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,cfm,100,cfm,BLOWER / CFM,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,esp_in,0.375,in. w.c.,BLOWER / ESP,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_watts,46.5,W,ELECTRICAL / HP/W,printed '46.5 W'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,rpm,1075,rpm,BLOWER / MAXIMUM RPM,"printed '1,075'"
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,drive,direct,,BLOWER / DRIVE,printed 'DIRECT'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,control,PRE-WIRED FAN SPEED CONTROLLER,,"NOTE 2, where the row's REMARKS cite it: ... PRE-WIRED FAN SPEED CONTROLLER ...",printed 'PRE-WIRED FAN SPEED CONTROLLER'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,volts,115,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-1,FAN,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,area_served,RESTROOM 103,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,cfm,100,cfm,BLOWER / CFM,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,esp_in,0.375,in. w.c.,BLOWER / ESP,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,motor_watts,46.5,W,ELECTRICAL / HP/W,printed '46.5 W'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,rpm,1075,rpm,BLOWER / MAXIMUM RPM,"printed '1,075'"
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,drive,direct,,BLOWER / DRIVE,printed 'DIRECT'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,vfd,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,control,PRE-WIRED FAN SPEED CONTROLLER,,"NOTE 2, where the row's REMARKS cite it: ... PRE-WIRED FAN SPEED CONTROLLER ...",printed 'PRE-WIRED FAN SPEED CONTROLLER'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,volts,115,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-2,FAN,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,area_served,JANITOR 105,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,cfm,100,cfm,BLOWER / CFM,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,esp_in,0.375,in. w.c.,BLOWER / ESP,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,motor_watts,46.5,W,ELECTRICAL / HP/W,printed '46.5 W'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,rpm,1075,rpm,BLOWER / MAXIMUM RPM,"printed '1,075'"
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,drive,direct,,BLOWER / DRIVE,printed 'DIRECT'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,vfd,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,control,PRE-WIRED FAN SPEED CONTROLLER,,"NOTE 2, where the row's REMARKS cite it: ... PRE-WIRED FAN SPEED CONTROLLER ...",printed 'PRE-WIRED FAN SPEED CONTROLLER'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,volts,115,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-3,FAN,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,area_served,ELECTRICAL 116,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,cfm,125,cfm,BLOWER / CFM,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,esp_in,0.25,in. w.c.,BLOWER / ESP,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,motor_watts,75.9,W,ELECTRICAL / HP/W,printed '75.9 W'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,rpm,1550,rpm,BLOWER / MAXIMUM RPM,"printed '1,550'"
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,drive,direct,,BLOWER / DRIVE,printed 'DIRECT'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,vfd,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,control,,,"NOTE 2, where the row's REMARKS cite it: ... PRE-WIRED FAN SPEED CONTROLLER ...",blank cell
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,volts,115,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-4,FAN,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,area_served,LAB MECHANICAL 120,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,cfm,250,cfm,BLOWER / CFM,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,esp_in,0.25,in. w.c.,BLOWER / ESP,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,motor_watts,66.9,W,ELECTRICAL / HP/W,printed '66.9 W'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,rpm,1550,rpm,BLOWER / MAXIMUM RPM,"printed '1,550'"
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,drive,direct,,BLOWER / DRIVE,printed 'DIRECT'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,vfd,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,control,,,"NOTE 2, where the row's REMARKS cite it: ... PRE-WIRED FAN SPEED CONTROLLER ...",blank cell
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,volts,115,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-5,FAN,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,building,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,area_served,NUCLEAR GAUGE STORAGE 128,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,service,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,cfm,125,cfm,BLOWER / CFM,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,esp_in,0.25,in. w.c.,BLOWER / ESP,
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,motor_watts,75.9,W,ELECTRICAL / HP/W,printed '75.9 W'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,rpm,1550,rpm,BLOWER / MAXIMUM RPM,"printed '1,550'"
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,drive,direct,,BLOWER / DRIVE,printed 'DIRECT'
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,vfd,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,control,,,"NOTE 2, where the row's REMARKS cite it: ... PRE-WIRED FAN SPEED CONTROLLER ...",blank cell
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,volts,115,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#12,EXHAUST FAN SCHEDULE,EF-6,FAN,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,area_served,HOT WATER LOOP,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,fuel,gas,,FUEL,printed 'NATURAL GAS'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,input_mbh,285,MBH,CAPACITY / INPUT MBH,
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,output_mbh,265,MBH,CAPACITY / OUTPUT MBH,
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,gpm,27,gpm,BOILER FLOW (GPM),printed '27.0'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,ewt_f,120,F,EWT (°F),printed '120.0'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,lwt_f,140,F,LWT (°F),printed '140.0'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,bas_interface,BACNET,,"NOTE 2, where the row's REMARKS cite it: ... BACnet INTERFACE ...",printed 'BACnet INTERFACE'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-1,BOILER,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,area_served,HOT WATER LOOP,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,fuel,gas,,FUEL,printed 'NATURAL GAS'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,input_mbh,285,MBH,CAPACITY / INPUT MBH,
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,output_mbh,265,MBH,CAPACITY / OUTPUT MBH,
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,gpm,27,gpm,BOILER FLOW (GPM),printed '27.0'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,ewt_f,120,F,EWT (°F),printed '120.0'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,lwt_f,140,F,LWT (°F),printed '140.0'
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,bas_interface,BACNET,,"NOTE 2, where the row's REMARKS cite it: ... BACnet INTERFACE ...",printed 'BACnet INTERFACE'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,B-2,BOILER,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,area_served,RESIDENCY LAB 131,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'RESIDENCY LAB 131 / SAV-1'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,cfm,2250,cfm,CFM,"printed '2,250'"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,heating_mbh,80,MBH,CAPACITY (MBH),printed '80.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,hw_gpm,9,gpm,FLUID PERFORMANCE / GPM,printed '9.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,hw_lwt_f,122.2,F,FLUID PERFORMANCE / L.W.T.,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,conn_in,1.25,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '1-1/4""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-1,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,area_served,SOIL/AGGREGATE 126,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'SOIL/AGGREGATE 126 / SAV-2'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,cfm,560,cfm,CFM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,heating_mbh,20.4,MBH,CAPACITY (MBH),
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,hw_gpm,2,gpm,FLUID PERFORMANCE / GPM,printed '2.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,hw_lwt_f,119.6,F,FLUID PERFORMANCE / L.W.T.,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,conn_in,0.75,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '3/4""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-2,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,area_served,ASPHALT LAB 124,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'ASPHALT LAB 124 / SAV-3'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,cfm,2260,cfm,CFM,"printed '2,260'"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,heating_mbh,80.2,MBH,CAPACITY (MBH),
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,hw_gpm,9,gpm,FLUID PERFORMANCE / GPM,printed '9.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,hw_lwt_f,122.2,F,FLUID PERFORMANCE / L.W.T.,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,conn_in,1.25,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '1-1/4""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-3,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,area_served,D-1 LAB 123,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'D-1 LAB 123 / SAV-4'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,cfm,1500,cfm,CFM,"printed '1,500'"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,heating_mbh,52,MBH,CAPACITY (MBH),printed '52.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,hw_gpm,5.2,gpm,FLUID PERFORMANCE / GPM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,hw_lwt_f,120,F,FLUID PERFORMANCE / L.W.T.,printed '120.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,conn_in,1,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '1""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-4,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,area_served,CONCRETE 119,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'CONCRETE 119 / SAV-5'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,cfm,585,cfm,CFM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,heating_mbh,20.9,MBH,CAPACITY (MBH),
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,hw_gpm,2,gpm,FLUID PERFORMANCE / GPM,printed '2.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,hw_lwt_f,119.1,F,FLUID PERFORMANCE / L.W.T.,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,conn_in,0.75,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '3/4""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-5,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,area_served,MATERIAL LAB 118,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'MATERIAL LAB 118 / SV-6'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,cfm,725,cfm,CFM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,heating_mbh,25.7,MBH,CAPACITY (MBH),
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,hw_gpm,2.7,gpm,FLUID PERFORMANCE / GPM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,hw_lwt_f,121,F,FLUID PERFORMANCE / L.W.T.,printed '121.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,conn_in,0.75,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '3/4""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-6,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,area_served,ASPHALT LAB 117,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'ASPHALT LAB 117 / SV-7'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,cfm,2260,cfm,CFM,"printed '2,260'"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,heating_mbh,80.2,MBH,CAPACITY (MBH),
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,hw_gpm,9,gpm,FLUID PERFORMANCE / GPM,printed '9.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,hw_lwt_f,122.2,F,FLUID PERFORMANCE / L.W.T.,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,conn_in,0.75,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '3/4""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-7,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,area_served,RESIDENCY NOISE ROOM 130,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'RESIDENCY NOISE ROOM 130 / SAV-8'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,cfm,630,cfm,CFM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,heating_mbh,22.3,MBH,CAPACITY (MBH),
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,hw_gpm,2.3,gpm,FLUID PERFORMANCE / GPM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,hw_lwt_f,120.6,F,FLUID PERFORMANCE / L.W.T.,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,conn_in,0.75,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '3/4""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-8,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,area_served,GENERAL LAB 125,,"AREA / SUPPLY VALVE SERVED: the area, before the slash",printed 'GENERAL LAB 125 / SAV-9'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,cfm,1290,cfm,CFM,"printed '1,290'"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,cooling_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,heating_mbh,45.6,MBH,CAPACITY (MBH),
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,hw_gpm,4.4,gpm,FLUID PERFORMANCE / GPM,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,hw_ewt_f,140,F,FLUID PERFORMANCE / E.W.T.,printed '140.0'
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,hw_lwt_f,119.3,F,FLUID PERFORMANCE / L.W.T.,
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,conn_in,1,in,PIPING RUNOUT SIZE: the coil hook-up's pipe size,"printed '1""'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,bas_interface,BACNET,,"NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD",printed 'BACnet INTEGRATION CARD'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,HC-9,DUCT_MOUNTED_COIL,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,area_served,AIR HANDLING UNIT AHU-1,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,humidifier_type,gas_fired,,GAS INPUT / MBH: a gas-fired steam humidifier,printed 'GAS INPUT 368.5 MBH'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,capacity_lb_hr,330,lb/hr,STEAM CAPACITY / LBS OF STEAM/HR,
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,volts,115,V,ELECTRIC REQUIREMENTS / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,HUMIDIFIER SCHEDULE,HUM-1,HUMIDIFIER,phase,1,,ELECTRIC REQUIREMENTS / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,building,,,,not printed
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,area_served,LAB AREA,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,qty,2,,BLOWER / # OF FANS: fans under the one mark,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,service,,,,not printed
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,cfm,15000,cfm,"BLOWER / CFM / DESIGN: the tag's total, before the parenthesis","printed '15,000'; author's reading of the printed row"
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,esp_in,4,in. w.c.,BLOWER / ESP,"printed '4.0""'"
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,motor_hp,15,hp,ELECTRICAL / HP PER FAN,printed '15.0'
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,motor_watts,,W,,not printed
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,rpm,1800,rpm,BLOWER / MAXIMUM RPM,"printed '1,800'"
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,drive,belt,,BLOWER / DRIVE,printed 'BELT'
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,vfd,yes,,"NOTE 2.1.3, where the row's REMARKS cite note 2: (2) VARIABLE FREQUENCY DRIVES (NEMA 3R)",author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,control,,,,not printed
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,LEF-1,FAN,phase,3,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,area_served,NUCLEAR GAUGE STORAGE 128,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,eh_kw,3,kW,ELECTRICAL / KW,printed '3.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-1,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,area_served,ENCLOSED MATERIAL STORAGE 127,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,eh_kw,3,kW,ELECTRICAL / KW,printed '3.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-2,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,area_served,ENCLOSED MATERIAL STORAGE 127,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,eh_kw,3,kW,ELECTRICAL / KW,printed '3.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-3,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,area_served,FIRE RISER 121,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,eh_kw,2,kW,ELECTRICAL / KW,printed '2.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-4,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,area_served,LAB MECHANICAL 120,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,cfm,300,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,eh_kw,3,kW,ELECTRICAL / KW,printed '3.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,motor_hp,,hp,FAN / HP,printed '-'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-5,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,area_served,ELECTRICAL 116,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,eh_kw,2,kW,ELECTRICAL / KW,printed '2.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-6,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,area_served,LOBBY 101,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,eh_kw,2,kW,ELECTRICAL / KW,printed '2.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-7,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,area_served,OPEN OFFICE 110,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,eh_kw,2,kW,ELECTRICAL / KW,printed '2.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-8,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,area_served,REST. 102,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC HEATER SCHEDULE'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,cfm,245,cfm,FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,eh_kw,2,kW,ELECTRICAL / KW,printed '2.0'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,motor_hp,0.125,hp,FAN / HP,printed '1/8'
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,volts,208,V,ELECTRICAL / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,ELECTRIC HEATER SCHEDULE,EH-9,UNIT_HEATER,phase,1,,ELECTRICAL / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,area_served,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,pipes,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,cfm,2250,cfm,SUPPLY FAN / CFM,"printed '2,250'"
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,motor_hp,1,hp,SUPPLY FAN / HP,printed '1.0'
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,fan_speeds,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,cooling_type,dx,,TABLE TITLE,title 'SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)' and note 2 'PROVIDE UNIT WITH MATCHING COOLING COIL ... EXPANSION VALVE': a split system's refrigerant (DX) coil (the author's reading)
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_wpd_ft,,ft,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_rows,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,chw_glycol_pct,,%,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,heating_type,gas,,GAS HEATING CAPACITY,the indoor unit prints a GAS HEATING CAPACITY (INPUT 80 / OUTPUT 78.0 MBH) and the title '(96%+ GAS)': a gas furnace (the author's reading)
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_wpd_ft,,ft,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_rows,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,hw_glycol_pct,,%,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,volts,115,V,SUPPLY FAN / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),F-1,FCU,phase,1,,SUPPLY FAN / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,area_served,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,cfm,,cfm,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,cooling_mbh,52,MBH,"COOLING CAPACITY AT 95° OSA, 80° EDB, 62° EWB / TOTAL MBH",printed '52.0'
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,cooling_tons,5,tons,NOMINAL TONS,
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,bas_interface,,,,not printed
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,volts,208,V,ELECTRICAL FOR CONDENSING UNIT / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS),CU-1,CONDENSING_UNIT,phase,1,,ELECTRICAL FOR CONDENSING UNIT / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,area_served,IT 115,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,pipes,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,cfm,640,cfm,SUPPLY FAN / CFM,
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,fan_speeds,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,ecm,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,cooling_type,dx,,TABLE TITLE,title 'DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE': a ductless split indoor unit is a refrigerant (DX) evaporator (the author's reading)
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_wpd_ft,,ft,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_rows,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,chw_glycol_pct,,%,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,heating_type,none,,"UNIT TYPE: HIGH WALL COOLING ONLY, so no heating",printed 'HIGH WALL COOLING ONLY'; author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_wpd_ft,,ft,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_rows,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,hw_glycol_pct,,%,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,volts,,V,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DFC-1,FCU,phase,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,building,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,area_served,IT 115,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,cfm,,cfm,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,cooling_mbh,25,MBH,COOLING CAPACITY AT 95°F OSA / TOTAL (MBH),printed '25.0'
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,cooling_tons,2,tons,NOMINAL TONS,printed '2.0'
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,bas_interface,,,,not printed
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,volts,208,V,ELECTRICAL OUTDOOR UNIT / V/Ø: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#14,DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,DCU-1,CONDENSING_UNIT,phase,1,,ELECTRICAL OUTDOOR UNIT / V/Ø: phase part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,building,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,floor,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,area_served,LABORATORIES,,AREA SERVED,
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,qty,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_cfm,13000,cfm,SUPPLY FAN / AIRFLOW (CFM) / DESIGN,"printed '13,000'"
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,oa_cfm_min,3950,cfm,MIN. O.S.A. CFM,"printed '3,950'"
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_hp,7.6,hp,SUPPLY FAN / HP/QTY: HP part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_qty,4,,SUPPLY FAN / HP/QTY: QTY part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,return_fan_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,exhaust_fan_hp,,hp,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,vfd,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,economizer,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,outdoor_air_pct,,%,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_type,dx,,DX / DEHUMIDIFICATION COOLING COIL,the row prints the DX / dehumidification cooling coil block
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_mbh,502.1,MBH,DX / DEHUMIDIFICATION COOLING COIL / CAPACITY (MBH) / TOTAL,
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_tons,,tons,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,dx_stages,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_wpd_ft,,ft,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_rows,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_glycol_pct,,%,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_type,gas,,GAS HEATING COIL,"the row prints a GAS HEATING COIL block (INPUT 1,125.0 / OUTPUT 893.8 MBH)"
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_mbh,893.8,MBH,GAS HEATING COIL / CAPACITY (MBH) / OUTPUT,
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_gpm,,gpm,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_ewt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_lwt_f,,F,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_wpd_ft,,ft,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_mbh,,MBH,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_rows,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_conn_in,,in,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_glycol_pct,,%,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_psig,,psig,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_lb_hr,,lb/hr,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,gas_input_mbh,1125,MBH,GAS HEATING COIL / CAPACITY (MBH) / INPUT,"printed '1,125.0'"
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,eh_kw,,kW,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,humidifier,yes,,HUMIDIFICATION COIL,"the row's HUMIDIFICATION COIL block names UNIT TAG HUM-1, the HUMIDIFIER SCHEDULE's unit"
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,energy_recovery,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,filter_merv,13,,COMBINATION FILTER / FINAL FILTER / EFF.: MERV,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,bas_interface,,,,not printed
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,volts,208,V,ELECTRICAL REQUIREMENTS / V/PH: volts part,author's reading of the printed row
+itd-d1-lab-mechanical.pdf#15,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,phase,3,,ELECTRICAL REQUIREMENTS / V/PH: phase part,author's reading of the printed row
