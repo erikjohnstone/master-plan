@@ -1,0 +1,512 @@
+# federal-mech — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheets M7.1 (PDF page 14), M7.2 (page 15) and M7.3 (page 16) at
+# 3x (mcp/scripts/render-page-crop.mjs), read by eye on 2026-09-23; second reads at 4x
+# with MuPDF (pymupdf get_pixmap) on chosen columns. The pipeline's output for these
+# sheets was not consulted. This dev document's key covers every claimed keyed-family
+# table (01-split.md, key-authoring scope).
+SET federal-mech
+SEED 20260923
+SCOPE Sheets M7.1 (page 14), M7.2 (page 15) and M7.3 (page 16) of the NICoE building mechanical schedules at Eglin AFB (SmithGroup), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, weights, noise and octave-band data, efficiencies, NPSH, static pressures other than a fan's external static, air-side temperatures, refrigerant and compressor data, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE (M7.1): one unit, AHU-1. Its fans and coils are scheduled in
+# the AIR HANDLING UNIT FAN SCHEDULE and AIR HANDLING UNIT HYDRONIC COIL SCHEDULE, which
+# the census does not claim; this table names them only by tag (SF-1,2 / RF-1,2 / HWC /
+# CHWC), so fan HP and coil capacities are not printed here. The coil tags sit under
+# headers that name the medium (HEATING / HW TAG, COOLING / CHW TAG): heating_type hw and
+# cooling_type chw are the author's reading. The ENERGY RECOVERY WHEEL block keys
+# energy_recovery wheel. Notes: 2 "PROVIDE VFD FOR EACH FAN. PROVIDE HAND OFF AUTO
+# SWITCH." (vfd); 3 "PROVIDE MERV 8 PREFILTER AND MERV 14 FINAL FILTER." (filter_merv 14,
+# the final filter); 13 "PROVIDE ENERGY WHEEL WITH 460V/3PH /60HZ MOTOR AND MOTOR
+# STARTER. ..." (the wheel motor's supply, not the unit's: volts/phase stay not printed);
+# 1, 4-12 are construction notes. The wheel's own VFD cell is blank.
+TABLE
+sheet: federal-attachment4-mechanical.pdf#14
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 14 crop 1078,64,1622,120 at 3x in 4 tiles (TAG column repeated) and notes crop 1078,180,1622,66 at 3x in 4 tiles; second read at 4x with MuPDF (bands 1080-1160, 1362-1610 and 1675-1738) of design supply CFM, minimum OA CFM and SF QTY
+rows: all 1 printed row
+col: TAG => tag
+col: LOCATION => -
+col: AIRFLOW / MINIMUM SUPPLY AIR FLOW CFM => -
+col: AIRFLOW / DESIGN SUPPLY AIR FLOW CFM => supply_cfm
+col: AIRFLOW / MINIMUM OUTSIDE AIR FLOW CFM => oa_cfm_min
+col: AIRFLOW / DESIGN RETURN AIRFLOW => -
+col: SUPPLY FAN / SF QTY => supply_fan_qty
+col: SUPPLY FAN / SF TAG => -
+col: SUPPLY FAN / E.S.P => -
+col: RELIEF FAN / RF QTY => -
+col: RELIEF FAN / RF TAG => -
+col: RELIEF FAN / E.S.P => -
+col: COIL DATA / HEATING / HW TAG => -
+col: [COIL DATA / HEATING / HW TAG: a hot water heating coil is scheduled] => heating_type
+col: COIL DATA / COOLING / CHW TAG => -
+col: [COIL DATA / COOLING / CHW TAG: a chilled water cooling coil is scheduled] => cooling_type
+col: ACCESSORIES / ENERGY RECOVERY WHEEL / TYPE => -
+col: [ACCESSORIES / ENERGY RECOVERY WHEEL: a wheel is scheduled] => energy_recovery
+col: ACCESSORIES / ENERGY RECOVERY WHEEL / TAG => -
+col: ACCESSORIES / ENERGY RECOVERY WHEEL / VFD => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+derive: vfd = yes ; header=NOTE 2 ; note=note 2: 'PROVIDE VFD FOR EACH FAN. PROVIDE HAND OFF AUTO SWITCH.'
+derive: filter_merv = 14 ; header=NOTE 3 ; note=note 3: 'PROVIDE MERV 8 PREFILTER AND MERV 14 FINAL FILTER.' (the final filter keys; the MERV 8 prefilter does not)
+grid:
+AHU-1 | MECH ROOM | 20150 | 25000 | 6500 | 21000 | 2 | SF-1,2 | 5.00 in-wg | 2 | RF-1,2 | 3.00 in-wg | HWC | hw (HWC) | CHWC | chw (CHWC) | AIR-TO-AIR | wheel (AIR-TO-AIR) | ERW-1 |  | DAIKIN | CAC/CAH | 
+END
+
+# CHILLER SCHEDULE (ELECTRIC AIR-COOLED) (M7.1): one chiller, CH-1. The top ELECTRICAL
+# header spans both the CONDENSER DATA and COMPRESSOR DATA groups, as printed. MAX KW AT
+# DESIGN keys kw_input. Notes: 1 "PROVIDE THE FOLLOWING: - LOW AMBIENT OPERATION DOWN TO
+# 0°F. - VFD FOR THE CONDENSER FANS - HIGH AMBIENT OPERATION, 125°F - FACTORY SUPPLIED
+# SPRING ISOLATORS - COMPRESSOR SOUND BLANKETS"; 3 "CHILLER SHALL EXCEED ASHRAE
+# 90.1-2010 MINIMUM PERFORMANCE REQUIREMENTS, AS FOLLOWS: - EER: 9.562, PER AHRI 550/590
+# - IPLV: 12.75, PER AHRI 550/590"; 4 "PROVIDE HARDWIRE INTERFACE BETWEEN CHILLER PANEL
+# AND SITE DDC CONTROLS." (bas_interface). No note 2 prints.
+TABLE
+sheet: federal-attachment4-mechanical.pdf#14
+title: CHILLER SCHEDULE (ELECTRIC AIR-COOLED)
+family: AIR_COOLED_CHILLER
+render: page 14 crop 426,655,2274,142 at 3x in 6 tiles (TAG column repeated) and notes crop 426,812,700,100 at 3x; second read at 4x with MuPDF (bands 428-500, 868-972, 1108-1260 and 2028-2106) of tons, GPM and max kW
+rows: all 1 printed row
+col: TAG => tag
+col: LOCATION => -
+col: TYPE => condenser
+col: REFRIGERANT => -
+col: MINIMUM NET COOLING CAPACITY TONS => tons
+col: EVAPORATOR SIDE DATA / EWT °F => chw_ewt_f
+col: EVAPORATOR SIDE DATA / LWT °F => chw_lwt_f
+col: EVAPORATOR SIDE DATA / DESIGN WATER FLOW GPM => chw_gpm
+col: EVAPORATOR SIDE DATA / NUMBER OF PASSES => -
+col: EVAPORATOR SIDE DATA / WATER MAX PD FT.H20 => -
+col: ELECTRICAL / CONDENSER DATA / AMBIENT TEMPERATURE °F => -
+col: ELECTRICAL / CONDENSER DATA / FAN QTY => -
+col: ELECTRICAL / CONDENSER DATA / FAN FLA (EA) => -
+col: ELECTRICAL / COMPRESSOR DATA / COMPRESSOR QTY => -
+col: ELECTRICAL / COMPRESSOR DATA / COMP 1 RLA => -
+col: ELECTRICAL / COMPRESSOR DATA / COMP 2 RLA => -
+col: ELECTRICAL / COMPRESSOR DATA / COMP 3 RLA => -
+col: ELECTRICAL / COMPRESSOR DATA / COMP 4 RLA => -
+col: ELECTRICAL / MAX KW AT DESIGN => kw_input
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASE => phase
+col: STARTER TYPE => -
+col: OPERATING WEIGHT LBS => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+derive: bas_interface = HARDWIRE ; header=NOTE 4 ; note=note 4: 'PROVIDE HARDWIRE INTERFACE BETWEEN CHILLER PANEL AND SITE DDC CONTROLS.'
+grid:
+CH-1 | UTILITY ENCLOSURE | air (AIR COOLED) | R410A | 110 | 54 | 44 | 271.00 | 2 | 9.20 | 92.2 | 8 | 3.6 | 4 | 37.8 | 54.5 | 37.8 | 54.5 | 122.5 | 460 | 3 | ACL | 5528.00 | DAIKIN | AGZ110E | 
+END
+
+# HOT WATER CONDENSING BOILER SCHEDULE (M7.1): two boilers. The FIRING RATE column is
+# headed NATURAL GAS (CFH): fuel gas is the author's reading. Notes: 1 "PROVIDE STAINLESS STEEL EXHAUST AND PVC
+# INLET."; 2 "SEE SHEET M5.1 FOR HOT WATER PIPING DIAGRAM AND ADDITIONAL HOT WATER SYSTEM
+# COMPONENTS."
+TABLE
+sheet: federal-attachment4-mechanical.pdf#14
+title: HOT WATER CONDENSING BOILER SCHEDULE
+family: BOILER
+render: page 14 crop 1195,879,1505,147 at 3x in 4 tiles (TAG column repeated) and notes crop 1195,1022,800,50 at 3x in 2 tiles; second read at 4x with MuPDF (bands 1197-1276, 1656-1736 and 1874-2100) of both rows' input MBH, GPM, EWT and LWT
+rows: all 2 printed rows
+col: TAG => tag
+col: LOCATION => -
+col: TYPE => -
+col: DESIGN PARAMETERS / INPUT MBH => input_mbh
+col: DESIGN PARAMETERS / MINIMUM EFFICIENCY AT 25% FIRING RATE => -
+col: DESIGN PARAMETERS / DESIGN FLOW GPM => gpm
+col: DESIGN PARAMETERS / EWT °F => ewt_f
+col: DESIGN PARAMETERS / LWT °F => lwt_f
+col: FIRING RATE / NATURAL GAS (CFH) => -
+col: [FIRING RATE / NATURAL GAS (CFH): the boiler's fuel] => fuel
+col: ELECTRICAL DATA / VOLTAGE => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: OPERATING WEIGHT => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+grid:
+B-1 | MECHANICAL ROOM | CONDENSING | 750 | 92 | 42.50 | 110 | 140 | 750 | gas (NATURAL GAS) | 120 | 1 | 1848.00 | FULTON | ENDURA-750 | 
+B-2 | MECHANICAL ROOM | CONDENSING | 750 | 92 | 42.50 | 110 | 140 | 750 | gas (NATURAL GAS) | 120 | 1 | 1848.00 | FULTON | ENDURA-750 | 
+END
+
+# PUMP SCHEDULE (M7.1): SYSTEM keys service as printed (HWRP-1 prints AHU-1). PIPE
+# CONNECTIONS / SUCTION keys conn_in, as SUCTION SIZE does in 060 (DISCHARGE typed "-").
+# FLUID WATER keys glycol_pct 0 (as in 004); CONDENSATE rows leave it blank. The six CP
+# rows print TYPE "-" and no temperature, head, NPSH, efficiency or connections. Notes:
+# 1 "PROVIDE VFD FOR EACH HW AND CW PUMP." (vfd: yes for the CWP and HWP rows; HWRP-1, a
+# SYSTEM AHU-1 pump on 140 °F water, is not clearly an "HW pump", so "?"); 2 "PROVIDE
+# INERTIA PADS FOR EACH HW AND CW PUMP." No duty/standby prints.
+TABLE
+sheet: federal-attachment4-mechanical.pdf#14
+title: PUMP SCHEDULE
+family: PUMP
+render: page 14 crop 450,1080,2250,224 at 3x in 6 tiles (TAG column repeated) and notes crop 450,1300,700,45 at 3x; second read at 4x with MuPDF (bands 452-530, 1172-1370, 1578-1658 and 1736-1836) of every row's GPM, head, suction size and HP
+rows: all 11 printed rows
+col: TAG => tag
+col: SYSTEM => service
+col: LOCATION => -
+col: TYPE => -
+col: FLUID => -
+col: [FLUID: WATER, so no glycol] => glycol_pct
+col: TEMPERATURE (°F) => -
+col: CAPACITY GPM => gpm
+col: DISCHARGE HEAD FT.H20 => head_ft
+col: MINIMUM NPSH FT.H2O => -
+col: MINIMUM EFFICIENCY (%) => -
+col: PIPE CONNECTIONS / SUCTION => conn_in
+col: PIPE CONNECTIONS / DISCHARGE => -
+col: MOTOR DATA / HORSEPOWER => motor_hp
+col: MOTOR DATA / RPM => rpm
+col: MOTOR DATA / VOLTAGE => volts
+col: MOTOR DATA / PHASE => phase
+col: OPERATING WEIGHT LBS => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+col: [NOTE 1: PROVIDE VFD FOR EACH HW AND CW PUMP] => vfd
+grid:
+CP-1 | CONDENSATE | ELEC 350 | - | CONDENSATE |  |  | 1.5 |  |  |  |  |  | .05 | 1800 | 120 V | 1 | 10.00 | LITTLE GIANT | VCL-24UL | CONDENSATE PUMP | 
+CP-2 | CONDENSATE | COMM 348 | - | CONDENSATE |  |  | 1.5 |  |  |  |  |  | .05 | 1800 | 120 V | 1 | 10.00 | LITTLE GIANT | VCL-24UL | CONDENSATE PUMP | 
+CP-3 | CONDENSATE | COMM 226 | - | CONDENSATE |  |  | 1.5 |  |  |  |  |  | .05 | 1800 | 120 V | 1 | 10.00 | LITTLE GIANT | VCL-24UL | CONDENSATE PUMP | 
+CP-4 | CONDENSATE | ELEC 111 | - | CONDENSATE |  |  | 1.5 |  |  |  |  |  | .05 | 1800 | 120 V | 1 | 10.00 | LITTLE GIANT | VCL-24UL | CONDENSATE PUMP | 
+CP-5 | CONDENSATE | STORAGE/KILN 338.1 | - | CONDENSATE |  |  | 1.5 |  |  |  |  |  | .05 | 1800 | 120 V | 1 | 10.00 | LITTLE GIANT | VCL-24UL | CONDENSATE PUMP | 
+CP-6 | CONDENSATE | STORAGE/KILN 338.1 | - | CONDENSATE |  |  | 1.5 |  |  |  |  |  | .05 | 1800 | 120 V | 1 | 10.00 | LITTLE GIANT | VCL-24UL | CONDENSATE PUMP | 
+CWP-1 | CHILLED WATER | MECHANICAL ROOM | CENTRIFUGAL | WATER | 0 | 42 | 271 | 80 | 7.9 | 74 | 3" | 2 1/2" | 10 | 1800 | 480 V | 3 | 388.00 | BELL&GOSSET | 1510-2.5BB | BASE-MOUNTED; PROVIDE 9.5" IMPELLER | yes
+CWP-2 | CHILLED WATER | MECHANICAL ROOM | CENTRIFUGAL | WATER | 0 | 42 | 271 | 80 | 7.9 | 74 | 3" | 2 1/2" | 10 | 1800 | 480 V | 3 | 388.00 | BELL&GOSSET | 1510-2.5BB | BASE-MOUNTED; PROVIDE 9.5" IMPELLER | yes
+HWP-1 | HOT WATER | MECHANICAL ROOM | CENTRIFUGAL | WATER | 0 | 140 | 85 | 90 | 8.1 | 57 | 2" | 1 1/2" | 5 | 1750 | 480 V | 3 | 210.00 | BELL&GOSSET | 1510-1-1/2BC | BASE-MOUNTED; PROVIDE 9.5" IMPELLER | yes
+HWP-2 | HOT WATER | MECHANICAL ROOM | CENTRIFUGAL | WATER | 0 | 140 | 85 | 90 | 8.1 | 57 | 2" | 1 1/2" | 5 | 1750 | 480 V | 3 | 210.00 | BELL&GOSSET | 1510-1-1/2BC | BASE-MOUNTED; PROVIDE 9.5" IMPELLER | yes
+HWRP-1 | AHU-1 | MECHANICAL ROOM | CENTRIFUGAL | WATER | 0 | 140 | 15 | 30 | 6.5 | 40 | 1 1/2" | 1 1/2" | 1.5 | 1750 | 460 V | 3 | 100.00 | BELL&GOSSET | 60-1-1/2x6-1/4 | IN-LINE | ?PROVIDE VFD FOR EACH HW AND CW PUMP (HWRP-1's SYSTEM is AHU-1)
+END
+
+# GENERAL FAN SCHEDULE (M7.1): four roof exhaust fans. DESIGN CFM keys cfm (MINIMUM CFM
+# typed "-"); EXTERNAL SP keys esp_in (TOTAL SP "-"); FAN RPM keys rpm (MAX RPM, the
+# motor's, "-"); VOLUME CONTROL keys control as printed. Notes: 1 "ALL FANS SHALL BE
+# RATED FOR HIGH WIND."; 2 "PROVIDE TIE DOWN POINTS."; 3 "PROVIDE FAN WITH SPEED
+# CONTROLLER." (not a VFD; control already keys the printed CV); 4 "FAN ALTERNATIVE
+# DIRECT DRIVE: MODEL TYPE G" (an alternate, so drive stays not printed).
+TABLE
+sheet: federal-attachment4-mechanical.pdf#14
+title: GENERAL FAN SCHEDULE
+family: FAN
+render: page 14 crop 400,1393,2300,146 at 3x in 6 tiles (TAG column repeated) and notes crop 400,1545,700,75 at 3x; second read at 4x with MuPDF (bands 402-480, 772-850, 1162-1330 and 2006-2124) of every row's design CFM, external SP, fan RPM and HP
+rows: all 4 printed rows
+col: TAG => tag
+col: AREA SERVED => area_served
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: AIR CAPACITY / MINIMUM CFM => -
+col: AIR CAPACITY / DESIGN CFM => cfm
+col: FAN CONFIGURATION / FAN TYPE => -
+col: FAN CONFIGURATION / WHEEL TYPE => -
+col: TOTAL SP I.W.G => -
+col: EXTERNAL SP I.W.G => esp_in
+col: FAN RPM => rpm
+col: VOLUME CONTROL => control
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 1 63 HZ => -
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 2 125 HZ => -
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 3 250 HZ => -
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 4 500 HZ => -
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 5 1,000 HZ => -
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 6 2,000 HZ => -
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 7 4,000 HZ => -
+col: OCTAVE BANDS, MAX DUTY POINT, MAX PWL (DB RE 10^(-12)) W / 8 8,000 HZ => -
+col: HORSEPOWER => motor_hp
+col: MAX RPM => -
+col: VOLTAGE => volts
+col: PHASE => phase
+col: OPERATING WEIGHT => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+grid:
+EF-1 | TREATMENT ROOMS - BOTTOM | ROOF | =ROOF (ROOF) | 750 | 750 | CENTRIFUGAL DOWNBLAST | BI | 0.50 | 0.50 | 1289 | CV | 71 | 73 | 72 | 64 | 59 | 57 | 52 | 46 | .25 | 1725 | 115 | 1 | 56.00 | GREENHECK | GB-091 | 
+EF-2 | TREATMENT ROOMS - TOP | ROOF | =ROOF (ROOF) | 450 | 450 | CENTRIFUGAL DOWNBLAST | BI | 0.50 | 0.50 | 1308 | CV | 72 | 71 | 70 | 61 | 57 | 53 | 46 | 42 | .25 | 1725 | 115 | 1 | 55.00 | GREENHECK | GB-081 | 
+EF-3 | ADMIN/GYM | ROOF | =ROOF (ROOF) | 1500 | 1500 | CENTRIFUGAL DOWNBLAST | BI | 0.50 | 0.50 | 1079 | CV | 74 | 76 | 72 | 66 | 59 | 58 | 52 | 46 | .5 | 1725 | 115 | 1 | 64.00 | GREENHECK | GB-141 | 
+EF-4 | MECH ROOM | ROOF | =ROOF (ROOF) | 1000 | 1000 | CENTRIFUGAL DOWNBLAST | BI | 0.50 | 0.50 | 1643 | CV | 74 | 78 | 78 | 70 | 66 | 65 | 60 | 54 | .25 | 1725 | 115 | 1 | 56.00 | GREENHECK | GB-091 | 
+END
+
+# DX FAN COIL UNIT SCHEDULE (M7.2): six wall-mounted DX indoor units, each paired with a
+# condensing unit (SYSTEM CU-1..CU-6). cooling_type dx is read from the title and TYPE
+# "DX-WALL MOUNTED", as baker and bldg5406 read their split-system fan coils; the FCU
+# vocabulary has no DX cooling capacity (chw_mbh is a chilled-water coil's), so TOTAL
+# CAPACITY BTU/HR is typed "-" as in bldg5406. VOLUME CONTROL "4 SPEED" keys fan_speeds;
+# FAN DATA / WATTS keys motor_hp in the watts it prints (as 12_MT's WATT), printed 0.
+TABLE
+sheet: federal-attachment4-mechanical.pdf#15
+title: DX FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 15 crop 710,1122,1978,185 at 3x in 5 tiles (TAG column repeated); second read at 4x with MuPDF (bands 712-786, 1214-1364 and 1450-1556) of every row's CFM, speed count and watts
+rows: all 6 printed rows
+col: TAG => tag
+col: LOCATION => -
+col: SYSTEM => -
+col: TYPE => -
+col: AIRSIDE DATA / AIR FLOW CFM => cfm
+col: AIRSIDE DATA / VOLUME CONTROL => fan_speeds
+col: AIRSIDE DATA / EXTERNAL SP I.W.G => -
+col: FAN DATA / WATTS => motor_hp [W]
+col: FAN DATA / VOLTAGE => volts
+col: FAN DATA / PHASE => phase
+col: COOLING COIL DATA / COOLING COIL DATA / TOTAL CAPACITY BTU/HR => -
+col: COOLING COIL DATA / COOLING COIL DATA / SENSIBLE CAPACITY BTU/HR => -
+col: COOLING COIL DATA / EAT DB °F => -
+col: COOLING COIL DATA / EAT WB °F => -
+col: COOLING COIL DATA / LAT DB °F => -
+col: COOLING COIL DATA / LAT WB °F => -
+col: MAX NC => -
+col: OPERATING WEIGHT LBS => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title 'DX FAN COIL UNIT SCHEDULE', TYPE 'DX-WALL MOUNTED' on every row (the author's reading)
+grid:
+EV-1 | ELEC 350 | CU-1 | DX-WALL MOUNTED | 600 | 4 SPEED | 0.20 | 0 | 208 | 1 | 21200 | 15760 | 75.0 | 62.6 | 53.0 | 52.5 | 53 | 27.00 | DAIKIN | FTK24NMVJU | 
+EV-2 | COMM 348 | CU-2 | DX-WALL MOUNTED | 600 | 4 SPEED | 0.20 | 0 | 208 | 1 | 21200 | 15760 | 75.0 | 62.6 | 53.0 | 52.5 | 53 | 27.00 | DAIKIN | FTK24NMVJU | 
+EV-3 | COMM 226 | CU-3 | DX-WALL MOUNTED | 600 | 4 SPEED | 0.20 | 0 | 208 | 1 | 21200 | 15760 | 75.0 | 62.6 | 53.0 | 52.5 | 53 | 27.00 | DAIKIN | FTK24NMVJU | 
+EV-4 | ELEC 111 | CU-4 | DX-WALL MOUNTED | 600 | 4 SPEED | 0.20 | 0 | 208 | 1 | 21200 | 15760 | 75.0 | 62.6 | 53.0 | 52.5 | 53 | 27.00 | DAIKIN | FTK24NMVJU | 
+EV-5 | STORAGE/KILN 338.1 | CU-5 | DX-WALL MOUNTED | 600 | 4 SPEED | 0.20 | 0 | 208 | 1 | 21200 | 15760 | 75.0 | 62.6 | 53.0 | 52.5 | 53 | 27.00 | DAIKIN | FTK24NMVJU | 
+EV-6 | STORAGE/KILN 338.1 | CU-6 | DX-WALL MOUNTED | 600 | 4 SPEED | 0.20 | 0 | 208 | 1 | 21200 | 15760 | 75.0 | 62.6 | 53.0 | 52.5 | 53 | 27.00 | DAIKIN | FTK24NMVJU | 
+END
+
+# HOT WATER FAN COIL UNIT SCHEDULE (M7.2): one unit, FCU-1, heating only. heating_type hw
+# is read from the title and its HEATING COIL DATA block. VOLUME CONTROL prints "CV",
+# which states no speed count ("?"). No capacity prints (hw_mbh not printed).
+TABLE
+sheet: federal-attachment4-mechanical.pdf#15
+title: HOT WATER FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 15 crop 952,568,1735,100 at 3x in 4 tiles (TAG column repeated); second read at 4x with MuPDF (bands 954-1030, 1306-1368, 1554-1632 and 1914-2136) of CFM, watts, EWT, LWT and GPM
+rows: all 1 printed row
+col: TAG => tag
+col: LOCATION => -
+col: TYPE => -
+col: AIRSIDE DATA / AIR FLOW CFM => cfm
+col: AIRSIDE DATA / VOLUME CONTROL => fan_speeds
+col: AIRSIDE DATA / EXTERNAL SP I.W.G => -
+col: FAN DATA / WATTS => motor_hp [W]
+col: FAN DATA / VOLTAGE => volts
+col: FAN DATA / PHASE => phase
+col: HEATING COIL DATA / EAT DB °F => -
+col: HEATING COIL DATA / LAT DB °F => -
+col: HEATING COIL DATA / EWT °F => hw_ewt_f
+col: HEATING COIL DATA / LWT °F => hw_lwt_f
+col: HEATING COIL DATA / FLOW GPM => hw_gpm
+col: HEATING COIL DATA / MAX PD FT.H2O => hw_wpd_ft
+col: MAX NC => -
+col: OPERATING WEIGHT LBS => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+derive: heating_type = hw ; header=TABLE TITLE ; note=title 'HOT WATER FAN COIL UNIT SCHEDULE'; the unit prints a HEATING COIL DATA block at 140 °F EWT (the author's reading)
+grid:
+FCU-1 | VESTIBULE 100 | HORIZONTAL CONCEALED | 200 | ?CV | 0.50 | 75 W | 120 V | 1 | 55 | 95 | 140 | 110 | 0.60 | 5.50 | 45 | 120.00 | DAIKIN | THC-H02 | 
+END
+
+# AIR-COOLED CONDENSING UNIT SCHEDULE (M7.2): six roof units. NOMINAL CAPACITY TONS
+# keys cooling_tons. CONDENSER FAN CFM, the unit's own and only printed airflow, keys cfm
+# (the author's reading); MAX KW AT DESIGN has no attribute in this family's vocabulary.
+# The column headed SYSTEM prints the unit's model (RK24NMVJU). Notes 1 "PROVIDE UNIT
+# WITH LOW AMBIENT OPERATION DOWN TO 0°F." and 2 "PROVIDE UNIT WITH HIGH AMBIENT
+# OPERATION UP TO 115°F" print nothing in the vocabulary.
+TABLE
+sheet: federal-attachment4-mechanical.pdf#15
+title: AIR-COOLED CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 15 crop 1153,706,1535,182 at 3x in 4 tiles (TAG column repeated) and notes crop 1153,885,700,42 at 3x; second read at 4x with MuPDF (bands 1155-1230, 1528-1606, 1768-1893 and 1958-2037) of every row's tons, condenser fan CFM and voltage
+rows: all 6 printed rows
+col: TAG => tag
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: TYPE => -
+col: REFRIGERANT TYPE => -
+col: NOMINAL CAPACITY TONS => cooling_tons
+col: AMBIENT TEMP °F => -
+col: CONDENSER FANS / QUANTITY => -
+col: [CONDENSER FANS / CONDENSER FAN CFM: the unit's only printed airflow] => cfm
+col: ELECTRICAL DATA / MAX KW AT DESIGN => -
+col: ELECTRICAL DATA / VOLTAGE => volts
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / FLA => -
+col: ELECTRICAL DATA / MOCP => -
+col: OPERATING WEIGHT LBS => -
+col: MANUFACTURER => -
+col: SYSTEM => -
+col: REMARKS => -
+grid:
+CU-1 | ROOF | =ROOF (ROOF) | AIR COOLED | R410A | 2 | 95 | 1 | 2101 | 1.7 | 208 | 1 | 12 | 20 | 108.00 | DAIKIN | RK24NMVJU | 
+CU-2 | ROOF | =ROOF (ROOF) | AIR COOLED | R410A | 2 | 95 | 1 | 2101 | 1.7 | 208 | 1 | 12 | 20 | 108.00 | DAIKIN | RK24NMVJU | 
+CU-3 | ROOF | =ROOF (ROOF) | AIR COOLED | R410A | 2 | 95 | 1 | 2101 | 1.7 | 208 | 1 | 12 | 20 | 108.00 | DAIKIN | RK24NMVJU | 
+CU-4 | ROOF | =ROOF (ROOF) | AIR COOLED | R410A | 2 | 95 | 1 | 2101 | 1.7 | 208 | 1 | 12 | 20 | 108.00 | DAIKIN | RK24NMVJU | 
+CU-5 | ROOF | =ROOF (ROOF) | AIR COOLED | R410A | 2 | 95 | 1 | 2101 | 1.7 | 208 | 1 | 12 | 20 | 108.00 | DAIKIN | RK24NMVJU | 
+CU-6 | ROOF | =ROOF (ROOF) | AIR COOLED | R410A | 2 | 95 | 1 | 2101 | 1.7 | 208 | 1 | 12 | 20 | 108.00 | DAIKIN | RK24NMVJU | 
+END
+
+# UNIT HEATER SCHEDULE (HOT WATER) (M7.2): two unit heaters. HIGH SPEED CFM, the rated
+# airflow, keys cfm (LOW SPEED CFM "-"), as DESIGN CFM does over MINIMUM CFM in the
+# GENERAL FAN SCHEDULE. heating_medium hw is read from the title "(HOT WATER)".
+# MINIMUM CAPACITY keys heating_mbh in the BTU/HR it prints. FAN DATA / RPM has no
+# attribute in this family's vocabulary.
+TABLE
+sheet: federal-attachment4-mechanical.pdf#15
+title: UNIT HEATER SCHEDULE (HOT WATER)
+family: UNIT_HEATER
+render: page 15 crop 790,1399,1898,116 at 3x in 5 tiles (TAG column repeated); second read at 4x with MuPDF (bands 792-868, 1266-1374, 1586-1732, 1872-1948 and 2016-2120) of both rows' high speed CFM, capacity, GPM and HP
+rows: all 2 printed rows
+col: TAG => tag
+col: LOCATION => -
+col: TYPE => -
+col: AIRSIDE DATA / LOW SPEED CFM => -
+col: AIRSIDE DATA / HIGH SPEED CFM => cfm
+col: AIRSIDE DATA / EAT DB °F => -
+col: AIRSIDE DATA / LAT DB °F => -
+col: AIRSIDE DATA / THROW => -
+col: HEATING DATA / MINIMUM CAPACITY BTU/HR => heating_mbh [BTU/H]
+col: HEATING DATA / EWT °F => hw_ewt_f
+col: HEATING DATA / LWT °F => hw_lwt_f
+col: HEATING DATA / FLOW GPM => hw_gpm
+col: HEATING DATA / MAX PD FT.H2O => -
+col: FAN DATA / HORSEPOWER => motor_hp
+col: FAN DATA / RPM => -
+col: FAN DATA / VOLTAGE => volts
+col: FAN DATA / PHASE => phase
+col: MOUNTING HEIGHT => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+derive: heating_medium = hw ; header=TABLE TITLE ; note=title 'UNIT HEATER SCHEDULE (HOT WATER)'
+grid:
+UH-1 | MECHANICAL ROOM | HORIZONTAL DISCHARGE | 950 | 1100 | 55 | 95 | 29' - 0" | 48400 | 140 | 110 | 3.20 | 3.00 | 0.05 | 1000 | 120 | 1 | 6' - 0" | TRANE | S-72 | 
+UH-2 | MECHANICAL ROOM | HORIZONTAL DISCHARGE | 950 | 1100 | 55 | 95 | 29' - 0" | 48400 | 140 | 110 | 3.20 | 3.00 | 0.05 | 1000 | 120 | 1 | 6' - 0" | TRANE | S-72 | 
+END
+
+# FIN TUBE RADIATION SCHEDULE (M7.2): four radiators. MINIMUM CAPACITY keys heating_mbh in
+# the BTU/HR it prints (CAPACITY PER FT. "-"); MINIMUM WATER FLOW keys hw_gpm. Notes: 1
+# "SPLIT EACH RADIATOR INTO TWO SECTIONS. ONE(1) AT 5'-0" AND ONE(1) AT 10'-0"."; 2
+# "RADIATOR LENGTH REPRESENTS THE ARC LENGTH."; 3 "FINAL RADIATOR ARC LENGTHS SHALL BE
+# BASED ON FIELD CONDITIONS TAKE FINAL MEASUREMENTS PRIOR TO ORDERING THE RADIATORS."
+TABLE
+sheet: federal-attachment4-mechanical.pdf#15
+title: FIN TUBE RADIATION SCHEDULE
+family: FIN_TUBE_RADIATION
+render: page 15 crop 858,1735,1830,140 at 3x in 5 tiles (TAG column repeated) and notes crop 858,1872,800,55 at 3x; second read at 4x with MuPDF (bands 860-936 and 1622-1926) of every row's capacity, GPM and EWT
+rows: all 4 printed rows
+col: TAG => tag
+col: LOCATION => -
+col: LENGTH => -
+col: MOUNTING => -
+col: MINIMUM FINS PER FOOT => -
+col: ENCLOSURE / WIDTH => -
+col: ENCLOSURE / HEIGHT => -
+col: CAPACITY PER FT. BTU/HR => -
+col: MINIMUM CAPACITY BTU/HR => heating_mbh [BTU/H]
+col: MINIMUM WATER FLOW GPM => hw_gpm
+col: EWT °F => hw_ewt_f
+col: LWT °F => hw_lwt_f
+col: EAT DB °F => -
+col: HORIZONTAL ROWS => -
+col: VERTICAL ROWS => -
+col: DRY WEIGHT LBS => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+grid:
+FTR-1 | CENTRAL PARK 103 | 15' - 0" | WALL | 32 | 0' - 2" | 0' - 8 5/8" | 400 | 6000 | 0.6 GPM | 140 | 110 | 65 | 1 | 3 | 51.00 lb | RUNTAL | RF-3 | FACTORY CURVED
+FTR-1B | CENTRAL PARK 103 | 15' - 0" | WALL | 32 | 0' - 2" | 0' - 8 5/8" | 400 | 6000 | 0.6 GPM | 140 | 110 | 65 | 1 | 3 | 51.00 lb | RUNTAL | RF-3 | FACTORY CURVED
+FTR-2 | CENTRAL PARK 103 | 15' - 0" | WALL | 32 | 0' - 2" | 0' - 8 5/8" | 400 | 6000 | 0.6 GPM | 140 | 110 | 65 | 1 | 3 | 51.00 lb | RUNTAL | RF-3 | FACTORY CURVED
+FTR-2B | CENTRAL PARK 103 | 15' - 0" | WALL | 32 | 0' - 2" | 0' - 8 5/8" | 400 | 6000 | 0.6 GPM | 140 | 110 | 65 | 1 | 3 | 51.00 lb | RUNTAL | RF-3 | FACTORY CURVED
+END
+
+# VOLUME CONTROL BOX SCHEDULE (M7.3): 58 boxes, no notes. The title does not name the
+# terminal type, so terminal_type stays not printed (as in bldg5406); heat_type hw is read
+# from the HYDRONIC REHEAT COIL DATA block every row prints. The reheat coil's SENSIBLE
+# CAPACITY keys hw_mbh in the BTU/HR it prints. Every row prints the same noise, static,
+# air and water temperatures, water pressure drop, manufacturer and model; only VAV-54,
+# VAV-55 and VAV-56 print a 1" pipe connection (the rest 3/4").
+TABLE
+sheet: federal-attachment4-mechanical.pdf#16
+title: VOLUME CONTROL BOX SCHEDULE
+family: VAV
+render: page 16 crop 1162,55,1525,487 (header and VAV-1..30) and 1162,525,1525,382 (VAV-30..58) at 3x in 5 tiles each (TAG column repeated); second read at 4x with MuPDF (bands 1164-1240, 1236-1456 and 2015-2210, y 55-542 and 525-905) of every row's inlet, minimum and maximum CFM, capacity, GPM and pipe size
+rows: all 58 printed rows
+col: TAG => tag
+col: INLET DIAMETER => inlet_size_in
+col: AIRSIDE DATA / MINIMUM AIR FLOW CFM => cfm_min
+col: AIRSIDE DATA / MAXIMUM AIR FLOW CFM => cfm_max
+col: MAXIMUM NOISE DATA / RADIATED SOUND (NC) => -
+col: MAXIMUM NOISE DATA / DISCHARGE SOUND (NC) => -
+col: AIRSIDE DATA / MIN INLET SP I.W.G. => -
+col: AIRSIDE DATA / MAX AIR PD I.W.G => -
+col: HYDRONIC REHEAT COIL DATA / EAT (°F) => -
+col: HYDRONIC REHEAT COIL DATA / LAT (°F) => -
+col: HYDRONIC REHEAT COIL DATA / EWT (°F) => hw_ewt_f
+col: HYDRONIC REHEAT COIL DATA / LWT (°F) => hw_lwt_f
+col: HYDRONIC REHEAT COIL DATA / SENSIBLE CAPACITY (BTU/HR) => hw_mbh [BTU/H]
+col: HYDRONIC REHEAT COIL DATA / FLOW (GPM) => hw_gpm
+col: HYDRONIC REHEAT COIL DATA / PIPE CONNECTION SIZE IN => hw_conn_in
+col: HYDRONIC REHEAT COIL DATA / MAX WATER PD FT. H20 => hw_wpd_ft
+col: MANUFACTURER => -
+col: MODEL => -
+col: REMARKS => -
+derive: heat_type = hw ; header=HYDRONIC REHEAT COIL DATA ; note=every row prints a hydronic reheat coil block (EWT 140 °F, LWT 110 °F)
+grid:
+VAV-1 | 8" | 350 | 550 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 15400 | 1.1 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-2 | 7" | 200 | 400 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-3 | 10" | 600 | 950 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 26400 | 1.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-4 | 8" | 400 | 550 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 17600 | 1.2 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-5 | 4" | 150 | 150 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-6 | 4" | 100 | 100 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 4400 | 0.3 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-7 | 4" | 100 | 200 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 4400 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-8 | 9" | 400 | 700 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 17600 | 1.2 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-9 | 7" | 300 | 400 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-10 | 6" | 300 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-11 | 6" | 300 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-12 | 6" | 300 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-13 | 6" | 200 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-14 | 4" | 200 | 200 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-15 | 7" | 400 | 400 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 17600 | 1.2 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-16 | 6" | 200 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-17 | 6" | 200 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-18 | 8" | 500 | 500 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 22000 | 1.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-19 | 4" | 150 | 150 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-20 | 6" | 300 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-21 | 5" | 250 | 250 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 11000 | 0.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-22 | 5" | 250 | 250 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 11000 | 0.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-23 | 5" | 250 | 250 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 11000 | 0.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-24 | 4" | 150 | 200 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-25 | 4" | 150 | 150 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-26 | 8" | 350 | 450 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 15400 | 1.1 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-27 | 4" | 100 | 200 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 4400 | 0.3 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-28 | 10" | 450 | 850 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 19800 | 1.4 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-29 | 4" | 100 | 100 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 4400 | 0.3 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-30 | 4" | 150 | 150 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-31 | 6" | 300 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-32 | 9" | 400 | 750 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 17600 | 1.2 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-33 | 7" | 300 | 400 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-34 | 8" | 600 | 600 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 26400 | 1.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-35 | 12" | 950 | 1350 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 41800 | 2.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-36 | 10" | 750 | 800 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 33000 | 2.2 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-37 | 8" | 500 | 500 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 22000 | 1.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-38 | 8" | 600 | 600 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 26400 | 1.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-39 | 7" | 150 | 350 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-40 | 7" | 150 | 400 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-41 | 8" | 250 | 500 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 11000 | 0.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-42 | 4" | 200 | 200 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-43 | 12" | 950 | 1050 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 41800 | 2.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-44 | 6" | 300 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-45 | 4" | 150 | 150 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-46 | 8" | 350 | 500 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 15400 | 1.1 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-47 | 10" | 900 | 1000 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 39600 | 2.7 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-48 | 4" | 150 | 150 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 6600 | 0.5 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-49 | 5" | 250 | 250 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 11000 | 0.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-50 | 7" | 300 | 350 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 13200 | 0.9 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-51 | 6" | 200 | 300 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-52 | 4" | 200 | 200 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 8800 | 0.6 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-53 | 5" | 250 | 250 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 11000 | 0.8 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-54 | 12" | 1100 | 1100 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 48400 | 3.3 | 1" | 5.00 | PRICE | SDV |  
+VAV-55 | 12" | 1100 | 1100 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 48400 | 3.3 | 1" | 5.00 | PRICE | SDV |  
+VAV-56 | 12" | 1200 | 1200 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 52800 | 3.6 | 1" | 5.00 | PRICE | SDV |  
+VAV-57 | 5" | 100 | 250 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 4400 | 0.3 | 3/4" | 5.00 | PRICE | SDV |  
+VAV-58 | 8" | 350 | 450 | 30 | 35 | 1.00 | 0.60 | 55 | 95 | 140 | 110 | 15400 | 1.1 | 3/4" | 5.00 | PRICE | SDV |  
+END
