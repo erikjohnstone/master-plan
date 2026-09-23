@@ -171,7 +171,9 @@ export const compileCorpusTakeoffOutput = {
    * less than source_item_count when a family was out of this template's
    * hydronic/actuated scope (see excluded_families); per-column coverage
    * and notes disclose exactly what filled from the schedule vs. was left
-   * blank (PN class / Branch Δp have no source anywhere in this pipeline). */
+   * blank (PN class / Branch Δp have no source anywhere in this pipeline;
+   * Consumer Δp, the template's CoilDP, stays blank until the HIT owners
+   * confirm what it expects). */
   valve_size_template: z.object({
     path: z.string(),
     rows_written: z.number().int(),

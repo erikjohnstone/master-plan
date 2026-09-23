@@ -84,3 +84,7 @@ for (const [key, { filled: n, total }] of Object.entries(valveExport.coverage)) 
   console.log(`  ${key.padEnd(20)} ${String(n).padStart(4)}/${total} (${pct}%)`);
 }
 console.log(`\nWrote ${xlsxPath}\nWrote ${reportPath}`);
+// Exit explicitly: a VectorGrid sidecar child can outlive shutdown and hold
+// the event loop open after everything is written (ASSEMBLIES_BUG_CATALOGUE
+// AS-6). The sidecar reads stdin until EOF, so it exits with this process.
+process.exit(0);

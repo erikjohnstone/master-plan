@@ -1,5 +1,41 @@
 # Changelog
 
+- **HIT valve export: three correctness fixes (MCP 0.9.81).** The Siemens
+  "Global Valves" mass-sizing export (`valveSizeExport.ts`, used by
+  `compile_corpus_takeoff`'s `export_path`, the UI's "Export to HIT" and
+  `export-valve-size-template.mjs`) wrote three things the template does not
+  mean or accept:
+  - **Consumer Δp (column H) is now always blank.** The template's defined
+    name for that column is `CoilDP` — the coil's own pressure drop — and the
+    export had been writing the valve's (GPM / Cv)², a different quantity.
+    The valve's drop is still computed and reported (the notes' "valve Δp
+    (derived)" count and each row's `_derived.valveDpPsi`), never written to
+    the workbook. Column H stays blank until the HIT owners confirm what
+    CoilDP expects.
+  - **Tolerance accepts only the template's own list** (10, 20, 30, 40, 50 —
+    `Constants!F2:F6`, which validates column J). Any other
+    `toleranceOverridePct` now throws a `RangeError` instead of writing a
+    value the workbook rejects. No caller passes one today; the column stays
+    blank by default.
+  - **Positioning Signal comes only from printed signal text**: printed
+    0–10 V → "0...10 Vdc"; printed floating (also tri-state or 3-point) →
+    "Floating control"; read from the Control signal cell, or from an
+    Actuator cell that prints the signal type itself. Removed: any
+    "modulating" actuator → 0...10 Vdc, and any "x–y V" range (2–10 V
+    included) → 0...10 Vdc. 2–10 V, 4–20 mA, two-position and text naming
+    two signal types are left blank, and the notes list every blank with the
+    printed text that caused it. Operating Voltage is still written only
+    alongside a Positioning Signal.
+  - API: the `deriveConsumerDpFromCv` option is removed (no caller used it);
+    `computeConsumerDpPsi` is renamed `computeValveDpPsi`;
+    `resolvePositioningSignal` and `HIT_TOLERANCE_PCT_VALUES` are new.
+  - Before/after on navfac-cherry-point-atc and itd-d1-lab (one compile per
+    set fed to both builders, VectorGrid on):
+    `opentakeoff-corpus/reports/assemblies/00-hit-export-before-after.md`.
+  - `export-valve-size-template.mjs` now exits after writing its files. It
+    could hang there, held open by a VectorGrid sidecar
+    (ASSEMBLIES_BUG_CATALOGUE AS-6).
+
 - Add Siemens Valve Size Template (`Valve_Size_Template_US_Global.xlsx`) export
   from the production control-valve takeoff (`compile_corpus_takeoff`
   kind `control_valves`/T-VALVE-01, the same Session+ODL pipeline MCP and the

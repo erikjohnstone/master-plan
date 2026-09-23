@@ -255,12 +255,15 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
             until the HIT owners confirm CoilDP's meaning;
           · tolerance is accepted only from {10,20,30,40,50}; anything else
             is refused with a message;
-          · Positioning Signal comes only from a printed control-signal
-            cell: printed 0–10 V → "0...10 Vdc", printed floating →
+          · Positioning Signal comes only from printed signal text: the
+            control-signal cell, or (when there is none) an Actuator cell
+            that prints the signal type itself ("0-10VDC", "FLOATING").
+            Printed 0–10 V → "0...10 Vdc", printed floating →
             "Floating control". The "MODULAT… → 0...10 Vdc" default and the
             any-"x–yV" → 0...10 Vdc mapping are removed. Any other printed
-            value (2–10 V, 4–20 mA, 2-position) is left blank and disclosed,
-            because the template cannot represent it;
+            value (2–10 V, 4–20 mA, 2-position, or two types at once) is
+            left blank and disclosed, because the template cannot represent
+            it;
           · Operating Voltage "24 VAC" is written only where a signal was
             written (current behaviour, kept);
           · coverage notes and the CHANGELOG say exactly what changed.
