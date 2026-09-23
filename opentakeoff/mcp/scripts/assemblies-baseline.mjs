@@ -26,7 +26,7 @@
 // its result is cached through evalCache.mjs (engine source + PDF identity +
 // this script's own source), so an unchanged rerun answers from cache.
 //
-//   node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> [setId ...]
+//   node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> [setId ...] [--out <dir>]
 //
 // WP0.2 — the frozen dev / held-out draw — is a second mode of this script,
 // run AFTER the census (it reads 00-baseline.json, never recompiles):
@@ -59,8 +59,11 @@ if (splitIdx >= 0 && !Number.isSafeInteger(splitSeed)) {
   console.error("--split needs an integer seed");
   process.exit(2);
 }
+const outIdx = argv.indexOf("--out");
+const outOverride = outIdx >= 0 ? resolve(argv[outIdx + 1]) : null;
 const positional = argv.filter((a, i) => !a.startsWith("--")
-  && !(singleIdx >= 0 && i === singleIdx + 1) && !(splitIdx >= 0 && i === splitIdx + 1));
+  && !(singleIdx >= 0 && i === singleIdx + 1) && !(splitIdx >= 0 && i === splitIdx + 1)
+  && !(outIdx >= 0 && i === outIdx + 1));
 const [corpusDir, ...only] = positional;
 if (!corpusDir) {
   console.error("usage: node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> [setId ...]");
@@ -162,10 +165,12 @@ async function computeSet(set) {
   const coils = compileTakeoff(session, graph, "embedded_coil_gaps");
   const coilsFound = coils.totals?.coils_found ?? 0;
   const coilGaps = coils.totals?.gaps ?? 0;
-  const coilLabels = {};
-  for (const c of coils.coils || []) {
-    const label = normHeader(c.coilLabel);
-    coilLabels[label] = (coilLabels[label] || 0) + 1;
+  // The compile exposes every coil only as a count; the rows it returns are
+  // the GAPS (coils with no scheduled valve), each carrying its coil label.
+  const gapLabels = {};
+  for (const g of coils.categories?.embedded_coil_gaps?.items || []) {
+    const label = normHeader(g.cells?.["COIL LABEL"]?.text);
+    gapLabels[label] = (gapLabels[label] || 0) + 1;
   }
 
   const bas = compileTakeoff(session, graph, "bas_points");
@@ -178,7 +183,7 @@ async function computeSet(set) {
     table_count: (graph.tables || []).length,
     families,
     control_valve_rows: valveRows,
-    embedded_coils: { found: coilsFound, without_scheduled_valve: coilGaps, by_label: coilLabels },
+    embedded_coils: { found: coilsFound, without_scheduled_valve: coilGaps, gaps_by_label: gapLabels },
     points_lists: {
       lists: basTotals.lists ?? 0, rows: basTotals.rows ?? 0,
       AI: basTotals.AI ?? 0, AO: basTotals.AO ?? 0, BI: basTotals.BI ?? 0, BO: basTotals.BO ?? 0,
@@ -330,10 +335,16 @@ if (splitSeed !== null) {
   // A silently missing VectorGrid runtime drops the pipeline to its weaker
   // fallback and undercounts (PR #101: navfac 142 vs 163 valve rows) — so the
   // engine that actually ran is part of the report, probed once, up front.
+  const importsOk = (py) => {
+    const probe = spawnSync(py, ["-c", "import pdfplumber, pymupdf, shapely"], { encoding: "utf8" });
+    if (probe.status !== 0) console.error(`WARNING: ${py} cannot import pdfplumber/pymupdf/shapely: ${String(probe.stderr || probe.error || "").trim().split("\n").pop()}`);
+    return probe.status === 0;
+  };
+  // Same resolution order as vectorGridClient.ts and tableSidecarClient.ts.
   const VG_PYTHON = process.env.OPENTAKEOFF_VECTORGRID_PYTHON || process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON || "python3";
-  const probe = spawnSync(VG_PYTHON, ["-c", "import pdfplumber, pymupdf, shapely"], { encoding: "utf8" });
-  const VG_IMPORTS_OK = probe.status === 0;
-  if (!VG_IMPORTS_OK) console.error(`WARNING: VectorGrid python (${VG_PYTHON}) cannot import pdfplumber/pymupdf/shapely — the graph will use the weaker fallback: ${String(probe.stderr || probe.error || "").trim().split("\n").pop()}`);
+  const VG_IMPORTS_OK = importsOk(VG_PYTHON);
+  const SIDECAR_PYTHON = process.env.OPENTAKEOFF_TABLE_SIDECAR_PYTHON || "python3";
+  const SIDECAR_IMPORTS_OK = process.env.OPENTAKEOFF_TABLE_SIDECAR === "0" ? null : importsOk(SIDECAR_PYTHON);
   const CONCURRENCY = Number(process.env.OPENTAKEOFF_EVAL_CONCURRENCY) || 1;
   const PER_SET_TIMEOUT_MS = Number(process.env.OPENTAKEOFF_EVAL_TIMEOUT_MS) || 45 * 60 * 1000;
   const wanted = spec.sets.filter((s) => !only.length || only.includes(s.id));
@@ -395,6 +406,8 @@ if (splitSeed !== null) {
     vectorgrid_python: VG_PYTHON,
     vectorgrid_mode: resolveVectorGridMode(),
     vectorgrid_python_imports_ok: VG_IMPORTS_OK,
+    table_sidecar_python: process.env.OPENTAKEOFF_TABLE_SIDECAR === "0" ? "disabled (OPENTAKEOFF_TABLE_SIDECAR=0)" : SIDECAR_PYTHON,
+    table_sidecar_python_imports_ok: SIDECAR_IMPORTS_OK,
     corpus_sets_registered: spec.sets.length,
     sets_requested: wanted.length,
     sets_present_here: present.length,
@@ -412,14 +425,16 @@ if (splitSeed !== null) {
     per_set: results,
   };
 
-  const outDir = join(corpus, "reports", "assemblies");
+  // --out <dir> writes the census elsewhere (a reproducibility re-run must
+  // not overwrite the committed baseline it is being compared against).
+  const outDir = outOverride || join(corpus, "reports", "assemblies");
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, "00-baseline.json"), `${JSON.stringify(summary, null, 1)}\n`);
 
   const L = [];
   L.push("# Assemblies goal — WP0.1 baseline census");
   L.push("");
-  L.push(`Generated ${summary.generated_at} by \`mcp/scripts/assemblies-baseline.mjs\` (Node ${summary.node}; VectorGrid mode \`${summary.vectorgrid_mode}\`, python \`${summary.vectorgrid_python}\`, imports ${summary.vectorgrid_python_imports_ok ? "OK" : "FAILED — weaker fallback engine"}).`);
+  L.push(`Generated ${summary.generated_at} by \`mcp/scripts/assemblies-baseline.mjs\` (Node ${summary.node}; VectorGrid mode \`${summary.vectorgrid_mode}\`, python \`${summary.vectorgrid_python}\`, imports ${summary.vectorgrid_python_imports_ok ? "OK" : "FAILED — weaker fallback engine"}; fallback table sidecar \`${summary.table_sidecar_python}\`${summary.table_sidecar_python_imports_ok === false ? " FAILED to import" : ""}).`);
   L.push("Reproduce: `cd opentakeoff/mcp && node --import tsx scripts/assemblies-baseline.mjs ../../opentakeoff-corpus`.");
   L.push("");
   L.push("## Coverage of this run");
