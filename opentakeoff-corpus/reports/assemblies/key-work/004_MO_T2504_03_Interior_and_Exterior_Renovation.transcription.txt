@@ -1,0 +1,226 @@
+# 004_MO_T2504_03_Interior_and_Exterior_Renovation — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheets M-601 (PDF page 39) and P-601 (page 31) at 3x, read by
+# eye on 2026-09-23. The pipeline's output for these sheets was not consulted. This dev
+# document's key covers every claimed keyed-family table (01-split.md, key-authoring
+# scope).
+SET 004_MO_T2504_03_Interior_and_Exterior_Renovation
+SEED 20260923
+SCOPE Sheets M-601 (page 39) and P-601 (page 31) of the Missouri National Guard Jefferson Barracks readiness center interior and exterior renovation (Casco Diversified), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, blower, static pressures, RPM of air units, filters' depth, air-side temperatures, face data, A2L data, MCA/MOCP/FLA, weights, vent and impeller sizes, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# DOAS SCHEDULE: one row, NOTES "ALL". Notes 1-19 print below the table; note 2 reads
+# "DIRECT DRIVE, VARIABLE SPEED PLENUM BLOWER WITH FACTORY VFD." (vfd = yes). Notes 3 and
+# 12 mention a "DIGITAL INTERFACE" for unit monitoring, which is not a printed BAS
+# interface. The ELECTRICAL HP is the unit's one motor rating, read as the blower
+# (BLOWER prints '-'). Gas capacities print in BTUS (BTU/H) and are keyed in that unit.
+# MAX OUTSIDE AIR CFM is a maximum, not a minimum, so oa_cfm_min stays not printed.
+TABLE
+sheet: 004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39
+title: DOAS SCHEDULE
+family: DOAS
+render: page 39 crop 244,75,2136,258 at 3x in 5 tiles (one row), notes in the same tiles; second read at 4x (crops 595,140,85,45 and 1882,140,85,45) of total CFM and output BTUS
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: BLOWER => -
+col: TOTAL CFM => supply_cfm
+col: MAX OUTSIDE AIR CFM => -
+col: RETURN AIR CFM => -
+col: WEIGHT (LBS) => -
+col: EXT. STATIC PRESSURE => -
+col: [ELECTRICAL / HP: the unit's blower motor] => supply_fan_hp
+col: ELECTRICAL / VOLT => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: DX COOLING / OUTSIDE AIR / DB => -
+col: DX COOLING / OUTSIDE AIR / WB => -
+col: DX COOLING / MIXED AIR / DB => -
+col: DX COOLING / MIXED AIR / WB => -
+col: DX COOLING / LEAVING AIR / DB => -
+col: DX COOLING / LEAVING AIR / WB => -
+col: DX COOLING / CAPACITY / SENSIBLE => -
+col: DX COOLING / CAPACITY / LATENT => -
+col: NATURAL GAS HEATING / GAS => -
+col: NATURAL GAS HEATING / INPUT BTUS => gas_input_mbh [BTU/H]
+col: NATURAL GAS HEATING / OUTPUT BTUS => heating_mbh [BTU/H]
+col: NATURAL GAS HEATING / TEMP RISE => -
+col: A2L MINIMUM ROOM VOLUME / ROOM AREA (SQ. FT) => -
+col: A2L MINIMUM ROOM VOLUME / AIRFLOW (CFM) => -
+col: A2L MINIMUM ROOM VOLUME / HEIGHT (FT) => -
+col: NOTES => -
+derive: cooling_type = dx ; header=DX COOLING ; note=the row prints the DX COOLING block
+derive: heating_type = gas ; header=NATURAL GAS HEATING ; note=the row prints the NATURAL GAS HEATING block (GAS: NATURAL)
+derive: vfd = yes ; header=NOTE 2 ; note=note 2, the row's NOTES cell says ALL: 'DIRECT DRIVE, VARIABLE SPEED PLENUM BLOWER WITH FACTORY VFD'
+grid:
+DOAS - 1 | CAPTIVEAIRE | CAS-HVAC3 | - | 3,000 | 3,000 | - | 3,224 | 1.0 | 3.0 | 208 V | 3 | 133.4 A | 150 A | 90.9°F | 79.4°F | 90.9°F | 79.4°F | 51.2°F | 51.2°F | 290.3 MBH | 129.3 MBH | NATURAL | 400,000 | 324,000 | 100°F | 719.6 | 1295 | 7.2 | ALL
+END
+
+# ROOFTOP UNIT SCHEDULE: tags print with irregular spacing ("RTU -1", "RTU - 2") and are
+# typed as printed. Notes 1-26 print below; each row's NOTES cell lists the ones that
+# apply. Every row cites notes 1 "VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN." and 2
+# "INVERTER DUTY MOTOR." (an inverter-driven fan: vfd = yes, the author's reading).
+# Note 12 "COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER." is cited by
+# every row but RTU -5 (1-10, 15, 17-19, 21-24, 26); note 23 "INDIRECT FIRED NATURAL GAS
+# STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN." only by RTU -5, so heating_type is keyed
+# for RTU -5 alone. Note 7 "SYMBIO 700 FACTORY CONTROLLER." is not a printed BAS
+# interface. FILTER prints '2" MERV 8'; the MERV is keyed from it.
+TABLE
+sheet: 004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39
+title: ROOFTOP UNIT SCHEDULE
+family: RTU
+render: page 39 crop 244,340,2136,340 at 3x in 5 tiles (seven rows at fixed heights), notes in the same tiles; second read at 4x (crops 650,445,65,140 and 1178,445,55,140 and 1662,445,85,140) of every row's CFM, total cooling and heating capacity
+rows: all 7 printed rows
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: SUPPLY FAN / CFM => supply_cfm
+col: [SUPPLY FAN / OA CFM: design minimum outdoor air] => oa_cfm_min
+col: SUPPLY FAN / DRIVE => -
+col: SUPPLY FAN / ESP => -
+col: SUPPLY FAN / TSP => -
+col: SUPPLY FAN / HP => supply_fan_hp
+col: SUPPLY FAN / RPM => -
+col: SUPPLY FAN / FILTER => -
+col: [SUPPLY FAN / FILTER: MERV] => filter_merv
+col: SUPPLY FAN / CHANGEOUT PD => -
+col: COOLING / CAPACITY (MBH) / TOTAL => cooling_mbh
+col: COOLING / CAPACITY (MBH) / SENS. => -
+col: COOLING / DX COOLING / EAT (DB/WB) => -
+col: COOLING / DX COOLING / LAT (DB/WB) => -
+col: COOLING / DX COOLING / AIR PD => -
+col: COOLING / DX COOLING / FACE AREA => -
+col: COOLING / DX COOLING / FACE VELOCITY => -
+col: HEATING / CAPACITY (MBH) => heating_mbh
+col: HEATING / EAT => -
+col: HEATING / LAT => -
+col: HEATING / AIR PD => -
+col: ELECTRICAL / CIRCUIT #1 / VOLTS => volts
+col: ELECTRICAL / CIRCUIT #1 / PHASE => phase
+col: ELECTRICAL / CIRCUIT #1 / MCA => -
+col: ELECTRICAL / CIRCUIT #1 / MOCP => -
+col: WEIGHT => -
+col: NOTES => -
+col: [NOTE 12, where the row's NOTES cite it: COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER] => economizer
+col: [NOTE 23, where the row's NOTES cite it: INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN] => heating_type
+derive: cooling_type = dx ; header=COOLING / DX COOLING ; note=every row prints the DX COOLING block
+derive: vfd = yes ; header=NOTES 1, 2 ; note=notes 1 'VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN' and 2 'INVERTER DUTY MOTOR', cited by every row: an inverter-driven supply fan (the author's reading)
+grid:
+RTU -1 | TRANE | YZK060 | 1,700 | 240 | DIRECT | 1.0 IN H2O | 1.044 IN H2O | 3 | 928 | 2" MERV 8 | 8 | 1.0 IN H2O | 55.5 | 35.2 | 75°F / 66°F | 54°F / 54°F | - | 11.84 SQ FT | 139 FT/MIN | 100.0 | 60°F | 104°F | - | 208 V | 3 PH | 35.0 A | 50 A | 1,145± LBS | 1-14, 16, 17, 19, 20, 24, 25 | airside (COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER) |
+RTU - 2 | TRANE | YZK072 | 2,250 | 360 | DIRECT | 1.0 IN H2O | 1.155 IN H2O | 3 | 1,041 | 2" MERV 8 | 8 | 1.0 IN H2O | 67.4 | 42.6 | 76°F / 66°F | 56°F / 55°F | - | 11.84 SQ FT | 160 FT/MIN | 120.0 | 57°F | 104°F | - | 208 V | 3 PH | 42.0 A | 60 A | 1,145± LBS | 1-14, 16, 17, 19, 20, 24, 25 | airside (COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER) |
+RTU -3 | TRANE | YZK060 | 1,600 | 240 | DIRECT | 1.0 IN H2O | 1.020 IN H2O | 3 | 900 | 2" MERV 8 | 8 | 1.0 IN H2O | 55.0 | 33.8 | 76°F / 66°F | 55°F / 54°F | - | 11.84 SQ FT | 127 FT/MIN | 100.0 | 58°F | 107°F | - | 208 V | 3 PH | 35.0A | 50 A | 1,145± LBS | 1-14, 16, 17, 19, 20, 24, 25 | airside (COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER) |
+RTU -4 | TRANE | YZK102 | 3,000 | 240 | DIRECT | 1.0 IN H2O | 1.442 IN H2O | 3 | 1,312 | 2" MERV 8 | 8 | 1.0 IN H2O | 93.0 | 60.0 | 74°F / 64°F | 55°F / 54°F | - | 11.84 SQ FT | 253 FT/MIN | 150.0 | 64°F | 102°F | - | 208 V | 3 PH | 48.0 A | 70 A | 1,223± LBS | 1-14, 16, 17, 19, 20, 24, 25 | airside (COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER) |
+RTU -5 | GREENHECK | RV-40 | 1,510 | 1,510 | DIRECT | 0.5 IN H2O | 0.692 IN H20 | 1 | 907 | 2" MERV 8 | 8 | 0.5 IN H2O | 128.2 | 61.4 | 95°F / 79°F | 54°F / 54°F | - | 11.81 SQ FT | 128 FT/MIN | 200.0 | 6°F | 99°F | - | 208 V | 3 PH | 54.7 A | 60 A | 2,190± LBS | 1-10, 15, 17-19, 21-24, 26 |  | gas (INDIRECT FIRED NATURAL GAS STAINLESS STEEL FURNACE WITH 16:1 TURNDOWN)
+RTU -6 | TRANE | YZK072 | 2,100 | 100 | DIRECT | 1.0 IN H2O | 1.185 IN H20 | 3 | 1,082 | 2" MERV 8 | 8 | 1.0 IN H2O | 67.0 | 44.0 | 75°F / 65°F | 56°F / 54°F | - | 11.84 SQ FT | 177 FT/MIN | 120.0 | 62°F | 105°F | - | 208 V | 3 PH | 42.0 A | 60 A | 1,145± LBS | 1-14, 16, 17, 19, 20, 24, 25 | airside (COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER) |
+RTU -7 | TRANE | YZK036 | 1,150 | 100 | DIRECT | 1.0 IN H2O | 1.01 IN H2O | 3 | 870 | 2" MERV 8 | 8 | 1.0 IN H2O | 34.0 | 22.0 | 74°F / 65°F | 56°F / 55°F | - | 11.84 SQ FT | 97 FT/MIN | 100.0 | 64°F | 127°F | - | 208 V | 3 PH | 23.0 A | 30 A | 1,136± LBS | 1-14, 16, 17, 19, 20, 24, 25 | airside (COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER) |
+END
+
+# NATURAL GAS UNIT HEATER SCHEDULE: REMARKS 1-6: 1 "CEILING MOUNT INSTALLATION.", 2
+# "FACTORY MOUNTED UNIT DISCONNECT.", 3 "FACTORY MOUNTED THERMOSTAT.", 4 "FACTORY
+# INSTALLED MANUAL RESET THERMAL CUTOUT.", 5 "LINE VOLTAGE THERMOSTAT.", 6 "FACTORY
+# CONTROLLER." BTUH (input) has no UNIT_HEATER attribute; BTUH OUTPUT keys heating_mbh
+# in the unit it prints. The gas connection keys conn_in.
+TABLE
+sheet: 004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39
+title: NATURAL GAS UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 39 crop 495,698,890,130 at 3x in 2 tiles, notes in the same tiles; second read at 4x (crop 890,745,100,28) of BTUH OUTPUT
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: BTUH => -
+col: BTUH OUTPUT => heating_mbh [BTU/H]
+col: GAS CONNECTION => conn_in
+col: VENT CONNECTION => -
+col: CFM => cfm
+col: REMARKS => -
+derive: heating_medium = gas ; header=TABLE TITLE ; note=title printed 'NATURAL GAS UNIT HEATER SCHEDULE'
+grid:
+GUH - 1 | MODINE | HD | 60,000 | 49,800 | 1/2" | 3" | 990 | 1-6
+END
+
+# EXHAUST FAN SCHEDULE: notes 1-12 print below; each row's REMARKS cell lists the ones
+# that apply. Note 4 "NEMA PREMIUM EFFICIENT MOTOR AND VARIABLE FREQUENCY DRIVE" is cited
+# by GEF - 1 only, note 12 "ECM VARIABLE SPEED MOTOR." by EF - 1 only; EF - 2 cites 10
+# (ceiling mounted) and 11 (sidewall termination). TSP is the fan's scheduled static
+# pressure and keys esp_in (the author's reading of a total static on a bare fan).
+TABLE
+sheet: 004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39
+title: EXHAUST FAN SCHEDULE
+family: FAN
+render: page 39 crop 1360,698,1025,250 at 3x in 3 tiles (MARK column repeated) and notes crop 1360,850,560,110 at 3x; second read at 4x (crops 1575,765,80,90 and 1862,765,80,90) of every row's CFM and RPM
+rows: all 3 printed rows
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: CFM => cfm
+col: [TSP (IN. H2O): the fan's scheduled static pressure] => esp_in
+col: DRIVE => drive
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / RPM => rpm
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / FLA => -
+col: WEIGHT => -
+col: REMARKS => -
+col: [NOTE 4, where the row's REMARKS cite it: NEMA PREMIUM EFFICIENT MOTOR AND VARIABLE FREQUENCY DRIVE] => vfd
+col: [NOTE 12, where the row's REMARKS cite it: ECM VARIABLE SPEED MOTOR] => ecm
+grid:
+EF - 1 | GREENHECK | G-140-VG | 1,660 | 1.0 | direct (DIRECT) | 1 | 1,338 | 208 | 3 | 3.6 | 88± LBS | 1, 7, 8, 12 |  | yes (ECM VARIABLE SPEED MOTOR)
+GEF - 1 | CAPTIVEAIRE | DU240HFA | 4,650 | 2.25 | direct (DIRECT) | 5 | 1,079 | 208 | 3 | 15.8 | 322± LBS | 1-9 | yes (NEMA PREMIUM EFFICIENT MOTOR AND VARIABLE FREQUENCY DRIVE) |
+EF - 2 | GREENHECK | SP-B80 | 50 | .5 | direct (DIRECT) | - | 900 | 115 | 1 | .16 | 10± LBS | 10, 11 |  |
+END
+
+# SUMP PUMP SCHEDULE (plumbing sheet P-601): REMARKS "ALL"; notes 1 "HIGH/LOW WATER
+# FLOAT ACTIVATION.", 2 "CAST IRON SUBMERSIBLE PUMP.", 3 "EX. SUMP PIT.", 4 "NEMA 1
+# INDOOR SIMPLEX CONTROL PANEL WITH THREE FLOAT SWITCHES AND HIGH WATER ALARM." The one
+# printed connection (DISCHARGE SIZE) keys conn_in.
+TABLE
+sheet: 004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31
+title: SUMP PUMP SCHEDULE
+family: PUMP
+render: page 31 crop 1095,270,1305,150 at 3x in 4 tiles, notes in the same tiles; second read at 4x (crop 1560,335,90,30) of GPM
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: [DISCHARGE SIZE: the pump's one printed connection] => conn_in
+col: GPM => gpm
+col: PUMP HEAD (FT) => head_ft
+col: RPM => rpm
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: REMARKS => -
+grid:
+SP - 1 | LIBERTY | 250 SERIES | 1-1/2" | 10 | 20 | 3450 | 1/3 | 115 | 1 | -- | - | ALL
+END
+
+# HOT WATER RETURN PUMP SCHEDULE (plumbing sheet P-601): REMARKS "ALL"; notes 1
+# "PROVIDE THERMOSTAT AT PUMP OUTLET." and 2 "STAINLESS STEEL BODY, FLANGED CONNECTIONS."
+# FLUID prints WATER (glycol_pct 0, as for 060's "OPERATING FLUID IS WATER").
+TABLE
+sheet: 004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31
+title: HOT WATER RETURN PUMP SCHEDULE
+family: PUMP
+render: page 31 crop 1285,438,1115,145 at 3x in 3 tiles and mark/notes crop 1180,470,560,95 at 3x; second read at 4x (crop 1770,505,95,26) of FLOW
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: [FLUID: WATER, so no glycol] => glycol_pct
+col: SERVICE => service
+col: IMPELLER DIAMETER => -
+col: FLOW => gpm
+col: PUMP HEAD => head_ft
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASE => phase
+col: REMARKS => -
+grid:
+HWRP - 1 | BELL & GOSSETT | ECOCIRC 20-18 | 0 | HW RECIRC | 3/4" | 7 GPM | 30 FT | 1/10 | 115 | 1 | ALL
+END
