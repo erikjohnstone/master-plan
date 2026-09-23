@@ -36,6 +36,11 @@ The file format is documented at the top of that script.
      `=<level> (<printed>)` under a `[LOCATION names a level]` column. A
      room or area ("MECH 152") is not a floor. A SERVES / AREA SERVED
      column keys `area_served` as printed.
+   - One printed number is one key line. In the AIR_HANDLER families (AHU,
+     DOAS, DOAH_*, OUTDOOR_AIR_UNIT, RTU) a coil block's capacity keys the
+     unit's `cooling_mbh` / `heating_mbh`; `chw_mbh` / `hw_mbh` stay unkeyed
+     there. A filter train keys its highest MERV (the final filter) as
+     `filter_merv`; a prefilter is typed for audit only.
 5. **Table notes count, and are labelled.** A value an estimator reads
    from the schedule's own notes (e.g. "PROVIDE … BACnet/MSTP INTERFACE",
    note 2, applying to rows whose NOTES cell cites it) is keyed with a

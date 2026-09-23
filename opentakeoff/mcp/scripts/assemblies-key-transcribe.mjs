@@ -91,6 +91,9 @@ const ELECTRICAL = { volts: num, phase: num };
 // "PROVIDE BACNET CARD") and connection sizes for hook-ups (research 04).
 const INTEGRATION = { bas_interface: text };
 
+// A coil block's printed capacity is the unit's cooling_mbh / heating_mbh;
+// chw_mbh / hw_mbh stay unkeyed in this family, so one printed number is
+// never two key lines (key-work/README.md).
 const AIR_HANDLER = {
   ...LOCATION, qty: num, supply_cfm: num, oa_cfm_min: num,
   supply_fan_hp: num, supply_fan_qty: num, return_fan_hp: num, exhaust_fan_hp: num, vfd: en("yes_no"),
@@ -218,9 +221,11 @@ const csvCell = (v) => {
  * two parts printing the same attribute for one instance is an error. */
 export function expandTranscription(doc) {
   if (!doc.set) throw new Error("missing SET");
-  const unitOf = (a) => (a.endsWith("_cfm") || a === "cfm" || a.startsWith("cfm_") ? "cfm"
+  // A fan's external static pressure is inches of water column, not the
+  // inches of a connection size; oa_cfm_min is a cfm like cfm_min.
+  const unitOf = (a) => (a.endsWith("_cfm") || a === "cfm" || a.startsWith("cfm_") || a.includes("_cfm_") ? "cfm"
     : a.endsWith("_gpm") || a === "gpm" ? "gpm" : a.endsWith("_f") ? "F" : a.endsWith("_ft") ? "ft"
-      : a.endsWith("_in") ? "in" : a.endsWith("_mbh") ? "MBH" : a.endsWith("_hp") ? "hp" : a.endsWith("_kw") || a === "kw_input" ? "kW"
+      : a === "esp_in" ? "in. w.c." : a.endsWith("_in") ? "in" : a.endsWith("_mbh") ? "MBH" : a.endsWith("_hp") ? "hp" : a.endsWith("_kw") || a === "kw_input" ? "kW"
         : a === "tons" || a.endsWith("_tons") ? "tons" : a === "volts" ? "V" : a.endsWith("_lb_hr") ? "lb/hr"
           : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : a.endsWith("_pct") ? "%" : a.endsWith("_psig") ? "psig" : "");
   const instances = new Map(); // sheet|title|tag -> { base, family, values: Map(attr -> line) }
@@ -329,23 +334,15 @@ export function expandTranscription(doc) {
 
 const COLUMNS = ["sheet", "table_title", "tag", "family", "attribute", "value", "unit", "source_header", "note"];
 
-if (process.argv[1] && process.argv[1].endsWith("assemblies-key-transcribe.mjs")) {
-  const [corpusDir, setId] = process.argv.slice(2).filter((a) => !a.startsWith("--"));
-  const check = process.argv.includes("--check");
-  if (!corpusDir || !setId) {
-    console.error("usage: node scripts/assemblies-key-transcribe.mjs <corpus-dir> <setId> [--check]");
-    process.exit(2);
-  }
-  const corpus = resolve(corpusDir);
-  const src = join(corpus, "reports", "assemblies", "key-work", `${setId}.transcription.txt`);
-  if (!existsSync(src)) { console.error(`no transcription at ${src}`); process.exit(2); }
-  const doc = parseTranscription(readFileSync(src, "utf8"));
-  if (doc.set !== setId) { console.error(`transcription says SET ${doc.set}, expected ${setId}`); process.exit(2); }
+/** The complete keys/<set>.attrs.csv text for a parsed transcription. A pure
+ * function of the transcription (no dates, no paths), so a committed key can
+ * be checked byte for byte against the transcription it came from. */
+export function renderKeyCsv(doc) {
+  const setId = doc.set;
   const rows = expandTranscription(doc);
   const instances = new Set(rows.map((r) => `${r.sheet}|${r.table_title}|${r.tag}`)).size;
   const printed = rows.filter((r) => r.value !== "").length;
   const summary = `${setId}: ${doc.tables.length} table(s), ${instances} instance(s), ${rows.length} keyed attribute value(s) (${printed} printed, ${rows.length - printed} empty)`;
-  if (check) { console.log(`OK ${summary}`); process.exit(0); }
   const H = [];
   H.push(`# ${setId}.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).`);
   H.push("#");
@@ -364,7 +361,24 @@ if (process.argv[1] && process.argv[1].endsWith("assemblies-key-transcribe.mjs")
   for (const e of doc.excludes) H.push(`# Not counted: ${e}`);
   H.push(`# ${summary}`);
   const body = [COLUMNS.join(","), ...rows.map((r) => COLUMNS.map((c) => csvCell(r[c])).join(","))];
+  return { text: `${H.join("\n")}\n${body.join("\n")}\n`, summary };
+}
+
+if (process.argv[1] && process.argv[1].endsWith("assemblies-key-transcribe.mjs")) {
+  const [corpusDir, setId] = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+  const check = process.argv.includes("--check");
+  if (!corpusDir || !setId) {
+    console.error("usage: node scripts/assemblies-key-transcribe.mjs <corpus-dir> <setId> [--check]");
+    process.exit(2);
+  }
+  const corpus = resolve(corpusDir);
+  const src = join(corpus, "reports", "assemblies", "key-work", `${setId}.transcription.txt`);
+  if (!existsSync(src)) { console.error(`no transcription at ${src}`); process.exit(2); }
+  const doc = parseTranscription(readFileSync(src, "utf8"));
+  if (doc.set !== setId) { console.error(`transcription says SET ${doc.set}, expected ${setId}`); process.exit(2); }
+  const { text, summary } = renderKeyCsv(doc);
+  if (check) { console.log(`OK ${summary}`); process.exit(0); }
   const dest = join(corpus, "keys", `${setId}.attrs.csv`);
-  writeFileSync(dest, `${H.join("\n")}\n${body.join("\n")}\n`);
+  writeFileSync(dest, text);
   console.log(`wrote ${dest} — ${summary}`);
 }
