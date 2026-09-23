@@ -1,0 +1,273 @@
+# 094_FL_Orange_County_Regional_History_Center_HVAC.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/094_FL_Orange_County_Regional_History_Center_HVAC.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M-401 (page 8) of the Orange County Regional History Center HVAC drawings (Atkins), the tables drawn for this document.
+#   094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8 | Cooling Tower Schedule | COOLING_TOWER | all 1 printed row | render: page 8 crop 1865,866,785,110 at 4x in 2 tiles (Mark column repeated) and notes crop 1880,988,760,150 at 3.2x; second read of cells, flow and fan HP
+#   094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8 | Air Handling Unit Schedule CHW | AHU | all 5 printed rows | render: page 8 crop 152,72,2495,200 at 4x in 7 tiles (Mark column repeated), notes crops 655,282,580,190 and 1225,282,560,160 and legend crop 150,282,500,140 at 3x; second read of AHU-04 total CFM, AHU-06 heating kW and AHU-08 chilled-water GPM
+#   094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8 | Packaged Air Cooled Water Chiller Schedule | AIR_COOLED_CHILLER | all 1 printed row | render: page 8 crop 1620,632,1025,112 at 4x in 3 tiles (Mark column repeated) and notes crop 1640,750,600,70 at 3.2x; second read of capacity tons, GPM and LWT
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Model numbers, weights, head, ambient wet bulb, drive type, fan RPM, duct size, cylinder count, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 094_FL_Orange_County_Regional_History_Center_HVAC: 3 table(s), 7 instance(s), 254 keyed attribute value(s) (98 printed, 156 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,building,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,floor,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,area_served,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,cells,1,,# Of Cells,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,tons,,tons,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,gpm,900,gpm,Flow GPM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,ewt_f,95,F,Water Temp. / Ent.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,lwt_f,85,F,Water Temp. / Lvg.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,fan_hp,20,hp,Fan Motor Data / HP,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,vfd,yes,,NOTE 4,note 4 of the table: 'PROVIDE WITH PREMIUM EFFICIENCY MOTOR AND VARIABLE FREQUENCY DRIVE'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,bas_interface,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,volts,460,V,Volt/ Phase: volts part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Cooling Tower Schedule,CT-1,COOLING_TOWER,phase,3,,Volt/ Phase: phase part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,building,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,floor,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,area_served,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,supply_cfm,5400,cfm,Air Flows / Total Max. CFM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,oa_cfm_min,1000,cfm,Air Flows / Occupied Mode OA CFM: design minimum outdoor air,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,supply_fan_hp,7.5,hp,Fan Data / Motor HP,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,supply_fan_qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,return_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,exhaust_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,vfd,yes,,Fan Data / Var. Freq. Drive,printed 'YES'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,economizer,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,outdoor_air_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,cooling_type,chw,,Cooling Coil / Water Data,"every row prints a chilled-water cooling coil (CC, water data 45/57 F; title 'CHW')"
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,cooling_mbh,136,MBH,Cooling Coil / Capacity / Total MBH,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,cooling_tons,,tons,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,dx_stages,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_gpm,23,gpm,Cooling Coil / Water Data / Flow GPM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_ewt_f,45,F,Cooling Coil / Water Data / Temp. F / Ent.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_lwt_f,57,F,Cooling Coil / Water Data / Temp. F / Lvg.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_wpd_ft,1.9,ft,Cooling Coil / Water Data / P.D. FT W.G.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_rows,8,,Cooling Coil / Air Data / Row/Fin. Per Ft.: rows part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,chw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,heating_type,none,,Unit Components: HCS (ELEC. HEATING COIL SECTION) and Heating Coil KW,printed 'no HCS; heating coil columns print '-''; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,heating_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_gpm,,gpm,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_ewt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_lwt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_wpd_ft,,ft,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_rows,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,hw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,steam_psig,,psig,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,steam_lb_hr,,lb/hr,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,gas_input_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,eh_kw,,kW,Heating Coil / KW,printed '-'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,humidifier,yes,,Unit Components: HF (ELECTRIC HUMIDIFIER SECTION) present,printed 'MXTD3-PF-FF-CC-HF-FAN'; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,energy_recovery,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,filter_merv,15,,Filters / Final Filter Type: MERV,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,bas_interface,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,volts,460,V,Electrical Data / Volt/ Phase/Hz: volts part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-04,AHU,phase,3,,Electrical Data / Volt/ Phase/Hz: phase part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,building,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,floor,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,area_served,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,supply_cfm,7400,cfm,Air Flows / Total Max. CFM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,oa_cfm_min,965,cfm,Air Flows / Occupied Mode OA CFM: design minimum outdoor air,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,supply_fan_hp,10,hp,Fan Data / Motor HP,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,supply_fan_qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,return_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,exhaust_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,vfd,yes,,Fan Data / Var. Freq. Drive,printed 'YES'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,economizer,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,outdoor_air_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,cooling_type,chw,,Cooling Coil / Water Data,"every row prints a chilled-water cooling coil (CC, water data 45/57 F; title 'CHW')"
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,cooling_mbh,180,MBH,Cooling Coil / Capacity / Total MBH,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,cooling_tons,,tons,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,dx_stages,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_gpm,30,gpm,Cooling Coil / Water Data / Flow GPM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_ewt_f,45,F,Cooling Coil / Water Data / Temp. F / Ent.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_lwt_f,57,F,Cooling Coil / Water Data / Temp. F / Lvg.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_wpd_ft,2.8,ft,Cooling Coil / Water Data / P.D. FT W.G.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_rows,6,,Cooling Coil / Air Data / Row/Fin. Per Ft.: rows part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,chw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,heating_type,none,,Unit Components: HCS (ELEC. HEATING COIL SECTION) and Heating Coil KW,printed 'no HCS; heating coil columns print '-''; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,heating_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_gpm,,gpm,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_ewt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_lwt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_wpd_ft,,ft,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_rows,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,hw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,steam_psig,,psig,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,steam_lb_hr,,lb/hr,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,gas_input_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,eh_kw,,kW,Heating Coil / KW,printed '-'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,humidifier,yes,,Unit Components: HF (ELECTRIC HUMIDIFIER SECTION) present,printed 'MXTD3-PF-FF-CC-HF-FAN'; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,energy_recovery,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,filter_merv,15,,Filters / Final Filter Type: MERV,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,bas_interface,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,volts,460,V,Electrical Data / Volt/ Phase/Hz: volts part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-05,AHU,phase,3,,Electrical Data / Volt/ Phase/Hz: phase part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,building,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,floor,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,area_served,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,supply_cfm,3100,cfm,Air Flows / Total Max. CFM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,oa_cfm_min,675,cfm,Air Flows / Occupied Mode OA CFM: design minimum outdoor air,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,supply_fan_hp,5,hp,Fan Data / Motor HP,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,supply_fan_qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,return_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,exhaust_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,vfd,no,,Fan Data / Var. Freq. Drive,printed 'NO'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,economizer,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,outdoor_air_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,cooling_type,chw,,Cooling Coil / Water Data,"every row prints a chilled-water cooling coil (CC, water data 45/57 F; title 'CHW')"
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,cooling_mbh,84,MBH,Cooling Coil / Capacity / Total MBH,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,cooling_tons,,tons,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,dx_stages,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_gpm,14,gpm,Cooling Coil / Water Data / Flow GPM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_ewt_f,45,F,Cooling Coil / Water Data / Temp. F / Ent.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_lwt_f,57,F,Cooling Coil / Water Data / Temp. F / Lvg.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_wpd_ft,1.7,ft,Cooling Coil / Water Data / P.D. FT W.G.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_rows,6,,Cooling Coil / Air Data / Row/Fin. Per Ft.: rows part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,chw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,heating_type,electric,,Unit Components: HCS (ELEC. HEATING COIL SECTION) and Heating Coil KW,printed 'HCS; 18 KW'; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,heating_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_gpm,,gpm,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_ewt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_lwt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_wpd_ft,,ft,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_rows,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,hw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,steam_psig,,psig,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,steam_lb_hr,,lb/hr,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,gas_input_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,eh_kw,18,kW,Heating Coil / KW,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,humidifier,yes,,Unit Components: HF (ELECTRIC HUMIDIFIER SECTION) present,printed 'MXB2-PF-FF-CC-HCS-HF-FAN'; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,energy_recovery,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,filter_merv,15,,Filters / Final Filter Type: MERV,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,bas_interface,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,volts,460,V,Electrical Data / Volt/ Phase/Hz: volts part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-06,AHU,phase,3,,Electrical Data / Volt/ Phase/Hz: phase part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,building,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,floor,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,area_served,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,supply_cfm,9770,cfm,Air Flows / Total Max. CFM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,oa_cfm_min,9770,cfm,Air Flows / Occupied Mode OA CFM: design minimum outdoor air,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,supply_fan_hp,15,hp,Fan Data / Motor HP,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,supply_fan_qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,return_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,exhaust_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,vfd,no,,Fan Data / Var. Freq. Drive,printed 'NO'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,economizer,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,outdoor_air_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,cooling_type,chw,,Cooling Coil / Water Data,"every row prints a chilled-water cooling coil (CC, water data 45/57 F; title 'CHW')"
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,cooling_mbh,898,MBH,Cooling Coil / Capacity / Total MBH,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,cooling_tons,,tons,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,dx_stages,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_gpm,149,gpm,Cooling Coil / Water Data / Flow GPM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_ewt_f,45,F,Cooling Coil / Water Data / Temp. F / Ent.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_lwt_f,57,F,Cooling Coil / Water Data / Temp. F / Lvg.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_wpd_ft,18.4,ft,Cooling Coil / Water Data / P.D. FT W.G.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_rows,8,,Cooling Coil / Air Data / Row/Fin. Per Ft.: rows part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,chw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,heating_type,electric,,Unit Components: HCS (ELEC. HEATING COIL SECTION) and Heating Coil KW,printed 'HCS; 108 KW'; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,heating_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_gpm,,gpm,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_ewt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_lwt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_wpd_ft,,ft,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_rows,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,hw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,steam_psig,,psig,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,steam_lb_hr,,lb/hr,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,gas_input_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,eh_kw,108,kW,Heating Coil / KW,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,humidifier,no,,Unit Components: HF (ELECTRIC HUMIDIFIER SECTION) present,"printed 'OAI-PF-FF-CC-HCS-FAN, no HF'; author's reading of the printed row"
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,energy_recovery,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,filter_merv,14,,Filters / Final Filter Type: MERV,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,bas_interface,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,volts,460,V,Electrical Data / Volt/ Phase/Hz: volts part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-07,AHU,phase,3,,Electrical Data / Volt/ Phase/Hz: phase part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,building,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,floor,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,area_served,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,supply_cfm,6700,cfm,Air Flows / Total Max. CFM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,oa_cfm_min,690,cfm,Air Flows / Occupied Mode OA CFM: design minimum outdoor air,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,supply_fan_hp,7.5,hp,Fan Data / Motor HP,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,supply_fan_qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,return_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,exhaust_fan_hp,,hp,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,vfd,yes,,Fan Data / Var. Freq. Drive,printed 'YES'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,economizer,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,outdoor_air_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,cooling_type,chw,,Cooling Coil / Water Data,"every row prints a chilled-water cooling coil (CC, water data 45/57 F; title 'CHW')"
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,cooling_mbh,163,MBH,Cooling Coil / Capacity / Total MBH,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,cooling_tons,,tons,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,dx_stages,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_gpm,27,gpm,Cooling Coil / Water Data / Flow GPM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_ewt_f,45,F,Cooling Coil / Water Data / Temp. F / Ent.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_lwt_f,57,F,Cooling Coil / Water Data / Temp. F / Lvg.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_wpd_ft,2.3,ft,Cooling Coil / Water Data / P.D. FT W.G.,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_rows,6,,Cooling Coil / Air Data / Row/Fin. Per Ft.: rows part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,chw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,heating_type,none,,Unit Components: HCS (ELEC. HEATING COIL SECTION) and Heating Coil KW,printed 'no HCS; heating coil columns print '-''; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,heating_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_gpm,,gpm,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_ewt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_lwt_f,,F,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_wpd_ft,,ft,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_rows,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,hw_glycol_pct,,%,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,steam_psig,,psig,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,steam_lb_hr,,lb/hr,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,gas_input_mbh,,MBH,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,eh_kw,,kW,Heating Coil / KW,printed '-'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,humidifier,yes,,Unit Components: HF (ELECTRIC HUMIDIFIER SECTION) present,printed 'MXTD3-PF-FF-CC-HF-FAN'; author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,energy_recovery,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,filter_merv,15,,Filters / Final Filter Type: MERV,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,bas_interface,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,volts,460,V,Electrical Data / Volt/ Phase/Hz: volts part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Air Handling Unit Schedule CHW,AHU-08,AHU,phase,3,,Electrical Data / Volt/ Phase/Hz: phase part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,building,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,floor,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,area_served,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,qty,,,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,condenser,air,,TABLE TITLE,title printed 'Packaged Air Cooled Water Chiller Schedule'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,tons,23,tons,Cooling Capacity / Capacity Tons,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,chw_gpm,55,gpm,Chilled Water Data / Flow GPM,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,chw_ewt_f,55,F,Chilled Water Data / EWT,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,chw_lwt_f,45,F,Chilled Water Data / LWT,
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,bas_interface,EXISTING BMS,,NOTE 4,note 4: 'PROVIDE FACTORY FURNISHED CONTROLLER AND CONNECT TO EXISTING BMS'
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,volts,460,V,Electrical Data / Volt/Phase: volts part,author's reading of the printed row
+094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8,Packaged Air Cooled Water Chiller Schedule,CH-2,AIR_COOLED_CHILLER,phase,3,,Electrical Data / Volt/Phase: phase part,author's reading of the printed row
