@@ -142,6 +142,33 @@ test("malformed transcriptions refuse instead of keying something", () => {
   assert.throws(() => parseTranscription("SET t\nTABLE\nsheet: s\ngrid:\n"), /missing END/);
 });
 
+test("a claimed table that prints no instance of its family is keyed with one table-level line; untitled claims key an empty title", () => {
+  const none = `SET t-none
+TABLE
+sheet: t.pdf#52
+title: (untitled)
+family: DUCT_MOUNTED_COIL
+render: test
+rows: none — an equipment anchorage schedule; no row is a coil
+grid:
+END
+`;
+  const doc = parseTranscription(none);
+  assert.equal(doc.tables[0].title, "");
+  const rows = expandTranscription(doc);
+  assert.deepEqual(rows, [{ sheet: "t.pdf#52", table_title: "", tag: "", family: "DUCT_MOUNTED_COIL", attribute: "", value: "", unit: "", source_header: "",
+    note: "no DUCT_MOUNTED_COIL instance printed: none — an equipment anchorage schedule; no row is a coil" }]);
+  const { text, summary } = renderKeyCsv(doc);
+  assert.match(summary, /0 instance\(s\), 0 keyed attribute value\(s\).*1 table\(s\) keyed with no instance of their family/);
+  assert.match(text, /#   t\.pdf#52 \| \(untitled\) \| DUCT_MOUNTED_COIL/);
+  assert.match(text, /\nt\.pdf#52,,,DUCT_MOUNTED_COIL,,,,,no DUCT_MOUNTED_COIL instance printed/);
+  // An empty grid must say so, and "none" with rows is a contradiction.
+  assert.throws(() => expandTranscription(parseTranscription(none.replace(/rows: .*/, "rows: all printed rows"))), /empty grid/);
+  assert.throws(() => expandTranscription(parseTranscription(none.replace("grid:\n", "grid:\nX-1\n").replace("render: test", "render: test\ncol: TAG => tag"))), /rows says none/);
+  // A titled table still needs its title.
+  assert.throws(() => expandTranscription(parseTranscription(none.replace("title: (untitled)\n", ""))), /missing title/);
+});
+
 test("renderKeyCsv is a pure function of the transcription", () => {
   const a = renderKeyCsv(parseTranscription(FAN_TRANSCRIPTION));
   const b = renderKeyCsv(parseTranscription(FAN_TRANSCRIPTION));
@@ -199,7 +226,7 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
     for (const r of expandTranscription(doc)) {
       const table = `${r.sheet} :: ${r.table_title}`;
       if (!instances.has(table)) instances.set(table, { family: r.family, tags: new Set() });
-      instances.get(table).tags.add(r.tag);
+      if (r.tag) instances.get(table).tags.add(r.tag); // an empty tag keys a table with no instance
     }
     for (const [table, { family, tags }] of instances) {
       if (heldout) {

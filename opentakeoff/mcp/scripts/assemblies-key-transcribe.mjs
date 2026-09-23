@@ -23,10 +23,13 @@
 //   EXCLUDES <line>     repeatable; what is deliberately not counted
 //   TABLE
 //   sheet: <file.pdf#page>
-//   title: <table title as printed>
+//   title: <table title as printed>   "(untitled)" when the compile claims the
+//                                      table under no title (keys table_title "")
 //   family: <compile family, e.g. VAV>
 //   render: <how it was read, e.g. "page 57 crop 100,200,900,400 @3x">
 //   rows: <which printed rows are keyed, e.g. "all 9 printed rows">
+//         "none — <why>" with an empty grid: the table prints no instance of
+//         its claimed family, and the key gets one table-level line saying so
 //   col: <printed header path> => <attribute>     one per grid column, in order;
 //                                                  "=> -" = printed but not covered;
 //                                                  "[...]" header = the author's
@@ -187,7 +190,10 @@ export function parseTranscription(textIn) {
     const where = `line ${i + 1}`;
     if (!line.trim() || line.trimStart().startsWith("#")) return;
     if (inGrid) {
-      if (line.trim() === "END") { inGrid = false; doc.tables.push(cur); cur = null; return; }
+      if (line.trim() === "END") {
+        if (cur.title === "(untitled)") { cur.title = ""; cur.untitled = true; }
+        inGrid = false; doc.tables.push(cur); cur = null; return;
+      }
       const cells = line.split("|").map((c) => c.trim());
       if (cells.length !== cur.cols.length) throw new Error(`${where}: ${cells.length} cells, ${cur.cols.length} columns declared — ${line}`);
       cur.grid.push({ cells, line: i + 1 });
@@ -229,11 +235,23 @@ export function expandTranscription(doc) {
         : a === "tons" || a.endsWith("_tons") ? "tons" : a === "volts" ? "V" : a.endsWith("_lb_hr") ? "lb/hr"
           : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : a.endsWith("_pct") ? "%" : a.endsWith("_psig") ? "psig" : "");
   const instances = new Map(); // sheet|title|tag -> { base, family, values: Map(attr -> line) }
-  const order = [];
+  const order = []; // instance keys and table-level lines, in transcription order
   for (const t of doc.tables) {
-    for (const k of ["sheet", "title", "family", "render", "rows"]) if (!t[k]) throw new Error(`TABLE ${t.title || "?"}: missing ${k}:`);
+    for (const k of ["sheet", "title", "family", "render", "rows"]) {
+      if (!t[k] && !(k === "title" && t.untitled)) throw new Error(`TABLE ${t.title || "?"}: missing ${k}:`);
+    }
     const attrs = KEY_ATTRIBUTES[t.family];
     if (!attrs) throw new Error(`TABLE ${t.title}: no key vocabulary for family ${t.family}`);
+    // A claimed table that prints no instance of its family (a structural
+    // anchorage schedule claimed as coils) is keyed, with no instance: one
+    // table-level line, so every value a pipeline reports from it is invented.
+    const none = /^none\b/i.test(t.rows);
+    if (none && t.grid.length) throw new Error(`TABLE ${t.title}: rows says none but the grid has ${t.grid.length} row(s)`);
+    if (!none && !t.grid.length) throw new Error(`TABLE ${t.title}: empty grid; write "rows: none — <why>" to key a table that prints no ${t.family}`);
+    if (none) {
+      order.push({ sheet: t.sheet, table_title: t.title, tag: "", family: t.family, attribute: "", value: "", unit: "", source_header: "", note: `no ${t.family} instance printed: ${t.rows}` });
+      continue;
+    }
     const tagCol = t.cols.findIndex((c) => c.attr === "tag");
     if (tagCol < 0) throw new Error(`TABLE ${t.title}: no "=> tag" column`);
     const mapped = new Map();
@@ -322,6 +340,7 @@ export function expandTranscription(doc) {
   }
   const out = [];
   for (const key of order) {
+    if (typeof key !== "string") { out.push(key); continue; }
     const inst = instances.get(key);
     for (const [attr, spec] of Object.entries(inst.attrs)) {
       const unit = spec.type === "num" || spec.type === "size" ? unitOf(attr) : "";
@@ -340,9 +359,12 @@ const COLUMNS = ["sheet", "table_title", "tag", "family", "attribute", "value", 
 export function renderKeyCsv(doc) {
   const setId = doc.set;
   const rows = expandTranscription(doc);
-  const instances = new Set(rows.map((r) => `${r.sheet}|${r.table_title}|${r.tag}`)).size;
-  const printed = rows.filter((r) => r.value !== "").length;
-  const summary = `${setId}: ${doc.tables.length} table(s), ${instances} instance(s), ${rows.length} keyed attribute value(s) (${printed} printed, ${rows.length - printed} empty)`;
+  const values = rows.filter((r) => r.tag !== "");
+  const instances = new Set(values.map((r) => `${r.sheet}|${r.table_title}|${r.tag}`)).size;
+  const printed = values.filter((r) => r.value !== "").length;
+  const empty = rows.length - values.length;
+  const summary = `${setId}: ${doc.tables.length} table(s), ${instances} instance(s), ${values.length} keyed attribute value(s) (${printed} printed, ${values.length - printed} empty)`
+    + (empty ? `, ${empty} table(s) keyed with no instance of their family` : "");
   const H = [];
   H.push(`# ${setId}.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).`);
   H.push("#");
@@ -354,10 +376,11 @@ export function renderKeyCsv(doc) {
   H.push("# expanded by mcp/scripts/assemblies-key-transcribe.mjs.");
   H.push("#");
   for (const s of doc.scope) H.push(`# Scope: ${s}`);
-  for (const t of doc.tables) H.push(`#   ${t.sheet} | ${t.title} | ${t.family} | ${t.rows} | render: ${t.render}`);
+  for (const t of doc.tables) H.push(`#   ${t.sheet} | ${t.untitled ? "(untitled)" : t.title} | ${t.family} | ${t.rows} | render: ${t.render}`);
   H.push("# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),");
   H.push("# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;");
   H.push("# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.");
+  if (empty) H.push("# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.");
   for (const e of doc.excludes) H.push(`# Not counted: ${e}`);
   H.push(`# ${summary}`);
   const body = [COLUMNS.join(","), ...rows.map((r) => COLUMNS.map((c) => csvCell(r[c])).join(","))];

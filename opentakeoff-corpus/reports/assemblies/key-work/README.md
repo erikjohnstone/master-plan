@@ -41,6 +41,18 @@ The file format is documented at the top of that script.
      unit's `cooling_mbh` / `heating_mbh`; `chw_mbh` / `hw_mbh` stay unkeyed
      there. A filter train keys its highest MERV (the final filter) as
      `filter_merv`; a prefilter is typed for audit only.
+   - `title:` is the claimed table's title as the census names it. That is
+     the printed title in every case so far, with two exceptions. A schedule
+     printed in parts keys every part under the drawn part's title (step 8).
+     A table the compile claims under no title is written
+     `title: (untitled)`: the key's table_title is empty, and the comment
+     names what is printed.
+   - A claimed table that prints no instance of its claimed family (060's
+     structural EQUIPMENT ANCHORAGE SCHEDULE, claimed as DUCT_MOUNTED_COIL)
+     is keyed with `rows: none — <why>` and an empty grid. The key gets one
+     line with an empty tag and attribute, and every value a pipeline
+     reports from that table scores invented. The mismatch also goes to the
+     catalogue.
 5. **Table notes count, and are labelled.** A value an estimator reads
    from the schedule's own notes (e.g. "PROVIDE … BACnet/MSTP INTERFACE",
    note 2, applying to rows whose NOTES cell cites it) is keyed with a
@@ -75,6 +87,13 @@ another table is reported as "out of key scope", neither correct nor
 invented. It needs that table's own key before it counts. Without this rule,
 a correct cross-table join would score as "invented", and the metric would
 reward not joining.
+
+Two more rules follow from how tables are keyed:
+- A schedule printed in parts is one keyed table, so a cite inside any
+  part's crop (each part's `render:` line) is in scope.
+- A table-level line (empty tag and attribute) keys a claimed table with
+  no instance of its family. Every value cited from that table is
+  invented.
 
 ## What would make these keys lie (checked while authoring)
 
