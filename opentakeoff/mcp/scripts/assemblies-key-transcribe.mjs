@@ -38,7 +38,13 @@
 //
 // Grid cells hold the PRINTED text. For an enum attribute the cell is
 // "<canonical> (<printed text>)", or just "<canonical>" when the canonical
-// value is itself what is printed. An empty cell is a printed blank. The
+// value is itself what is printed. An empty cell is a printed blank. A cell
+// starting with "?" is printed but is not ONE value for the attribute (a
+// multi-speed "50-80-110" airflow, "SEE NOTE 3"): it keys an empty value
+// with the printed text in the note, so a pipeline that picks one scores
+// "invented". "col: <header> => <attr> [<unit>]" records the unit the
+// header PRINTS when it differs from the attribute's usual one (a static
+// pressure printed in "(FT)"); values are never converted here. The
 // attribute vocabulary below is the key's own; WP1 maps every keyed
 // attribute to exactly one canonical attribute.
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
@@ -73,24 +79,30 @@ const coil = (p, unitsOnly = false) => ({
 });
 const LOCATION = { building: text, floor: text, area_served: text };
 const ELECTRICAL = { volts: num, phase: num };
+// Selectors from research 02 §3a ("schedule attributes that select
+// variants") that the first vocabulary missed, added before any census
+// output was read: a printed network/BAS interface ("BACNET", "LON",
+// "PROVIDE BACNET CARD") and connection sizes for hook-ups (research 04).
+const INTEGRATION = { bas_interface: text };
 
 const AIR_HANDLER = {
   ...LOCATION, qty: num, supply_cfm: num, oa_cfm_min: num,
   supply_fan_hp: num, supply_fan_qty: num, return_fan_hp: num, exhaust_fan_hp: num, vfd: en("yes_no"),
-  economizer: en("economizer"), cooling_type: en("cooling_type"), cooling_mbh: num, cooling_tons: num, ...coil("chw"),
+  economizer: en("economizer"), outdoor_air_pct: num, cooling_type: en("cooling_type"), cooling_mbh: num, cooling_tons: num,
+  dx_stages: num, ...coil("chw"),
   heating_type: en("heating_type"), heating_mbh: num, ...coil("hw"), gas_input_mbh: num, eh_kw: num,
-  humidifier: en("yes_no"), energy_recovery: en("energy_recovery"), filter_merv: num, ...ELECTRICAL,
+  humidifier: en("yes_no"), energy_recovery: en("energy_recovery"), filter_merv: num, ...INTEGRATION, ...ELECTRICAL,
 };
 const GENERIC_HVAC = {
   ...LOCATION, qty: num, cfm: num, cooling_mbh: num, cooling_tons: num, heating_mbh: num, ...coil("hw", true),
-  ...coil("chw", true), motor_hp: num, eh_kw: num, ...ELECTRICAL,
+  ...coil("chw", true), motor_hp: num, eh_kw: num, conn_in: num, ...INTEGRATION, ...ELECTRICAL,
 };
 
 /** Covered attributes per compile family — the key's scope, stated in its header. */
 export const KEY_ATTRIBUTES = {
   VAV: {
     ...LOCATION, terminal_type: en("terminal_type"), inlet_size_in: size, cfm_max: num, cfm_min: num, cfm_heat: num,
-    heat_type: en("heat_type"), ...coil("hw"), eh_kw: num, eh_stages: num, motor_hp: num, ...ELECTRICAL,
+    heat_type: en("heat_type"), ...coil("hw"), eh_kw: num, eh_stages: num, motor_hp: num, ecm: en("yes_no"), ...ELECTRICAL,
   },
   AHU: AIR_HANDLER, DOAS: AIR_HANDLER, DOAH_UNIT: AIR_HANDLER, DOAH_HANDLING: AIR_HANDLER, OUTDOOR_AIR_UNIT: AIR_HANDLER, RTU: AIR_HANDLER,
   FCU: {
@@ -99,21 +111,22 @@ export const KEY_ATTRIBUTES = {
   },
   PUMP: {
     ...LOCATION, qty: num, service: text, gpm: num, head_ft: num, motor_hp: num, rpm: num, vfd: en("yes_no"),
-    pump_arrangement: en("pump_arrangement"), ...ELECTRICAL,
+    pump_arrangement: en("pump_arrangement"), conn_in: num, ...ELECTRICAL,
   },
   FAN: {
     ...LOCATION, qty: num, service: text, cfm: num, esp_in: num, motor_hp: num, motor_watts: num, rpm: num,
-    drive: en("drive"), vfd: en("yes_no"), ecm: en("yes_no"), ...ELECTRICAL,
+    drive: en("drive"), vfd: en("yes_no"), ecm: en("yes_no"), control: text, ...ELECTRICAL,
   },
-  UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), eh_kw: num, motor_hp: num, ...ELECTRICAL },
-  CABINET_UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), eh_kw: num, motor_hp: num, ...ELECTRICAL },
-  BOILER: { ...LOCATION, qty: num, fuel: en("fuel"), input_mbh: num, output_mbh: num, gpm: num, ewt_f: num, lwt_f: num, eh_kw: num, ...ELECTRICAL },
-  AIR_COOLED_CHILLER: { ...LOCATION, qty: num, condenser: en("condenser"), tons: num, chw_gpm: num, chw_ewt_f: num, chw_lwt_f: num, kw_input: num, ...ELECTRICAL },
-  HEAT_RECOVERY_CHILLER: { ...LOCATION, qty: num, condenser: en("condenser"), tons: num, chw_gpm: num, chw_ewt_f: num, chw_lwt_f: num, hw_gpm: num, hw_ewt_f: num, hw_lwt_f: num, kw_input: num, ...ELECTRICAL },
-  COOLING_TOWER: { ...LOCATION, qty: num, tons: num, gpm: num, ewt_f: num, lwt_f: num, fan_hp: num, vfd: en("yes_no"), ...ELECTRICAL },
+  UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), eh_kw: num, motor_hp: num, conn_in: num, ...ELECTRICAL },
+  CABINET_UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), eh_kw: num, motor_hp: num, conn_in: num, ...ELECTRICAL },
+  BOILER: { ...LOCATION, qty: num, fuel: en("fuel"), input_mbh: num, output_mbh: num, gpm: num, ewt_f: num, lwt_f: num, eh_kw: num, conn_in: num, ...INTEGRATION, ...ELECTRICAL },
+  AIR_COOLED_CHILLER: { ...LOCATION, qty: num, condenser: en("condenser"), tons: num, chw_gpm: num, chw_ewt_f: num, chw_lwt_f: num, kw_input: num, conn_in: num, ...INTEGRATION, ...ELECTRICAL },
+  HEAT_RECOVERY_CHILLER: { ...LOCATION, qty: num, condenser: en("condenser"), tons: num, chw_gpm: num, chw_ewt_f: num, chw_lwt_f: num, hw_gpm: num, hw_ewt_f: num, hw_lwt_f: num, kw_input: num, conn_in: num, ...INTEGRATION, ...ELECTRICAL },
+  COOLING_TOWER: { ...LOCATION, qty: num, cells: num, tons: num, gpm: num, ewt_f: num, lwt_f: num, fan_hp: num, vfd: en("yes_no"), conn_in: num, ...INTEGRATION, ...ELECTRICAL },
   HEAT_EXCHANGER: {
     ...LOCATION, qty: num, hx_type: en("hx_type"), primary_medium: en("medium"), secondary_medium: en("medium"),
     primary_gpm: num, primary_ewt_f: num, primary_lwt_f: num, secondary_gpm: num, secondary_ewt_f: num, secondary_lwt_f: num, capacity_mbh: num,
+    primary_conn_in: num, secondary_conn_in: num,
   },
   ERV: { ...LOCATION, qty: num, recovery_type: en("recovery_type"), supply_cfm: num, exhaust_cfm: num, supply_fan_hp: num, exhaust_fan_hp: num, ...ELECTRICAL },
   HUMIDIFIER: { ...LOCATION, qty: num, humidifier_type: en("humidifier_type"), capacity_lb_hr: num, eh_kw: num, ...ELECTRICAL },
@@ -172,7 +185,7 @@ export function parseTranscription(textIn) {
     else if ((m = line.match(/^EXCLUDES\s+(.+)$/))) doc.excludes.push(m[1]);
     else if (line.trim() === "TABLE") cur = { cols: [], derive: [], grid: [] };
     else if (cur && (m = line.match(/^(sheet|title|family|render|rows):\s*(.+)$/))) cur[m[1]] = m[2].trim();
-    else if (cur && (m = line.match(/^col:\s*(.+?)\s*=>\s*(\S+)$/))) cur.cols.push({ header: m[1], attr: m[2] });
+    else if (cur && (m = line.match(/^col:\s*(.+?)\s*=>\s*(\S+)(?:\s+\[([^\]]+)\])?$/))) cur.cols.push({ header: m[1], attr: m[2], unit: m[3] ?? null });
     else if (cur && (m = line.match(/^derive:\s*(\w+)\s*=\s*([^;]+?)\s*;\s*header=([^;]+?)\s*;\s*note=(.+)$/))) {
       cur.derive.push({ attr: m[1], value: m[2], header: m[3], note: m[4] });
     } else if (cur && line.trim() === "grid:") inGrid = true;
@@ -223,11 +236,16 @@ export function expandTranscription(doc) {
           : a.endsWith("_gpm") || a === "gpm" ? "gpm" : a.endsWith("_f") ? "F" : a.endsWith("_ft") ? "ft"
             : a.endsWith("_in") ? "in" : a.endsWith("_mbh") ? "MBH" : a.endsWith("_hp") ? "hp" : a.endsWith("_kw") || a === "kw_input" ? "kW"
               : a === "tons" || a.endsWith("_tons") ? "tons" : a === "volts" ? "V" : a.endsWith("_lb_hr") ? "lb/hr"
-                : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : "");
-        const unit = spec.type === "num" || spec.type === "size" ? unitOf(attr) : "";
+                : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : a.endsWith("_pct") ? "%" : "");
+        let unit = spec.type === "num" || spec.type === "size" ? unitOf(attr) : "";
         if (mapped.has(attr)) {
           const col = t.cols[mapped.get(attr)];
           const cell = row.cells[mapped.get(attr)];
+          if (col.unit) unit = col.unit;
+          if (cell.startsWith("?")) {
+            out.push({ ...base, value: "", unit, source_header: col.header, note: `printed '${cell.slice(1).trim()}' — not a single value for this attribute` });
+            continue;
+          }
           if (!cell) { out.push({ ...base, value: "", unit, source_header: col.header, note: "blank cell" }); continue; }
           // A printed dash / N/A in a number column says "none here": no value,
           // and the printed mark is kept so the scorer can tell it from a blank.
