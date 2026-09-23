@@ -41,6 +41,18 @@ The file format is documented at the top of that script.
    edited after the pipeline has run on that sheet; a key that later looks
    wrong is written up in `ASSEMBLIES_BUG_CATALOGUE.md`.
 
+## How a key is scored (fixed before any normalizer exists)
+
+A key covers an instance **as printed in one table**: the drawn table. Some
+documents print one unit's attributes across several tables (federal-mech
+prints an AHU's units, fans and hydronic coils as three schedules). So the
+attribute eval (instrument 2) scores a normalized value against a key line
+only when the value's cell cite lies in that key's table. A value cited from
+another table is reported as "out of key scope", neither correct nor
+invented. It needs that table's own key before it counts. Without this rule,
+a correct cross-table join would score as "invented", and the metric would
+reward not joining.
+
 ## What would make these keys lie (checked while authoring)
 
 - Misread digits in small print (3/8, 5/6, 1/7): read at 3×, and at 4× when
