@@ -38,7 +38,8 @@
 //
 // Grid cells hold the PRINTED text. For an enum attribute the cell is
 // "<canonical> (<printed text>)", or just "<canonical>" when the canonical
-// value is itself what is printed. An empty cell is a printed blank. A cell
+// value is itself what is printed; a text attribute read out of longer
+// printed text is "=<value> (<printed text>)". An empty cell is a printed blank. A cell
 // starting with "?" is printed but is not ONE value for the attribute (a
 // multi-speed "50-80-110" airflow, "SEE NOTE 3"): it keys an empty value
 // with the printed text in the note, so a pipeline that picks one scores
@@ -144,11 +145,16 @@ for (const f of ["HEAT_PUMP", "CONDENSING_UNIT", "VRF_INDOOR", "VRF_OUTDOOR", "F
  * anything carrying two numbers — the transcriber splits such a cell. */
 export function parseNumber(printed) {
   const t = String(printed).trim().replace(/["″]/g, "").replace(/(\d),(\d{3})\b/g, "$1$2");
+  // Only proper inch fractions (x/2, x/4 … x/64, numerator < denominator):
+  // "460/3" is a V/PH cell, never 153.33.
+  const inchFraction = (num, den) => Number(num) < Number(den) && [2, 4, 8, 16, 32, 64].includes(Number(den));
   let m = t.match(/^(\d+)[\s-]+(\d+)\/(\d+)(?:\s*[A-Za-z%°.]+)?$/);
-  if (m) return String(Number(m[1]) + Number(m[2]) / Number(m[3]));
+  if (m && inchFraction(m[2], m[3])) return String(Number(m[1]) + Number(m[2]) / Number(m[3]));
   m = t.match(/^(\d+)\/(\d+)(?:\s*[A-Za-z%°.]+)?$/);
-  if (m) return String(Number(m[1]) / Number(m[2]));
-  m = t.match(/^(-?\d+(?:\.\d+)?|-?\.\d+)(?:\s*[A-Za-z%°.#/]+)?$/);
+  if (m && inchFraction(m[1], m[2])) return String(Number(m[1]) / Number(m[2]));
+  // One number, then optional unit words ("450 CFM", "30% P.G.", "7.5 HP
+  // (VFD)"); a second number anywhere means the transcriber splits the cell.
+  m = t.match(/^(-?\d+(?:\.\d+)?|-?\.\d+)(?:\s*[A-Za-z%°.#/()&]+)*$/);
   if (m) return String(Number(m[1]));
   throw new Error(`not a single printed number: "${printed}"`);
 }
@@ -283,6 +289,14 @@ export function expandTranscription(doc) {
               const e = parseEnum(cell, spec.values);
               value = e.value;
               if (e.printed !== null) note = `printed '${e.printed}'`;
+            } else if (cell.startsWith("=")) {
+              // "=<value> (<printed>)": a text attribute whose canonical value is
+              // a reading of the printed text (a LOCATION "NW ROOF" keyed as
+              // floor "ROOF"), with the printed text kept in the note.
+              const m = cell.match(/^=\s*(.+?)\s*\((.*)\)\s*$/);
+              if (!m) throw new Error(`text cell "${cell}" must be "=<value> (<printed>)"`);
+              value = m[1];
+              note = `printed '${m[2]}'`;
             } else value = cell;
           } catch (e) {
             throw new Error(`line ${row.line} (${tag}.${attr}): ${e.message}`);

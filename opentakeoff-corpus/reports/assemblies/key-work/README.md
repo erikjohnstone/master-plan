@@ -30,6 +30,12 @@ The file format is documented at the top of that script.
      is typed `?<printed>`.
    - A column whose header prints a unit other than the attribute's usual
      one gets `[<unit>]` on its `col:` line. Values are never converted.
+   - Location: `building`, `floor` and `area_served` come from columns that
+     print them. A LOCATION column keys `floor` only in rows where its text
+     names a level ("ROOF", "BASEMENT", "LEVEL 2", "MEZZ"), typed
+     `=<level> (<printed>)` under a `[LOCATION names a level]` column. A
+     room or area ("MECH 152") is not a floor. A SERVES / AREA SERVED
+     column keys `area_served` as printed.
 5. **Table notes count, and are labelled.** A value an estimator reads
    from the schedule's own notes (e.g. "PROVIDE … BACnet/MSTP INTERFACE",
    note 2, applying to rows whose NOTES cell cites it) is keyed with a
