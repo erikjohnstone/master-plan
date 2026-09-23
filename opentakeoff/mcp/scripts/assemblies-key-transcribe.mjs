@@ -145,9 +145,10 @@ for (const f of ["HEAT_PUMP", "CONDENSING_UNIT", "VRF_INDOOR", "VRF_OUTDOOR", "F
  * anything carrying two numbers — the transcriber splits such a cell. */
 export function parseNumber(printed) {
   const t = String(printed).trim().replace(/["″]/g, "").replace(/(\d),(\d{3})\b/g, "$1$2");
-  // Only proper inch fractions (x/2, x/4 … x/64, numerator < denominator):
-  // "460/3" is a V/PH cell, never 153.33.
-  const inchFraction = (num, den) => Number(num) < Number(den) && [2, 4, 8, 16, 32, 64].includes(Number(den));
+  // Only PROPER fractions (numerator < denominator ≤ 64): inch sizes (3/4,
+  // 1-1/4) and fractional horsepower (1/3, 1/12) are real printed values;
+  // "460/3" and "115/1" are V/PH cells, never 153.33 or 115.
+  const inchFraction = (num, den) => Number(num) < Number(den) && Number(den) <= 64;
   let m = t.match(/^(\d+)[\s-]+(\d+)\/(\d+)(?:\s*[A-Za-z%°.]+)?$/);
   if (m && inchFraction(m[2], m[3])) return String(Number(m[1]) + Number(m[2]) / Number(m[3]));
   m = t.match(/^(\d+)\/(\d+)(?:\s*[A-Za-z%°.]+)?$/);
