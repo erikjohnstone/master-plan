@@ -168,3 +168,137 @@ Each would pick the split by its outcome.
 01-split.md, "Key-authoring scope"). With the bulk corpus staged (AS-2), the
 extra documents extend dev and add a second held-out tier; the frozen held-out
 documents never move to dev.
+
+---
+
+## AS-8 — the compile misses printed keyed-family schedules (OPEN — owned by the table/compile loops)
+
+**Found:** 2026-09-23, WP0.3, while keying the dev documents from renders
+(census `reports/assemblies/00-baseline.json`, commit 63ad081).
+
+**What:** these printed schedules belong to a keyed family, but
+`compile_corpus_takeoff` claims none of them in any keyed family. WP0.3 keys
+every *claimed* table (01-split.md), so their rows are in no key and no census
+count. An assembly built from the compile cannot count them, and a join that
+needs them (an AHU's fans and coils) has nothing to join.
+
+**Evidence** (printed titles and rows as read from renders; page = PDF page):
+
+| Set | Page | Printed schedule | Rows | Would be |
+|---|---|---|---|---|
+| 040 | 47 (M600) | AIR HANDLING UNIT SCHEDULE (vertical, left column) | AHU-1B | AHU |
+| 040 | 47 | SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE | SS-1 / SSCU-1 | FCU + CONDENSING_UNIT |
+| 040 | 47 | UNFIRED CLEAN STEAM GENERATOR SCHEDULE | HX-1 | the humidifiers' steam source |
+| 040 | 47 | CONDENSATE PUMP TRAP PACKAGED SCHEDULE | PT-1 | PUMP |
+| 12_MT | 28 (M0.1) | SPLIT SYSTEM HEAT PUMP SCHEDULE | HP-1, HP-2 and FC-1A to FC-4B | HEAT_PUMP + FCU |
+| 031 | 72 (M-501) | SINGLE DUCT AIR TERMINAL UNIT SCHEDULE, with its AIR TERMINAL UNIT SIZING SCHEDULE | the terminal units the reheat coils RHC1-RHC13 sit in (1-1-TU01 to 2-1-TU13) | VAV (the set has no VAV claim at all) |
+| 031 | 71 (M-500) | CLEAN STEAM GENERATOR SCHEDULE | 1 row: STEAM-STEAM, HUMIDIFICATION, 79.2 LBS/HR produced (the claimed humidifier WHSE-SH1's flow) | the humidifier's steam source |
+| 094 | 8 | Disposable Cylinder Electric Humidifier Schedule | HF-4, HF-5, HF-6, HF-8 (50/50/33/50 lb/hr, 17/17/11.4/17 kW, 480/3) | HUMIDIFIER |
+| baker | 41 (M6.01) | ELECTRIC UNIT HEATER SCHEDULE | EWH-1, EWH-2 (electric wall heaters, 1.5 kW) | UNIT_HEATER |
+| federal-mech | 14 (M7.1) | AIR HANDLING UNIT FAN SCHEDULE | RF-1, RF-2, SF-1, SF-2 (AHU-1's fans) | FAN |
+| federal-mech | 14 | AIR HANDLING UNIT HYDRONIC COIL SCHEDULE | CHWC, HWC (AHU-1's coils) | the AHU's coil data |
+
+**Effect:** the census and the keys miss these units. 031 schedules its VAV
+terminal units but carries no VAV instance. federal-mech's and 031's AHUs
+lose the fan and coil data an assembly needs (AS-11 has the join problems).
+
+**Next:** the table/compile loops own the fix; claims are theirs, and this
+goal never touches extraction. When the claims change, the census re-runs
+and dev keys are authored for the newly claimed tables. Held-out keys do not
+change.
+
+---
+
+## AS-9 — claimed tables that print no instance of their claimed family (OPEN — owned by the table/compile loops)
+
+**Found:** 2026-09-23, WP0.3.
+
+**Evidence:**
+- 060 page 52 (structural sheet S-513): the EQUIPMENT ANCHORAGE SCHEDULE is
+  claimed as DUCT_MOUNTED_COIL (census: 3 rows, no title). Its 15 printed
+  rows are tanks, pumps, a chiller, a DDC panel, AC units and condensing
+  units. None is a duct-mounted coil.
+- 031 page 33 (architectural sheet AE401): the EQUIPMENT SCHEDULE is claimed
+  as FAN (census: 1 row). Its 12 rows are toilet accessories and appliances.
+  RF-2 REFRIGERATOR / FREEZER is the likely trigger, since RF- is a
+  return-fan prefix.
+
+Both are keyed with `rows: none` (key-work/README.md). The key gets one
+table-level line, so every value reported from these tables scores invented.
+
+**Effect:** phantom instances are counted (a FAN, and duct coils).
+
+**Next:** as AS-8. A family claim may need more than a tag prefix, for
+example the sheet's discipline or a header check.
+
+---
+
+## AS-10 — a claimed table's printed title is not taken (OPEN — owned by the table/compile loops)
+
+**Found:** 2026-09-23, WP0.3.
+
+**Evidence:**
+- bldg5406 page 18 (plumbing sheet P-601): the PUMP table prints "CIRCULATING
+  PUMP SCHEDULE" inside its own frame, but is claimed under no title. The
+  census title is empty, and the key uses `title: (untitled)`.
+- 060 page 52: the anchorage table of AS-9 is also claimed under no title.
+  There the title prints *below* the table (detail B1).
+
+**Effect:** title lookups (`find_schedule`) and the UI show an untitled
+table.
+
+---
+
+## AS-11 — drawing inconsistencies an assembly join must survive (OPEN — this goal, WP2 and later)
+
+**Found:** 2026-09-23, WP0.3. These are facts of the documents, not pipeline
+bugs; they are recorded because the join and normalizer work must handle
+them.
+
+- **031:** the AIR HANDLING UNIT SCHEDULE names its parts WHSE-SF-1,
+  WHSE-RF-1, WHSE-SH-1 and WHSE-PC-1. Their own schedules print WHSE-SF1,
+  WHSE-RF1 and WHSE-SH1 (hyphen only), and WHSE-PHC1, a different mark.
+  WHSE-CC-1 matches. A join needs hyphen-insensitive tag matching, and still
+  cannot pair PC-1 with PHC1 by tag alone.
+- **federal-mech:** AHU-1 names its fans "SF-1,2" and "RF-1,2". A join must
+  expand the range.
+- **itd-d1-lab:** HOT WATER REHEAT COIL SCHEDULE rows HC-6 and HC-7 name their
+  supply valves "SV-6" and "SV-7"; the valve schedule prints SAV-6 and SAV-7.
+- **12_MT:** the CABINET UNIT HEATER SCHEDULE's temperature headers are
+  swapped between AIR SIDE and LIQUID SIDE (the key's comment gives the
+  evidence: 15.7 MBH at 1.5 GPM is a 21 °F water drop, matching 180 → 160).
+  The key reads the water temperatures from the AIR SIDE cells as the
+  author's reading, so a normalizer that trusts the header grouping gets them
+  wrong.
+
+---
+
+## AS-12 — the frozen key vocabulary cannot hold some printed selectors (OPEN — this goal, WP1)
+
+**Found:** 2026-09-23, WP0.3.
+
+**What:** the key vocabulary (`assemblies-key-transcribe.mjs`
+`KEY_ATTRIBUTES`) was frozen before the census ran, and a key is never
+edited. So these printed values have no attribute, and are typed "-":
+- **DX fan coil cooling capacity:** FCU has `chw_mbh` (a chilled-water
+  coil's) but no `cooling_mbh`. Affected: bldg5406 split units (COOLING /
+  MBH); federal-mech DX FAN COIL UNIT SCHEDULE (TOTAL CAPACITY 21200 BTU/HR
+  on six rows); itd-d1-lab F-1 (the split system's cooling is keyed on its
+  outdoor unit instead).
+- **Gas furnace heating capacity in FCU:** itd-d1-lab F-1, INPUT 80 / OUTPUT
+  78.0 MBH.
+- **A water-source heat pump's source loop:** 018 prints FLUID WATER,
+  EWT/LWT, 15 GPM and WPD. The loop GPM selects the hook-up (research 04 §5).
+- **Condensing unit input kW:** federal-mech CU-1 to CU-6 print MAX KW AT
+  DESIGN 1.7. Chillers have `kw_input`; GENERIC_HVAC does not.
+- **Control or BAS for unit heaters and humidifiers:** itd-d1-lab ELECTRIC
+  HEATER note 6, "UNIT TO BE STANDALONE AND NOT CONTROLLED BY DDC" (EH-7 to
+  EH-9), and HUMIDIFIER note 3, "CONNECT UNIT TO DDC CONTROL SYSTEM". Both
+  decide whether a unit carries points at all.
+- **ECM in AIR_HANDLER:** itd-d1-lab AHU note 2, "PROVIDE FAN ASSEMBLY WITH
+  ECM MOTORIZED IMPELLER FANS".
+
+**Next:** WP1's canonical schema adds these attributes. GATE 1's check still
+holds (every *keyed* attribute maps to exactly one canonical attribute). The
+new attributes stay unscored against the current keys; a later key tier
+(AS-2) can include them.
