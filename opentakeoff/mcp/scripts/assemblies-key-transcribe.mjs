@@ -73,10 +73,15 @@ const num = { type: "num" };
 const size = { type: "size" }; // round (one number) or rectangular (WxH)
 const text = { type: "text" };
 const en = (e) => ({ type: "enum", values: ENUMS[e] });
+// Research 04 §5: a coil hook-up's variant is selected by the coil's
+// connection size, GPM, pressure drop, service AND glycol percentage.
 const coil = (p, unitsOnly = false) => ({
   [`${p}_gpm`]: num, [`${p}_ewt_f`]: num, [`${p}_lwt_f`]: num,
-  ...(unitsOnly ? {} : { [`${p}_wpd_ft`]: num, [`${p}_mbh`]: num, [`${p}_rows`]: num, [`${p}_conn_in`]: num }),
+  ...(unitsOnly ? {} : { [`${p}_wpd_ft`]: num, [`${p}_mbh`]: num, [`${p}_rows`]: num, [`${p}_conn_in`]: num, [`${p}_glycol_pct`]: num }),
 });
+// Research 04 §1.3/§5: a steam coil hook-up is selected by steam pressure
+// and condensate load.
+const STEAM = { steam_psig: num, steam_lb_hr: num };
 const LOCATION = { building: text, floor: text, area_served: text };
 const ELECTRICAL = { volts: num, phase: num };
 // Selectors from research 02 §3a ("schedule attributes that select
@@ -90,7 +95,7 @@ const AIR_HANDLER = {
   supply_fan_hp: num, supply_fan_qty: num, return_fan_hp: num, exhaust_fan_hp: num, vfd: en("yes_no"),
   economizer: en("economizer"), outdoor_air_pct: num, cooling_type: en("cooling_type"), cooling_mbh: num, cooling_tons: num,
   dx_stages: num, ...coil("chw"),
-  heating_type: en("heating_type"), heating_mbh: num, ...coil("hw"), gas_input_mbh: num, eh_kw: num,
+  heating_type: en("heating_type"), heating_mbh: num, ...coil("hw"), ...STEAM, gas_input_mbh: num, eh_kw: num,
   humidifier: en("yes_no"), energy_recovery: en("energy_recovery"), filter_merv: num, ...INTEGRATION, ...ELECTRICAL,
 };
 const GENERIC_HVAC = {
@@ -111,14 +116,14 @@ export const KEY_ATTRIBUTES = {
   },
   PUMP: {
     ...LOCATION, qty: num, service: text, gpm: num, head_ft: num, motor_hp: num, rpm: num, vfd: en("yes_no"),
-    pump_arrangement: en("pump_arrangement"), conn_in: num, ...ELECTRICAL,
+    pump_arrangement: en("pump_arrangement"), glycol_pct: num, conn_in: num, ...ELECTRICAL,
   },
   FAN: {
     ...LOCATION, qty: num, service: text, cfm: num, esp_in: num, motor_hp: num, motor_watts: num, rpm: num,
     drive: en("drive"), vfd: en("yes_no"), ecm: en("yes_no"), control: text, ...ELECTRICAL,
   },
-  UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), eh_kw: num, motor_hp: num, conn_in: num, ...ELECTRICAL },
-  CABINET_UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), eh_kw: num, motor_hp: num, conn_in: num, ...ELECTRICAL },
+  UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), ...STEAM, eh_kw: num, motor_hp: num, conn_in: num, ...ELECTRICAL },
+  CABINET_UNIT_HEATER: { ...LOCATION, qty: num, heating_medium: en("heating_medium"), cfm: num, heating_mbh: num, ...coil("hw", true), ...STEAM, eh_kw: num, motor_hp: num, conn_in: num, ...ELECTRICAL },
   BOILER: { ...LOCATION, qty: num, fuel: en("fuel"), input_mbh: num, output_mbh: num, gpm: num, ewt_f: num, lwt_f: num, eh_kw: num, conn_in: num, ...INTEGRATION, ...ELECTRICAL },
   AIR_COOLED_CHILLER: { ...LOCATION, qty: num, condenser: en("condenser"), tons: num, chw_gpm: num, chw_ewt_f: num, chw_lwt_f: num, kw_input: num, conn_in: num, ...INTEGRATION, ...ELECTRICAL },
   HEAT_RECOVERY_CHILLER: { ...LOCATION, qty: num, condenser: en("condenser"), tons: num, chw_gpm: num, chw_ewt_f: num, chw_lwt_f: num, hw_gpm: num, hw_ewt_f: num, hw_lwt_f: num, kw_input: num, conn_in: num, ...INTEGRATION, ...ELECTRICAL },
@@ -126,7 +131,7 @@ export const KEY_ATTRIBUTES = {
   HEAT_EXCHANGER: {
     ...LOCATION, qty: num, hx_type: en("hx_type"), primary_medium: en("medium"), secondary_medium: en("medium"),
     primary_gpm: num, primary_ewt_f: num, primary_lwt_f: num, secondary_gpm: num, secondary_ewt_f: num, secondary_lwt_f: num, capacity_mbh: num,
-    primary_conn_in: num, secondary_conn_in: num,
+    primary_conn_in: num, secondary_conn_in: num, primary_steam_psig: num, primary_steam_lb_hr: num,
   },
   ERV: { ...LOCATION, qty: num, recovery_type: en("recovery_type"), supply_cfm: num, exhaust_cfm: num, supply_fan_hp: num, exhaust_fan_hp: num, ...ELECTRICAL },
   HUMIDIFIER: { ...LOCATION, qty: num, humidifier_type: en("humidifier_type"), capacity_lb_hr: num, eh_kw: num, ...ELECTRICAL },
@@ -210,7 +215,7 @@ export function expandTranscription(doc) {
     : a.endsWith("_gpm") || a === "gpm" ? "gpm" : a.endsWith("_f") ? "F" : a.endsWith("_ft") ? "ft"
       : a.endsWith("_in") ? "in" : a.endsWith("_mbh") ? "MBH" : a.endsWith("_hp") ? "hp" : a.endsWith("_kw") || a === "kw_input" ? "kW"
         : a === "tons" || a.endsWith("_tons") ? "tons" : a === "volts" ? "V" : a.endsWith("_lb_hr") ? "lb/hr"
-          : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : a.endsWith("_pct") ? "%" : "");
+          : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : a.endsWith("_pct") ? "%" : a.endsWith("_psig") ? "psig" : "");
   const instances = new Map(); // sheet|title|tag -> { base, family, values: Map(attr -> line) }
   const order = [];
   for (const t of doc.tables) {
