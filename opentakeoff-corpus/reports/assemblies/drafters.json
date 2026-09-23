@@ -1,0 +1,153 @@
+{
+ "_about": "ASSEMBLIES goal WP0.2 input: which engineering firm drafted each locally present corpus document, so the dev / held-out split can keep one drafter's documents on one side. Evidence is the PDF's own text layer (title blocks) or sets.json provenance, gathered 2026-09-23 with pymupdf page.get_text(); a firm is named only where that text names it. A document with no identifiable firm is its own group. Two documents are grouped when the text shows a shared firm or a shared design team; that is deliberately conservative (it can only make the held-out side harder, never leak a drafter into it). Byte-identical documents are marked duplicate_of and never counted twice.",
+ "groups": {
+  "up-engineers-architects": {
+   "firm": "U.P. Engineers & Architects",
+   "sets": [
+    "bessemer"
+   ],
+   "evidence": "'U.P. ENGINEERS' in the title block on 8/8 pages; sets.json provenance names the firm"
+  },
+  "musgrove-engineering": {
+   "firm": "Musgrove Engineering, P.A. (with Miller Stauffer Architects on D-1)",
+   "sets": [
+    "itd-d1-lab",
+    "itd-d1-lab-raster",
+    "069_ID_ITD_District_2_Laboratory_Heating_Upgrades"
+   ],
+   "evidence": "sets.json gc for itd-d1-lab is 'Miller Stauffer Architects / Musgrove Engineering'; 'MUSGROVE' and 'ENGINEERING, P.A.' in the title block on 9/9 pages of 069; itd-d1-lab-raster is a synthetic raster of itd-d1-lab's own sheet (sets.json)"
+  },
+  "baskerville-donovan": {
+   "firm": "Baskerville-Donovan, Inc. (MEP-FP engineering)",
+   "sets": [
+    "federal-mech"
+   ],
+   "evidence": "'BASKERVILLE-DONOVAN, INC.' + 'MEP-FP ENGINEERING' in the title block on 19/24 pages"
+  },
+  "navfac-mid-atlantic": {
+   "firm": "NAVFAC Mid-Atlantic (agency; A/E firm not named in the text layer)",
+   "sets": [
+    "navfac-cherry-point-atc"
+   ],
+   "evidence": "'NAVAL FACILITIES ENGINEERING COMMAND ~ MID-ATLANTIC' in the title block on 40/75 pages"
+  },
+  "sazan-engineers": {
+   "firm": "Sazan Engineers (with Cole Architects)",
+   "sets": [
+    "baker-county-eoc"
+   ],
+   "evidence": "'SAZAN' on 31/65 pages; 'COLE ARCHITECTS, PLLC' copyright lines"
+  },
+  "va-incandescence-team": {
+   "firm": "VA A/E teams sharing Incandescence Life Safety, Inc. (040: Alesia Architecture P.C., Shaffer Stevens & Schaap P.C., Calibre Engineering, Inc.; 031: '…RCHITECTS, P.C.', MEP firm not named)",
+   "sets": [
+    "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile"
+   ],
+   "evidence": "'INCANDESCENCE LIFE SAFETY, INC.' in the title block on 90/90 pages of 031 and 48/48 pages of 040; grouped conservatively because 031's MEP firm is not named"
+  },
+  "matrix-consulting": {
+   "firm": "Matrix Consulting Engineers, Inc. (with Hobbs + Black Associates)",
+   "sets": [
+    "078_US_CP25028_MSU_Union_Sparty_Store_Renovations"
+   ],
+   "evidence": "'MECHANICAL/ ELECTRICAL ENGINEER' + 'MATRIX CONSULTING' + 'CONSULTING ENGINEERS, INC' in the title block"
+  },
+  "72abw-civil-engineer": {
+   "firm": "72 ABW Civil Engineer Directorate (Tinker AFB)",
+   "sets": [
+    "tinker-afb-iwcs-controls"
+   ],
+   "evidence": "'72 ABW CIVIL ENGINEER DIRECTORATE' on 31/31 pages"
+  },
+  "coffman-engineers": {
+   "firm": "Coffman Engineers",
+   "sets": [
+    "30_WA_SpokaneTransit_CoolingTower"
+   ],
+   "evidence": "'COFFMAN ENGINEERS' on 14/14 pages"
+  },
+  "crockett-engineering": {
+   "firm": "Crockett Engineering Consultants, LLC",
+   "sets": [
+    "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri"
+   ],
+   "evidence": "'CROCKETT ENGINEERING CONSULANTS' (sic) title block p1; 'Crockett Engineering Consultants, LLC' p3. (031 mentions Crockett only as the author of a geotechnical report, so it is not grouped here.)"
+  },
+  "apogee-consulting": {
+   "firm": "Apogee Consulting Group, P.A.",
+   "sets": [
+    "053_VA_Renovate_Expand_Emergency_Room_System_VA"
+   ],
+   "evidence": "'APOGEE CONSULTING GROUP, P.A.' under 'CONSULTANTS:' on 12/12 pages"
+  },
+  "unidentified:bldg5406-hvac-demo": {
+   "firm": null,
+   "sets": [
+    "bldg5406-hvac-demo"
+   ],
+   "evidence": "no firm name in the text layer"
+  },
+  "unidentified:12_MT_MSU_ReidHall_Renovation": {
+   "firm": null,
+   "sets": [
+    "12_MT_MSU_ReidHall_Renovation"
+   ],
+   "evidence": "architect Slate Architecture, Inc.; the MEP firm is not named in the text layer"
+  },
+  "unidentified:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project": {
+   "firm": null,
+   "sets": [
+    "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project"
+   ],
+   "evidence": "no firm name in the text layer"
+  },
+  "unidentified:004_MO_T2504_03_Interior_and_Exterior_Renovation": {
+   "firm": null,
+   "sets": [
+    "004_MO_T2504_03_Interior_and_Exterior_Renovation"
+   ],
+   "evidence": "title block reads only 'ENGINEERING'"
+  },
+  "unidentified:018_GA_USDA_ARS_U_S_National_Poultry_Research_Center": {
+   "firm": null,
+   "sets": [
+    "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center"
+   ],
+   "evidence": "title block reads 'ARCHITECTS/ENGINEERS PLANNING SURVEYING MANAGEMENT' with no firm name in the text layer"
+  },
+  "unidentified:074_CA_West_Valley_College_STEM_Classroom_HVAC": {
+   "firm": null,
+   "sets": [
+    "074_CA_West_Valley_College_STEM_Classroom_HVAC"
+   ],
+   "evidence": "only DSA (Division of the State Architect) stamps in the text layer"
+  },
+  "unidentified:094_FL_Orange_County_Regional_History_Center_HVAC": {
+   "firm": null,
+   "sets": [
+    "094_FL_Orange_County_Regional_History_Center_HVAC"
+   ],
+   "evidence": "no firm name in the text layer"
+  },
+  "unidentified:tarrant-county-mechanical": {
+   "firm": null,
+   "sets": [
+    "tarrant-county-mechanical"
+   ],
+   "evidence": "no firm name in the text layer"
+  }
+ },
+ "duplicates": {
+  "062_ID_ITD_District_1_Laboratory_Building_Mechanical": {
+   "duplicate_of": "itd-d1-lab",
+   "evidence": "byte-identical PDF (sha256 prefix 9dafcead2eb5 for both)"
+  }
+ },
+ "derived": {
+  "itd-d1-lab-raster": {
+   "derived_from": "itd-d1-lab",
+   "evidence": "sets.json: 'The SAME real D-1 Testing Laboratory HVAC plan sheet (M1.0) as itd-d1-lab … SYNTHETICALLY flattened to an image-only page' — same printed content, so it is never keyed separately"
+  }
+ }
+}
