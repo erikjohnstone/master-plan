@@ -145,3 +145,26 @@ and npm test completed. The evidence is saved as
 `wedge-evidence-conformance.txt` beside the guard logs. The same watchdog
 pattern wraps `export-valve-size-template.mjs` runs: the script writes
 `report.json`, then its sidecars are stopped.
+
+---
+
+## AS-7 — GATE 0's dev size is out of reach in this environment (BLOCKED — AS-2; ceiling demonstrated)
+
+**Found:** 2026-09-23, WP0.2 (`reports/assemblies/01-split.md`).
+
+**Numbers:** 17 of the 22 distinct present documents carry at least one
+compiled row in a keyed equipment family. Seed 20260923, committed before the
+census finished, put the drafter groups in the order `imeg` (kept in dev for
+HX) → `up-engineers-architects` → `usda-ars-southeast-area` →
+`coffman-engineers` → `crockett-engineering` → `burns-mcdonnell` (2 documents).
+Held-out reached 4 and then 6, so dev has **11** documents (target ≥ 12). Even
+keying every claimed table in them, the compile claims **245** rows (target
+≥ 300 instances).
+
+**Not done:** redrawing, reordering, or splitting a drafter group to reach 12.
+Each would pick the split by its outcome.
+
+**Next:** keys are authored at the maximum this population allows (see
+01-split.md, "Key-authoring scope"). With the bulk corpus staged (AS-2), the
+extra documents extend dev and add a second held-out tier; the frozen held-out
+documents never move to dev.

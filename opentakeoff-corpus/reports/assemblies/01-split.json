@@ -1,0 +1,772 @@
+{
+ "seed": 20260923,
+ "heldout_min_docs": 5,
+ "key_rows_per_table_max": 30,
+ "population_docs": 17,
+ "shuffled_group_order": [
+  "imeg",
+  "up-engineers-architects",
+  "usda-ars-southeast-area",
+  "coffman-engineers",
+  "crockett-engineering",
+  "burns-mcdonnell",
+  "atkins",
+  "davis-monthan-afb-ce",
+  "smithgroup",
+  "sazan-engineers",
+  "unidentified:074_CA_West_Valley_College_STEM_Classroom_HVAC",
+  "musgrove-engineering",
+  "ace-inc",
+  "casco-diversified"
+ ],
+ "skipped_for_dev_coverage": [
+  {
+   "group": "imeg",
+   "would_uncover": [
+    "HX"
+   ]
+  }
+ ],
+ "dev": {
+  "groups": [
+   "ace-inc",
+   "atkins",
+   "casco-diversified",
+   "davis-monthan-afb-ce",
+   "imeg",
+   "musgrove-engineering",
+   "sazan-engineers",
+   "smithgroup",
+   "unidentified:074_CA_West_Valley_College_STEM_Classroom_HVAC"
+  ],
+  "sets": [
+   "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+   "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+   "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+   "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+   "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+   "094_FL_Orange_County_Regional_History_Center_HVAC",
+   "12_MT_MSU_ReidHall_Renovation",
+   "baker-county-eoc",
+   "bldg5406-hvac-demo",
+   "federal-mech",
+   "itd-d1-lab"
+  ],
+  "covers": [
+   "VAV",
+   "AHU/DOAS/RTU",
+   "FCU",
+   "pump",
+   "fan",
+   "UH/CUH",
+   "boiler",
+   "chiller",
+   "cooling tower",
+   "HX",
+   "ERV",
+   "humidifier"
+  ],
+  "tables": [
+   {
+    "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "family": "DOAS",
+    "table": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 :: DOAS SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "family": "RTU",
+    "table": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 :: ROOFTOP UNIT SCHEDULE",
+    "claimed_rows": 7,
+    "keyed_rows_max": 7,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "family": "PUMP",
+    "table": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31 :: SUMP PUMP SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "family": "FAN",
+    "table": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 :: EXHAUST FAN SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "family": "UNIT_HEATER",
+    "table": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39 :: NATURAL GAS UNIT HEATER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "family": "AHU",
+    "table": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72 :: AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "family": "PUMP",
+    "table": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71 :: PUMP SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "family": "FAN",
+    "table": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33 :: EQUIPMENT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "family": "UNIT_HEATER",
+    "table": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72 :: ELECTRIC UNIT HEATER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "family": "HUMIDIFIER",
+    "table": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71 :: STEAM HUMIDIFER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "family": "HEAT_EXCHANGER",
+    "table": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71 :: STEAM TO WATER HEAT EXCHANGER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "family": "DUCT_MOUNTED_COIL",
+    "table": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72 :: CHILLED WATER COOLING COIL SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+    "family": "PUMP",
+    "table": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47 :: PUMP SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+    "family": "FAN",
+    "table": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47 :: FAN SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+    "family": "UNIT_HEATER",
+    "table": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47 :: UNIT HEATER SCHEDULE - HOT WATER",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+    "family": "AHU",
+    "table": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5 :: EXISTING AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+    "family": "BOILER",
+    "table": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5 :: EXISTING CONDENSING HOT WATER BOILER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+    "family": "PUMP",
+    "table": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5 :: NEW PUMP SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+    "family": "ERV",
+    "table": "074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25 :: ENERGY RECOVERY VENTILATOR",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+    "family": "AHU",
+    "table": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8 :: Air Handling Unit Schedule CHW",
+    "claimed_rows": 5,
+    "keyed_rows_max": 5,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8 :: Packaged Air Cooled Water Chiller Schedule",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+    "family": "COOLING_TOWER",
+    "table": "094_FL_Orange_County_Regional_History_Center_HVAC.pdf#8 :: Cooling Tower Schedule",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "12_MT_MSU_ReidHall_Renovation",
+    "family": "VAV",
+    "table": "12_MT_MSU_ReidHall_Renovation.pdf#28 :: DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "12_MT_MSU_ReidHall_Renovation",
+    "family": "CABINET_UNIT_HEATER",
+    "table": "12_MT_MSU_ReidHall_Renovation.pdf#28 :: CABINET UNIT HEATER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "12_MT_MSU_ReidHall_Renovation",
+    "family": "FIN_TUBE_RADIATION",
+    "table": "12_MT_MSU_ReidHall_Renovation.pdf#28 :: FINNED PIPE RADIATION SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "baker-county-eoc",
+    "family": "FCU",
+    "table": "baker-county-eoc-bidset.pdf#41 :: SPLIT SYSTEM FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "baker-county-eoc",
+    "family": "RTU",
+    "table": "baker-county-eoc-bidset.pdf#41 :: PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "baker-county-eoc",
+    "family": "ERV",
+    "table": "baker-county-eoc-bidset.pdf#41 :: ENERGY RECOVERY VENTILATOR SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "baker-county-eoc",
+    "family": "CONDENSING_UNIT",
+    "table": "baker-county-eoc-bidset.pdf#41 :: SPLIT SYSTEM CONDENSING UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "baker-county-eoc",
+    "family": "FAN",
+    "table": "baker-county-eoc-bidset.pdf#41 :: FAN SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bldg5406-hvac-demo",
+    "family": "AHU",
+    "table": "bldg5406-hvac-demo-mechanical.pdf#6 :: AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bldg5406-hvac-demo",
+    "family": "FCU",
+    "table": "bldg5406-hvac-demo-mechanical.pdf#6 :: SPLIT SYSTEM AIR CONDITIONING UNITS",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bldg5406-hvac-demo",
+    "family": "VAV",
+    "table": "bldg5406-hvac-demo-mechanical.pdf#6 :: AIR TERMINAL BOX SCHEDULE",
+    "claimed_rows": 9,
+    "keyed_rows_max": 9,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bldg5406-hvac-demo",
+    "family": "CONDENSING_UNIT",
+    "table": "bldg5406-hvac-demo-mechanical.pdf#6 :: SPLIT SYSTEM AIR CONDITIONING UNITS",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bldg5406-hvac-demo",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "bldg5406-hvac-demo-mechanical.pdf#6 :: PACKAGED AIR COOLED CHILLER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bldg5406-hvac-demo",
+    "family": "PUMP",
+    "table": "bldg5406-hvac-demo-mechanical.pdf#18 :: ",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bldg5406-hvac-demo",
+    "family": "FAN",
+    "table": "bldg5406-hvac-demo-mechanical.pdf#6 :: FAN SCHEDULE",
+    "claimed_rows": 5,
+    "keyed_rows_max": 5,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "AHU",
+    "table": "federal-attachment4-mechanical.pdf#14 :: AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "FCU",
+    "table": "federal-attachment4-mechanical.pdf#15 :: DX FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "federal-mech",
+    "family": "VAV",
+    "table": "federal-attachment4-mechanical.pdf#16 :: VOLUME CONTROL BOX SCHEDULE",
+    "claimed_rows": 58,
+    "keyed_rows_max": 30,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "CONDENSING_UNIT",
+    "table": "federal-attachment4-mechanical.pdf#15 :: AIR-COOLED CONDENSING UNIT SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "federal-attachment4-mechanical.pdf#14 :: CHILLER SCHEDULE (ELECTRIC AIR-COOLED)",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "BOILER",
+    "table": "federal-attachment4-mechanical.pdf#14 :: HOT WATER CONDENSING BOILER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "PUMP",
+    "table": "federal-attachment4-mechanical.pdf#14 :: PUMP SCHEDULE",
+    "claimed_rows": 11,
+    "keyed_rows_max": 11,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "FAN",
+    "table": "federal-attachment4-mechanical.pdf#14 :: GENERAL FAN SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "UNIT_HEATER",
+    "table": "federal-attachment4-mechanical.pdf#15 :: UNIT HEATER SCHEDULE (HOT WATER)",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "federal-mech",
+    "family": "FIN_TUBE_RADIATION",
+    "table": "federal-attachment4-mechanical.pdf#15 :: FIN TUBE RADIATION SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "AHU",
+    "table": "itd-d1-lab-mechanical.pdf#15 :: AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "FCU",
+    "table": "itd-d1-lab-mechanical.pdf#14 :: SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "CONDENSING_UNIT",
+    "table": "itd-d1-lab-mechanical.pdf#14 :: SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "BOILER",
+    "table": "itd-d1-lab-mechanical.pdf#13 :: CONDENSING HOT WATER BOILER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "PUMP",
+    "table": "itd-d1-lab-mechanical.pdf#12 :: PUMP SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "FAN",
+    "table": "itd-d1-lab-mechanical.pdf#13 :: LAB EXHAUST FAN SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "UNIT_HEATER",
+    "table": "itd-d1-lab-mechanical.pdf#14 :: ELECTRIC HEATER SCHEDULE",
+    "claimed_rows": 9,
+    "keyed_rows_max": 9,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "HUMIDIFIER",
+    "table": "itd-d1-lab-mechanical.pdf#13 :: HUMIDIFIER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "itd-d1-lab",
+    "family": "DUCT_MOUNTED_COIL",
+    "table": "itd-d1-lab-mechanical.pdf#13 :: HOT WATER REHEAT COIL SCHEDULE",
+    "claimed_rows": 9,
+    "keyed_rows_max": 9,
+    "tables_in_stratum": 1
+   }
+  ]
+ },
+ "heldout": {
+  "groups": [
+   "up-engineers-architects",
+   "usda-ars-southeast-area",
+   "coffman-engineers",
+   "crockett-engineering",
+   "burns-mcdonnell"
+  ],
+  "sets": [
+   "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+   "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+   "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+   "30_WA_SpokaneTransit_CoolingTower",
+   "bessemer",
+   "navfac-cherry-point-atc"
+  ],
+  "covers": [
+   "VAV",
+   "AHU/DOAS/RTU",
+   "FCU",
+   "pump",
+   "fan",
+   "UH/CUH",
+   "boiler",
+   "chiller",
+   "cooling tower",
+   "humidifier"
+  ],
+  "tables": [
+   {
+    "set": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+    "family": "HEAT_PUMP",
+    "table": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13 :: WATER SOURCE HEAT PUMP (PART 1 OF 2)",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+    "family": "FAN",
+    "table": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13 :: EXHAUST FAN SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+    "family": "RTU",
+    "table": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11 :: PACKAGED EQUIPMENT SCHEDULE (RTU)",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+    "family": "CONDENSING_UNIT",
+    "table": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24 :: CONDENSING UNIT SCHEDULE (RCUA)",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+    "family": "PUMP",
+    "table": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23 :: VERTICAL SPLIT-CASE HVAC PUMP SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+    "family": "DUCT_MOUNTED_COIL",
+    "table": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#52 :: ",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "30_WA_SpokaneTransit_CoolingTower",
+    "family": "BOILER",
+    "table": "30_WA_SpokaneTransit_CoolingTower.pdf#2 :: GAS-FIRED HYDRONIC BOILER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "30_WA_SpokaneTransit_CoolingTower",
+    "family": "PUMP",
+    "table": "30_WA_SpokaneTransit_CoolingTower.pdf#2 :: HVAC PUMP SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "30_WA_SpokaneTransit_CoolingTower",
+    "family": "COOLING_TOWER",
+    "table": "30_WA_SpokaneTransit_CoolingTower.pdf#2 :: CLOSED COOLING TOWER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bessemer",
+    "family": "HEAT_PUMP",
+    "table": "bessemer-mechanical-bidset.pdf#8 :: VARIABLE REFRIGERANT PACKAGED HEAT PUMP",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "bessemer",
+    "family": "FAN",
+    "table": "bessemer-mechanical-bidset.pdf#8 :: FAN SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "AHU",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#42 :: AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "DOAH_UNIT",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#42 :: DEDICATED OUTDOOR AIR UNIT SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "DOAH_HANDLING",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#49 :: DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "FCU",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#45 :: FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 10,
+    "keyed_rows_max": 10,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "VAV",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#43 :: VARIABLE AIR VOLUME TERMINAL BOX",
+    "claimed_rows": 27,
+    "keyed_rows_max": 27,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#44 :: AIR COOLED CHILLER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "HEAT_RECOVERY_CHILLER",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#45 :: AIR COOLED HEAT RECOVERY CHILLER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "BOILER",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#45 :: BOILER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "PUMP",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#45 :: PUMP SCHEDULE",
+    "claimed_rows": 11,
+    "keyed_rows_max": 11,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "FAN",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#44 :: FAN SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "CABINET_UNIT_HEATER",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#48 :: CABINET UNIT HEATER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "UNIT_HEATER",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#45 :: UNIT HEATER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "CRAH",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#48 :: COMPUTER ROOM AIR HANDLER TYPE SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "DEHUMIDIFIER",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#44 :: DEHUMIDIFIER SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "navfac-cherry-point-atc",
+    "family": "HUMIDIFIER",
+    "table": "navfac-cherry-point-atc-mechanical.pdf#43 :: HUMIDIFIER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 3
+   }
+  ]
+ },
+ "required_coverage_missing_from_population": [],
+ "excluded_from_population": {
+  "062_ID_ITD_District_1_Laboratory_Building_Mechanical": {
+   "duplicate_of": "itd-d1-lab",
+   "evidence": "byte-identical PDF (sha256 prefix 9dafcead2eb5 for both)"
+  },
+  "itd-d1-lab-raster": {
+   "derived_from": "itd-d1-lab",
+   "evidence": "sets.json: 'The SAME real D-1 Testing Laboratory HVAC plan sheet (M1.0) as itd-d1-lab … SYNTHETICALLY flattened to an image-only page' — same printed content, so it is never keyed separately"
+  }
+ },
+ "generated_at": "2026-09-23T19:47:34.049Z",
+ "baseline_generated_at": "2026-09-23T19:47:16.244Z"
+}
