@@ -1,0 +1,237 @@
+# bldg5406-hvac-demo — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheets M-601 (PDF page 6) and P-601 (page 18) at 6-8x, read by
+# eye on 2026-09-23. Both pages carry /Rotate 90 over sideways content, so they were
+# rendered with the page rotation cleared (scratch render_unrot.py / tiles_unrot.py,
+# pymupdf only) and every crop below is in the UNROTATED page space. The pipeline's
+# output for these sheets was not consulted. This dev document's key covers every
+# claimed keyed-family table (01-split.md, key-authoring scope).
+SET bldg5406-hvac-demo
+SEED 20260923
+SCOPE Sheets M-601 (page 6) and P-601 (page 18) of the FBNM 130007 RPI NDI Lab, Facility 5406 mechanical drawings (Davis-Monthan AFB civil engineer), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, static pressures, fan RPM/BHP of the AHU, air-side temperatures, face velocity, filter pressure drops, reheat MBH of electric boxes, IPLV, evaporator pressure drop, MCA, weights, noise, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SCHEDULE: REMARKS "SEE NOTES" (all twelve apply). Note 8 "PROVIDE
+# VFD ON SUPPLY FAN."; note 10 "CHILLED WATER COIL SHALL BE PROVIDED WITH 2-WAY
+# VALVE."; note 4 "UNIT TO HAVE MERV8 AND MERV13 FILTERS, ..."; note 7 "PROVIDE MIXING
+# BOX SECTION WITH OUTDOOR AIRFLOW MEASURING STATION." (not an economizer). No heating
+# prints.
+TABLE
+sheet: bldg5406-hvac-demo-mechanical.pdf#6
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 6 unrotated crop 22,205,570,62 at 8x in 4 tiles and notes crop 22,241,330,32 at 6x; second read at 10x (crops 110,215,20,27 and 372,215,20,27) of supply CFM and coil GPM
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER / MODEL => -
+col: AREA SERVICED => area_served
+col: SUPPLY FAN / CFM => supply_cfm
+col: SUPPLY FAN / MIN. O.A. => oa_cfm_min
+col: SUPPLY FAN / E.S.P. (IN W.G.) => -
+col: SUPPLY FAN / T.S.P. (IN W.G.) => -
+col: SUPPLY FAN / RPM => -
+col: SUPPLY FAN / BHP => -
+col: SUPPLY FAN / HP => supply_fan_hp
+col: COOLING COIL / TOTAL MBH => cooling_mbh
+col: COOLING COIL / SENSIBLE MBH => -
+col: COOLING COIL / SENSIBLE HEAT RATIO => -
+col: COOLING COIL / E.A.T. DB/WB (°F) => -
+col: COOLING COIL / L.A.T. DB/WB (°F) => -
+col: COOLING COIL / MAX. AIR P.D. (IN. W.G.) => -
+col: COOLING COIL / COIL FACE VELOCITY (FPM) => -
+col: COOLING COIL / EWT/LWT (°F) => -
+col: [COOLING COIL / EWT/LWT (°F): EWT part] => chw_ewt_f
+col: [COOLING COIL / EWT/LWT (°F): LWT part] => chw_lwt_f
+col: COOLING COIL / GPM => chw_gpm
+col: COOLING COIL / MAX. W.P.D. (FT. W.G.) => chw_wpd_ft
+col: COOLING COIL / NO. OF ROWS => chw_rows
+col: ELECTRICAL V / PH / HZ => -
+col: [ELECTRICAL V / PH / HZ: volts part] => volts
+col: [ELECTRICAL V / PH / HZ: phase part] => phase
+col: FILTERS / PRE FILTER => -
+col: FILTERS / DIRTY AIR PRESS. DROP (IN W.G.), pre filter => -
+col: FILTERS / FINAL FILTER => -
+col: [FILTERS / FINAL FILTER: MERV] => filter_merv
+col: FILTERS / DIRTY AIR PRESS. DROP (IN W.G.), final filter => -
+col: WEIGHT (LBS) => -
+col: REMARKS => -
+derive: cooling_type = chw ; header=COOLING COIL ; note=the cooling coil prints water EWT/LWT and GPM; note 10 'CHILLED WATER COIL SHALL BE PROVIDED WITH 2-WAY VALVE'
+derive: vfd = yes ; header=NOTE 8 ; note=note 8, the row's REMARKS say SEE NOTES: 'PROVIDE VFD ON SUPPLY FAN'
+grid:
+AHU-1 | TRANE / UCCAB10C0 | BUILDING 5406 | 5100 | 1290 | 2.0 | 5.7 | 2530 | 7.8 | 10 | 176.3 | 176.3 | 1.0 | 83.8 / 61.5 | 52.2 / 48.9 | 0.838 | 525 | 44.0 / 56.1 | 44.0 | 56.1 | 29.0 | 1.37 | 8 | 460 / 3 / 60 | 460 | 3 | MERV 8 | 1.0 | MERV 13 | 13 | 1.0 | 1795 | SEE NOTES
+END
+
+# AIR TERMINAL BOX SCHEDULE: notes 1 "PROVIDE WALL MOUNTED THERMOSTAT." and 2 "PROVIDE
+# ELECTRIC REHEAT COIL." (every row: SEE NOTES). REGULATOR SET CFM equals MIN. CFM on
+# VAV-3, VAV-8 and VAV-9 and is the box's maximum setting (the author's reading).
+# REHEAT MBH is the electric coil's output; the VAV vocabulary keys electric heat as
+# eh_kw only (hw_mbh is a hot-water coil).
+TABLE
+sheet: bldg5406-hvac-demo-mechanical.pdf#6
+title: AIR TERMINAL BOX SCHEDULE
+family: VAV
+render: page 6 unrotated crop 22,285,528,88 at 7x in 3 tiles (MARK column repeated), notes in the same tiles; second read at 10x (crops 165,295,45,65 and 205,295,110,65) of every row's regulator CFM, min CFM and heater kW
+rows: all 9 printed rows
+col: MARK => tag
+col: MANUFACTURER / MODEL => -
+col: INLET DIA. (INCHES) => inlet_size_in
+col: [REGULATOR SET CFM: the box's maximum airflow setting] => cfm_max
+col: MIN. CFM => cfm_min
+col: REHEAT MBH => -
+col: ELECTRIC HEATER KW => eh_kw
+col: VOLTS / PH / HZ => -
+col: [VOLTS / PH / HZ: volts part] => volts
+col: [VOLTS / PH / HZ: phase part] => phase
+col: CONTROLS => -
+col: MAX NC => -
+col: REMARKS => -
+derive: heat_type = electric ; header=ELECTRIC HEATER KW ; note=every row prints an ELECTRIC HEATER KW; note 2 'PROVIDE ELECTRIC REHEAT COIL'
+grid:
+VAV-1 | TRANE / VCEF | 14 | 2170 | 870 | 41.0 | 12 | 480 / 3 / 60 | 480 | 3 | DDC | 30 | SEE NOTES
+VAV-2 | TRANE / VCEF | 10 | 820 | 290 | 13.7 | 4 | 277 / 1 / 60 | 277 | 1 | DDC | 30 | SEE NOTES
+VAV-3 | TRANE / VCEF | 6 | 360 | 360 | 13.7 | 4 | 277 / 1 / 60 | 277 | 1 | DDC | 30 | SEE NOTES
+VAV-4 | TRANE / VCEF | 6 | 320 | 125 | 5.1 | 1.5 | 277 / 1 / 60 | 277 | 1 | DDC | 30 | SEE NOTES
+VAV-5 | TRANE / VCEF | 8 | 460 | 190 | 8.5 | 2.5 | 277 / 1 / 60 | 277 | 1 | DDC | 30 | SEE NOTES
+VAV-6 | TRANE / VCEF | 6 | 430 | 175 | 8.5 | 2.5 | 277 / 1 / 60 | 277 | 1 | DDC | 30 | SEE NOTES
+VAV-7 | TRANE / VCEF | 4 | 130 | 85 | 3.4 | 1.0 | 277 / 1 / 60 | 277 | 1 | DDC | 30 | SEE NOTES
+VAV-8 | TRANE / VCEF | 8 | 400 | 400 | 17.1 | 5.0 | 480 / 3 / 60 | 480 | 3 | DDC | 30 | SEE NOTES
+VAV-9 | TRANE / VCEF | 4 | 85 | 85 | 3.4 | 1.0 | 277 / 1 / 60 | 277 | 1 | DDC | 30 | SEE NOTES
+END
+
+# FAN SCHEDULE: notes 1 "PROVIDE MOTORIZED DAMPER.", 2 "PROVIDE NEMA-1 TOGGLE SWITCH.",
+# 3 "PROVIDE SOLID STATE SPEED CONTROL.", 4 "PROVIDE TWO SPARE BELTS AND EXTENDED LUBE
+# LINES.", 5 "PROVIDE TWO SPEED FAN AND WALL MOUNTED THERMOSTAT.", 6 "INSTALL INLINE
+# FAN IN EXISTING EQUIPMENT VENT DUCT. PROVIDE WALL MOUNTED MANUAL SWITCH." Each row's
+# REMARKS cite its notes; control keys the switching/speed notes it cites (2, 3, 5, 6).
+# EF-5's HP cell prints "42 WATT", which keys motor_watts rather than motor_hp.
+TABLE
+sheet: bldg5406-hvac-demo-mechanical.pdf#6
+title: FAN SCHEDULE
+family: FAN
+render: page 6 unrotated crop 22,383,398,80 at 7x in 2 tiles (MARK column repeated), notes in the same tiles; second read at 10x (crop 125,398,80,40) of every row's CFM, S.P., RPM and HP
+rows: all 5 printed rows
+col: MARK => tag
+col: QTY. => qty
+col: MANUFACTURER / MODEL => -
+col: CFM => cfm
+col: S.P. (IN. W.C.) => esp_in
+col: MOTOR RPM => rpm
+col: ELECTRICAL / HP => motor_hp
+col: [ELECTRICAL / HP: a cell printed in WATT] => motor_watts
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / Ø => phase
+col: ELECTRICAL / HZ. => -
+col: TYPE => -
+col: DRIVE => drive
+col: SERVICE => service
+col: REMARKS => -
+col: [NOTES 2, 3, 5, 6 as the row's REMARKS cite them: how the fan is switched and controlled] => control
+grid:
+EF-1 | 1 | GREENHECK / CW-080-VG | 165 | 0.5 | 1725 | 1/10 |  | 115 | 1 | 60 | CENTRIFUGAL SIDEWALL | direct (DIRECT) | RESTROOMS | SEE NOTES 1, 2, 3 | =NEMA-1 TOGGLE SWITCH; SOLID STATE SPEED CONTROL (PROVIDE NEMA-1 TOGGLE SWITCH. PROVIDE SOLID STATE SPEED CONTROL.)
+EF-2 | 1 | GREENHECK / CWB-099-4 | 400 | 0.5 | 1725 | 1/4 |  | 115 | 1 | 60 | CENTRIFUGAL SIDEWALL | belt (BELT) | SPECTROMETRIC OIL ANALYSIS | SEE NOTES 1, 2, 4 | =NEMA-1 TOGGLE SWITCH (PROVIDE NEMA-1 TOGGLE SWITCH.)
+EF-3 | 1 | GREENHECK / CWB-099-4 | 300 | 0.4 | 1725 | 1/4 |  | 115 | 1 | 60 | CENTRIFUGAL SIDEWALL | belt (BELT) | FILM PROCESSING | SEE NOTES 1, 2, 4 | =NEMA-1 TOGGLE SWITCH (PROVIDE NEMA-1 TOGGLE SWITCH.)
+EF-4 | 1 | GREENHECK / CW-070-VG | 200 | 0.4 | 1725 | 1/10 |  | 115 | 1 | 60 | CENTRIFUGAL SIDEWALL | direct (DIRECT) | MECHANICAL 113A | SEE NOTES 1, 2, 4, 5 | =NEMA-1 TOGGLE SWITCH; TWO SPEED FAN AND WALL MOUNTED THERMOSTAT (PROVIDE NEMA-1 TOGGLE SWITCH. PROVIDE TWO SPEED FAN AND WALL MOUNTED THERMOSTAT.)
+EF-5 | 1 | SUNCOURT / DB204P | 80 | - | - | ?42 WATT | 42 | 120 | 1 | 60 | INLINE DUCT | direct (DIRECT) | SPECTROMETRIC OIL ANALYSIS | SEE NOTES 1, 2, 3, 6 | =NEMA-1 TOGGLE SWITCH; SOLID STATE SPEED CONTROL; WALL MOUNTED MANUAL SWITCH (PROVIDE NEMA-1 TOGGLE SWITCH. PROVIDE SOLID STATE SPEED CONTROL. INSTALL INLINE FAN IN EXISTING EQUIPMENT VENT DUCT. PROVIDE WALL MOUNTED MANUAL SWITCH.)
+END
+
+# PACKAGED AIR COOLED CHILLER SCHEDULE: notes 1 "PROVIDE CONTROL TRANSFORMER AND FLOW
+# SWITCH.", 2 "CAPACITY BASED ON 105°F AMBIENT TEMPERATURE.", 3 (warranty).
+TABLE
+sheet: bldg5406-hvac-demo-mechanical.pdf#6
+title: PACKAGED AIR COOLED CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 6 unrotated crop 22,462,320,50 at 7x in 1 tile, notes in the same tile; second read at 10x (crop 95,470,30,22) of tons and operating flow
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER / MODEL => -
+col: NOMINAL CAPACITY (TONS) => tons
+col: OPERATING WATER FLOW (GPM) => chw_gpm
+col: MINIMUM FLOW RATE (GPM) => -
+col: EWT / LWT (°F) => -
+col: [EWT / LWT (°F): EWT part] => chw_ewt_f
+col: [EWT / LWT (°F): LWT part] => chw_lwt_f
+col: IPLV/ NPLV => -
+col: MAX. EVAP. P.D. (FT) => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / Ø => phase
+col: ELECTRICAL / HZ. => -
+col: ELECTRICAL / TOTAL KW => kw_input
+col: REMARKS => -
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'PACKAGED AIR COOLED CHILLER SCHEDULE'
+grid:
+CH-1 | TRANE / CGAM 20 | 20 | 35.6 | 4.0 | 56 / 44 | 56 | 44 | 14.16 / 17.72 | 8.35 | 480 | 3 | 60 | 25.9 | SEE NOTES
+END
+
+# SPLIT SYSTEM AIR CONDITIONING UNITS: one printed row whose MARK is "AC-1 / ACCU-1",
+# the indoor and outdoor unit of one split system, and the compile claims the table as
+# both FCU and CONDENSING_UNIT. It is keyed as two instances from the same row: AC-1
+# (FCU: the indoor CFM) and ACCU-1 (CONDENSING_UNIT: the system's cooling MBH and its
+# single power connection). Notes 1 "INDOOR UNIT SHALL BE POWERED THROUGH THE OUTDOOR
+# UNIT." (so the electrical keys the outdoor unit), 2 (design conditions), 3 (basis of
+# design), 4 (condensate pump kit with float switch and alarm to the control system).
+TABLE
+sheet: bldg5406-hvac-demo-mechanical.pdf#6
+title: SPLIT SYSTEM AIR CONDITIONING UNITS
+family: FCU
+render: page 6 unrotated crop 22,517,405,68 at 7x in 1 tile, notes in the same tile; second read at 10x (crop 135,522,40,24) of the CFM
+rows: the 1 printed row, its indoor unit (AC-1)
+col: [MARK: the indoor unit, before the slash] => tag
+col: INDOOR UNIT TYPE => -
+col: REFRIGERANT TYPE => -
+col: CFM => cfm
+col: COOLING / MBH => -
+col: ELECTRICAL (V / φ / HZ) => -
+col: MCA (AMPS) (INDOOR / OUTDOOR) => -
+col: WEIGHT (LBS) (INDOOR / OUTDOOR) => -
+col: BASED ON MANUFACTURER / MODEL => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title 'SPLIT SYSTEM AIR CONDITIONING UNITS' with REFRIGERANT TYPE R410A: a refrigerant (DX) indoor unit (the author's reading)
+grid:
+AC-1 | WALL MOUNTED | R410A | 530 | 24 | 208 / 1 / 60 | 1 / 18 | 53 / 163 | MITSUBISHI / PKA-A24FA / PUY-A24NHA | SEE NOTES
+END
+
+TABLE
+sheet: bldg5406-hvac-demo-mechanical.pdf#6
+title: SPLIT SYSTEM AIR CONDITIONING UNITS
+family: CONDENSING_UNIT
+render: page 6 unrotated crop 22,517,405,68 at 7x in 1 tile, notes in the same tile
+rows: the 1 printed row, its outdoor unit (ACCU-1)
+col: [MARK: the outdoor unit, after the slash] => tag
+col: INDOOR UNIT TYPE => -
+col: REFRIGERANT TYPE => -
+col: CFM => -
+col: COOLING / MBH => cooling_mbh
+col: ELECTRICAL (V / φ / HZ) => -
+col: [ELECTRICAL (V / φ / HZ): volts part] => volts
+col: [ELECTRICAL (V / φ / HZ): phase part] => phase
+col: MCA (AMPS) (INDOOR / OUTDOOR) => -
+col: WEIGHT (LBS) (INDOOR / OUTDOOR) => -
+col: BASED ON MANUFACTURER / MODEL => -
+col: REMARKS => -
+grid:
+ACCU-1 | WALL MOUNTED | R410A | 530 | 24 | 208 / 1 / 60 | 208 | 1 | 1 / 18 | 53 / 163 | MITSUBISHI / PKA-A24FA / PUY-A24NHA | SEE NOTES
+END
+
+# The drawn PUMP table on page 18 (plumbing sheet P-601) is claimed under no title; it
+# prints the title "CIRCULATING PUMP SCHEDULE" inside its own frame (catalogue: title
+# not taken). REMARKS: "STAINLESS STEEL HOUSING AND BMS CONTROLS" (the PUMP vocabulary
+# has no BAS attribute). LOCATION prints a room, not a level.
+TABLE
+sheet: bldg5406-hvac-demo-mechanical.pdf#18
+title: (untitled)
+family: PUMP
+render: page 18 unrotated crop 62,505,322,50 at 8x in 1 tile; second read at 10x (crop 120,515,28,28) of GPM and head
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER / MODEL => -
+col: GPM => gpm
+col: TD HEAD IN FT. => head_ft
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / V => volts
+col: ELECTRICAL / φ => phase
+col: ELECTRICAL / HZ => -
+col: SERVING => service
+col: LOCATION => -
+col: REMARKS => -
+grid:
+CP-1 | GRUNDFOS / MAGNA3 32-60 F (N) | 4 | 40 | 1/25 | 115 | 1 | 60 | 110° F RETURN | MECH. RM | STAINLESS STEEL HOUSING AND BMS CONTROLS
+END
