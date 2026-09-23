@@ -1,0 +1,112 @@
+# 30_WA_SpokaneTransit_CoolingTower — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M-002 (PDF page 2) at 3x, read by eye on 2026-09-23.
+# The pipeline's output for this sheet was not consulted. Tables are the ones the
+# WP0.2 draw (seed 20260923) named for this document.
+SET 30_WA_SpokaneTransit_CoolingTower
+SEED 20260923
+SCOPE Sheet M-002 (page 2) of the Spokane Transit Plaza cooling tower and boiler replacement (Coffman Engineers), the tables drawn for this document.
+EXCLUDES Manufacturer, model, weight and dimension columns, electrical FLA/MCA/MOCP, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+TABLE
+sheet: 30_WA_SpokaneTransit_CoolingTower.pdf#2
+title: CLOSED COOLING TOWER SCHEDULE
+family: COOLING_TOWER
+render: page 2 crop 1050,118,1568,262 at 3x in 3 tiles (tag column repeated); second read of CT-1 flow, fan HP and volts on each tile
+rows: all 1 printed row
+col: TAG => tag
+col: [LOCATION names a level] => floor
+col: SERVES => area_served
+col: MANUFACTURER / MODEL => -
+col: TYPE => -
+col: COIL / FLOW RATE (GPM) => gpm
+col: COIL / EWT (°F) => ewt_f
+col: COIL / LWT (°F) => lwt_f
+col: COIL / EWB (°F) => -
+col: [COIL / CONNECTION INLET/OUTLET: size, inlet = outlet] => conn_in
+col: COIL / FLUID => -
+col: FAN(S) / NO. => -
+col: FAN(S) / MOTOR (HP) => fan_hp
+col: FAN(S) / CFM => -
+col: PUMP(S) / NO. => -
+col: PUMP(S) / MOTOR (HP) => -
+col: PUMP(S) / GPM => -
+col: PAN HTR (KW) => -
+col: MAKEUP WATER => -
+col: UNIT ELECTRICAL REQUIREMENTS / FLA => -
+col: UNIT ELECTRICAL REQUIREMENTS / MCA => -
+col: UNIT ELECTRICAL REQUIREMENTS / MOCP => -
+col: UNIT ELECTRICAL REQUIREMENTS / VOLTS => volts
+col: UNIT ELECTRICAL REQUIREMENTS / Ø => phase
+col: DIMENSIONS (L x W x H) => -
+col: OPER. WT. (LBS) => -
+col: NOTES => -
+derive: vfd = yes ; header=NOTE 2 ; note=note 2, cited by CT-1: 'PROVIDE WITH BALTIGUARD PLUS INTEGRAL VFD FAN SPEED CONTROL OR EQUIVALENT'
+grid:
+CT-1 | =ROOF (NW ROOF) | CONDENSER WATER | BAC/VFL-024-32J | CLOSED LOOP FLUID COOLER | 110 | 90 | 80 | 68 | 4 | 30%EG | 1 | 7.50 | 17,160 | 1 | 0.50 | 94 | 3.00 | 1-1/2" | 17.7 | 22 | 30 | 460 | 3 | 11ft x 4ft x 7.5ft | 5,750 | 1,2,3,4,5,6,7
+END
+
+TABLE
+sheet: 30_WA_SpokaneTransit_CoolingTower.pdf#2
+title: GAS-FIRED HYDRONIC BOILER SCHEDULE
+family: BOILER
+render: page 2 crop 1360,398,1225,180 at 3x in 2 tiles (tag column repeated); second read of input, flow and HWS/HWR connection
+rows: all 1 printed row
+col: TAG => tag
+col: [LOCATION names a level] => floor
+col: SERVES => area_served
+col: MANUFACTURER/ MODEL => -
+col: BOILER PERFORMANCE / INPUT (MBh) => input_mbh
+col: BOILER PERFORMANCE / OUTPUT (MBh) => output_mbh
+col: BOILER PERFORMANCE / EFF. % => -
+col: BOILER PERFORMANCE / EWT (F) => ewt_f
+col: BOILER PERFORMANCE / LWT (F) => lwt_f
+col: BOILER PERFORMANCE / FLOW (GPM) => gpm
+col: BOILER PERFORMANCE / WPD (FT WC) => -
+col: FLUID => -
+col: CONNECTIONS (IN) / FUEL GAS => -
+col: CONNECTIONS (IN) / HWS HWR => conn_in
+col: CONNECTIONS (IN) / GAS VENT => -
+col: [UNIT POWER REQUIREMENTS / V/PH: volts part] => volts
+col: [UNIT POWER REQUIREMENTS / V/PH: phase part] => phase
+col: UNIT POWER REQUIREMENTS / MCA => -
+col: UNIT POWER REQUIREMENTS / MOCP => -
+col: OPER. WT. (LBS) => -
+col: REMARKS => -
+derive: fuel = gas ; header=TABLE TITLE ; note=title printed 'GAS-FIRED HYDRONIC BOILER SCHEDULE'
+grid:
+BOILER 1 | =BASEMENT (BASEMENT) | BUILDING | WEIL McCLAAIN 1288 | 3773 | 3162 | 83.1 | 160 | 180 | 250 | 10 | 30% PG | NA | ?(1) 6" (3) 5" | 14" | NA | NA | NA | NA | 7,260 | BURNER IS EXISTING, POWER CONNECTION AND GAS CONNECTION ARE EXISTING ON THE BURNER. FLOW CAN BE 500 GPM IF BOILERS ARE OPERATED IN SERIES. BURNER RATE WILL BE LIMITED. PROVIDE WITH PRESSURE SAFETY VALVE SET AT 50 PSIG.
+END
+
+# HVAC PUMP SCHEDULE: MOTOR SPEED prints CONSTANT on every row, yet note 2 (cited
+# by all three rows) says "VARIABLE FREQUENCY DRIVE PROVIDED BY CONTROLS, INSTALLED
+# BY E.C." and the VFD schedule on the same sheet lists VFD-1/2/3 for P-1/P-2/P-6.
+# Keyed as an estimator reads it: vfd = yes, sourced to NOTE 2.
+TABLE
+sheet: 30_WA_SpokaneTransit_CoolingTower.pdf#2
+title: HVAC PUMP SCHEDULE
+family: PUMP
+render: page 2 crop 1435,615,1150,225 at 3x in 2 tiles (tag column repeated) and notes crop 1435,828,760,95 at 3x; second read of P-1 GPM, P-2 HP and P-6 RPM
+rows: all 3 printed rows (a fourth ruled row is empty)
+col: TAG => tag
+col: SERVICE => service
+col: MFR => -
+col: MODEL NUMBER => -
+col: TYPE => -
+col: IMP. SIZE => -
+col: GPM => gpm
+col: HEAD FT H20 => head_ft
+col: [FLUID: glycol percent] => glycol_pct
+col: MOTOR RPM => rpm
+col: MOTOR SPEED => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / HP => motor_hp
+col: WEIGHT (LBS) => -
+col: NOTES => -
+col: [NOTE 2: VARIABLE FREQUENCY DRIVE PROVIDED BY CONTROLS] => vfd
+col: [NOTE 1: P-1 AND P-2 ARE REDUNDANT AND SHALL ALTERNATE OPERATION] => pump_arrangement
+grid:
+P-1 | HEATING WATER | BELL&GOSSETT | e-1510-4GC | END SUCTION | 11.125 | 502 | 120 | 30% P.G. | 1770 | CONSTANT | 460 | 3 | 25 | 520 | 1, 2, 3, 4, 6 | yes | duty_standby
+P-2 | HEATING WATER | BELL&GOSSETT | e-1510-4GC | END SUCTION | 11.125 | 502 | 120 | 30% P.G. | 1770 | CONSTANT | 460 | 3 | 25 | 520 | 1, 2, 3, 4, 6 | yes | duty_standby
+P-6 | CONDENSER WATER | BELL&GOSSETT | e-1510-1.5AD | END SUCTION | 5.5 | 110 | 120 | 30% E.G. | 3600 | CONSTANT | 460 | 3 | 10 | 318 | 2, 3, 5, 6 | yes |
+END
