@@ -1,5 +1,5 @@
 {
- "_about": "ASSEMBLIES goal WP0.2 input: which engineering firm drafted each locally present corpus document, so the dev / held-out split can keep one drafter's documents on one side. Evidence is the PDF's own text layer (title blocks) or sets.json provenance, gathered 2026-09-23 with pymupdf page.get_text(); a firm is named only where that text names it. A document with no identifiable firm is its own group. Two documents are grouped when the text shows a shared firm or a shared design team; that is deliberately conservative (it can only make the held-out side harder, never leak a drafter into it). Byte-identical documents are marked duplicate_of and never counted twice.",
+ "_about": "ASSEMBLIES goal WP0.2 input: which engineering firm drafted each locally present corpus document, so the dev / held-out split can keep one drafter's documents on one side. Evidence is the PDF's own text layer (title blocks) or sets.json provenance, gathered 2026-09-23 with pymupdf page.get_text(); a firm is named only where that text names it. A document with no identifiable firm is its own group. Two documents are grouped when the text shows a shared firm or a shared design team; that is deliberately conservative (it can only make the held-out side harder, never leak a drafter into it). Byte-identical documents are marked duplicate_of and never counted twice. Firms were re-checked against a render of each document's title block on 2026-09-23 (before the split was drawn); two text-layer attributions were corrected that way (federal-mech, 031/040).",
  "groups": {
   "72abw-civil-engineer": {
    "firm": "72 ABW Civil Engineer Directorate (Tinker AFB)",
@@ -8,12 +8,41 @@
    ],
    "evidence": "'72 ABW CIVIL ENGINEER DIRECTORATE' on 31/31 pages"
   },
+  "ace-inc": {
+   "firm": "ACE Inc. (Associated Construction Engineering), with Slate Architecture",
+   "sets": [
+    "12_MT_MSU_ReidHall_Renovation"
+   ],
+   "evidence": "M0.1 title block (render): Slate Architecture and 'ACE INC … ACE JOB 25B26166'; text layer 'ASSOCIATED CONSTRUCTION ENGINEERING'"
+  },
   "apogee-consulting": {
    "firm": "Apogee Consulting Group, P.A.",
    "sets": [
     "053_VA_Renovate_Expand_Emergency_Room_System_VA"
    ],
    "evidence": "'APOGEE CONSULTING GROUP, P.A.' under 'CONSULTANTS:' on 12/12 pages"
+  },
+  "atkins": {
+   "firm": "Atkins (Orlando FL)",
+   "sets": [
+    "094_FL_Orange_County_Regional_History_Center_HVAC"
+   ],
+   "evidence": "M-401 title block (render): 'ATKINS, 482 SOUTH KELLER ROAD, ORLANDO, FL 32810'"
+  },
+  "burns-mcdonnell": {
+   "firm": "Burns & McDonnell (navfac: A/E of record, Chesapeake VA office, for NAVFAC Mid-Atlantic; 060: construction manager / prime on a design-build job)",
+   "sets": [
+    "navfac-cherry-point-atc",
+    "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project"
+   ],
+   "evidence": "navfac M-601 title block (render): 'BURNS McDONNELL, 1305 EXECUTIVE BLVD. SUITE 160, CHESAPEAKE, VA 23320' under the NAVFAC block. 060 text: 'SUBMITTED TO FIRE PROTECTION ENGINEERING AND BURNS & MCDONNELL CONSTRUCTION MANAGER' (p1) and 'AT NO ADDITIONAL COST TO BURNS AND MCDONNELL' (p39); its title block is blank. Grouped conservatively: the same firm may have designed both"
+  },
+  "casco-diversified": {
+   "firm": "CASCO Diversified Corporation, Engineering (St. Louis)",
+   "sets": [
+    "004_MO_T2504_03_Interior_and_Exterior_Renovation"
+   ],
+   "evidence": "M-601 title block (render): 'CASCO DIVERSIFIED CORPORATION ENGINEERING', CASCO logo, 12 Sunnen Drive St. Louis; 'CASCO' on 51/51 pages"
   },
   "coffman-engineers": {
    "firm": "Coffman Engineers",
@@ -29,6 +58,13 @@
    ],
    "evidence": "'CROCKETT ENGINEERING CONSULANTS' (sic) title block p1; 'Crockett Engineering Consultants, LLC' p3. (031 mentions Crockett only as the author of a geotechnical report, so it is not grouped here.)"
   },
+  "davis-monthan-afb-ce": {
+   "firm": "Davis-Monthan AFB Civil Engineer Office (Air Combat Command, in-house)",
+   "sets": [
+    "bldg5406-hvac-demo"
+   ],
+   "evidence": "M-601 title block (render at 5x): 'DEPARTMENT OF THE AIR FORCE, AIR COMBAT COMMAND, DAVIS-MONTHAN AFB, ARIZONA, CIVIL ENGINEER OFFICE'. A different base and command from tinker-afb-iwcs-controls (72 ABW, Tinker AFB)"
+  },
   "imeg": {
    "firm": "IMEG Corp. (engineer of record on both VA sets: St. Louis office on 031, Naperville office on 040; Incandescence Life Safety on both)",
    "sets": [
@@ -42,7 +78,7 @@
    "sets": [
     "078_US_CP25028_MSU_Union_Sparty_Store_Renovations"
    ],
-   "evidence": "'MECHANICAL/ ELECTRICAL ENGINEER' + 'MATRIX CONSULTING' + 'CONSULTING ENGINEERS, INC' in the title block"
+   "evidence": "'MECHANICAL/ ELECTRICAL ENGINEER' + 'MATRIX CONSULTING' + 'CONSULTING ENGINEERS, INC' in the title block (a render of A-610 shows only the architect, Hobbs + Black; the M/E firm is named in the text layer of the M/E sheets)"
   },
   "musgrove-engineering": {
    "firm": "Musgrove Engineering, P.A. (with Miller Stauffer Architects on D-1)",
@@ -53,19 +89,12 @@
    ],
    "evidence": "sets.json gc for itd-d1-lab is 'Miller Stauffer Architects / Musgrove Engineering'; 'MUSGROVE' and 'ENGINEERING, P.A.' in the title block on 9/9 pages of 069; itd-d1-lab-raster is a synthetic raster of itd-d1-lab's own sheet (sets.json)"
   },
-  "navfac-mid-atlantic": {
-   "firm": "NAVFAC Mid-Atlantic (agency; A/E firm not named in the text layer)",
-   "sets": [
-    "navfac-cherry-point-atc"
-   ],
-   "evidence": "'NAVAL FACILITIES ENGINEERING COMMAND ~ MID-ATLANTIC' in the title block on 40/75 pages"
-  },
   "sazan-engineers": {
    "firm": "Sazan Engineers (with Cole Architects)",
    "sets": [
     "baker-county-eoc"
    ],
-   "evidence": "'SAZAN' on 31/65 pages; 'COLE ARCHITECTS, PLLC' copyright lines"
+   "evidence": "M6.01 title block (render): consultant 'SĀZĀN GROUP, 1030 NW Bond St., Bend, Oregon' under Cole Architects; 'SAZAN' on 31/65 pages"
   },
   "smithgroup": {
    "firm": "SmithGroup (MEP-FP engineering; Baskerville-Donovan is civil, IMEG electronic security, on the same title block)",
@@ -74,61 +103,19 @@
    ],
    "evidence": "title block of M7.1 (p14, render at 0.55x) lists 'SmithGroup — MEP-FP ENGINEERING', 'Baskerville-Donovan, Inc. — CIVIL ENGINEERING', 'IMEG Corporation — ELECTRONIC SECURITY / TELECOMMUNICATIONS'; 'SMITHGROUP' on 24/24 pages. CORRECTED 2026-09-23 before any draw: the first text-layer pass paired 'BASKERVILLE-DONOVAN, INC.' with the 'MEP-FP ENGINEERING' line; the render shows the pairing was wrong"
   },
-  "unidentified:004_MO_T2504_03_Interior_and_Exterior_Renovation": {
-   "firm": null,
+  "summit-consultants": {
+   "firm": "Summit Consultants, Inc. (Fort Worth TX)",
    "sets": [
-    "004_MO_T2504_03_Interior_and_Exterior_Renovation"
+    "tarrant-county-mechanical"
    ],
-   "evidence": "title block reads only 'ENGINEERING'"
-  },
-  "unidentified:018_GA_USDA_ARS_U_S_National_Poultry_Research_Center": {
-   "firm": null,
-   "sets": [
-    "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center"
-   ],
-   "evidence": "title block reads 'ARCHITECTS/ENGINEERS PLANNING SURVEYING MANAGEMENT' with no firm name in the text layer"
-  },
-  "unidentified:060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project": {
-   "firm": null,
-   "sets": [
-    "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project"
-   ],
-   "evidence": "no firm name in the text layer"
+   "evidence": "1M108A title block (render): 'SUMMIT CONSULTANTS, INC., 1300 SUMMIT AVENUE, SUITE 500, FORT WORTH, TEXAS'"
   },
   "unidentified:074_CA_West_Valley_College_STEM_Classroom_HVAC": {
    "firm": null,
    "sets": [
     "074_CA_West_Valley_College_STEM_Classroom_HVAC"
    ],
-   "evidence": "only DSA (Division of the State Architect) stamps in the text layer"
-  },
-  "unidentified:094_FL_Orange_County_Regional_History_Center_HVAC": {
-   "firm": null,
-   "sets": [
-    "094_FL_Orange_County_Regional_History_Center_HVAC"
-   ],
-   "evidence": "no firm name in the text layer"
-  },
-  "unidentified:12_MT_MSU_ReidHall_Renovation": {
-   "firm": null,
-   "sets": [
-    "12_MT_MSU_ReidHall_Renovation"
-   ],
-   "evidence": "architect Slate Architecture, Inc.; the MEP firm is not named in the text layer"
-  },
-  "unidentified:bldg5406-hvac-demo": {
-   "firm": null,
-   "sets": [
-    "bldg5406-hvac-demo"
-   ],
-   "evidence": "no firm name in the text layer"
-  },
-  "unidentified:tarrant-county-mechanical": {
-   "firm": null,
-   "sets": [
-    "tarrant-county-mechanical"
-   ],
-   "evidence": "no firm name in the text layer"
+   "evidence": "title block (render): TD ARC (architect) and a California PE stamp whose name is not legible; no engineering firm named"
   },
   "up-engineers-architects": {
    "firm": "U.P. Engineers & Architects",
@@ -136,6 +123,13 @@
     "bessemer"
    ],
    "evidence": "'U.P. ENGINEERS' in the title block on 8/8 pages; sets.json provenance names the firm"
+  },
+  "usda-ars-southeast-area": {
+   "firm": "USDA Agricultural Research Service, Southeast Area (in-house, Stoneville MS)",
+   "sets": [
+    "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center"
+   ],
+   "evidence": "M-601 title block (render): 'USDA AGRICULTURAL RESEARCH SERVICE … SOUTHEAST AREA … STONEVILLE, MS'; no outside A/E named"
   }
  },
  "duplicates": {
