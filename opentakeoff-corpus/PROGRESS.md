@@ -1,5 +1,72 @@
 ## Active work
 
+### Active work: assemblies (GOAL LOOP S, `goals/ASSEMBLIES.md`) — started 2026-09-23
+
+Branch `claude/affectionate-darwin-316fwo` (the goal's BRANCH line names
+`assemblies`; the owner's `/goal` command named this branch, so the loop runs
+here). Coordinator only, one heavy job at a time. Bug catalogue:
+`ASSEMBLIES_BUG_CATALOGUE.md`. Reports: `reports/assemblies/`.
+
+**Gates passed:** none yet. **Now:** WP0 (baseline + harness + HIT fix).
+
+**SETUP — environment (2026-09-23).** Node 24.21.0 unpacked from the npm
+`node-linux-x64` package (nvm and nodejs.org are unreachable); one root
+`npm ci` in `opentakeoff/` (npm workspaces — separate installs in web/ and
+mcp/ break module resolution); `.venv-sidecar` (sidecar/requirements.txt +
+pymupdf) and `.venv-bas`; Java 21 for OpenDataLoader. Every command runs
+after `source /root/.ot-env.sh` (PATH, CA bundle,
+`OPENTAKEOFF_VECTORGRID_PYTHON`, `OPENTAKEOFF_BAS_PYTHON`). Measurements
+additionally set `OPENTAKEOFF_TABLE_SIDECAR_PYTHON` to the same venv; the
+guard runs below did not, and later guard runs keep that environment so
+before/after stay comparable.
+
+**SETUP — the guard is red at HEAD (AS-1), so the rule is "no new failure".**
+Measured on `71fb4b9` (= `origin/main` `5ab7ca8` + goal documents only):
+- web `npm run check`: typecheck OK; lint 0 errors / 3 warnings; `npm test`
+  3527 tests, 3511 pass, **3 fail**, 13 skipped — `sheetgraph.test.ts`
+  "multi-building: qualified ROW keys ('A-134') carry their building; sheet
+  numbers never mint rooms" (line 947), `tableRecallGaps.test.ts` "B-11: a
+  block the finish pass never claims is not silently skipped for it" and
+  "B-12: single-data-row schedules drawn in a real grid are extracted".
+  `check` stops at the failing `npm test`, so the rest of its chain was run
+  one script at a time: bench:bas-sync, bench:bas-drawings,
+  bench:bas-revision-inventory, bench:bas-deliverable-scope,
+  bench:bas-scope-review, bench:bas-readiness, bench, bench:linear and build
+  all exit 0. bench:linear rewrote `bench/linear/results.json` with timing
+  fields only (no metric changed); the file was restored.
+- mcp: typecheck OK. `npm test` (its `pretest` runs `test:bas` and the
+  revision/issue/scope suites: 133 + 33 + 6 + 17 tests, all pass) then the
+  main suite: 433 tests, 314 pass, **5 fail**, 114 skipped —
+  `conformance.test.ts` "sheet graph (#87): index, resolve with citations,
+  refusal with reasons, find_schedule" and "sweep_schedule_row: a mark drawn
+  only on non-plan sheets discloses reference_tags instead of refusing (WP4,
+  real navfac data)"; `crossCorpusWorkflow.test.mjs` "WP1 keyed compile
+  acceptance on ≥2 non-NAVFAC sets" with its subtests
+  `bldg5406-hvac-demo.compile.json` and `federal-mech.compile.json`
+  (TAKEOFF_BUG_CATALOGUE B-44/B-45/B-46). `check:tool-count` **fails**:
+  README.md and docs/USER_GUIDE.md say 60 tools, the server registers 61.
+- The conformance worker did not exit after its 20 tests reported: two idle
+  VectorGrid sidecars kept its event loop open (AS-6). Stopping the two
+  idle sidecars let it exit; no test result changed.
+- Logs: this session's scratchpad `guard/` (web-check-baseline.log,
+  web-<script>.log, mcp-<script>.log, wedge-evidence-conformance.txt).
+
+**WP0.2 seed, fixed before the census finished (19:10 UTC): `20260923`.**
+The draw is `assemblies-baseline.mjs --split 20260923` over the census; the
+seed is written here before any real draw exists, so it cannot have been
+chosen for the outcome. (The only earlier `--split` runs were on a synthetic
+census in the scratchpad, to prove the mode is deterministic.)
+
+**Asked of the owner once (goal INPUTS; keep going meanwhile):** HIT owners'
+answers on CoilDP / BranchDP / Tolerance and row limits (INPUT 2); Desigo
+Select import format, field-equipment type list and license-point counting
+(INPUT 3); one controls integrator and one mechanical contractor to review
+the starter library (INPUT 4, due at GATE 4); 2–3 real partner jobs with what
+was entered downstream, plus unseen PDFs for the NEW-DOCUMENT TESTs (INPUT
+5); network access for `drive.google.com` / `drive.usercontent.google.com`
+so the bulk corpus can be staged (AS-2).
+
+
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered
 only four hand-keyed sets. `sets.json` now registers 121 sets total (108
