@@ -8,7 +8,7 @@ here). Coordinator only, one heavy job at a time. Bug catalogue:
 `ASSEMBLIES_BUG_CATALOGUE.md`. Reports: `reports/assemblies/`.
 
 **Gates passed:** GATE 0 (2026-09-23; dev is below the TRUTH size target, a ceiling
-demonstrated in AS-7). **Now:** WP1 (canonical attribute schema).
+demonstrated in AS-7); GATE 1 (2026-09-23). **Now:** WP2 (structural normalizer).
 
 **SETUP — environment (2026-09-23).** Node 24.21.0 unpacked from the npm
 `node-linux-x64` package (nvm and nodejs.org are unreachable); one root
@@ -141,6 +141,47 @@ are outside the population; AS-8 lists them); editing any committed key.
   table-recall-eval, tag-eval: 163 modules), so WP0 cannot have moved its
   metrics. The loop's first corpus-eval run, the baseline WP1 and later
   compare against, is recorded here when it finishes.
+
+**WP1 — canonical attribute schema; GATE 1 passed (2026-09-23).**
+`web/src/lib/assemblies/attributes.ts` is on the shared path: normalize.ts,
+the attribute eval, typical selection and every surface read this one
+schema.
+- **Scope:** 30 equipment families (the census's ATTR_KEY_FAMILIES) and 107
+  canonical attributes: 81 number, 19 enum, 6 text, 1 size.
+- **Keyed attributes:** each family lists exactly the frozen key vocabulary,
+  707 family × attribute pairs mapping by identity onto 97 canonical
+  attributes.
+- **Extensions:** 39 family pairs (10 new attributes) for printed selectors
+  that vocabulary cannot hold (AS-12, AS-13, AS-14). Today's keys do not
+  score them.
+- **Units:** one canonical unit per number attribute, and exact factors
+  within a dimension only (BTU/H→MBH, W→kW, W↔hp at 745.7, feet of water→in.
+  w.c. ×12). Temperatures accept °F only.
+- **Examples:** 83 are a key's printed source header and 10 a transcription
+  column typed "-". 14 attributes are printed in no keyed table; the schema
+  says so, and GATE 1 fails the day a key prints one.
+
+**GATE 1** (`mcp/test/assembliesSchema.test.mjs`, 4 tests, in `npm test`)
+checks:
+- the schema's families equal the vocabulary's;
+- every key attribute maps to exactly one canonical attribute of its family
+  (injective), with the same kind and enum values;
+- all 7,348 key lines, dev and held-out, map; every printed unit converts;
+  all 3,061 printed values are canonical;
+- every example is a real key header or transcription column.
+
+`web/test/assemblies/attributes.test.ts` (5 tests) checks the schema's shape,
+units and enums.
+
+Negative controls each fail the intended test:
+- dropping BTU/H from MBH;
+- a made-up example header;
+- removing VAV's `ecm`.
+
+Also: test globs were added (web `test/assemblies/*.test.ts`, mcp
+`test/assembliesSchema.test.mjs`); web tsc and the mcp typecheck exit 0 (web
+eslint covers .js/.jsx only). The full guard runs after the corpus-eval
+baseline, one heavy job at a time.
 
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real

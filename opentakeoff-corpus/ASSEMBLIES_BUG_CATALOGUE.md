@@ -375,3 +375,32 @@ every key line's unit against the canonical schema. This entry extends AS-11
 - A unit that is not printed at all stays invented. The scorer needs a rule
   that tells the two apart (the row's cells, or the table's notes, name the
   unit), fixed before any normalizer output is scored.
+
+---
+
+## AS-14 — the frozen key vocabulary omits an air handler's return and exhaust airflow and its return-fan count (OPEN — scored only by a later key tier)
+
+**Found:** 2026-09-23, WP1, reviewing the canonical schema against plan
+§8.5 (THE LOOP step 7).
+
+**What:** plan §8.5 gives an air handler's fans (supply, return, relief,
+exhaust) each {cfm, hp, vfd}. The frozen key vocabulary
+(`assemblies-key-transcribe.mjs` AIR_HANDLER) has supply airflow, supply,
+return and exhaust fan HP, a supply-fan count and one unit-level VFD. It has
+no return or exhaust airflow and no return/relief fan count.
+
+**Evidence** (each printed column is typed "-" in its key):
+- federal-mech AHU-1: "AIRFLOW / DESIGN RETURN AIRFLOW" 21000 and "RELIEF
+  FAN / RF QTY" 2;
+- 031 WHSE-AHU-1: "AIR FLOW / RETURN / CFM" 12450;
+- navfac DOAH-A1 and DOAH-A2: "EXHAUST FAN / CFM" 1,280 and 1,380.
+
+**What happened:** WP1 adds `return_cfm`, `return_fan_qty` and `exhaust_cfm`
+as extensions for the six air-handler families. They are unscored today;
+keys are never edited.
+
+**Also recorded for GATE 1:** the schema check reads every key, dev and
+held-out, for units and enums. The held-out keys drove exactly two schema
+entries, both dimensionally exact conversions: W to kW (bessemer's heat pump
+electric coil) and feet of water to in. w.c. (bessemer's fan static, AS-13).
+No fitted value came from a held-out key.
