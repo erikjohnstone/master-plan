@@ -1,0 +1,379 @@
+# 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheets M-500 (PDF page 71), M-501 (page 72) and AE401 (page 33)
+# at 3x, read by eye on 2026-09-23. The pipeline's output for these sheets was not
+# consulted. This dev document's key covers every claimed keyed-family table
+# (01-split.md, key-authoring scope).
+#
+# These VA sheets print every quantity in imperial units with the SI value in brackets
+# ("CFM | [L/s]"); the imperial column keys, the bracketed SI column is typed "-". Several
+# schedules print one unit on two rows, SELECTION CRITERIA and OPERATING CONDITION: a
+# value that differs between the two rows is not ONE value ("?", both typed), a value
+# the two rows share keys once.
+SET 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for
+SEED 20260923
+SCOPE Sheets M-500 (page 71), M-501 (page 72) and AE401 (page 33) of the Harry S. Truman VA warehouse renovation for pandemic preparedness (IMEG), every claimed keyed-family table of this dev document.
+EXCLUDES Bracketed SI conversions, fan construction data, efficiencies, air-side temperatures, face data, pressure drops, NPSH, specific gravity, control-valve and trap data, component marks, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# FAN SCHEDULE (M-500): notes 1 "ALL SELECTIONS ARE BASED ON AN ALTITUDE OF 760..." and
+# 2 "PROVIDE CURB ADAPTER TO FIT EXISTING 14"X14" CURB." WHSE-SF1 and WHSE-RF1 each
+# print a SELECTION CRITERIA and an OPERATING CONDITION row. The supply fan sits in the
+# AHU (LOCATION WHSE-AHU1), so its TSP is not an external static; the stand-alone
+# return and exhaust fans' TSP keys esp_in (the author's reading). NUMBER OF FANS keys
+# qty; FAN MAX RPM is the fan's speed (the motor RPM column is the motor's). SPEED
+# CONTROL keys control as printed.
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71
+title: FAN SCHEDULE
+family: FAN
+render: page 71 crop 1268,108,1732,250 at 3x in 4 tiles (MARK column repeated) and notes crop 1268,355,700,45 at 3x; second read at 4x (crops 1540,185,60,170 and 2408,185,48,170) of every row's CFM and HP
+rows: all 6 printed rows, 4 marks (WHSE-SF1 and WHSE-RF1 print a selection and an operating row each)
+col: MARK => tag
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: AREA AND/OR BLDG SERVED => area_served
+col: SYSTEM AND/OR SERVICE => service
+col: AIR FLOW / CFM => cfm
+col: AIR FLOW / [L/s] => -
+col: TSP / IN => -
+col: [TSP / IN: the static pressure of a stand-alone return or exhaust fan] => esp_in
+col: TSP / [Pa] => -
+col: FAN / TYPE => -
+col: [FAN / NUMBER OF FANS: fans under the one mark] => qty
+col: FAN / WHEEL => -
+col: FAN / CLASS => -
+col: FAN / ARRANGEMENT, ROTATION, AND DISCHARGE => -
+col: FAN / DIAMETER / IN => -
+col: FAN / DIAMETER / [mm] => -
+col: FAN / MIN % EFF => -
+col: FAN / DRIVE => drive
+col: [FAN / FAN MAX RPM: the fan's speed] => rpm
+col: MOTOR ELECTRICAL / NOMINAL POWER / BHP => -
+col: MOTOR ELECTRICAL / NOMINAL POWER / HP => motor_hp
+col: MOTOR ELECTRICAL / NOMINAL POWER / [kW] => -
+col: MOTOR ELECTRICAL / PHASE => phase
+col: MOTOR ELECTRICAL / VOLT => volts
+col: MOTOR ELECTRICAL / RPM => -
+col: MOTOR ELECTRICAL / SPEED CONTROL => control
+col: CONTROL SEQUENCE => -
+col: REMARKS => -
+grid:
+WHSE-SF1 | WHSE-AHU1 |  | WAREHOUSE | WHSE-AHU-1 | ?13500 (SELECTION CRITERIA) / 11250 (OPERATING CONDITION) | [6400] / [5300] | 6.4 / 4.9 |  | [1600] / [1200] | PLENUM | 2 | AIRFOIL | II | ARR 3, CW ROTATION, TH DISCHARGE | 20 | [500] | 60% | direct (DIRECT) | 1314 | 10.25 | 15 | [11] | 3 | 460 | 1750 | VARIABLE |  | SELECTION CRITERIA / OPERATING CONDITION
+WHSE-RF1 | B309 CEILING |  | WAREHOUSE | WHSE-AHU-1 | ?11250 (SELECTION CRITERIA) / 9000 (OPERATING CONDITION) | [5300] / [4200] | 1 | 1 | [250] | MIXED FLOW | 1 | MIXED FLOW | I | ARR 4, INLINE, HORIZ. DISCHARGE | 27 | [680] | 60% | direct (DIRECT) | 950 | 3.13 | 5 | [4] | 3 | 460 | 1750 | VARIABLE |  | SELECTION CRITERIA / OPERATING CONDITION
+WHSE-EF1 | ROOF | =ROOF (ROOF) | WAREHOUSE | TOILET/ BREAKROOM... | 620 | [290] | 0.75 | 0.75 | [190] | DOWNBLAST CENTRIFUGAL | 1 | BIW | I | N/A | 10 | [250] | 50% | direct (DIRECT) | 1705 | 0.2 | 0.25 | [ ] | 1 | 120 | 1725 | CONSTANT |  | NOTE 2
+WHSE-EF2 | WALL |  | WAREHOUSE | FORKLIFT... | 1300 | [610] | 0.75 | 0.75 | [190] | SIDEWALL | 1 | BIW | I | N/A | 16.5 | [410] | 50% | direct (DIRECT) | 1200 | 0.275 | 0.334 | [ ] | 1 | 120 | 1725 | VARIABLE |  | ----
+END
+
+# STEAM HUMIDIFER SCHEDULE (M-500, title as printed): note 1 "COORDINATE DISPERSION PANEL
+# SIZE WITH AIR HANDLING UNIT WHSE-AHU-1 DIMENSIONS." A unit-mounted dispersion tube fed
+# from CLEAN STEAM (the sheet's clean steam generator) is direct steam injection (the
+# author's reading). Steam FLOW keys the capacity.
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71
+title: STEAM HUMIDIFER SCHEDULE
+family: HUMIDIFIER
+render: page 71 crop 1320,735,1680,140 at 3x in 4 tiles (MARK column repeated), note in the same tiles; second read at 4x (crop 2488,808,70,25) of the steam flow; whole table re-rendered at 4x with MuPDF (pymupdf get_pixmap on the same crop), re-checking CFM, LAT dewpoint and trap capacity
+rows: all 1 printed row
+col: MARK => tag
+col: LOCATION => -
+col: SYSTEM AND/OR SEVICE => -
+col: [HUMIDIFIER TYPE: a dispersion tube fed from a clean steam source] => humidifier_type
+col: AIR FLOW / CFM => -
+col: AIR FLOW / [L/s] => -
+col: # OF MANIFOLDS => -
+col: EAT / Db / °F => -
+col: EAT / Db / [°C] => -
+col: EAT / DEWPOINT / °F => -
+col: EAT / DEWPOINT / [°C] => -
+col: LAT / %RH => -
+col: LAT / DEWPOINT / °F => -
+col: LAT / DEWPOINT / [°C] => -
+col: SOURCE => -
+col: STEAM / PRESS ENT VALVE / PSIG => -
+col: STEAM / PRESS ENT VALVE / [kPa] => -
+col: STEAM / PRESS ENT DISPERSION... / PSIG => -
+col: STEAM / PRESS ENT DISPERSION... / [kPa] => -
+col: STEAM / FLOW / LBS/HR => capacity_lb_hr
+col: STEAM / FLOW / [kg/HR] => -
+col: CONTROL TYPE => -
+col: TRAP / MARK => -
+col: TRAP / CAPACITY / LBS/HR => -
+col: TRAP / CAPACITY / [kg/HR] => -
+col: REMARKS => -
+grid:
+WHSE-SH1 | WHSE-AHU-1 | WHSE-AHU-1 | direct_injection (UNIT-MOUNTED DISPERSION TUBE; SOURCE CLEAN STEAM) | 6075 | [2900] | 1 | 55 | [13] | 30.8 | [-1] | [60] | 41.1 | [5] | CLEAN STEAM | 2 | [14] | 0 | [ ] | 79.2 | [36] |  |  | 80 | [36] |
+END
+
+# STEAM TO WATER HEAT EXCHANGER SCHEDULE (M-500): each exchanger prints two rows, one per
+# steam control valve (REMARKS "1/3 CONTROL VALVE", "2/3 CONTROL VALVE"). The valves
+# carry 375 and 745 LBS/HR; no total prints, so the steam load is not one value. The
+# supply steam pressure is the one entering the control valve (15 PSIG; 5 PSIG enters
+# the exchanger). REHEAT WATER is heating hot water (the author's reading).
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71
+title: STEAM TO WATER HEAT EXCHANGER SCHEDULE
+family: HEAT_EXCHANGER
+render: page 71 crop 1325,890,1675,200 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 1836,985,58,95) of both units' water EWT; whole table re-rendered at 4x with MuPDF, re-checking both units' GPM, steam PSIG and control valve LBS/HR
+rows: all 4 printed rows, 2 marks (each exchanger prints a row per control valve)
+col: MARK => tag
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: AREA AND/OR BLDG SERVED => area_served
+col: SYSTEM AND/OR SERVICE => -
+col: TYPE => hx_type
+col: WATER CONDITIONS / FLOW / GPM => secondary_gpm
+col: WATER CONDITIONS / FLOW / [L/s] => -
+col: WATER CONDITIONS / EWT / °F => secondary_ewt_f
+col: WATER CONDITIONS / EWT / [°C] => -
+col: WATER CONDITIONS / LWT / °F => secondary_lwt_f
+col: WATER CONDITIONS / LWT / [°C] => -
+col: WATER CONDITIONS / WPD / FT => -
+col: WATER CONDITIONS / WPD / [kPa] => -
+col: [STEAM PRESSURE / ENT CONTROL VALVE / PSIG: the supply steam pressure] => primary_steam_psig
+col: STEAM PRESSURE / ENT CONTROL VALVE / [kPa] => -
+col: STEAM PRESSURE / ENT HEAT EXCHANGER / PSIG => -
+col: STEAM PRESSURE / ENT HEAT EXCHANGER / [kPa] => -
+col: CONTROL VALVE / Cv => -
+col: CONTROL VALVE / SIZE [MM] => -
+col: CONTROL VALVE / SIZE[IN] => -
+col: CONTROL VALVE / LBS/HR => primary_steam_lb_hr
+col: CONTROL VALVE / [kg/HR] => -
+col: TRAP / TRAP # => -
+col: TRAP / SIZE [MM] INCHES => -
+col: TRAP / CAPACITY / LBS/HR => -
+col: TRAP / CAPACITY / [kg/HR] => -
+col: REMARKS => -
+derive: primary_medium = steam ; header=TABLE TITLE ; note=title printed 'STEAM TO WATER HEAT EXCHANGER SCHEDULE'
+derive: secondary_medium = hw ; header=SYSTEM AND/OR SERVICE ; note=the water side is REHEAT WATER, heating hot water (the author's reading)
+grid:
+WHSE-HX1 | B1 C11 PIPE BASEMENT | =BASEMENT (B1 C11 PIPE BASEMENT) | WAREHOUSE | REHEAT WATER | shell_and_tube (SHELL & TUBE) | 55 | [4] | 120 | [49] | 160 | [71] | 5 | [15] | 15 | [100] | 5 | [35] | 7.3 / 14.5 | 20 / 25 | 0.75 / 1 | ?375 (1/3 CONTROL VALVE) / 745 (2/3 CONTROL VALVE) | [3] | WHSE-T2 | 2 | 2500 | [1100] | 1/3 CONTROL VALVE / 2/3 CONTROL VALVE
+WHSE-HX2 | B1 C11 PIPE BASEMENT | =BASEMENT (B1 C11 PIPE BASEMENT) | WAREHOUSE | REHEAT WATER | shell_and_tube (SHELL & TUBE) | 55 | [4] | 120 | [49] | 160 | [71] | 5 | [15] | 15 | [100] | 5 | [35] | 7.3 / 14.5 | 20 / 25 | 0.75 / 1 | ?375 (1/3 CONTROL VALVE) / 745 (2/3 CONTROL VALVE) | [3] | WHSE-T2 | 2 | 2500 | [1100] | 1/3 CONTROL VALVE / 2/3 CONTROL VALVE
+END
+
+# PUMP SCHEDULE (M-500): WHSE-P1 prints REMARKS "NOT USED" and nothing else (keyed as
+# printed: every value blank). LOCATION prints truncated room text ("B1 C11 PIPE...",
+# "CBG1 CEILING...") that names no level. FLUID WATER keys glycol_pct 0; SPEED CONTROL
+# VFD / NONE keys vfd; REMARKS DUTY/STANDBY keys the arrangement.
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#71
+title: PUMP SCHEDULE
+family: PUMP
+render: page 71 crop 1505,1105,1495,145 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 1995,1180,58,65) of every row's GPM
+rows: all 4 printed rows
+col: MARK => tag
+col: LOCATION => -
+col: AREA AND/OR BLDG SERVED => area_served
+col: SYSTEM AND/OR SERVICE => service
+col: TYPE => -
+col: CIRCULATING FLUID / FLUID => -
+col: [CIRCULATING FLUID / FLUID: WATER, so no glycol] => glycol_pct
+col: CIRCULATING FLUID / FLOW / GPM => gpm
+col: CIRCULATING FLUID / FLOW / [L/s] => -
+col: CIRCULATING FLUID / HEAD / FT => head_ft
+col: CIRCULATING FLUID / HEAD / [kPa] => -
+col: CIRCULATING FLUID / NPSH AVAILABLE / FT => -
+col: CIRCULATING FLUID / NPSH AVAILABLE / [kPa] => -
+col: CIRCULATING FLUID / TEMPERATURE / °F => -
+col: CIRCULATING FLUID / TEMPERATURE / [°C] => -
+col: CIRCULATING FLUID / SP GR => -
+col: MIN % EFF => -
+col: ELECTRICAL MOTOR / NOMINAL POWER / HP => motor_hp
+col: ELECTRICAL MOTOR / NOMINAL POWER / [kW] => -
+col: ELECTRICAL MOTOR / PHASE => phase
+col: ELECTRICAL MOTOR / VOLT => volts
+col: ELECTRICAL MOTOR / MAX RPM => rpm
+col: ELECTRICAL MOTOR / SPEED CONTROL => vfd
+col: REMARKS => -
+col: [REMARKS: DUTY/STANDBY] => pump_arrangement
+grid:
+WHSE-P1 |  |  |  |  |  |  |  | [ ] |  | [ ] |  | [ ] |  |  |  |  |  | [ ] |  |  |  |  | NOT USED |
+WHSE-P2 | B1 C11 PIPE... | B14 | REHEAT WATER | INLINE | WATER | 0 | 60 | [4] | 60 | [960] |  | N/A | 160 | [71] | 1.0 | 50 | 3 | [2] | 3 | 460 | 1800 | yes (VFD) | DUTY/STANDBY | duty_standby (DUTY/STANDBY)
+WHSE-P3 | B1 C11 PIPE... | B14 | REHEAT WATER | INLINE | WATER | 0 | 60 | [4] | 60 | [960] |  | N/A | 160 | [71] | 1.0 | 50 | 3 | [2] | 3 | 460 | 1800 | yes (VFD) | DUTY/STANDBY | duty_standby (DUTY/STANDBY)
+WHSE-P4 | CBG1 CEILING... | WHSE-AHU-1 | PREHEAT WATER | INLINE | WATER | 0 | 10 | [1] | 25 | [400] |  | N/A | 160 | [71] | 1.0 | N/A | 0.1667 | [.10] | 1 | 115 | 3300 | no (NONE) |  |
+END
+
+# AIR HANDLING UNIT SCHEDULE (M-501): a component index. It names the unit's fans,
+# filters, coils and humidifier by mark; their data are in their own schedules (the
+# FAN, CHILLED WATER COOLING COIL, HOT WATER HEATING COIL and STEAM HUMIDIFER schedules,
+# keyed there), so only what this table prints is keyed here. HEAT RECOVERY MARK prints
+# N/A (energy_recovery none) and HUMIDIFIER MARK names WHSE-SH-1 (humidifier yes), both
+# the author's reading. AIR FLOW prints VAV.
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72
+title: AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: page 72 crop 1375,108,1625,108 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 1845,183,58,22) of the minimum OA; whole table re-rendered at 4x with MuPDF, re-checking supply CFM, heat recovery mark and humidifier mark
+rows: all 1 printed row
+col: MARK => tag
+col: LOCATION => -
+col: AREA AND/OR BLDG SERVED => area_served
+col: TYPE => -
+col: AIR FLOW => -
+col: AIR FLOW / SUPPLY / CFM => supply_cfm
+col: AIR FLOW / SUPPLY / [L/s] => -
+col: AIR FLOW / MIN OA / CFM => oa_cfm_min
+col: AIR FLOW / MIN OA / [L/s] => -
+col: AIR FLOW / RETURN / CFM => -
+col: AIR FLOW / RETURN / [L/s] => -
+col: SUPPLY FAN MARK => -
+col: RETURN OR RELIEF FAN MARK => -
+col: EXHAUST FAN MARK => -
+col: PREFILTER MARK => -
+col: AFTER FILTER MARK => -
+col: FINAL FILTER MARK => -
+col: [HEAT RECOVERY MARK: N/A, so none] => energy_recovery
+col: PREHEAT COIL MARK => -
+col: COOLING COIL MARK => -
+col: REHEAT COIL => -
+col: [HUMIDIFIER MARK: a humidifier is scheduled] => humidifier
+col: REMARKS => -
+grid:
+WHSE-AHU-1 | CORRIDOR CBG1... | WAREHOUSE | MODULAR ROOFTOP | VAV | 13500 | [6400] | 1920 | [910] | 12450 | [5900] | WHSE-SF-1 | WHSE-RF-1 | N/A | WHSE-PF-1 | N/A | WHSE-FF-1 | none (N/A) | WHSE-PC-1 | WHSE-CC-1 | AT TU | yes (WHSE-SH-1) | -----
+END
+
+# CHILLED WATER COOLING COIL SCHEDULE (M-501): note "THE COOLING COIL FIN SPACING SHALL
+# NOT EXCEED 132 FINS PER FOOT [400 FINS PER METER]." WHSE-CC-1 prints a selection and
+# an operating row; airflow, capacity and GPM differ, the water temperatures do not.
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72
+title: CHILLED WATER COOLING COIL SCHEDULE
+family: DUCT_MOUNTED_COIL
+render: page 72 crop 1140,228,1860,145 at 3x in 5 tiles (MARK column repeated), note in the same tiles; second read at 4x (crop 2123,300,58,38) of both rows' total capacity; whole table re-rendered at 4x with MuPDF, re-checking both rows' CFM, GPM, EWT and LWT
+rows: both printed rows, 1 mark (a selection and an operating row)
+col: MARK => tag
+col: LOCATION => -
+col: AREA AND/OR BLDG SERVED => area_served
+col: SYSTEM AND/OR SERVICE => -
+col: AIR FLOW / CFM => cfm
+col: AIR FLOW / [L/s] => -
+col: MAX FACE VELOCITY / FPM => -
+col: MAX FACE VELOCITY / [M/s] => -
+col: APD / IN WG => -
+col: APD / [Pa] => -
+col: EAT / Db / °F => -
+col: EAT / Db / [°C] => -
+col: EAT / Wb / °F => -
+col: EAT / Wb / [°C] => -
+col: LAT / Db / °F => -
+col: LAT / Db / [°C] => -
+col: LAT / Wb / °F => -
+col: LAT / Wb / [°C] => -
+col: TOTAL CAPACITY / MBH => cooling_mbh
+col: TOTAL CAPACITY / [kW] => -
+col: SENSIBLE CAPACITY / MBH => -
+col: SENSIBLE CAPACITY / [kW] => -
+col: CHILLED WATER / FLOW / GPM => chw_gpm
+col: CHILLED WATER / FLOW / [L/s] => -
+col: CHILLED WATER / EWT / °F => chw_ewt_f
+col: CHILLED WATER / EWT / [°C] => -
+col: CHILLED WATER / LWT / °F => chw_lwt_f
+col: CHILLED WATER / LWT / [°C] => -
+col: CHILLED WATER / WPD / FT => -
+col: CHILLED WATER / WPD / [M] => -
+col: REMARKS => -
+grid:
+WHSE-CC-1 | WHSE-AHU-1 | WAREHOUSE | WHSE-AHU-1 | ?13500 (SELECTION CRITERIA) / 11250 (OPERATING CONDITION) | [6400] / [5300] | 445 / 375 | [2] | 0.65 / 0.05 | [160] / [13] | 77.8 | [25] | 66.8 | [19] | 53 / 52.3 | [12] / [11] | 52.9 / 52.1 | [12] / [11] | ?570.59 (SELECTION CRITERIA) / 499 (OPERATING CONDITION) | [170] / [150] | 369.3 / 316.5 | [110] / [93] | ?81.2 (SELECTION CRITERIA) / 71 (OPERATING CONDITION) | [5] | 42 | [6] | 56 | [13] | 10 | [3] | SELECTION CRITERIA / OPERATING CONDITION
+END
+
+# HOT WATER HEATING COIL SCHEDULE (M-501): 15 printed rows for 14 marks. WHSE-PHC1 prints
+# identical SELECTION CRITERIA and OPERATING CONDITION rows (keyed once). % GLYCOL prints
+# 0 on every row (the duct-coil vocabulary has no glycol attribute).
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72
+title: HOT WATER HEATING COIL SCHEDULE
+family: DUCT_MOUNTED_COIL
+render: page 72 crop 1415,615,1585,305 at 3x in 4 tiles (MARK column repeated); second read at 4x (crops 1808,690,58,225 and 2280,690,148,225) of every row's CFM, MBH and GPM
+rows: all 15 printed rows, 14 marks (WHSE-PHC1 prints two identical rows)
+col: MARK => tag
+col: LOCATION => -
+col: AREA AND/OR BLDG SERVED => area_served
+col: SYSTEM AND/OR SERVICE => -
+col: APPLICATION => -
+col: AIR FLOW / CFM => cfm
+col: AIR FLOW / [L/s] => -
+col: MAX FACE VELOCITY / FPM => -
+col: MAX FACE VELOCITY / [M/s] => -
+col: MAX APD / IN WG => -
+col: MAX APD / [Pa] => -
+col: TEMPERATURES / EAT / °F => -
+col: TEMPERATURES / EAT / [°C] => -
+col: TEMPERATURES / LAT / °F => -
+col: TEMPERATURES / LAT / [°C] => -
+col: TOTAL MIN CAPACITY / MBH => heating_mbh
+col: TOTAL MIN CAPACITY / [kW] => -
+col: HOT WATER / FLOW / GPM => hw_gpm
+col: HOT WATER / FLOW / [L/s] => -
+col: HOT WATER / EWT / °F => hw_ewt_f
+col: HOT WATER / EWT / [°C] => -
+col: HOT WATER / LWT / °F => hw_lwt_f
+col: HOT WATER / LWT / [°C] => -
+col: HOT WATER / WPD / FT => -
+col: HOT WATER / WPD / [kPa] => -
+col: % GLYCOL => -
+col: REMARKS => -
+grid:
+WHSE-PHC1 | WHSE-AHU-1 | WAREHOUSE | WHSE-AHU-1 | PREHEAT | 6075 | [2900] | 213 | [1] | 0.015 | [4] | 45.0 | [7] | 74.0 | [23] | 188.0 | [640] | 9.4 | [.6] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | SELECTION CRITERIA / OPERATING CONDITION
+WHSE-RHC1 | 1-1-TU01 | W05 | WHSE-AHU-1 | REHEAT | 600 | [280] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 25.9 | [88] | 1.7 | [.1] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC2 | 1-1-TU02 | W06 | WHSE-AHU-1 | REHEAT | 300 | [140] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 13.0 | [44] | 0.9 | [.1] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC3 | 1-1-TU03 | W01 | WHSE-AHU-1 | REHEAT | 370 | [170] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 16.0 | [55] | 1.1 | [.1] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC4 | 1-1-TU04 | W02 | WHSE-AHU-1 | REHEAT | 900 | [420] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 38.9 | [130] | 2.6 | [.2] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC5 | 1-1-TU05 | WC01A | WHSE-AHU-1 | REHEAT | 900 | [420] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 38.9 | [130] | 2.6 | [.2] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC6 | 1-1-TU06 | W05A | WHSE-AHU-1 | REHEAT | 300 | [140] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 13.0 | [44] | 0.9 | [.1] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC7 | 1-1-TU07 | W04 | WHSE-AHU-1 | REHEAT | 520 | [250] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 22.5 | [77] | 1.5 | [.1] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC8 | 1-1-TU08 | W09 | WHSE-AHU-1 | REHEAT | 180 | [85] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 7.8 | [27] | 0.5 | [.0] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC9 | 1-1-TU09 | W04A | WHSE-AHU-1 | REHEAT | 440 | [210] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 19.0 | [65] | 1.3 | [.1] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC10 | 1-1-TU10 | W03 | WHSE-AHU-1 | REHEAT | 1575 | [740] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 68.0 | [230] | 4.5 | [.3] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC11 | 1-1-TU11 | W03A | WHSE-AHU-1 | REHEAT | 1025 | [480] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 44.3 | [150] | 3.0 | [.2] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC12 | 2-1-TU12 | W11 | WHSE-AHU-1 | REHEAT | 2600 | [1200] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 112.3 | [380] | 7.5 | [.5] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+WHSE-RHC13 | 2-1-TU13 | W11 | WHSE-AHU-1 | REHEAT | 1125 | [530] |  | [ ] | .5 | [130] | 55.0 | [13] | 95.0 | [35] | 48.6 | [170] | 3.2 | [.2] | 160 | [71] | 120 | [49] | 5 | [15] | 0 | ---
+END
+
+# ELECTRIC UNIT HEATER SCHEDULE (M-501): REMARKS "EXISTING". The heater's capacity prints
+# in BTUH (keyed heating_mbh, in the unit it prints) and, bracketed, in watts: the bracket
+# is the SI conversion of the BTUH figure (17100 BTUH is about 5010 W), typed "-" like
+# every bracketed column on these sheets, so eh_kw stays not printed (one printed
+# quantity is one key line). POWER (460/3) is the heater's supply; the FAN MOTOR's own
+# 120/1 is typed "-". A third ruled row is empty.
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72
+title: ELECTRIC UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 72 crop 1745,1578,1255,140 at 3x in 3 tiles (MARK column repeated); second read at 4x (crop 2347,1650,62,40) of both rows' BTUH; whole table re-rendered at 4x with MuPDF, re-checking both rows' CFM, phase, volt and fan HP
+rows: all 2 printed rows (a third ruled row is empty)
+col: MARK => tag
+col: LOCATION => -
+col: AREA AND/OR BLDG SERVED => area_served
+col: TYPE => -
+col: AIR FLOW / CFM => cfm
+col: AIR FLOW / L/S => -
+col: EAT / °F => -
+col: EAT / [°C] => -
+col: MIN CAPACITY / BTUH => heating_mbh [BTU/H]
+col: MIN CAPACITY / [W] => -
+col: POWER / AMP => -
+col: POWER / PHASE => phase
+col: POWER / VOLT => volts
+col: FAN MOTOR / FAN POWER / HP => motor_hp
+col: FAN MOTOR / FAN POWER / [W] => -
+col: FAN MOTOR / PHASE => -
+col: FAN MOTOR / VOLT => -
+col: REMARKS => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC UNIT HEATER SCHEDULE' (TYPE: HORIZONTAL COIL RESISTANCE)
+grid:
+WHSE-EUH-1 | W02 | 14 RECEIVING DOCK | HORIZONTAL COIL RESISTANCE | 500 | [240] | 65 | [18] | 17100 | [5000] |  | 3 | 460 | 0.1 | [75] | 1 | 120 | EXISTING
+WHSE-EUH-2 | W02 | 14 RECEIVING DOCK | HORIZONTAL COIL RESISTANCE | 500 | [240] | 65 |  | 17100 | [5000] |  | 3 | 460 | 0.1 | [75] | 1 | 120 | EXISTING
+END
+
+# The drawn FAN claim on page 33 is the architectural sheet AE401's EQUIPMENT SCHEDULE:
+# KEY / JSN / DESCRIPTION / PROVIDED / INSTALLED for GB-18, GB-36, GB-42 (grab bars),
+# GH-1, GH-2 (garment hooks), IW-1 (ice and water dispenser), MR-1 (mirror), PT-1 (paper
+# towel dispenser), RF-2 (REFRIGERATOR / FREEZER), SD-1 (soap dispenser), TT-1 (toilet
+# tissue dispenser), WP-1 (waste paper basket). No row is a fan (catalogue: family
+# mismatch, likely the RF- prefix).
+TABLE
+sheet: 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#33
+title: EQUIPMENT SCHEDULE
+family: FAN
+render: page 33 (AE401) crop 2185,90,440,250 at 3x
+rows: none — AE401's architectural EQUIPMENT SCHEDULE of 12 toilet accessories and appliances; no row is a fan
+grid:
+END
