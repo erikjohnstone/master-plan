@@ -37,7 +37,12 @@ The file format is documented at the top of that script.
 6. **Second read.** Re-render the crop and re-check at least three cells per
    table, chosen before looking: the first row, the last row, and one
    middle row. Record the check in the table's `render:` line.
-7. **Expand and commit** the transcription with its key. A key is never
+7. **A schedule printed in parts is one table.** A title printed as
+   "… 1 OF 2" and "… 2 OF 2" on the same sheet names one schedule (the
+   compile strips that suffix too). Its key covers every printed part, and
+   each part is its own `TABLE` block with the same `title:`, so no column
+   of the unit is left out.
+8. **Expand and commit** the transcription with its key. A key is never
    edited after the pipeline has run on that sheet; a key that later looks
    wrong is written up in `ASSEMBLIES_BUG_CATALOGUE.md`.
 

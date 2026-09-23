@@ -200,11 +200,19 @@ const csvCell = (v) => {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
 
-/** Expand a parsed transcription into key rows; throws on anything invalid. */
+/** Expand a parsed transcription into key rows; throws on anything invalid.
+ * TABLE blocks with the same sheet + title are parts of one printed schedule
+ * ("… 1 OF 2" / "… 2 OF 2"): an instance's attributes merge across them, and
+ * two parts printing the same attribute for one instance is an error. */
 export function expandTranscription(doc) {
   if (!doc.set) throw new Error("missing SET");
-  const out = [];
-  const seenInstances = new Set();
+  const unitOf = (a) => (a.endsWith("_cfm") || a === "cfm" || a.startsWith("cfm_") ? "cfm"
+    : a.endsWith("_gpm") || a === "gpm" ? "gpm" : a.endsWith("_f") ? "F" : a.endsWith("_ft") ? "ft"
+      : a.endsWith("_in") ? "in" : a.endsWith("_mbh") ? "MBH" : a.endsWith("_hp") ? "hp" : a.endsWith("_kw") || a === "kw_input" ? "kW"
+        : a === "tons" || a.endsWith("_tons") ? "tons" : a === "volts" ? "V" : a.endsWith("_lb_hr") ? "lb/hr"
+          : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : a.endsWith("_pct") ? "%" : "");
+  const instances = new Map(); // sheet|title|tag -> { base, family, values: Map(attr -> line) }
+  const order = [];
   for (const t of doc.tables) {
     for (const k of ["sheet", "title", "family", "render", "rows"]) if (!t[k]) throw new Error(`TABLE ${t.title || "?"}: missing ${k}:`);
     const attrs = KEY_ATTRIBUTES[t.family];
@@ -224,33 +232,41 @@ export function expandTranscription(doc) {
       if (mapped.has(d.attr) || derived.has(d.attr)) throw new Error(`TABLE ${t.title}: ${d.attr} both mapped and derived`);
       derived.set(d.attr, d);
     }
+    const seenInBlock = new Set();
     for (const row of t.grid) {
       const tag = row.cells[tagCol];
       if (!tag) throw new Error(`line ${row.line}: empty tag`);
+      if (seenInBlock.has(tag)) throw new Error(`line ${row.line}: tag ${tag} twice in one TABLE block`);
+      seenInBlock.add(tag);
       const key = `${t.sheet}|${t.title}|${tag}`;
-      if (seenInstances.has(key)) throw new Error(`line ${row.line}: duplicate instance ${key}`);
-      seenInstances.add(key);
+      let inst = instances.get(key);
+      if (!inst) {
+        inst = { base: { sheet: t.sheet, table_title: t.title, tag, family: t.family }, attrs, values: new Map() };
+        instances.set(key, inst);
+        order.push(key);
+      } else if (inst.base.family !== t.family) {
+        throw new Error(`line ${row.line}: ${tag} is ${inst.base.family} in one part and ${t.family} in another`);
+      }
+      const put = (attr, line) => {
+        if (inst.values.has(attr)) throw new Error(`line ${row.line}: ${tag}.${attr} printed in two parts of ${t.title}`);
+        inst.values.set(attr, line);
+      };
       for (const [attr, spec] of Object.entries(attrs)) {
-        const base = { sheet: t.sheet, table_title: t.title, tag, family: t.family, attribute: attr };
-        const unitOf = (a) => (a.endsWith("_cfm") || a === "cfm" || a.startsWith("cfm_") ? "cfm"
-          : a.endsWith("_gpm") || a === "gpm" ? "gpm" : a.endsWith("_f") ? "F" : a.endsWith("_ft") ? "ft"
-            : a.endsWith("_in") ? "in" : a.endsWith("_mbh") ? "MBH" : a.endsWith("_hp") ? "hp" : a.endsWith("_kw") || a === "kw_input" ? "kW"
-              : a === "tons" || a.endsWith("_tons") ? "tons" : a === "volts" ? "V" : a.endsWith("_lb_hr") ? "lb/hr"
-                : a === "rpm" ? "rpm" : a === "motor_watts" ? "W" : a.endsWith("_pct") ? "%" : "");
         let unit = spec.type === "num" || spec.type === "size" ? unitOf(attr) : "";
         if (mapped.has(attr)) {
           const col = t.cols[mapped.get(attr)];
           const cell = row.cells[mapped.get(attr)];
           if (col.unit) unit = col.unit;
+          const header = col.header.replace(/^\[|\]$/g, "");
           if (cell.startsWith("?")) {
-            out.push({ ...base, value: "", unit, source_header: col.header, note: `printed '${cell.slice(1).trim()}' — not a single value for this attribute` });
+            put(attr, { value: "", unit, source_header: header, note: `printed '${cell.slice(1).trim()}' — not a single value for this attribute` });
             continue;
           }
-          if (!cell) { out.push({ ...base, value: "", unit, source_header: col.header, note: "blank cell" }); continue; }
+          if (!cell) { put(attr, { value: "", unit, source_header: header, note: "blank cell" }); continue; }
           // A printed dash / N/A in a number column says "none here": no value,
           // and the printed mark is kept so the scorer can tell it from a blank.
           if ((spec.type === "num" || spec.type === "size") && /^(-+|—|–|N\/?A|NONE)$/i.test(cell)) {
-            out.push({ ...base, value: "", unit, source_header: col.header, note: `printed '${cell}'` });
+            put(attr, { value: "", unit, source_header: header, note: `printed '${cell}'` });
             continue;
           }
           let value;
@@ -268,17 +284,24 @@ export function expandTranscription(doc) {
           }
           if (!note && (spec.type === "num" || spec.type === "size") && value !== cell) note = `printed '${cell}'`;
           if (col.header.startsWith("[")) note = note ? `${note}; author's reading of the printed row` : "author's reading of the printed row";
-          out.push({ ...base, value, unit, source_header: col.header.replace(/^\[|\]$/g, ""), note });
+          put(attr, { value, unit, source_header: header, note });
         } else if (derived.has(attr)) {
           const d = derived.get(attr);
           let value = d.value;
           if (spec.type === "enum") value = parseEnum(d.value, spec.values).value;
           else if (spec.type === "num") value = parseNumber(d.value);
-          out.push({ ...base, value, unit, source_header: d.header, note: d.note });
-        } else {
-          out.push({ ...base, value: "", unit, source_header: "", note: "not printed" });
+          put(attr, { value, unit, source_header: d.header, note: d.note });
         }
       }
+    }
+  }
+  const out = [];
+  for (const key of order) {
+    const inst = instances.get(key);
+    for (const [attr, spec] of Object.entries(inst.attrs)) {
+      const unit = spec.type === "num" || spec.type === "size" ? unitOf(attr) : "";
+      const line = inst.values.get(attr) || { value: "", unit, source_header: "", note: "not printed" };
+      out.push({ ...inst.base, attribute: attr, ...line });
     }
   }
   return out;
