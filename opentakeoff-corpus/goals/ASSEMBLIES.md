@@ -1,6 +1,8 @@
 # Goal: assemblies — every counted unit expands into its points, devices and hook-ups, cite-backed and vendor-neutral
 
-Opened 2026-09-23. **Not started.** This goal has two supporting documents:
+Opened and owner-approved 2026-09-23. **Not started.** To run it, paste the
+KICKOFF PROMPT at the end of this file as a session's first message. This goal
+has two supporting documents:
 - `plans/04-assemblies-plan.md`: what assemblies are, what partners need, what
   the repo already has, and the design.
 - `plans/04-research/01–06`: the research, with every citation.
@@ -20,9 +22,10 @@ QUEUE.
 - Output is CSV and PDF, plus the existing HIT valve workbook. No connectors.
 - No pricing ships. Partners may add their own prices and labor.
 
-**This goal amends a standing boundary, and the owner must confirm it before
-WP3 lands.** `opentakeoff/docs/BAS_PRODUCTION_GOAL.md:22` forbids "costs,
-prices, quotations, monetary totals, labor hours, productivity rates,
+**This goal amends a standing boundary. The owner confirmed the amendment on
+2026-09-23**, and a banner at the top of `opentakeoff/docs/BAS_PRODUCTION_GOAL.md`
+records it. That file's first "Non-negotiable boundaries" bullet forbids
+"costs, prices, quotations, monetary totals, labor hours, productivity rates,
 commercial estimating, or supplier/product catalogs". This goal:
 - **allows** typical-derived points and devices, always labelled as derived
   from an explicit recipe and never as extracted fact;
@@ -52,9 +55,10 @@ edits their internals.
 | D8 | **Expressions** use a small, safe, Excel-like language: parsed, never passed to `eval`. References are validated on load and on edit. The fixed order is qty → waste → rounding, rounding happens at roll-up, and every stage is exported. | STACK's misspelled-variable pitfall; Quick Bid's rounding-changes-waste pitfall (research 01). The linear goal's live-vs-order precedent. |
 | D9 | **Exports:** a published CSV set plus PDF plus the HIT adapter. Desigo Select gets a **hand-entry worksheet** because no import is documented. | Research 03 §2–§4. |
 | D10 | **Starter library sources.** BAS: UFC 3-410-01 (2025) Table 3-1; UFGS 23 09 00/13/93; UFC 3-410-02; LBNL Modelica Buildings Library G36 (BSD-3-Clause-LBNL); 223P/Xeto/Brick. Hook-ups: the UFGS mechanical sections (23 64 26, 23 21 13, 23 21 23, 23 22 26, 23 30 00, 23 05 93, 23 81 47, 23 57 10, 23 64 10, 23 65 00, 23 52 00) and VA master specs, all US Government works. **ASHRAE text is never copied.** | Research 02 licensing summary; research 04 §7. UFC 3-410-01 public-release status and Table 3-1 were verified. |
-| D13 | **Two per-project settings drive hook-ups.** (1) A **hook-up profile**: balancing method, kits/hoses allowed and maximum kit size, 3-way allowed, P/T and thermometer policy, union→flange size. (2) An editable **responsibility matrix** (furnish / install / low-voltage wiring / line power / program / test) that defaults to the VA 23 09 23 Responsibility Table. Component lines carry **size and end type** so partner labor units apply. | Research 04: the variants come from the spec or owner standard, not the schedule, and the sources conflict (UFGS vs NSCS vs IMEG). VA 23 09 23's table was verified. Labor units are keyed item × size × material × joint (MCAA/PHCC structure). |
-| D11 | **Fix the HIT adapter's semantics.** Column H `CoilDP` ("Consumer Δp") is the coil's drop, not the valve's (GPM/Cv)². Tolerance is limited to {10,20,30,40,50}. The signal default must be disclosed. **Until the HIT owners confirm, leave H blank** rather than keep the wrong value, and put coil Δp and valve Δp in `valves.csv`. | Verified in the committed workbook's defined names and validations (plan §5). |
+| D11 | **Fix the HIT adapter's semantics first (WP0.4), because partners may already be using the export.** Column H `CoilDP` ("Consumer Δp") is the coil's drop, not the valve's (GPM/Cv)². Tolerance is limited to {10,20,30,40,50}. The signal default must be disclosed. **Until the HIT owners confirm, leave H blank** rather than keep the wrong value, and put coil Δp and valve Δp in `valves.csv` (WP7). | Verified in the committed workbook's defined names and validations (plan §5). A wrong number in a sizing input is worse than a blank the partner fills. |
 | D12 | **Controller I/O is tallied in TypeScript** (sums by unit, building and floor). `bas_engine/**` is not touched by this goal. | The static host cannot run Python. The tallies are simple sums; bas_engine owns capacity math under its own contracts. |
+| D13 | **Two per-project settings drive hook-ups.** (1) A **hook-up profile**: balancing method, kits/hoses allowed and maximum kit size, 3-way allowed, P/T and thermometer policy, union→flange size. (2) An editable **responsibility matrix** (furnish / install / low-voltage wiring / line power / program / test) that defaults to the VA 23 09 23 Responsibility Table. Component lines carry **size and end type** so partner labor units apply. | Research 04: the variants come from the spec or owner standard, not the schedule, and the sources conflict (UFGS vs NSCS vs IMEG). VA 23 09 23's table was verified. Labor units are keyed item × size × material × joint (MCAA/PHCC structure). |
+| D14 | **Optional partner price/labor fields are in scope (WP9).** Partner-entered, opaque, labelled "partner-entered" everywhere, and never shipped. | Owner approval, 2026-09-23. The user expects partners to need their own prices. |
 
 ---
 
@@ -62,7 +66,9 @@ edits their internals.
 GOAL LOOP S — assemblies: read the unit, pick the recipe, expand it, cite it, export it
 
 REPO      erikjohnstone/master-plan
-BRANCH    ONE long-lived feature branch `assemblies`, created from `main`. Small
+BRANCH    ONE long-lived feature branch `assemblies`, created from `main` once
+          the branch carrying this goal (claude/affectionate-darwin-316fwo)
+          has merged; until then, create it from that branch. Small
           commits, one WP step each. Every commit body states SHOULD-THIS-BE-ON-
           THE-SHARED-PATH and the before/after numbers. Open a DRAFT PR at the
           end of WP2 and keep it updated. NEVER merge to main yourself — merge
@@ -227,7 +233,8 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
 
 ════ THE QUEUE — work packages, in order ═══════════════════════════════
 
-  WP0  BASELINE + HARNESS (no production code).
+  WP0  BASELINE + HARNESS. No production code, except the HIT correctness
+       fix in 0.4.
     0.1 scripts/assemblies-baseline.mjs. For each corpus set (VectorGrid on),
         compile hvac_equipment and record:
           · instances per family;
@@ -242,8 +249,27 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
     0.2 Choose and freeze the dev and HELD-OUT document lists by seed (TRUTH).
         Commit the lists and the seed.
     0.3 Author the first *.attrs.csv keys (dev ≥12 documents).
+    0.4 HIT EXPORT CORRECTNESS (D11), in valveSizeExport.ts only:
+          · column H (CoilDP) is left blank, and the valve's own (GPM/Cv)²
+            moves to the export's coverage notes as "valve Δp (derived)"
+            until the HIT owners confirm CoilDP's meaning;
+          · tolerance is accepted only from {10,20,30,40,50}; anything else
+            is refused with a message;
+          · Positioning Signal comes only from a printed control-signal
+            cell: printed 0–10 V → "0...10 Vdc", printed floating →
+            "Floating control". The "MODULAT… → 0...10 Vdc" default and the
+            any-"x–yV" → 0...10 Vdc mapping are removed. Any other printed
+            value (2–10 V, 4–20 mA, 2-position) is left blank and disclosed,
+            because the template cannot represent it;
+          · Operating Voltage "24 VAC" is written only where a signal was
+            written (current behaviour, kept);
+          · coverage notes and the CHANGELOG say exactly what changed.
+        Tests are updated to the corrected semantics. Re-run the export on
+        navfac and itd-d1-lab (VectorGrid on) and report which columns
+        changed and how many rows.
     GATE 0: baseline reproducible by one command; keys committed with
-            scope headers; held-out list frozen; guard green.
+            scope headers; held-out list frozen; HIT correctness tests green
+            with the before/after column report; guard green.
 
   WP1  CANONICAL ATTRIBUTE SCHEMA.
     attributes.ts gives each family its attributes with units and enums (plan
@@ -299,7 +325,6 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
           · no double counting of nested sub-assemblies.
     GATE 3: tests green; property tests (random attribute sets) raise no
             exceptions; linear goldens byte-identical; guard green.
-            Owner confirmation of the doctrine amendment (header) received.
 
   WP4  STARTER LIBRARY v1 (vendor-neutral, sourced).
     4.1 us-typicals-v1.json: the 26 BAS typicals in research 02 §3b.
@@ -406,14 +431,12 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
         unless the partner filled them.
     7.2 A PDF section in the takeoff report: summary, per-family tables,
         exceptions, citations.
-    7.3 HIT adapter, per D11:
+    7.3 HIT adapter (the WP0.4 corrections stay in force):
           · also takes coil-derived valve roles (hydronic coils from existing
             embedded-coil detection → valve role with GPM, coil WPD, EWT,
             service), each row flagged "coil-derived";
-          · CoilDP left blank until the HIT owners confirm its meaning, then
-            filled from coil WPD (ft × 0.433 → psi);
-          · tolerance restricted to {10..50};
-          · signal default disclosed or left blank;
+          · CoilDP stays blank until the HIT owners confirm its meaning, then
+            is filled from coil WPD (ft × 0.433 → psi);
           · split at 200 rows.
     7.4 UI and MCP both produce the set from ONE shared builder.
     GATE 7: export validation (instrument 5) green; coil-derived valve rows
@@ -433,7 +456,7 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
           · (c) distributor: device CSVs only.
     GATE 8: all three scenarios pass; round-trips lossless; guard green.
 
-  WP9  OPTIONAL PARTNER COST / LABOR (only with the user's go-ahead, see header).
+  WP9  OPTIONAL PARTNER COST / LABOR (approved by the owner 2026-09-23, D14).
     · If partner fields exist, extended cost (qty × unit_cost) and hours by
       labor category appear in lines.csv and the PDF, labelled
       "partner-entered".
@@ -480,7 +503,7 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
   reach across the boundary to unblock yourself.
 
 ════ INPUTS ONLY THE USER CAN GIVE (ask once, then keep going) ═════════
-  1. Confirmation of the doctrine amendment (header). Needed by GATE 3.
+  1. Confirmation of the doctrine amendment (header). RECEIVED 2026-09-23.
   2. HIT owners' answers on CoilDP / BranchDP / Tolerance, other mass-sizing
      templates, and row limits. Needed to FILL column H; until then it stays
      blank.
@@ -490,14 +513,38 @@ WHO       One coordinator, coordinator-only per root AGENTS.md (no subagents
      starter library. GATE 4 sends the list.
   5. 2–3 real partner jobs with what was actually entered downstream (WP10),
      plus one unseen PDF for each NEW-DOCUMENT TEST.
-  6. Go / no-go on WP9 (partner price/labor fields).
+  6. Go / no-go on WP9 (partner price/labor fields). RECEIVED 2026-09-23: go.
 
 ════ DONE ══════════════════════════════════════════════════════════════
-  · GATES 0–8 green, with the held-out numbers at or above their thresholds.
-  · WP9 green or explicitly declined by the user.
+  · GATES 0–9 green, with the held-out numbers at or above their thresholds.
   · WP10 run on every partner job the user supplied.
   · NEW-DOCUMENT TEST #2 reported.
   · Docs synced.
   · corpus-eval and the linear bench unchanged.
   · The draft PR marked ready — never merged by you.
+```
+
+## KICKOFF PROMPT (paste as the session's first message)
+
+```
+You are the coordinator for GOAL LOOP S (assemblies) in erikjohnstone/master-plan.
+
+1. Read opentakeoff-corpus/goals/ASSEMBLIES.md top to bottom, then
+   plans/04-assemblies-plan.md, then the research sections its SETUP names.
+2. Obey root AGENTS.md and opentakeoff/AGENTS.md: answer SHOULD THIS BE ON THE
+   SHARED PATH? before every change; coordinator-only (no subagents unless I
+   re-enable delegation); never merge to main — merge is deploy.
+3. Check out branch `assemblies`, creating it per the goal's BRANCH line if it
+   doesn't exist. Run SETUP. If anything is red at HEAD, stop and report.
+4. Find where you are: the first work package whose GATE is not recorded as
+   passed under "Active work: assemblies" in opentakeoff-corpus/PROGRESS.md.
+   Start there. Work THE QUEUE in order; follow THE LOOP for every step
+   (audit first, failing test or key first, implement, measure, adversarial
+   self-review, catalogue entry, PROGRESS.md entry, commit, push).
+5. Report every gate's numbers when measured — dev AND held-out, including
+   regressions — and never claim a number a run hasn't finished producing.
+6. When you need something only I can give (INPUTS list), ask once, record the
+   ask in PROGRESS.md, and continue with the next unblocked item. Never stall.
+7. Keep going until DONE is true, or until a remaining ceiling is demonstrated
+   with reproducible evidence.
 ```

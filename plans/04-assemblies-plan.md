@@ -407,7 +407,8 @@ diffusers. The installed quantity comes only from reconcile.
 - `docs/bas-production/COMPONENT_LIST_RULE_CONTRACT.md`
 - `bas_engine/README.md`: "No product catalog…"
 
-**The amendment:**
+**The amendment** (confirmed by the owner 2026-09-23; banner added to
+`BAS_PRODUCTION_GOAL.md`):
 - Typical-derived points and devices become allowed, clearly labelled as coming
   from an explicit recipe.
 - Partner-entered prices and hours become allowed, as opaque partner data.
@@ -627,8 +628,9 @@ How values are extracted and recorded:
 ## 9. Open questions
 
 **For the user:**
-- Confirm the doctrine amendment (§7).
-- Should the optional partner price/labor fields be in v1?
+- ~~Confirm the doctrine amendment (§7).~~ Confirmed 2026-09-23.
+- ~~Should the optional partner price/labor fields be in v1?~~ Yes, 2026-09-23
+  (goal WP9).
 - Pick 2–3 real partner jobs. We need the drawings plus what the partner
   actually entered into HIT, Desigo Select or their estimate.
 - Name at least one controls integrator and one mechanical contractor to review
