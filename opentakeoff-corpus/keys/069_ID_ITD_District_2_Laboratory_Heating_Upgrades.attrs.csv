@@ -1,0 +1,184 @@
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/069_ID_ITD_District_2_Laboratory_Heating_Upgrades.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M3.0 (page 5) of the ITD District 2 laboratory heating system upgrades (Musgrove Engineering), the tables drawn for this document.
+#   069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5 | NEW PUMP SCHEDULE | PUMP | all 6 printed rows | render: page 5 crop 1272,372,985,330 at 3x in 2 tiles (SYMBOL column repeated), remarks crop 1272,698,600,110 at 3x and VFD schedule crop 155,665,1080,150 at 3x; second read of HWP-1 flow, BP-2 HP and CWP-2 RPM
+#   069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5 | EXISTING CONDENSING HOT WATER BOILER SCHEDULE | BOILER | all 2 printed rows | render: page 5 crop 155,372,1080,200 at 3x in 2 tiles (SYMBOL column repeated) and remarks crop 150,562,760,80 at 3x; second read at 4x (crop 600,372,270,200) of B-1(E) input MBH, B-2(E) output MBH and B-2(E) boiler flow
+#   069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5 | EXISTING AIR HANDLING UNIT SCHEDULE | AHU | the 1 printed row | render: page 5 crop 155,135,2100,150 at 3.5x in 5 tiles (SYMBOL column repeated) and remarks crop 150,283,760,80 at 3x; second read at 4x (crops 370,135,175,150 and 1480,135,150,150 and 1960,135,110,150) of supply CFM, supply HP/QTY, heating-coil GPM and min O.S.A. CFM
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, weight, minimum efficiency and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades: 3 table(s), 9 instance(s), 165 keyed attribute value(s) (87 printed, 78 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,area_served,HOT WATER LOOP,,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,service,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,gpm,80,gpm,CAPACITY / FLOW (GPM),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,head_ft,40,ft,CAPACITY / HEAD (FT),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,motor_hp,2,hp,MOTOR / HP,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,rpm,1725,rpm,MOTOR / RPM,"printed '1,725'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,vfd,yes,,TYPE 'INLINE VARIABLE'; VFD schedule PURPOSE,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,pump_arrangement,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,glycol_pct,30,%,NOTE 3,"remark 3, cited by every row: 'CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,volts,460,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-1,PUMP,phase,3,,MOTOR / V/Ø: phase part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,area_served,HOT WATER LOOP,,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,service,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,gpm,80,gpm,CAPACITY / FLOW (GPM),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,head_ft,40,ft,CAPACITY / HEAD (FT),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,motor_hp,2,hp,MOTOR / HP,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,rpm,1725,rpm,MOTOR / RPM,"printed '1,725'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,vfd,yes,,TYPE 'INLINE VARIABLE'; VFD schedule PURPOSE,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,pump_arrangement,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,glycol_pct,30,%,NOTE 3,"remark 3, cited by every row: 'CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,volts,460,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,HWP-2,PUMP,phase,3,,MOTOR / V/Ø: phase part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,area_served,BOILER PUMP (B-1),,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,service,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,gpm,40,gpm,CAPACITY / FLOW (GPM),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,head_ft,15,ft,CAPACITY / HEAD (FT),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,motor_hp,0.3333333333333333,hp,MOTOR / HP,printed '1/3'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,rpm,4350,rpm,MOTOR / RPM,"printed '4,350'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,vfd,,,TYPE 'INLINE VARIABLE'; VFD schedule PURPOSE,blank cell
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,pump_arrangement,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,glycol_pct,30,%,NOTE 3,"remark 3, cited by every row: 'CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,volts,115,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-1,PUMP,phase,1,,MOTOR / V/Ø: phase part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,area_served,BOILER PUMP (B-1),,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,service,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,gpm,40,gpm,CAPACITY / FLOW (GPM),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,head_ft,15,ft,CAPACITY / HEAD (FT),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,motor_hp,0.3333333333333333,hp,MOTOR / HP,printed '1/3'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,rpm,4350,rpm,MOTOR / RPM,"printed '4,350'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,vfd,,,TYPE 'INLINE VARIABLE'; VFD schedule PURPOSE,blank cell
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,pump_arrangement,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,glycol_pct,30,%,NOTE 3,"remark 3, cited by every row: 'CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,volts,115,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,BP-2,PUMP,phase,1,,MOTOR / V/Ø: phase part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,area_served,CHILLED WATER LOOP,,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,service,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,gpm,185,gpm,CAPACITY / FLOW (GPM),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,head_ft,55,ft,CAPACITY / HEAD (FT),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,motor_hp,5,hp,MOTOR / HP,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,rpm,3325,rpm,MOTOR / RPM,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,vfd,,,TYPE 'INLINE VARIABLE'; VFD schedule PURPOSE,blank cell
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,pump_arrangement,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,glycol_pct,30,%,NOTE 3,"remark 3, cited by every row: 'CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,volts,460,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-1,PUMP,phase,3,,MOTOR / V/Ø: phase part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,area_served,CHILLED WATER LOOP,,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,service,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,gpm,185,gpm,CAPACITY / FLOW (GPM),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,head_ft,55,ft,CAPACITY / HEAD (FT),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,motor_hp,5,hp,MOTOR / HP,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,rpm,3325,rpm,MOTOR / RPM,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,vfd,,,TYPE 'INLINE VARIABLE'; VFD schedule PURPOSE,blank cell
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,pump_arrangement,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,glycol_pct,30,%,NOTE 3,"remark 3, cited by every row: 'CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,volts,460,V,MOTOR / V/Ø: volts part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,NEW PUMP SCHEDULE,CWP-2,PUMP,phase,3,,MOTOR / V/Ø: phase part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,area_served,HOT WATER LOOP,,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,fuel,gas,,FUEL,printed 'NATURAL GAS'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,input_mbh,1000,MBH,CAPACITY / INPUT MBH,"printed '1,000'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,output_mbh,982,MBH,CAPACITY / OUTPUT MBH,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,gpm,40,gpm,BOILER FLOW (GPM),printed '40.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,ewt_f,100,F,EWT (°F),printed '100.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,lwt_f,150,F,LWT (°F),printed '150.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,eh_kw,,kW,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,bas_interface,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,volts,,V,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-1(E),BOILER,phase,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,area_served,HOT WATER LOOP,,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,fuel,gas,,FUEL,printed 'NATURAL GAS'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,input_mbh,1000,MBH,CAPACITY / INPUT MBH,"printed '1,000'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,output_mbh,982,MBH,CAPACITY / OUTPUT MBH,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,gpm,40,gpm,BOILER FLOW (GPM),printed '40.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,ewt_f,100,F,EWT (°F),printed '100.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,lwt_f,150,F,LWT (°F),printed '150.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,eh_kw,,kW,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,bas_interface,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,volts,,V,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING CONDENSING HOT WATER BOILER SCHEDULE,B-2(E),BOILER,phase,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,building,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,floor,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,area_served,LABORATORIES,,AREA SERVED,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,qty,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,supply_cfm,16400,cfm,SUPPLY FAN / CFM,"printed '16,400'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,oa_cfm_min,2150,cfm,MIN. O.S.A. CFM,"printed '2,150'"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,supply_fan_hp,3.2,hp,SUPPLY FAN / HP/QTY: HP part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,supply_fan_qty,6,,SUPPLY FAN / HP/QTY: QTY part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,return_fan_hp,,hp,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,exhaust_fan_hp,,hp,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,vfd,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,economizer,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,outdoor_air_pct,,%,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,cooling_type,chw,,CHILLED WATER/DEHUMIDIFICATION COOLING COIL,"the row prints the chilled-water cooling coil block (fluid E.W.T. 45, L.W.T. 55.0)"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,cooling_mbh,842.7,MBH,CHILLED WATER/DEHUMIDIFICATION COOLING COIL / CAPACITY (MBH) / TOTAL,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,cooling_tons,,tons,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,dx_stages,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_gpm,177,gpm,CHILLED WATER/DEHUMIDIFICATION COOLING COIL / FLUID PERFORMANCE / GPM,printed '177.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_ewt_f,45,F,CHILLED WATER/DEHUMIDIFICATION COOLING COIL / FLUID PERFORMANCE / E.W.T.,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_lwt_f,55,F,CHILLED WATER/DEHUMIDIFICATION COOLING COIL / FLUID PERFORMANCE / L.W.T.,printed '55.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_wpd_ft,18,ft,CHILLED WATER/DEHUMIDIFICATION COOLING COIL / FLUID P.D. (FT),printed '18.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_mbh,,MBH,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_rows,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,chw_glycol_pct,30,%,CHILLED WATER/DEHUMIDIFICATION COOLING COIL / FLUID TYPE,printed '30% PG'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,heating_type,hw,,HEATING COIL,"the heating coil block prints FLUID TYPE 30% PG and fluid E.W.T./L.W.T./GPM, a hydronic coil; no service name is printed"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,heating_mbh,960,MBH,HEATING COIL / CAPACITY (MBH),printed '960.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_gpm,48,gpm,HEATING COIL / FLUID PERFORMANCE / GPM,printed '48.0'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_ewt_f,140,F,HEATING COIL / FLUID PERFORMANCE / E.W.T.,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_lwt_f,98.1,F,HEATING COIL / FLUID PERFORMANCE / L.W.T.,
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_wpd_ft,5.1,ft,HEATING COIL / FLUID P.D. (FT),
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_mbh,,MBH,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_rows,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_conn_in,,in,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,hw_glycol_pct,30,%,HEATING COIL / FLUID TYPE,printed '30% PG'
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,steam_psig,,psig,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,steam_lb_hr,,lb/hr,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,gas_input_mbh,,MBH,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,eh_kw,,kW,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,humidifier,yes,,HUMIDIFICATION COIL,the row prints a HUMIDIFICATION COIL block (air-side geometry only)
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,energy_recovery,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,filter_merv,13,,COMBINATION FILTER / FINAL FILTER / EFF.: MERV,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,bas_interface,,,,not printed
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,volts,460,V,SUPPLY FAN / V/Ø: volts part,author's reading of the printed row
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,EXISTING AIR HANDLING UNIT SCHEDULE,AHU-1(E),AHU,phase,3,,SUPPLY FAN / V/Ø: phase part,author's reading of the printed row
