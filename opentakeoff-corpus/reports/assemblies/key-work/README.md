@@ -30,19 +30,26 @@ The file format is documented at the top of that script.
      is typed `?<printed>`.
    - A column whose header prints a unit other than the attribute's usual
      one gets `[<unit>]` on its `col:` line. Values are never converted.
-5. **Judgments are marked.** An attribute read from the row's structure
+5. **Table notes count, and are labelled.** A value an estimator reads
+   from the schedule's own notes (e.g. "PROVIDE … BACnet/MSTP INTERFACE",
+   note 2, applying to rows whose NOTES cell cites it) is keyed with a
+   `derive:` line (or a per-row `[NOTE n]` column) whose header starts with
+   `NOTE`. The scorer reports note-sourced attributes as their own slice,
+   so a grid-cell reader is never mistaken for a notes reader, or the
+   reverse.
+6. **Judgments are marked.** An attribute read from the row's structure
    rather than from a single cell (for example `heat_type = hw` because the
    row prints a hot-water coil block) uses a bracketed `[…]` header, or a
    `derive:` line with its reason. The key notes it as the author's reading.
-6. **Second read.** Re-render the crop and re-check at least three cells per
+7. **Second read.** Re-render the crop and re-check at least three cells per
    table, chosen before looking: the first row, the last row, and one
    middle row. Record the check in the table's `render:` line.
-7. **A schedule printed in parts is one table.** A title printed as
+8. **A schedule printed in parts is one table.** A title printed as
    "… 1 OF 2" and "… 2 OF 2" on the same sheet names one schedule (the
    compile strips that suffix too). Its key covers every printed part, and
    each part is its own `TABLE` block with the same `title:`, so no column
    of the unit is left out.
-8. **Expand and commit** the transcription with its key. A key is never
+9. **Expand and commit** the transcription with its key. A key is never
    edited after the pipeline has run on that sheet; a key that later looks
    wrong is written up in `ASSEMBLIES_BUG_CATALOGUE.md`.
 
