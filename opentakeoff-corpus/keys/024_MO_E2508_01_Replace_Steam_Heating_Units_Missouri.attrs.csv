@@ -1,0 +1,197 @@
+# 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M600 (page 11) of the Missouri School for the Deaf steam heating unit replacement (Timberlake Engineering, a Crockett company), the tables drawn for this document.
+#   024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11 | PACKAGED EQUIPMENT SCHEDULE (RTU) | RTU | all 4 printed rows | render: page 11 crop 387,162,1852,158 at 3x in 4 tiles (MARK column repeated) and notes crop 387,318,640,125 at 3x; second read of RTU-101 airflow, RTU-103 tons and RTU-104 gas input
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer, model, dimensions, weight, MCA/MOCP, refrigerant, air temperatures, EER, ambient, outdoor-air design airflow, and every other printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri: 1 table(s), 4 instance(s), 180 keyed attribute value(s) (68 printed, 112 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,building,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,floor,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,area_served,WOMENS LOCKER,,AREA SERVED,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,qty,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,supply_cfm,3000,cfm,SUPPLY / AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,oa_cfm_min,10.6,cfm,OUTDOOR AIR / MIN. AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,supply_fan_hp,3,hp,SUPPLY / MOTOR (HP),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,supply_fan_qty,1,,SUPPLY / MOTOR QUANTITY,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,return_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,exhaust_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,vfd,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,economizer,airside,,NOTE 4,"note 4, cited by every row: 'ECONOMIZER WITH SINGLE DRY BULB CONTROL'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,outdoor_air_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,cooling_type,dx,,DX COOLING,every row prints the DX COOLING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,cooling_mbh,92.69,MBH,DX COOLING / TOTAL (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,cooling_tons,7.5,tons,DX COOLING / NOMINAL TONS,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,dx_stages,3,,DX COOLING / COMPRESSOR / STAGES,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,chw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,heating_type,gas,,NATURAL GAS HEATING,every row prints the NATURAL GAS HEATING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,heating_mbh,162,MBH,NATURAL GAS HEATING / OUTPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,hw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,steam_psig,,psig,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,steam_lb_hr,,lb/hr,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,gas_input_mbh,200,MBH,NATURAL GAS HEATING / INPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,eh_kw,,kW,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,humidifier,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,energy_recovery,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,filter_merv,8,,FILTER: MERV rating,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,bas_interface,BACNET IP,,NOTE 1,"note 1, cited by every row: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,volts,208,V,ELECTRICAL / VOLTAGE / PHASE: volts part,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-101,RTU,phase,3,,ELECTRICAL / VOLTAGE / PHASE: phase part,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,building,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,floor,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,area_served,MENS LOCKER,,AREA SERVED,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,qty,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,supply_cfm,2625,cfm,SUPPLY / AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,oa_cfm_min,33.5,cfm,OUTDOOR AIR / MIN. AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,supply_fan_hp,3,hp,SUPPLY / MOTOR (HP),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,supply_fan_qty,1,,SUPPLY / MOTOR QUANTITY,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,return_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,exhaust_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,vfd,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,economizer,airside,,NOTE 4,"note 4, cited by every row: 'ECONOMIZER WITH SINGLE DRY BULB CONTROL'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,outdoor_air_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,cooling_type,dx,,DX COOLING,every row prints the DX COOLING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,cooling_mbh,91.63,MBH,DX COOLING / TOTAL (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,cooling_tons,7.5,tons,DX COOLING / NOMINAL TONS,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,dx_stages,3,,DX COOLING / COMPRESSOR / STAGES,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,chw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,heating_type,gas,,NATURAL GAS HEATING,every row prints the NATURAL GAS HEATING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,heating_mbh,162,MBH,NATURAL GAS HEATING / OUTPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,hw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,steam_psig,,psig,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,steam_lb_hr,,lb/hr,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,gas_input_mbh,200,MBH,NATURAL GAS HEATING / INPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,eh_kw,,kW,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,humidifier,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,energy_recovery,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,filter_merv,8,,FILTER: MERV rating,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,bas_interface,BACNET IP,,NOTE 1,"note 1, cited by every row: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,volts,208,V,ELECTRICAL / VOLTAGE / PHASE: volts part,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-102,RTU,phase,3,,ELECTRICAL / VOLTAGE / PHASE: phase part,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,building,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,floor,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,area_served,GYM,,AREA SERVED,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,qty,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,supply_cfm,6000,cfm,SUPPLY / AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,oa_cfm_min,741,cfm,OUTDOOR AIR / MIN. AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,supply_fan_hp,3,hp,SUPPLY / MOTOR (HP),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,supply_fan_qty,2,,SUPPLY / MOTOR QUANTITY,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,return_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,exhaust_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,vfd,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,economizer,airside,,NOTE 4,"note 4, cited by every row: 'ECONOMIZER WITH SINGLE DRY BULB CONTROL'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,outdoor_air_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,cooling_type,dx,,DX COOLING,every row prints the DX COOLING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,cooling_mbh,236.77,MBH,DX COOLING / TOTAL (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,cooling_tons,20,tons,DX COOLING / NOMINAL TONS,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,dx_stages,4,,DX COOLING / COMPRESSOR / STAGES,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,chw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,heating_type,gas,,NATURAL GAS HEATING,every row prints the NATURAL GAS HEATING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,heating_mbh,324,MBH,NATURAL GAS HEATING / OUTPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,hw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,steam_psig,,psig,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,steam_lb_hr,,lb/hr,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,gas_input_mbh,400,MBH,NATURAL GAS HEATING / INPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,eh_kw,,kW,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,humidifier,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,energy_recovery,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,filter_merv,8,,FILTER: MERV rating,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,bas_interface,BACNET IP,,NOTE 1,"note 1, cited by every row: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,volts,120,V,ELECTRICAL / VOLTAGE / PHASE: volts part,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-103,RTU,phase,3,,ELECTRICAL / VOLTAGE / PHASE: phase part,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,building,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,floor,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,area_served,GYM,,AREA SERVED,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,qty,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,supply_cfm,6000,cfm,SUPPLY / AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,oa_cfm_min,741,cfm,OUTDOOR AIR / MIN. AIRFLOW (CFM),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,supply_fan_hp,3,hp,SUPPLY / MOTOR (HP),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,supply_fan_qty,2,,SUPPLY / MOTOR QUANTITY,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,return_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,exhaust_fan_hp,,hp,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,vfd,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,economizer,airside,,NOTE 4,"note 4, cited by every row: 'ECONOMIZER WITH SINGLE DRY BULB CONTROL'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,outdoor_air_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,cooling_type,dx,,DX COOLING,every row prints the DX COOLING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,cooling_mbh,236.77,MBH,DX COOLING / TOTAL (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,cooling_tons,20,tons,DX COOLING / NOMINAL TONS,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,dx_stages,4,,DX COOLING / COMPRESSOR / STAGES,
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,chw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,heating_type,gas,,NATURAL GAS HEATING,every row prints the NATURAL GAS HEATING block
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,heating_mbh,324,MBH,NATURAL GAS HEATING / OUTPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_gpm,,gpm,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_ewt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_lwt_f,,F,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_wpd_ft,,ft,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_mbh,,MBH,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_rows,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_conn_in,,in,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,hw_glycol_pct,,%,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,steam_psig,,psig,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,steam_lb_hr,,lb/hr,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,gas_input_mbh,400,MBH,NATURAL GAS HEATING / INPUT (MBH),
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,eh_kw,,kW,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,humidifier,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,energy_recovery,,,,not printed
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,filter_merv,8,,FILTER: MERV rating,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,bas_interface,BACNET IP,,NOTE 1,"note 1, cited by every row: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'"
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,volts,120,V,ELECTRICAL / VOLTAGE / PHASE: volts part,author's reading of the printed row
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,PACKAGED EQUIPMENT SCHEDULE (RTU),RTU-104,RTU,phase,3,,ELECTRICAL / VOLTAGE / PHASE: phase part,author's reading of the printed row
