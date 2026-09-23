@@ -222,13 +222,16 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
     const doc = parseTranscription(readFileSync(join(REPORTS, "key-work", `${setId}.transcription.txt`), "utf8"));
     const heldout = split.heldout.sets.includes(setId);
     assert.ok(heldout || split.dev.sets.includes(setId), `${setId} is in neither the dev nor the held-out split`);
+    // One printed table can hold two claimed families (a split system's indoor
+    // and outdoor unit on one row), so the scope is checked per table x family.
     const instances = new Map();
     for (const r of expandTranscription(doc)) {
       const table = `${r.sheet} :: ${r.table_title}`;
-      if (!instances.has(table)) instances.set(table, { family: r.family, tags: new Set() });
-      if (r.tag) instances.get(table).tags.add(r.tag); // an empty tag keys a table with no instance
+      const key = `${table}\u0000${r.family}`;
+      if (!instances.has(key)) instances.set(key, { table, family: r.family, tags: new Set() });
+      if (r.tag) instances.get(key).tags.add(r.tag); // an empty tag keys a table with no instance
     }
-    for (const [table, { family, tags }] of instances) {
+    for (const { table, family, tags } of instances.values()) {
       if (heldout) {
         const drawn = split.heldout.tables.find((t) => t.set === setId && t.table === table && t.family === family);
         assert.ok(drawn, `${setId}: ${family} "${table}" was not drawn for the held-out key`);
