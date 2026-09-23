@@ -1,0 +1,54 @@
+# bessemer.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/bessemer.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M601 (page 8) of the Iron Belle Apartments mechanical bid set (U.P. Engineers & Architects), the tables drawn for this document.
+#   bessemer-mechanical-bidset.pdf#8 | FAN SCHEDULE | FAN | all 1 printed row (one empty ruled row above it) | render: page 8 crop 1298,1420,1165,150 at 3x in 2 tiles (ID column repeated); second read of EF-1 airflow, ESP and watts
+#   bessemer-mechanical-bidset.pdf#8 | VARIABLE REFRIGERANT PACKAGED HEAT PUMP | HEAT_PUMP | all 1 printed row (one empty ruled row above it) | render: page 8 crop 1385,1185,905,98 at 3x in 3 tiles (ID column repeated) and notes crop 1385,1280,560,80 at 3x; second read at 4x (crop 1630,1185,380,98) of HP-1 airflow, cooling capacity and electric coil watts
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer, model and duct-connection columns, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# bessemer: 2 table(s), 2 instance(s), 36 keyed attribute value(s) (13 printed, 23 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,area_served,,,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,service,BATHROOM EXHAUST FAN W/ LIGHT,,DESCRIPTION,
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,cfm,,cfm,AIR FLOW (CFM),printed '50-80-110' — not a single value for this attribute
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,esp_in,0.25,ft,EXT. SP. (FT),
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,motor_hp,,hp,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,motor_watts,10.5,W,ELECTRICAL / WATTS,
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,rpm,1121,rpm,RPM,
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,drive,,,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,control,LOCAL SWITCH,,NOTE 3: UNIT SHALL TURN ON WITH LOCAL SWITCH,printed 'UNIT SHALL TURN ON WITH LOCAL SWITCH'; author's reading of the printed row
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,volts,120,V,ELECTRICAL / VOLTS,
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,EF-1,FAN,phase,1,,ELECTRICAL / PHASE,
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,building,,,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,floor,,,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,area_served,,,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,qty,,,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,cfm,635,cfm,AIRFLOW/BLOWER DATA / CFM,
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,cooling_mbh,23.4,MBH,COOLING CAPACITY (MBH),
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,cooling_tons,,tons,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,heating_mbh,21,MBH,HEATING CAPACITY (MBH),
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,hw_gpm,,gpm,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,hw_ewt_f,,F,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,hw_lwt_f,,F,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,chw_gpm,,gpm,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,chw_ewt_f,,F,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,chw_lwt_f,,F,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,motor_hp,,hp,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,eh_kw,6888,W,ELECTRIC COIL CAPACITY (WATTS),
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,conn_in,,in,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,bas_interface,,,,not printed
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,volts,230,V,ELECTRICAL / VOLTAGE,
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,HP-1,HEAT_PUMP,phase,1,,ELECTRICAL / PHASE,

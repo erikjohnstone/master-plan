@@ -1,0 +1,60 @@
+# bessemer — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M601 (PDF page 8) at 3x, read by eye on 2026-09-23.
+# The pipeline's output for this sheet was not consulted. Tables are the ones the
+# WP0.2 draw (seed 20260923) named for this document.
+SET bessemer
+SEED 20260923
+SCOPE Sheet M601 (page 8) of the Iron Belle Apartments mechanical bid set (U.P. Engineers & Architects), the tables drawn for this document.
+EXCLUDES Manufacturer, model and duct-connection columns, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+TABLE
+sheet: bessemer-mechanical-bidset.pdf#8
+title: FAN SCHEDULE
+family: FAN
+render: page 8 crop 1298,1420,1165,150 at 3x in 2 tiles (ID column repeated); second read of EF-1 airflow, ESP and watts
+rows: all 1 printed row (one empty ruled row above it)
+col: ID => tag
+col: DESCRIPTION => service
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: AIR FLOW (CFM) => cfm
+col: EXT. SP. (FT) => esp_in [ft]
+col: RPM => rpm
+col: DUCT CONNECTION (IN) => -
+col: ELECTRICAL / VOLTS => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / WATTS => motor_watts
+col: Notes => -
+col: [NOTE 3: UNIT SHALL TURN ON WITH LOCAL SWITCH] => control
+grid:
+EF-1 | BATHROOM EXHAUST FAN W/ LIGHT | PANASONIC | FV-0511VKL2 | ?50-80-110 | 0.25 | 1121 | 4"Ø | 120 | 1 | 10.5 | 1,2,3 | =LOCAL SWITCH (UNIT SHALL TURN ON WITH LOCAL SWITCH)
+END
+
+# VARIABLE REFRIGERANT PACKAGED HEAT PUMP: one printed row, with one empty ruled row
+# above it. The six unnumbered notes under the table apply to the whole schedule;
+# one of them reads "PROVIDE WITH 7.5 KW ELECTRIC BACKUP COILS". The grid's ELECTRIC
+# COIL CAPACITY (WATTS) cell prints 6888 (7.5 kW rated at 240 V gives 6888 W at the
+# printed 230 V), and the key keeps the grid cell in the unit the header prints. The
+# note "PROVIDE WITH PROGRAMMABLE THERMOSTAT AND WIRING." names a stand-alone
+# thermostat, not a BAS interface, so bas_interface stays not printed.
+TABLE
+sheet: bessemer-mechanical-bidset.pdf#8
+title: VARIABLE REFRIGERANT PACKAGED HEAT PUMP
+family: HEAT_PUMP
+render: page 8 crop 1385,1185,905,98 at 3x in 3 tiles (ID column repeated) and notes crop 1385,1280,560,80 at 3x; second read at 4x (crop 1630,1185,380,98) of HP-1 airflow, cooling capacity and electric coil watts
+rows: all 1 printed row (one empty ruled row above it)
+col: ID => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: AIRFLOW/BLOWER DATA / CFM => cfm
+col: AIRFLOW/BLOWER DATA / ESP (IN) => -
+col: HEATING CAPACITY (MBH) => heating_mbh
+col: COOLING CAPACITY (MBH) => cooling_mbh
+col: ELECTRIC COIL CAPACITY (WATTS) => eh_kw [W]
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / AMPS => -
+col: ELECTRICAL / MOCP => -
+grid:
+HP-1 | FRIEDRICH | VRP24K75FRBLAA | 635 | 0.2 | 21 | 23.4 | 6888 | 230 | 1 | 40.3 | 45
+END
