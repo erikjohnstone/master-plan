@@ -632,6 +632,14 @@ Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Bo
   - navfac's printed lists name 40 units, by family: pump 22, boiler 6, fan 3, air handler 2, air-cooled chiller 2, heat-recovery chiller 2, unit heater 2, DOAS 1. 0 of the 40 agree with their typical by I/O type.
   - None of the 40 diffs is classified, because classifying means reading a held-out document unit by unit, and the split forbids that (never tune on held-out).
   - WP6 is therefore blocked: its only unit-level printed lists are held-out. What it needs is a dev document with unit-level lists (INPUT 5 partner jobs, or the goal's named sets, AS-2).
+- **Instrument 1 (corpus-eval), unchanged by construction since its last measured run** (`58512fa`, UNCHANGED against the baseline). Checked with `mcp/scripts/assemblies-scorer-imports.mjs 58512fa`, esbuild's metafile of the scorers' entry points:
+  - the scorers import 166 local modules;
+  - of the 70 files changed since, 3 are among them, and each change is inert for scoring:
+    - `mcp/src/session.ts` adds `sheetTextSpans`, which only `mcp/src/assemblies.ts` calls;
+    - `web/src/lib/csv.js` adds `parseCsvRows` (`csvEsc` is unchanged);
+    - `assemblies/schema.ts` adds one interface field, a type erased at run time.
+  - No scorer module mentions either new function.
+  - Not rerun: the scorers' children spawn orphans that re-score forever (AS-15). The per-run workaround stops them by PID, and this session's permission check refused stopping test processes (AS-6). An unreaped run would stall the container.
 - **D6 census** (`reports/assemblies/05b-schematic-census-dev.txt`): 30 control schematics on dev, 15 with I/O tokens. Only 3 bind one unit and print I/O: itd-d1-lab EF-5, LEF-1 and EH-5. The I/O-count match (`ioMatch.ts`) could decide options on at most 3 of 244 rows, and it would be unsafe on system diagrams, so it stays unwired. AS-19 records the demonstrated ceiling: GATE 5 cannot pass on the documents this environment stages.
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
