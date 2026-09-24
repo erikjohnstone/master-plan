@@ -467,6 +467,17 @@ rebuilds them and requires identical bytes.
   - Exports: WP7.
 
 
+**Instrument 1 after WP2–WP4 (2026-09-24, `reports/assemblies/04-corpus-eval-wp4.txt`): UNCHANGED.**
+Cold corpus-eval at 58512fa, same settings as the baseline:
+- takeoff 541 keyed tags, 85.0% exact, Σ|Δqty| 192, missing 13, false-add 59; applicable installed rows 423/499; honest refusals 9/14;
+- reference 92/129 cells exact;
+- table recall and tag census identical per set;
+- sheet graph cells 78 right, 0 wrong, 13 missed (P 100.0%, R 85.7%); 393 tags reported; 504 row symbols found.
+
+That matches the baseline's corpus figures with baker included; this run scored baker in-run, where the baseline needed a rerun after an OOM.
+
+Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Both sets are absent here and unscored in both runs. graph-eval has no per-set timeout, so its child was killed by hand; the drain loop was stopped by hand once every scorer had exited.
+
 **WP5 — apply on the shared path (in progress, 2026-09-24).**
 - **WP5.5, the truth (be676b3, d74abaf):**
   - `keys/<set>.typicals.csv` for all 11 dev documents: 244 instances, 142 with a typical and 102 `none`.
