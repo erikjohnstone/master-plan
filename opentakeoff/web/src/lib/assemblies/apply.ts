@@ -1,0 +1,305 @@
+// ASSEMBLIES goal, WP5.1 — applying the assembly library to a project's
+// compiled equipment (plan §8.2; goals/ASSEMBLIES.md WP5.1).
+//
+// SHOULD THIS BE ON THE SHARED PATH? Yes. Which typical each scheduled unit
+// gets, and what it waits for, is the takeoff's answer. The Takeoff panel,
+// the MCP tools and the evals call this module with the same compile
+// (compileTakeoff(…, "hvac_equipment") over Session.graphForPipeline), so
+// they cannot disagree. Only reading the inputs (a browser page, a Session)
+// is surface-specific.
+//
+// From the compile to the lines, in order:
+//   1. each compiled row is normalized (normalize.ts) with the context of the
+//      table it was compiled from: its headers and rows, the notes, legend and
+//      code legends printed with it (scheduleNotes.ts), and the units the
+//      project's drive schedules name as their loads;
+//   2. each row becomes an Instance: its canonical attributes with their
+//      cites, where it is (building, floor, the air handler that serves it)
+//      and how many units its tag stands for;
+//   3. what no row prints is derived from the project, each with the rule
+//      that derived it and its basis:
+//      · the family the library applies: a row whose printed airflows make
+//        it a 100% outdoor-air unit is a dedicated outdoor air unit, and a
+//        fan coil row with gas heat is a furnace, whatever schedule they were
+//        printed in (the compile's family stays on the row);
+//      · `terminals_served`, the terminal units whose rows name the air
+//        handler (a cell, or a part of the table's title, that reads exactly
+//        as its tag: the tag is the evidence, never a word, LAW L1); 0 for
+//        every air handler when the project schedules no terminal unit and
+//        no duct-mounted (reheat) coil; all of them for the project's only
+//        AHU or RTU when no terminal row names one;
+//   4. the library is applied (select.ts) and expanded (expand.ts).
+import type { Value } from "./expr";
+import { expandAll, type DrawingEvidence } from "./expand";
+import { normalizeCompileItem, vfdDrivenTags, type CompileItem, type NormalizedItem, type TableContext } from "./normalize";
+import { citedCodeLegend, scheduleLegend, scheduleNotes, type Box, type NoteSpan, type ScheduleNote } from "./scheduleNotes";
+import type { ApplicationRecord, AssemblyDefinition, Cite, ExpandedLine } from "./schema";
+import type { Instance, Override, ProjectSettings } from "./select";
+
+/** One compiled row: a compileTakeoff("hvac_equipment") item and its family. */
+export type CompiledItem = CompileItem & { family: string };
+
+/** A schedule table of the sheet graph that rows were compiled from. */
+export interface CompiledTable {
+  sheet: string;
+  /** The compile's title for it (the title with a trailing "N OF M" dropped). */
+  title: string;
+  headers: readonly string[];
+  region?: Box | null;
+  rows?: ReadonlyArray<{ key: string; cells: Readonly<Record<string, string>> }>;
+  /** Notes already read, when there are no page spans to read them from. */
+  notes?: readonly ScheduleNote[];
+  spans?: readonly NoteSpan[];
+}
+
+/** A project's compiled equipment: the rows, the tables they came from and
+ * the text spans of those tables' pages (sheet id → spans), when read. */
+export interface CompiledProject {
+  items: readonly CompiledItem[];
+  tables?: readonly CompiledTable[];
+  pages?: Readonly<Record<string, readonly NoteSpan[]>>;
+}
+
+interface ReadTable extends CompiledTable {
+  readNotes?: readonly ScheduleNote[];
+  readCodes?: Record<string, Record<string, string>>;
+  readLegend?: Record<string, string>;
+}
+
+/** The context of the table a row was compiled from: its headers in order,
+ * the numbered notes and the legend printed with it, the code legends its
+ * headers cite (read from its page's text spans) and its rows. Null when no
+ * table of the project is the row's. `cache` keeps what was read per table,
+ * so each table's notes are read once. */
+export function tableContextOf(
+  item: Pick<CompileItem, "sheet_id" | "table_title">,
+  tables: readonly CompiledTable[],
+  pages: Readonly<Record<string, readonly NoteSpan[]>> = {},
+  cache: WeakMap<CompiledTable, ReadTable> = new WeakMap(),
+): TableContext | null {
+  const headers: string[] = [];
+  const notes: ScheduleNote[] = [];
+  const rows: Array<{ key: string; cells: Readonly<Record<string, string>> }> = [];
+  const codes: Record<string, Record<string, string>> = {};
+  const legend: Record<string, string> = {};
+  for (const table of tables) {
+    if (table.sheet !== item.sheet_id || table.title !== item.table_title) continue;
+    let t = cache.get(table);
+    if (!t) cache.set(table, t = { ...table });
+    for (const h of t.headers) if (!headers.includes(h)) headers.push(h);
+    const spans = pages[t.sheet] ?? t.spans;
+    t.readNotes ??= spans && t.region ? scheduleNotes(spans, t.region) : (t.notes ?? []);
+    for (const n of t.readNotes) if (!notes.some((x) => x.id === n.id)) notes.push(n);
+    for (const r of t.rows ?? []) rows.push(r);
+    if (spans) {
+      t.readCodes ??= Object.fromEntries(t.headers.map((h) => [h, citedCodeLegend(spans, h)]).filter((e): e is [string, Record<string, string>] => Boolean(e[1])));
+      Object.assign(codes, t.readCodes);
+      t.readLegend ??= t.region ? scheduleLegend(spans, t.region) : {};
+      Object.assign(legend, t.readLegend);
+    }
+  }
+  return headers.length || notes.length || rows.length ? { headers, notes, rows, codes, legend } : null;
+}
+
+/** Every row of the project normalized with its table's context (step 1),
+ * in the order of `project.items`. */
+export function normalizeProject(project: CompiledProject): NormalizedItem[] {
+  const cache = new WeakMap<CompiledTable, ReadTable>();
+  const driven = vfdDrivenTags(project.items);
+  return project.items.map((it) => {
+    const table = tableContextOf(it, project.tables ?? [], project.pages ?? {}, cache);
+    return normalizeCompileItem(it, it.family, table && driven.size ? { ...table, driven } : table);
+  });
+}
+
+// ── Links between rows ──────────────────────────────────────────────────────
+
+/** Families that serve terminal units, and the terminal families. */
+export const AIR_HANDLER_FAMILIES: ReadonlySet<string> = new Set(["AHU", "RTU", "DOAS", "DOAH_UNIT", "DOAH_HANDLING", "OUTDOOR_AIR_UNIT"]);
+export const TERMINAL_FAMILIES: ReadonlySet<string> = new Set(["VAV"]);
+
+/** A tag in one spelling: case, whitespace and dash glyphs never distinguish
+ * two units. */
+export const canonTag = (t: string): string => String(t ?? "").toUpperCase().replace(/[‐-―−﹘﹣－]/g, "-").replace(/\s+/g, "");
+const dashless = (t: string) => canonTag(t).replace(/[-.]/g, "");
+
+/** The parts of a cell or title that could each be one tag: the whole text,
+ * and its pieces between separators (",", "/", "&", " AND ", whitespace). */
+function tagPieces(text: string): string[] {
+  const s = String(text ?? "").trim();
+  if (!s) return [];
+  return [s, ...s.split(/\s*[,/&]\s*|\s+AND\s+|\s+/i)].filter(Boolean);
+}
+
+/** For each terminal row, the air handlers whose tag a cell of the row or a
+ * part of its table's title reads as exactly (index into `items`). */
+export function servingAirHandlers(items: readonly CompiledItem[]): Map<number, number[]> {
+  const byTag = new Map<string, number[]>();
+  items.forEach((it, i) => {
+    if (!AIR_HANDLER_FAMILIES.has(it.family)) return;
+    for (const k of new Set([canonTag(it.tag), dashless(it.tag)])) {
+      if (!k) continue;
+      if (!byTag.has(k)) byTag.set(k, []);
+      byTag.get(k)!.push(i);
+    }
+  });
+  const links = new Map<number, number[]>();
+  if (!byTag.size) return links;
+  const lookup = (piece: string) => byTag.get(canonTag(piece)) ?? byTag.get(dashless(piece)) ?? [];
+  items.forEach((it, i) => {
+    if (!TERMINAL_FAMILIES.has(it.family)) return;
+    const found = new Set<number>();
+    for (const cell of Object.values(it.cells ?? {})) {
+      const text = cell?.text ?? "";
+      if (canonTag(text) === canonTag(it.tag)) continue;
+      for (const piece of tagPieces(text)) for (const h of lookup(piece)) found.add(h);
+    }
+    for (const piece of tagPieces(it.table_title ?? "")) for (const h of lookup(piece)) found.add(h);
+    if (found.size) links.set(i, [...found].sort((a, b) => a - b));
+  });
+  return links;
+}
+
+// ── Instances ───────────────────────────────────────────────────────────────
+
+/** The cite of a row's own mark: the cell that reads as its tag. */
+export function rowCite(item: CompiledItem): Cite {
+  for (const [header, cell] of Object.entries(item.cells ?? {})) {
+    if (canonTag(cell?.text ?? "") === canonTag(item.tag)) return { sheet: item.sheet_id, table_title: item.table_title, header, bbox: cell?.bbox ?? null };
+  }
+  return { sheet: item.sheet_id, table_title: item.table_title, header: "(row)", bbox: null };
+}
+
+/** A derived attribute: its value, and the rule and project fact behind it. */
+export interface DerivedAttribute {
+  value: Value;
+  rule: string;
+  basis: string;
+}
+
+/** An instance with what the apply path read and derived for it. */
+export interface AppliedInstance extends Instance {
+  /** The compiled row it came from (index into the project's items). */
+  item: number;
+  /** Attributes the project gives it that its own row does not print. */
+  derived: Record<string, DerivedAttribute>;
+  /** Attributes its row leaves unknown, with the reason. */
+  unknown: NormalizedItem["unknown"];
+}
+
+/** Families that serve terminal units from a central fan. */
+const CENTRAL_AIR_HANDLER_FAMILIES: ReadonlySet<string> = new Set(["AHU", "RTU"]);
+
+/** The family the library applies to a row, when its printed values make it
+ * another family's unit than the schedule it was compiled from:
+ *  · an air handler whose minimum outdoor air is 100% of its supply airflow
+ *    (printed as a percent, or as equal airflows) supplies only outdoor air,
+ *    which is what a dedicated outdoor air unit is;
+ *  · a fan coil row with gas heat has a burner, so it is a furnace.
+ * Null when the row is its schedule's family. */
+export function appliedFamily(family: string, n: NormalizedItem): DerivedAttribute | null {
+  const num = (a: string) => (typeof n.attributes[a]?.value === "number" ? (n.attributes[a].value as number) : null);
+  if (family === "AHU" || family === "RTU") {
+    const pct = num("outdoor_air_pct");
+    if (pct !== null && pct >= 100) return { value: "DOAS", rule: "derive.family.outdoor_air_pct", basis: `minimum outdoor air ${pct}% of supply: a dedicated outdoor air unit` };
+    const oa = num("oa_cfm_min");
+    const sa = num("supply_cfm");
+    if (oa !== null && sa !== null && sa > 0 && oa >= sa) {
+      return { value: "DOAS", rule: "derive.family.outdoor_air_cfm", basis: `minimum outdoor air ${oa} cfm of ${sa} cfm supply: a dedicated outdoor air unit` };
+    }
+  }
+  if (family === "FCU" && n.attributes.heating_type?.value === "gas") {
+    return { value: "FURNACE", rule: "derive.family.gas_heat", basis: `a fan coil row with gas heat ("${n.attributes.heating_type.cite.header}"): a furnace` };
+  }
+  return null;
+}
+
+/** The project's rows as instances (steps 2 and 3). */
+export function instancesOf(project: CompiledProject, normalized: readonly NormalizedItem[] = normalizeProject(project)): AppliedInstance[] {
+  const { items } = project;
+  const families = items.map((it, i) => appliedFamily(it.family, normalized[i]));
+  const familyOf = (i: number) => String(families[i]?.value ?? items[i].family);
+  const links = servingAirHandlers(items);
+  const terminals = items.flatMap((it, i) => (TERMINAL_FAMILIES.has(it.family) ? [i] : []));
+  // Zone equipment that sits on terminals without their own schedule: a
+  // duct-mounted (reheat) coil means terminal units may exist unscheduled.
+  const zoneCoils = items.some((it) => it.family === "DUCT_MOUNTED_COIL");
+  const central = items.flatMap((it, i) => (CENTRAL_AIR_HANDLER_FAMILIES.has(familyOf(i)) ? [i] : []));
+  // Which air handler serves which terminal rows, and on what basis.
+  const served = new Map<number, number[]>();
+  let countBasis: "links" | "no_terminals" | "sole_air_handler" | null = null;
+  if (links.size) {
+    countBasis = "links";
+    for (const [t, hs] of links) for (const h of hs) {
+      if (!served.has(h)) served.set(h, []);
+      served.get(h)!.push(t);
+    }
+  } else if (!terminals.length && !zoneCoils) {
+    countBasis = "no_terminals";
+  } else if (terminals.length && central.length === 1) {
+    countBasis = "sole_air_handler";
+    served.set(central[0], terminals);
+    for (const t of terminals) links.set(t, [central[0]]);
+  }
+  return items.map((it, i) => {
+    const n = normalized[i];
+    const family = familyOf(i);
+    const attributes: Instance["attributes"] = {};
+    for (const [k, a] of Object.entries(n.attributes)) attributes[k] = { value: a.value, cite: a.cite };
+    const derived: Record<string, DerivedAttribute> = {};
+    if (families[i]) derived.family = families[i]!;
+    const unknown = { ...n.unknown };
+    if (AIR_HANDLER_FAMILIES.has(family) && !n.attributes.terminals_served) {
+      const ts = served.get(i) ?? [];
+      const named = ts.slice(0, 5).map((t) => items[t].tag).join(", ") + (ts.length > 5 ? ", …" : "");
+      const count = countBasis === "links" ? { rule: "derive.terminals_served", basis: ts.length ? `${ts.length} terminal row(s) name ${it.tag}: ${named}` : `the project's terminal rows name their air handlers, and none names ${it.tag}` }
+        : countBasis === "no_terminals" ? { rule: "derive.terminals_served.none_scheduled", basis: "the project schedules no terminal unit and no duct-mounted coil" }
+          : countBasis === "sole_air_handler" && CENTRAL_AIR_HANDLER_FAMILIES.has(family) ? { rule: "derive.terminals_served.sole_air_handler", basis: `${it.tag} is the project's only AHU or RTU, and its ${ts.length} terminal row(s) name no air handler: ${named}` }
+            : null;
+      if (count) {
+        derived.terminals_served = { value: ts.length, ...count };
+        attributes.terminals_served = { value: ts.length, cite: null };
+        delete unknown.terminals_served;
+      } else {
+        unknown.terminals_served = { reason: terminals.length
+          ? "the project's terminal rows name no air handler, and it has more than one"
+          : "the project schedules duct-mounted coils but no terminal unit, so its terminals are not known" };
+      }
+    }
+    const handlers = links.get(i) ?? [];
+    const qty = n.attributes.qty?.value;
+    const multiplier = typeof qty === "number" && Number.isInteger(qty) && qty >= 1
+      ? { value: qty, basis: `QTY "${n.attributes.qty.printed}" (${n.attributes.qty.cite.header})` }
+      : { value: 1, basis: "one unit per tag" };
+    const text = (a: string) => (typeof n.attributes[a]?.value === "string" ? String(n.attributes[a].value) : null);
+    return {
+      item: i,
+      tag: it.tag,
+      family,
+      attributes,
+      derived,
+      unknown,
+      scope: {
+        building: it.building ?? text("building"),
+        floor: text("floor"),
+        system: AIR_HANDLER_FAMILIES.has(family) ? it.tag : handlers.length === 1 ? items[handlers[0]].tag : null,
+      },
+      cites: [rowCite(it)],
+      multiplier,
+    };
+  });
+}
+
+/** Apply the library to a project (step 4): every unit's records and lines. */
+export function applyAssemblies(input: {
+  project: CompiledProject;
+  library: readonly AssemblyDefinition[];
+  settings?: ProjectSettings;
+  overrides?: readonly Override[];
+  evidence?: Readonly<Record<string, DrawingEvidence>>;
+  normalized?: readonly NormalizedItem[];
+}): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[] } {
+  const instances = instancesOf(input.project, input.normalized);
+  const { applications, lines } = expandAll(instances, input.library, input.settings ?? {}, input.overrides ?? [], input.evidence ?? {});
+  return { instances, applications, lines };
+}

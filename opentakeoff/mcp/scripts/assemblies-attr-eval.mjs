@@ -41,8 +41,8 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { attributeSpec, canonicalAttributeFor, keyValueToCanonical } from "../../web/src/lib/assemblies/attributes.ts";
-import { citedCodeLegend, scheduleLegend, scheduleNotes } from "../../web/src/lib/assemblies/scheduleNotes.ts";
 import { vfdDrivenTags } from "../../web/src/lib/assemblies/normalize.ts";
+import { tableContextOf } from "../../web/src/lib/assemblies/apply.ts";
 
 export const KEY_COLUMNS = ["sheet", "table_title", "tag", "family", "attribute", "value", "unit", "source_header", "note"];
 
@@ -140,7 +140,7 @@ export function sameCanonical(attr, a, b) {
   return String(a) === String(b);
 }
 
-function matchItem(inst, tableItems, used) {
+export function matchItem(inst, tableItems, used) {
   let pool = tableItems.filter((it) => !used.has(it) && canonTag(it.tag) === canonTag(inst.tag));
   let how = "tag";
   if (!pool.length) {
@@ -153,32 +153,6 @@ function matchItem(inst, tableItems, used) {
   const item = (same.length ? same : pool)[0];
   used.add(item);
   return { item, how };
-}
-
-/** The table an item was compiled from: its headers in order, the numbered
- * notes and the legend printed with it and the code legends its headers cite
- * (all read from its page's text spans, `pages`), and its rows. */
-function tableContext(item, tables, pages = {}) {
-  const headers = [];
-  const notes = [];
-  const rows = [];
-  const codes = {};
-  const legend = {};
-  for (const t of tables) {
-    if (t.sheet !== item.sheet_id || t.title !== item.table_title) continue;
-    for (const h of t.headers) if (!headers.includes(h)) headers.push(h);
-    const spans = pages[t.sheet] ?? t.spans;
-    t.readNotes ??= spans && t.region ? scheduleNotes(spans, t.region) : (t.notes ?? []);
-    for (const n of t.readNotes) if (!notes.some((x) => x.id === n.id)) notes.push(n);
-    for (const r of t.rows ?? []) rows.push(r);
-    if (spans) {
-      t.readCodes ??= Object.fromEntries(t.headers.map((h) => [h, citedCodeLegend(spans, h)]).filter(([, c]) => c));
-      Object.assign(codes, t.readCodes);
-      t.readLegend ??= t.region ? scheduleLegend(spans, t.region) : {};
-      Object.assign(legend, t.readLegend);
-    }
-  }
-  return headers.length || notes.length || rows.length ? { headers, notes, rows, codes, legend } : null;
 }
 
 const citeInTable = (cite, t) => Boolean(cite) && cite.sheet === t.sheet && t.titles.has(cite.table_title);
@@ -196,11 +170,12 @@ export function scoreSet({ setId, key, snapshot, normalize }) {
     byTable.get(k).push(it);
   }
   const memo = new Map();
+  const read = new WeakMap();
   // The units the project's drive schedules name as their loads.
   const driven = vfdDrivenTags(snapshot.items);
   const norm = (it) => {
     if (!memo.has(it)) {
-      const table = tableContext(it, snapshot.tables, snapshot.pages);
+      const table = tableContextOf(it, snapshot.tables, snapshot.pages, read);
       memo.set(it, normalize(it, it.family, table && driven.size ? { ...table, driven } : table));
     }
     return memo.get(it);
@@ -420,6 +395,35 @@ async function snapshotSet(corpus, spec, set) {
   return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages };
 }
 
+/** One set's compile snapshot (snapshotSet), taken in a child process so a
+ * crash or a runaway graph build cannot take the caller down. Resolves to
+ * the snapshot, or to { id, error }. */
+export function snapshotInChild(corpus, id) {
+  const thisScript = fileURLToPath(import.meta.url);
+  const TIMEOUT_MS = Number(process.env.OPENTAKEOFF_EVAL_TIMEOUT_MS) || 45 * 60 * 1000;
+  return new Promise((res) => {
+    const started = Date.now();
+    process.stderr.write(`· ${id} …\n`);
+    const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", id], { stdio: ["ignore", "pipe", "inherit"] });
+    let out = "";
+    let settled = false;
+    const finish = (value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      process.stderr.write(`  ${id}: ${value.error ? "ERROR" : `graph from ${value.graph}, ${value.items.length} compile items`} in ${Math.round((Date.now() - started) / 1000)}s\n`);
+      res(value);
+    };
+    const timer = setTimeout(() => { child.kill("SIGKILL"); finish({ id, error: `timed out after ${TIMEOUT_MS}ms` }); }, TIMEOUT_MS);
+    child.stdout.on("data", (d) => { out += d; });
+    child.on("close", (code) => {
+      if (code !== 0 || !out.trim()) return finish({ id, error: `child exited ${code} with no result` });
+      try { finish(JSON.parse(out)); } catch (e) { finish({ id, error: `bad child JSON: ${e?.message || e}` }); }
+    });
+    child.on("error", (e) => finish({ id, error: String(e?.message || e) }));
+  });
+}
+
 async function main() {
   const argv = process.argv.slice(2);
   const flag = (f) => argv.includes(f);
@@ -466,29 +470,7 @@ async function main() {
     ? (it, family) => ({ family, tag: it.tag, attributes: {}, unknown: {} })
     : (await import("../../web/src/lib/assemblies/normalize.ts")).normalizeCompileItem;
 
-  const thisScript = fileURLToPath(import.meta.url);
-  const TIMEOUT_MS = Number(process.env.OPENTAKEOFF_EVAL_TIMEOUT_MS) || 45 * 60 * 1000;
-  const snapshot = (id) => new Promise((res) => {
-    const started = Date.now();
-    process.stderr.write(`· ${id} …\n`);
-    const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", id], { stdio: ["ignore", "pipe", "inherit"] });
-    let out = "";
-    let settled = false;
-    const finish = (value) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      process.stderr.write(`  ${id}: ${value.error ? "ERROR" : `graph from ${value.graph}, ${value.items.length} compile items`} in ${Math.round((Date.now() - started) / 1000)}s\n`);
-      res(value);
-    };
-    const timer = setTimeout(() => { child.kill("SIGKILL"); finish({ id, error: `timed out after ${TIMEOUT_MS}ms` }); }, TIMEOUT_MS);
-    child.stdout.on("data", (d) => { out += d; });
-    child.on("close", (code) => {
-      if (code !== 0 || !out.trim()) return finish({ id, error: `child exited ${code} with no result` });
-      try { finish(JSON.parse(out)); } catch (e) { finish({ id, error: `bad child JSON: ${e?.message || e}` }); }
-    });
-    child.on("error", (e) => finish({ id, error: String(e?.message || e) }));
-  });
+  const snapshot = (id) => snapshotInChild(corpus, id);
 
   const results = [];
   const errors = [];

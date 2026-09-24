@@ -399,7 +399,7 @@ export function airHandlerTypicals() {
   const S2302 = (loc: string) => src.ufgs("23 09 23.02", loc);
   const rtu = {
     ...meta("rtu-networked", "Packaged rooftop unit with factory controls on the network", ["UFGS 23 09 23.02 §3.1.5 (gateways, packaged units)", "UFGS 23 09 00 §1.4.54-1.4.55", "[inferred] research 02 §3b typical 13: the exposed point list"]),
-    applies_to: { family: ["RTU"], selector: "known(attr.bas_interface)", rank: 30 },
+    applies_to: { family: ["RTU"], selector: "known(attr.bas_interface) and attr.bas_interface != 'HARDWIRE'", rank: 30 },
     options: [AHU_COMMON_OPTIONS.find((o) => o.id === "duct_smoke_detectors")!, { id: "gateway", label: "A single-unit gateway (the unit's controller does not speak BACnet)", default: false, note: "UFGS 23 09 23.02 §3.1.5.1: one packaged unit per gateway, at most 10 ft of non-BACnet wiring." }],
     lines: [
       device("packaged-controller", "packaged-controller", { label: "Factory unit controller (furnished with the unit)", s223: "Controller", params: { class: "'packaged_onboard'" }, source: src.ufgs("23 09 00", "§1.4.54: packaged equipment") }),

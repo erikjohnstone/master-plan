@@ -16,7 +16,7 @@ the partner review it requests is INPUT 4).
 - held-out fails at 85.8% exact with 2 invented, and must pass at DONE
   (AS-17; closing it needs more dev documents, AS-2).
 
-**Now:** WP5 (apply on the shared path).
+**Now:** WP5 (apply on the shared path): keys and instrument 3 done, the apply core in; GATE 5 dev 47.5% at the schedule-only ceiling (AS-19).
 
 **Draft PR:** erikjohnstone/master-plan#108 (opened at the end of WP2 per the BRANCH line; never merged by the loop).
 
@@ -465,6 +465,37 @@ rebuilds them and requires identical bytes.
   - Deriving `terminals_served`: WP5.
   - Loading the starter into a profile or a project: WP5.
   - Exports: WP7.
+
+
+**WP5 — apply on the shared path (in progress, 2026-09-24).**
+- **WP5.5, the truth (be676b3, d74abaf):**
+  - `keys/<set>.typicals.csv` for all 11 dev documents: 244 instances, 142 with a typical and 102 `none`.
+  - The same for all 6 held-out documents: 91 instances, 79 with a typical and 12 `none`.
+  - Written from renders and the controls sheets (sequences, schematics, points lists); the pipeline was not consulted.
+  - Each row's basis note cites its evidence. The conventions are in AS-18.
+- **Instrument 3** (`mcp/scripts/assemblies-typical-eval.mjs`):
+  - It takes its snapshots from the attribute eval's child, so both instruments score one compile.
+  - It scores one outcome per keyed instance: exact, option_wrong, wrong_typical, unresolved or unmatched. Options the key leaves open are scored apart.
+  - Each unresolved record's missing attributes are checked against `*.attrs.csv`.
+  - GATE 5's "undisclosed" check fails a decided record that rests on a value the attribute key says is not printed.
+  - `--heldout` prints aggregates only; `--detail` is dev-only.
+- **WP5.1, the shared apply path** (`web/src/lib/assemblies/apply.ts`):
+  - The table context the normalizer reads moved here from the attribute eval, so UI, MCP and both evals feed the normalizer the same way. The attribute eval's dev output is byte-identical before and after.
+  - Instances carry their cites, scope (the serving air handler is the system) and multiplier (a printed QTY).
+  - Derived with a rule and basis:
+    - the applied family: a 100% outdoor-air air handler is a DOAS, a gas-fired fan coil a furnace;
+    - `terminals_served`: from terminal rows naming the air handler, from the project's only AHU/RTU, or 0 when no terminal unit or duct-mounted coil is scheduled.
+  - `web/test/assemblies/apply.test.ts`: 7 tests. All 99 assemblies tests pass; web tsc exits 0.
+- **Library fix AS-20:** a hardwired interface is no longer a network interface (chiller, boiler, rtu-networked). The JSON was rebuilt by the builder.
+- **Typical eval, dev** (`reports/assemblies/05-typical-eval-dev.{json,md}`):
+  - 116 of 244 exact (47.5%; GATE 5 needs 98%): 44 option_wrong, 21 wrong_typical, 63 unresolved.
+  - One unresolved record names a printed value the normalizer misses (bldg5406 AHU-1, AS-16).
+  - Undisclosed: 0. 73 exact rows reach a drawing-decided option through the library default.
+  - AS-19 breaks the misses down by cause. A schedule-only proposal is capped at 123 of 244, because the rest of the truth is on the control drawings (D6).
+  - Held-out is not run; it is scored at the gate.
+- **Next:**
+  - WP5.2 persistence, WP5.3 the MCP tool and parity test, WP5.4 the UI panel.
+  - Then D6 evidence (control schematics, points lists, sequences bound to units) and the project settings AS-19 names.
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered

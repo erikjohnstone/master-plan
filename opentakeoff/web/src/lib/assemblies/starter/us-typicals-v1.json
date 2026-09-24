@@ -17367,7 +17367,7 @@
     "family": [
      "RTU"
     ],
-    "selector": "known(attr.bas_interface)",
+    "selector": "known(attr.bas_interface) and attr.bas_interface != 'HARDWIRE'",
     "rank": 30
    },
    "options": [
@@ -22015,7 +22015,8 @@
     {
      "id": "network_interface",
      "label": "Boiler controls on the network (a BACnet interface)",
-     "auto": "known(attr.bas_interface)"
+     "auto": "known(attr.bas_interface) and attr.bas_interface != 'HARDWIRE'",
+     "note": "A printed hardwired interface (bas_interface HARDWIRE: enable, status and alarm contacts wired to the DDC) is discrete points, not a network interface."
     }
    ],
    "lines": [
@@ -23160,7 +23161,8 @@
     {
      "id": "network_interface",
      "label": "Chiller controls on the network (a BACnet interface)",
-     "auto": "known(attr.bas_interface)"
+     "auto": "known(attr.bas_interface) and attr.bas_interface != 'HARDWIRE'",
+     "note": "A printed hardwired interface (bas_interface HARDWIRE: enable, status and alarm contacts wired to the DDC) is discrete points, not a network interface."
     },
     {
      "id": "ufc_minimum_points",

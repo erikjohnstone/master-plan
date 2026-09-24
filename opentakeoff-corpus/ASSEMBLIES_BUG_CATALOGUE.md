@@ -640,3 +640,86 @@ changed to fit.
 - DoD owners (Eglin AFB, Davis-Monthan AFB) set `ufc_minimum_points=true`
   on HVAC typicals. Plumbing pumps set it false, outside UFC 3-410-01's HVAC
   scope.
+
+---
+
+## AS-19 — the typicals auto-proposal reads schedules, while half the dev truths are decided on the control drawings: 116 of 244 exact (OPEN — this goal, WP5/WP6; the demonstrated ceiling of a schedule-only proposal)
+
+**Found:** 2026-09-24, WP5.1, the first run of instrument 3
+(`mcp/scripts/assemblies-typical-eval.mjs`; `reports/assemblies/05-typical-eval-dev.{json,md}`).
+The proposal is the shared apply path: `web/src/lib/assemblies/apply.ts`
+(normalize with the table context, derived family and `terminals_served`)
+into `select.ts`. It runs with no project settings and no partner defaults.
+
+**Numbers (dev, 244 keyed instances, all matched to a compile item):**
+- 116 exact (47.5%, GATE 5 needs 98%): 73 of the 142 typical rows and 43 of
+  the 102 `none` rows. The 43 are the families v1 has no typical for:
+  DUCT_MOUNTED_COIL 24, CONDENSING_UNIT 11, FIN_TUBE_RADIATION 8.
+- Disclosure: 73 of the exact rows reach a drawing-decided option through
+  the library default. No decided record rests on a value the attribute key
+  says is not printed.
+- 62 of the 63 unresolved rows name only attributes the drawing leaves
+  unprinted. One names a value the normalizer misses: bldg5406 AHU-1
+  `cooling_type`, the rotated-schedule ceiling of AS-16.
+
+The other 128 rows, by cause:
+
+| Cause | Rows | Examples |
+|---|---|---|
+| The drawings decide an option away from the library default (control schematics, points lists, sequences) | 44 option_wrong | federal VAV CO2 sensors 15; unit and cabinet heater modulating valves 8; exhaust fan dampers and pressure control 7; DoD UFC minimum points 4 (plus federal AHU-1 and the chillers); 094 AHU-04/05/08 (no zone sensor, freezestat on the starter, no smoke detector); federal B-1/B-2 isolation valves; itd HUM-1 space humidity; itd F-1 fan status |
+| Context outside the row (AS-18: no BAS, standalone, monitor-only, existing, component) | 21 wrong_typical + 38 unresolved | baker, 004 (no BAS); itd EH-1..9, federal UH, CP; 069 B-1(E)/B-2(E); 031 WHSE-SF1/RF1 |
+| A fan or pump whose VFD the schedule does not print; the key decides it from the control points or a note | 18 unresolved | federal EF-1..4, bldg5406 EF-1..5 and CP-1, 069 CWP-1/2 ("NEW CONSTANT SPEED" in a note), itd EF-4..6, 031 WHSE-EF1/EF2 ("SPEED CONTROL: CONSTANT / VARIABLE") |
+| An auto option with no printed attribute and no partner default | 4 unresolved | FCU `variable_speed_fan` (ecm): bldg5406 AC-1, federal FCU-1; 094 AHU-06 economizer; 094 AHU-07 exhaust fan (energy recovery) |
+| Terminal counts the schedules do not give | 2 unresolved | 031 WHSE-AHU-1 (its terminals are reheat coils); itd AHU-1 (the M6.3 schematic makes it 100% OA, the schedule prints 3,950 of 13,000 cfm) |
+
+Structural fixes in this commit, which change typicals but not the count:
+- `terminals_served` is derived from the terminal rows that name the air
+  handler, from the project's only AHU/RTU, or as 0 when the project
+  schedules no terminal unit and no duct-mounted coil. 094 AHU-04/05/08
+  (single-zone) and federal AHU-1 (multizone VAV) now get their key's
+  typical.
+- A 100% outdoor-air air handler takes the DOAS typical (094 AHU-07, whose
+  printed OA equals its supply). A gas-fired fan coil takes the furnace
+  typical (itd F-1).
+Each of these rows still misses on an option that the control drawings
+decide.
+
+**Ceiling:** with every schedule attribute read perfectly, a schedule-only
+proposal still misses every row whose truth is on the control drawings: 62
+of the 142 typical rows need a non-default option (counted from the keys
+against the library defaults), and the 59 context `none` rows need context.
+Its ceiling is at most (142−62) + (102−59) = 123 of 244 (50.4%). It is lower
+still, because a fan or pump whose schedule prints no VFD cannot be decided
+from the schedule either. GATE 5 cannot pass on schedules.
+
+**Path, in the order it will be tried:**
+- D6 evidence (goal WP5.1/WP6): control schematics, printed points lists and
+  sequences bound to a unit decide its options and whether it has BAS
+  control. The sheet graph already carries L4.8 control schematics with
+  bound equipment tags, instrument labels and explicit I/O tokens, plus
+  sequence narratives. WP6's printed-list-to-unit mapping is the same map.
+- Project settings the estimator states once and the record discloses: BAS
+  scope (22 rows) and a DoD owner (UFC minimum points). The eval would report
+  them apart from the auto-proposal.
+- Partner defaults (INPUT 4) for options the drawings leave open.
+Keys are never changed to fit.
+
+---
+
+## AS-20 — a printed hardwired chiller interface counted as a network interface (FIXED — library v1 auto expressions)
+
+**Found:** 2026-09-24, instrument 3 on dev: federal CH-1 (note 4, "PROVIDE
+HARDWIRE INTERFACE BETWEEN CHILLER PANEL AND SITE DDC CONTROLS"). The
+normalizer reads it as `bas_interface` HARDWIRE, and the chiller's
+`network_interface` auto was `known(attr.bas_interface)`, so the record
+claimed a BACnet interface. The boiler's option and the `rtu-networked`
+selector had the same expression.
+
+**Fix:** the three expressions now read `known(attr.bas_interface) and
+attr.bas_interface != 'HARDWIRE'`, which matches the options' own
+definitions ("on the network (a BACnet interface)"). A hardwired interface
+is enable, status and alarm contacts: discrete points. The builder was
+changed and the JSON rebuilt from it. Tests: apply.test.ts "a printed
+hardwired interface is not a network interface (chiller, boiler, RTU)".
+Dev: federal CH-1's `network_interface` now matches its key. The row still
+misses on `chw_isolation_valve` and `ufc_minimum_points` (AS-19).

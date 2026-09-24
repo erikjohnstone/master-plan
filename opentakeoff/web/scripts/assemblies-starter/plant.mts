@@ -106,7 +106,7 @@ function boilers() {
     applies_to: { family: "BOILER", rank: 10 },
     options: [
       { id: "isolation_valve", label: "Motorized isolation valve with status", default: false, note: "UFGS 23 09 00 §3.7.8.5.2 b trends each boiler's isolation valve command and status." },
-      { id: "network_interface", label: "Boiler controls on the network (a BACnet interface)", auto: "known(attr.bas_interface)" },
+      { id: "network_interface", label: "Boiler controls on the network (a BACnet interface)", auto: "known(attr.bas_interface) and attr.bas_interface != 'HARDWIRE'", note: "A printed hardwired interface (bas_interface HARDWIRE: enable, status and alarm contacts wired to the DDC) is discrete points, not a network interface." },
     ],
     lines: [
       device("boiler-interface", "factory-interface", { label: "Boiler control panel interface (enable, status and alarm contacts)", source: src.va("23 09 23 (03-01-23)", "§1.1 Responsibility Table: Chiller/boiler controls interface with control system") }),
@@ -169,7 +169,7 @@ function chillers() {
       { id: "chw_isolation_valve", label: "Motorized chilled-water isolation valve (headered pumps)", default: true, note: "G36 (MBL chiIsoValTyp): 2-position by default; UFGS 23 09 00 §3.7.8.5.1 b trends its command and status." },
       { id: "modulating_isolation", label: "Modulating isolation valves with position feedback (G36 Actuator.Modulating)", default: false },
       { id: "isolation_end_switches", label: "Open and closed end switches on 2-position isolation valves", default: false },
-      { id: "network_interface", label: "Chiller controls on the network (a BACnet interface)", auto: "known(attr.bas_interface)" },
+      { id: "network_interface", label: "Chiller controls on the network (a BACnet interface)", auto: "known(attr.bas_interface) and attr.bas_interface != 'HARDWIRE'", note: "A printed hardwired interface (bas_interface HARDWIRE: enable, status and alarm contacts wired to the DDC) is discrete points, not a network interface." },
       UFC_OPTION,
     ],
     lines: [
