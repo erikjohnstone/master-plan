@@ -7,9 +7,18 @@ Branch `claude/affectionate-darwin-316fwo` (the goal's BRANCH line names
 here). Coordinator only, one heavy job at a time. Bug catalogue:
 `ASSEMBLIES_BUG_CATALOGUE.md`. Reports: `reports/assemblies/`.
 
-**Gates passed:** GATE 0 (2026-09-23; dev is below the TRUTH size target, a ceiling
-demonstrated in AS-7); GATE 1 (2026-09-23); GATE 3 (2026-09-24); GATE 4 (2026-09-24;
-the partner review it requests is INPUT 4).
+**Gates passed:**
+- GATE 0 (2026-09-23; dev is below the TRUTH size target, a ceiling demonstrated in AS-7);
+- GATE 1 (2026-09-23);
+- GATE 3 (2026-09-24);
+- GATE 4 (2026-09-24; the partner review it requests is INPUT 4);
+- GATE 7 (2026-09-24): export validation green on dev and held-out; the coil-derived HIT rows reported against WP0 (161 = 161, 11 = 11); guard green;
+- GATE 8 (2026-09-24): the three persona scenarios pass, the library CSV round trip is lossless, the UI proof passes, guard green;
+- GATE 9 (2026-09-24): unit tests; the starter's grep test (c) is green.
+
+**GATE 6, measured 2026-09-24, not passed** (`reports/assemblies/06-points-compare-{dev,heldout}`):
+- dev has no evidence: no dev unit is named by a printed list (AS-22);
+- held-out navfac names 40 units, 0 agree by I/O type, and the 40 diffs stay unclassified, because classifying them would mean reading held-out.
 
 **GATE 2, measured 2026-09-24, not passed:**
 - dev fails on exact at a demonstrated extraction ceiling (AS-16);
@@ -17,7 +26,8 @@ the partner review it requests is INPUT 4).
   (AS-17; closing it needs more dev documents, AS-2).
 
 **GATE 5, measured 2026-09-24, not passed** (AS-19; `reports/assemblies/05-typical-eval-{dev,heldout}.{json,md}`):
-- Typical eval dev: 116/244 exact (47.5%; needs 98%). This is at the schedule-only ceiling AS-19 demonstrates (at most 123/244). Counting only the rows that reach every drawing-decided option without a library default: 43/244.
+- Typical eval dev: 116/244 exact (47.5%; needs 98%). This is at the schedule-only ceiling AS-19 demonstrates (at most 123/244). Counting only the rows that reach every drawing-decided option without a library default: 43/244. Re-measured at the final HEAD with the same result.
+- The D6 census finds only 3 dev units with their own printed I/O, so the control drawings cannot close the gap here (AS-19: a demonstrated ceiling).
 - Held-out: 21/91 exact (23.1%; needs 95%), reported with aggregates only.
 - Undisclosed: 0 on both sides (passes).
 - Parity: green on D04 (records, lines, report and the CSV set).
@@ -29,7 +39,18 @@ the partner review it requests is INPUT 4).
 - NEW-DOCUMENT TEST #1: blocked on INPUT 5 (asked once in WP0, still open).
 - UI proof (a real PDF in the running app; details under WP8): **passes**, 10 checks. The browser's records and lines are byte-identical to `apply_assemblies` (214 records, 3,220 lines).
 
-**Now:** GATE 5 is measured and not passed. The next lever is D6 from the control drawings: an I/O-count match against schematics bound to units (`ioMatch.ts`, written and unit-tested), pending a census. WP6's instrument is written, but AS-2, AS-22 and the held-out rule leave it little to compare. WP7's CSV set, PDF section and HIT changes are in. WP8's library CSV, presets and persona scenarios and WP9's partner-entered fields are in; their gates wait on the UI proof and the guard.
+**Now (2026-09-24): every gate the loop can move is either passed or stopped at a demonstrated ceiling.**
+- Passed: GATES 0, 1, 3, 4, 7, 8 and 9.
+- Not passed, with the evidence:
+  - GATE 2: extraction ceiling on dev (AS-16); held-out needs more dev documents (AS-17, AS-2).
+  - GATE 5: the schedule-only ceiling, and the D6 census (AS-19).
+  - GATE 6: no dev evidence (AS-22); held-out cannot be classified without reading it.
+- What would move them, all from the owner:
+  - dev documents whose control drawings or points lists bind one unit each (INPUT 5 partner jobs, or the goal's listed sets, AS-2);
+  - partner defaults and the reviewers' judgement (INPUT 4).
+- WP10 and the NEW-DOCUMENT tests wait on INPUT 5; the HIT and Desigo questions wait on INPUTs 2 and 3.
+- Corpus-eval is unchanged by construction; the linear bench changed timing only.
+- Final guard (below): no new failure.
 
 **Draft PR:** erikjohnstone/master-plan#108 (opened at the end of WP2 per the BRANCH line; never merged by the loop).
 
@@ -589,7 +610,18 @@ Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Bo
 - **Parity (D04).** The scoped CSV set under the presets, over MCP, is the browser builder's bytes. `export_scope` without `export_dir`, and an unknown preset, are refused. mcp assemblies apply and points compare: 4/4 pass (PARITY 151 s).
 - **Tests:** web assemblies and HIT 158 pass (among them partner 2, presets 3, scope 1, the PDF's partner section 1, personas 3). Web and mcp tsc exit 0. eslint: 0 errors (the 3 known warnings). The full web `npm test` has 3665 tests: 3649 pass, the 3 AS-1 failures, 13 skipped. `npm run build` exits 0.
 - **GATE 9** (unit tests; grep test (c) still green): **passes**. `partner.test.ts`, persona (a) and the PDF test assert the extension and the label; starter.test.ts's grep test (c) is green.
-- **GATE 8** (all three scenarios pass; round-trips lossless; guard green): the scenarios pass, the library round trip is lossless, and the UI proof passes. The full guard after these edits runs next.
+- **GATE 8** (all three scenarios pass; round-trips lossless; guard green): **passes.** The scenarios pass, the library round trip is lossless, the UI proof passes, and the final guard shows no new failure.
+- **Final guard** (after every edit of this session; logs in the session scratchpad `guard2/`): no new failure against AS-1.
+  - web:
+    - typecheck and lint pass (0 errors, the 3 known warnings);
+    - `npm test`: 3,669 tests, 3,653 pass, only the 3 AS-1 failures, 13 skipped;
+    - the six BAS benches, bench, bench:linear and build exit 0. bench:linear rewrote only its timing fields, and the file was restored.
+  - mcp:
+    - typecheck 0;
+    - pretest chain 133 + 33 + 6 + 17, all pass;
+    - main suite: 470 tests, 351 pass, only the 5 AS-1 failures, 114 skipped, 0 cancelled, 12 minutes;
+    - `check:tool-count` passes.
+  - The main suite ran as `node --import tsx --test --test-force-exit <package.json's files>`. Each worker now exits when its tests end, and the idle table sidecars exit on stdin EOF. AS-6 no longer needs a process stopped, and none was left running.
 - **UI proof** (`web/scripts/playwright-assemblies.mjs`, `raw/federal-attachment4-mechanical.pdf`, the Vite dev server, headless Chromium): **10 checks pass.**
   - Reference: `mcp/scripts/assemblies-apply.mjs`, through the real MCP tool on a Session: 128 units, 214 records, 3,220 lines in 144 s. A second call set `hookup_defaults`, the kit-maker preset and `export_scope: mechanical` (2,661 lines).
   - The checks:

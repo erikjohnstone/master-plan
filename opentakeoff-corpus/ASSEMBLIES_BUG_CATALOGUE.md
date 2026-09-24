@@ -153,8 +153,19 @@ background task was stopped: the sidecars went with it, the worker's event
 loop drained, and the runner printed its summary. It reported the file-level
 "Promise resolution is still pending but the event loop has already
 resolved" as cancelled, and the two known AS-1 failures among its 20 tests.
-No other result changed. The per-run workaround now needs either that
-permission or the owning loop's fix.
+No other result changed.
+
+**Workaround that needs no signal (2026-09-24, the final guard):** run the
+main suite as `node --import tsx --test --test-force-exit` with the same
+files as `package.json`'s `test` script. The runner exits each worker once
+its tests have ended, whatever handles remain. The table sidecar reads
+`for line in sys.stdin`, so it exits on EOF when its parent's pipe closes.
+The suite finished in 12 minutes, with the same 5 AS-1 failures and no
+process left behind. A tiny reproduction checked both halves first: a test
+that spawns an idle stdin-reading child exits 0 under the flag, and the child
+exits on EOF. `--test-force-exit` is not allowed in NODE_OPTIONS, so it goes
+on the command line. The owning loop's fix, `unref`, or tracking every
+spawned sidecar in `vectorGridClient.ts`, is still the real one.
 
 ---
 
