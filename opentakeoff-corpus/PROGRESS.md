@@ -139,8 +139,36 @@ are outside the population; AS-8 lists them); editing any committed key.
   text in `mcp/src/tools.ts` and `outputs.ts`. None of them is in the import
   graph of any corpus-eval scorer (takeoff-eval, graph-eval,
   table-recall-eval, tag-eval: 163 modules), so WP0 cannot have moved its
-  metrics. The loop's first corpus-eval run, the baseline WP1 and later
-  compare against, is recorded here when it finishes.
+  metrics.
+- **Corpus-eval baseline (instrument 1), the numbers WP1 and later compare
+  against:** cold cache, VectorGrid on, at `da7493d` (WP1; nothing in WP0 or
+  WP1 is in any scorer's import graph), 2026-09-23 23:12 to 2026-09-24 00:19,
+  saved as `reports/assemblies/00-corpus-eval-baseline.txt`. One child per
+  scorer (`OPENTAKEOFF_EVAL_CONCURRENCY=1`), 40-minute per-set timeout, under
+  the AS-15 orphan reaper (494 orphans stopped, one per set per scorer; no
+  scorer reads an orphan's output). 23 of the 121 sets have their PDFs in
+  this container (AS-2).
+  - takeoff: 541 keyed tags, 85.0% exact, Σ|Δqty| 192, missing 13,
+    false-add 59; applicable installed rows 423/499 (84.8%); expected honest
+    refusals 9/14.
+  - reference: 92/129 cells exact (71.3%): itd-d1-lab 0/34 (its lab
+    ventilation sequence table is missing), bessemer 9/12, federal-mech,
+    navfac and baker 100%.
+  - graph: cells 78 right, 0 wrong, 13 missed (P 100.0%, R 85.7%, every miss
+    a baker CEILING finish); row-symbol recall 100.0% (504); tag P/R 0.0%
+    (393 room tags reported; the HVAC tag keys have no is_room column). The
+    baker child ended without a result (a signal exit; the run's one OOM
+    kill, 23:44, came while four scorers ran at once); its numbers are from
+    a rerun alone at
+    `9f9de9a` (WP2's first commit; nothing it adds is in a scorer's import
+    graph), in the same file.
+  - table recall 46/51 (90.2%); tag census 1,354/1,850 (73.2%), 18 of 21
+    keyed sets below their floor, so tag-eval exits 1 by design and
+    corpus-eval.mjs exits 1 at 00:04 while the graph scorer runs on.
+  - Regressions against the last recorded full run (`2cd532b`, 2026-08-29,
+    "Final outcome/production batch"): reference 129/129 → 92/129 and graph
+    cells 91/91 → 78/91. Both predate this loop; none of its files is
+    imported by a scorer.
 
 **WP1 — canonical attribute schema; GATE 1 passed (2026-09-23).**
 `web/src/lib/assemblies/attributes.ts` is on the shared path: normalize.ts,

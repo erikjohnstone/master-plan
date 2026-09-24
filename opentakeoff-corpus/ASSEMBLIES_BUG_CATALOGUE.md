@@ -404,3 +404,73 @@ held-out, for units and enums. The held-out keys drove exactly two schema
 entries, both dimensionally exact conversions: W to kW (bessemer's heat pump
 electric coil) and feet of water to in. w.c. (bessemer's fan static, AS-13).
 No fitted value came from a held-out key.
+
+---
+
+## AS-15 — every corpus-eval scorer child spawns an orphan that re-scores its set, forever (OPEN — owned by the scorers' loops; worked around per run)
+
+**Found:** 2026-09-23, recording the loop's corpus-eval baseline (task: measure 1).
+
+**What:** the first cold `npm run eval:corpus` at `470d609` drove this
+16 GB / 4-core container into a memory stall within 15 minutes:
+`/proc/pressure/memory` full avg10 = 97%, MemAvailable 1.7 GB, load average
+72, and a plain `ps` or `grep` took over two minutes. Seventeen of the
+`--single-json` scorer processes had PPID 1 (no live parent). The run's
+own `eval.err` showed sets starting 10 to 39 times each in 20 minutes
+(itd-d1-lab 39, federal-mech 37, navfac 34); the most a set can start is
+4, once per scorer. This is the "extra tag-eval.mjs --single-json processes
+with ppid=1" PROGRESS.md records as an unexplained anomaly, and it fits the
+23 oom-kills logged there.
+
+**Root cause (confirmed by reading the code):** all four scorers that
+`corpus-eval.mjs` runs (`takeoff-eval.mjs`, `graph-eval.mjs`,
+`tag-eval.mjs`, `table-recall-eval.mjs`) end their `--single-json` branch
+with `process.stdout.write(JSON.stringify(result), () => process.exit(0));`
+and no `else`. The exit waits for a later tick, so the child falls through
+into the orchestrator code below it. In the child, `only` is `[setId]` (the
+set id is a positional argument), so the orchestrator spawns a grandchild
+for the same set before the exit callback runs. The child then exits, and
+the grandchild, orphaned, repeats the whole thing. Each set a scorer
+finishes leaves a chain that re-scores it until killed; nothing reads the
+chain's output (its stdout pipe has no reader). Introduced by `5ab7ca8`
+(#107), which moved the exit into the write callback to avoid truncating
+the result; before that, the synchronous `process.exit(0)` never reached the
+orchestrator code.
+
+**Why this goal does not fix it:** the scorers are other loops' instrument
+(goals/ASSEMBLIES.md WHAT YOU OWN does not list them). Proposed fix, one
+line per scorer: `await new Promise((r) => process.stdout.write(json, r));
+process.exit(0);` (a top-level await, so nothing after it runs), or an
+`else` around the orchestrator. `assemblies-baseline.mjs` and
+`assemblies-attr-eval.mjs` (this goal's) are not affected: their single-set
+branch cannot fall through.
+
+**Workaround used (changes no score):** the baseline run (attempt 2) ran
+with an orphan reaper on its own process group. The reaper stops a
+process only when it is in that group, has PPID 1, and is a node process
+with the exact argument `--single-json`, or that process's table
+sidecar. An orphan's stdout has no reader, so no scorer ever sees its
+result. The reaper was tested on synthetic orphans first: it stopped the
+exact match and left a look-alike argument and a non-node process alone.
+Attempt 2 also ran one child per scorer (`OPENTAKEOFF_EVAL_CONCURRENCY=1`,
+4 heavy children on 4 cores) with a 40-minute per-set timeout.
+The reaper stopped 494 orphans over the run: 487 node children (122 each
+from takeoff-eval, graph-eval and tag-eval, 121 from table-recall-eval, one
+per set scored) and 7 table sidecars. With it the run held; its low point
+was 1.6 GB available at 23:43, and the container's memory cgroup OOM-killed
+one 5.9 GB node process at 23:44 (not an orphan) while four scorers ran
+heavy sets at once; the run's one child that ended without a result is
+graph-eval's baker-county-eoc, taken to be that process. That set was rerun alone afterwards
+(`reports/assemblies/00-corpus-eval-baseline.txt`).
+
+**Two more things this run showed about the orchestrator (recorded, not
+fixed; also the scorers' loops'):** tag-eval.mjs exits 1 by design when any
+keyed set is below its floor, and corpus-eval.mjs awaits its scorers with
+`Promise.all`, so a below-floor tag census ends corpus-eval with exit 1 while
+graph-eval is still running (its report still arrives on the shared stderr).
+And the sets whose PDFs are absent here fail fast with ENOENT on a path from
+the corpus author's machine (AS-2), which every scorer prints per set.
+
+**Evidence:** `reports/assemblies/00-corpus-eval-orphans.txt` (attempt 1:
+the per-set start counts and the orphan process list; attempt 2: the reaper's
+per-scorer counts).

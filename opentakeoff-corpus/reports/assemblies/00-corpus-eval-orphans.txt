@@ -1,0 +1,64 @@
+# AS-15 evidence — corpus-eval scorer children that re-score their set forever
+#
+# Attempt 1 (cold, VectorGrid on, at 470d609, default concurrency 2), killed after ~20 minutes in a memory stall.
+# Times each set STARTED in eval.err ("· <set> …" lines; at most 4 are legitimate, one per scorer):
+     39 itd-d1-lab
+     37 federal-mech
+     34 navfac-cherry-point-atc
+     33 bldg5406-hvac-demo
+     32 baker-county-eoc
+     31 itd-d1-lab-raster
+     20 24_IA_JohnsonCounty_Courthouse
+     19 27_WA_ColvilleTribes_Hatchery_Lab
+     18 16_NV_CarsonValleyMS_HVAC_Replacement
+     17 13_MI_MSU_LifeSciences_LabRenovation
+     16 03_FL_HurlburtField_ChildDevCenter
+     15 08_ME_BGS_Augusta_EastCampus_Renovation
+     14 15_IA_IowaState_Biorenewables_Lab
+     13 09_ME_BGS_KennebecValleyCC_Renovation
+     10 bessemer
+      1 12_MT_MSU_ReidHall_Renovation
+      1 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for
+#
+# --single-json processes alive at 23:03:12 UTC (pid, parent pid, scorer, set); ppid=1 = orphan:
+13277 ppid=1 graph-eval.mjs bessemer
+11215 ppid=9764 graph-eval.mjs federal-mech
+9841 ppid=9764 graph-eval.mjs itd-d1-lab
+11951 ppid=9765 table-recall-eval.mjs 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for
+13909 ppid=1 table-recall-eval.mjs 03_FL_HurlburtField_ChildDevCenter
+13919 ppid=1 table-recall-eval.mjs 08_ME_BGS_Augusta_EastCampus_Renovation
+13887 ppid=1 table-recall-eval.mjs 09_ME_BGS_KennebecValleyCC_Renovation
+10163 ppid=9765 table-recall-eval.mjs 12_MT_MSU_ReidHall_Renovation
+13930 ppid=1 table-recall-eval.mjs 13_MI_MSU_LifeSciences_LabRenovation
+13942 ppid=1 table-recall-eval.mjs 15_IA_IowaState_Biorenewables_Lab
+13897 ppid=1 table-recall-eval.mjs 16_NV_CarsonValleyMS_HVAC_Replacement
+13869 ppid=1 table-recall-eval.mjs 24_IA_JohnsonCounty_Courthouse
+13858 ppid=1 table-recall-eval.mjs 27_WA_ColvilleTribes_Hatchery_Lab
+13975 ppid=1 table-recall-eval.mjs baker-county-eoc
+12348 ppid=1 table-recall-eval.mjs bessemer
+13949 ppid=1 table-recall-eval.mjs bldg5406-hvac-demo
+13875 ppid=1 table-recall-eval.mjs federal-mech
+13963 ppid=1 table-recall-eval.mjs itd-d1-lab
+13956 ppid=1 table-recall-eval.mjs itd-d1-lab-raster
+13847 ppid=1 table-recall-eval.mjs navfac-cherry-point-atc
+12323 ppid=1 tag-eval.mjs bessemer
+10789 ppid=9776 tag-eval.mjs federal-mech
+9874 ppid=9776 tag-eval.mjs itd-d1-lab
+9827 ppid=9763 takeoff-eval.mjs bessemer
+9828 ppid=9763 takeoff-eval.mjs itd-d1-lab
+
+# Attempt 2 (the baseline run: cold, VectorGrid on, at da7493d, OPENTAKEOFF_EVAL_CONCURRENCY=1), under the orphan reaper.
+# Orphans stopped, by scorer (one per set scored; each has PPID 1 and the exact argument --single-json):
+    122 graph-eval.mjs
+    121 table-recall-eval.mjs
+    122 tag-eval.mjs
+    122 takeoff-eval.mjs
+# Table sidecars (python sidecar/tables.py) stopped with them:
+7
+# First and last reap:
+23:13:23
+00:19:01
+# The run's one OOM kill (dmesg, memory cgroup), not an orphan (pid 32340 is not in the reaper's log):
+#   Memory cgroup out of memory: Killed process 32340 (MainThread) total-vm:24116660kB, anon-rss:5927536kB (23:44:42 UTC)
+# The run's one child that ended without a result is graph-eval.mjs baker-county-eoc
+# ("ERROR: child process exited null with no result", a signal exit); the two are taken to be the same process.
