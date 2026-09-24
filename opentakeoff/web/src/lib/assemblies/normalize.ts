@@ -41,11 +41,13 @@ export interface CompileItem {
   description?: string | null;
 }
 
-/** The schedule table the item was compiled from: its headers in order, and
- * the numbered notes printed with it (scheduleNotes.ts), when read. */
+/** The schedule table the item was compiled from: its headers in order; the
+ * numbered notes printed with it (scheduleNotes.ts), when read; and its rows
+ * (the sheet graph's, key and cell text), when given. */
 export interface TableContext {
   headers: readonly string[];
   notes?: readonly ScheduleNote[];
+  rows?: ReadonlyArray<{ key: string; cells: Readonly<Record<string, string>> }>;
 }
 
 export interface Cite {
@@ -142,7 +144,9 @@ export interface ParsedNumber { n: number; unit: string | null; words: string }
  * "3/4\"", "1-1/2", "15,400", "7.5 HP (VFD)"). Anything carrying a second
  * number is not one value. */
 export function parseNumberCell(text: string): ParsedNumber | null {
-  const t = String(text ?? "").trim().replace(/["″]/g, " IN ").replace(/(\d),(\d{3})\b/g, "$1$2").replace(/\s+/g, " ").trim();
+  // "15,000 (7,500 PER FAN)": the row's total, then its share per unit.
+  const t = String(text ?? "").trim().replace(/\s*\([^()]*\b(?:PER|EACH|EA)\b[^()]*\)\s*$/i, "")
+    .replace(/["″]/g, " IN ").replace(/(\d),(\d{3})\b/g, "$1$2").replace(/\s+/g, " ").trim();
   let m = t.match(/^(\d+)[\s-]+(\d+)\/(\d+)((?:\s*[A-Za-z%°.#()&/]+)*)$/);
   if (m && properFraction(m[2], m[3])) return { n: Number(m[1]) + Number(m[2]) / Number(m[3]), ...tail(m[4]) };
   m = t.match(/^(\d+)\/(\d+)((?:\s*[A-Za-z%°.#()&/]+)*)$/);
@@ -260,14 +264,15 @@ export type Quantity =
   | "airflow" | "waterflow" | "ewt" | "lwt" | "ewt_lwt" | "capacity" | "hp" | "watts" | "kw" | "volts" | "phase" | "vph"
   | "rpm" | "esp" | "tsp" | "head" | "wpd" | "inlet_size" | "conn_size" | "tons" | "merv" | "qty" | "rows"
   | "lbhr" | "psig" | "area_served" | "service" | "location" | "drive" | "fuel" | "vfd" | "ecm" | "control"
-  | "fluid" | "glycol" | "hp_qty" | "cells" | "economizer" | "humidifier" | "energy_recovery" | "type" | "rows_fins";
+  | "fluid" | "glycol" | "hp_qty" | "cells" | "economizer" | "humidifier" | "energy_recovery" | "type" | "rows_fins" | "arrangement" | "controller";
 
 /** The quantities a header names, from its words. A header naming none is
  * a column the schema does not read (MANUFACTURER, WEIGHT, NC, FLA …).
  * `h` is headerText() output; exported for tests and diagnostics. */
 export function quantitiesOf(h: string): Quantity[] {
   const q: Quantity[] = [];
-  const electricalPair = /\bV(?:OLTS?|OLTAGE)?\s*\/\s*PH(?:ASES?)?\b/.test(h);
+  // V/PH, or a V/…/HZ triple whose phase symbol the text lost.
+  const electricalPair = /\bV(?:OLTS?|OLTAGE)?\s*\/\s*PH(?:ASES?)?\b/.test(h) || (/\bV\b/.test(h) && /\bHZ\b/.test(h) && !/\bVOLT/.test(h));
   if (electricalPair) q.push("vph");
   else {
     if (/\bVOLT(?:S|AGE)?\b/.test(h) || h === "V" || /\bELECTRICAL\s+V$/.test(h)) q.push("volts");
@@ -277,7 +282,11 @@ export function quantitiesOf(h: string): Quantity[] {
   else if (/\b(?:HP|HORSEPOWER|MHP)\b/.test(h) && !/\bBHP\b/.test(h) && !/\bHP\s*\/\s*W\b/.test(h)) q.push("hp");
   if ((/\bHP\s*\/\s*W\b/.test(h) || /\bWATTS?\b/.test(h)) && !/\bCAPACITY\b|\bCOIL\b|\bHEAT/.test(h)) q.push("watts");
   if (/\bKW\b/.test(h)) q.push("kw");
-  if ((/\bCFM\b|\bAIR\s?FLOWS?\b/.test(h) || /\bMIN(?:IMUM)?\s+(?:OA|OSA|OUTSIDE\s+AIR|OUTDOOR\s+AIR)$/.test(h)) && !/\bDIRECTION\b/.test(h)) q.push("airflow");
+  // Airflow: CFM, AIRFLOW, an air quantity ("DESIGN QUANTITIES" of a
+  // terminal), a terminal's PRIMARY AIR (not its inlet, temperature or
+  // pressure), a minimum outside air.
+  const primaryAir = /\bPRIMARY\s+AIR\b/.test(h) && !/\bSIZE\b|\bDIA|\bINLET\b|\bTEMP|\bS\.?P\b|\bPRESS|\bVELOCITY\b|\bDUCT\b/.test(h);
+  if ((/\bCFM\b|\bAIR\s?FLOWS?\b|\bAIR\s+QUANTIT(?:Y|IES)\b|\bDESIGN\s+QUANTITIES\b/.test(h) || primaryAir || /\bMIN(?:IMUM)?\s+(?:OA|OSA|OUTSIDE\s+AIR|OUTDOOR\s+AIR)$/.test(h)) && !/\bDIRECTION\b/.test(h)) q.push("airflow");
   if (/\bGPM\b/.test(h) || (/\bFLOW\b/.test(h) && !/\bAIR\s?FLOW|CFM|LBHR|CFH|STEAM\b/.test(h) && /\b(?:WATER|FLUID|HW|CHW|COIL|HEATING|COOLING|PUMP|BOILER|CAPACITY|CIRCULATING|EVAPORATOR|CONDENSER)\b|^FLOW$/.test(h))) q.push("waterflow");
   const water = /\b(?:WATER|WTR)\b/.test(h);
   const ewt = /\bEWT\b|\bENT(?:ERING)?\s+(?:WATER|WTR)\b/.test(h) || (water && /\bTEMP\w*(?:\s+F)?\s+ENT$/.test(h));
@@ -303,11 +312,15 @@ export function quantitiesOf(h: string): Quantity[] {
   if (/\bAREA\b.*\bSERV(?:ED|ICED)\b|^SERVES$|^AREA$/.test(h)) q.push("area_served");
   else if (/^(?:SERVICE|SERVING|SYSTEM|SYSTEM AND\/OR SERVICE|SYSTEM AND\/OR SEVICE)$/.test(h)) q.push("service");
   if (/^LOCATION$/.test(h)) q.push("location");
+  if (/^(?:REMARKS|ARRANGEMENT|OPERATION|PUMP\s+ARRANGEMENT)$/.test(h)) q.push("arrangement");
   if (/\bDRIVE\b/.test(h) && !/\bFREQ|VARIABLE|VFD\b/.test(h)) q.push("drive");
   if (/^FUEL$|\bFUEL\s+TYPE\b/.test(h)) q.push("fuel");
   if (/\bVFD\b|\bVAR(?:IABLE)?\s+FREQ/.test(h)) q.push("vfd");
   if (/(?:^|\s)EC$|\bECM\b/.test(h)) q.push("ecm");
   if (/\bSPEED\s+CONTROL\b|\bCONTROL\s+TYPE\b|\bVOLUME\s+CONTROL\b/.test(h)) q.push("control");
+  // Not a "… BY" column: that names who furnishes it ("EC" there is the
+  // electrical contractor, never an EC motor).
+  else if (/\bCONTROLLER\b|\bSTARTER\b/.test(h) && !/\bBY\b|\bFURNISHED\b|\bPROVIDED\b|\bINSTALLED\b|\bWIRED\b/.test(h)) q.push("controller");
   if (/\bFLUID(?:\s+TYPE)?$/.test(h)) q.push("fluid");
   if (/\bGLYCOL\b|\b%\s*(?:PG|EG)\b/.test(h)) q.push("glycol");
   if (/\bECONOMIZER\b/.test(h)) q.push("economizer");
@@ -338,6 +351,55 @@ function waterPhysicsAgrees(family: string, s: Service, ewt: number, lwt: number
   const heatingWaterCools = s === "hw";
   const producer = WATER_PRODUCERS.has(family);
   return (heatingWaterCools !== producer) ? ewt > lwt : ewt < lwt;
+}
+
+/** Whether a coil's water temperature fits the air it heats or cools: a
+ * heating coil's water is warmer than any air entering it, a cooling coil's
+ * colder. The entering-air temperatures of the same coil block only (a
+ * preheat coil's 13 °F air says nothing of a cooling coil's water), and not
+ * an "EAT" printed on the block's water side; none printed, or a producer or
+ * heat exchanger: nothing to check. */
+function airAgrees(ctx: RowContext, s: Service, water: number): boolean {
+  if ((s !== "hw" && s !== "chw") || WATER_PRODUCERS.has(ctx.family) || ctx.family === "HEAT_EXCHANGER") return true;
+  const eats = ctx.cols
+    .filter((c) => c.cell && /\bEAT\b|\bENT(?:ERING)?\s+AIR\b/.test(c.h) && waterService(c, ctx) === s
+      && !/\b(?:LIQUID|FLUID|WATER)\s+SIDE\b|\bFLUID\s+PERFORMANCE\b/.test(c.h))
+    .map((c) => parseNumberCell(c.cell!.text.replace(/\s*\/.*$/, ""))?.n)
+    .filter((n): n is number => Number.isFinite(n));
+  if (!eats.length) return true;
+  return s === "hw" ? water > Math.min(...eats) : water < Math.max(...eats);
+}
+
+/** The two halves of a split system: a column that names the other half
+ * ("ELECTRICAL FOR CONDENSING UNIT" in a furnace's row, "SUPPLY FAN" in its
+ * condensing unit's) is not this unit's. */
+const SPLIT_INDOOR = new Set(["FCU", "FURNACE", "VRF_INDOOR"]);
+const SPLIT_OUTDOOR = new Set(["CONDENSING_UNIT", "VRF_OUTDOOR"]);
+const OUTDOOR_WORDS = /\bOUTDOOR\s+UNITS?\b|\bCONDENSING\s+UNITS?\b|\bODU\b|\bCONDENSER\b(?!\s+WATER)/;
+const INDOOR_WORDS = /\bINDOOR\s+UNITS?\b|\bIDU\b|\bSUPPLY\s+FAN\b|\bEVAPORATOR\b|\bFURNACE\b|\bGAS\s+HEAT(?:ING)?\b/;
+function otherHalf(h: string, family: string, paired: boolean): boolean {
+  if (SPLIT_INDOOR.has(family)) {
+    if (OUTDOOR_WORDS.test(h) && !INDOOR_WORDS.test(h)) return true;
+    // One row scheduling both halves ("ACCU-1 / AC-1"): the power connection
+    // it prints without naming a half is the outdoor unit's, which feeds the
+    // indoor one; the indoor unit's own prints as INDOOR or SUPPLY FAN.
+    const power = quantitiesOf(h).some((q) => q === "volts" || q === "phase" || q === "vph");
+    return paired && power && !INDOOR_WORDS.test(h);
+  }
+  if (SPLIT_OUTDOOR.has(family)) return INDOOR_WORDS.test(h) && !OUTDOOR_WORDS.test(h);
+  return false;
+}
+
+/** Whether the table's row for this unit names a second unit beside it
+ * ("ACCU-1 / AC-1", "F-1 , CU-1"): one row scheduling both halves of a split
+ * system. */
+function pairedRow(item: CompileItem, table: TableContext | null): boolean {
+  const own = canonKey(item.tag);
+  const tagLike = /^[A-Z]{1,6}-?\d{1,3}[A-Z]?(?:\([A-Z]\))?$/;
+  return (table?.rows ?? []).some((r) => Object.values(r.cells).some((text) => {
+    const parts = String(text ?? "").toUpperCase().split(/\s*[\/,&]\s*|\s+AND\s+/).map(canonKey).filter(Boolean);
+    return parts.length >= 2 && parts.includes(own) && parts.every((p) => tagLike.test(p));
+  }));
 }
 
 /** The water service a column belongs to, from its own block words, else
@@ -448,7 +510,8 @@ function numberFor(attr: string, col: Column, headerUnit: string | null): { valu
   if (!p) return { reason: `cell "${text}" is not one number` };
   const spec = attributeSpec(attr);
   const canonical = spec.unit ?? "";
-  const unit = p.unit ?? headerUnit ?? canonical;
+  // An inch mark on a static pressure is inches of water column.
+  const unit = p.unit === "in" && canonical === "in. w.c." ? canonical : p.unit ?? headerUnit ?? canonical;
   let factor: number;
   try {
     factor = unitFactor(attr, unit);
@@ -458,6 +521,8 @@ function numberFor(attr: string, col: Column, headerUnit: string | null): { valu
   // 12 significant digits: a unit factor's float noise (49,800 BTU/H ×
   // 0.001) never shows in a reported value.
   const value = Number((p.n * factor).toPrecision(12));
+  // A motor printed as exactly 0 is the schedule saying the unit has none.
+  if (value === 0 && /^0$/.test(text.trim()) && (attr === "motor_hp" || attr === "motor_watts")) return { value };
   const range = RANGE[canonical];
   if (range && (value < range[0] || value > range[1])) return { reason: `${value} ${canonical} is outside the physical range of ${attr}` };
   return { value };
@@ -511,7 +576,10 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       case "volts": {
         if (!col.cell || !ctx.attrs.has("volts")) break;
         const p = parseNumberCell(text.replace(/V$/i, ""));
+        // 24 VDC (an EC motor's supply) counts when the cell prints its unit.
+        const low = /^\s*(12|24|48)\s*V(?:DC|AC)?\s*$/i.exec(text);
         if (p && STANDARD_VOLTS.has(p.n)) found.push({ attr: "volts", col, value: p.n, printed: text, rule: "electrical.volts", rank: electricalRank(h, ctx) });
+        else if (low) found.push({ attr: "volts", col, value: Number(low[1]), printed: text, rule: "electrical.low_volts", rank: electricalRank(h, ctx) });
         else failed.push({ attr: "volts", reason: `cell "${text}" is not a standard voltage` });
         break;
       }
@@ -534,6 +602,8 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
           break;
         }
         if (ctx.family === "VAV") {
+          // A heating (hot deck) minimum is not the box's minimum.
+          if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h) && W.min.test(h)) break;
           if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h) && !W.min.test(h)) num(pick(ctx, "cfm_heat"), q, "airflow.terminal_heating");
           else if (W.min.test(h)) num(pick(ctx, "cfm_min"), q, "airflow.terminal_min");
           else if (W.max.test(h) || W.design.test(h) || /\bCOOLING\b|\bCOLD\b/.test(h)) num(pick(ctx, "cfm_max"), q, "airflow.terminal_max");
@@ -548,6 +618,9 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
           break;
         }
         if (W.returnAir.test(h) || W.oa.test(h)) break;
+        // An outdoor unit's airflow is its condenser's: an unqualified CFM in
+        // a split system's table is the indoor unit's.
+        if (SPLIT_OUTDOOR.has(ctx.family) && !OUTDOOR_WORDS.test(h)) break;
         num(pick(ctx, "cfm", "supply_cfm"), q, "airflow.unit", airRank());
         break;
       }
@@ -562,7 +635,12 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         if (W.air.test(h) && !/\bWATER|WTR|EWT|LWT\b/.test(h)) break;
         const s = waterService(col, ctx);
         const ids = (end: "ewt" | "lwt") => waterAttr(ctx, s, `${end}_f`);
-        if (q !== "ewt_lwt") { num(ids(q), q, `water.${s ?? "unit"}.${q}`); break; }
+        if (q !== "ewt_lwt") {
+          const p = col.cell ? parseNumberCell(text) : null;
+          if (p && !airAgrees(ctx, s, p.n)) { const a = ids(q); if (a) failed.push({ attr: a, reason: `"${text}" under "${col.header}" contradicts the row's entering air` }); break; }
+          num(ids(q), q, `water.${s ?? "unit"}.${q}`);
+          break;
+        }
         if (!col.cell) break;
         const parts = text.split("/").map((p) => parseNumberCell(p));
         const [ewtA, lwtA] = [ids("ewt"), ids("lwt")];
@@ -615,9 +693,13 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       case "watts": {
         // A fan's motor rated in watts. A heater's watts are its heat, so a
         // family that heats electrically never reads a WATTS column as a motor.
+        // A unit heated by water draws power only for its fan: its
+        // ELECTRICAL watts are the motor's.
         const motorWords = W.fanWord.test(h) || W.motor.test(h);
-        if (!motorWords && !ctx.attrs.has("motor_watts")) break;
-        const electricHeater = W.electricHeat.test(headerText(ctx.title)) || ctx.cols.some((c) => quantitiesOf(c.h).includes("kw"));
+        const kwCol = ctx.cols.some((c) => quantitiesOf(c.h).includes("kw"));
+        const waterHeated = ctx.hasWaterSide && !kwCol && /\bELEC/.test(h) && ctx.attrs.has("motor_hp");
+        if (!motorWords && !ctx.attrs.has("motor_watts") && !waterHeated) break;
+        const electricHeater = !waterHeated && (W.electricHeat.test(headerText(ctx.title)) || kwCol);
         if (electricHeater && !motorWords) break;
         if (!col.cell) break;
         const p = parseNumberCell(text);
@@ -674,16 +756,18 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         found.push({ attr, col, value: n, printed: text, rule: "size.connection", rank: /\bSUCTION\b|\bINLET\b/.test(h) ? 0 : /\bDISCHARGE\b/.test(h) ? 2 : 1 });
         break;
       }
-      case "tons": num(pick(ctx, "cooling_tons", "tons"), q, "capacity.tons"); break;
+      // A NOMINAL size names the unit's class; a capacity column beside it is
+      // what the unit is scheduled to deliver.
+      case "tons": num(pick(ctx, "cooling_tons", "tons"), q, "capacity.tons", /\bNOMINAL\b/.test(h) ? 1 : 0); break;
       case "merv": {
         if (!col.cell || !ctx.attrs.has("filter_merv")) break;
-        // A bare FILTER column counts only when its cell prints the word MERV
-        // (once: '2" MERV 8' is a 2-inch MERV 8 filter).
+        // A MERV column may print the bare rating; any other filter column
+        // counts only when its cell names one MERV rating ('2" MERV 8' is a
+        // 2-inch MERV 8 filter; "12in. cartridge - 95% eff - MERV 15").
         const t = text.toUpperCase().trim();
         const mervs = [...t.matchAll(/\bMERV\s*-?\s*(\d{1,2})\b/g)];
-        const m = /\bFILTERS?$/.test(h) && !/\bMERV\b|\bFINAL\b/.test(h)
-          ? (mervs.length === 1 && !/\bPRE-?\s?FILTER/.test(t) ? mervs[0] : null)
-          : t.match(/^(?:MERV\s*-?\s*)?(\d{1,2})$/);
+        const bare = /\bMERV\b/.test(h) ? t.match(/^(?:MERV\s*-?\s*)?(\d{1,2})$/) : null;
+        const m = bare ?? (mervs.length === 1 && !/\bPRE-?\s?FILTER/.test(t) ? mervs[0] : null);
         if (m && Number(m[1]) >= 1 && Number(m[1]) <= 20) found.push({ attr: "filter_merv", col, value: Number(m[1]), printed: text, rule: "filter.merv", rank: 0 });
         else failed.push({ attr: "filter_merv", reason: `cell "${text}" is not one MERV rating` });
         break;
@@ -728,7 +812,10 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       }
       case "area_served": {
         if (!col.cell || !ctx.attrs.has("area_served")) break;
-        const v = /\//.test(h) && /\bSUPPLY\s+VALVE\b/.test(h) ? text.split("/")[0].trim() : text.trim();
+        // "AREA / SUPPLY VALVE SERVED": the area, before the valve's tag
+        // ("SOIL/AGGREGATE 126 / SAV-2").
+        const valve = /\//.test(h) && /\bSUPPLY\s+VALVE\b/.test(h) ? text.match(/^(.*\S)\s*\/\s*[A-Z]{1,5}-?\d{1,3}[A-Z]?\s*$/i) : null;
+        const v = valve ? valve[1].trim() : text.trim();
         if (v) found.push({ attr: "area_served", col, value: v, printed: text, rule: "text.area_served", rank: 0 });
         break;
       }
@@ -781,6 +868,11 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       case "control": {
         if (!col.cell) break;
         const t = text.toUpperCase().trim();
+        if (!ctx.attrs.has("control") && ctx.attrs.has("vfd") && /^(?:CONSTANT(?:\s+(?:SPEED|VOLUME))?|C\.?V\.?|NONE)$/.test(t)) {
+          // Constant speed: a motor with no variable frequency drive.
+          found.push({ attr: "vfd", col, value: "no", printed: text, rule: "enum.vfd_constant_speed", rank: 1 });
+          break;
+        }
         const speeds = t.match(/^(\d)\s*-?\s*SPEED$/);
         if (speeds && ctx.attrs.has("fan_speeds")) { found.push({ attr: "fan_speeds", col, value: Number(speeds[1]), printed: text, rule: "count.fan_speeds", rank: 0 }); break; }
         if (ctx.attrs.has("control")) { found.push({ attr: "control", col, value: text.trim(), printed: text, rule: "text.control", rank: 0 }); break; }
@@ -834,6 +926,28 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         }
         break;
       }
+      case "controller": {
+        // A CONTROLLER / STARTER (TYPE) column names the one device the motor
+        // is started or run by, so the one it names rules the others out.
+        if (!col.cell) break;
+        const t = text.toUpperCase().replace(/\s+/g, " ").trim();
+        const kind = /^(?:VFD|VSD|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVE)$/.test(t) ? "vfd"
+          : /^(?:ECM?|EC\s+(?:MOTOR\s+)?CONTROLLER|ECM\s+CONTROLLER)$/.test(t) ? "ecm"
+          : /^(?:(?:COMBINATION\s+|MAGNETIC\s+|MANUAL\s+|MOTOR\s+)?STARTER|MAG\.?\s+STARTER|FVNR|ACROSS\s+THE\s+LINE)$/.test(t) ? "starter" : null;
+        if (!kind) break;
+        if (ctx.attrs.has("vfd")) found.push({ attr: "vfd", col, value: kind === "vfd" ? "yes" : "no", printed: text, rule: "enum.controller_type", rank: 0 });
+        if (ctx.attrs.has("ecm")) found.push({ attr: "ecm", col, value: kind === "ecm" ? "yes" : "no", printed: text, rule: "enum.controller_type", rank: 0 });
+        break;
+      }
+      case "arrangement": {
+        // A cell that is exactly a pump arrangement ("DUTY/STANDBY", "LEAD/LAG").
+        if (!col.cell || !ctx.attrs.has("pump_arrangement")) break;
+        const t = text.toUpperCase().replace(/\s+/g, " ").trim();
+        const v = /^DUTY\s*\/\s*STAND-?\s?BY$/.test(t) ? "duty_standby" : /^LEAD\s*\/\s*LAG$/.test(t) ? "lead_lag"
+          : /^PARALLEL$/.test(t) ? "parallel" : /^STAND-?\s?BY$/.test(t) ? "standby" : /^DUTY$/.test(t) ? "duty" : null;
+        if (v) found.push({ attr: "pump_arrangement", col, value: v, printed: text, rule: "enum.pump_arrangement", rank: 0 });
+        break;
+      }
       case "cells": {
         if (!col.cell || !ctx.attrs.has("cells")) break;
         const p = parseNumberCell(text);
@@ -856,7 +970,7 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       }
       case "hp_qty": {
         if (!col.cell) break;
-        const parts = text.split("/").map((p) => p.trim());
+        const parts = text.split(/[/\\]/).map((p) => p.trim());
         const hp = parts.length === 2 ? parseNumberCell(parts[0]) : null;
         const n = parts.length === 2 ? parseNumberCell(parts[1]) : null;
         // "1/2" could be half a horsepower: a split needs a part a fraction cannot be.
@@ -884,6 +998,13 @@ function electricalRank(h: string, ctx: RowContext): number {
   const outdoor = /\bOUTDOOR\b|\bCONDENSING\b|\bCONDENSER\b|\bCU\b/.test(h);
   const indoor = /\bINDOOR\b|\bSUPPLY\s+FAN\b|\bFAN\s+DATA\b|\bEVAPORATOR\b/.test(h);
   if (ctx.family === "CONDENSING_UNIT" || ctx.family === "VRF_OUTDOOR") return outdoor ? 0 : indoor ? 3 : 1;
+  // A heater's power connection over its fan motor's (an electric unit
+  // heater's elements at 460/3, its fan at 120/1); for a fan or a pump the
+  // motor is the unit.
+  if (!["FAN", "PUMP"].includes(ctx.family) && !indoor) {
+    if (/\bPOWER\b|\bUNIT\b/.test(h) && !/\bMOTOR\b/.test(h)) return 0;
+    if (/\bMOTOR\b|\bFAN\b/.test(h)) return 2;
+  }
   return indoor ? 0 : outdoor ? 3 : 1;
 }
 
@@ -930,7 +1051,9 @@ function derived(item: CompileItem, ctx: RowContext, values: Map<string, Candida
   const chwCols = ["chw_gpm", "chw_ewt_f", "chw_lwt_f"].map((a) => values.get(a)).filter((c): c is Candidate => Boolean(c));
   const ehCol = values.get("eh_kw");
   const heatSource = (): { value: string; col: Column; rule: string } | null => {
-    const water = hwCols.length >= 2 ? hwCols[0] : null;
+    // Two values of a hot-water block; for a unit that only heats, its water
+    // flow alone (it heats with that water).
+    const water = hwCols.length >= 2 ? hwCols[0] : HEATING_ONLY.has(ctx.family) && ctx.family !== "VAV" ? values.get("hw_gpm") ?? values.get("gpm") ?? null : null;
     if (water && !ehCol) return { value: "hw", col: water.col, rule: "derived.hw_coil_block" };
     if (ehCol && !water) return { value: "electric", col: ehCol.col, rule: "derived.electric_heat_kw" };
     return null;
@@ -945,11 +1068,20 @@ function derived(item: CompileItem, ctx: RowContext, values: Map<string, Candida
     if (named && (!s || s.value === named)) out.push({ attr: "heating_medium", col: titleCol, value: named, printed: item.table_title, rule: "derived.title_names_medium", rank: 0 });
     else if (!named && s) out.push({ attr: "heating_medium", col: s.col, value: s.value, printed: s.col.cell?.text ?? "", rule: s.rule, rank: 0 });
   }
+  // A coil the row names by its medium and tag ("COIL DATA COOLING CHW TAG"
+  // = "CHWC"): the unit has that coil; its data is in the coil's own schedule.
+  const namedCoil = (medium: RegExp) => ctx.cols.find((c) => c.cell && /\bCOILS?\b/.test(c.h) && medium.test(c.h)
+    && !/^(?:[-–—]+|N\/?A|NONE)$/i.test(c.cell.text.trim()));
+  const chwCoil = namedCoil(/\bCHW\b|\bCHILLED\s+WATER\b/);
+  const hwCoil = namedCoil(/\bHW\b|\bHHW\b|\bHOT\s+WATER\b/);
+  // A split system or a packaged air conditioner cools with refrigerant.
+  const dxTitle = W.dx.test(title) || /\bSPLIT\b/.test(title) || /\bPACKAGED\b.*\bAIR[-\s]+CONDITION(?:ING|ER)\b/.test(title);
   if (ctx.attrs.has("cooling_type")) {
     const dxHeader = ctx.cols.find((c) => W.dx.test(c.h) && c.cell);
-    if (chwCols.length >= 2 && !dxHeader && !W.dx.test(title)) out.push({ attr: "cooling_type", col: chwCols[0].col, value: "chw", printed: chwCols[0].printed, rule: "derived.chw_coil_block", rank: 0 });
-    else if (!chwCols.length && W.dx.test(title)) out.push({ attr: "cooling_type", col: titleCol, value: "dx", printed: item.table_title, rule: "derived.title_names_dx", rank: 0 });
-    else if (!chwCols.length && dxHeader) out.push({ attr: "cooling_type", col: dxHeader, value: "dx", printed: dxHeader.cell?.text ?? "", rule: "derived.dx_block", rank: 0 });
+    if (chwCols.length >= 2 && !dxHeader && !dxTitle) out.push({ attr: "cooling_type", col: chwCols[0].col, value: "chw", printed: chwCols[0].printed, rule: "derived.chw_coil_block", rank: 0 });
+    else if (!chwCols.length && chwCoil && !dxHeader && !dxTitle) out.push({ attr: "cooling_type", col: chwCoil, value: "chw", printed: chwCoil.cell?.text ?? "", rule: "derived.chw_coil_named", rank: 0 });
+    else if (!chwCols.length && !chwCoil && dxTitle) out.push({ attr: "cooling_type", col: titleCol, value: "dx", printed: item.table_title, rule: "derived.title_names_dx", rank: 0 });
+    else if (!chwCols.length && !chwCoil && dxHeader) out.push({ attr: "cooling_type", col: dxHeader, value: "dx", printed: dxHeader.cell?.text ?? "", rule: "derived.dx_block", rank: 0 });
   }
   // Enums the table's own title states in so many words.
   const titled = (attr: string, value: string | null, rule: string) => {
@@ -962,44 +1094,108 @@ function derived(item: CompileItem, ctx: RowContext, values: Map<string, Candida
     titled("primary_medium", "steam", "derived.title_names_steam_to_water");
     titled("secondary_medium", "hw", "derived.title_names_steam_to_water");
   }
+  // A gas-fired unit: a gas input or firing-rate column with a value.
+  const gasInput = ctx.cols.find((c) => c.cell && W.gas.test(c.h) && (quantitiesOf(c.h).includes("capacity") || /\bCFH\b|\bFIRING\b/.test(c.h))
+    && parseNumberCell(c.cell.text) !== null);
   if (ctx.attrs.has("heating_type")) {
     const gasCol = values.get("gas_input_mbh") ?? ctx.cols.map((c) => (W.gas.test(c.h) && c.cell && quantitiesOf(c.h).includes("capacity") ? c : null)).find(Boolean);
     const water = hwCols.length >= 2 ? hwCols[0] : null;
-    const kinds = [water && "hw", gasCol && "gas", ehCol && "electric"].filter(Boolean);
+    const hw = water?.col ?? hwCoil ?? null;
+    const kinds = [hw && "hw", gasCol && "gas", ehCol && "electric"].filter(Boolean);
     if (kinds.length === 1) {
-      const col = water ? water.col : gasCol ? ("col" in gasCol ? gasCol.col : gasCol) : ehCol!.col;
+      const col = hw ? hw : gasCol ? ("col" in gasCol ? gasCol.col : gasCol) : ehCol!.col;
       out.push({ attr: "heating_type", col, value: kinds[0] as string, printed: col.cell?.text ?? "", rule: `derived.${kinds[0]}_heating_block`, rank: 0 });
+    } else if (!kinds.length) {
+      // A unit its type or title calls COOLING ONLY has no heat.
+      const only = [titleCol, ...ctx.cols.filter((c) => c.cell && quantitiesOf(c.h).includes("type"))]
+        .find((c) => /\bCOOLING\s+ONLY\b/i.test(c === titleCol ? item.table_title : c.cell!.text));
+      if (only) out.push({ attr: "heating_type", col: only, value: "none", printed: only.cell?.text ?? "", rule: "derived.cooling_only", rank: 0 });
     }
   }
+  const byGas = (attr: string, value: string, rule: string) => {
+    if (gasInput && ctx.attrs.has(attr) && !values.has(attr)) out.push({ attr, col: gasInput, value, printed: gasInput.cell?.text ?? "", rule, rank: 0 });
+  };
+  byGas("fuel", "gas", "derived.gas_input_names_fuel");
+  if (ctx.family === "HUMIDIFIER") byGas("humidifier_type", "gas_fired", "derived.gas_input_names_gas_fired");
   return out;
 }
 
-// ── 7. The table's notes ────────────────────────────────────────────────────
+// ── 7. Stacked lines ────────────────────────────────────────────────────────
+
+const canonKey = (t: string) => String(t ?? "").toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-").replace(/\s+/g, "");
+const sameText = (t: string) => String(t ?? "").toUpperCase().replace(/\s+/g, " ").trim();
+
+/** A unit printed on several lines of its table under one mark (a fan's
+ * airflow at SELECTION CRITERIA, then at OPERATING CONDITION; a heat
+ * exchanger's 1/3 and 2/3 control valves): the sheet graph keeps each line as
+ * a row with the same key, and the compile keeps the first. A column whose
+ * lines print different values is not one value for the unit; a column they
+ * print alike is. */
+function stackedLines(item: CompileItem, table: TableContext | null): ((col: Column) => string | null) {
+  const own = canonKey(item.tag);
+  const lines = (table?.rows ?? []).filter((r) => canonKey(r.key) === own);
+  if (lines.length < 2) return () => null;
+  return (col) => {
+    const texts = [...new Set(lines.map((r) => sameText(r.cells[col.header] ?? "")).filter(Boolean))];
+    return texts.length > 1 ? `the mark prints ${lines.length} lines that differ in "${col.header}" (${texts.join(" / ")}): not one value` : null;
+  };
+}
+
+// ── 8. The table's notes ────────────────────────────────────────────────────
 
 /** The notes that speak for this row: the ones its REMARKS / NOTES cell
  * cites ("SEE NOTES 1, 2"; "SEE NOTES" or "ALL" is every one). A table with
- * no such column prints its notes for every row, except a note that names
- * other units of the row's own tag family and not this one. */
-function notesForRow(item: CompileItem, ctx: RowContext, notes: readonly ScheduleNote[]): ScheduleNote[] {
+ * no such column, or one where no row cites a note, prints its notes for
+ * every row, except a note that names other units of the row's own tag
+ * family and not this one. */
+function notesForRow(item: CompileItem, ctx: RowContext, notes: readonly ScheduleNote[], rows: TableContext["rows"] = []): ScheduleNote[] {
   if (!notes.length) return [];
   const citeCols = ctx.cols.filter((c) => /^(?:REMARKS|NOTES?|COMMENTS)$/.test(c.h));
-  if (citeCols.length) {
+  // A REMARKS column is a citation column when some row of the table cites a
+  // note in it; one that only prints remarks ("BASE-MOUNTED") leaves the
+  // table's notes speaking for every row.
+  const citing = citeCols.length > 0 && (!rows?.length
+    || rows.some((r) => citeCols.some((c) => citedNoteIds(r.cells[c.header] ?? "") !== null)));
+  if (citing) {
     const cites = citeCols.map((c) => citedNoteIds(c.cell?.text ?? "")).filter((c): c is NonNullable<typeof c> => Boolean(c));
     if (cites.some((c) => c.all)) return [...notes];
     return notes.filter((n) => cites.some((c) => c.ids.includes(n.id)));
   }
   const prefix = String(item.tag ?? "").toUpperCase().match(/^([A-Z]{1,5})[-\s]?\d/)?.[1];
   const own = String(item.tag ?? "").toUpperCase().replace(/[\s-]/g, "");
+  const service = ctx.cols.find((c) => c.cell && /^(?:SYSTEM|SERVICE|SERVING)$/.test(c.h))?.cell?.text.toUpperCase() ?? null;
   return notes.filter((n) => {
+    // A note for "EACH HW AND CW PUMP" speaks for the rows of those services.
+    const scope = noteServiceScope(n.text);
+    if (scope && !(service && scope.some((re) => re.test(service)))) return false;
     if (!prefix) return true;
     const named = [...n.text.toUpperCase().matchAll(new RegExp(`\\b${prefix}[-\\s]?\\d{1,3}[A-Z]?\\b`, "g"))].map((m) => m[0].replace(/[\s-]/g, ""));
     return !named.length || named.includes(own);
   });
 }
 
-function fromNotes(item: CompileItem, ctx: RowContext, notes: readonly ScheduleNote[], reasons: Map<string, UnknownAttribute>): Candidate[] {
+/** The water services a note restricts itself to ("PROVIDE VFD FOR EACH HW
+ * AND CW PUMP": hot water and chilled or condenser water), as tests on a
+ * row's SYSTEM / SERVICE text; null when it names none. */
+function noteServiceScope(text: string): RegExp[] | null {
+  const t = text.toUpperCase().replace(/\s+/g, " ");
+  const SERVICE = "HHW|HW|CHW|CW|CDW|HOT WATER|HEATING WATER|CHILLED WATER|CONDENSER WATER|GLYCOL";
+  const m = t.match(new RegExp(`\\b(?:EACH|ALL|THE)\\s+((?:${SERVICE})(?:\\s*(?:,|&|/|AND)\\s*(?:${SERVICE}))*)\\s+(?:PUMPS?|COILS?|UNITS?|SYSTEMS?)\\b`));
+  if (!m) return null;
+  const tests: RegExp[] = [];
+  for (const w of m[1].split(/\s*(?:,|&|\/|\bAND\b)\s*/)) {
+    if (/^(?:HHW|HW|HOT WATER|HEATING WATER)$/.test(w)) tests.push(/\bHOT\s+WATER\b|\bHH?WS?\b|\bHEATING\b/);
+    else if (/^(?:CHW|CHILLED WATER)$/.test(w)) tests.push(/\bCHILLED\b|\bCHWS?\b/);
+    else if (/^(?:CDW|CONDENSER WATER)$/.test(w)) tests.push(/\bCONDENSER\b|\bCDWS?\b/);
+    else if (w === "CW") tests.push(/\bCHILLED\b|\bCHWS?\b|\bCONDENSER\b|\bCDWS?\b|\bCWS?\b/);
+    else if (w === "GLYCOL") tests.push(/\bGLYCOL\b/);
+  }
+  return tests.length ? tests : null;
+}
+
+function fromNotes(item: CompileItem, ctx: RowContext, table: TableContext | null, reasons: Map<string, UnknownAttribute>): Candidate[] {
   const byAttr = new Map<string, Array<{ value: string | number; note: ScheduleNote; rule: string }>>();
-  for (const note of notesForRow(item, ctx, notes)) {
+  for (const note of notesForRow(item, ctx, table?.notes ?? [], table?.rows)) {
     for (const v of noteValues(note, ctx.attrs)) {
       if (!byAttr.has(v.attr)) byAttr.set(v.attr, []);
       byAttr.get(v.attr)!.push({ value: v.value, note, rule: v.rule });
@@ -1021,7 +1217,7 @@ function fromNotes(item: CompileItem, ctx: RowContext, notes: readonly ScheduleN
   return out;
 }
 
-// ── 8. The row ──────────────────────────────────────────────────────────────
+// ── 9. The row ──────────────────────────────────────────────────────────────
 
 /** Canonical attributes for one compiled row of `family`. */
 export function normalizeCompileItem(item: CompileItem, family: string, table: TableContext | null = null): NormalizedItem {
@@ -1032,7 +1228,8 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
   } catch {
     return result;
   }
-  const cols = columnsOf(item, table);
+  const paired = pairedRow(item, table);
+  const cols = columnsOf(item, table).filter((c) => !otherHalf(c.h, family, paired));
   const ctx: RowContext = {
     family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null,
     hasWaterSide: cols.some((c) => quantitiesOf(c.h).some((q) => q === "waterflow" || q === "ewt" || q === "lwt" || q === "ewt_lwt")),
@@ -1041,8 +1238,14 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
 
   const byAttr = new Map<string, Candidate[]>();
   const reasons = new Map<string, UnknownAttribute>();
+  const differs = stackedLines(item, table);
   for (const col of cols) {
     const { found, failed } = candidatesOf(col, ctx, item);
+    const stacked = found.length ? differs(col) : null;
+    if (stacked) {
+      for (const c of found) if (!reasons.has(c.attr)) reasons.set(c.attr, { reason: stacked, header: col.header, printed: col.cell?.text });
+      continue;
+    }
     for (const c of found) {
       if (!byAttr.has(c.attr)) byAttr.set(c.attr, []);
       byAttr.get(c.attr)!.push(c);
@@ -1059,7 +1262,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
     else reasons.set(attr, { reason: `${top.length} columns answer it differently: ${top.map((c) => `"${c.col.header}" = "${c.printed}"`).join(", ")}` });
   }
   for (const d of derived(item, ctx, chosen)) if (!chosen.has(d.attr)) chosen.set(d.attr, d);
-  for (const n of fromNotes(item, ctx, table?.notes ?? [], reasons)) if (!chosen.has(n.attr)) chosen.set(n.attr, n);
+  for (const n of fromNotes(item, ctx, table, reasons)) if (!chosen.has(n.attr)) chosen.set(n.attr, n);
 
   for (const [attr, c] of chosen) {
     result.attributes[attr] = {

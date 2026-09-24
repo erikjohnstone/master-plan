@@ -31,19 +31,23 @@ function frameBox([x0, y0, x1, y1]: Box, rot: number): Box {
   }
 }
 
-const NOTES_LABEL = /^(?:(?:GENERAL|SCHEDULE|KEYED)\s+)?NOTES?\s*:?$/i;
+const NOTES_LABEL = /^(?:(?:(?:GENERAL|SCHEDULE|KEYED)\s+)?NOTES?\s*:?|REMARKS\s*:)$/i;
 const NOTE_NUMBER = /^\s*(?:\(?\s*(\d{1,2}|[A-Z])\s*[.)]|NOTE\s+(\d{1,2}|[A-Z])\s*[:.-])(?:\s+|$)/i;
-/** A list printed beside the notes that is not notes (alternate makes). */
-const OTHER_LIST = /\bMANUFACTURERS?\s*:?$|\bALTERNATES?\b.*\bMANUFACTURERS?\b/i;
+/** The heading of a list printed beside the notes that is not notes
+ * (alternate makes): a line of its own that ends in the word. A note's own
+ * text that names makers ("1. APPROVED ALTERNATE MANUFACTURERS: B&G, …")
+ * follows its number on the line, so it is no heading. */
+const OTHER_LIST = /\bMANUFACTURERS?\s*:?\s*$/i;
 
 interface Framed { box: Box; str: string }
 
 /** The numbered notes printed with a table (`region`, the sheet graph's
- * table region, same space as the spans). The region often contains the
- * notes block itself. The block starts at a NOTES label at the table's left
- * edge, below its header band, and runs until a gap; its notes may be set in
- * several columns, and a list of alternate manufacturers beside them is not
- * part of it. Empty when the table prints none. */
+ * table region, same space as the spans; `spans` may be the whole page's).
+ * The region often contains the notes block itself. The block starts at a
+ * NOTES label below the table's header band — at its left edge, or else a
+ * "NOTES:" within its width — and runs until a gap; its notes may be set in
+ * several columns, and neither a list of alternate manufacturers beside them
+ * nor a legend to their left is part of it. Empty when the table prints none. */
 export function scheduleNotes(spans: readonly NoteSpan[], region: Box): ScheduleNote[] {
   // The table's reading rotation: the one most of its own text runs at.
   const inside = spans.filter((s) => s.x0 >= region[0] - 1 && s.x1 <= region[2] + 1 && s.y0 >= region[1] - 1 && s.y1 <= region[3] + 1);
@@ -52,51 +56,80 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
   const rot = [...count.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? 0;
   const framed: Framed[] = spans.filter((s) => (s.rot ?? 0) === rot).map((s) => ({ box: frameBox([s.x0, s.y0, s.x1, s.y1], rot), str: s.str.trim() })).filter((s) => s.str);
   const [ru0, rv0, ru1, rv1] = frameBox(region, rot);
-  const heights = framed.filter((s) => s.box[1] >= rv0 && s.box[3] <= rv1).map((s) => s.box[3] - s.box[1]).sort((a, b) => a - b);
+  const heights = framed.filter((s) => s.box[0] >= ru0 && s.box[2] <= ru1 && s.box[1] >= rv0 && s.box[3] <= rv1).map((s) => s.box[3] - s.box[1]).sort((a, b) => a - b);
   const lineH = heights.length ? heights[Math.floor(heights.length / 2)] : 8;
   const width = ru1 - ru0;
   const height = rv1 - rv0;
 
-  // The label: a NOTES word at the table's left edge, below its header band
-  // (a NOTES column header sits in that band, and to the right).
-  const label = framed
-    .filter((s) => {
-      const first = s.str.split(/\s+(?=\d{1,2}[.)]|\(\d{1,2}\))/)[0];
-      return NOTES_LABEL.test(first) && s.box[0] >= ru0 - 0.1 * width - 3 * lineH && s.box[0] <= ru0 + 0.2 * width
-        && s.box[1] >= rv0 + Math.min(0.2 * height, 6 * lineH) && s.box[1] <= rv1 + 6 * lineH;
-    })
-    .sort((a, b) => a.box[1] - b.box[1])[0];
+  // The label: a NOTES word below the table's header band (a NOTES column
+  // header sits in that band) and no further than a few lines past its last
+  // row. One at the table's left edge is the label; failing that, one within
+  // the table's width that ends in a colon (the left edge may hold a legend).
+  const labels = framed.filter((s) => {
+    const first = s.str.split(/\s+(?=\d{1,2}[.)]|\(\d{1,2}\))/)[0];
+    return NOTES_LABEL.test(first) && s.box[0] >= ru0 - 3 * lineH && s.box[0] <= ru1 - 0.1 * width
+      && s.box[1] >= rv0 + Math.min(0.2 * height, 6 * lineH) && s.box[1] <= rv1 + 6 * lineH;
+  }).sort((a, b) => a.box[1] - b.box[1]);
+  const label = labels.find((s) => s.box[0] <= ru0 + 0.2 * width)
+    ?? labels.find((s) => /:/.test(s.str.split(/\s+(?=\d{1,2}[.)]|\(\d{1,2}\))/)[0]));
   if (!label) return [];
 
-  // The block: everything from the label down, left of any list of makers,
-  // until a vertical gap.
-  const stopU = Math.min(ru1 + 3 * lineH, ...framed
-    .filter((s) => OTHER_LIST.test(s.str) && s.box[1] >= label.box[1] - lineH && s.box[0] > label.box[0])
-    .map((s) => s.box[0] - lineH));
+  // The block: everything from the label down, from the label's column to
+  // the table's right edge, until a vertical gap; a list of makers beside the
+  // notes ends the block's width where its heading starts.
+  const followsNumber = (s: Framed) => NOTE_NUMBER.test(s.str) || framed.some((m) => m !== s && NOTE_NUMBER.test(m.str)
+    && Math.abs((m.box[1] + m.box[3]) / 2 - (s.box[1] + s.box[3]) / 2) <= 0.5 * lineH && m.box[2] <= s.box[0] + 1 && s.box[0] - m.box[2] <= 4 * lineH);
+  let stopU = ru1 + 3 * lineH;
   const candidates = framed
-    .filter((s) => s !== label && s.box[1] >= label.box[1] - 0.5 * lineH && s.box[0] >= ru0 - 0.1 * width - 3 * lineH && s.box[0] < stopU)
+    .filter((s) => s !== label && s.box[1] >= label.box[1] - 0.5 * lineH && s.box[0] >= label.box[0] - 3 * lineH && s.box[0] < stopU)
     .sort((a, b) => a.box[1] - b.box[1]);
-  const block: Framed[] = [];
-  const labelRest = label.str.replace(/^\s*(?:(?:GENERAL|SCHEDULE|KEYED)\s+)?NOTES?\s*:?\s*/i, "");
+  let block: Framed[] = [];
+  const labelRest = label.str.replace(/^\s*(?:(?:(?:GENERAL|SCHEDULE|KEYED)\s+)?NOTES?\s*:?|REMARKS\s*:)\s*/i, "");
   if (labelRest) block.push({ box: [label.box[0] + 1, label.box[1], label.box[2], label.box[3]], str: labelRest });
   let bottom = label.box[3];
+  // Another table's title ends the block when it sits over the notes; one
+  // beside them (a table to their right) is only skipped.
+  const overlapsBlock = (s: Framed) => {
+    const all = [label, ...block];
+    return s.box[0] < Math.max(...all.map((b) => b.box[2])) && s.box[2] > Math.min(...all.map((b) => b.box[0]));
+  };
   for (const s of candidates) {
+    if (s.box[0] >= stopU) continue;
     if (s.box[1] - bottom > 2.5 * lineH) break;
-    if (/\bSCHEDULE\s*$/i.test(s.str) || NOTES_LABEL.test(s.str)) break;
+    if (NOTES_LABEL.test(s.str)) break;
+    if (/\bSCHEDULE\s*$/i.test(s.str)) {
+      if (overlapsBlock(s)) break;
+      continue;
+    }
+    if (OTHER_LIST.test(s.str) && !followsNumber(s) && s.box[0] > label.box[0]) {
+      stopU = s.box[0] - lineH;
+      block = block.filter((b) => b.box[0] < stopU);
+      continue;
+    }
     block.push(s);
     bottom = Math.max(bottom, s.box[3]);
   }
 
+  // The list's numbers are set in one style, the first number's ("1.",
+  // "(1)", "A."); a number in another style inside a note ("(2) VARIABLE
+  // FREQUENCY DRIVES" under "2.1.3.") is the note's own sub-list, not a note.
+  const styleOf = (str: string) => {
+    const t = str.trim();
+    return /^NOTE\s/i.test(t) ? "note" : /^\(/.test(t) ? "paren" : /^\d{1,2}\s*\)/.test(t) ? "num)" : /^\d/.test(t) ? "num." : /^[A-Z]\s*\)/i.test(t) ? "letter)" : "letter.";
+  };
+  const firstMarker = block.filter((s) => NOTE_NUMBER.test(s.str)).sort((a, b) => a.box[1] - b.box[1] || a.box[0] - b.box[0])[0];
+  const style = firstMarker ? styleOf(firstMarker.str) : null;
   // Columns start where note numbers start; every span joins the column
   // whose start is the last one at or left of it.
-  const isMarker = (s: Framed) => NOTE_NUMBER.test(s.str);
+  const isMarker = (s: Framed) => NOTE_NUMBER.test(s.str) && styleOf(s.str) === style;
   const starts: number[] = [];
   for (const s of block.filter(isMarker).sort((a, b) => a.box[0] - b.box[0])) {
     if (!starts.length || s.box[0] - starts[starts.length - 1] > 3 * lineH) starts.push(s.box[0]);
   }
   if (!starts.length) return [];
+  // A span left of the first column (a legend beside the notes) is in none.
   const columnOf = (s: Framed) => {
-    let c = 0;
+    let c = -1;
     for (let i = 0; i < starts.length; i++) if (starts[i] <= s.box[0] + 1.5 * lineH) c = i;
     return c;
   };
@@ -104,17 +137,35 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
   const byColumn = new Map<number, Framed[]>();
   for (const s of block) {
     const c = columnOf(s);
+    if (c < 0) continue;
     if (!byColumn.has(c)) byColumn.set(c, []);
     byColumn.get(c)!.push(s);
   }
+  const mid = (s: Framed) => (s.box[1] + s.box[3]) / 2;
   for (const [c, ss] of byColumn) {
-    // Reading order within a column: line by line, left to right.
-    ss.sort((a, b) => {
-      const dv = (a.box[1] + a.box[3]) / 2 - (b.box[1] + b.box[3]) / 2;
-      return Math.abs(dv) <= 0.5 * lineH ? a.box[0] - b.box[0] : dv;
-    });
+    // Reading order within a column: line by line, left to right. A line's
+    // text starts at the column's number or an indent (a sub-list's) and
+    // runs without a wide gap; what sits past a gap on the same line (a
+    // table beside the notes) is not note text.
+    ss.sort((a, b) => mid(a) - mid(b));
+    const lines: Framed[][] = [];
     for (const s of ss) {
-      const m = s.str.match(NOTE_NUMBER);
+      const line = lines[lines.length - 1];
+      if (line && mid(s) - mid(line[0]) <= 0.5 * lineH) line.push(s);
+      else lines.push([s]);
+    }
+    const read: Framed[] = [];
+    for (const line of lines) {
+      line.sort((a, b) => a.box[0] - b.box[0]);
+      let edge = starts[c] + 12 * lineH;
+      for (const s of line) {
+        if (s.box[0] > edge) break;
+        read.push(s);
+        edge = s.box[2] + 4 * lineH;
+      }
+    }
+    for (const s of read) {
+      const m = isMarker(s) ? s.str.match(NOTE_NUMBER) : null;
       if (m) columns[c].push({ id: (m[1] ?? m[2]).toUpperCase(), text: s.str.slice(m[0].length).trim() });
       else if (columns[c].length) {
         const last = columns[c][columns[c].length - 1];
@@ -169,8 +220,11 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>): Note
   if (fanDrive && !negated("(?:VFD|VSD|VARIABLE)")) put("vfd", "yes", "note.vfd");
   else if (/\bINVERTER\s*-?\s*DUTY\s+MOTORS?\b/.test(t)) put("vfd", "yes", "note.inverter_duty_motor");
   if (/\bECMS?\b|\bEC\s+MOTORS?\b|\bELECTRONICALLY\s+COMMUTATED\b/.test(t) && !negated("(?:ECM|EC MOTOR)")) put("ecm", "yes", "note.ecm");
+  // An existing system counts only as what the unit is connected to
+  // ("CONNECT TO EXISTING BMS"), not one that merely gains points.
+  const existing = t.match(/\b(?:CONNECT(?:ED|ION)?|INTERFACE[DS]?|INTEGRATE[DS]?|INTEGRATION|TIED?|COMMUNICATES?|COMMUNICATION)\b[^.;]*?\b(?:TO|INTO|WITH)\s+(?:THE\s+)?(EXISTING\s+(?:BMS|BAS|EMS|EMCS|DDC))\b/);
   const bas = /\bBACNET\b/.test(t) ? "BACNET" : /\bLONWORKS\b/.test(t) ? "LONWORKS" : /\bMODBUS\b/.test(t) ? "MODBUS"
-    : (t.match(/\bEXISTING\s+(BMS|BAS|EMS|EMCS|DDC)\b/)?.[0] ?? (/\bHARD\s*-?\s*WIRED?\s+INTERFACE\b/.test(t) ? "HARDWIRE" : null));
+    : (existing?.[1] ?? (/\bHARD\s*-?\s*WIRED?\s+INTERFACE\b/.test(t) ? "HARDWIRE" : null));
   if (bas) put("bas_interface", bas, "note.bas_interface");
   const glycol = t.match(/\b(\d{1,2})\s*%\s*(?:(?:PROPYLENE|ETHYLENE)\s+)?GLYCOL\b/) ?? t.match(/\b(\d{1,2})\s*%\s*(?:PG|EG)\b/);
   if (glycol) put("glycol_pct", Number(glycol[1]), "note.glycol");
@@ -180,8 +234,39 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>): Note
   const merv = [...t.matchAll(/\b(PRE-?\s?FILTERS?\s+)?MERV\s*-?\s*(\d{1,2})\b(\s+PRE-?\s?FILTERS?)?/g)]
     .filter((m) => !m[1] && !m[3]).map((m) => Number(m[2]));
   if (merv.length) put("filter_merv", Math.max(...merv), "note.final_filter");
-  if (/\b(?:SWITCH|SPEED\s+CONTROL(?:LER)?|THERMOSTAT|TWO\s+SPEED)\b/.test(t)) {
-    put("control", note.text.replace(/^\s*PROVIDE\s+/i, "").replace(/\.\s*$/, "").trim(), "note.control");
+  const controls = controlItems(note.text);
+  if (controls.length) put("control", controls.join("; "), "note.control");
+  return out;
+}
+
+const CONTROL_DEVICE = /\b(?:SWITCH|SPEED\s+CONTROL(?:LER)?|THERMOSTAT|TWO\s+SPEED)\b/;
+
+/** The control devices a note provides, each as printed: its sentences, then
+ * the items of a "PROVIDE UNIT WITH A, B, C" list, keeping the ones that
+ * name a switch, speed control or thermostat. A disconnect switch is power,
+ * not control. */
+export function controlItems(text: string): string[] {
+  const out: string[] = [];
+  for (const sentence of text.toUpperCase().replace(/\s+/g, " ").split(/\.(?:\s+|$)|;/)) {
+    if (!CONTROL_DEVICE.test(sentence)) continue;
+    const body = sentence.trim().replace(/^PROVIDE\s+(?:(?:EACH\s+|THE\s+)?(?:UNIT|FAN)S?\s+WITH\s+)?/, "");
+    // List items: commas outside parentheses.
+    const items: string[] = [];
+    let depth = 0, cur = "";
+    for (const ch of body) {
+      if (ch === "(") depth++;
+      if (ch === ")") depth = Math.max(0, depth - 1);
+      if (ch === "," && depth === 0) { items.push(cur); cur = ""; } else cur += ch;
+    }
+    items.push(cur);
+    for (let item of items) {
+      item = item.trim().replace(/^(?:AND|&)\s+/, "");
+      if (!CONTROL_DEVICE.test(item) || /\bDISCONNECT\b/.test(item)) continue;
+      // "UNIT SHALL TURN ON WITH LOCAL SWITCH": the device after its WITH.
+      const withAt = item.lastIndexOf(" WITH ");
+      if (withAt >= 0 && CONTROL_DEVICE.test(item.slice(withAt + 6)) && !CONTROL_DEVICE.test(item.slice(0, withAt))) item = item.slice(withAt + 6);
+      if (item) out.push(item.trim());
+    }
   }
   return out;
 }

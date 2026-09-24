@@ -2,7 +2,7 @@
 // how the normalizer applies them to the rows that cite them.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { citedNoteIds, noteValues, scheduleNotes, type NoteSpan } from "../../src/lib/assemblies/scheduleNotes.ts";
+import { citedNoteIds, noteValues, scheduleNotes, type NoteSpan, controlItems } from "../../src/lib/assemblies/scheduleNotes.ts";
 import { normalizeCompileItem, type CompileItem } from "../../src/lib/assemblies/normalize.ts";
 
 // bldg5406-hvac-demo-mechanical.pdf page 6 as mcp/src/pdf.ts textSpans reads
@@ -64,9 +64,10 @@ test("citations: numbered, ranged, every note, none", () => {
 test("what a note states, in its formulaic forms only", () => {
   const attrs = new Set(["vfd", "ecm", "bas_interface", "glycol_pct", "economizer", "heating_type", "filter_merv", "control"]);
   const v = (text: string) => Object.fromEntries(noteValues({ id: "1", text }, attrs).map((x) => [x.attr, x.value]));
-  assert.deepEqual(v("PROVIDE VFD FOR EACH FAN. PROVIDE HAND OFF AUTO SWITCH."), { vfd: "yes", control: "VFD FOR EACH FAN. PROVIDE HAND OFF AUTO SWITCH" });
+  assert.deepEqual(v("PROVIDE VFD FOR EACH FAN. PROVIDE HAND OFF AUTO SWITCH."), { vfd: "yes", control: "HAND OFF AUTO SWITCH" });
   assert.deepEqual(v("PROVIDE BACnet INTEGRATION CARD"), { bas_interface: "BACNET" });
   assert.deepEqual(v("PROVIDE FACTORY FURNISHED CONTROLLER AND CONNECT TO EXISTING BMS"), { bas_interface: "EXISTING BMS" });
+  assert.deepEqual(v("ADDITIONAL CONTROL POINTS SHALL BE ADDED TO EXISTING DDC SYSTEM."), {}, "points added to a system are not the unit's interface");
   assert.deepEqual(v("CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL"), { glycol_pct: 30 });
   assert.deepEqual(v("CAPACITY BASED ON 100% WATER"), { glycol_pct: 0 });
   assert.deepEqual(v("COMPARATIVE ENTHALPY ECONOMIZER WITH BAROMETRIC RELIEF DAMPER"), { economizer: "airside" });
@@ -102,7 +103,7 @@ test("a row gets the notes its REMARKS cell cites; the grid outranks a note", ()
 
 test("a table with no citation column prints its notes for every row, except one naming only other units", () => {
   const notes = [
-    { id: "1", text: "PROVIDE VFD FOR EACH HW AND CW PUMP." },
+    { id: "1", text: "PROVIDE VFD FOR EACH PUMP." },
     { id: "2", text: "P-3 AND P-4: CAPACITY BASED ON 100% WATER." },
   ];
   const table = { headers: ["MARK", "GPM"], notes };
@@ -111,6 +112,22 @@ test("a table with no citation column prints its notes for every row, except one
   assert.equal(p1.attributes.glycol_pct, undefined);
   const p3 = normalizeCompileItem(row("P-3", "PUMP SCHEDULE", { GPM: "40" }), "PUMP", table);
   assert.equal(p3.attributes.glycol_pct.value, 0);
+});
+
+// federal-mech PUMP SCHEDULE: note 1 "PROVIDE VFD FOR EACH HW AND CW PUMP."
+// over pumps whose SYSTEM is HOT WATER, CHILLED WATER, CONDENSATE or a unit's
+// tag; the REMARKS column prints remarks, never a citation.
+test("a note naming services speaks for the rows of those services; remarks that cite nothing are no citation column", () => {
+  const notes = [{ id: "1", text: "PROVIDE VFD FOR EACH HW AND CW PUMP." }];
+  const rows = [
+    { key: "CWP-1", cells: { MARK: "CWP-1", SYSTEM: "CHILLED WATER", REMARKS: "BASE-MOUNTED" } },
+    { key: "HWP-1", cells: { MARK: "HWP-1", SYSTEM: "HOT WATER", REMARKS: "BASE-MOUNTED" } },
+    { key: "CP-1", cells: { MARK: "CP-1", SYSTEM: "CONDENSATE", REMARKS: "CONDENSATE PUMP" } },
+    { key: "HWRP-1", cells: { MARK: "HWRP-1", SYSTEM: "AHU-1", REMARKS: "IN-LINE" } },
+  ];
+  const table = { headers: ["MARK", "SYSTEM", "GPM", "REMARKS"], notes, rows };
+  const vfd = (r: (typeof rows)[number]) => normalizeCompileItem(row(r.key, "PUMP SCHEDULE", { SYSTEM: r.cells.SYSTEM, GPM: "40", REMARKS: r.cells.REMARKS }), "PUMP", table).attributes.vfd?.value;
+  assert.deepEqual(rows.map(vfd), ["yes", "yes", undefined, undefined]);
 });
 
 // 004_MO_T2504_03…pdf page 39, EXHAUST FAN SCHEDULE: the graph's region
@@ -147,10 +164,40 @@ test("a notes block inside the table's region, in two columns, beside a list of 
   assert.ok(!notes.some((n) => /LOREN COOK/.test(n.text)), "the manufacturers list is not a note");
 });
 
+test("a control note gives the devices it provides, not the whole note; a disconnect is not a control", () => {
+  assert.deepEqual(controlItems("PROVIDE UNIT WITH MANUFACTURER'S ALUMINUM ROOF CAP (FLAT ROOF) EQUAL TO COOK MODEL PR (W/ INTEGRAL BIRD SCREEN AND ROOF CURB), BACKDRAFT DAMPER, STANDARD PLUG DISCONNECT, PRE-WIRED FAN SPEED CONTROLLER, AND OUTLET FLEX DUCT CONNECTION."),
+    ["PRE-WIRED FAN SPEED CONTROLLER"]);
+  assert.deepEqual(controlItems("PROVIDE UNIT WITH ROOF CURB, THERMAL OVERLOAD PROTECTION, PRE-WIRED NEMA 3R ELECTRICAL DISCONNECT SWITCH, AND INTEGRAL BIRD SCREEN"), []);
+  assert.deepEqual(controlItems("ELECTRICAL TO PROVIDE DISCONNECT SWITCH."), []);
+  assert.deepEqual(controlItems("INSTALL INLINE FAN IN EXISTING EQUIPMENT VENT DUCT. PROVIDE WALL MOUNTED MANUAL SWITCH."), ["WALL MOUNTED MANUAL SWITCH"]);
+  assert.deepEqual(controlItems("PROVIDE TWO SPEED FAN AND WALL MOUNTED THERMOSTAT."), ["TWO SPEED FAN AND WALL MOUNTED THERMOSTAT"]);
+  assert.deepEqual(controlItems("FAN SHALL RUN WITH LIGHT SWITCH"), ["LIGHT SWITCH"]);
+});
+
 test("a VFD note is the fan's or motor's, never a compressor's own drive", () => {
   const attrs = new Set(["vfd"]);
   const v = (text: string) => noteValues({ id: "1", text }, attrs).map((x) => x.value);
   assert.deepEqual(v("VARIABLE SPEED COMPRESSOR WITH FACTORY VFD."), []);
   assert.deepEqual(v("DIRECT DRIVE, VARIABLE SPEED PLENUM BLOWER WITH FACTORY VFD."), ["yes"]);
   assert.deepEqual(v("INVERTER DUTY MOTOR."), ["yes"]);
+});
+
+test("a block labelled REMARKS: is read like NOTES:; a REMARKS column header is not a label; a note naming makers is not a list", () => {
+  const spans: NoteSpan[] = [
+    { str: "NEW PUMP SCHEDULE", x0: 2500, y0: 860, x1: 2900, y1: 880 },
+    { str: "REMARKS", x0: 4393, y0: 878, x1: 4480, y1: 896 },
+    { str: "HWP-1", x0: 2560, y0: 1000, x1: 2620, y1: 1018 },
+    { str: "1 , 2 , 3 , 4", x0: 4393, y0: 1000, x1: 4480, y1: 1018 },
+    { str: "REMARKS:", x0: 2555, y0: 1407, x1: 2640, y1: 1425 },
+    { str: "3.", x0: 2575, y0: 1543, x1: 2590, y1: 1561 },
+    { str: "CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.", x0: 2610, y0: 1543, x1: 3200, y1: 1561 },
+    { str: "1.", x0: 2575, y0: 1433, x1: 2590, y1: 1451 },
+    { str: "APPROVED ALTERNATE MANUFACTURERS: B&G, GRUNDFOS, TACO.", x0: 2610, y0: 1433, x1: 3300, y1: 1451 },
+    { str: "2.", x0: 2575, y0: 1488, x1: 2590, y1: 1506 },
+    { str: "PROVIDE SUCTION DIFFUSER.", x0: 2610, y0: 1488, x1: 2900, y1: 1506 },
+  ];
+  const notes = scheduleNotes(spans, [2550, 860, 4500, 1400]);
+  assert.deepEqual(notes.map((n) => n.id), ["1", "2", "3"]);
+  assert.equal(notes[2].text, "CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.");
+  assert.equal(notes[0].text, "APPROVED ALTERNATE MANUFACTURERS: B&G, GRUNDFOS, TACO.", "a note naming makers is a note, not a list heading");
 });

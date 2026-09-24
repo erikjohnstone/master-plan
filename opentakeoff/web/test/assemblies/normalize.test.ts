@@ -188,7 +188,8 @@ test("minimum outdoor air without CFM printed; MERV only where the cell says MER
   assert.equal(values(normalizeCompileItem(row("CT-1", "COOLING TOWER SCHEDULE", { "FAN MOTOR DATA HP": "10" }), "COOLING_TOWER")).fan_hp, 10);
   const pump = values(normalizeCompileItem(row("P-3", "PUMP SCHEDULE", { "ELECTRICAL MOTOR SPEED CONTROL": "VFD" }), "PUMP"));
   assert.equal(pump.vfd, "yes");
-  assert.equal(values(normalizeCompileItem(row("P-4", "PUMP SCHEDULE", { "ELECTRICAL MOTOR SPEED CONTROL": "CONSTANT" }), "PUMP")).vfd, undefined);
+  assert.equal(values(normalizeCompileItem(row("P-4", "PUMP SCHEDULE", { "ELECTRICAL MOTOR SPEED CONTROL": "CONSTANT" }), "PUMP")).vfd, "no", "constant speed: no VFD");
+  assert.equal(values(normalizeCompileItem(row("P-4", "PUMP SCHEDULE", { "ELECTRICAL MOTOR SPEED CONTROL": "SEE NOTE 2" }), "PUMP")).vfd, undefined);
 });
 
 test("enums the title or a TYPE cell states outright; none from a word the row does not print", () => {
@@ -280,4 +281,33 @@ test("a filter cell printing its thickness and MERV; OUTPUT over a bare BTUH", (
   assert.equal(values(normalizeCompileItem(row("RTU-8", "RTU SCHEDULE", { "SUPPLY FAN FILTER": '2" MERV 8' }), "RTU")).filter_merv, 8);
   const uh = values(normalizeCompileItem(row("GUH-2", "NATURAL GAS UNIT HEATER SCHEDULE", { BTUH: "60,000", "BTUH OUTPUT": "49,800" }), "UNIT_HEATER"));
   assert.equal(uh.heating_mbh, 49.8);
+});
+
+test("a mark printed on stacked lines: columns that differ are not one value, columns alike are", () => {
+  // 031's FAN SCHEDULE as the sheet graph holds it: WHSE-SF1 on two lines
+  // (SELECTION CRITERIA, then OPERATING CONDITION); the compile keeps the first.
+  const headers = ["MARK", "AIR FLOW CFM", "TSP IN", "MOTOR ELECTRICAL NOMINAL POWER HP", "MOTOR ELECTRICAL VOLT", "REMARKS"];
+  const line = (cfm: string, tsp: string, remark: string) => ({ key: "WHSE-SF1", cells: { MARK: "WHSE-SF1", "AIR FLOW CFM": cfm, "TSP IN": tsp, "MOTOR ELECTRICAL NOMINAL POWER HP": "15", "MOTOR ELECTRICAL VOLT": "460", REMARKS: remark } });
+  const table = { headers, rows: [line("13500", "6.4", "SELECTION CRITERIA"), line("11250", "4.9", "OPERATING CONDITION")] };
+  const n = normalizeCompileItem(row("WHSE-SF1", "FAN SCHEDULE", { "AIR FLOW CFM": "13500", "TSP IN": "6.4", "MOTOR ELECTRICAL NOMINAL POWER HP": "15", "MOTOR ELECTRICAL VOLT": "460", REMARKS: "SELECTION CRITERIA" }), "FAN", table);
+  const v = values(n);
+  assert.equal(v.cfm, undefined);
+  assert.match(n.unknown.cfm.reason, /2 lines that differ in "AIR FLOW CFM" \(13500 \/ 11250\)/);
+  assert.equal(v.esp_in, undefined);
+  assert.equal(v.motor_hp, 15);
+  assert.equal(v.volts, 460);
+  // WHSE-PHC1 prints both lines alike: its values stand.
+  const phc = { headers: ["MARK", "AIR FLOW CFM"], rows: [{ key: "WHSE-PHC1", cells: { "AIR FLOW CFM": "6075" } }, { key: "WHSE-PHC1", cells: { "AIR FLOW CFM": "6075" } }] };
+  assert.equal(values(normalizeCompileItem(row("WHSE-PHC1", "HOT WATER HEATING COIL SCHEDULE", { "AIR FLOW CFM": "6075" }), "DUCT_MOUNTED_COIL", phc)).cfm, 6075);
+});
+
+test("one controller per motor: a VFD rules out an EC motor and a starter rules out both; HP\\QTY; NONE is no VFD", () => {
+  const f = (cell: string) => values(normalizeCompileItem(row("EF-9", "FAN SCHEDULE", { "ELECTRICAL CONTROLLER/ STARTER TYPE": cell }), "FAN"));
+  assert.deepEqual([f("VFD").vfd, f("VFD").ecm], ["yes", "no"]);
+  assert.deepEqual([f("ECM").vfd, f("ECM").ecm], ["no", "yes"]);
+  assert.deepEqual([f("MAGNETIC STARTER").vfd, f("MAGNETIC STARTER").ecm], ["no", "no"]);
+  assert.equal(f("SEE NOTE 3").vfd, undefined);
+  const ahu = values(normalizeCompileItem(row("AHU-9", "AHU SCHEDULE", { "SUPPLY FAN HP/QTY": "3.2 \\ 6" }), "AHU"));
+  assert.deepEqual([ahu.supply_fan_hp, ahu.supply_fan_qty], [3.2, 6]);
+  assert.equal(values(normalizeCompileItem(row("P-7", "PUMP SCHEDULE", { "ELECTRICAL MOTOR SPEED CONTROL": "NONE" }), "PUMP")).vfd, "no");
 });
