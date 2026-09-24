@@ -26,7 +26,8 @@ the partner review it requests is INPUT 4).
   - mcp: typecheck 0; the pretest suites pass. The main suite showed the 5 AS-1 failures and PARITY. PARITY's check of the PDF producer searched the raw bytes of a compressed PDF, a test bug; it now reads the producer with pdf-lib, and the rerun passes (below).
   - The conformance worker hung on its idle sidecars again (AS-6); the run ended when the guard's own task was stopped.
   - `check:tool-count` passes (62 tools). It failed at SETUP (60 vs 61), and WP5's tool-count edits fixed it.
-- NEW-DOCUMENT TEST #1: blocked on INPUT 5 (asked once in WP0, still open). The UI proof on a real PDF is the next heavy job.
+- NEW-DOCUMENT TEST #1: blocked on INPUT 5 (asked once in WP0, still open).
+- UI proof (a real PDF in the running app; details under WP8): **passes**, 10 checks. The browser's records and lines are byte-identical to `apply_assemblies` (214 records, 3,220 lines).
 
 **Now:** GATE 5 is measured and not passed. The next lever is D6 from the control drawings: an I/O-count match against schematics bound to units (`ioMatch.ts`, written and unit-tested), pending a census. WP6's instrument is written, but AS-2, AS-22 and the held-out rule leave it little to compare. WP7's CSV set, PDF section and HIT changes are in. WP8's library CSV, presets and persona scenarios and WP9's partner-entered fields are in; their gates wait on the UI proof and the guard.
 
@@ -551,7 +552,7 @@ Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Bo
 - **The Takeoff → Assemblies panel:**
   - it gets accessible names (regions, tables, pressed and expanded states), a keyboard **Details** button per unit and scroll containers for wide tables;
   - the canvas probe exposes the assemblies project and state, so a browser run can recompute in-page and compare bytes;
-  - `web/scripts/playwright-assemblies.mjs` is the UI proof (its run is pending; see WP8 below).
+  - `web/scripts/playwright-assemblies.mjs` is the UI proof (it passes; see WP8 below).
 - **WP6 instrument 4** (`mcp/scripts/assemblies-points-compare.mjs`, 2 unit tests): per unit a printed list names, the typical's point lines against the printed rows by I/O type. Every diff needs a class and evidence in `reports/assemblies/06-points-diffs.csv`.
   - Documents: the WP0.1 census's sets with mapped rows (federal-mech; navfac is held-out, aggregates only).
   - The goal's other named sets (Eglin, Albany, USDA, Orange County 21) are not staged here (AS-2).
@@ -588,7 +589,26 @@ Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Bo
 - **Parity (D04).** The scoped CSV set under the presets, over MCP, is the browser builder's bytes. `export_scope` without `export_dir`, and an unknown preset, are refused. mcp assemblies apply and points compare: 4/4 pass (PARITY 151 s).
 - **Tests:** web assemblies and HIT 158 pass (among them partner 2, presets 3, scope 1, the PDF's partner section 1, personas 3). Web and mcp tsc exit 0. eslint: 0 errors (the 3 known warnings). The full web `npm test` has 3665 tests: 3649 pass, the 3 AS-1 failures, 13 skipped. `npm run build` exits 0.
 - **GATE 9** (unit tests; grep test (c) still green): **passes**. `partner.test.ts`, persona (a) and the PDF test assert the extension and the label; starter.test.ts's grep test (c) is green.
-- **GATE 8** (all three scenarios pass; round-trips lossless; guard green): the scenarios pass and the library round trip is lossless. The guard at this state (the full mcp suite after these `mcp/src` edits) and the UI proof are the next heavy jobs.
+- **GATE 8** (all three scenarios pass; round-trips lossless; guard green): the scenarios pass, the library round trip is lossless, and the UI proof passes. The full guard after these edits runs next.
+- **UI proof** (`web/scripts/playwright-assemblies.mjs`, `raw/federal-attachment4-mechanical.pdf`, the Vite dev server, headless Chromium): **10 checks pass.**
+  - Reference: `mcp/scripts/assemblies-apply.mjs`, through the real MCP tool on a Session: 128 units, 214 records, 3,220 lines in 144 s. A second call set `hookup_defaults`, the kit-maker preset and `export_scope: mechanical` (2,661 lines).
+  - The checks:
+    - the real `/__ot/assemblies-project` response;
+    - the browser's own records, lines and report, recomputed in the page, byte-identical to MCP's;
+    - the on-screen totals, exceptions and unit rows are that report;
+    - Download CSV set = `export_dir`, byte for byte (8 CSV files; `assemblies.pdf` in both);
+    - project settings from the panel (starter defaults, kit-maker preset), saved with the project; the mechanical-scope download = MCP with the same settings and `export_scope`, byte for byte; cleared again;
+    - a unit's details from the keyboard;
+    - an override with its reason;
+    - library clone, live validation, an update offered and not applied (A5), withdrawn on delete;
+    - both themes at 1280, 1440 and 1920 px with no horizontal page scroll;
+    - IndexedDB autosave, and a reload that keeps the pins and the override.
+  - Found on the way: **AS-23**. The panel's starter library never loaded under the dev server, because a dynamic JSON import passed import attributes. It is fixed and guarded by a test.
+  - Two test-script bugs were fixed:
+    - the MCP client's default 60 s request timeout now covers a real graph build;
+    - the header check read `textContent`, where "Library" runs into the count; it now uses a data attribute.
+  - The first run also met Vite's one-time dependency re-optimization, which reloads the page.
+  - Logs and screenshots: the session scratchpad's `uiproof/`.
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered

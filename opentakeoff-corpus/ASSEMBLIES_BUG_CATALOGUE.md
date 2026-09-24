@@ -838,3 +838,29 @@ scheduled unit, or a list that sits inside a control detail bound to its
 equipment). Until then, D6 does not apply to these units and WP6 has no dev
 unit to compare.
 
+
+## AS-23 — the Takeoff panel's starter library never loaded under the dev server (FIXED — this goal, WP5.4)
+
+**Found:** 2026-09-24, the first UI-proof run (`web/scripts/playwright-assemblies.mjs`
+on `raw/federal-attachment4-mechanical.pdf`, the Vite dev server).
+
+**What:** Takeoff → Assemblies showed "0 assemblies (0 yours)" and "Failed to
+fetch dynamically imported module:
+…/src/lib/assemblies/starter/us-hookups-v1.json?import". The run's screenshot
+and log are in the session scratchpad (`uiproof/ui-run1/`).
+
+**Root cause (confirmed):** `starterLibrary.ts` (WP5.4) loaded the two starter
+files with `import("…json", { with: { type: "json" } })`. The Vite dev server
+rewrites the URL to `…json?import` and serves a JavaScript module
+(`Content-Type: text/javascript`), but it keeps a dynamic import's options
+object. The browser then asked for a JSON module, got JavaScript, and refused
+it. A static import's attributes are stripped (`presets.ts` and
+`linear/rates.ts` load fine), and `vite build` bundles the JSON, so the unit
+tests, the build and CI all passed. Only a browser run against the dev server
+could show it.
+
+**Fix:** the two dynamic imports drop their attributes (Node with tsx and
+the build read the JSON either way). `web/test/assemblies/starterLibrary.test.ts`
+loads the starter through the gate (47 records) and fails on any dynamic
+import in `web/src` that passes attributes. As a negative control, the
+pre-fix file trips it.
