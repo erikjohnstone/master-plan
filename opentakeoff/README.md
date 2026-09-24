@@ -281,6 +281,12 @@ second use is not a side effect; see [the data layer](#the-data-layer--why-this-
   schedule row and library rule. An unresolved unit names what it waits for instead of guessing,
   and a saved project keeps the library versions it used. **Takeoff → Assemblies** in the
   browser, `apply_assemblies` over MCP, one shared path
+- **Assemblies exports**—eight CSV files (equipment, lines and roll-up, points, valves, damper
+  actuators, sensors, a Desigo Select worksheet), each engineering field with its source column,
+  plus the report as a PDF section; the HIT valve export adds the coils no scheduled valve
+  serves. Your library travels as a spreadsheet, the starter's hook-up profile and responsibility
+  presets are project settings, and your own part numbers, costs and hours come back labelled
+  partner-entered ([columns](docs/ASSEMBLIES_CSV.md))
 - **Stitched sheets**—a floor split across a match line becomes one working surface; a room
   that crosses the seam traces as one shape, One-Click included
   ([#161](https://github.com/Kentucky-ai/opentakeoff/issues/161))
