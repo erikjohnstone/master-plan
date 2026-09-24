@@ -41,7 +41,8 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { attributeSpec, canonicalAttributeFor, keyValueToCanonical } from "../../web/src/lib/assemblies/attributes.ts";
-import { scheduleNotes } from "../../web/src/lib/assemblies/scheduleNotes.ts";
+import { citedCodeLegend, scheduleLegend, scheduleNotes } from "../../web/src/lib/assemblies/scheduleNotes.ts";
+import { vfdDrivenTags } from "../../web/src/lib/assemblies/normalize.ts";
 
 export const KEY_COLUMNS = ["sheet", "table_title", "tag", "family", "attribute", "value", "unit", "source_header", "note"];
 
@@ -155,12 +156,14 @@ function matchItem(inst, tableItems, used) {
 }
 
 /** The table an item was compiled from: its headers in order, the numbered
- * notes printed with it (read from its page's text spans, `pages`), and its
- * rows. */
+ * notes and the legend printed with it and the code legends its headers cite
+ * (all read from its page's text spans, `pages`), and its rows. */
 function tableContext(item, tables, pages = {}) {
   const headers = [];
   const notes = [];
   const rows = [];
+  const codes = {};
+  const legend = {};
   for (const t of tables) {
     if (t.sheet !== item.sheet_id || t.title !== item.table_title) continue;
     for (const h of t.headers) if (!headers.includes(h)) headers.push(h);
@@ -168,8 +171,14 @@ function tableContext(item, tables, pages = {}) {
     t.readNotes ??= spans && t.region ? scheduleNotes(spans, t.region) : (t.notes ?? []);
     for (const n of t.readNotes) if (!notes.some((x) => x.id === n.id)) notes.push(n);
     for (const r of t.rows ?? []) rows.push(r);
+    if (spans) {
+      t.readCodes ??= Object.fromEntries(t.headers.map((h) => [h, citedCodeLegend(spans, h)]).filter(([, c]) => c));
+      Object.assign(codes, t.readCodes);
+      t.readLegend ??= t.region ? scheduleLegend(spans, t.region) : {};
+      Object.assign(legend, t.readLegend);
+    }
   }
-  return headers.length || notes.length || rows.length ? { headers, notes, rows } : null;
+  return headers.length || notes.length || rows.length ? { headers, notes, rows, codes, legend } : null;
 }
 
 const citeInTable = (cite, t) => Boolean(cite) && cite.sheet === t.sheet && t.titles.has(cite.table_title);
@@ -187,8 +196,13 @@ export function scoreSet({ setId, key, snapshot, normalize }) {
     byTable.get(k).push(it);
   }
   const memo = new Map();
+  // The units the project's drive schedules name as their loads.
+  const driven = vfdDrivenTags(snapshot.items);
   const norm = (it) => {
-    if (!memo.has(it)) memo.set(it, normalize(it, it.family, tableContext(it, snapshot.tables, snapshot.pages)));
+    if (!memo.has(it)) {
+      const table = tableContext(it, snapshot.tables, snapshot.pages);
+      memo.set(it, normalize(it, it.family, table && driven.size ? { ...table, driven } : table));
+    }
     return memo.get(it);
   };
   const outcomes = [];

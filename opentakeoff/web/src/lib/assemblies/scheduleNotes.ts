@@ -270,3 +270,123 @@ export function controlItems(text: string): string[] {
   }
   return out;
 }
+
+/** The note a header cites for its codes ("CONTROLLER/ STARTER TYPE (NOTE C)"),
+ * read as a legend: the sheet's note of that id ("C. CONTROLLER STARTER TYPE:"),
+ * confirmed by sharing words with the header, and its "CODE = MEANING" lines
+ * ("FV = FULL VOLTAGE") up to the next note. Null when the header cites no
+ * note, or no note on the sheet both carries the id and names the column. */
+export function citedCodeLegend(spans: readonly NoteSpan[], header: string): Record<string, string> | null {
+  const cite = header.match(/\(\s*NOTE\s+([A-Z]|\d{1,2})\s*\)\s*$/i);
+  if (!cite) return null;
+  const id = cite[1].toUpperCase();
+  // The header's own words, after its group: the leaf the note explains.
+  const words = (t: string) => new Set(t.toUpperCase().replace(/\(\s*NOTE\s+\w+\s*\)/g, " ").split(/[^A-Z]+/).filter((w) => w.length >= 3));
+  const leaf = words(header.slice(0, cite.index));
+  const upright = spans.filter((s) => !s.rot).map((s) => ({ ...s, str: s.str.trim() })).filter((s) => s.str);
+  const markerRe = new RegExp(`^${id}\\.\\s+(.*)$`, "i");
+  let best: { span: NoteSpan & { str: string }; shared: number } | null = null;
+  for (const s of upright) {
+    const m = s.str.match(markerRe);
+    if (!m) continue;
+    const shared = [...words(m[1])].filter((w) => leaf.has(w)).length;
+    if (shared >= 2 && (!best || shared > best.shared)) best = { span: s, shared };
+  }
+  if (!best) return null;
+  const top = best.span;
+  const lineH = Math.max(1, top.y1 - top.y0);
+  // The legend's lines: below the marker, in its column, until the next
+  // lettered or numbered note or a gap.
+  const below = upright
+    .filter((s) => s !== top && s.y0 > top.y0 + 0.5 * lineH && Math.abs(s.x0 - top.x0) <= 3 * lineH)
+    .sort((a, b) => a.y0 - b.y0);
+  const codes: Record<string, string> = {};
+  let last: string | null = null;
+  let bottom = top.y1;
+  for (const s of below) {
+    if (s.y0 - bottom > 2.5 * lineH) break;
+    if (/^(?:[A-Z]|\d{1,2})\.\s+\S/.test(s.str)) break;
+    const d = s.str.match(/^([A-Z0-9][A-Z0-9/&.-]{0,9})\s*[=:–—-]\s*(\S.*)$/i);
+    if (d) {
+      last = d[1].toUpperCase();
+      codes[last] = d[2].replace(/\.\s*$/, "").trim();
+    } else if (last) {
+      // A definition wrapped onto the next line.
+      codes[last] = `${codes[last]} ${s.str.replace(/\.\s*$/, "").trim()}`;
+    }
+    bottom = Math.max(bottom, s.y1);
+  }
+  return Object.keys(codes).length ? codes : null;
+}
+
+const LEGEND_LABEL = /^(?:[A-Z][A-Z.]*\s+){0,3}LEGEND\s*:?$/i;
+const LEGEND_CODE = /^[A-Z0-9][A-Z0-9/&.]{0,7}$/i;
+
+/** The legend printed with a table ("COMPONENTS LEGEND": "PF - PREFILTER",
+ * "HF - ELECTRIC HUMIDIFIER SECTION"), as code → meaning. Its label sits where
+ * a notes label would (below the header band, across the table's width, no
+ * further than a few lines past the last row); its lines pair a short code
+ * with a meaning that starts with a dash or an equals sign, in one or more
+ * columns, and a meaning may wrap onto the next line of its column. Empty
+ * when the table prints none. */
+export function scheduleLegend(spans: readonly NoteSpan[], region: Box): Record<string, string> {
+  const inside = spans.filter((s) => s.x0 >= region[0] - 1 && s.x1 <= region[2] + 1 && s.y0 >= region[1] - 1 && s.y1 <= region[3] + 1);
+  const count = new Map<number, number>();
+  for (const s of inside) count.set(s.rot ?? 0, (count.get(s.rot ?? 0) ?? 0) + 1);
+  const rot = [...count.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? 0;
+  const framed: Framed[] = spans.filter((s) => (s.rot ?? 0) === rot).map((s) => ({ box: frameBox([s.x0, s.y0, s.x1, s.y1], rot), str: s.str.trim() })).filter((s) => s.str);
+  const [ru0, rv0, ru1, rv1] = frameBox(region, rot);
+  const heights = framed.filter((s) => s.box[0] >= ru0 && s.box[2] <= ru1 && s.box[1] >= rv0 && s.box[3] <= rv1).map((s) => s.box[3] - s.box[1]).sort((a, b) => a - b);
+  const lineH = heights.length ? heights[Math.floor(heights.length / 2)] : 8;
+  const height = rv1 - rv0;
+  const label = framed
+    .filter((s) => LEGEND_LABEL.test(s.str) && s.box[0] >= ru0 - 3 * lineH && s.box[0] <= ru1
+      && s.box[1] >= rv0 + Math.min(0.2 * height, 6 * lineH) && s.box[1] <= rv1 + 6 * lineH)
+    .sort((a, b) => a.box[1] - b.box[1] || a.box[0] - b.box[0])[0];
+  if (!label) return {};
+  // Its width: to the table's right edge, or to a NOTES label beside it.
+  const mid = (s: Framed) => (s.box[1] + s.box[3]) / 2;
+  const right = Math.min(ru1 + 3 * lineH, ...framed
+    .filter((s) => s !== label && NOTES_LABEL.test(s.str) && Math.abs(mid(s) - mid(label)) <= lineH && s.box[0] > label.box[2])
+    .map((s) => s.box[0] - lineH));
+  const candidates = framed
+    .filter((s) => s !== label && s.box[1] > label.box[1] + 0.5 * lineH && s.box[0] >= label.box[0] - 3 * lineH && s.box[0] < right)
+    .sort((a, b) => mid(a) - mid(b));
+  const lines: Framed[][] = [];
+  let bottom = label.box[3];
+  for (const s of candidates) {
+    if (s.box[1] - bottom > 2.5 * lineH) break;
+    const line = lines[lines.length - 1];
+    if (line && mid(s) - mid(line[0]) <= 0.5 * lineH) line.push(s);
+    else lines.push([s]);
+    bottom = Math.max(bottom, s.box[3]);
+  }
+  const legend: Record<string, string> = {};
+  // The meaning columns seen so far: where each starts, and its last code.
+  const columns: Array<{ u: number; code: string }> = [];
+  for (const line of lines) {
+    line.sort((a, b) => a.box[0] - b.box[0]);
+    for (let i = 0; i < line.length; i++) {
+      const s = line[i];
+      const whole = s.str.match(/^([A-Z0-9][A-Z0-9/&.]{0,7})\s+[-=–—]\s*(\S.*)$/i);
+      const next = line[i + 1];
+      if (whole) {
+        const code = whole[1].toUpperCase();
+        legend[code] = whole[2].trim();
+        columns.push({ u: s.box[0], code });
+      } else if (LEGEND_CODE.test(s.str) && next && /^[-=–—]\s*\S/.test(next.str) && next.box[0] - s.box[2] <= 6 * lineH) {
+        const code = s.str.toUpperCase();
+        legend[code] = next.str.replace(/^[-=–—]\s*/, "").trim();
+        const at = columns.findIndex((c) => Math.abs(c.u - next.box[0]) <= 2 * lineH);
+        if (at >= 0) columns[at].code = code; else columns.push({ u: next.box[0], code });
+        i++;
+      } else {
+        // A wrapped meaning: the column whose meaning starts nearest at or
+        // left of it.
+        const col = columns.filter((c) => c.u <= s.box[0] + 2 * lineH).sort((a, b) => b.u - a.u)[0];
+        if (col) legend[col.code] = `${legend[col.code]} ${s.str}`.trim();
+      }
+    }
+  }
+  return legend;
+}

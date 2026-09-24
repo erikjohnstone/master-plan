@@ -42,12 +42,21 @@ export interface CompileItem {
 }
 
 /** The schedule table the item was compiled from: its headers in order; the
- * numbered notes printed with it (scheduleNotes.ts), when read; and its rows
- * (the sheet graph's, key and cell text), when given. */
+ * numbered notes printed with it (scheduleNotes.ts), when read; its rows
+ * (the sheet graph's, key and cell text), when given; and the code legends
+ * its headers cite, when read. */
 export interface TableContext {
   headers: readonly string[];
   notes?: readonly ScheduleNote[];
   rows?: ReadonlyArray<{ key: string; cells: Readonly<Record<string, string>> }>;
+  /** Per header, the codes the note it cites defines ("FV" → "FULL
+   * VOLTAGE"; scheduleNotes.ts citedCodeLegend). */
+  codes?: Readonly<Record<string, Readonly<Record<string, string>>>>;
+  /** The legend printed with the table, code → meaning ("HF" → "ELECTRIC
+   * HUMIDIFIER SECTION"; scheduleNotes.ts scheduleLegend). */
+  legend?: Readonly<Record<string, string>>;
+  /** The units a drive schedule's row names as its load (vfdDrivenTags). */
+  driven?: ReadonlySet<string>;
 }
 
 export interface Cite {
@@ -390,15 +399,16 @@ function otherHalf(h: string, family: string, paired: boolean): boolean {
   return false;
 }
 
-/** Whether the table's row for this unit names a second unit beside it
- * ("ACCU-1 / AC-1", "F-1 , CU-1"): one row scheduling both halves of a split
- * system. */
+/** Whether the table's row for this unit names a unit of another kind
+ * beside it ("ACCU-1 / AC-1", "F-1 , CU-1"): one row scheduling both halves of
+ * a split system. Two units of one kind on a row ("FCU-1/FCU-2") are no pair. */
 function pairedRow(item: CompileItem, table: TableContext | null): boolean {
   const own = canonKey(item.tag);
-  const tagLike = /^[A-Z]{1,6}-?\d{1,3}[A-Z]?(?:\([A-Z]\))?$/;
+  const tagLike = /^([A-Z]{1,6})-?\d{1,3}[A-Z]?(?:\([A-Z]\))?$/;
   return (table?.rows ?? []).some((r) => Object.values(r.cells).some((text) => {
     const parts = String(text ?? "").toUpperCase().split(/\s*[\/,&]\s*|\s+AND\s+/).map(canonKey).filter(Boolean);
-    return parts.length >= 2 && parts.includes(own) && parts.every((p) => tagLike.test(p));
+    if (parts.length < 2 || !parts.includes(own) || !parts.every((p) => tagLike.test(p))) return false;
+    return new Set(parts.map((p) => p.match(tagLike)![1])).size >= 2;
   }));
 }
 
@@ -434,6 +444,10 @@ interface RowContext {
   defaultWater: Service;
   /** The table prints a water flow or water temperature column. */
   hasWaterSide: boolean;
+  /** Per header, the codes its cited note defines. */
+  codes: Readonly<Record<string, Readonly<Record<string, string>>>>;
+  /** The table's legend, code → meaning. */
+  legend: Readonly<Record<string, string>>;
 }
 
 /** The one service every medium-named water column of the table names (a
@@ -930,10 +944,13 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         // A CONTROLLER / STARTER (TYPE) column names the one device the motor
         // is started or run by, so the one it names rules the others out.
         if (!col.cell) break;
-        const t = text.toUpperCase().replace(/\s+/g, " ").trim();
-        const kind = /^(?:VFD|VSD|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVE)$/.test(t) ? "vfd"
-          : /^(?:ECM?|EC\s+(?:MOTOR\s+)?CONTROLLER|ECM\s+CONTROLLER)$/.test(t) ? "ecm"
-          : /^(?:(?:COMBINATION\s+|MAGNETIC\s+|MANUAL\s+|MOTOR\s+)?STARTER|MAG\.?\s+STARTER|FVNR|ACROSS\s+THE\s+LINE)$/.test(t) ? "starter" : null;
+        // A code the header's cited note defines reads as its meaning
+        // ("FV" under "… TYPE (NOTE C)", C: "FV = FULL VOLTAGE").
+        const printed = text.toUpperCase().replace(/\s+/g, " ").trim();
+        const t = (ctx.codes[col.header]?.[printed] ?? printed).toUpperCase().replace(/\s+/g, " ").trim();
+        const kind = /^(?:VFD|VSD|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVE)(?:\s*(?:\/\s*B|WITH\s+BYPASS))?$/.test(t) ? "vfd"
+          : /^(?:ECM?|EC\s+(?:MOTOR\s+)?CONTROLLER|ECM\s+CONTROLLER|ELECTRONICALLY\s+COMMUTATED(?:\s+MOTOR)?)$/.test(t) ? "ecm"
+          : /^(?:(?:COMBINATION\s+|MAGNETIC\s+|MANUAL\s+|MOTOR\s+)?STARTER|MAG\.?\s+STARTER|FVNR|ACROSS\s+THE\s+LINE|FULL\s+VOLTAGE(?:\s+NON-?\s?REVERSING)?(?:\s+STARTER)?|WYE-?\s?DELTA|SOLID\s+STATE(?:\s+\(?SOFT\s+START\)?)?|SOFT\s+START(?:ER)?)$/.test(t) ? "starter" : null;
         if (!kind) break;
         if (ctx.attrs.has("vfd")) found.push({ attr: "vfd", col, value: kind === "vfd" ? "yes" : "no", printed: text, rule: "enum.controller_type", rank: 0 });
         if (ctx.attrs.has("ecm")) found.push({ attr: "ecm", col, value: kind === "ecm" ? "yes" : "no", printed: text, rule: "enum.controller_type", rank: 0 });
@@ -1112,11 +1129,48 @@ function derived(item: CompileItem, ctx: RowContext, values: Map<string, Candida
       if (only) out.push({ attr: "heating_type", col: only, value: "none", printed: only.cell?.text ?? "", rule: "derived.cooling_only", rank: 0 });
     }
   }
+  // A unit's sections in air-flow order, as codes its table's legend
+  // defines ("MXTD3-PF-FF-CC-HF-FAN", SEE LEGEND BELOW): the list is the whole
+  // unit, so a section the legend offers and the list lacks is not there.
+  const seq = ctx.cols.find((c) => c.cell && /\bLEGEND\b/.test(c.h) && /\bCOMPONENTS?\b|\bSECTIONS?\b|\bAIR\s*FLOW\b|\bARRANGEMENT\b|\bCONFIGURATION\b/.test(c.h));
+  const codes = seq ? seq.cell!.text.toUpperCase().split(/\s*[-,+]\s*|\s+/).filter(Boolean) : [];
+  if (seq && codes.length >= 2 && codes.every((c) => ctx.legend[c])) {
+    const meanings = codes.map((c) => ctx.legend[c].toUpperCase());
+    const offered = Object.values(ctx.legend).map((m) => m.toUpperCase());
+    const byLegend = (attr: string, value: string) => {
+      if (ctx.attrs.has(attr) && !values.has(attr) && !out.some((o) => o.attr === attr)) {
+        out.push({ attr, col: seq, value, printed: seq.cell!.text, rule: "derived.components_legend", rank: 0 });
+      }
+    };
+    if (offered.some((m) => /\bHUMIDIFIER\b/.test(m))) byLegend("humidifier", meanings.some((m) => /\bHUMIDIFIER\b/.test(m)) ? "yes" : "no");
+    const HEAT = /\bHEATING\s+COIL\b|\bHEATER\b|\bFURNACE\b|\bHEAT(?:ING)?\s+SECTION\b/;
+    if (offered.some((m) => HEAT.test(m))) {
+      const heat = meanings.filter((m) => HEAT.test(m));
+      const kinds = new Set(heat.map((m) => (/\bELEC/.test(m) ? "electric" : /\bSTEAM\b/.test(m) ? "steam" : /\bGAS\b|\bFURNACE\b/.test(m) ? "gas" : /\bHOT\s+WATER\b|\bHW\b/.test(m) ? "hw" : "?")));
+      if (!heat.length) byLegend("heating_type", "none");
+      else if (kinds.size === 1 && !kinds.has("?")) byLegend("heating_type", [...kinds][0]);
+    }
+  }
+
   const byGas = (attr: string, value: string, rule: string) => {
     if (gasInput && ctx.attrs.has(attr) && !values.has(attr)) out.push({ attr, col: gasInput, value, printed: gasInput.cell?.text ?? "", rule, rank: 0 });
   };
   byGas("fuel", "gas", "derived.gas_input_names_fuel");
   if (ctx.family === "HUMIDIFIER") byGas("humidifier_type", "gas_fired", "derived.gas_input_names_gas_fired");
+  if (ctx.family === "HUMIDIFIER" && ctx.attrs.has("humidifier_type") && !values.has("humidifier_type") && !out.some((o) => o.attr === "humidifier_type")) {
+    // The humidifier's TYPE cell names how it makes or delivers steam; a
+    // dispersion tube or manifold fed from a steam SOURCE (clean, plant or
+    // boiler steam) injects that steam directly.
+    const typeCol = ctx.cols.find((c) => c.cell && /\bTYPE\b/.test(c.h));
+    const t = typeCol?.cell?.text.toUpperCase() ?? "";
+    const source = ctx.cols.find((c) => c.cell && /^SOURCE$|\bSTEAM\s+SOURCE\b/.test(c.h))?.cell?.text.toUpperCase() ?? "";
+    const v = /\bSTEAM[-\s]+TO[-\s]+STEAM\b/.test(t) ? "steam_to_steam" : /\bELECTRODE\b/.test(t) ? "electrode"
+      : /\bRESISTIVE\b|\bRESISTANCE\b/.test(t) ? "resistive" : /\bGAS[-\s]+FIRED\b/.test(t) ? "gas_fired"
+      : /\bEVAPORATIVE\b|\bWETTED\s+MEDIA\b/.test(t) ? "evaporative" : /\bATOMIZ/.test(t) ? "atomizing"
+      : /\bDISPERSION\b|\bMANIFOLD\b|\bSTEAM\s+INJECTION\b|\bDIRECT\s+(?:STEAM\s+)?INJECTION\b/.test(t)
+        && /\bSTEAM\b/.test(source) && !/\bELECTRI|\bGAS\b|\bELECTRODE\b/.test(source) ? "direct_injection" : null;
+    if (v && typeCol) out.push({ attr: "humidifier_type", col: typeCol, value: v, printed: typeCol.cell!.text, rule: "enum.humidifier_type", rank: 0 });
+  }
   return out;
 }
 
@@ -1219,6 +1273,23 @@ function fromNotes(item: CompileItem, ctx: RowContext, table: TableContext | nul
 
 // ── 9. The row ──────────────────────────────────────────────────────────────
 
+/** The units the project's drive schedules drive: a VARIABLE_FREQUENCY_DRIVE
+ * row's PURPOSE / SERVES / EQUIPMENT / LOAD cell naming another compiled
+ * unit's tag ("VFD-1 … PURPOSE HWP-1"). Canonical tags. */
+export function vfdDrivenTags(items: ReadonlyArray<{ family: string; tag: string; cells: CompileItem["cells"] }>): Set<string> {
+  const tags = new Set(items.filter((i) => i.family !== "VARIABLE_FREQUENCY_DRIVE").map((i) => canonKey(i.tag)));
+  const driven = new Set<string>();
+  for (const vfd of items.filter((i) => i.family === "VARIABLE_FREQUENCY_DRIVE")) {
+    for (const [header, cell] of Object.entries(vfd.cells ?? {})) {
+      if (!/\bPURPOSE\b|\bSERV(?:ES|ICE|ING|ED)\b|\bEQUIPMENT\b|\bLOAD\b|\bMOTOR\s+TAG\b/.test(headerText(header))) continue;
+      for (const token of String(cell?.text ?? "").toUpperCase().split(/\s*[,/&]\s*|\s+AND\s+|\s+/)) {
+        if (tags.has(canonKey(token))) driven.add(canonKey(token));
+      }
+    }
+  }
+  return driven;
+}
+
 /** Canonical attributes for one compiled row of `family`. */
 export function normalizeCompileItem(item: CompileItem, family: string, table: TableContext | null = null): NormalizedItem {
   const result: NormalizedItem = { family, tag: item.tag, attributes: {}, unknown: {} };
@@ -1231,7 +1302,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
   const paired = pairedRow(item, table);
   const cols = columnsOf(item, table).filter((c) => !otherHalf(c.h, family, paired));
   const ctx: RowContext = {
-    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null,
+    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null, codes: table?.codes ?? {}, legend: table?.legend ?? {},
     hasWaterSide: cols.some((c) => quantitiesOf(c.h).some((q) => q === "waterflow" || q === "ewt" || q === "lwt" || q === "ewt_lwt")),
   };
   ctx.defaultWater = HEATING_ONLY.has(family) ? "hw" : family === "AIR_COOLED_CHILLER" ? "chw" : titleWater(ctx.title) ?? tableWater(cols) ?? (family === "HEAT_EXCHANGER" && cols.some((c) => W.steam.test(c.h)) ? "secondary" : null) ?? physicsWater(item, cols, family);
@@ -1263,6 +1334,10 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
   }
   for (const d of derived(item, ctx, chosen)) if (!chosen.has(d.attr)) chosen.set(d.attr, d);
   for (const n of fromNotes(item, ctx, table, reasons)) if (!chosen.has(n.attr)) chosen.set(n.attr, n);
+  // A drive schedule that names this unit as its load: the unit runs on a VFD.
+  if (!chosen.has("vfd") && ctx.attrs.has("vfd") && table?.driven?.has(canonKey(item.tag))) {
+    chosen.set("vfd", { attr: "vfd", col: { header: "(drive schedule)", h: "", cell: { text: item.tag, bbox: null }, order: -1 }, value: "yes", printed: item.tag, rule: "cross.drive_schedule_load", rank: 6 });
+  }
 
   for (const [attr, c] of chosen) {
     result.attributes[attr] = {

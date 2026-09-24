@@ -474,3 +474,63 @@ the corpus author's machine (AS-2), which every scorer prints per set.
 **Evidence:** `reports/assemblies/00-corpus-eval-orphans.txt` (attempt 1:
 the per-set start counts and the orphan process list; attempt 2: the reaper's
 per-scorer counts).
+
+---
+
+## AS-16 — bldg5406's rotated schedules lose, merge and reorder their columns in the sheet graph; 80 dev values are out of the normalizer's reach (OPEN — owned by the graph's loop; a demonstrated ceiling for GATE 2)
+
+**Found:** 2026-09-24, WP2, measuring the normalizer on the dev keys.
+
+**What:** the dev attribute eval (`reports/assemblies/02-attr-eval-dev.md`)
+misses 80 of bldg5406-hvac-demo's 145 printed values (44.8% exact). The
+other ten dev documents miss 4 of 1,908: 12_MT's cabinet unit heaters, whose
+drawing prints the coil's water under AIR SIDE and the air under LIQUID SIDE
+(AS-11). All 80 sit in the five schedules bldg5406 draws at a quarter turn,
+where the sheet graph:
+- dropped columns (the terminal boxes' INLET DIA. and VOLTS / PH / HZ; the
+  page-18 pump schedule's SERVING, head, HP and V/φ);
+- merged neighbours into one cell (AHU-1's "5100 1290 BUILDING 5406" under
+  CFM; the fans' "1/4 115 1 60" under ELECTRICAL; the pump's "4 40" under
+  GPM);
+- stripped the words that name a column's quantity (REGULATOR SET CFM became
+  "CFM", MIN. CFM became "AIR TERMINAL BOX SCHEDULE CFM", the AHU's cooling
+  coil lost its COOLING COIL group);
+- reversed a header's word order ("(°F) LWT / EWT" over "56 / 44", which the
+  physics check then refuses).
+
+Per-table evidence, with the key's headers beside the graph's and a graph
+row, is in `reports/assemblies/02-bldg5406-ceiling.md`.
+
+**Why this goal does not fix it:** the sheet graph (sheetgraph.ts,
+vectorGrid*) is outside WHAT YOU OWN, and the normalizer reads only the
+graph's columns: that is the shared path's table truth, which the UI and the
+MCP tools display. Splitting a merged cell by value shapes (115 is a
+voltage, 60 a frequency) or taking a bare "CFM" as the box's maximum would
+assign values the graph does not hold (LAW L4). Two readings would come
+close: re-gridding the rotated table from the text spans inside the
+normalizer, or pairing values by the order they print in. The first is a
+second extractor off the shared path; the second guesses. The key is not
+changed.
+
+**The ceiling this puts on GATE 2 (dev):** leaving out these 80 and 12_MT's
+4 (AS-11: the drawing's air and water groups are swapped, and the normalizer
+refuses the contradiction rather than reinterpret the headers), exact can
+reach at most 1,969 of 2,053 (95.9%), below GATE 2's 98%. The normalizer
+measures 1,967 (95.8%), with 2 wrong and 0 invented. The 2 wrong are
+itd-d1-lab's BP-1/BP-2 AREA SERVED: the graph joins the spans
+"BOILER PUMP ( B-1" and ")" into "( B-1)", and the key reads "( B-1 )".
+Without bldg5406, dev measures 1,902 of 1,908 exact (99.7%). The gate stays
+failed as defined. The ceiling is recorded here and in PROGRESS; the gate is
+not redefined.
+
+**AS-15 addendum (2026-09-24 01:12): an orphan outlives the run.** The
+baker-county-eoc graph rerun (`run-graph-baker.sh`, one set) exited 0 at
+00:42:19 and stopped its reaper with it. Its child had already spawned the
+fall-through successor, which re-scored baker (about 13 minutes, 5.7 GB),
+then spawned the next. At 01:12 PID 17697 (PPID 1, the run's process group
+26055, `graph-eval.mjs … --single-json baker-county-eoc`) held 5.7 GB. It
+pushed the container to 1.3 GB available and a load average of 12 while
+the guard's mcp tests ran. It was stopped by PID with its table sidecar;
+nothing read its output. A run under the workaround must keep its reaper
+alive until its process group is empty, not until the orchestrator exits.
+The loop's run scripts do that from now on.

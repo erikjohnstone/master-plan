@@ -2,7 +2,7 @@
 // how the normalizer applies them to the rows that cite them.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { citedNoteIds, noteValues, scheduleNotes, type NoteSpan, controlItems } from "../../src/lib/assemblies/scheduleNotes.ts";
+import { citedCodeLegend, citedNoteIds, controlItems, noteValues, scheduleLegend, scheduleNotes, type NoteSpan } from "../../src/lib/assemblies/scheduleNotes.ts";
 import { normalizeCompileItem, type CompileItem } from "../../src/lib/assemblies/normalize.ts";
 
 // bldg5406-hvac-demo-mechanical.pdf page 6 as mcp/src/pdf.ts textSpans reads
@@ -200,4 +200,97 @@ test("a block labelled REMARKS: is read like NOTES:; a REMARKS column header is 
   assert.deepEqual(notes.map((n) => n.id), ["1", "2", "3"]);
   assert.equal(notes[2].text, "CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.");
   assert.equal(notes[0].text, "APPROVED ALTERNATE MANUFACTURERS: B&G, GRUNDFOS, TACO.", "a note naming makers is a note, not a list heading");
+});
+
+// 094_FL…pdf page 8, Air Handling Unit Schedule: a components legend holds the
+// table's lower-left corner, the NOTES: label sits beside it, the notes run in
+// two columns, and a sound-power table sits right of the second column.
+const ahuRegion: [number, number, number, number] = [300.48, 133.2, 5281.42, 532.56];
+const ahuSheet: NoteSpan[] = [
+  at(1500, 140, 2000, "Air Handling Unit Schedule CHW"),
+  at(334, 584, 505, "Comopnents Legend"), at(1326, 584, 1395, "NOTES:"),
+  at(3695, 597, 4620, "MAXIMUM PERMISSIBLE SOUND POWER LEVELS SCHEDULE - CENTRAL STATION AIR HANDLING UNITS"),
+  at(334, 624, 357, "PF"), at(406, 624, 518, "- PREFILTER"), at(853, 624, 903, "MXB2"), at(925, 624, 1184, "- MIXING BOX SECTION WITH"),
+  at(1369, 624, 2177, "1. UNIT SIZES AND EQUIPMENT SELECTIONS BASED ON TRANE."),
+  at(2468, 624, 2484, "7."), at(2504, 624, 3075, "FILTER EFFICIENCIES BASED ON ASHRAE 52-76 TEST METHOD."),
+  at(4129, 633, 4185, "AHU-4"), at(4215, 633, 4270, "AHU-5"),
+  at(334, 645, 356, "FF"), at(406, 645, 538, "- FINAL FILTER"), at(935, 645, 1203, "RA MOTORIZED DAMPER AND"),
+  at(2468, 645, 2484, "8."), at(2504, 645, 3251, "COOLING COILS SHALL BE RECONNECTED TO EXISTING 3-WAY CONTROL VALVES."),
+  at(3711, 651, 3992, "MAX. PWL AT UNIT DISCHARGE"), at(4050, 651, 4100, "63 HZ"), at(4147, 651, 4167, "85"),
+  at(334, 666, 374, "HCS"), at(406, 666, 692, "- ELEC. HEATING COIL SECTION"), at(935, 666, 1161, "OA MOTORIZED DAMPER"),
+  at(1369, 666, 2286, "2. MOTORS SHALL BE 3 PHASE, 1800 RPM."),
+  at(334, 686, 359, "HF"), at(406, 686, 707, "- ELECTRIC HUMIDIFIER SECTION"),
+];
+
+test("a notes label beside a legend; the legend itself; a table beside the notes is not note text", () => {
+  const notes = scheduleNotes(ahuSheet, ahuRegion);
+  assert.deepEqual(notes.map((n) => n.id), ["1", "2", "7", "8"]);
+  assert.equal(notes.find((n) => n.id === "7")?.text, "FILTER EFFICIENCIES BASED ON ASHRAE 52-76 TEST METHOD.");
+  assert.equal(notes.find((n) => n.id === "8")?.text, "COOLING COILS SHALL BE RECONNECTED TO EXISTING 3-WAY CONTROL VALVES.");
+  assert.ok(!notes.some((n) => /PREFILTER|MIXING BOX|AHU-4|PWL/.test(n.text)), "neither the legend nor the sound table is note text");
+  assert.deepEqual(scheduleLegend(ahuSheet, ahuRegion), {
+    PF: "PREFILTER", MXB2: "MIXING BOX SECTION WITH RA MOTORIZED DAMPER AND OA MOTORIZED DAMPER",
+    FF: "FINAL FILTER", HCS: "ELEC. HEATING COIL SECTION", HF: "ELECTRIC HUMIDIFIER SECTION",
+  });
+});
+
+// federal-attachment4-mechanical.pdf page 14, CHILLER SCHEDULE: the notes'
+// second column runs past the next table's title, printed to their right.
+test("another table's title beside the notes is skipped, not the end of them", () => {
+  const region: [number, number, number, number] = [867.6, 1325.28, 5376.22, 1572.7];
+  const sheet: NoteSpan[] = [
+    at(2500, 1330, 3200, "CHILLER SCHEDULE (ELECTRIC AIR-COOLED)"),
+    at(879, 1642, 940, "NOTES:"),
+    at(879, 1664, 893, "1."), at(910, 1664, 1127, "PROVIDE THE FOLLOWING:"),
+    at(1311, 1664, 1325, "3."), at(1342, 1664, 1644, "CHILLER SHALL EXCEED ASHRAE 90.1"),
+    at(940, 1685, 1282, "- LOW AMBIENT OPERATION DOWN TO 0°F."),
+    at(1311, 1750, 1325, "4."), at(1342, 1750, 1763, "PROVIDE HARDWIRE INTERFACE BETWEEN CHILLER"),
+    at(3320, 1768, 4456, "HOT WATER CONDENSING BOILER SCHEDULE"),
+    at(1342, 1772, 1614, "PANEL AND SITE DDC CONTROLS."),
+    at(879, 1794, 893, "2."), at(910, 1794, 1300, "PROVIDE CONDENSER COIL GUARDS."),
+  ];
+  const notes = scheduleNotes(sheet, region);
+  assert.deepEqual(notes.map((n) => n.id), ["1", "2", "3", "4"]);
+  assert.equal(notes.find((n) => n.id === "4")?.text, "PROVIDE HARDWIRE INTERFACE BETWEEN CHILLER PANEL AND SITE DDC CONTROLS.");
+  assert.deepEqual(noteValues(notes.find((n) => n.id === "4")!, new Set(["bas_interface"])).map((v) => v.value), ["HARDWIRE"]);
+});
+
+// itd-d1-lab-mechanical.pdf page 13, LAB EXHAUST FAN SCHEDULE note 2: a
+// sub-list numbered "2.1.3." and "(2)" inside note 2.
+test("a sub-list in another numbering style stays in its note", () => {
+  const region: [number, number, number, number] = [100, 100, 2000, 400];
+  const sheet: NoteSpan[] = [
+    at(110, 105, 600, "LAB EXHAUST FAN SCHEDULE"),
+    at(110, 420, 180, "NOTES:"),
+    at(110, 442, 125, "1."), at(150, 442, 900, "PROVIDE FAN WITH FRP CONSTRUCTION."),
+    at(110, 464, 125, "2."), at(150, 464, 1100, "CONTRACTOR SHALL PROVIDE AND INSTALL THE FOLLOWING:"),
+    at(190, 486, 240, "2.1.3."), at(260, 486, 300, "(2)"), at(320, 486, 800, "VARIABLE FREQUENCY DRIVES (NEMA 3R)"),
+    at(110, 508, 125, "3."), at(150, 508, 900, "THE AIR BALANCING CONTRACTOR SHALL CONFIRM THE SET POINT."),
+  ];
+  const notes = scheduleNotes(sheet, region);
+  assert.deepEqual(notes.map((n) => n.id), ["1", "2", "3"]);
+  assert.equal(notes[1].text, "CONTRACTOR SHALL PROVIDE AND INSTALL THE FOLLOWING: 2.1.3. (2) VARIABLE FREQUENCY DRIVES (NEMA 3R)");
+  assert.deepEqual(noteValues(notes[1], new Set(["vfd"])).map((v) => v.value), ["yes"]);
+});
+
+// 040_IL…pdf page 47: SCHEDULE GENERAL NOTES at the sheet's right edge, notes
+// lettered A-G; the FAN SCHEDULE's header cites NOTE C for its codes.
+test("the codes a header's cited note defines, confirmed by the note naming the column", () => {
+  const sheet: NoteSpan[] = [
+    at(5203, 239, 5758, "SCHEDULE GENERAL NOTES:"),
+    at(5159, 295, 5736, "A. DISCONNECT AND CONTROLLER STARTER FURNISHED AND"), at(5159, 316, 5297, "INSTALLED BY:"),
+    at(5159, 337, 5378, "MFR = MANUFACTURER"), at(5159, 358, 5465, "EC = ELECTRICAL CONTRACTOR."),
+    at(5159, 380, 5757, "MC = FURNISHED BY MECHANICAL CONTRACTOR, INSTALLED BY"), at(5159, 401, 5418, "ELECTRICAL CONTRACTOR."),
+    at(5159, 511, 5365, "B. DISCONNECT TYPE:"), at(5159, 532, 5256, "F = FUSED"), at(5159, 553, 5317, "NF = NON-FUSED"),
+    at(5159, 592, 5463, "C. CONTROLLER STARTER TYPE:"), at(5159, 613, 5344, "FV = FULL VOLTAGE"),
+    at(5159, 634, 5332, "WYE = WYE-DELTA"), at(5159, 656, 5462, "SS = SOLID STATE (SOFT START)"),
+    at(5159, 698, 5495, "VFD = VARIABLE FREQUENCY DRIVE"),
+    at(5159, 765, 5790, "D. FAN RPM SHALL NOT EXCEED 110% OF SCHEDULED VALUE, WITH"),
+  ];
+  assert.deepEqual(citedCodeLegend(sheet, "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER TYPE (NOTE C)"),
+    { FV: "FULL VOLTAGE", WYE: "WYE-DELTA", SS: "SOLID STATE (SOFT START)", VFD: "VARIABLE FREQUENCY DRIVE" });
+  assert.equal(citedCodeLegend(sheet, "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER BY (NOTE A)")?.MC, "FURNISHED BY MECHANICAL CONTRACTOR, INSTALLED BY ELECTRICAL CONTRACTOR");
+  assert.equal(citedCodeLegend(sheet, "FAN RPM (NOTE D)"), null, "a note that defines no codes");
+  assert.equal(citedCodeLegend(sheet, "CURB TYPE (NOTE C)"), null, "a note that does not name the column");
+  assert.equal(citedCodeLegend(sheet, "CONTROLLER/ STARTER TYPE"), null, "a header citing no note");
 });

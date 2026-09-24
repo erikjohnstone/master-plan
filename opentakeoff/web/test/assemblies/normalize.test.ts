@@ -4,7 +4,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  headerText, normalizeCompileItem, parseElectricalCell, parseNumberCell, parseSizeCell,
+  headerText, normalizeCompileItem, parseElectricalCell, parseNumberCell, parseSizeCell, vfdDrivenTags,
   type CompileItem,
 } from "../../src/lib/assemblies/normalize.ts";
 
@@ -310,4 +310,113 @@ test("one controller per motor: a VFD rules out an EC motor and a starter rules 
   const ahu = values(normalizeCompileItem(row("AHU-9", "AHU SCHEDULE", { "SUPPLY FAN HP/QTY": "3.2 \\ 6" }), "AHU"));
   assert.deepEqual([ahu.supply_fan_hp, ahu.supply_fan_qty], [3.2, 6]);
   assert.equal(values(normalizeCompileItem(row("P-7", "PUMP SCHEDULE", { "ELECTRICAL MOTOR SPEED CONTROL": "NONE" }), "PUMP")).vfd, "no");
+});
+
+// itd-d1-lab SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE: one row, "F-1 , CU-1",
+// a furnace and its condensing unit; bldg5406's "ACCU-1 / AC-1" row prints one
+// unqualified V/φ/HZ (its φ lost by the text layer).
+test("split systems: a column naming the other half is not this unit's; a pair's bare power is the outdoor unit's", () => {
+  const cells = {
+    "SUPPLY FAN CFM": "2,250", "SUPPLY FAN HP": "1.0", "SUPPLY FAN V/Ø": "115/1", "GAS HEATING CAPACITY OUTPUT MBH": "78.0",
+    "ELECTRICAL FOR CONDENSING UNIT V/Ø": "208/1", "NOMINAL TONS": "5",
+  };
+  const rows = [{ key: "F-1CU-1", cells: { SYMBOL: "F-1 , CU-1", ...cells } }];
+  const table = { headers: ["SYMBOL", ...Object.keys(cells)], rows };
+  const title = "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)";
+  const f1 = values(normalizeCompileItem(row("F-1", title, cells), "FCU", table));
+  assert.deepEqual([f1.volts, f1.phase, f1.cfm, f1.cooling_type], [115, 1, 2250, "dx"]);
+  const cu = values(normalizeCompileItem(row("CU-1", title, cells), "CONDENSING_UNIT", table));
+  assert.deepEqual([cu.volts, cu.phase, cu.cfm, cu.motor_hp, cu.heating_mbh], [208, 1, undefined, undefined, undefined]);
+  const pair = { "(V / / ELECTRICAL HZ)": "208 / 1 / 60", CFM: "530", "COOLING MBH": "24" };
+  const pairTable = { headers: ["MARK", ...Object.keys(pair)], rows: [{ key: "ACCU-1/AC-1", cells: { MARK: "ACCU-1 / AC-1", ...pair } }] };
+  const accu = values(normalizeCompileItem(row("ACCU-1", "SPLIT SYSTEM AIR CONDITIONING UNITS", pair), "CONDENSING_UNIT", pairTable));
+  assert.deepEqual([accu.volts, accu.phase, accu.cfm], [208, 1, undefined]);
+  const ac = values(normalizeCompileItem(row("AC-1", "SPLIT SYSTEM AIR CONDITIONING UNITS", pair), "FCU", pairTable));
+  assert.deepEqual([ac.volts, ac.phase, ac.cfm], [undefined, undefined, 530]);
+});
+
+// 12_MT's CABINET UNIT HEATER SCHEDULE prints the coil's water under AIR SIDE
+// (EAT 180, LAT 160) and the air under LIQUID SIDE (EAT 55, LWT 130).
+test("a coil water temperature that contradicts its own block's entering air is refused", () => {
+  const cuh = normalizeCompileItem(row("CUH-1", "CABINET UNIT HEATER SCHEDULE", {
+    "PERFORMANCE AIR SIDE EAT °F": "180", "PERFORMANCE AIR SIDE LAT °F": "160",
+    "PERFORMANCE LIQUID SIDE (FRESH WATER) GPM": "1.5", "PERFORMANCE LIQUID SIDE (FRESH WATER) EAT °F": "55",
+    "PERFORMANCE LIQUID SIDE (FRESH WATER) LWT °F": "130", "ELECTRICAL DATA VOLT": "24 VDC", "ELECTRICAL DATA WATT": "15",
+  }), "CABINET_UNIT_HEATER");
+  const v = values(cuh);
+  assert.equal(v.hw_lwt_f, undefined);
+  assert.match(cuh.unknown.hw_lwt_f.reason, /contradicts the row's entering air/);
+  assert.equal(v.heating_medium, "hw", "a heating-only unit with a water flow heats with that water");
+  assert.equal(v.volts, 24);
+  assert.ok(Math.abs(Number(v.motor_hp) - 15 / 745.699872) < 1e-6, "a water-heated unit's electrical watts are its fan's");
+  // 069's AHU: a preheat coil's 13 °F entering air says nothing of the cooling coil's water.
+  const ahu = values(normalizeCompileItem(row("AHU-1", "AIR HANDLING UNIT SCHEDULE", {
+    "CHILLED WATER/DEHUMIDIFICATION COOLING COIL E.A.T. (°F) D.B.": "98.7",
+    "CHILLED WATER/DEHUMIDIFICATION COOLING COIL FLUID PERFORMANCE E.W.T.": "45",
+    "CHILLED WATER/DEHUMIDIFICATION COOLING COIL FLUID PERFORMANCE L.W.T.": "55.0",
+    "HEATING COIL E.A.T. (°F) D.B.": "12.9", "HEATING COIL FLUID PERFORMANCE E.W.T.": "140", "HEATING COIL FLUID PERFORMANCE L.W.T.": "98.1",
+  }), "AHU"));
+  assert.deepEqual([ahu.chw_ewt_f, ahu.chw_lwt_f, ahu.hw_ewt_f, ahu.hw_lwt_f, ahu.cooling_type], [45, 55, 140, 98.1, "chw"]);
+});
+
+test("coils named by tag, COOLING ONLY, gas inputs, split and packaged titles", () => {
+  const ahu = values(normalizeCompileItem(row("AHU-1", "AIR HANDLING UNIT SCHEDULE", { "COIL DATA HEATING HW TAG": "HWC", "COIL DATA COOLING CHW TAG": "CHWC" }), "AHU"));
+  assert.deepEqual([ahu.cooling_type, ahu.heating_type], ["chw", "hw"]);
+  const dfc = values(normalizeCompileItem(row("DFC-1", "DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE", { "UNIT TYPE": "HIGH WALL COOLING ONLY", "SUPPLY FAN CFM": "640" }), "FCU"));
+  assert.deepEqual([dfc.heating_type, dfc.cooling_type], ["none", "dx"]);
+  assert.equal(values(normalizeCompileItem(row("B-1", "HOT WATER CONDENSING BOILER SCHEDULE", { "FIRING RATE NATURAL GAS (CFH)": "750" }), "BOILER")).fuel, "gas");
+  assert.equal(values(normalizeCompileItem(row("HUM-1", "HUMIDIFIER SCHEDULE", { "GAS INPUT MBH": "368.5" }), "HUMIDIFIER")).humidifier_type, "gas_fired");
+  assert.equal(values(normalizeCompileItem(row("SH-1", "STEAM HUMIDIFER SCHEDULE", { "HUMIDIFIER TYPE": "UNIT-MOUNTED DISPERSION TUBE", SOURCE: "CLEAN STEAM" }), "HUMIDIFIER")).humidifier_type, "direct_injection");
+  assert.equal(values(normalizeCompileItem(row("SH-2", "HUMIDIFIER SCHEDULE", { "HUMIDIFIER TYPE": "DISPERSION TUBE", SOURCE: "ELECTRIC" }), "HUMIDIFIER")).humidifier_type, undefined);
+  assert.equal(values(normalizeCompileItem(row("RTU-1", "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)", { "SUPPLY FAN CFM": "4000" }), "RTU")).cooling_type, "dx");
+});
+
+test("cells: one MERV in a filter's words, a NOMINAL size under a capacity, a per-unit share, inch marks, a printed zero motor", () => {
+  const merv = (cell: string) => values(normalizeCompileItem(row("AHU-4", "AHU SCHEDULE", { "FILTERS FINAL FILTER TYPE": cell, "FILTERS PREFILTER TYPE": '2" Pleated - MERV 8' }), "AHU")).filter_merv;
+  assert.equal(merv("12in. cartridge - 95% eff - MERV 15"), 15);
+  assert.equal(merv("MERV 8 / MERV 13"), undefined);
+  assert.equal(merv("13"), undefined, "a bare number counts only under a MERV header");
+  assert.equal(values(normalizeCompileItem(row("CH-2", "CHILLER SCHEDULE", { "COOLING CAPACITY NOMINAL TONS": "30", "COOLING CAPACITY CAPACITY TONS": "23" }), "AIR_COOLED_CHILLER")).tons, 23);
+  assert.equal(parseNumberCell("15,000 (7,500 PER FAN)")?.n, 15000);
+  const lef = values(normalizeCompileItem(row("LEF-1", "LAB EXHAUST FAN SCHEDULE", { "BLOWER CFM DESIGN": "15,000 (7,500 PER FAN)", "BLOWER ESP": '4.0"' }), "FAN"));
+  assert.deepEqual([lef.cfm, lef.esp_in], [15000, 4]);
+  assert.equal(values(normalizeCompileItem(row("EV-1", "FAN COIL SCHEDULE", { "FAN DATA WATTS": "0" }), "FCU")).motor_hp, 0);
+});
+
+// 12_MT's DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE: air quantities with no
+// CFM word, a cold and a hot deck each with a minimum.
+test("a dual-duct terminal's air quantities: cold design is its maximum, hot design its heating flow, cold minimum its minimum", () => {
+  const v = values(normalizeCompileItem(row("VAV-1", "DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE", {
+    "PRIMARY AIR MINIMUM COLD": "70", "PRIMARY AIR MINIMUM HOT": "30", "DESIGN QUANTITIES COLD": "200", "DESIGN QUANTITIES HOT": "130", "INLET AIR SIZE COLD INLET": '6"',
+  }), "VAV"));
+  assert.deepEqual([v.cfm_max, v.cfm_min, v.cfm_heat], [200, 70, 130]);
+});
+
+// 040's FAN SCHEDULE: "CONTROLLER/ STARTER TYPE (NOTE C)" = "FV"; 094's AHU
+// schedule: "UNIT COMPONENTS … SEE LEGEND BELOW" = "MXTD3-PF-FF-CC-HF-FAN";
+// 069's VFD schedule: PURPOSE "HWP-1".
+test("codes a cited note or the table's legend defines, and a drive schedule's load", () => {
+  const codes = { "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER TYPE (NOTE C)": { FV: "FULL VOLTAGE", VFD: "VARIABLE FREQUENCY DRIVE" } };
+  const ef = (cell: string) => values(normalizeCompileItem(row("EF-2A", "FAN SCHEDULE", { "ELECTRICAL (NOTE 1) CONTROLLER/ STARTER TYPE (NOTE C)": cell }), "FAN", { headers: [], codes }));
+  assert.deepEqual([ef("FV").vfd, ef("FV").ecm], ["no", "no"]);
+  assert.equal(ef("XX").vfd, undefined);
+  const legend = { MXTD3: "SIMILAR TO MXTD2", PF: "PREFILTER", FF: "FINAL FILTER", CC: "COILING COIL", HF: "ELECTRIC HUMIDIFIER SECTION", FAN: "FAN", HCS: "ELEC. HEATING COIL SECTION", OAI: "OUTSIDE AIR INTAKE SECTION" };
+  const ahu = (seq: string) => values(normalizeCompileItem(row("AHU-4", "Air Handling Unit Schedule CHW", { "UNIT COMPONENTS IN DIRECTION OF AIR FLOW SEE LEGEND BELOW": seq }), "AHU", { headers: [], legend }));
+  assert.deepEqual([ahu("MXTD3-PF-FF-CC-HF-FAN").humidifier, ahu("MXTD3-PF-FF-CC-HF-FAN").heating_type], ["yes", "none"]);
+  assert.deepEqual([ahu("OAI-PF-FF-CC-HCS-FAN").humidifier, ahu("OAI-PF-FF-CC-HCS-FAN").heating_type], ["no", "electric"]);
+  assert.equal(ahu("OAI-PF-XX-FAN").humidifier, undefined, "a code the legend does not define: no reading");
+  const pump = (tag: string) => values(normalizeCompileItem(row(tag, "NEW PUMP SCHEDULE", { "CAPACITY FLOW (GPM)": "80" }), "PUMP", { headers: [], driven: vfdDrivenTags([
+    { family: "PUMP", tag: "HWP-1", cells: {} }, { family: "PUMP", tag: "BP-1", cells: {} },
+    { family: "VARIABLE_FREQUENCY_DRIVE", tag: "VFD-1", cells: { PURPOSE: { text: "HWP-1", bbox: null } } },
+  ]) })).vfd;
+  assert.deepEqual([pump("HWP-1"), pump("BP-1")], ["yes", undefined]);
+});
+
+test("two units of one kind on a row are no split pair; a legend column must list the unit's sections", () => {
+  const cells = { "ELECTRICAL V/PH": "208/1", CFM: "400" };
+  const table = { headers: ["MARK", ...Object.keys(cells)], rows: [{ key: "FCU-1/FCU-2", cells: { MARK: "FCU-1/FCU-2", ...cells } }] };
+  assert.equal(values(normalizeCompileItem(row("FCU-1", "FAN COIL UNIT SCHEDULE", cells), "FCU", table)).volts, 208);
+  const legend = { PF: "PREFILTER", FF: "FINAL FILTER", HF: "ELECTRIC HUMIDIFIER SECTION" };
+  const filters = values(normalizeCompileItem(row("AHU-9", "AHU SCHEDULE", { "FILTER TYPE (SEE LEGEND)": "PF-FF" }), "AHU", { headers: [], legend }));
+  assert.equal(filters.humidifier, undefined, "a filter column's codes are not the unit's whole list of sections");
 });
