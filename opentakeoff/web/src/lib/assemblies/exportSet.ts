@@ -34,7 +34,7 @@
 // `scope` narrows lines.csv and lines_rollup.csv to one party's lines: those
 // of its trade, or where it furnishes, installs, wires, powers, programs or
 // tests. The unit list, the points and the device schedules stay whole.
-import { csvEsc } from "../csv.js";
+import { csvEsc, parseCsvRows } from "../csv.js";
 import type { AppliedInstance, PrintedPointRow } from "./apply";
 import { extendedOf, PARTNER_ENTERED } from "./partner";
 import type { AssembliesReport } from "./report";
@@ -408,4 +408,61 @@ function desigoWorksheet(report: AssembliesReport, lines: readonly ExpandedLine[
     note: `${report.totals.units} units in the project; ${noPoints} with neither a typical nor a printed points list are not counted. Room automation points depend on the room controller the tool selects; they are not counted here.`,
   });
   return rows;
+}
+
+/** Columns that hold a number or nothing: counts, quantities, and every
+ * engineering field whose name ends in its unit. */
+const NUMERIC_COLUMN = /^(qty|qty_with_waste|qty_order|multiplier|waste_pct|units|AI|AO|BI|BO|PULSE|NET_IN|NET_OUT|SOFT|field_points|integration_points|lines_summed|lines_unresolved|lines_replaced|lines_error|printed_points_rows|unit_cost|hours|extended_cost|extended_hours|cv|sections)$|_(in|gpm|psi|psig|lb_hr|ft2|cfm|fpm|in_wc|in_lb|pct)$/;
+const MAX_PROBLEMS_PER_FILE = 20;
+
+/**
+ * What is wrong with a CSV set, as instrument 5 checks it (goals/ASSEMBLIES.md
+ * MEASURE 5). The checks:
+ * - the files are the documented eight;
+ * - each header is its file's columns, each row is whole and ends in CRLF;
+ * - every `*_source` is in the closed list;
+ * - a field with a value names where it came from, and a field whose source
+ *   is `unknown` or `selection` is blank;
+ * - number columns hold a number or nothing;
+ * - partner columns are filled only on rows labelled partner-entered.
+ * Empty when the set is sound; at most 20 problems a file, then a count.
+ */
+export function csvSetProblems(set: Readonly<Record<string, string>>): string[] {
+  const out: string[] = [];
+  const files = Object.keys(COLUMNS) as ExportFile[];
+  const extra = Object.keys(set).filter((f) => !(files as string[]).includes(f));
+  const missing = files.filter((f) => !(f in set));
+  if (extra.length) out.push(`files not in the set's spec: ${extra.join(", ")}`);
+  if (missing.length) out.push(`files missing: ${missing.join(", ")}`);
+  for (const file of files.filter((f) => f in set)) {
+    const text = set[file];
+    const found: string[] = [];
+    const add = (p: string) => { found.push(`${file}: ${p}`); };
+    if (!text.endsWith("\r\n")) add("the last row does not end in CRLF");
+    if (/[^\r]\n/.test(text.replace(/"[^"]*"/g, ""))) add("a row ends in a bare LF");
+    const [head, ...rows] = parseCsvRows(text);
+    const cols = COLUMNS[file] as readonly string[];
+    if (!head || head.join(",") !== cols.join(",")) { add(`header is not the documented columns`); out.push(...found); continue; }
+    rows.forEach((r, i) => {
+      const at = `row ${i + 2}`;
+      if (r.length !== cols.length) { add(`${at} has ${r.length} cells, not ${cols.length}`); return; }
+      const rec = Object.fromEntries(cols.map((c, j) => [c, r[j]]));
+      for (const c of cols) {
+        const v = rec[c];
+        if (c.endsWith("_source")) {
+          if (!(EXPORT_SOURCES as readonly string[]).includes(v)) add(`${at} ${c} = "${v}" is not a source`);
+          const field = rec[c.slice(0, -"_source".length)];
+          if (field !== undefined && field !== "" && (v === "unknown" || v === "selection")) add(`${at} ${c} = ${v} but the field has a value`);
+          if (field !== undefined && field === "" && v !== "unknown" && v !== "selection") add(`${at} ${c} = ${v} but the field is blank`);
+        } else if (NUMERIC_COLUMN.test(c) && v !== "" && !Number.isFinite(Number(v))) add(`${at} ${c} = "${v}" is not a number`);
+      }
+      if ("partner_fields" in rec) {
+        if (rec.partner_fields !== "" && rec.partner_fields !== PARTNER_ENTERED) add(`${at} partner_fields = "${rec.partner_fields}"`);
+        if (rec.partner_fields === "" && PARTNER.some((c) => c !== "partner_fields" && rec[c] !== "")) add(`${at} partner columns filled without the partner-entered label`);
+      }
+    });
+    out.push(...found.slice(0, MAX_PROBLEMS_PER_FILE));
+    if (found.length > MAX_PROBLEMS_PER_FILE) out.push(`${file}: …and ${found.length - MAX_PROBLEMS_PER_FILE} more`);
+  }
+  return out;
 }

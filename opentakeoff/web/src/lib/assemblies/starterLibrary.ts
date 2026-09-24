@@ -4,9 +4,13 @@
 import { sanitizeAssemblyDefinitions, type AssemblyDefinition } from "./schema";
 
 export async function loadStarterLibrary(): Promise<AssemblyDefinition[]> {
+  // No import attributes here: Vite's dev server keeps a dynamic import's
+  // options while it serves the JSON as a JavaScript module, and the browser
+  // then refuses the module for its MIME type. (A static import's attributes
+  // are stripped, and the build bundles the JSON either way.)
   const [typicals, hookups] = await Promise.all([
-    import("./starter/us-typicals-v1.json", { with: { type: "json" } }),
-    import("./starter/us-hookups-v1.json", { with: { type: "json" } }),
+    import("./starter/us-typicals-v1.json"),
+    import("./starter/us-hookups-v1.json"),
   ]);
   const raw = [...(typicals.default.assemblies as unknown[]), ...(hookups.default.assemblies as unknown[])];
   const { assemblies, rejected } = sanitizeAssemblyDefinitions(raw);

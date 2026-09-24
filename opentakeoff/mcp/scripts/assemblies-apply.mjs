@@ -36,8 +36,11 @@ const [ct, st] = InMemoryTransport.createLinkedPair();
 await buildServer(session).connect(st);
 const client = new Client({ name: "assemblies-apply", version: "0.0.0" });
 await client.connect(ct);
+// A real set's first call builds its sheet graph: minutes, not the client's
+// default 60 s request timeout.
+const REQUEST = { timeout: Number(process.env.OT_APPLY_TIMEOUT_MS) || 3 * 60 * 60 * 1000 };
 const t0 = Date.now();
-const res = await client.callTool({ name: "apply_assemblies", arguments: { path: resolve(out), overwrite: true, ...(library ? { library_path: resolve(library) } : {}), ...(exportDir ? { export_dir: resolve(exportDir) } : {}) } });
+const res = await client.callTool({ name: "apply_assemblies", arguments: { path: resolve(out), overwrite: true, ...(library ? { library_path: resolve(library) } : {}), ...(exportDir ? { export_dir: resolve(exportDir) } : {}) } }, undefined, REQUEST);
 const text = res.content?.[0]?.text ?? "";
 if (res.isError) {
   console.error(text);
@@ -46,7 +49,7 @@ if (res.isError) {
 const reply = JSON.parse(text);
 console.log(`apply_assemblies: ${reply.report?.totals?.units ?? "?"} units, ${reply.report?.totals?.records ?? "?"} records, ${reply.report?.totals?.lines ?? "?"} lines in ${Math.round((Date.now() - t0) / 1000)} s → ${resolve(out)}${reply.export_dir ? `; CSV set (${reply.export_dir.files.length} files) → ${reply.export_dir.dir}` : ""}`);
 for (const args of calls) {
-  const r = await client.callTool({ name: "apply_assemblies", arguments: { overwrite: true, ...(library ? { library_path: resolve(library) } : {}), ...args, ...(args.export_dir ? { export_dir: resolve(args.export_dir) } : {}) } });
+  const r = await client.callTool({ name: "apply_assemblies", arguments: { overwrite: true, ...(library ? { library_path: resolve(library) } : {}), ...args, ...(args.export_dir ? { export_dir: resolve(args.export_dir) } : {}) } }, undefined, REQUEST);
   const body = r.content?.[0]?.text ?? "";
   if (r.isError) {
     console.error(body);

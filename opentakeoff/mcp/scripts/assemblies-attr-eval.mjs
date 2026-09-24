@@ -333,7 +333,7 @@ export function renderText(summary, { side, detail, results, normalizer }) {
 }
 
 // ── CLI ─────────────────────────────────────────────────────────────────────
-async function snapshotSet(corpus, spec, set) {
+async function snapshotSet(corpus, spec, set, opts = {}) {
   const { resolveSetFiles } = await import("./corpusFiles.mjs");
   const { cachedSheetGraph } = await import("./sheetGraphCache.mjs");
   const { compileTakeoff } = await import("../../web/src/lib/compileTakeoff.mjs");
@@ -373,19 +373,21 @@ async function snapshotSet(corpus, spec, set) {
     return textSpans(await docs.get(at.file).page(at.page));
   }, bas);
   for (const doc of docs.values()) await doc.destroy();
-  return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages, printed_points };
+  // --with-hit (instrument 5): the HIT export's inputs, from the same graph.
+  const hit = opts.hit ? { valves: compileTakeoff(null, graph, "control_valves"), coils: compileTakeoff(null, graph, "embedded_coil_gaps") } : undefined;
+  return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages, printed_points, ...(hit ? { hit } : {}) };
 }
 
 /** One set's compile snapshot (snapshotSet), taken in a child process so a
  * crash or a runaway graph build cannot take the caller down. Resolves to
  * the snapshot, or to { id, error }. */
-export function snapshotInChild(corpus, id) {
+export function snapshotInChild(corpus, id, opts = {}) {
   const thisScript = fileURLToPath(import.meta.url);
   const TIMEOUT_MS = Number(process.env.OPENTAKEOFF_EVAL_TIMEOUT_MS) || 45 * 60 * 1000;
   return new Promise((res) => {
     const started = Date.now();
     process.stderr.write(`· ${id} …\n`);
-    const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", id], { stdio: ["ignore", "pipe", "inherit"] });
+    const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", id, ...(opts.hit ? ["--with-hit"] : [])], { stdio: ["ignore", "pipe", "inherit"] });
     let out = "";
     let settled = false;
     const finish = (value) => {
@@ -423,7 +425,7 @@ async function main() {
     let result;
     try {
       if (!set) throw new Error(`unknown set id: ${argv[singleIdx + 1]}`);
-      result = await snapshotSet(corpus, spec, set);
+      result = await snapshotSet(corpus, spec, set, { hit: flag("--with-hit") });
     } catch (e) {
       result = { id: argv[singleIdx + 1], error: String(e?.stack || e?.message || e) };
     }

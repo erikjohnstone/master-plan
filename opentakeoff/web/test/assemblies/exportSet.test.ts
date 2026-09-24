@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies, type CompiledItem, type PrintedPointRow } from "../../src/lib/assemblies/apply.ts";
-import { COLUMNS, EXPORT_SOURCES, assembliesCsvSet, inScope, type ExportFile } from "../../src/lib/assemblies/exportSet.ts";
+import { COLUMNS, EXPORT_SOURCES, assembliesCsvSet, csvSetProblems, inScope, type ExportFile } from "../../src/lib/assemblies/exportSet.ts";
 import { LIBRARY_CSV_COLUMNS } from "../../src/lib/assemblies/libraryCsv.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
 import { assembliesReport } from "../../src/lib/assemblies/report.ts";
@@ -155,6 +155,31 @@ test("scope: one party's lines in lines.csv and the roll-up; every other file wh
   }
   assert.deepEqual(assembliesCsvSet({ ...applied, report, scope: null }), set, "no scope is the whole set");
   assert.throws(() => assembliesCsvSet({ ...applied, report, scope: "plumber" }), /scope "plumber" is not a party/);
+});
+
+test("instrument 5's checks (csvSetProblems): a sound set has none; each seeded defect is caught", () => {
+  assert.deepEqual(csvSetProblems(set), []);
+  assert.deepEqual(csvSetProblems(assembliesCsvSet({ ...applied, report, scope: "mechanical" })), []);
+  const lines = set["lines.csv"];
+  const [head, first, ...rest] = lines.split("\r\n");
+  const cols = head.split(",");
+  const cellsOf = (row: string) => parseCsv(`${row}\r\n`)[0];
+  const rowWith = (row: string, col: string, value: string) => {
+    const cells = cellsOf(row);
+    cells[cols.indexOf(col)] = value;
+    return cells.map((c) => (/[",\r\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)).join(",");
+  };
+  const withLines = (text: string) => ({ ...set, "lines.csv": text });
+  const problems = (text: string) => csvSetProblems(withLines(text)).join(" | ");
+  assert.match(problems([head.replace("qty_basis", "qty_base"), first, ...rest].join("\r\n")), /lines\.csv: header is not the documented columns/);
+  assert.match(problems([head, rowWith(first, "size_in_source", "guessed"), ...rest].join("\r\n")), /size_in_source = "guessed" is not a source/);
+  assert.match(problems([head, rowWith(first, "qty", "two"), ...rest].join("\r\n")), /qty = "two" is not a number/);
+  assert.match(problems([head, rowWith(rowWith(first, "size_in", "2"), "size_in_source", "unknown"), ...rest].join("\r\n")), /size_in_source = unknown but the field has a value/);
+  assert.match(problems([head, rowWith(first, "unit_cost", "5"), ...rest].join("\r\n")), /partner columns filled without the partner-entered label/);
+  assert.match(problems([head, first.split(",").slice(0, -1).join(","), ...rest].join("\r\n")), /row 2 has \d+ cells/);
+  assert.match(problems(lines.replace(/\r\n$/, "")), /does not end in CRLF/);
+  const { ["sensors.csv"]: _gone, ...seven } = set;
+  assert.match(csvSetProblems(seven).join(" | "), /files missing: sensors\.csv/);
 });
 
 test("docs/ASSEMBLIES_CSV.md names every column of every file", () => {

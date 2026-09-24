@@ -416,7 +416,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
         <button type="button" style={{ ...btn, background: view === "library" ? "var(--ink)" : "var(--paper-bright)", color: view === "library" ? "var(--paper-bright)" : "var(--ink)" }} aria-pressed={view === "library"} onClick={() => setView("library")}>
           Library{updates.length ? ` · ${updates.length} update${updates.length === 1 ? "" : "s"}` : ""}
         </button>
-        <span style={{ marginLeft: "auto", fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>
+        <span style={{ marginLeft: "auto", fontSize: "var(--fs-s)", color: "var(--ink-muted)" }} data-assemblies-count={library.length} data-assemblies-pinned={state?.pinned?.length ?? 0}>
           {library.length} assemblies ({partner.length} yours) · {state?.pinned?.length ?? 0} pinned in this project
         </span>
       </div>

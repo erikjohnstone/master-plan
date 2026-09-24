@@ -55,7 +55,7 @@ async function openAssemblies() {
   const panel = page.getByRole('region', { name: 'Assemblies', exact: true });
   await panel.waitFor({ state: 'visible', timeout: 30000 });
   // The starter library loads on demand; the header counts it.
-  await page.waitForFunction(() => /\b[1-9]\d* assemblies\b/.test(document.querySelector('[data-assemblies-panel]')?.textContent || ''), null, { timeout: 60000 });
+  await page.waitForFunction(() => Number(document.querySelector('[data-assemblies-count]')?.dataset.assembliesCount) > 0, null, { timeout: 60000 });
   return panel;
 }
 
@@ -244,7 +244,7 @@ try {
     await page.reload({ waitUntil: 'domcontentloaded' });
     await openImportedSheet(page);
     panel = await openAssemblies();
-    assert.match(await panel.innerText(), new RegExp(`${saved.pinned.length} pinned in this project`));
+    assert.equal(Number(await panel.locator('[data-assemblies-count]').getAttribute('data-assemblies-pinned')), saved.pinned.length, 'the pins came back with the project');
     const again = page.waitForResponse((r) => r.url().includes('/__ot/assemblies-project'), { timeout: 1800000 });
     await panel.locator('[data-assemblies-load]').click();
     assert.equal((await again).status(), 200);

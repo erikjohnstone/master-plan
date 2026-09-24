@@ -54,6 +54,12 @@
   hour. Three scripted persona scenarios (a BAS integrator, a mechanical
   contractor, a distributor) run the whole path in CI.
 
+  Fixed: under the dev server the Assemblies view never loaded the starter
+  library ("0 assemblies"). Its on-demand import passed JSON import
+  attributes that Vite keeps on a dynamic import while serving JavaScript, so
+  the browser refused the module. A test now fails on any such import
+  (ASSEMBLIES_BUG_CATALOGUE AS-23).
+
 - **Controls assemblies on the shared path: `apply_assemblies` (MCP 0.9.82; 62 tools).**
   The scheduled HVAC equipment of a set now gets its controls typical and
   mechanical hook-up from an assembly library. `web/src/lib/assemblies/apply.ts`

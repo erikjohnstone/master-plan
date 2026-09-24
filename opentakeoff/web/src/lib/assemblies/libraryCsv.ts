@@ -25,6 +25,7 @@
 // Reading reports every problem by row and column before the gate runs, then
 // the gate's own rejections by the rows of the record they reject. Nothing is
 // dropped silently.
+import { parseCsvRows } from "../csv.js";
 import { ACTIVITIES, sanitizeAssemblyDefinitions, type AssemblyDefinition } from "./schema";
 
 export const LIBRARY_CSV_COLUMNS = [
@@ -88,28 +89,10 @@ function csvText(s: string): string {
   return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-/** RFC 4180 rows. A spreadsheet's formula guard (a leading ') is not added
- * on export, and one added by another tool is not removed: it would be part
- * of the value. */
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let cell = "";
-  let quoted = false;
-  const t = text.replace(/^\uFEFF/, "");
-  for (let i = 0; i < t.length; i++) {
-    const ch = t[i];
-    if (quoted) {
-      if (ch === '"' && t[i + 1] === '"') { cell += '"'; i++; } else if (ch === '"') quoted = false; else cell += ch;
-    } else if (ch === '"') quoted = true;
-    else if (ch === ",") { row.push(cell); cell = ""; } else if (ch === "\n" || ch === "\r") {
-      if (ch === "\r" && t[i + 1] === "\n") i++;
-      row.push(cell); rows.push(row); row = []; cell = "";
-    } else cell += ch;
-  }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
-  return rows;
-}
+/** RFC 4180 rows (csv.js). A spreadsheet's formula guard (a leading ') is
+ * not added on export, and one added by another tool is not removed: it
+ * would be part of the value. */
+const parseCsv = (text: string): string[][] => parseCsvRows(text);
 
 export interface LibraryCsvError {
   /** 1-based CSV record (the header is row 1; a quoted cell may span lines). */

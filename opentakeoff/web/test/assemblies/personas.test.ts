@@ -13,7 +13,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies, type CompiledItem } from "../../src/lib/assemblies/apply.ts";
-import { assembliesCsvSet } from "../../src/lib/assemblies/exportSet.ts";
+import { assembliesCsvSet, csvSetProblems } from "../../src/lib/assemblies/exportSet.ts";
 import { importLibraryCsv, libraryToCsv } from "../../src/lib/assemblies/libraryCsv.ts";
 import { cloneForEdit, combinedLibrary } from "../../src/lib/assemblies/libraryEdit.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
@@ -89,6 +89,7 @@ test("(a) BAS integrator: a cloned VAV typical with part numbers and hours, appl
   assert.ok(vavRecords.every((a) => a.options.co2_sensor.value === true && a.options.co2_sensor.source === "partner_default"));
   const report = assembliesReport(applied.instances, applied.applications, applied.lines);
   const set = assembliesCsvSet({ ...applied, report });
+  assert.deepEqual(csvSetProblems(set), []);
   // The partner's fields reach lines.csv, extended and labelled, and only on the partner's lines.
   const lines = parseCsv(set["lines.csv"]);
   const ctl = lines.filter((r) => r.role === "terminal-unit-controller" && r.unit_tag.startsWith("VAV"));
@@ -119,6 +120,7 @@ test("(b) mechanical contractor: the mechanical scope, a hook-up profile and the
   const applied = applyAssemblies({ project, library: STARTER, normalized, settings });
   const report = assembliesReport(applied.instances, applied.applications, applied.lines);
   const set = assembliesCsvSet({ ...applied, report, scope: "mechanical" });
+  assert.deepEqual(csvSetProblems(set), []);
   const lines = parseCsv(set["lines.csv"]);
   assert.ok(lines.length > 0);
   assert.ok(lines.length < applied.lines.length, "the scope leaves other parties' lines out");
