@@ -8,7 +8,14 @@ here). Coordinator only, one heavy job at a time. Bug catalogue:
 `ASSEMBLIES_BUG_CATALOGUE.md`. Reports: `reports/assemblies/`.
 
 **Gates passed:** GATE 0 (2026-09-23; dev is below the TRUTH size target, a ceiling
-demonstrated in AS-7); GATE 1 (2026-09-23); GATE 3 (2026-09-24). GATE 2 measured 2026-09-24: dev fails on exact at a demonstrated extraction ceiling (AS-16); the held-out measurement is running. **Now:** WP4 (starter library).
+demonstrated in AS-7); GATE 1 (2026-09-23); GATE 3 (2026-09-24).
+
+**GATE 2, measured 2026-09-24, not passed:**
+- dev fails on exact at a demonstrated extraction ceiling (AS-16);
+- held-out fails at 85.8% exact with 2 invented, and must pass at DONE
+  (AS-17; closing it needs more dev documents, AS-2).
+
+**Now:** WP4 (starter library).
 
 **SETUP — environment (2026-09-23).** Node 24.21.0 unpacked from the npm
 `node-linux-x64` package (nvm and nodejs.org are unreachable); one root
@@ -212,6 +219,101 @@ eslint covers .js/.jsx only). The full guard runs after the corpus-eval
 baseline, one heavy job at a time.
 
 
+**WP2 — structural normalizer; GATE 2 measured 2026-09-24: dev FAILS on exact, with the remaining ceiling demonstrated (AS-16).**
+Shared path: `web/src/lib/assemblies/normalize.ts` (compile row → canonical
+attributes, each with its cell cite and rule id) and `scheduleNotes.ts` (a
+table's notes, its legend, and the code legends its headers cite, all read
+from the page's text spans, the same spans and image-px space the sheet graph
+is built from). Instrument 2 is `mcp/scripts/assemblies-attr-eval.mjs`.
+
+- **GATE 2 (dev), `reports/assemblies/02-attr-eval-dev.{json,md}`:**
+  1,967 of 2,053 printed values exact (95.8%, need ≥ 98%) FAIL; wrong 2
+  (0.1%, need ≤ 0.5%) ok; invented 0 ok. By slice: grid 1,629/1,677
+  (97.1%), author's structural reading 278/316 (88.0%), table notes 60/60.
+  All 3,227 empty values are correctly unknown.
+- **Where the 86 non-exact values are:**
+  - 80 are bldg5406's rotated schedules. The sheet graph drops, merges and
+    reorders their columns (AS-16; evidence in
+    `reports/assemblies/02-bldg5406-ceiling.md`).
+  - 4 are 12_MT's cabinet unit heaters, whose drawing swaps its AIR SIDE and
+    LIQUID SIDE groups (AS-11). The normalizer refuses the contradiction
+    rather than reinterpret the headers.
+  - 2 are wrong: itd-d1-lab's BP-1/BP-2 AREA SERVED, where the graph joins
+    "( B-1" and ")" with no space and the key reads "( B-1 )".
+  - The other eight dev documents are 100% exact. Without bldg5406, dev is
+    1,902/1,908 (99.7%).
+- **The ceiling:** with bldg5406's 80 and 12_MT's 4 out of any normalizer's
+  reach, exact can reach at most 1,969/2,053 (95.9%). The fix belongs to
+  the graph's loop (rotated grids). No key, scorer or threshold was changed.
+- **GATE 2 (held-out), reported now, must pass at DONE:** 865 of 1,008
+  printed values exact (85.8%, need ≥ 95%) FAIL; wrong 4 (0.4%, need ≤ 1%)
+  ok; invented 2 (need 0) FAIL. `reports/assemblies/02-attr-eval-heldout.{json,md}`,
+  aggregates only (`--heldout`), with the normalizer of 3f836e9 (the
+  report's normalize.ts sha256 bb3ffecf804c matches the commit).
+  - By slice: grid 653/728 (89.7%), the author's structural reading
+    163/216 (75.5%), table notes 49/64 (76.6%; all 4 wrong values).
+    1,058 of 1,060 empty values are correctly unknown.
+  - By set: navfac-cherry-point-atc 730/835 (87.4%; the 2 invented),
+    024_MO 52/68 (76.5%; the 4 wrong), 30_WA_SpokaneTransit 38/47,
+    060_XX_ASC 26/30, 018_GA_USDA 11/15, bessemer 8/13.
+  - Dev outside its ceiling is 99.7%; held-out is 85.8%. The rules do not
+    yet carry to drafting they were not grown on (AS-17). No held-out
+    value, render or graph was opened. The only honest way to close the gap is more dev
+    documents, and the present population is exhausted: 11 dev + 6
+    held-out of the 17 that carry a keyed family (AS-7). The bulk corpus
+    needs network access (AS-2, already asked). Held-out is scored again
+    only at a gate.
+- **Guard after WP2 (run at e878025; 3f836e9's later changes touch only
+  `lib/assemblies/`, the eval script and their tests, so GATE 3's guard
+  re-ran the web half on them, and the mcp assemblies suites, 26 tests,
+  pass at HEAD):** web typecheck and lint
+  exit 0 (0 errors, the same 3 warnings as SETUP); `npm test` 3,570 tests,
+  3,554 pass, the same 3 fail as SETUP; the six bas benches, bench,
+  bench:linear and build exit 0. mcp typecheck exits 0; `npm test` runs
+  its pretest suites (133 + 33 + 6 + 17, all pass), then 459 tests: 339
+  pass, 114 skipped, 6 fail. Five are SETUP's; the sixth,
+  `detect_rooms assign mode`, timed out at 528 s while the machine was
+  loaded, then passed alone in 42 s (`guard-wp2/rerun-detect-rooms.log`).
+  `check:tool-count` exits 0 (0c26d0d synced the docs to 61 tools).
+- **corpus-eval unchanged:** since its baseline (1e8aae8) nothing it runs
+  has changed. Outside `lib/assemblies/` and the tests, the diff is the
+  attribute-eval script, the linear library's `kind` skip (byte-identical
+  goldens, WP3), store.js and profile.js. None of these is on the
+  corpus-eval path.
+- **What the normalizer reads:**
+  - Header words name each column's quantity and block (coil, fan,
+    electrical, heating), and the cell must validate as one value of it:
+    a unit the attribute accepts, a physical range.
+  - Unqualified water columns take the table's service, checked by
+    EWT/LWT physics and by the air entering the same coil.
+  - Split-system rows keep each half's columns.
+  - A NOMINAL size ranks below a capacity; OUTPUT and TOTAL rank first.
+  - Derived enumerations: coil blocks, named coils, titles (SPLIT,
+    PACKAGED AIR CONDITIONING), COOLING ONLY, gas inputs, a humidifier's
+    TYPE and SOURCE.
+  - A drive schedule's PURPOSE naming a unit gives that unit's VFD.
+- **What it reads from notes and legends:**
+  - The numbered notes printed with a table: several columns, a legend
+    beside them, a sub-list in another numbering style, a table or title
+    beside them.
+  - The notes a row's REMARKS cite, or every note when no row cites any.
+    A note naming services or other units speaks only for those.
+  - Values: VFD, ECM, BAS interface, glycol, economizer, gas heat, MERV,
+    and control devices.
+  - A table's legend, which gives a unit's sections from its component
+    codes.
+  - A cited lettered note's codes ("FV = FULL VOLTAGE").
+- **Tests:**
+  - `web/test/assemblies/normalize.test.ts` and `scheduleNotes.test.ts`
+    (47 tests, geometry and rows from the dev documents);
+  - `mcp/test/assembliesAttrEval.test.mjs` (12 tests).
+  - Every rule added from a measured miss has a test on the miss's own
+    shape and a negative control beside it (a disconnect switch is not a
+    control; points added to a DDC system are not an interface; two units
+    of one kind on a row are no split pair; a filter column's codes are
+    not a unit's sections).
+
+
 **WP3 — the assembly engine; GATE 3 passed (2026-09-24).**
 Shared path, `web/src/lib/assemblies/` (pure TS, zod): both surfaces choose,
 expand and roll up through these modules.
@@ -286,6 +388,17 @@ expand and roll up through these modules.
   - The guard's mcp half ran after WP2 (see WP2). The engine is web-only
     until WP5: mcp imports nothing new (session.ts reads only
     SEED_ASSEMBLIES).
+- **Layers (added after GATE 3, for WP4's hook-ups):**
+  - An assembly names its layer ("controls" by default; "hookup" for the
+    mechanical hook-up). A unit gets one assembly per layer the library
+    offers its family, each chosen by that layer's own selectors, and
+    every expanded line carries its layer.
+  - An override may name a layer. An exclusion without one covers every
+    layer.
+  - A unit whose selectors are all false is `no_assembly`; before this
+    change it was `unresolved`, with nothing left to resolve.
+  - Tests: `engine.test.ts` 14. web `npm test` ran 3,606 tests: 3,590 pass
+    and the same 3 fail as SETUP. tsc exits 0.
 - **Not done here, on purpose:**
   - No surface uses the engine yet (WP5).
   - The starter library is WP4.

@@ -95,7 +95,9 @@ export const AssemblyDefinitionSchema = z.object({
    * part: a sub-assembly, expanded only where another assembly's line names
    * it, never chosen on its own. */
   kind: z.enum(["equipment", "project", "part"]),
-  applies_to: z.object({ family: z.string().min(1), selector: expr.optional(), rank: z.number().int() }).strict(),
+  /** layer: a unit gets one assembly per layer ("controls", the BAS
+   * typical; "hookup", the mechanical hook-up; a partner may add more). */
+  applies_to: z.object({ family: z.string().min(1), selector: expr.optional(), rank: z.number().int(), layer: id.default("controls") }).strict(),
   options: z.array(Option).default([]),
   variables: z.array(Variable).default([]),
   lines: z.array(Line).min(1),
@@ -123,9 +125,10 @@ export interface Cite {
   bbox: number[] | null;
 }
 
-/** One unit's recipe in a project (plan §8.2). */
+/** One unit's recipe in a project for one layer (plan §8.2). */
 export interface ApplicationRecord {
   instance: { tag: string; family: string; scope: { building: string | null; floor: string | null; system: string | null }; cites: Cite[] };
+  layer: string;
   assembly: { id: string; version: string } | null;
   selected_by: "rule" | "user";
   reason: string | null;
@@ -144,6 +147,7 @@ export interface ApplicationRecord {
 export interface ExpandedLine {
   tag: string;
   family: string;
+  layer: string;
   scope: { building: string | null; floor: string | null; system: string | null };
   /** assembly id@version:line id, with the sub-assembly path when nested. */
   rule: string;

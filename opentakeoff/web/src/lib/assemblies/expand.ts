@@ -23,7 +23,7 @@
 import { ExprError, type Value } from "./expr";
 import type { ApplicationRecord, AssemblyDefinition, AssemblyLine, ExpandedLine, ValueSource } from "./schema";
 import { SELECTION } from "./schema";
-import { envFor, latest, PROJECT_INSTANCE, run, selectAssembly, selectProjectAssemblies, type Instance, type Override, type ProjectSettings } from "./select";
+import { envFor, latest, layersFor, PROJECT_INSTANCE, run, selectAssembly, selectProjectAssemblies, type Instance, type Override, type ProjectSettings } from "./select";
 
 /** What the drawing itself says about a unit's controls (read-only inputs from
  * the BAS points and assembly-register outputs). */
@@ -89,7 +89,7 @@ export function expandApplication(
         if (!sub || depth > 8) continue;
         const q = evalOr(line.qty);
         const n = q && q.known && typeof q.value === "number" ? q.value : null;
-        const subApp = selectAssembly(instance, [sub], settings, { tag: instance.tag, reason: "sub-assembly", assembly: { id: sub.id, version: sub.version } });
+        const subApp = selectAssembly(instance, [sub], settings, { tag: instance.tag, reason: "sub-assembly", assembly: { id: sub.id, version: sub.version } }, app.layer);
         const sv = Object.fromEntries(Object.entries(subApp.variables).map(([k, v]) => [k, { value: v.value as Value | null, source: v.source }]));
         const so = Object.fromEntries(Object.entries(subApp.options).map(([k, v]) => [k, { value: v.value as Value | null, source: v.source }]));
         walk(sub, `${rule}/`, factor !== null && n !== null ? factor * n : null, [...missing, ...(q && !q.known ? q.missing : [])], depth + 1, sv, so);
@@ -122,6 +122,7 @@ export function expandApplication(
       out.push({
         tag: instance.tag,
         family: instance.family,
+        layer: app.layer,
         scope: instance.scope,
         rule,
         kind: line.kind,
@@ -156,7 +157,8 @@ function sourceOf(src: string, sources: Map<string, ValueSource | null>): Expand
   return "expr";
 }
 
-/** Choose and expand every unit: instances in tag order, so the result does
+/** Choose and expand every unit in every layer the library offers its
+ * family: instances in tag order, layers in name order, so the result does
  * not depend on the order they arrive in. */
 export function expandAll(
   instances: readonly Instance[],
@@ -169,9 +171,12 @@ export function expandAll(
   const applications: ApplicationRecord[] = [];
   const lines: ExpandedLine[] = [];
   for (const inst of sorted) {
-    const app = selectAssembly(inst, library, settings, overrides.find((o) => o.tag === inst.tag));
-    applications.push(app);
-    lines.push(...expandApplication(app, inst, library, settings, evidence[inst.tag]));
+    for (const layer of layersFor(inst.family, library)) {
+      const override = overrides.find((o) => o.tag === inst.tag && (o.layer ?? layer) === layer && (!o.assembly || library.some((a) => a.id === o.assembly!.id && (a.applies_to.layer ?? "controls") === layer)));
+      const app = selectAssembly(inst, library, settings, override, layer);
+      applications.push(app);
+      lines.push(...expandApplication(app, inst, library, settings, evidence[inst.tag]));
+    }
   }
   // Project assemblies, once each, after the units.
   for (const app of selectProjectAssemblies(library, settings)) {

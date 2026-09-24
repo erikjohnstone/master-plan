@@ -232,3 +232,26 @@ test("a project assembly applies once per project, on project variables; unknown
   assert.equal(unset.lines.filter((l) => l.role.id === "air-separator").length, 0);
   assert.equal(expandAll(inst, assemblies, { variables: { closed_loops: 0 } }).lines.filter((l) => l.role.id === "air-separator").length, 0);
 });
+
+test("layers: a unit gets one assembly per layer, each chosen by its own selectors", () => {
+  const { assemblies, rejected: bad } = sanitizeAssemblyDefinitions([...RAW, {
+    id: "vav-hw-hookup", version: "1", title: "VAV reheat coil hook-up", kind: "equipment", status: "starter",
+    applies_to: { family: "VAV", selector: "attr.heat_type = 'hw'", rank: 20, layer: "hookup" },
+    lines: [line({ id: "coil", kind: "assembly", qty: "1", ref: { id: "coil-hookup" }, trade: "mechanical", role: { vocab: "ot", id: "hydronic-coil-hookup" } })],
+  }]);
+  assert.deepEqual(bad, []);
+  const inst = vav("VAV-1", { heat_type: "hw", cfm_max: 500, hw_conn_in: 0.75 });
+  const { applications, lines } = expandAll([inst], assemblies, settings);
+  assert.deepEqual(applications.map((a) => [a.layer, a.assembly?.id]), [["controls", "vav-hw"], ["hookup", "vav-hw-hookup"]]);
+  assert.deepEqual([...new Set(lines.map((l) => l.layer))], ["controls", "hookup"]);
+  const cool = expandAll([vav("VAV-2", { heat_type: "none" })], assemblies, settings).applications;
+  assert.deepEqual(cool.map((a) => [a.layer, a.status]), [["controls", "ok"], ["hookup", "no_assembly"]], "a cooling-only box has no hook-up in this library");
+  const excluded = expandAll([inst], assemblies, settings, [{ tag: "VAV-1", reason: "by others", exclude: true, layer: "hookup" }]).applications;
+  assert.deepEqual(excluded.map((a) => [a.layer, a.status]), [["controls", "ok"], ["hookup", "excluded"]]);
+});
+
+test("every selector false is no assembly, not unresolved", () => {
+  const onlyHw = LIB.filter((a) => a.id === "vav-hw");
+  assert.equal(selectAssembly(vav("VAV-1", { heat_type: "none" }), onlyHw).status, "no_assembly");
+  assert.equal(selectAssembly(vav("VAV-2", {}), onlyHw).status, "unresolved");
+});

@@ -46,10 +46,12 @@ export interface ProjectSettings {
   responsibility?: Record<string, Partial<Record<string, string>>>;
 }
 
-/** A user's choice for one unit, always with a reason. */
+/** A user's choice for one unit, always with a reason; for one layer, or
+ * (with no layer) for every layer an exclusion covers. */
 export interface Override {
   tag: string;
   reason: string;
+  layer?: string;
   exclude?: boolean;
   assembly?: { id: string; version?: string };
   options?: Record<string, boolean>;
@@ -164,17 +166,25 @@ export const PROJECT_INSTANCE: Instance = {
 export function selectProjectAssemblies(library: readonly AssemblyDefinition[], settings: ProjectSettings = {}): ApplicationRecord[] {
   const out: ApplicationRecord[] = [];
   for (const def of latest(library).filter((a) => a.kind === "project").sort((a, b) => a.id.localeCompare(b.id))) {
-    const app = selectAssembly({ ...PROJECT_INSTANCE, family: def.applies_to.family }, [{ ...def, kind: "equipment" }], settings);
+    const app = selectAssembly({ ...PROJECT_INSTANCE, family: def.applies_to.family }, [{ ...def, kind: "equipment" }], settings, undefined, def.applies_to.layer ?? "controls");
     if (app.status === "no_assembly") continue;
     out.push({ ...app, instance: { ...app.instance, family: "project" } });
   }
   return out;
 }
 
-/** Choose one unit's assembly, options and variables. */
-export function selectAssembly(instance: Instance, library: readonly AssemblyDefinition[], settings: ProjectSettings = {}, override?: Override): ApplicationRecord {
+/** The layers the library offers a family, in name order ("controls" when
+ * it offers none). */
+export function layersFor(family: string, library: readonly AssemblyDefinition[]): string[] {
+  const layers = [...new Set(library.filter((a) => a.kind === "equipment" && a.applies_to.family === family).map((a) => a.applies_to.layer ?? "controls"))].sort();
+  return layers.length ? layers : ["controls"];
+}
+
+/** Choose one unit's assembly, options and variables in one layer. */
+export function selectAssembly(instance: Instance, library: readonly AssemblyDefinition[], settings: ProjectSettings = {}, override?: Override, layer = "controls"): ApplicationRecord {
   const base = {
     instance: { tag: instance.tag, family: instance.family, scope: instance.scope, cites: instance.cites },
+    layer,
     multiplier: instance.multiplier ?? { value: 1, basis: "one unit per tag" },
   };
   const empty = { options: {}, variables: {}, unresolved: { missing: [], candidates: [] } };
@@ -210,7 +220,7 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
   }
 
   // A part is never chosen on its own; it expands where a line names it.
-  const candidates = latest(library).filter((a) => a.kind === "equipment" && a.applies_to.family === instance.family);
+  const candidates = latest(library).filter((a) => a.kind === "equipment" && a.applies_to.family === instance.family && (a.applies_to.layer ?? "controls") === layer);
   if (!candidates.length) return { ...base, ...empty, assembly: null, selected_by: "rule", reason: null, status: "no_assembly" };
   const applicable: AssemblyDefinition[] = [];
   const possible: Array<{ def: AssemblyDefinition; missing: string[] }> = [];
@@ -225,6 +235,8 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
   applicable.sort(byRank);
   possible.sort((a, b) => byRank(a.def, b.def));
   const top = applicable[0];
+  // Every selector false: no assembly applies (plan §8.3).
+  if (!top && !possible.length) return { ...base, ...empty, assembly: null, selected_by: "rule", reason: null, status: "no_assembly" };
   const rivals = top ? applicable.filter((a) => a.applies_to.rank === top.applies_to.rank) : [];
   const higherPossible = possible.filter((p) => !top || p.def.applies_to.rank >= top.applies_to.rank);
   if (top && rivals.length === 1 && !higherPossible.length) {

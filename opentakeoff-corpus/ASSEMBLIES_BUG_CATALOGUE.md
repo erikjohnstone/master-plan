@@ -533,4 +533,47 @@ pushed the container to 1.3 GB available and a load average of 12 while
 the guard's mcp tests ran. It was stopped by PID with its table sidecar;
 nothing read its output. A run under the workaround must keep its reaper
 alive until its process group is empty, not until the orchestrator exits.
-The loop's run scripts do that from now on.
+The loop's run scripts do that from now on. (The first version of that
+drain loop counted the script waiting on it, which sits in the same
+group, and never exited after the held-out run; it now leaves its caller
+out. No eval process was alive when it was stopped.)
+
+---
+
+## AS-17 — held-out GATE 2 fails: the normalizer's rules do not yet carry to drafting they were not grown on (OPEN — this goal; closing it needs dev documents the environment cannot stage, AS-2)
+
+**Found:** 2026-09-24, GATE 2 (held-out), measured once with the normalizer
+of 3f836e9 (`reports/assemblies/02-attr-eval-heldout.{json,md}`; the
+report's normalize.ts sha256 bb3ffecf804c matches the commit).
+
+**Numbers (aggregates only; `--heldout` prints no value):** 865 of 1,008
+printed values exact (85.8%, need ≥ 95%); wrong 4 (0.4%, need ≤ 1%);
+invented 2 (need 0). Grid slice 653/728 (89.7%), the author's structural
+reading 163/216 (75.5%), table notes 49/64 (76.6%, holding all 4 wrong).
+By set: navfac-cherry-point-atc 730/835 (the 2 invented), 024_MO 52/68
+(the 4 wrong), 30_WA_SpokaneTransit 38/47, 060_XX_ASC 26/30, 018_GA_USDA
+11/15, bessemer 8/13. Dev outside its ceiling (AS-16) is 1,902/1,908
+(99.7%).
+
+**Why:** the rules were grown on 11 dev documents, each from a measured dev
+miss with a test on its shape. Held-out documents draw their schedules
+differently, and the gap says the rules are still narrower than the
+drafting population. That diagnosis rests on the gap alone: no held-out
+value, render or graph was opened, and none will be to fix this.
+
+**Why it is not fixed now:** the only honest way to close it is more dev
+evidence, and the present population is exhausted. 17 of the 22 present
+documents carry a keyed family, and all 17 are keyed, 11 dev and 6
+held-out (AS-7). The bulk corpus (~98 sets) needs network access to
+`drive.google.com` / `drive.usercontent.google.com` (AS-2, asked once in
+WP0). Tuning on the held-out numbers would make them a second dev set and
+leave the gate without a measure. The committed cross-set compile
+snapshots (`takeoffs/cross-set-compile/`) hold totals only, with no
+headers or cells to learn from.
+
+**Unblock:** stage the bulk corpus. Then draw a second dev tier by a
+written seed, key it from renders (TRUTH), fix what it shows on the shared
+path, and score held-out again at the next gate. The 6 frozen held-out
+documents never move to dev; the extra documents also give the second
+held-out tier AS-2 describes.
+
