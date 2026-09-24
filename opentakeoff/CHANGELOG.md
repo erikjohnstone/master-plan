@@ -1,5 +1,39 @@
 # Changelog
 
+- **Controls assemblies on the shared path: `apply_assemblies` (MCP 0.9.82; 62 tools).**
+  The scheduled HVAC equipment of a set now gets its controls typical and
+  mechanical hook-up from an assembly library. `web/src/lib/assemblies/apply.ts`
+  runs these steps:
+  - normalizes each compiled row with the notes, legend and code legends
+    printed with its table;
+  - derives what no row prints, each with a rule and basis: a 100%
+    outdoor-air air handler is a DOAS, a gas-fired fan coil a furnace, and
+    `terminals_served` comes from the terminal rows that name their air
+    handler;
+  - applies the library (the starter US typicals v1 and hook-ups by default).
+
+  Every unit gets a record per layer: its typical, options and variables
+  with their source, and a status. An `unresolved` record names what it
+  waits for; nothing is guessed. `web/src/lib/assemblies/report.ts` shapes
+  the result for every surface: exceptions first, a table per family, a row
+  per unit with cites. The MCP tool takes `library_path` (an assemblies file
+  or an estimator profile), `settings`, `overrides` with reasons, `families`,
+  `detail` and `path`.
+
+  In the browser, **Takeoff → Assemblies** shows the same result, read
+  through `/__ot/assemblies-project` (the builder the MCP tool uses) and
+  applied by the same function. Overrides ask for a reason. The project file
+  keeps an `assemblies` block (`projectState.ts`): the definitions the
+  records used (pinned, so a library edit never changes a saved project
+  silently), settings and overrides. "Update to latest" lists each option
+  and line that would change and applies nothing until adopted. The
+  **Library** view keeps the starter read-only. **Clone to edit** makes your
+  version (same id, next version), validated live against the whole library
+  and tinted where it overrides the starter.
+
+  Library fix: a printed hardwired chiller/boiler/RTU interface no longer
+  counts as a network (BACnet) interface.
+
 - **HIT valve export: three correctness fixes (MCP 0.9.81).** The Siemens
   "Global Valves" mass-sizing export (`valveSizeExport.ts`, used by
   `compile_corpus_takeoff`'s `export_path`, the UI's "Export to HIT" and

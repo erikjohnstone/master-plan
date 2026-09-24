@@ -8,6 +8,7 @@
  *   POST /__ot/sweep-schedule-row       → Session.sweepScheduleRow (shared path)
  *   POST /__ot/count-marks              → Session.countMarks (shared path)
  *   POST /__ot/reconcile-schedule-plan  → reconcileSchedulePlan (shared path)
+ *   POST /__ot/assemblies-project       → the assemblies apply path's project (shared path)
  *
  * Same MCP Session.graphForPipeline() path every blueprint uses — not a
  * takeoff-only fork. Body: JSON { pdfPath } or multipart file(s) + kind.
@@ -420,6 +421,10 @@ async function handle(req, res, mode) {
       const result = await runCli({ mode: "symbol_sweep", pdfPaths, symbol, signal: abortController.signal });
       return sendJson(res, 200, restoreUploadedSheetKeys(result, pdfPaths, fileNames));
     }
+    if (mode === "assemblies_project") {
+      const result = await runCli({ mode: "assemblies_project", pdfPaths, signal: abortController.signal });
+      return sendJson(res, 200, result);
+    }
     if (mode === "count_marks") {
       const markList = marks
         ? String(marks).split(",").map((m) => m.trim()).filter(Boolean)
@@ -534,6 +539,7 @@ const OT_ROUTES = [
   ["/__ot/symbol-sweep", "symbol_sweep"],
   ["/__ot/count-marks", "count_marks"],
   ["/__ot/reconcile-schedule-plan", "reconcile"],
+  ["/__ot/assemblies-project", "assemblies_project"],
 ];
 const assignmentMiddleware = basAssignmentMiddleware(resolveTsxLoader);
 const assemblyMiddleware = basAssemblyMiddleware(resolveTsxLoader);

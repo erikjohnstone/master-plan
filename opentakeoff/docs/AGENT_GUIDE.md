@@ -194,6 +194,16 @@ and a `status` (matched / schedule-only / plan-only / …) with citations both w
 quantities and the status per line — never just the schedule count — the same "never a numbers
 report alone" discipline as the standard finish above.
 
+**A controls (BAS) estimate of that equipment** continues with `apply_assemblies`. It applies an
+assembly library to every scheduled unit: its controls typical and its mechanical hook-up, with
+the options, variables and expanded lines, each citing the schedule row and the library rule.
+Read `report.exceptions` first. An unresolved unit names what it waits for: an attribute the
+schedule does not print, a project setting, or two typicals that tie. That is the answer, not a
+failure. Report it, or pass the partner's value in `settings` or an override with a reason. Never
+pick a typical or an option the drawing does not decide. A typical never overwrites a printed
+points list or a drawing-declared component, and the records are proposals for the estimator,
+not approval.
+
 ## 4. Withheld is not a failure — it is the answer
 
 Four tools measure things they then decline to commit, and say why. The arrays they hand back are
@@ -255,7 +265,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 58 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 62 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Fifty-seven descriptions is real token weight for a session that may never touch half of them, so

@@ -10,6 +10,8 @@
  *   --mode symbol_sweep        → Session.symbolSweep JSON on stdout
  *   --mode count_marks        → Session.countMarks JSON on stdout
  *   --mode reconcile          → reconcileSchedulePlan JSON on stdout
+ *   --mode assemblies_project → the project the assemblies apply path reads
+ *                                (mcp/src/assemblies.ts, the apply_assemblies builder)
  *
  * Progress (compile walkthrough): lines on stderr of the form
  *   OT_PROGRESS\t{"phase":"…","message":"…"}\n
@@ -27,6 +29,7 @@ import { writeJsonAndExit } from "./cliJson.mjs";
 import { Session } from "../src/session.ts";
 import { compileProductionTakeoff, compileProductionTakeoffs } from "../src/productionTakeoff.ts";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
+import { sessionAssembliesProject } from "../src/assemblies.ts";
 
 function argsOf(argv, name) {
   const out = [];
@@ -287,6 +290,16 @@ if (mode === "complete_bas") {
     control_schematics: controlSchematics,
     reconcile,
   });
+}
+
+if (mode === "assemblies_project") {
+  // SHOULD THIS BE ON THE SHARED PATH? Yes: the builder MCP's apply_assemblies
+  // calls. The browser applies its library to this project with the same
+  // applyAssemblies (web/src/lib/assemblies/apply.ts).
+  progress("compile", "Compiling HVAC equipment and reading its schedule notes for assemblies…");
+  const project = await sessionAssembliesProject(session);
+  progress("done", `Assemblies project ready — ${project.items.length} scheduled row${project.items.length === 1 ? "" : "s"}.`, { items: project.items.length });
+  await writeJsonAndExit(project);
 }
 
 if (mode !== "compile") {

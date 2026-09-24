@@ -1180,6 +1180,17 @@ export class Session {
     };
   }
 
+  /** The text spans of one loaded sheet, in image px (the spans its sheet
+   * graph is built from), or null when no loaded sheet has that key. Read-only:
+   * another consumer's lazy span cache is not populated. "file#1" is the first
+   * page, which the Session keys by the bare file name. (ASSEMBLIES WP5.3:
+   * the schedule notes the apply path reads, mcp/src/assemblies.ts.) */
+  sheetTextSpans(key: string): TextSpan[] | null {
+    const state = this.sheets.get(key) ?? (key.endsWith("#1") ? this.sheets.get(key.slice(0, -2)) : undefined);
+    if (!state) return null;
+    return state.spans ?? textSpans(state.page);
+  }
+
   /** Shared text-only BAS evidence seam. Does not build or modify the graph,
    * invoke OCR/geometry, or alter existing schedule/symbol output. Reading
    * loaded bytes' identity avoids a path changing underneath an open session.

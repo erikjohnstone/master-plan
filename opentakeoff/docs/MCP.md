@@ -291,6 +291,11 @@ Fifty-eight tools, in the order an agent tends to reach for them:
   schedule row and the plan ink. Report both quantities and the status per
   line, never the schedule count alone—the same discipline as `export_report`
   below.
+  For a controls estimate, `apply_assemblies` then proposes each scheduled
+  unit's controls typical and mechanical hook-up (options, variables, lines,
+  each citing its schedule row and library rule) on the same shared path as
+  the Takeoff panel; its `report.exceptions` come first, and an unresolved
+  unit names what it waits for rather than guessing.
 - **Measure**—`one_click`, `detect_rooms` (both take `layers {include,
   exclude}` to override the sheet's stated layer roles for a call),
   `measure_polygon`, `measure_line`, `measure_surface` (wall SF: an open run

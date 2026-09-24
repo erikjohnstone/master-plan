@@ -542,6 +542,41 @@ condition properties still closes them. Drawing shortcuts and actions are unchan
 Takeoff retains its existing exports. The separate legacy per-condition report is
 available from **⋯ → Measurement report**, not a primary navigation tab.
 
+### Controls assemblies (Takeoff → Assemblies)
+
+**Takeoff → Assemblies** turns the set's scheduled HVAC equipment into a controls
+estimate. Press **Apply assemblies**. The same Session+ODL path MCP uses reads the
+equipment schedules and the notes printed with them, and your assembly library
+then gives each unit its controls typical and its mechanical hook-up:
+- its options and variables, each with its source (the schedule, a project
+  setting, a partner default, the library default, or you);
+- its lines (points, devices, labor hooks) with quantities, each citing the
+  schedule row and the library rule.
+
+**Exceptions come first.** A unit the drawings do not decide is *unresolved*, and it
+says what it waits for: an attribute the schedule does not print, a project
+setting, or two typicals that tie. Nothing is guessed. Resolve one with **Use …**,
+which picks a candidate typical, or open **Details** to set an option or exclude
+the unit. Every override asks for a reason and is kept on the record under
+**Your overrides**. Below the exceptions sit a table per family (units, typicals,
+unresolved, without a typical, lines) and one row per unit. Click a unit for its
+options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
+typical, or the terminal count behind an air handler's typical), and lines.
+Clicking a tag paints its schedule row on the drawing.
+
+**The project keeps its versions.** Applying pins every definition the records
+used into the saved project. A later edit to your library never changes a saved
+project silently. **Library** lists any updates under **Update to latest**, with
+each option and line that would change, and nothing moves until you press
+**Adopt**.
+
+**The library.** The starter library (US typicals v1 and the mechanical hook-ups)
+is read-only. **Clone to edit** makes your own version with the same id and the
+next version number, saved in your profile beside the starter. The editor
+validates live against the whole library: its shape, every expression against
+the families' attributes, device references, and sub-assembly references. What
+your version changes from the starter is tinted amber.
+
 ### Manual sections
 
 1. [Five minutes to a takeoff](#1-five-minutes-to-a-takeoff)
@@ -1355,7 +1390,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->61<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->62<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

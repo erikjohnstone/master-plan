@@ -493,9 +493,29 @@ rebuilds them and requires identical bytes.
   - Undisclosed: 0. 73 exact rows reach a drawing-decided option through the library default.
   - AS-19 breaks the misses down by cause. A schedule-only proposal is capped at 123 of 244, because the rest of the truth is on the control drawings (D6).
   - Held-out is not run; it is scored at the gate.
+- **WP5.3, MCP (0.9.82, 62 tools):** `apply_assemblies` (`mcp/src/assemblies.ts`, registered in tools.ts).
+  - `sessionAssembliesProject` builds the project from the Session's hvac_equipment compile and its pages' spans (`Session.sheetTextSpans`, read-only), through the shared `compiledProjectOf` (apply.ts). The attribute eval's snapshot uses the same builder; its dev output is byte-identical.
+  - The library loads by path: an assemblies file or an estimator profile, through the load gate; a rejected record fails the call.
+  - `report.ts` (shared) shapes the reply: exceptions first, per-family table, unit rows with cites.
+  - The docs synced by AGENTS.md's list: staging row (measure), the finish-step instruction in server.ts, mcp/README table row, docs/MCP.md, AGENT_GUIDE, the tool-count markers, CHANGELOG, and the version on its three surfaces.
+  - Parity test `mcp/test/assembliesApply.test.mjs`: the tool's records and lines against the browser's apply of the JSON-transported project, on D04 (federal-mech, dev). It runs after the heavy corpus-eval job.
+- **WP5.2, persistence** (`web/src/lib/assemblies/projectState.ts`):
+  - The project file's additive `assemblies` block pins every definition the records used, with sub-assemblies transitively, plus settings and overrides with reasons.
+  - Its sanitize gate names everything it drops.
+  - A library edit never changes a saved project (A5, tested). "Update to latest" is a per-option/variable/line diff; only `adoptUpdate` moves a pin.
+  - The canvas saves and hydrates the block like `stitches`.
+- **WP5.4, UI:** a **Takeoff → Assemblies** tab (`web/src/components/AssembliesPanel.jsx`).
+  - Units view: exceptions first with "Use <typical>" and details, a family table, unit rows with cites, options, derived facts and lines, and overrides that ask for a reason.
+  - Library view: the starter is read-only; **Clone to edit** (`libraryEdit.ts`) makes the next version with live validation against the whole library and an amber tint on its overrides; "Update to latest" has Adopt.
+  - The project comes from `/__ot/assemblies-project` (production-graph-cli `--mode assemblies_project`, the MCP builder), with sheet keys remapped. The starter JSON loads on demand, and the partner library lives in the profile store.
+- **Tests:** web assemblies 107 pass (apply 7, report 1, projectState 3, libraryEdit 4 among them). mcp: the typical-eval suite (4) and the library-load test pass. Web and mcp tsc exit 0. eslint shows 0 errors and the same 3 pre-existing warnings.
+- **Heavy-job note:**
+  - The sheet-graph cache key hashes all of `mcp/src` and `mcp/package.json`, so WP5.3 invalidates every cached graph once.
+  - The parity test, the evals at the new HEAD and the guard rebuild them, one heavy job at a time, after the WP4 corpus-eval run.
 - **Next:**
-  - WP5.2 persistence, WP5.3 the MCP tool and parity test, WP5.4 the UI panel.
-  - Then D6 evidence (control schematics, points lists, sequences bound to units) and the project settings AS-19 names.
+  - Parity test and guard at the new HEAD; GATE 5 measured (dev and held-out).
+  - NEW-DOCUMENT TEST #1 waits on INPUT 5 (a partner job PDF).
+  - Then D6 evidence (control schematics, points lists and sequences bound to units) and the project settings AS-19 names.
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered

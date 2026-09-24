@@ -60,6 +60,76 @@ export interface CompiledProject {
   pages?: Readonly<Record<string, readonly NoteSpan[]>>;
 }
 
+/** The compile's own rule for a table's title (corpusTakeoff.mjs uniqueFamily:
+ * a trailing "N OF M" part suffix is dropped). */
+export const compileTableTitle = (title: unknown): string => String(title || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+
+/** A sheet id's file and page: "set.pdf#14" → { file: "set.pdf", page: 14 };
+ * a bare file name is its first page. Null when the page is not a number. */
+export function sheetPage(sheet: string): { file: string; page: number } | null {
+  const hash = sheet.lastIndexOf("#");
+  const file = hash >= 0 ? sheet.slice(0, hash) : sheet;
+  const page = hash >= 0 ? Number(sheet.slice(hash + 1)) : 1;
+  return Number.isInteger(page) && page >= 1 ? { file, page } : null;
+}
+
+/** What the apply path reads of an hvac_equipment compile and of the sheet
+ * graph it was compiled from (loosely typed: both are JSON on the wire). */
+export interface HvacCompile {
+  categories?: Record<string, { items?: ReadonlyArray<{ tag: string; sheet_id: string; table_title: string; cells?: CompileItem["cells"]; building?: string | null; description?: string | null }> }>;
+}
+export interface GraphTables {
+  tables?: ReadonlyArray<{
+    sheet: string;
+    title?: { text?: string | null } | null;
+    headers?: readonly string[];
+    region?: Box | null;
+    rows?: ReadonlyArray<{ key: string; cells?: Readonly<Record<string, { text?: string | null } | null>> }>;
+  }>;
+}
+
+/** The compile's rows (one per item, with its category's family) and the
+ * graph tables they were compiled from. */
+export function compiledRowsAndTables(compiled: HvacCompile, graph: GraphTables): { items: CompiledItem[]; tables: CompiledTable[] } {
+  const items: CompiledItem[] = [];
+  for (const [family, cat] of Object.entries(compiled.categories ?? {})) {
+    for (const it of cat.items ?? []) {
+      items.push({ family, tag: it.tag, sheet_id: it.sheet_id, table_title: it.table_title, cells: it.cells ?? {},
+        building: it.building ?? null, description: it.description ?? null });
+    }
+  }
+  const wanted = new Set(items.map((it) => `${it.sheet_id}|${it.table_title}`));
+  const tables: CompiledTable[] = [];
+  for (const t of graph.tables ?? []) {
+    const title = compileTableTitle(t.title?.text);
+    if (!wanted.has(`${t.sheet}|${title}`)) continue;
+    tables.push({ sheet: t.sheet, title, headers: t.headers ?? [], region: t.region ?? null,
+      rows: (t.rows ?? []).map((r) => ({ key: r.key, cells: Object.fromEntries(Object.entries(r.cells ?? {}).map(([h, c]) => [h, c?.text ?? ""])) })) });
+  }
+  return { items, tables };
+}
+
+/** The project the apply path reads: the compile's rows and tables, and the
+ * text spans of every page a claimed table with a region is on (the spans
+ * the graph itself is built from, in the same space as the region), read by
+ * `spansOf`, the one surface-specific part (a Session's page, a PDF opened
+ * by path). Spans keep only what the notes reader uses, so every surface
+ * sends the same JSON. */
+export async function compiledProjectOf(
+  compiled: HvacCompile,
+  graph: GraphTables,
+  spansOf: (sheet: string) => Promise<readonly NoteSpan[] | null> | readonly NoteSpan[] | null,
+): Promise<CompiledProject> {
+  const { items, tables } = compiledRowsAndTables(compiled, graph);
+  const pages: Record<string, NoteSpan[]> = {};
+  for (const sheet of new Set(tables.filter((t) => t.region).map((t) => t.sheet))) {
+    if (!sheetPage(sheet)) continue;
+    const spans = await spansOf(sheet);
+    if (spans) pages[sheet] = spans.map((sp) => ({ str: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, ...(sp.rot ? { rot: sp.rot } : {}) }));
+  }
+  return { items, tables, pages };
+}
+
 interface ReadTable extends CompiledTable {
   readNotes?: readonly ScheduleNote[];
   readCodes?: Record<string, Record<string, string>>;
@@ -136,7 +206,9 @@ function tagPieces(text: string): string[] {
 export function servingAirHandlers(items: readonly CompiledItem[]): Map<number, number[]> {
   const byTag = new Map<string, number[]>();
   items.forEach((it, i) => {
-    if (!AIR_HANDLER_FAMILIES.has(it.family)) return;
+    // A mark with no letter ("1") is not a tag a terminal row can be said to
+    // name: a QTY or size cell would read as it.
+    if (!AIR_HANDLER_FAMILIES.has(it.family) || !/[A-Z]/i.test(it.tag)) return;
     for (const k of new Set([canonTag(it.tag), dashless(it.tag)])) {
       if (!k) continue;
       if (!byTag.has(k)) byTag.set(k, []);
@@ -181,6 +253,9 @@ export interface DerivedAttribute {
 export interface AppliedInstance extends Instance {
   /** The compiled row it came from (index into the project's items). */
   item: number;
+  /** The family of the schedule it was compiled from (`family` is the one
+   * the library applies, which `derived.family` may have changed). */
+  compiled_family: string;
   /** Attributes the project gives it that its own row does not print. */
   derived: Record<string, DerivedAttribute>;
   /** Attributes its row leaves unknown, with the reason. */
@@ -276,6 +351,7 @@ export function instancesOf(project: CompiledProject, normalized: readonly Norma
       item: i,
       tag: it.tag,
       family,
+      compiled_family: it.family,
       attributes,
       derived,
       unknown,

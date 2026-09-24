@@ -1840,3 +1840,22 @@ export const countMarksOutput = {
   skipped: z.array(z.object({ sheet: z.string(), role: z.string(), reason: z.string() })),
   complete: z.boolean(),
 };
+
+// ASSEMBLIES WP5.3 — apply_assemblies (mcp/src/assemblies.ts; the report is
+// web/src/lib/assemblies/report.ts, the records and lines schema.ts).
+export const applyAssembliesOutput = {
+  library: z.object({ source: z.string(), assemblies: z.number().int() }),
+  report: z.object({
+    schema: z.literal("opentakeoff.assemblies_report.v1"),
+    totals: z.object({
+      units: z.number().int(), records: z.number().int(), by_status: z.record(z.string(), z.number().int()),
+      lines: z.number().int(), lines_by_status: z.record(z.string(), z.number().int()),
+    }),
+    exceptions: z.array(z.record(z.string(), z.unknown())),
+    families: z.array(z.record(z.string(), z.unknown())),
+    units: z.array(z.record(z.string(), z.unknown())).optional(),
+  }),
+  applications: z.array(z.record(z.string(), z.unknown())).optional(),
+  lines: z.array(z.record(z.string(), z.unknown())).optional(),
+  path: z.string().optional(),
+};

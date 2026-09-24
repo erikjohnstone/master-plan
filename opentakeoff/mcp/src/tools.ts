@@ -25,7 +25,7 @@ import {
   markVerdictOutput, deleteVerdictOutput,
   sheetGraphOutput, listTagsOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
-  classifyStrokesOutput, traceRunOutput,
+  classifyStrokesOutput, traceRunOutput, applyAssembliesOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
@@ -33,6 +33,7 @@ import { importTakeoff } from "./importing.ts";
 import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
 import { takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
 import { compileProductionTakeoff } from "./productionTakeoff.ts";
+import { applyAssembliesToSession } from "./assemblies.ts";
 import { basReviewRequestSchema } from "../../web/src/lib/basReviewContract.ts";
 import { basEquipmentReviewRequestSchema } from "../../web/src/lib/basEquipmentRegister.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
@@ -1033,6 +1034,50 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       compiled.export_path = null;
     }
     return compiled;
+  }));
+
+  const assemblyValue = z.union([z.number(), z.string(), z.boolean()]);
+  server.registerTool("apply_assemblies", {
+    description: `Controls assemblies (typicals) for the loaded set's scheduled HVAC equipment: the shared apply path the Takeoff panel's Assemblies view runs. It compiles hvac_equipment (the compile_corpus_takeoff path) and reads each row's canonical attributes, with the schedule notes printed with its table. Then it applies an assembly library to every unit: the starter library by default (US typicals v1 plus the mechanical hook-ups), or library_path for a partner library or an estimator profile. Each unit gets a record per layer: its typical (id@version), the options and variables with their source (attr, drawing, project, partner_default, starter_default, user), and a status: ok, unresolved, no_assembly (v1 has no typical for the family), excluded or overridden. The report lists the exceptions FIRST. An unresolved unit names what it waits for (an attribute the schedule does not print, a project setting, two tied typicals). Never guess it: report it, or pass the partner's value in settings (partnerDefaults, variables) or an override with a reason. Derived facts carry their rule and basis: a 100% outdoor-air air handler takes the DOAS typical, a gas-fired fan coil the furnace typical, and terminals_served comes from the terminal rows that name their air handler. Records are proposals for the estimator to review, not approval; typicals never overwrite printed points lists or drawing-declared components (those replace a typical's lines of the same role). detail: summary (default: totals, exceptions, per-family table), units (plus one row per unit with cites), lines (plus every record and expanded line: quantities, parameters and their sources, responsibility, rule and cites). families narrows the reply, never the application. path writes the full result (records, lines, report) as JSON. Cites (bbox) are in the compile's space: ${COORDS}`,
+    inputSchema: {
+      library_path: z.string().optional().describe("An assemblies JSON file ({ assemblies: [...] } or an array) or an estimator profile (.otprofile JSON: its assembly_library's equipment records). Every record passes the library gate or the call fails with the rejections. Omit for the starter library"),
+      settings: z.object({
+        variables: z.record(z.string(), assemblyValue).optional().describe("Project variables (wiring method, valve body, spare %, …) by id"),
+        partnerDefaults: z.record(z.string(), assemblyValue).optional().describe("The partner's defaults for options and variables the drawing leaves unknown, keyed '<assembly id>.<id>' or '<id>'; each record names where it used one"),
+        profile: z.record(z.string(), z.boolean()).optional().describe("Hook-up profile switches by id; an unset switch leaves its lines unresolved"),
+        responsibility: z.record(z.string(), z.record(z.string(), z.string())).optional().describe("Per-project responsibility edits: role id → { activity: party }"),
+      }).optional().describe("Project settings; none are assumed"),
+      overrides: z.array(z.object({
+        tag: z.string(),
+        reason: z.string().min(1).describe("Why: kept on the record"),
+        layer: z.string().optional().describe("controls or hookup; omit to cover every layer (an exclusion) or the controls layer"),
+        exclude: z.boolean().optional(),
+        assembly: z.object({ id: z.string(), version: z.string().optional() }).optional(),
+        options: z.record(z.string(), z.boolean()).optional(),
+        variables: z.record(z.string(), assemblyValue).optional(),
+      })).optional().describe("Per-unit choices, each with a reason"),
+      families: z.array(z.string()).optional().describe("Only these (applied) families in the reply, e.g. ['VAV','AHU']"),
+      detail: z.enum(["summary", "units", "lines"]).optional().describe("summary (default), units, or lines"),
+      path: z.string().optional().describe("Optional JSON file for the full result"),
+      overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
+    },
+    outputSchema: applyAssembliesOutput,
+  }, run("apply_assemblies", async ({ library_path, settings, overrides, families, detail, path: outPath, overwrite }) => {
+    if (outPath) await assertWritable(outPath, "json", overwrite);
+    // One application: the file gets every record and line; the reply only
+    // what `detail` asks for.
+    const { project: _project, ...full } = await applyAssembliesToSession(session, { library_path, settings, overrides, families, detail: "lines" });
+    const want = detail ?? "summary";
+    const { units, ...summary } = full.report;
+    const reply = {
+      library: full.library,
+      report: want === "summary" ? summary : { ...summary, units },
+      ...(want === "lines" ? { applications: full.applications, lines: full.lines } : {}),
+    };
+    if (!outPath) return reply;
+    const { writeFile } = await import("node:fs/promises");
+    await writeFile(outPath, JSON.stringify(full, null, 2));
+    return { ...reply, path: outPath };
   }));
 
   server.registerTool("reconcile_schedule_plan", {

@@ -40,6 +40,9 @@ test("terminal rows link to the air handler their cell or table title names; the
   assert.deepEqual(links.get(6), [0, 1]);
   assert.equal(links.has(7), false, "only terminal families are linked");
   assert.equal(servingAirHandlers(items.filter((it) => it.family !== "AHU")).size, 0, "no air handler, no link");
+  // An air handler marked "1" is not named by a terminal row's QTY cell.
+  const numeric = [row("AHU", "1", "AHU SCHEDULE"), row("VAV", "VAV-9", "VAV BOX SCHEDULE", { QTY: "1" })];
+  assert.equal(servingAirHandlers(numeric).size, 0);
 });
 
 test("terminals_served is derived from the links, 0 only when the terminal schedules name their air handlers", () => {

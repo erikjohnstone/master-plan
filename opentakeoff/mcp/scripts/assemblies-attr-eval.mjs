@@ -42,7 +42,7 @@ import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { attributeSpec, canonicalAttributeFor, keyValueToCanonical } from "../../web/src/lib/assemblies/attributes.ts";
 import { vfdDrivenTags } from "../../web/src/lib/assemblies/normalize.ts";
-import { tableContextOf } from "../../web/src/lib/assemblies/apply.ts";
+import { compileTableTitle, compiledProjectOf, sheetPage, tableContextOf } from "../../web/src/lib/assemblies/apply.ts";
 
 export const KEY_COLUMNS = ["sheet", "table_title", "tag", "family", "attribute", "value", "unit", "source_header", "note"];
 
@@ -70,9 +70,8 @@ function splitCsvLine(line) {
   return cells;
 }
 
-/** The compile's own rule for a table title (corpusTakeoff.mjs uniqueFamily:
- * a trailing "N OF M" part suffix is dropped). */
-export const compileTableTitle = (title) => String(title || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+/** The compile's own rule for a table title (apply.ts, shared). */
+export { compileTableTitle };
 
 /** keys/<set>.attrs.csv → its lines, plus the printed titles of tables keyed
  * in parts (from the key's own "#   sheet | title | family | rows | render:
@@ -357,40 +356,21 @@ async function snapshotSet(corpus, spec, set) {
   // The compile reads the graph alone (corpusTakeoff.mjs sheetRecords: the UI
   // path); a Session would only add page accounting, which is not scored.
   const hvac = compileTakeoff(null, graph, "hvac_equipment");
-  const items = [];
-  for (const [family, cat] of Object.entries(hvac.categories || {})) {
-    for (const it of cat.items || []) {
-      items.push({ family, tag: it.tag, sheet_id: it.sheet_id, table_title: it.table_title, cells: it.cells || {},
-        building: it.building ?? null, description: it.description ?? null });
-    }
-  }
-  const wanted = new Set(items.map((it) => `${it.sheet_id}|${it.table_title}`));
-  const tables = [];
-  for (const t of graph.tables || []) {
-    const title = compileTableTitle(t.title?.text);
-    if (wanted.has(`${t.sheet}|${title}`)) {
-      tables.push({ sheet: t.sheet, title, headers: t.headers || [], region: t.region ?? null,
-        rows: (t.rows || []).map((r) => ({ key: r.key, cells: Object.fromEntries(Object.entries(r.cells || {}).map(([h, c]) => [h, c?.text ?? ""])) })) });
-    }
-  }
-  // The text spans of each page a claimed table is on (the spans the graph
-  // itself is built from, in the same space as its region), once per page.
-  // The parent reads the notes from them (scheduleNotes.ts), so a
-  // notes-reader change never needs a new snapshot.
+  // The rows, their tables and their pages' text spans, assembled by the
+  // apply path's own builder (apply.ts compiledProjectOf); only reading a
+  // page is this script's own: the PDF opened by path. The parent reads the
+  // notes from the spans (scheduleNotes.ts), so a notes-reader change never
+  // needs a new snapshot.
   const { openPdf, textSpans } = await import("../src/pdf.ts");
   const fileOf = new Map(files.map((f) => [basename(f), f]));
   const docs = new Map();
-  const pages = {};
-  for (const sheet of new Set(tables.filter((t) => t.region).map((t) => t.sheet))) {
-    const hash = sheet.lastIndexOf("#");
-    const base = hash >= 0 ? sheet.slice(0, hash) : sheet;
-    const page = hash >= 0 ? Number(sheet.slice(hash + 1)) : 1;
-    const file = fileOf.get(base);
-    if (!file || !Number.isInteger(page)) continue;
-    if (!docs.has(base)) docs.set(base, await openPdf(file));
-    pages[sheet] = textSpans(await docs.get(base).page(page))
-      .map((s) => ({ str: s.str, x0: s.x0, y0: s.y0, x1: s.x1, y1: s.y1, ...(s.rot ? { rot: s.rot } : {}) }));
-  }
+  const { items, tables, pages } = await compiledProjectOf(hvac, graph, async (sheet) => {
+    const at = sheetPage(sheet);
+    const file = at && fileOf.get(at.file);
+    if (!file) return null;
+    if (!docs.has(at.file)) docs.set(at.file, await openPdf(file));
+    return textSpans(await docs.get(at.file).page(at.page));
+  });
   for (const doc of docs.values()) await doc.destroy();
   return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages };
 }
