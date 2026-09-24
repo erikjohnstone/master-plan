@@ -103,7 +103,7 @@ test("an electric unit heater: kW is heat, the title names the medium, fan hp is
   const v = values(n);
   assert.equal(v.eh_kw, 5);
   assert.equal(v.heating_medium, "electric");
-  assert.equal(v.motor_hp, 1 / 15);
+  assert.ok(Math.abs(Number(v.motor_hp) - 1 / 15) < 1e-9);
   assert.equal(v.cfm, 350);
   assert.equal(n.attributes.heating_medium.cite.header, "(table title)");
 });
@@ -274,4 +274,10 @@ test("a coil schedule whose water columns all name hot water decides an unqualif
   }), "DUCT_MOUNTED_COIL"));
   assert.equal(v.heating_mbh, 44);
   assert.equal(v.cooling_mbh, undefined);
+});
+
+test("a filter cell printing its thickness and MERV; OUTPUT over a bare BTUH", () => {
+  assert.equal(values(normalizeCompileItem(row("RTU-8", "RTU SCHEDULE", { "SUPPLY FAN FILTER": '2" MERV 8' }), "RTU")).filter_merv, 8);
+  const uh = values(normalizeCompileItem(row("GUH-2", "NATURAL GAS UNIT HEATER SCHEDULE", { BTUH: "60,000", "BTUH OUTPUT": "49,800" }), "UNIT_HEATER"));
+  assert.equal(uh.heating_mbh, 49.8);
 });

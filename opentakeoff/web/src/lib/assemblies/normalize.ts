@@ -29,6 +29,7 @@
 // and nothing is classified from a word alone. LAW L4: absence is never
 // evidence — no column, no value.
 import { attributeSpec, familyAttributes, unitFactor } from "./attributes";
+import { citedNoteIds, noteValues, type ScheduleNote } from "./scheduleNotes";
 
 /** A compileTakeoff("hvac_equipment") item, as far as the normalizer reads it. */
 export interface CompileItem {
@@ -40,9 +41,11 @@ export interface CompileItem {
   description?: string | null;
 }
 
-/** The schedule table the item was compiled from: its headers in order. */
+/** The schedule table the item was compiled from: its headers in order, and
+ * the numbered notes printed with it (scheduleNotes.ts), when read. */
 export interface TableContext {
   headers: readonly string[];
+  notes?: readonly ScheduleNote[];
 }
 
 export interface Cite {
@@ -452,7 +455,9 @@ function numberFor(attr: string, col: Column, headerUnit: string | null): { valu
   } catch {
     return { reason: `unit ${unit} is not one ${attr} accepts` };
   }
-  const value = p.n * factor;
+  // 12 significant digits: a unit factor's float noise (49,800 BTU/H ×
+  // 0.001) never shows in a reported value.
+  const value = Number((p.n * factor).toPrecision(12));
   const range = RANGE[canonical];
   if (range && (value < range[0] || value > range[1])) return { reason: `${value} ${canonical} is outside the physical range of ${attr}` };
   return { value };
@@ -595,7 +600,7 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
           // only when the table prints that coil's water; an electric heater's
           // MBH is not (bldg5406's REHEAT MBH beside ELECTRIC HEATER KW).
           if ((ctx.family === "VAV" || ctx.family === "FCU") && !ctx.hasWaterSide) break;
-          if (HEATING_ONLY.has(ctx.family) || s === "hw") num(ctx.family === "VAV" ? pick(ctx, "hw_mbh") : pick(ctx, "heating_mbh"), q, "capacity.heating_unit", W.total.test(h) ? 0 : 1);
+          if (HEATING_ONLY.has(ctx.family) || s === "hw") num(ctx.family === "VAV" ? pick(ctx, "hw_mbh") : pick(ctx, "heating_mbh"), q, "capacity.heating_unit", W.output.test(h) || W.total.test(h) ? 0 : 1);
           else if (s === "chw") { if (!W.sensible.test(h)) num(pick(ctx, "cooling_mbh"), q, "capacity.cooling_unit", W.total.test(h) ? 0 : 1); }
         }
         break;
@@ -672,8 +677,13 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       case "tons": num(pick(ctx, "cooling_tons", "tons"), q, "capacity.tons"); break;
       case "merv": {
         if (!col.cell || !ctx.attrs.has("filter_merv")) break;
-        // A bare FILTER column counts only when its cell prints the word MERV.
-        const m = text.toUpperCase().trim().match(/\bFILTERS?$/.test(h) && !/\bMERV\b|\bFINAL\b/.test(h) ? /^MERV\s*-?\s*(\d{1,2})$/ : /^(?:MERV\s*-?\s*)?(\d{1,2})$/);
+        // A bare FILTER column counts only when its cell prints the word MERV
+        // (once: '2" MERV 8' is a 2-inch MERV 8 filter).
+        const t = text.toUpperCase().trim();
+        const mervs = [...t.matchAll(/\bMERV\s*-?\s*(\d{1,2})\b/g)];
+        const m = /\bFILTERS?$/.test(h) && !/\bMERV\b|\bFINAL\b/.test(h)
+          ? (mervs.length === 1 && !/\bPRE-?\s?FILTER/.test(t) ? mervs[0] : null)
+          : t.match(/^(?:MERV\s*-?\s*)?(\d{1,2})$/);
         if (m && Number(m[1]) >= 1 && Number(m[1]) <= 20) found.push({ attr: "filter_merv", col, value: Number(m[1]), printed: text, rule: "filter.merv", rank: 0 });
         else failed.push({ attr: "filter_merv", reason: `cell "${text}" is not one MERV rating` });
         break;
@@ -964,7 +974,54 @@ function derived(item: CompileItem, ctx: RowContext, values: Map<string, Candida
   return out;
 }
 
-// ── 7. The row ──────────────────────────────────────────────────────────────
+// ── 7. The table's notes ────────────────────────────────────────────────────
+
+/** The notes that speak for this row: the ones its REMARKS / NOTES cell
+ * cites ("SEE NOTES 1, 2"; "SEE NOTES" or "ALL" is every one). A table with
+ * no such column prints its notes for every row, except a note that names
+ * other units of the row's own tag family and not this one. */
+function notesForRow(item: CompileItem, ctx: RowContext, notes: readonly ScheduleNote[]): ScheduleNote[] {
+  if (!notes.length) return [];
+  const citeCols = ctx.cols.filter((c) => /^(?:REMARKS|NOTES?|COMMENTS)$/.test(c.h));
+  if (citeCols.length) {
+    const cites = citeCols.map((c) => citedNoteIds(c.cell?.text ?? "")).filter((c): c is NonNullable<typeof c> => Boolean(c));
+    if (cites.some((c) => c.all)) return [...notes];
+    return notes.filter((n) => cites.some((c) => c.ids.includes(n.id)));
+  }
+  const prefix = String(item.tag ?? "").toUpperCase().match(/^([A-Z]{1,5})[-\s]?\d/)?.[1];
+  const own = String(item.tag ?? "").toUpperCase().replace(/[\s-]/g, "");
+  return notes.filter((n) => {
+    if (!prefix) return true;
+    const named = [...n.text.toUpperCase().matchAll(new RegExp(`\\b${prefix}[-\\s]?\\d{1,3}[A-Z]?\\b`, "g"))].map((m) => m[0].replace(/[\s-]/g, ""));
+    return !named.length || named.includes(own);
+  });
+}
+
+function fromNotes(item: CompileItem, ctx: RowContext, notes: readonly ScheduleNote[], reasons: Map<string, UnknownAttribute>): Candidate[] {
+  const byAttr = new Map<string, Array<{ value: string | number; note: ScheduleNote; rule: string }>>();
+  for (const note of notesForRow(item, ctx, notes)) {
+    for (const v of noteValues(note, ctx.attrs)) {
+      if (!byAttr.has(v.attr)) byAttr.set(v.attr, []);
+      byAttr.get(v.attr)!.push({ value: v.value, note, rule: v.rule });
+    }
+  }
+  const out: Candidate[] = [];
+  for (const [attr, vs] of byAttr) {
+    const col = (n: ScheduleNote): Column => ({ header: `(table note ${n.id})`, h: "", cell: { text: n.text, bbox: null }, order: -1 });
+    if (attr === "control") {
+      // Every cited control note, in note order: "A; B".
+      const value = vs.map((v) => String(v.value)).join("; ");
+      out.push({ attr, col: col(vs[0].note), value, printed: vs.map((v) => v.note.text).join(" | "), rule: "note.control", rank: 5 });
+      continue;
+    }
+    const distinct = new Set(vs.map((v) => String(v.value)));
+    if (distinct.size === 1) out.push({ attr, col: col(vs[0].note), value: vs[0].value, printed: vs[0].note.text, rule: vs[0].rule, rank: 5 });
+    else reasons.set(attr, { reason: `notes ${vs.map((v) => v.note.id).join(", ")} state it differently` });
+  }
+  return out;
+}
+
+// ── 8. The row ──────────────────────────────────────────────────────────────
 
 /** Canonical attributes for one compiled row of `family`. */
 export function normalizeCompileItem(item: CompileItem, family: string, table: TableContext | null = null): NormalizedItem {
@@ -1002,6 +1059,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
     else reasons.set(attr, { reason: `${top.length} columns answer it differently: ${top.map((c) => `"${c.col.header}" = "${c.printed}"`).join(", ")}` });
   }
   for (const d of derived(item, ctx, chosen)) if (!chosen.has(d.attr)) chosen.set(d.attr, d);
+  for (const n of fromNotes(item, ctx, table?.notes ?? [], reasons)) if (!chosen.has(n.attr)) chosen.set(n.attr, n);
 
   for (const [attr, c] of chosen) {
     result.attributes[attr] = {

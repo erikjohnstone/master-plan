@@ -41,6 +41,7 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { attributeSpec, canonicalAttributeFor, keyValueToCanonical } from "../../web/src/lib/assemblies/attributes.ts";
+import { scheduleNotes } from "../../web/src/lib/assemblies/scheduleNotes.ts";
 
 export const KEY_COLUMNS = ["sheet", "table_title", "tag", "family", "attribute", "value", "unit", "source_header", "note"];
 
@@ -153,14 +154,18 @@ function matchItem(inst, tableItems, used) {
   return { item, how };
 }
 
-/** Headers of the table an item was compiled from, in order. */
+/** The table an item was compiled from: its headers in order, and the
+ * numbered notes printed with it. */
 function tableContext(item, tables) {
   const headers = [];
+  const notes = [];
   for (const t of tables) {
     if (t.sheet !== item.sheet_id || t.title !== item.table_title) continue;
     for (const h of t.headers) if (!headers.includes(h)) headers.push(h);
+    t.readNotes ??= t.spans && t.region ? scheduleNotes(t.spans, t.region) : (t.notes ?? []);
+    for (const n of t.readNotes) if (!notes.some((x) => x.id === n.id)) notes.push(n);
   }
-  return headers.length ? { headers } : null;
+  return headers.length || notes.length ? { headers, notes } : null;
 }
 
 const citeInTable = (cite, t) => Boolean(cite) && cite.sheet === t.sheet && t.titles.has(cite.table_title);
@@ -370,8 +375,35 @@ async function snapshotSet(corpus, spec, set) {
   const tables = [];
   for (const t of graph.tables || []) {
     const title = compileTableTitle(t.title?.text);
-    if (wanted.has(`${t.sheet}|${title}`)) tables.push({ sheet: t.sheet, title, headers: t.headers || [] });
+    if (wanted.has(`${t.sheet}|${title}`)) tables.push({ sheet: t.sheet, title, headers: t.headers || [], region: t.region ?? null, spans: [] });
   }
+  // The text spans around each claimed table (the spans the graph itself is
+  // built from, in the same space as its region; the region grown by half its
+  // size every way, so notes past it are kept at any rotation). The parent
+  // reads the notes from them (scheduleNotes.ts), so a notes-reader change
+  // never needs a new snapshot.
+  const { openPdf, textSpans } = await import("../src/pdf.ts");
+  const fileOf = new Map(files.map((f) => [basename(f), f]));
+  const docs = new Map();
+  const spansOf = new Map();
+  for (const t of tables) {
+    if (!t.region) continue;
+    if (!spansOf.has(t.sheet)) {
+      const hash = t.sheet.lastIndexOf("#");
+      const base = hash >= 0 ? t.sheet.slice(0, hash) : t.sheet;
+      const page = hash >= 0 ? Number(t.sheet.slice(hash + 1)) : 1;
+      const file = fileOf.get(base);
+      if (!file || !Number.isInteger(page)) { spansOf.set(t.sheet, null); continue; }
+      if (!docs.has(base)) docs.set(base, await openPdf(file));
+      spansOf.set(t.sheet, textSpans(await docs.get(base).page(page)));
+    }
+    const spans = spansOf.get(t.sheet);
+    if (!spans) continue;
+    const [x0, y0, x1, y1] = t.region;
+    const gx = 0.5 * (x1 - x0), gy = 0.5 * (y1 - y0);
+    t.spans = spans.filter((s) => s.x0 >= x0 - gx && s.x1 <= x1 + gx && s.y0 >= y0 - gy && s.y1 <= y1 + gy);
+  }
+  for (const doc of docs.values()) await doc.destroy();
   return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables };
 }
 
