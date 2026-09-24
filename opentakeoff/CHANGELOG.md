@@ -1,5 +1,59 @@
 # Changelog
 
+- **Assemblies exports: the CSV set, and coil-derived valves in the HIT
+  export (MCP 0.9.83).** `web/src/lib/assemblies/exportSet.ts` builds eight
+  CSV files from one application of the library: `equipment.csv`,
+  `lines.csv`, `lines_rollup.csv` (rounded at the roll-up), `points.csv` (a
+  unit's printed points list where the drawing has one, otherwise its
+  typical's points), `valves.csv`, `damper_actuators.csv`, `sensors.csv` and
+  `desigo_select_worksheet.csv`. Units are in the column names. Every
+  engineering field has a `*_source` column from one closed list (`schedule`,
+  `drawing`, `derived`, `project`, `partner_default`, `starter_default`,
+  `user`, `typical`, `selection`, `unknown`), and a field left for the
+  selection tool is blank on purpose. Responsibility is six columns, and the
+  partner columns (part number, cost, hours, labor category) stay blank
+  unless the partner's own library fills them (below). The
+  columns are documented in `docs/ASSEMBLIES_CSV.md`, and a test fails when a
+  column is not. **Takeoff → Assemblies → Download CSV set** zips them, and
+  `apply_assemblies` writes the same bytes with the new `export_dir`
+  argument (the whole project's, whatever `families` narrows the reply to).
+  Both add `assemblies.pdf`, the report as a PDF section
+  (`assemblies/reportPdf.ts`: a summary, exceptions first, the family table,
+  and the units with their schedule rows), and the Takeoff panel's PDF
+  carries the same section once assemblies are applied.
+
+  The HIT valve export (`compile_corpus_takeoff` `export_path`, the UI's
+  "Export to HIT" and `export-valve-size-template.mjs`) adds one row for each
+  hydronic coil printed inside an equipment schedule that no scheduled valve
+  serves, from the embedded-coil compile, flagged coil-derived. Flow is the
+  coil's printed GPM. System comes only from printed service text, and CoilDP
+  stays blank. Past 195 valves the rows split across workbooks
+  (`…_part1of2.xlsx`), so every row stays inside the template's dropdown
+  range.
+
+  `apply_assemblies`' description and the Takeoff panel's note now say what
+  the apply path does with drawing evidence: a printed points list replaces a
+  unit's typical point lines. Components declared in a reviewed BAS assembly
+  register are not read yet (ASSEMBLIES_BUG_CATALOGUE AS-21).
+
+  The partner's library travels as CSV. **Library → Export CSV / Import
+  CSV…** (`assemblies/libraryCsv.ts`: one row per record, option, variable
+  and line, read back through the profile's gate with every problem by row
+  and column), and `apply_assemblies`' `library_path` now takes that CSV.
+  **Project settings** in the Assemblies view set the hook-up profile's
+  switches and variables and apply the starter's responsibility presets
+  (`assemblies/presets.ts`); over MCP, `settings.hookup_defaults` and
+  `settings.responsibility_preset` do the same, under the project's own
+  settings. The export's **Scope** menu and `export_scope` narrow `lines.csv`
+  and the roll-up to one party's lines. A partner's own part numbers, unit
+  costs, hours and labor categories reach `lines.csv` and the device files
+  labelled `partner-entered`. `lines.csv` extends them (`extended_cost` is
+  the quantity with waste × unit cost, `extended_hours` the installed
+  quantity × hours; `assemblies/partner.ts`), and `report.partner` and the
+  PDF section sum them by labor category. The starter ships no price, rate or
+  hour. Three scripted persona scenarios (a BAS integrator, a mechanical
+  contractor, a distributor) run the whole path in CI.
+
 - **Controls assemblies on the shared path: `apply_assemblies` (MCP 0.9.82; 62 tools).**
   The scheduled HVAC equipment of a set now gets its controls typical and
   mechanical hook-up from an assembly library. `web/src/lib/assemblies/apply.ts`

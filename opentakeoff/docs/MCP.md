@@ -295,7 +295,13 @@ Fifty-eight tools, in the order an agent tends to reach for them:
   unit's controls typical and mechanical hook-up (options, variables, lines,
   each citing its schedule row and library rule) on the same shared path as
   the Takeoff panel; its `report.exceptions` come first, and an unresolved
-  unit names what it waits for rather than guessing.
+  unit names what it waits for rather than guessing. `export_dir` writes the
+  project's CSV set ([ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md)), and
+  `export_scope` narrows its lines to one party. `settings.hookup_defaults`
+  and `settings.responsibility_preset` start from the starter's hook-up
+  profile and responsibility presets. `library_path` takes a partner library
+  as JSON or as the panel's library CSV, and its own prices and hours come
+  back labelled partner-entered.
 - **Measure**—`one_click`, `detect_rooms` (both take `layers {include,
   exclude}` to override the sheet's stated layer roles for a call),
   `measure_polygon`, `measure_line`, `measure_surface` (wall SF: an open run

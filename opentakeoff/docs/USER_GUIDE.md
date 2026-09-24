@@ -559,13 +559,44 @@ setting, or two typicals that tie. Nothing is guessed. Resolve one with **Use â€
 which picks a candidate typical, or open **Details** to set an option or exclude
 the unit. Every override asks for a reason and is kept on the record under
 **Your overrides**. Below the exceptions sit a table per family (units, typicals,
-unresolved, without a typical, lines) and one row per unit. Click a unit for its
-options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
+unresolved, without a typical, lines) and one row per unit. Click a unit, or its
+**Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.
 Clicking a tag paints its schedule row on the drawing. **Printed points** shows the
 rows of any printed points list that names the unit. That list stands instead of
 the typical's point lines, which show as *replaced*: the drawing's own list wins.
 The typical never adds to it.
+
+**Project settings** (above the exceptions) hold what the library asks of the
+project, saved with it. The hook-up profile has switches, for example strainers
+and P/T ports at coils, hoses at terminal coils, and a condensate trap at fan
+coils. It also has variables, for example balancing, the coil valve body, the
+largest coil kit and the flange size. Hover over any of them for the
+specifications that make it a choice.
+**Fill unset from the starter's defaults** sets every one you have not set; a
+switch or count left unset keeps its lines waiting. **Who does what** applies a
+responsibility preset, for example "the controls contractor furnishes the valve
+and ships it to the kit maker". It shows which presets the project holds and
+lists your edits, which **Clear responsibility edits** removes.
+
+**Exports.** **Download CSV set** saves a zip of eight CSV files for the whole
+project: equipment, lines and their roll-up, points, valves, damper actuators,
+sensors, and a Desigo Select hand-entry worksheet. The **Scope** menu beside it
+narrows the lines and the roll-up to one party's lines (for example, only the
+mechanical contractor's: its trade, or whatever it furnishes or installs); the
+unit list, points and device schedules stay whole. The zip also holds
+`assemblies.pdf`, the same report as a PDF (exceptions first, then the family
+table and the units). Once you apply assemblies, the Takeoff panel's **PDF**
+carries that section after its own tables. Units are in the column names,
+and every engineering field has a `*_source` column that says whether the
+schedule, the drawing, a setting, the typical or nobody gave it; a field left for
+the selection tool is blank and says so. The columns are listed in
+[ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md), and MCP's `apply_assemblies` writes the
+same files with `export_dir`. The Takeoff panel's **Export to HIT** (after a
+control-valve takeoff) now adds one row for each hydronic coil printed inside an
+equipment schedule that no scheduled valve serves, with the coil's printed flow.
+Past 195 valves it saves several workbooks in a zip, so every row keeps the
+template's dropdowns.
 
 **The project keeps its versions.** Applying pins every definition the records
 used into the saved project. A later edit to your library never changes a saved
@@ -578,7 +609,16 @@ is read-only. **Clone to edit** makes your own version with the same id and the
 next version number, saved in your profile beside the starter. The editor
 validates live against the whole library: its shape, every expression against
 the families' attributes, device references, and sub-assembly references. What
-your version changes from the starter is tinted amber.
+your version changes from the starter is tinted amber. **Export CSV** saves the
+whole library as one spreadsheet, a row per option, variable, line and record, and
+**Import CSVâ€¦** reads your edited copy back through the same checks, listing any
+problem by row and column. The columns are in [ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md#the-library-as-csv-assemblies-librarycsv).
+Your own part numbers, unit costs, hours and labor categories go on your
+version's lines (the starter ships none). They come back labelled
+*partner-entered*: in `lines.csv`, with the cost and hours extended by each
+line's quantity; in the totals above the report; and in the PDF, which sums the
+extended cost and the hours by labor category. The currency and the categories
+are yours.
 
 ### Manual sections
 

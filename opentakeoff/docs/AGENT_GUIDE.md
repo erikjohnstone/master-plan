@@ -200,9 +200,12 @@ the options, variables and expanded lines, each citing the schedule row and the 
 Read `report.exceptions` first. An unresolved unit names what it waits for: an attribute the
 schedule does not print, a project setting, or two typicals that tie. That is the answer, not a
 failure. Report it, or pass the partner's value in `settings` or an override with a reason. Never
-pick a typical or an option the drawing does not decide. A typical never overwrites a printed
-points list or a drawing-declared component, and the records are proposals for the estimator,
-not approval.
+pick a typical or an option the drawing does not decide. A printed points list that names a
+unit stands instead of its typical's point lines. Prices and hours are never OpenTakeoff's: a
+partner library's own part numbers, costs and hours come back as `report.partner` and in
+`lines.csv` labelled partner-entered, and you report them that way. Components declared in a reviewed BAS
+assembly register are not read yet. The records are proposals for the estimator, not
+approval.
 
 ## 4. Withheld is not a failure — it is the answer
 

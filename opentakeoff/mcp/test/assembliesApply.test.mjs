@@ -13,7 +13,7 @@
 // same bytes. A dev document (federal-mech, fixture D04) is the input.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -23,6 +23,9 @@ import { buildServer } from "../server.ts";
 import { loadAssemblyLibrary, sessionAssembliesProject, STARTER_FILES } from "../src/assemblies.ts";
 import { applyAssemblies } from "../../web/src/lib/assemblies/apply.ts";
 import { assembliesReport } from "../../web/src/lib/assemblies/report.ts";
+import { assembliesCsvSet } from "../../web/src/lib/assemblies/exportSet.ts";
+import { libraryToCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
+import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { loadFixtureSession } from "./helpers/loadFixtureGraph.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -35,7 +38,7 @@ async function call(client, name, args) {
   return { isError: !!res.isError, data: JSON.parse(res.content[0].text), structured: res.structuredContent };
 }
 
-test("library load: the starter by default, an assemblies file, a profile; a rejected record fails the call", async () => {
+test("library load: the starter by default, an assemblies file, a profile, a library CSV; a rejected record fails the call", async () => {
   const starter = await loadAssemblyLibrary();
   assert.equal(starter.library.length, 31 + 16, "US typicals v1 (31) and the hook-ups (16)");
   assert.match(starter.source, new RegExp(STARTER_FILES.join(", ")));
@@ -50,6 +53,17 @@ test("library load: the starter by default, an assemblies file, a profile; a rej
   assert.deepEqual((await loadAssemblyLibrary(join(dir, "profile.otprofile"))).library.map((a) => a.id), ["fcu"], "the linear record is not this library's");
   await assert.rejects(loadAssemblyLibrary(join(dir, "bad.json")), /library gate rejected 1 assembly/);
   await assert.rejects(loadAssemblyLibrary(join(dir, "missing.json")), /library_path/);
+  // The panel's Library → Export CSV reads back as the same library; its problems by row and column.
+  const csv = libraryToCsv(starter.library);
+  await writeFile(join(dir, "library.csv"), csv);
+  const fromCsv = await loadAssemblyLibrary(join(dir, "library.csv"));
+  assert.match(fromCsv.source, /library CSV/);
+  assert.equal(JSON.stringify(fromCsv.library), JSON.stringify(starter.library), "the library CSV is lossless");
+  const [head, ...rows] = csv.split("\r\n");
+  const rowTypeAt = head.split(",").indexOf("row_type");
+  const broken = rows.map((r, i) => (i === 3 ? r.split(",").map((c, j) => (j === rowTypeAt ? "widget" : c)).join(",") : r));
+  await writeFile(join(dir, "broken.csv"), [head, ...broken].join("\r\n"));
+  await assert.rejects(loadAssemblyLibrary(join(dir, "broken.csv")), /broken\.csv: the library CSV has \d+ problems?: row 5 row_type/);
 });
 
 test("PARITY: apply_assemblies over MCP and the browser's apply of the wire project give byte-identical records and lines (federal-mech, D04)", { timeout: 20 * 60 * 1000 }, async () => {
@@ -92,6 +106,47 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   // reads that number as the served equipment, and a number names no unit.
   assert.ok(Array.isArray(project.printed_points));
   assert.equal(ui.instances.filter((i) => i.printed_points.length).length, 0);
+
+  // The CSV set: export_dir writes the shared builder's bytes, the same the
+  // browser's Download CSV set zips; for the whole project, whatever
+  // `families` narrows the reply to.
+  const dir = await mkdtemp(join(tmpdir(), "ot-asm-csv-"));
+  const exported = await call(client, "apply_assemblies", { export_dir: dir, families: ["AHU"] });
+  assert.equal(exported.isError, false, JSON.stringify(exported.data).slice(0, 300));
+  const expected = assembliesCsvSet({ ...ui, report: assembliesReport(ui.instances, ui.applications, ui.lines) });
+  assert.deepEqual([...exported.data.export_dir.files].sort(), [...Object.keys(expected), "assemblies.pdf"].sort());
+  for (const [name, text] of Object.entries(expected)) assert.equal(await readFile(join(dir, name), "utf8"), text, `${name}: the browser builder's bytes`);
+  // The report's PDF section, stamped as ours (so a re-export may replace it).
+  const pdf = await readFile(join(dir, "assemblies.pdf"));
+  assert.equal(pdf.subarray(0, 5).toString("latin1"), "%PDF-");
+  const { PDFDocument } = await import("pdf-lib");
+  assert.equal((await PDFDocument.load(pdf, { updateMetadata: false })).getProducer(), "OpenTakeoff");
+  assert.ok((await readFile(join(dir, "equipment.csv"), "utf8")).includes(",VAV,"), "every family, not only the reply's");
+  // Re-exporting over our own files needs no overwrite; an unrelated file there is refused, and nothing is written.
+  assert.equal((await call(client, "apply_assemblies", { export_dir: dir })).isError, false);
+  await writeFile(join(dir, "points.csv"), "not,ours\r\n");
+  const refused = await client.callTool({ name: "apply_assemblies", arguments: { export_dir: dir } });
+  assert.equal(refused.isError, true);
+  assert.match(refused.content[0].text, /points\.csv already exists and is not an OpenTakeoff export/);
+  assert.equal(await readFile(join(dir, "points.csv"), "utf8"), "not,ours\r\n");
+
+  // The starter's presets and a scope over MCP are the browser's: the same settings
+  // (presets.ts) and the same scoped files.
+  const scopedDir = await mkdtemp(join(tmpdir(), "ot-asm-csv-scope-"));
+  const presets = { hookup_defaults: true, responsibility_preset: "valve-shipped-to-kit-maker" };
+  const scoped = await call(client, "apply_assemblies", { export_dir: scopedDir, export_scope: "mechanical", settings: presets });
+  assert.equal(scoped.isError, false, JSON.stringify(scoped.data).slice(0, 300));
+  assert.equal(scoped.data.export_dir.scope, "mechanical");
+  const uiPresets = applyAssemblies({ project: wire, library, settings: settingsWithPresets({}, { hookupDefaults: true, responsibilityPreset: "valve-shipped-to-kit-maker" }) });
+  const expectedScoped = assembliesCsvSet({ ...uiPresets, report: assembliesReport(uiPresets.instances, uiPresets.applications, uiPresets.lines), scope: "mechanical" });
+  for (const [name, text] of Object.entries(expectedScoped)) assert.equal(await readFile(join(scopedDir, name), "utf8"), text, `${name}: mechanical scope under the presets`);
+  assert.notEqual(expectedScoped["lines.csv"], expected["lines.csv"]);
+  // export_scope narrows an export (so it needs export_dir); an unknown preset is refused.
+  const refused2 = async (args) => {
+    try { return !!(await client.callTool({ name: "apply_assemblies", arguments: args })).isError; } catch { return true; }
+  };
+  assert.equal(await refused2({ export_scope: "mechanical" }), true);
+  assert.equal(await refused2({ settings: { responsibility_preset: "no-such-preset" } }), true);
 
   // summary (default) leaves units and lines out; families narrows the reply only.
   const s = await call(client, "apply_assemblies", {});

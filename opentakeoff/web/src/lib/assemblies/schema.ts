@@ -188,6 +188,9 @@ export interface ExpandedLine {
   /** The drawing evidence the line rests on (the instance's cites). */
   cites: Cite[];
   source: AssemblyLine["source"];
+  /** The partner's own fields on the line's rule, as entered (D14); absent
+   * when the rule carries none, as every starter line does. */
+  partner?: NonNullable<AssemblyLine["partner"]>;
 }
 
 // ── The load gate ───────────────────────────────────────────────────────────

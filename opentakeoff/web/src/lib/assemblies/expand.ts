@@ -144,6 +144,7 @@ export function expandApplication(
         qty_source: known ? (usedDefault ? "partner_default" : "evidence") : null,
         cites: instance.cites,
         source: line.source,
+        ...(line.partner && Object.keys(line.partner).length ? { partner: { ...line.partner } } : {}),
       });
     }
   };

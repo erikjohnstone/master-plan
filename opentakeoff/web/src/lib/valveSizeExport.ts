@@ -74,6 +74,11 @@ export interface ValveSizeExportOptions {
    * row where a Positioning Signal was also resolved — i.e., only where
    * there's independent evidence the valve is BAS-actuated. Default true. */
   fillOperatingVoltageDefault?: boolean;
+  /** An embedded_coil_valve_gaps compile (compileTakeoff(…,
+   * "embedded_coil_gaps"), read-only): each hydronic coil found inside an
+   * equipment schedule with no matching scheduled valve adds one row,
+   * flagged coil-derived (ASSEMBLIES goal WP7.3). Omitted: none. */
+  coilGaps?: any;
 }
 
 /** Why Positioning Signal is blank on a row. */
@@ -103,7 +108,7 @@ export interface ValveSizeExportRow extends ValveSizeRow {
   /** Provenance, dropped before writing to the template — kept on the
    * in-memory row for reporting/testing, never fed to fillValveSizeTemplate
    * (which only reads the ValveSizeRow fields it knows). */
-  _source: { family: string; tag: string | null; sheetId: string | null; tableTitle: string | null };
+  _source: { family: string; tag: string | null; sheetId: string | null; tableTitle: string | null; coilDerived?: true };
   /** Computed or withheld values, for reporting only — never written to the
    * workbook either. */
   _derived: {
@@ -123,6 +128,8 @@ const COLUMN_KEYS: Array<keyof ValveSizeRow> = [
 export interface ValveSizeExportResult {
   rows: ValveSizeExportRow[];
   sourceItemCount: number;
+  /** Rows from coilGaps: coils with no scheduled valve, one valve each. */
+  coilDerivedCount: number;
   excludedFamilies: Array<{ family: string; count: number; reason: string }>;
   coverage: Record<string, { filled: number; total: number }>;
   notes: string[];
@@ -280,6 +287,34 @@ function mapRow(item: any, family: string, opts: Required<Pick<ValveSizeExportOp
   };
 }
 
+/** One coil-derived row: a hydronic coil printed inside an equipment
+ * schedule that no scheduled valve serves. Its flow is the coil's printed
+ * GPM. Its System comes only from printed service text (the coil's label,
+ * then its table's title), never from the entering water temperature.
+ * CoilDP stays blank like every row's (see the file header), and so does
+ * everything a valve schedule would have printed. */
+function mapCoilRow(item: any, opts: Required<Pick<ValveSizeExportOptions,
+  "hydronicTier" | "toleranceOverridePct" | "fillOperatingVoltageDefault">>): ValveSizeExportRow {
+  const cells = item?.cells || {};
+  const label = cellText(cells, "COIL LABEL");
+  return {
+    unitNo: item?.tag || cellText(cells, "SERVED") || null,
+    location: item?.building || null,
+    system: mapSystem(label, opts.hydronicTier) ?? mapSystem(item?.table_title ?? null, opts.hydronicTier),
+    ports: null,
+    pnClass: null,
+    lineSizeIn: null,
+    designFlowRateGpm: parseCleanNumber(cellText(cells, "GPM")),
+    consumerDpPsi: null,
+    branchDpPsi: null,
+    tolerancePct: opts.toleranceOverridePct ?? null,
+    positioningSignal: null,
+    operatingVoltage: null,
+    _source: { family: "EMBEDDED_COIL", tag: item?.tag ?? null, sheetId: item?.sheet_id ?? null, tableTitle: item?.table_title ?? null, coilDerived: true },
+    _derived: { valveDpPsi: null, positioningSignal: { value: null, header: null, printed: null, blankReason: "no_signal_printed" } },
+  };
+}
+
 /** "a ×3, b ×1" for the most frequent printed values, then "+N more". */
 function tally(values: string[], limit = 6): string {
   const counts = new Map<string, number>();
@@ -316,6 +351,9 @@ export function buildValveSizeExport(compiled: any, opts: ValveSizeExportOptions
     }
   }
   rows.sort((a, b) => (a.unitNo || "").localeCompare(b.unitNo || "") || 0);
+  // Coil-derived rows follow the scheduled valves, in the detector's order.
+  const coilItems = opts.coilGaps?.categories?.embedded_coil_gaps?.items || [];
+  for (const item of coilItems) rows.push(mapCoilRow(item, resolvedOpts));
 
   const excludedFamilies = Object.entries(categories)
     .filter(([name, cat]: [string, any]) => !families.includes(name) && (cat?.items?.length || 0) > 0)
@@ -360,9 +398,12 @@ export function buildValveSizeExport(compiled: any, opts: ValveSizeExportOptions
     "Operating Voltage defaults to the template's only defined value (24 VAC) on rows where a Positioning Signal was also resolved — set fillOperatingVoltageDefault:false to leave it blank instead.",
     "Ports needs BOTH a 2-way/3-way Configuration cell and (for 2-way only) a Fail position cell to resolve Normally Open vs Closed — printed schedules without a Fail position column leave 2-way rows blank rather than guess.",
   ];
+  if (coilItems.length) {
+    notes.push(`${coilItems.length} coil-derived row(s) follow the scheduled valves: hydronic coils printed inside equipment schedules (GPM with EWT/LWT) that no scheduled valve serves, one valve each. Flow is the coil's printed GPM; System comes only from the coil's printed label or its table's title (blank for ${rows.filter((r) => r._source.coilDerived && !r.system).length}); every other column is blank for the estimator.`);
+  }
   if (excludedFamilies.length) {
     notes.push(`${excludedFamilies.reduce((n, f) => n + f.count, 0)} schedule row(s) excluded as out of this template's scope: ${excludedFamilies.map((f) => `${f.family} (${f.count}) — ${f.reason}`).join("; ")}.`);
   }
 
-  return { rows, sourceItemCount, excludedFamilies, coverage, notes };
+  return { rows, sourceItemCount, coilDerivedCount: coilItems.length, excludedFamilies, coverage, notes };
 }

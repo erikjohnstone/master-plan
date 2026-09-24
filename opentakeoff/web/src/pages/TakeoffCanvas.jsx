@@ -157,7 +157,7 @@ import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, 
 import { buildXlsx } from "../lib/xlsx.js";
 import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
 import { buildValveSizeExport } from "../lib/valveSizeExport.ts";
-import { fillValveSizeTemplate, VALVE_SIZE_TEMPLATE_PUBLIC_PATH, VALVE_SIZE_TEMPLATE_FILENAME } from "../lib/valveSizeTemplate.ts";
+import { valveSizeTemplateFiles, VALVE_SIZE_TEMPLATE_PUBLIC_PATH } from "../lib/valveSizeTemplate.ts";
 import {
   reconcileScheduleFamilyWithSweeps,
   reconcileRowsToCsv,
@@ -8730,12 +8730,27 @@ export default function TakeoffCanvas() {
   // Siemens HIT sizing tool.
   async function exportControlValveTakeoffToHit() {
     if (!lastControlValveTakeoff) return;
-    const valveExport = buildValveSizeExport(lastControlValveTakeoff);
+    // Coil-derived valves (ASSEMBLIES WP7.3): the embedded-coil compile on the
+    // same production path, read-only. A failure stops the export rather than
+    // leave those valves out silently.
+    let coilGaps;
+    try {
+      coilGaps = await fetchProductionCorpusTakeoff("embedded_coil_gaps");
+    } catch (e) {
+      throw new Error(`Couldn't read the coils embedded in the equipment schedules, so the coil-derived valves can't be included: ${e?.message || e}`);
+    }
+    const valveExport = buildValveSizeExport(lastControlValveTakeoff, { coilGaps });
     const templateRes = await fetch(VALVE_SIZE_TEMPLATE_PUBLIC_PATH);
     if (!templateRes.ok) throw new Error(`template fetch ${templateRes.status}`);
     const templateBytes = new Uint8Array(await templateRes.arrayBuffer());
-    const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
-    downloadBytes(VALVE_SIZE_TEMPLATE_FILENAME, filled, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    // One workbook per 195 valves, so every row keeps its dropdowns.
+    const files = await valveSizeTemplateFiles(templateBytes, valveExport.rows);
+    if (files.length === 1) {
+      downloadBytes(files[0].filename, files[0].bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    } else {
+      const { zipSync } = await import("fflate");
+      downloadBytes("Valve_Size_Template_US_Global.zip", zipSync(Object.fromEntries(files.map((f) => [f.filename, f.bytes])), { level: 0 }), "application/zip");
+    }
   }
 
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
@@ -9128,6 +9143,12 @@ export default function TakeoffCanvas() {
         shapes: () => shapes,
         markups: () => markups,
         graphTables: () => graphTables,
+        // The Assemblies view's inputs as the canvas holds them (the project
+        // read through /__ot/assemblies-project and the project file's
+        // assemblies block): playwright-assemblies applies them in-page with
+        // the shared modules and compares the bytes with apply_assemblies.
+        assembliesProject: () => assembliesProject,
+        assembliesState: () => assembliesState,
         scheduleTables: () => currentGraphTables,
         openSchedules: () => setSchedulesOpen(true),
         // Put an answer in the thread without a model call, so the answer's

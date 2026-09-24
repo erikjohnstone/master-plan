@@ -176,7 +176,11 @@ export const compileCorpusTakeoffOutput = {
    * confirm what it expects). */
   valve_size_template: z.object({
     path: z.string(),
+    /** Every workbook written: one per 195 rows, so each row keeps its dropdowns. */
+    files: z.array(z.object({ path: z.string(), rows: z.number().int() })).optional(),
     rows_written: z.number().int(),
+    /** Rows for hydronic coils no scheduled valve serves (embedded-coil compile). */
+    coil_derived_rows: z.number().int().optional(),
     source_item_count: z.number().int(),
     excluded_families: z.array(z.object({ family: z.string(), count: z.number().int(), reason: z.string() })),
     coverage: z.record(z.string(), z.object({ filled: z.number().int(), total: z.number().int() })),
@@ -1851,6 +1855,10 @@ export const applyAssembliesOutput = {
       units: z.number().int(), records: z.number().int(), by_status: z.record(z.string(), z.number().int()),
       lines: z.number().int(), lines_by_status: z.record(z.string(), z.number().int()),
     }),
+    partner: z.object({
+      label: z.literal("partner-entered"), lines: z.number().int(), extended_cost: z.number().nullable(), costed_lines: z.number().int(),
+      hours: z.array(z.object({ labor_category: z.string(), extended_hours: z.number(), lines: z.number().int() })), not_extended: z.number().int(),
+    }).nullable().describe("The partner's own cost and labor fields, extended; null when the library carries none"),
     exceptions: z.array(z.record(z.string(), z.unknown())),
     families: z.array(z.record(z.string(), z.unknown())),
     units: z.array(z.record(z.string(), z.unknown())).optional(),
@@ -1858,4 +1866,5 @@ export const applyAssembliesOutput = {
   applications: z.array(z.record(z.string(), z.unknown())).optional(),
   lines: z.array(z.record(z.string(), z.unknown())).optional(),
   path: z.string().optional(),
+  export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
 };

@@ -15,7 +15,10 @@ import starterHookups from "../../web/src/lib/assemblies/starter/us-hookups-v1.j
 import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type CompiledProject, type HvacCompile } from "../../web/src/lib/assemblies/apply.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { assembliesReport, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
+import { assembliesCsvSet, type ExportFile } from "../../web/src/lib/assemblies/exportSet.ts";
 import { equipmentAssembliesOf } from "../../web/src/lib/assemblies/library.ts";
+import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
+import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
 import type { Override, ProjectSettings } from "../../web/src/lib/assemblies/select.ts";
 import { UserError } from "./format.ts";
@@ -51,13 +54,29 @@ function gate(raw: unknown[], source: string): AssemblyDefinition[] {
 }
 
 /** The starter library (typicals and hook-ups), or a library by path: an
- * assemblies file ({ assemblies: [...] } or a bare array) or an estimator
+ * assemblies file ({ assemblies: [...] } or a bare array), an estimator
  * profile, whose assembly_library holds linear records too (only records
- * with a `kind` are this library's). */
+ * with a `kind` are this library's), or a library CSV (the Takeoff panel's
+ * Library → Export CSV; libraryCsv.ts). The file is the library. */
 export async function loadAssemblyLibrary(path?: string): Promise<{ library: AssemblyDefinition[]; source: string }> {
   if (!path) {
     const raw: unknown[] = [...(starterTypicals.assemblies as unknown[]), ...(starterHookups.assemblies as unknown[])];
     return { library: gate(raw, "starter"), source: `starter (${STARTER_FILES.join(", ")})` };
+  }
+  if (/\.csv$/i.test(path)) {
+    let text: string;
+    try {
+      text = await readFile(path, "utf8");
+    } catch (e) {
+      throw new UserError(`library_path ${path}: ${e instanceof Error ? e.message : String(e)}`);
+    }
+    // The same parse and gate as the panel's Import CSV; every problem by row and column.
+    const { library, errors } = libraryFromCsv(text);
+    if (errors.length) {
+      throw new UserError(`${path}: the library CSV has ${errors.length} problem${errors.length === 1 ? "" : "s"}: `
+        + errors.slice(0, 5).map((e) => `${e.row ? `row ${e.row}` : e.record ?? "file"}${e.column ? ` ${e.column}` : ""}: ${e.message}`).join(" | "));
+    }
+    return { library, source: `${path} (library CSV)` };
   }
   let parsed: unknown;
   try {
@@ -77,12 +96,19 @@ export async function loadAssemblyLibrary(path?: string): Promise<{ library: Ass
   throw new UserError(`library_path ${path}: not an assemblies file ({ assemblies: [...] }, an array) or a profile ({ assembly_library: [...] })`);
 }
 
+/** Project settings, plus the starter's presets to build them from. */
+export type AssembliesSettingsInput = ProjectSettings & { hookup_defaults?: boolean; responsibility_preset?: string };
+
 export interface ApplyAssembliesOptions {
   library_path?: string;
-  settings?: ProjectSettings;
+  settings?: AssembliesSettingsInput;
   overrides?: Override[];
   families?: string[];
   detail?: "summary" | "units" | "lines";
+  /** Build the CSV set (exportSet.ts) of the whole application. */
+  csv?: boolean;
+  /** One party's lines in the CSV set's lines.csv and lines_rollup.csv. */
+  export_scope?: string;
 }
 
 export interface ApplyAssembliesResult {
@@ -90,6 +116,10 @@ export interface ApplyAssembliesResult {
   report: Omit<AssembliesReport, "units"> & { units?: AssembliesReport["units"] };
   applications?: ApplicationRecord[];
   lines?: ExpandedLine[];
+  /** The CSV set, file name → text, when asked for, and the whole
+   * project's report it was built with (the PDF section's). */
+  csv?: Record<ExportFile, string>;
+  csvReport?: AssembliesReport;
 }
 
 /** Apply a library to the Session's project and report it. `families`
@@ -98,7 +128,14 @@ export interface ApplyAssembliesResult {
 export async function applyAssembliesToSession(session: Session, opts: ApplyAssembliesOptions = {}): Promise<ApplyAssembliesResult & { project: CompiledProject }> {
   const project = await sessionAssembliesProject(session);
   const { library, source } = await loadAssemblyLibrary(opts.library_path);
-  const { instances, applications, lines } = applyAssemblies({ project, library, settings: opts.settings ?? {}, overrides: opts.overrides ?? [] });
+  const { hookup_defaults: hookupDefaults, responsibility_preset: responsibilityPreset, ...own } = opts.settings ?? {};
+  let settings: ProjectSettings;
+  try {
+    settings = settingsWithPresets(own, { hookupDefaults, responsibilityPreset });
+  } catch (e) {
+    throw new UserError(e instanceof Error ? e.message : String(e));
+  }
+  const { instances, applications, lines } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [] });
   const want = opts.families?.length ? new Set(opts.families) : null;
   const inst = want ? instances.filter((i) => want.has(i.family)) : instances;
   const apps = want ? applications.filter((a) => want.has(a.instance.family)) : applications;
@@ -106,10 +143,19 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   const report = assembliesReport(inst, apps, lns);
   const detail = opts.detail ?? "summary";
   const { units: _units, ...summary } = report;
+  // The CSV set is the whole project's, whatever the reply's families.
+  const whole = opts.csv ? (want ? assembliesReport(instances, applications, lines) : report) : undefined;
+  let csv: Record<ExportFile, string> | undefined;
+  try {
+    csv = whole ? assembliesCsvSet({ instances, applications, lines, report: whole, scope: opts.export_scope ?? null }) : undefined;
+  } catch (e) {
+    throw new UserError(e instanceof Error ? e.message : String(e));
+  }
   return {
     project,
     library: { source, assemblies: library.length },
     report: detail === "summary" ? summary : report,
     ...(detail === "lines" ? { applications: apps, lines: lns } : {}),
+    ...(csv ? { csv, csvReport: whole } : {}),
   };
 }

@@ -47,7 +47,7 @@ import { canonicalBasJson } from '../../web/src/lib/basCanonical.ts';
 import { inspectBasEngineering } from './basEngineeringReview.ts';
 import { writeEngineeringWorkbook } from './engineeringWorkbookFile.ts';
 import { exportBasEvidenceBundle, inspectBasEvidenceBundleFile } from './basEvidenceBundleFile.ts';
-import { basename } from 'node:path';
+import { basename, join } from 'node:path';
 import { viewBasOriginalSource } from './basSourceView.ts';
 import { restoreBasEvidenceFile } from './basRestoreFile.ts';
 import { basDrawingCommandSchema, basDrawingCommandResultSchema } from '../../web/src/lib/basDrawingInspection.ts';
@@ -55,7 +55,11 @@ import { runBasDrawingCommand } from './basDrawingReview.ts';
 import { basIssueCommandSchema, basIssueTransportResultSchema } from '../../web/src/lib/basIssueTransportContract.ts';
 import { runBasIssueTransport } from './basIssueTransport.ts';
 import { buildValveSizeExport } from '../../web/src/lib/valveSizeExport.ts';
-import { fillValveSizeTemplate, VALVE_SIZE_TEMPLATE_FILENAME } from '../../web/src/lib/valveSizeTemplate.ts';
+import { valveSizeTemplateFiles, VALVE_SIZE_TEMPLATE_FILENAME } from '../../web/src/lib/valveSizeTemplate.ts';
+import { assembliesPdfBytes } from '../../web/src/lib/assemblies/reportPdf.ts';
+import { RESPONSIBILITY_PRESETS } from '../../web/src/lib/assemblies/presets.ts';
+import { PARTIES } from '../../web/src/lib/assemblies/schema.ts';
+import { compileTakeoff } from '../../web/src/lib/compileTakeoff.mjs';
 import { fileURLToPath } from 'node:url';
 import { basScopeCommandSchema, basScopeTransportResultSchema } from '../../web/src/lib/basScopeTransportContract.ts';
 import { runBasScopeTransport } from './basScopeTransport.ts';
@@ -970,7 +974,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       bas_engineering_inspect: basEngineeringInspectRequestSchema.optional().describe('BAS only: replay retained engineering history in shared Python and inspect the selected retained capture without creating an engineering decision. Default recompile returns saved results as requires_python_replay; use this option before relying on them. verified_shared_python_replay establishes calculation equality for declared inputs, not source interpretation, installation or project completeness. Stale dependency status remains separate. No automatic approval or revision rebasing.'),
       bas_project_review: basProjectReviewRequestSchema.optional().describe('BAS only: inspect the shared, source-linked project finding queue for an exact retained capture. Returns original domain codes, affected subjects, source locations, saved constraint failures/unknowns, exclusions and dependency state. Does not dismiss findings, replay Python, verify stored PDF availability or approve a takeoff. First compile to obtain capture_id. Same view as Takeoff > Review & changes; original decisions and extraction remain unchanged.'),
       path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
-      export_path: z.string().optional().describe(`Optional directory for CSV/XLSX workbook tabs. For kind control_valves/T-VALVE-01, also writes ${VALVE_SIZE_TEMPLATE_FILENAME} — Siemens' own "Global Valves" mass-sizing template, template-filled (not rebuilt) with one row per compiled valve: Unit No./Location/System/Ports from the schedule, Line Size/Design flow rate straight off the schedule cells, Positioning Signal only from printed signal text (0-10 V or floating; "modulating" alone is never defaulted) and Operating Voltage only alongside it. Consumer Δp (the template's CoilDP, the coil's drop, which compiled valve rows do not carry) stays blank until the HIT owners confirm what it expects; the valve's own (GPM/Cv)^2 is reported in the notes as valve Δp (derived), never written to the sheet. PN class and Branch Δp are never on a plan schedule and are always left blank. Tolerance is blank (the template accepts only 10/20/30/40/50). See the reply's valve_size_template.coverage/notes for exactly what filled and why.`),
+      export_path: z.string().optional().describe(`Optional directory for CSV/XLSX workbook tabs. For kind control_valves/T-VALVE-01, also writes ${VALVE_SIZE_TEMPLATE_FILENAME} — Siemens' own "Global Valves" mass-sizing template, template-filled (not rebuilt) with one row per compiled valve: Unit No./Location/System/Ports from the schedule, Line Size/Design flow rate straight off the schedule cells, Positioning Signal only from printed signal text (0-10 V or floating; "modulating" alone is never defaulted) and Operating Voltage only alongside it. Consumer Δp (the template's CoilDP, the coil's drop, which compiled valve rows do not carry) stays blank until the HIT owners confirm what it expects; the valve's own (GPM/Cv)^2 is reported in the notes as valve Δp (derived), never written to the sheet. PN class and Branch Δp are never on a plan schedule and are always left blank. Tolerance is blank (the template accepts only 10/20/30/40/50). Hydronic coils printed inside equipment schedules that no scheduled valve serves add one row each after the scheduled valves (coil-derived: the coil's printed GPM, System only from printed service text; valve_size_template.coil_derived_rows). Past 195 valves the rows split across …_part1of2.xlsx and so on (valve_size_template.files), so every row keeps the template's dropdowns. See the reply's valve_size_template.coverage/notes for exactly what filled and why.`),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: compileCorpusTakeoffOutput,
@@ -1014,15 +1018,22 @@ No approval, installed count or complete requirement discovery. Changes stay in 
         // Siemens "Global Valves" mass-sizing template — same compiled
         // control-valve rows as the CSVs above, template-filled (byte-level;
         // see valveSizeTemplate.ts), never a second extraction path.
-        const valveExport = buildValveSizeExport(compiled);
+        // Coil-derived valves (ASSEMBLIES WP7.3): the embedded-coil compile
+        // on the same graph, read-only; one row per coil no scheduled valve
+        // serves, flagged coil-derived.
+        const coilGaps = compileTakeoff(session, await session.graphForPipeline(), "embedded_coil_gaps");
+        const valveExport = buildValveSizeExport(compiled, { coilGaps });
         const templatePath = fileURLToPath(new URL("../../web/public/templates/Valve_Size_Template_US_Global.xlsx", import.meta.url));
         const templateBytes = new Uint8Array(await (await import("node:fs/promises")).readFile(templatePath));
-        const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
-        const outFile = `${exportPath.replace(/\/$/, "")}/${VALVE_SIZE_TEMPLATE_FILENAME}`;
-        await writeFile(outFile, filled);
+        // One workbook per dropdown range (rows 6–200), every row once.
+        const files = await valveSizeTemplateFiles(templateBytes, valveExport.rows);
+        for (const f of files) await writeFile(`${exportPath.replace(/\/$/, "")}/${f.filename}`, f.bytes);
+        const outFile = `${exportPath.replace(/\/$/, "")}/${files[0].filename}`;
         compiled.valve_size_template = {
           path: outFile,
+          files: files.map((f) => ({ path: `${exportPath.replace(/\/$/, "")}/${f.filename}`, rows: f.rows })),
           rows_written: valveExport.rows.length,
+          coil_derived_rows: valveExport.coilDerivedCount,
           source_item_count: valveExport.sourceItemCount,
           excluded_families: valveExport.excludedFamilies,
           coverage: valveExport.coverage,
@@ -1038,14 +1049,16 @@ No approval, installed count or complete requirement discovery. Changes stay in 
 
   const assemblyValue = z.union([z.number(), z.string(), z.boolean()]);
   server.registerTool("apply_assemblies", {
-    description: `Controls assemblies (typicals) for the loaded set's scheduled HVAC equipment: the shared apply path the Takeoff panel's Assemblies view runs. It compiles hvac_equipment (the compile_corpus_takeoff path) and reads each row's canonical attributes, with the schedule notes printed with its table. Then it applies an assembly library to every unit: the starter library by default (US typicals v1 plus the mechanical hook-ups), or library_path for a partner library or an estimator profile. Each unit gets a record per layer: its typical (id@version), the options and variables with their source (attr, drawing, project, partner_default, starter_default, user), and a status: ok, unresolved, no_assembly (v1 has no typical for the family), excluded or overridden. The report lists the exceptions FIRST. An unresolved unit names what it waits for (an attribute the schedule does not print, a project setting, two tied typicals). Never guess it: report it, or pass the partner's value in settings (partnerDefaults, variables) or an override with a reason. Derived facts carry their rule and basis: a 100% outdoor-air air handler takes the DOAS typical, a gas-fired fan coil the furnace typical, and terminals_served comes from the terminal rows that name their air handler. Records are proposals for the estimator to review, not approval; typicals never overwrite printed points lists or drawing-declared components (those replace a typical's lines of the same role). detail: summary (default: totals, exceptions, per-family table), units (plus one row per unit with cites), lines (plus every record and expanded line: quantities, parameters and their sources, responsibility, rule and cites). families narrows the reply, never the application. path writes the full result (records, lines, report) as JSON. Cites (bbox) are in the compile's space: ${COORDS}`,
+    description: `Controls assemblies (typicals) for the loaded set's scheduled HVAC equipment: the shared apply path the Takeoff panel's Assemblies view runs. It compiles hvac_equipment (the compile_corpus_takeoff path) and reads each row's canonical attributes, with the schedule notes printed with its table. Then it applies an assembly library to every unit: the starter library by default (US typicals v1 plus the mechanical hook-ups), or library_path for a partner library (JSON, or the library CSV the Takeoff panel's Library → Export CSV writes) or an estimator profile. Each unit gets a record per layer: its typical (id@version), the options and variables with their source (attr, drawing, project, partner_default, starter_default, user), and a status: ok, unresolved, no_assembly (v1 has no typical for the family), excluded or overridden. The report lists the exceptions FIRST. An unresolved unit names what it waits for (an attribute the schedule does not print, a project setting, two tied typicals). Never guess it: report it, or pass the partner's value in settings (partnerDefaults, variables) or an override with a reason. settings.hookup_defaults starts from the starter hook-up profile (strainers, P/T ports, kits at 1 in. and below, manual balancing…) and settings.responsibility_preset from a responsibility preset (who furnishes and installs the coil valves); the project's own profile, variables and responsibility win over both. Derived facts carry their rule and basis: a 100% outdoor-air air handler takes the DOAS typical, a gas-fired fan coil the furnace typical, and terminals_served comes from the terminal rows that name their air handler. Records are proposals for the estimator to review, not approval; a printed points list that names a unit replaces its typical's point lines (the drawing's list stands), and components declared in a reviewed BAS assembly register are not read yet. detail: summary (default: totals, exceptions, per-family table), units (plus one row per unit with cites), lines (plus every record and expanded line: quantities, parameters and their sources, responsibility, rule and cites). families narrows the reply, never the application. path writes the full result (records, lines, report) as JSON. export_dir writes the CSV set for the whole project (equipment, lines, lines_rollup, points, valves, damper_actuators, sensors, desigo_select_worksheet; docs/ASSEMBLIES_CSV.md): the same bytes as the Takeoff panel's Download CSV set, with units in the headers and a *_source column beside every engineering field; plus assemblies.pdf, the report's PDF section (summary, exceptions first, per-family table, units with their schedule rows). export_scope narrows lines.csv and lines_rollup.csv to one party's lines (its trade, or any activity it does); the other files stay whole. A partner library's own part numbers, unit costs, hours and labor categories reach lines.csv extended by quantity and the report (report.partner, the PDF) as totals, always labelled partner-entered; the starter ships none. Cites (bbox) are in the compile's space: ${COORDS}`,
     inputSchema: {
-      library_path: z.string().optional().describe("An assemblies JSON file ({ assemblies: [...] } or an array) or an estimator profile (.otprofile JSON: its assembly_library's equipment records). Every record passes the library gate or the call fails with the rejections. Omit for the starter library"),
+      library_path: z.string().optional().describe("An assemblies JSON file ({ assemblies: [...] } or an array), a library CSV (.csv: the Takeoff panel's Library → Export CSV, one row per item; docs/ASSEMBLIES_CSV.md) or an estimator profile (.otprofile JSON: its assembly_library's equipment records). The file is the library. Every record passes the library gate or the call fails with the rejections (a CSV's by row and column). Omit for the starter library"),
       settings: z.object({
         variables: z.record(z.string(), assemblyValue).optional().describe("Project variables (wiring method, valve body, spare %, …) by id"),
         partnerDefaults: z.record(z.string(), assemblyValue).optional().describe("The partner's defaults for options and variables the drawing leaves unknown, keyed '<assembly id>.<id>' or '<id>'; each record names where it used one"),
         profile: z.record(z.string(), z.boolean()).optional().describe("Hook-up profile switches by id; an unset switch leaves its lines unresolved"),
         responsibility: z.record(z.string(), z.record(z.string(), z.string())).optional().describe("Per-project responsibility edits: role id → { activity: party }"),
+        hookup_defaults: z.boolean().optional().describe("Start from the starter hook-up profile's switches and variables (each cites the specifications that make it a choice); profile and variables given here win"),
+        responsibility_preset: z.enum(RESPONSIBILITY_PRESETS.map((p) => p.id) as [string, ...string[]]).optional().describe(`A responsibility preset under the project's own edits: ${RESPONSIBILITY_PRESETS.map((p) => `${p.id} (${p.label})`).join("; ")}`),
       }).optional().describe("Project settings; none are assumed"),
       overrides: z.array(z.object({
         tag: z.string(),
@@ -1059,14 +1072,17 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       families: z.array(z.string()).optional().describe("Only these (applied) families in the reply, e.g. ['VAV','AHU']"),
       detail: z.enum(["summary", "units", "lines"]).optional().describe("summary (default), units, or lines"),
       path: z.string().optional().describe("Optional JSON file for the full result"),
+      export_dir: z.string().optional().describe("Optional directory for the CSV set (eight CSV files and assemblies.pdf, the whole project's)"),
+      export_scope: z.enum(PARTIES).optional().describe("With export_dir: only this party's lines in lines.csv and lines_rollup.csv (its trade, or any activity it furnishes, installs, wires, powers, programs or tests)"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: applyAssembliesOutput,
-  }, run("apply_assemblies", async ({ library_path, settings, overrides, families, detail, path: outPath, overwrite }) => {
+  }, run("apply_assemblies", async ({ library_path, settings, overrides, families, detail, path: outPath, export_dir: exportDir, export_scope: exportScope, overwrite }) => {
     if (outPath) await assertWritable(outPath, "json", overwrite);
     // One application: the file gets every record and line; the reply only
     // what `detail` asks for.
-    const { project: _project, ...full } = await applyAssembliesToSession(session, { library_path, settings, overrides, families, detail: "lines" });
+    if (exportScope && !exportDir) throw new UserError("export_scope narrows the CSV set: pass export_dir too");
+    const { project: _project, csv, csvReport, ...full } = await applyAssembliesToSession(session, { library_path, settings, overrides, families, detail: "lines", csv: !!exportDir, export_scope: exportScope });
     const want = detail ?? "summary";
     const { units, ...summary } = full.report;
     const reply = {
@@ -1074,10 +1090,20 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       report: want === "summary" ? summary : { ...summary, units },
       ...(want === "lines" ? { applications: full.applications, lines: full.lines } : {}),
     };
-    if (!outPath) return reply;
-    const { writeFile } = await import("node:fs/promises");
-    await writeFile(outPath, JSON.stringify(full, null, 2));
-    return { ...reply, path: outPath };
+    const { mkdir, writeFile } = await import("node:fs/promises");
+    let exported: { dir: string; files: string[] } | undefined;
+    if (exportDir && csv && csvReport) {
+      await mkdir(exportDir, { recursive: true });
+      const names = Object.keys(csv) as (keyof typeof csv)[];
+      for (const name of names) await assertWritable(join(exportDir, name), "csv", overwrite);
+      await assertWritable(join(exportDir, "assemblies.pdf"), "pdf", overwrite);
+      for (const name of names) await writeFile(join(exportDir, name), csv[name]);
+      // The report's PDF section (the Takeoff panel's PDF carries the same).
+      await writeFile(join(exportDir, "assemblies.pdf"), await assembliesPdfBytes(csvReport));
+      exported = { dir: exportDir, files: [...names, "assemblies.pdf"], ...(exportScope ? { scope: exportScope } : {}) };
+    }
+    if (outPath) await writeFile(outPath, JSON.stringify(full, null, 2));
+    return { ...reply, ...(outPath ? { path: outPath } : {}), ...(exported ? { export_dir: exported } : {}) };
   }));
 
   server.registerTool("reconcile_schedule_plan", {

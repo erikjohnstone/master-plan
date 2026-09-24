@@ -7,14 +7,22 @@
 //
 // Units: exceptions first (each unresolved unit names what it waits for), a
 // table per family, a row per unit with its cites, options and lines;
-// overrides carry a reason. Library: the starter is read-only; clone a record
-// to edit it, with live validation against the whole library and an amber
-// tint on what it overrides.
+// overrides carry a reason. Project settings: the hook-up profile's switches
+// and variables and the responsibility presets (presets.ts), saved with the
+// project. Library: the starter is read-only; clone a record to edit it, with
+// live validation against the whole library and an amber tint on what it
+// overrides.
 import { useEffect, useMemo, useState } from "react";
 import { applyAssemblies } from "../lib/assemblies/apply";
+import { assembliesCsvSet } from "../lib/assemblies/exportSet";
+import { importLibraryCsv, libraryToCsv } from "../lib/assemblies/libraryCsv";
+import { downloadText } from "../lib/totals";
 import { cloneForEdit, combinedLibrary, overridesOf, validateEdit } from "../lib/assemblies/libraryEdit";
+import { activeResponsibilityPresets, HOOKUP_SWITCHES, HOOKUP_VARIABLES, hookupProfileDefaults, RESPONSIBILITY_PRESETS, withResponsibilityPreset } from "../lib/assemblies/presets";
 import { adoptUpdate, emptyAssembliesState, libraryUpdates, pinUsed, projectLibrary } from "../lib/assemblies/projectState";
 import { assembliesReport } from "../lib/assemblies/report";
+import { PARTIES } from "../lib/assemblies/schema";
+import { downloadArchive } from "../lib/projectArchive";
 
 const btn = {
   padding: "5px 10px", borderRadius: "var(--r-1)", border: "1px solid var(--ink-faint)",
@@ -40,7 +48,7 @@ function askReason(what) {
 function UnitDetail({ unit, lines, onOverride }) {
   const derived = Object.entries(unit.derived || {});
   return (
-    <div style={{ padding: "8px 12px 14px 28px", background: "var(--paper)" }} data-assembly-unit-detail={unit.tag}>
+    <div style={{ padding: "8px 12px 14px 28px", background: "var(--paper)" }} data-assembly-unit-detail={unit.tag} role="region" aria-label={`${unit.tag} ${unit.layer} details`}>
       {unit.reason && <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginBottom: 6 }}>Rule: <span style={mono}>{unit.reason}</span></div>}
       {unit.printed_points && (
         <div style={{ marginBottom: 8, fontSize: "var(--fs-s)" }}>
@@ -53,8 +61,8 @@ function UnitDetail({ unit, lines, onOverride }) {
         </div>
       )}
       {Object.keys(unit.options || {}).length > 0 && (
-        <table style={{ borderCollapse: "collapse", marginBottom: 10 }}>
-          <thead><tr><th style={th}>Option</th><th style={th}>Value</th><th style={th}>Source</th><th style={th} /></tr></thead>
+        <table style={{ borderCollapse: "collapse", marginBottom: 10 }} aria-label={`${unit.tag} options`}>
+          <thead><tr><th style={th}>Option</th><th style={th}>Value</th><th style={th}>Source</th><th style={th}><span className="workspace-sr-only">Override</span></th></tr></thead>
           <tbody>
             {Object.entries(unit.options).map(([id, o]) => (
               <tr key={id} style={o.source === "user" ? { background: amber } : undefined}>
@@ -71,7 +79,7 @@ function UnitDetail({ unit, lines, onOverride }) {
           </tbody>
         </table>
       )}
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+      <div style={{ overflowX: "auto" }}><table style={{ borderCollapse: "collapse", width: "100%" }} aria-label={`${unit.tag} lines`}>
         <thead><tr><th style={th}>Line</th><th style={th}>Kind</th><th style={th}>I/O</th><th style={th}>Qty</th><th style={th}>Status</th><th style={th}>Rule</th></tr></thead>
         <tbody>
           {lines.map((l, i) => (
@@ -85,7 +93,7 @@ function UnitDetail({ unit, lines, onOverride }) {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
       <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
         <button type="button" style={btn} onClick={() => onOverride({ exclude: true }, `excluding ${unit.tag}`)}>Exclude unit…</button>
       </div>
@@ -93,10 +101,122 @@ function UnitDetail({ unit, lines, onOverride }) {
   );
 }
 
+/** A typed setting: blank is unset; true/yes, false/no, a number, or text. */
+function parseSetting(text) {
+  const t = String(text ?? "").trim();
+  if (!t) return undefined;
+  if (/^(true|yes)$/i.test(t)) return true;
+  if (/^(false|no)$/i.test(t)) return false;
+  const n = Number(t);
+  return Number.isFinite(n) ? n : t;
+}
+
+const fieldset = { border: "1px solid var(--ink-faint)", borderRadius: "var(--r-1)", padding: "8px 10px", margin: 0, minWidth: 0 };
+const legend = { fontSize: "var(--fs-s)", fontWeight: 650, padding: "0 4px" };
+const input = { padding: "4px 6px", border: "1px solid var(--ink-faint)", borderRadius: "var(--r-1)", font: "inherit", fontSize: "var(--fs-s)", background: "var(--paper-bright)", color: "var(--ink)" };
+
+/** The project's settings the library reads: the hook-up profile's switches
+ * and variables, and who does what (a responsibility preset, or the edits it
+ * leaves). Each change is saved with the project and re-applies at once. */
+function ProjectSettingsView({ settings, onChange }) {
+  const profile = settings.profile ?? {};
+  const variables = settings.variables ?? {};
+  const active = activeResponsibilityPresets(settings);
+  const setSwitch = (id, v) => onChange({ ...settings, profile: { ...profile, [id]: v } });
+  const setVariable = (id, v) => {
+    const next = { ...variables };
+    if (v === undefined) delete next[id];
+    else next[id] = v;
+    onChange({ ...settings, variables: next });
+  };
+  const fillDefaults = () => {
+    const d = hookupProfileDefaults();
+    onChange({ ...settings, profile: { ...d.profile, ...profile }, variables: { ...d.variables, ...variables } });
+  };
+  const clearResponsibility = () => {
+    const next = { ...settings };
+    delete next.responsibility;
+    onChange(next);
+  };
+  const clearHookup = () => {
+    const next = { ...settings };
+    delete next.profile;
+    delete next.variables;
+    onChange(next);
+  };
+  const setCount = Object.keys(profile).length + Object.keys(variables).length;
+  return (
+    <details data-assemblies-settings style={{ marginBottom: 14 }}>
+      <summary style={{ cursor: "pointer", fontSize: "var(--fs-m)", fontWeight: 650 }}>
+        Project settings
+        <span style={{ fontWeight: 400, fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>
+          {" "}· {setCount} of {HOOKUP_SWITCHES.length + HOOKUP_VARIABLES.length} hook-up settings set · responsibility: {active.length ? active.join(", ") : settings.responsibility ? "edited" : "the typicals' matrix"}
+        </span>
+      </summary>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, padding: "8px 2px" }}>
+        <fieldset style={fieldset}>
+          <legend style={legend}>Hook-up profile</legend>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 6 }}>
+            <button type="button" style={btn} onClick={fillDefaults} data-assemblies-profile-defaults>Fill unset from the starter's defaults</button>
+            {setCount > 0 && <button type="button" style={btn} onClick={clearHookup} data-assemblies-profile-clear>Clear hook-up settings</button>}
+          </div>
+          {HOOKUP_SWITCHES.map((sw) => (
+            <label key={sw.id} title={sw.sources.join("\n")} style={{ display: "flex", gap: 6, alignItems: "baseline", fontSize: "var(--fs-s)", marginBottom: 3 }}>
+              <input type="checkbox" checked={profile[sw.id] === true} onChange={(e) => setSwitch(sw.id, e.target.checked)} data-assemblies-switch={sw.id} />
+              <span>{sw.label}{profile[sw.id] === undefined && <span style={{ color: "var(--ink-muted)" }}> (unset: its lines wait)</span>}</span>
+            </label>
+          ))}
+        </fieldset>
+        <fieldset style={fieldset}>
+          <legend style={legend}>Project variables</legend>
+          {HOOKUP_VARIABLES.map((v) => (
+            <label key={v.id} title={v.sources.join("\n")} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 110px", gap: 6, alignItems: "center", fontSize: "var(--fs-s)", marginBottom: 4 }}>
+              <span>{v.label}{v.unit ? ` (${v.unit})` : ""}</span>
+              {v.values ? (
+                <select value={variables[v.id] ?? ""} onChange={(e) => setVariable(v.id, e.target.value || undefined)} style={input} data-assemblies-variable={v.id}>
+                  <option value="">unset</option>
+                  {v.values.map((x) => <option key={x} value={x}>{x}</option>)}
+                </select>
+              ) : (
+                <input key={`${v.id}:${String(variables[v.id] ?? "")}`} defaultValue={variables[v.id] ?? ""} style={input} data-assemblies-variable={v.id}
+                  placeholder={v.default === null || v.default === undefined ? "unset" : `starter: ${v.default}`}
+                  onBlur={(e) => { const next = parseSetting(e.target.value); if (next !== variables[v.id]) setVariable(v.id, next); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); }} />
+              )}
+            </label>
+          ))}
+        </fieldset>
+        <fieldset style={fieldset}>
+          <legend style={legend}>Who does what</legend>
+          <select value="" style={{ ...input, width: "100%" }} aria-label="Apply a responsibility preset" data-assemblies-preset
+            onChange={(e) => { if (e.target.value) onChange(withResponsibilityPreset(settings, e.target.value)); }}>
+            <option value="">Apply a responsibility preset…</option>
+            {RESPONSIBILITY_PRESETS.map((pr) => <option key={pr.id} value={pr.id}>{pr.label}</option>)}
+          </select>
+          <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", margin: "6px 0" }} data-assemblies-presets-active={active.join(" ")}>
+            {active.length ? `Holds: ${active.map((id) => RESPONSIBILITY_PRESETS.find((pr) => pr.id === id)?.label ?? id).join("; ")}` : "No preset: each line keeps its typical's matrix."}
+          </div>
+          {settings.responsibility && (
+            <>
+              <ul style={{ margin: "0 0 6px", paddingLeft: 18, fontSize: "var(--fs-s)" }}>
+                {Object.entries(settings.responsibility).map(([role, cells]) => (
+                  <li key={role}><span style={mono}>{role}</span>: {Object.entries(cells).map(([a, party]) => `${a} ${party}`).join(", ")}</li>
+                ))}
+              </ul>
+              <button type="button" style={btn} onClick={clearResponsibility}>Clear responsibility edits</button>
+            </>
+          )}
+        </fieldset>
+      </div>
+    </details>
+  );
+}
+
 function LibraryView({ starter, partner, onSavePartner, library, rejected, updates, onAdopt }) {
   const [selected, setSelected] = useState(null);
   const [filter, setFilter] = useState("");
   const [draft, setDraft] = useState(null);
+  const [imported, setImported] = useState(null);
   const latestById = useMemo(() => {
     const m = new Map();
     for (const a of library) {
@@ -116,15 +236,43 @@ function LibraryView({ starter, partner, onSavePartner, library, rejected, updat
     setSelected(`${check.def.id}@${check.def.version}`);
     setDraft(null);
   };
+  // The library as CSV, one row per item (libraryCsv.ts): export all of it;
+  // import through the same gate as a profile, the starter kept read-only.
+  const importCsv = async (file) => {
+    if (!file) return;
+    const text = await file.text();
+    const r = importLibraryCsv(text, starter, partner);
+    if (r.added.length || r.replaced.length) onSavePartner(r.partner);
+    setImported({ file: file.name, ...r });
+  };
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "minmax(260px, 340px) minmax(0, 1fr)", gap: 16, padding: "12px 8px" }} data-assemblies-library>
+    <div style={{ display: "grid", gridTemplateColumns: "minmax(220px, 340px) minmax(0, 1fr)", gap: 16, padding: "12px 8px" }} data-assemblies-library role="region" aria-label="Assembly library">
       <div>
-        <input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter id, title, family…"
+        <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+          <button type="button" style={btn} onClick={() => downloadText("assemblies-library.csv", libraryToCsv(library), "text/csv")} data-assemblies-library-export>Export CSV</button>
+          <label style={{ ...btn, display: "inline-block" }}>
+            Import CSV…
+            <input type="file" accept=".csv,text/csv" style={{ display: "none" }} aria-label="Import a library CSV" data-assemblies-library-import
+              onChange={(e) => { importCsv(e.target.files?.[0]); e.target.value = ""; }} />
+          </label>
+        </div>
+        {imported && (
+          <div role="status" style={{ fontSize: "var(--fs-s)", marginBottom: 8 }} data-assemblies-import={imported.errors.length ? "errors" : "ok"}>
+            {imported.file}: {imported.added.length} added, {imported.replaced.length} replaced, {imported.unchanged.length} unchanged
+            {imported.errors.length > 0 && (
+              <ul style={{ color: "var(--c-danger)", margin: "4px 0 0", paddingLeft: 18 }}>
+                {imported.errors.slice(0, 12).map((e, i) => <li key={i}>{e.row ? `Row ${e.row}` : e.record}{e.column ? `, ${e.column}` : ""}: {e.message}</li>)}
+                {imported.errors.length > 12 && <li>…and {imported.errors.length - 12} more</li>}
+              </ul>
+            )}
+          </div>
+        )}
+        <input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter id, title, family…" aria-label="Filter the library"
           style={{ width: "100%", padding: "7px 9px", border: "1px solid var(--ink-faint)", borderRadius: "var(--r-1)", font: "inherit", marginBottom: 8 }} />
         {rejected.length > 0 && <div style={{ color: "var(--c-danger)", fontSize: "var(--fs-s)", marginBottom: 8 }}>{rejected.length} record(s) refused by the library gate: {rejected.slice(0, 3).map((r) => `${r.id}: ${r.errors[0]}`).join("; ")}</div>}
         <div style={{ maxHeight: "62vh", overflow: "auto" }}>
           {shown.map((a) => (
-            <button key={`${a.id}@${a.version}`} type="button" onClick={() => { setSelected(`${a.id}@${a.version}`); setDraft(null); }}
+            <button key={`${a.id}@${a.version}`} type="button" aria-pressed={selected === `${a.id}@${a.version}`} onClick={() => { setSelected(`${a.id}@${a.version}`); setDraft(null); }}
               style={{ ...btn, display: "block", width: "100%", textAlign: "left", marginBottom: 4, background: selected === `${a.id}@${a.version}` ? "var(--paper)" : "var(--paper-bright)" }}
               data-assembly-id={a.id}>
               <span style={mono}>{a.id}@{a.version}</span>
@@ -174,7 +322,7 @@ function LibraryView({ starter, partner, onSavePartner, library, rejected, updat
             )}
             {draft != null ? (
               <div>
-                <textarea value={draft} onChange={(e) => setDraft(e.target.value)} spellCheck={false}
+                <textarea value={draft} onChange={(e) => setDraft(e.target.value)} spellCheck={false} aria-label="Assembly definition (JSON)"
                   style={{ width: "100%", minHeight: "44vh", ...mono, fontSize: "var(--fs-xs)", border: `1px solid ${check?.errors.length ? "var(--c-danger)" : "var(--ink-faint)"}`, borderRadius: "var(--r-1)", padding: 8 }} />
                 {check?.errors.length ? <ul style={{ color: "var(--c-danger)", fontSize: "var(--fs-s)" }} data-assembly-edit-errors={check.errors.length}>{check.errors.slice(0, 12).map((e) => <li key={e}>{e}</li>)}</ul>
                   : <div style={{ color: "var(--ink-secondary)", fontSize: "var(--fs-s)", margin: "6px 0" }}>Valid against the library.</div>}
@@ -185,7 +333,7 @@ function LibraryView({ starter, partner, onSavePartner, library, rejected, updat
               </div>
             ) : (
               <>
-                <table style={{ borderCollapse: "collapse", marginBottom: 10 }}>
+                <table style={{ borderCollapse: "collapse", marginBottom: 10 }} aria-label={`${def.id} options`}>
                   <thead><tr><th style={th}>Option</th><th style={th}>Default</th><th style={th}>Auto</th><th style={th}>Label</th></tr></thead>
                   <tbody>{def.options.map((o) => <tr key={o.id} style={tint?.options.some((c) => c.id === o.id) ? { background: amber } : undefined}><td style={{ ...td, ...mono }}>{o.id}</td><td style={td}>{o.default === undefined ? "—" : String(o.default)}</td><td style={{ ...td, ...mono }}>{o.auto || ""}</td><td style={td}>{o.label}</td></tr>)}</tbody>
                 </table>
@@ -201,17 +349,21 @@ function LibraryView({ starter, partner, onSavePartner, library, rejected, updat
   );
 }
 
-export default function AssembliesPanel({ project, projectStatus = {}, onLoadProject, starter = [], partner = [], onSavePartner, state, onStateChange, onOpenCitation }) {
+export default function AssembliesPanel({ project, projectStatus = {}, onLoadProject, starter = [], partner = [], onSavePartner, state, onStateChange, onOpenCitation, projectName = "", onReport }) {
   const [view, setView] = useState("units");
   const [family, setFamily] = useState("");
   const [filter, setFilter] = useState("");
   const [open, setOpen] = useState(null);
+  const [exportErr, setExportErr] = useState("");
+  const [scope, setScope] = useState("");
   const { library, rejected } = useMemo(() => combinedLibrary(starter, partner), [starter, partner]);
   const applied = useMemo(() => (project ? applyAssemblies({
     project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [],
   }) : null), [project, library, state]);
   const report = useMemo(() => (applied ? assembliesReport(applied.instances, applied.applications, applied.lines) : null), [applied]);
   const updates = useMemo(() => (state ? libraryUpdates(state, library) : []), [state, library]);
+  // The Takeoff panel's PDF carries this report's section.
+  useEffect(() => { onReport?.(report); }, [report]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Pin what the records used (A5): the project keeps these versions until an
   // update is adopted.
@@ -233,18 +385,35 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
       : { tag: unit.tag, layer: unit.layer, reason, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}), ...(patch.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
     onStateChange?.({ ...base, overrides: [...others, entry] });
   };
+  const setSettings = (next) => onStateChange?.({ ...(state ?? emptyAssembliesState()), settings: next });
   const removeOverride = (i) => {
     const base = state ?? emptyAssembliesState();
     onStateChange?.({ ...base, overrides: base.overrides.filter((_, j) => j !== i) });
+  };
+  // The CSV set is the shared builder's bytes (exportSet.ts, the same files
+  // apply_assemblies writes with export_dir); only the zip is this surface's.
+  const downloadCsvSet = async () => {
+    setExportErr("");
+    try {
+      const files = assembliesCsvSet({ ...applied, report, scope: scope || null });
+      // Loaded on demand, as the takeoff PDF and the other archives load them.
+      const [{ strToU8, zipSync }, { assembliesPdfBytes }] = await Promise.all([import("fflate"), import("../lib/assemblies/reportPdf")]);
+      const pdf = await assembliesPdfBytes(report, { projectName });
+      const zip = zipSync({ ...Object.fromEntries(Object.entries(files).map(([name, text]) => [name, strToU8(text)])), "assemblies.pdf": pdf }, { level: 6 });
+      const base = String(projectName || "").trim().replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "project";
+      downloadArchive(`assemblies-${base}${scope ? `-${scope}` : ""}.zip`, zip);
+    } catch (e) {
+      setExportErr(`Couldn't build the CSV set: ${e?.message || e}`);
+    }
   };
   const linesOf = (u) => applied.lines.filter((l) => l.tag === u.tag && l.layer === u.layer && l.family === u.family && JSON.stringify(l.cites[0]) === JSON.stringify(u.cites[0]));
   const units = report ? report.units.filter((u) => (!family || u.family === family) && (!filter || `${u.tag} ${u.family} ${u.assembly ?? ""}`.toLowerCase().includes(filter.toLowerCase()))) : [];
 
   return (
-    <div data-assemblies-panel style={{ padding: "8px 8px 24px" }}>
+    <div data-assemblies-panel style={{ padding: "8px 8px 24px" }} role="region" aria-label="Assemblies">
       <div style={{ display: "flex", gap: 8, alignItems: "center", padding: "8px 0" }}>
-        <button type="button" style={{ ...btn, background: view === "units" ? "var(--ink)" : "var(--paper-bright)", color: view === "units" ? "var(--paper-bright)" : "var(--ink)" }} onClick={() => setView("units")}>Units</button>
-        <button type="button" style={{ ...btn, background: view === "library" ? "var(--ink)" : "var(--paper-bright)", color: view === "library" ? "var(--paper-bright)" : "var(--ink)" }} onClick={() => setView("library")}>
+        <button type="button" style={{ ...btn, background: view === "units" ? "var(--ink)" : "var(--paper-bright)", color: view === "units" ? "var(--paper-bright)" : "var(--ink)" }} aria-pressed={view === "units"} onClick={() => setView("units")}>Units</button>
+        <button type="button" style={{ ...btn, background: view === "library" ? "var(--ink)" : "var(--paper-bright)", color: view === "library" ? "var(--paper-bright)" : "var(--ink)" }} aria-pressed={view === "library"} onClick={() => setView("library")}>
           Library{updates.length ? ` · ${updates.length} update${updates.length === 1 ? "" : "s"}` : ""}
         </button>
         <span style={{ marginLeft: "auto", fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>
@@ -271,13 +440,27 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
             <span style={{ color: report.totals.by_status.unresolved ? "var(--c-danger)" : undefined }}><strong>{report.totals.by_status.unresolved}</strong> unresolved</span>
             <span><strong style={{ color: "var(--ink)" }}>{report.totals.by_status.no_assembly}</strong> without a typical</span>
             <span><strong style={{ color: "var(--ink)" }}>{report.totals.lines}</strong> lines ({report.totals.lines_by_status.ok} ok, {report.totals.lines_by_status.unresolved} unresolved, {report.totals.lines_by_status.replaced} replaced by drawing evidence)</span>
-            <button type="button" style={{ ...btn, marginLeft: "auto" }} onClick={() => onLoadProject?.()} disabled={!!projectStatus.loading}>{projectStatus.loading ? "Reading…" : "Re-read schedules"}</button>
+            {report.partner && (
+              <span data-assemblies-partner title="Partner-entered: your library's own figures, extended by each line's quantity. OpenTakeoff ships no prices, rates or hours.">
+                partner-entered: {report.partner.extended_cost ?? "no"} extended cost{report.partner.hours.length ? ` · ${report.partner.hours.map((h) => `${h.extended_hours} h ${h.labor_category || "(no category)"}`).join(", ")}` : ""}
+              </span>
+            )}
+            {exportErr && <span role="alert" style={{ color: "var(--c-danger)", marginLeft: "auto" }}>{exportErr}</span>}
+            <select value={scope} onChange={(e) => setScope(e.target.value)} aria-label="Scope of lines.csv and the roll-up" data-assemblies-scope
+              style={{ ...input, marginLeft: exportErr ? 0 : "auto" }}>
+              <option value="">Scope: all parties</option>
+              {PARTIES.map((party) => <option key={party} value={party}>Scope: {party.replace("_", " ")} lines</option>)}
+            </select>
+            <button type="button" style={btn} onClick={downloadCsvSet} data-assemblies-export>Download CSV set</button>
+            <button type="button" style={btn} onClick={() => onLoadProject?.()} disabled={!!projectStatus.loading}>{projectStatus.loading ? "Reading…" : "Re-read schedules"}</button>
           </div>
 
+          <ProjectSettingsView settings={state?.settings ?? {}} onChange={setSettings} />
+
           {report.exceptions.length > 0 && (
-            <section data-assemblies-exceptions={report.exceptions.length} style={{ marginBottom: 16 }}>
+            <section data-assemblies-exceptions={report.exceptions.length} style={{ marginBottom: 16 }} aria-label="Exceptions">
               <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>Exceptions first: {report.exceptions.length} record{report.exceptions.length === 1 ? "" : "s"} wait for something</h3>
-              <table style={{ borderCollapse: "collapse", width: "100%" }}>
+              <div style={{ overflowX: "auto" }}><table style={{ borderCollapse: "collapse", width: "100%" }} aria-label="Records that wait for something">
                 <thead><tr><th style={th}>Unit</th><th style={th}>Family</th><th style={th}>Layer</th><th style={th}>Waits for</th><th style={th}>Candidates</th><th style={th}>Resolve</th></tr></thead>
                 <tbody>
                   {report.exceptions.map((e, i) => (
@@ -292,23 +475,26 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                           const [id, version] = c.split("@");
                           return <button key={c} type="button" style={{ ...btn, marginRight: 4 }} onClick={() => override(e)({ assembly: { id, version } }, `choosing ${c} for ${e.tag}`)}>Use {id}</button>;
                         })}
-                        <button type="button" style={btn} onClick={() => setOpen(`${e.tag}|${e.layer}|${JSON.stringify(e.cites[0])}`)}>Details</button>
+                        <button type="button" style={btn} onClick={() => { setFamily(""); setFilter(""); setOpen(`${e.tag}|${e.layer}|${JSON.stringify(e.cites[0])}`); }}>Details</button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </table></div>
             </section>
           )}
 
-          <section style={{ marginBottom: 16 }} data-assemblies-families={report.families.length}>
+          <section style={{ marginBottom: 16 }} data-assemblies-families={report.families.length} aria-label="By family">
             <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>By family</h3>
-            <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <div style={{ overflowX: "auto" }}><table style={{ borderCollapse: "collapse", width: "100%" }} aria-label="Assemblies by family">
               <thead><tr><th style={th}>Family</th><th style={th}>Units</th><th style={th}>Typicals</th><th style={th}>Unresolved</th><th style={th}>No typical</th><th style={th}>Lines</th></tr></thead>
               <tbody>
                 {report.families.map((f) => (
-                  <tr key={f.family} style={{ cursor: "pointer" }} onClick={() => setFamily(family === f.family ? "" : f.family)}>
-                    <td style={{ ...td, fontWeight: family === f.family ? 650 : undefined }}>{f.family}</td>
+                  <tr key={f.family}>
+                    <td style={td}>
+                      <button type="button" aria-pressed={family === f.family} onClick={() => setFamily(family === f.family ? "" : f.family)}
+                        style={{ ...btn, border: "none", padding: 0, background: "transparent", textDecoration: "underline", fontWeight: family === f.family ? 650 : undefined }}>{f.family}</button>
+                    </td>
                     <td style={td}>{f.units}</td>
                     <td style={{ ...td, ...mono }}>{Object.entries(f.assemblies).map(([a, n]) => `${a} ×${n}`).join(", ") || "—"}</td>
                     <td style={{ ...td, color: f.by_status.unresolved ? "var(--c-danger)" : undefined }}>{f.by_status.unresolved}</td>
@@ -317,18 +503,18 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
           </section>
 
-          <section data-assemblies-units={units.length}>
+          <section data-assemblies-units={units.length} aria-label="Units">
             <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "4px 0 6px" }}>
               <h3 style={{ margin: 0, fontSize: "var(--fs-m)" }}>Units{family ? ` · ${family}` : ""}</h3>
-              <input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter tag, family, typical…"
+              <input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter tag, family, typical…" aria-label="Filter units"
                 style={{ padding: "5px 8px", border: "1px solid var(--ink-faint)", borderRadius: "var(--r-1)", font: "inherit", fontSize: "var(--fs-s)" }} />
               {family && <button type="button" style={btn} onClick={() => setFamily("")}>All families</button>}
             </div>
-            <table style={{ borderCollapse: "collapse", width: "100%" }}>
-              <thead><tr><th style={th}>Unit</th><th style={th}>Family</th><th style={th}>Layer</th><th style={th}>Typical</th><th style={th}>Status</th><th style={th}>Lines</th><th style={th}>Printed points</th></tr></thead>
+            <div style={{ overflowX: "auto" }}><table style={{ borderCollapse: "collapse", width: "100%" }} aria-label="Units and their typicals">
+              <thead><tr><th style={th}>Unit</th><th style={th}>Family</th><th style={th}>Layer</th><th style={th}>Typical</th><th style={th}>Status</th><th style={th}>Lines</th><th style={th}>Printed points</th><th style={th}><span className="workspace-sr-only">Details</span></th></tr></thead>
               <tbody>
                 {units.map((u) => {
                   const k = `${u.tag}|${u.layer}|${JSON.stringify(u.cites[0])}`;
@@ -346,16 +532,20 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                       <td style={{ ...td, ...mono }} title={u.printed_points ? u.printed_points.lists.join("\n") : "No printed points list names this unit"}>
                         {u.printed_points ? `${u.printed_points.rows} (${["AI", "AO", "BI", "BO"].map((io) => `${io} ${u.printed_points.by_io[io]}`).join(" ")})` : "—"}
                       </td>
+                      <td style={td}>
+                        <button type="button" style={btn} aria-expanded={open === k} aria-label={`${u.tag} ${u.layer} details`}
+                          onClick={(ev) => { ev.stopPropagation(); setOpen(open === k ? null : k); }}>{open === k ? "Hide" : "Details"}</button>
+                      </td>
                     </tr>,
-                    open === k ? <tr key={`${k}-d`}><td colSpan={7} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} /></td></tr> : null,
+                    open === k ? <tr key={`${k}-d`}><td colSpan={8} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} /></td></tr> : null,
                   ];
                 })}
               </tbody>
-            </table>
+            </table></div>
           </section>
 
           {(state?.overrides?.length ?? 0) > 0 && (
-            <section style={{ marginTop: 16 }} data-assemblies-overrides={state.overrides.length}>
+            <section style={{ marginTop: 16 }} data-assemblies-overrides={state.overrides.length} aria-label="Your overrides">
               <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>Your overrides</h3>
               {state.overrides.map((o, i) => (
                 <div key={i} style={{ fontSize: "var(--fs-s)", marginBottom: 4 }}>

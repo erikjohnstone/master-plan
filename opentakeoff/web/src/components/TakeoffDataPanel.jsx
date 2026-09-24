@@ -334,6 +334,8 @@ export default function TakeoffDataPanel({
   const [err, setErr] = useState("");
   const [jumpFamily, setJumpFamily] = useState("");
   const [hitBusy, setHitBusy] = useState(false);
+  // The Assemblies tab's report, once applied: the PDF carries its section.
+  const [assembliesReport, setAssembliesReport] = useState(null);
   const [hitErr, setHitErr] = useState("");
 
   const runExportToHit = async () => {
@@ -425,6 +427,7 @@ export default function TakeoffDataPanel({
           title: mode === "workflow" ? "Workflow data" : "Takeoff",
           projectName,
           mode,
+          assembliesReport,
         });
       }
     } catch (e) {
@@ -546,7 +549,7 @@ export default function TakeoffDataPanel({
               <span>{rows.length} cited source fields</span>
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
-              {tab === "assemblies" ? "Each scheduled unit's controls typical and hook-up, from your assembly library. Exceptions come first: an unresolved unit names what it waits for. Every line cites its schedule row and its rule; typicals never overwrite printed points lists or drawing-declared components."
+              {tab === "assemblies" ? "Each scheduled unit's controls typical and hook-up, from your assembly library. Exceptions come first: an unresolved unit names what it waits for. Every line cites its schedule row and its rule. A printed points list that names a unit stands instead of its typical's point lines."
                 : tab === "overview" ? "A guided estimator review of scope, grounding, BAS requirements, and open decisions. Raw extraction fields remain available in Audit data."
                 : tab === "review" ? basViewState?.projectReview?.snapshots
                 ? "Review a scoped snapshot with its exact original PDFs. Historical approval does not certify the current project."
@@ -687,7 +690,7 @@ export default function TakeoffDataPanel({
           {tab !== 'review' && basViewState?.projectReview?.returnFromDomain && <button type="button" onClick={() => setTab('review')}>← Return to issue review</button>}
           {tab === 'assemblies' && assemblies ? <AssembliesPanel project={assemblies.project} projectStatus={assemblies.status} onLoadProject={assemblies.onLoad}
               starter={assemblies.starter} partner={assemblies.partner} onSavePartner={assemblies.onSavePartner}
-              state={assemblies.state} onStateChange={assemblies.onStateChange} onOpenCitation={onOpenCitation} />
+              state={assemblies.state} onStateChange={assemblies.onStateChange} onOpenCitation={onOpenCitation} projectName={projectName} onReport={setAssembliesReport} />
             : tab === 'overview' && completeBasRun ? <BasTakeoffOverview corpusMeta={corpusMeta} citedFieldCount={rows.length} onNavigate={navigateOverview} />
             : tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
             onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}

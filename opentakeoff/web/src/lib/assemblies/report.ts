@@ -7,6 +7,7 @@
 // many each typical got is the takeoff's answer. The Takeoff panel and the
 // MCP tool both render this object; neither counts on its own.
 import type { AppliedInstance, DerivedAttribute, PrintedPointRow } from "./apply";
+import { partnerSummary, type PartnerSummary } from "./partner";
 import type { ApplicationRecord, Cite, ExpandedLine } from "./schema";
 
 type RecordStatus = ApplicationRecord["status"];
@@ -50,6 +51,9 @@ export interface FamilyRow {
 export interface AssembliesReport {
   schema: "opentakeoff.assemblies_report.v1";
   totals: { units: number; records: number; by_status: Record<RecordStatus, number>; lines: number; lines_by_status: Record<LineStatus, number> };
+  /** The partner's own cost and labor fields, extended and labelled
+   * "partner-entered" (WP9); null when no line carries one. */
+  partner: PartnerSummary | null;
   /** Records that wait for something, first: each names what it waits for. */
   exceptions: UnitRow[];
   families: FamilyRow[];
@@ -125,6 +129,7 @@ export function assembliesReport(
   return {
     schema: "opentakeoff.assemblies_report.v1",
     totals: { units: instances.length, records: applications.length, by_status: byStatus, lines: lines.length, lines_by_status: linesByStatus },
+    partner: partnerSummary(lines),
     exceptions,
     families,
     units,

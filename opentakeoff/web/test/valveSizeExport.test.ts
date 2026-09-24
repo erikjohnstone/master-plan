@@ -260,3 +260,22 @@ test("empty compile produces zero rows, not an error", () => {
   assert.deepEqual(result.rows, []);
   assert.equal(result.sourceItemCount, 0);
 });
+
+test("coil-derived rows: an embedded coil with no scheduled valve joins the export, flagged, with CoilDP blank and the system only from printed text", async () => {
+  const { buildValveSizeExport } = await import("../src/lib/valveSizeExport.ts");
+  const coilGaps = { kind: "embedded_coil_valve_gaps", categories: { embedded_coil_gaps: { items: [
+    { tag: "AHU-1", sheet_id: "m.pdf#9", table_title: "AIR HANDLING UNIT SCHEDULE", cells: { "COIL LABEL": { text: "CHW COIL" }, GPM: { text: "42" }, EWT: { text: "44" }, SERVED: { text: "" } } },
+    { tag: "AHU-2", sheet_id: "m.pdf#9", table_title: "AIR HANDLING UNIT SCHEDULE", cells: { "COIL LABEL": { text: "COOLING COIL" }, GPM: { text: "30" }, EWT: { text: "44" }, SERVED: { text: "" } } },
+  ] } } };
+  const r = buildValveSizeExport({ categories: {} }, { coilGaps });
+  assert.equal(r.rows.length, 2);
+  assert.equal(r.coilDerivedCount, 2);
+  const [a, b] = r.rows;
+  assert.deepEqual([a.unitNo, a.system, a.designFlowRateGpm, a.consumerDpPsi], ["AHU-1", "SCHW", 42, null]);
+  assert.equal(a._source.coilDerived, true);
+  assert.equal(a._source.family, "EMBEDDED_COIL");
+  assert.equal(b.system, null, "\"COOLING COIL\" prints no service: blank, never read off the EWT");
+  assert.ok(r.notes.some((n) => /2 coil-derived row/.test(n)), r.notes.join("\n"));
+  // Scheduled valves are unaffected, and a compile without coil gaps adds none.
+  assert.equal(buildValveSizeExport({ categories: {} }).coilDerivedCount, 0);
+});
