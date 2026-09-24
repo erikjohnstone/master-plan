@@ -544,6 +544,28 @@ Without bldg5406, dev measures 1,902 of 1,908 exact (99.7%). The gate stays
 failed as defined. The ceiling is recorded here and in PROGRESS; the gate is
 not redefined.
 
+**Root cause, found 2026-09-24 (the graph's own record, `vector_pipeline` in
+bldg5406's cached graph):**
+- VectorGrid ran on the schedule sheet and found the ruled grids of the
+  sideways schedules. It then declined them:
+  - `#6: 11x10 at 434,22,498,513` (the air terminal boxes) and
+    `#6: 11x7 at 358,125,398,424` with `#6: 2x6 at 358,22,398,56` (the fans),
+    each with "no header block above the data";
+  - page 18's pump schedule (`#18: 8x2 at 293,71,313,377`) with "unknown kind
+    and no title".
+- On a quarter-turned schedule the header block sits beside the data in page
+  coordinates, not above it, so VectorGrid's upright-header check refuses a
+  grid it has read.
+- The graph then kept `sheetgraph.ts`'s `extractAllQuarterTurnedTables`
+  reading instead. That path turns the vertical text spans and runs the
+  text-anchor extractor on them, and it produced the merged, dropped and
+  reordered columns above. Those tables carry `rotated_headers: true`.
+- The fix belongs in VectorGrid's header detection (read a grid whose text
+  runs vertically in the turned frame), which the table-engine loop owns.
+- With these 80 values read, dev would reach at most 2,047 of 2,053 (99.7%),
+  above GATE 2's 98%. Nothing else in dev is near the threshold.
+
+
 **AS-15 addendum (2026-09-24 01:12): an orphan outlives the run.** The
 baker-county-eoc graph rerun (`run-graph-baker.sh`, one set) exited 0 at
 00:42:19 and stopped its reaper with it. Its child had already spawned the
