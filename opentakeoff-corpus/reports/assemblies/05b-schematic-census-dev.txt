@@ -1,0 +1,65 @@
+# Assemblies goal — control-schematic census (dev), 2026-09-24
+# Reproduce: cd opentakeoff/mcp && node --import tsx scripts/assemblies-schematic-census.mjs ../../opentakeoff-corpus
+# Read-only: the sheet graph's L4.8 control schematics (controlSchematic.ts) through the cached graph. Dev documents only.
+
+
+004_MO_T2504_03_Interior_and_Exterior_Renovation (graph cache): 0 control schematic(s)
+
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for (graph cache): 2 control schematic(s)
+  031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68 · VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 2; equipment V-1(unbound)
+  031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69 · OUTSIDE AIR CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 9; equipment D-3(unbound), TT-4(unbound), AI-1(unbound), MT-2(unbound), AI-2(unbound), AI-4(unbound), TT-5(unbound), AI-5(unbound), TT-3(unbound), AI-6(unbound), TT-6(unbound), AI-7(unbound), TT-1(ambiguous), AI-8(unbound), SPS-1(unbound), AI-9(unbound), MT-1(unbound), AI-11(unbound), TT-2(unbound), D-2(unbound), BI-1(unbound), PSL-1(unbound), BI-2(unbound), IT-2(unbound), BI-3(unbound), IT-1(unbound), BI-4(unbound), TSL-1(unbound), BI-5(unbound), PSH-1(unbound), BI-6(unbound), MSH-1(unbound), BI-7(unbound), ALM-1(unbound), BI-8(unbound), ALM-2(unbound), SC-2(unbound), AO-1(unbound), D-1(unbound), AO-2(unbound), SC-1, AO-3(unbound), D-1(unbound), V-2(unbound), AO-4(unbound), D-2(unbound), V-1(unbound), AO-5(unbound), D-3(unbound), V-2(unbound), AO-8(unbound), V-1(unbound), AO-9(unbound), V-4(unbound), AO-10(unbound), V-4(unbound), BO-1(unbound), SST-2(unbound), BO-2(unbound), SST-1(unbound), BO-3(unbound), V-3(unbound), V-3(unbound), V-2(unbound), V-1(unbound), PSL-1(unbound), MT-2(unbound), PT-1(ambiguous), TT-4(unbound), IT-2(unbound), SC-1, SST-1(unbound), ALM-1(unbound), TT-1(ambiguous), MT-1(unbound), MSH-1(unbound), PSH-1(unbound), SPS-1(unbound), TT-5(unbound), TSL-1(unbound), TT-3(unbound), TT-6(unbound), IT-1(unbound), SC-1, SST-1(unbound), ALM-1(unbound), TT-2(unbound), MC-1(unbound)
+  units bound to one schedule row: SC-1 ×3 schematics
+
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile (graph cache): 0 control schematic(s)
+
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades (graph cache): 2 control schematic(s)
+  069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#6 · EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC — I/O AI 5 AO 4 DI 8 DO 5; instruments 18; equipment BCV-1(unbound), VFD-1, HWP-1, BP-2, HWP-2, BP-1, VFD-2, B-2(unbound), B-1(unbound)
+  069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#7 · EXISTING CHILLED WATER SYSTEM CONTROL SCHEMATIC — I/O AI 2 AO 0 DI 0 DO 0; instruments 8; equipment TO AHU-1 COIL(unbound), FROM AHU-1 COIL(unbound), AHU-1(unbound), AHU-1(unbound), CWP-1, BT-1(unbound), CWP-2, CH-1(unbound)
+  units bound to one schedule row: VFD-1 (22 I/O), HWP-1 (22 I/O), BP-2 (22 I/O), HWP-2 (22 I/O), BP-1 (22 I/O), VFD-2 (22 I/O), CWP-1 (2 I/O), CWP-2 (2 I/O)
+
+074_CA_West_Valley_College_STEM_Classroom_HVAC (graph cache): 0 control schematic(s)
+
+094_FL_Orange_County_Regional_History_Center_HVAC (graph cache): 0 control schematic(s)
+
+12_MT_MSU_ReidHall_Renovation (graph cache): 0 control schematic(s)
+
+baker-county-eoc (graph cache): 0 control schematic(s)
+
+bldg5406-hvac-demo (graph cache): 0 control schematic(s)
+
+federal-mech (graph cache): 13 control schematic(s)
+  federal-attachment4-mechanical.pdf#19 · CHILLED WATER SYSTEM - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 5; equipment FM-1(unbound), CH-1, T-1(unbound), AHU-1, DP-1(unbound), V-2(unbound), T-2(unbound), AHU-1, ED-1(unbound), SPA-1(unbound), CI-2(unbound), CI-1(unbound), AX-2(unbound), AX-1(unbound), CWP-1, T-3(unbound), CSR-1(unbound), SS-1(unbound), CI-5(unbound), AX-5(unbound), T-4(unbound), CWP-2, CSR-2(unbound), SS-2(unbound), CI-6(unbound), AX-6(unbound)
+  federal-attachment4-mechanical.pdf#20 · BOILER SYSTEM - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 8; equipment AHU-1, T-5(unbound), T-6(unbound), HWP-1, AX-5(unbound), CI-3(unbound), SS-1(unbound), CSR-1(unbound), FM-1(unbound), T-1(unbound), V-1(unbound), V-3(unbound), B-1, AX-6(unbound), CI-4(unbound), SS-2(unbound), CSR-2(unbound), T-2(unbound), DP-1(unbound), DP-2(unbound), AX-1(unbound), AX-2(unbound), CI-1(unbound), ED-1(unbound), CV-1(unbound), FM-2(unbound), T-3(unbound), V-2(unbound), B-2, T-4(unbound), AX-3(unbound), AX-4(unbound), CI-2(unbound), ED-2(unbound), T-7(unbound), CV-2(unbound)
+  federal-attachment4-mechanical.pdf#23 · CONSTANT AIR VOLUME BOX - CONTROL DIAGRAM — I/O AI 9 AO 6 DI 0 DO 0; instruments 0; equipment T-5(unbound), MD-4(unbound), V-4(unbound), T-6(unbound), T-7(unbound), T-5(unbound), MD-4(unbound), V-4(unbound), T-6(unbound), T-7(unbound), T-9(unbound), MD-5(unbound), V-5(unbound), T-10(unbound), T-11(unbound), T-9(unbound), MD-5(unbound), V-5(unbound), T-10(unbound), T-11(unbound)
+  federal-attachment4-mechanical.pdf#23 · VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment T-9(unbound), MD-5(unbound), V-5(unbound), T-10(unbound), T-11(unbound)
+  federal-attachment4-mechanical.pdf#23 · DUAL MAXIMUM VARIABLE AIR VOLUME BOX - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment T-9(unbound), MD-5(unbound), V-5(unbound), T-10(unbound), T-11(unbound)
+  federal-attachment4-mechanical.pdf#24 · FAN COIL UNIT - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 1; equipment T-1(unbound), V-1(unbound), CSR-1(unbound), SS-1(unbound)
+  federal-attachment4-mechanical.pdf#24 · MECHANICAL ROOM EXHAUST FAN - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 1; equipment SS-2(unbound), CSR-2(unbound)
+  federal-attachment4-mechanical.pdf#24 · TOILET EXHAUST FANS - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 1; equipment SS-1(unbound), CSR-1(unbound)
+  federal-attachment4-mechanical.pdf#24 · UNIT HEATER - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment T-1(unbound)
+  federal-attachment4-mechanical.pdf#24 · DX SPLIT SYSTEM - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment T-13(unbound)
+  federal-attachment4-mechanical.pdf#24 · FINNED TUBE RADIATOR - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment V-3(unbound), T-4(unbound)
+  federal-attachment4-mechanical.pdf#24 · LIGHTING CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment L-1(unbound), L-2(unbound), L-3(unbound), L-4(unbound), L-5(unbound), L-6(unbound), L-7(unbound)
+  federal-attachment4-mechanical.pdf#24 · EMERGENCY SHUTDOWN - CONTROL DIAGRAM — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment SW-1(unbound)
+  units bound to one schedule row: CH-1, AHU-1 ×3 schematics, CWP-1, CWP-2, HWP-1, B-1, B-2
+
+itd-d1-lab (graph cache): 13 control schematic(s)
+  itd-d1-lab-mechanical.pdf#16 · TEMPERATURE CONTROL SCHEMATIC — I/O AI 1 AO 0 DI 0 DO 0; instruments 1; equipment none
+  itd-d1-lab-mechanical.pdf#16 · DUCTLESS SPLIT SYSTEM CONTROL SCHEMATIC — I/O AI 1 AO 0 DI 0 DO 0; instruments 0; equipment DFC-1(unbound), DCU-1(unbound)
+  itd-d1-lab-mechanical.pdf#16 · HEAT RELIEF FAN CONTROL SCHEMATIC — I/O AI 1 AO 0 DI 2 DO 2; instruments 5; equipment EF-5
+  itd-d1-lab-mechanical.pdf#16 · HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC — I/O AI 1 AO 0 DI 3 DO 3; instruments 8; equipment D-1(unbound), EF-6, L-1, EF-7(unbound), L-2
+  itd-d1-lab-mechanical.pdf#17 · LAB EXHAUST SYSTEM CONTROL SCHEMATIC — I/O AI 2 AO 1 DI 3 DO 2; instruments 13; equipment LEF-1
+  itd-d1-lab-mechanical.pdf#17 · SPLIT SYSTEM CONTROL SCHEMATIC — I/O AI 2 AO 0 DI 4 DO 4; instruments 7; equipment F-1(unbound), CU-1(unbound)
+  itd-d1-lab-mechanical.pdf#18 · HEATING WATER SYSTEM CONTROL SCHEMATIC — I/O AI 8 AO 1 DI 4 DO 0; instruments 11; equipment D-1(unbound), ET-1, BCV-1, AS-1, BP-1, BP-1, PF-1, B-1, B-2, HWP-1, HWP-2
+  itd-d1-lab-mechanical.pdf#19 · VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC — I/O AI 7 AO 3 DI 3 DO 1; instruments 15; equipment AHU-1, D-1(unbound), HUM-1
+  itd-d1-lab-mechanical.pdf#20 · LAB VENTILATION WITH SNORKEL HOODS SYSTEM CONTROL SCHEMATIC — I/O AI 2 AO 1 DI 1 DO 0; instruments 1; equipment none
+  itd-d1-lab-mechanical.pdf#20 · LAB VENTILATION WITH MULTIPLE HOODS SYSTEM CONTROL SCHEMATIC — I/O AI 2 AO 1 DI 2 DO 0; instruments 1; equipment D-1(unbound)
+  itd-d1-lab-mechanical.pdf#21 · GENERAL EXHAUST FAN CONTROL SCHEMATIC — I/O AI 0 AO 0 DI 0 DO 0; instruments 0; equipment EF-1, EF-2, EF-3
+  itd-d1-lab-mechanical.pdf#21 · ELECTRIC UNIT HEATER CONTROL SCHEMATIC — I/O AI 1 AO 0 DI 1 DO 0; instruments 1; equipment EH-5
+  itd-d1-lab-mechanical.pdf#21 · LAB VENTILATION WITH GENERAL EXHAUST SYSTEM CONTROL SCHEMATIC — I/O AI 2 AO 1 DI 1 DO 0; instruments 2; equipment D-1(unbound), D-1(unbound), D-1(unbound)
+  units bound to one schedule row: EF-5 (5 I/O), EF-6 (7 I/O), L-1 (7 I/O), L-2 (7 I/O), LEF-1 (8 I/O), ET-1 (13 I/O), BCV-1 (13 I/O), AS-1 (13 I/O), BP-1 (26 I/O) ×2 schematics, PF-1 (13 I/O), B-1 (13 I/O), B-2 (13 I/O), HWP-1 (13 I/O), HWP-2 (13 I/O), AHU-1 (14 I/O), HUM-1 (14 I/O), EF-1, EF-2, EF-3, EH-5 (2 I/O)
+  own I/O: EF-5 — itd-d1-lab-mechanical.pdf#16 "HEAT RELIEF FAN CONTROL SCHEMATIC" AI 1 AO 0 BI 2 BO 2 (evidence_inventory)
+  own I/O: LEF-1 — itd-d1-lab-mechanical.pdf#17 "LAB EXHAUST SYSTEM CONTROL SCHEMATIC" AI 2 AO 1 BI 3 BO 2 (evidence_inventory)
+  own I/O: EH-5 — itd-d1-lab-mechanical.pdf#21 "ELECTRIC UNIT HEATER CONTROL SCHEMATIC" AI 1 AO 0 BI 1 BO 0 (evidence_inventory)
+
+TOTAL: 11 dev documents, 30 control schematics (15 with printed I/O tokens); 36 scheduled units bound to one schedule row, 25 of them on a schematic with I/O tokens; 3 schematics bind one unit and print I/O, giving 3 units their own printed I/O

@@ -714,6 +714,34 @@ from the schedule either. GATE 5 cannot pass on schedules.
 - Partner defaults (INPUT 4) for options the drawings leave open.
 Keys are never changed to fit.
 
+**The D6 census (2026-09-24, `reports/assemblies/05b-schematic-census-dev.txt`):**
+- The 11 dev documents carry 30 control schematics, and 15 print explicit I/O
+  tokens. 36 scheduled units bind to one schedule row through a schematic,
+  and 25 of them sit on a schematic with I/O tokens.
+- Only **3 schematics bind a single unit and print I/O**: itd-d1-lab EF-5,
+  LEF-1 and EH-5. All three are `evidence_inventory` status.
+- The other schematics are of two kinds:
+  - system diagrams (heating water, chilled water, a VAV air handler with its
+    humidifier), whose I/O belongs to several units at once, bound and
+    unbound;
+  - typical diagrams bound to no unit. Federal-mech's CAV, VAV, FCU, unit
+    heater and exhaust fan diagrams name no scheduled tag, and their title
+    naming a family is a word, not a binding (L1). Federal-mech's 13 diagrams
+    print I/O tokens on only one.
+- No dev unit has a printed points list (AS-22).
+- So drawing-decided options could reach at most 3 of the 244 dev rows
+  (≤ 1.2 pp). Partial I/O labelling makes an I/O-count match on system
+  diagrams unsafe: a wrong fit would decide options wrongly.
+- `ioMatch.ts` (tested) therefore stays unwired, and its header says so.
+- **Ceiling (demonstrated):** GATE 5 cannot pass on the documents this
+  environment stages. The truths that decide it sit in context (AS-18) and in
+  control drawings that do not bind I/O to one unit. What would move it:
+  - project-level statements the estimator makes once (BAS scope, a DoD
+    owner), reported apart from the auto-proposal;
+  - partner defaults (INPUT 4);
+  - dev documents whose control drawings bind one unit each (AS-2, INPUT 5).
+
+
 **GATE 5, measured 2026-09-24 at 6bfa8be (`reports/assemblies/05-typical-eval-{dev,heldout}.{json,md}`):**
 - Dev: 116 of 244 exact (47.5%; the gate needs 98%). 44 option_wrong, 21
   wrong_typical, 63 unresolved (one dishonest: bldg5406 AHU-1, AS-16), 0

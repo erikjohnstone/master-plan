@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-09-24T07:14:11.356Z",
+  "side": "heldout",
+  "documents": 6,
+  "totals": {
+    "documents": 6,
+    "errored": 0,
+    "documents_with_problems": 0,
+    "csv_problems": 0,
+    "hit_problems": 0,
+    "units": 438,
+    "lines": 6677,
+    "hit_scheduled_rows": 163,
+    "coil_derived_rows": 11,
+    "coil_derived_with_gpm": 11,
+    "coil_derived_with_system": 0,
+    "wp0_coils_without_valve": 11,
+    "documents_whose_coil_rows_differ_from_wp0": 0,
+    "workbooks": 6
+  }
+}

@@ -610,6 +610,30 @@ Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Bo
   - The first run also met Vite's one-time dependency re-optimization, which reloads the page.
   - Logs and screenshots: the session scratchpad's `uiproof/`.
 
+**WP7 GATE 7, WP6 GATE 6 and the D6 census (2026-09-24, later).**
+- **Instrument 5** (`mcp/scripts/assemblies-export-validate.mjs`, and `exportSet.ts` `csvSetProblems`, which the unit tests run too). For each document of the frozen split:
+  - the starter is applied to the compile;
+  - the CSV set is checked: documented headers, whole CRLF rows, closed-list sources, values consistent with their source, numbers in number columns, partner columns only when labelled;
+  - the HIT rows, coil-derived included, are filled into the template and each workbook read back.
+- **GATE 7 dev: green** (`reports/assemblies/07-export-validation-dev.{json,md}`):
+  - 11 documents, 0 errors, 0 CSV problems, 0 HIT problems;
+  - 471 units and 5,734 lines;
+  - HIT: 33 scheduled valves and 161 coil-derived rows. All 161 have their printed GPM; 60 have a System from printed text, and the rest leave System blank rather than guess;
+  - the coil-derived rows equal the WP0.1 census's 161 coils without a scheduled valve, with no document differing;
+  - one workbook each (no document passes 195 valves).
+- **GATE 7 held-out: green** (aggregates, `07-export-validation-heldout.{json,md}`):
+  - 6 documents, 0 errors, 0 CSV problems, 0 HIT problems;
+  - 438 units and 6,677 lines;
+  - HIT: 163 scheduled plus 11 coil-derived rows, equal to WP0's 11.
+  - GATE 7 also needs the guard at this state, which runs next.
+- **Instrument 4 bug, fixed before its first run:** the points compare picked documents from a census field the census never wrote, so it would have compared nothing and passed GATE 6. `documentsToCompare()` is now tested against the real census. A run with no unit to compare now reports "no evidence", not PASS.
+- **GATE 6 dev: no evidence.** federal-mech maps 0 printed rows to units (AS-22), and the goal's other listed documents are not staged (AS-2). So there is no diff to classify, and GATE 6 is not passed (`reports/assemblies/06-points-compare-dev.{json,md}`).
+- **GATE 6 held-out: fails** (aggregates, `06-points-compare-heldout.{json,md}`).
+  - navfac's printed lists name 40 units, by family: pump 22, boiler 6, fan 3, air handler 2, air-cooled chiller 2, heat-recovery chiller 2, unit heater 2, DOAS 1. 0 of the 40 agree with their typical by I/O type.
+  - None of the 40 diffs is classified, because classifying means reading a held-out document unit by unit, and the split forbids that (never tune on held-out).
+  - WP6 is therefore blocked: its only unit-level printed lists are held-out. What it needs is a dev document with unit-level lists (INPUT 5 partner jobs, or the goal's named sets, AS-2).
+- **D6 census** (`reports/assemblies/05b-schematic-census-dev.txt`): 30 control schematics on dev, 15 with I/O tokens. Only 3 bind one unit and print I/O: itd-d1-lab EF-5, LEF-1 and EH-5. The I/O-count match (`ioMatch.ts`) could decide options on at most 3 of 244 rows, and it would be unsafe on system diagrams, so it stays unwired. AS-19 records the demonstrated ceiling: GATE 5 cannot pass on the documents this environment stages.
+
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered
 only four hand-keyed sets. `sets.json` now registers 121 sets total (108
