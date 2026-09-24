@@ -30,7 +30,7 @@
 // The documents: every dev document of the frozen split and every present
 // corpus document outside it whose compile maps printed rows to a unit, as
 // the WP0.1 baseline counted them (reports/assemblies/00-baseline.json,
-// per_set[].points_list_rows); the BAS points compile has not changed since.
+// per_set[].points_lists.rows); the BAS points compile has not changed since.
 // Held-out documents (--heldout) print per-family agreement only: never
 // tuned on.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -97,6 +97,16 @@ export function comparePoints({ setId, snapshot, library, normalized: given = nu
     printed_rows: (snapshot.printed_points ?? []).length,
     unmatched: [...unmatched.values()].map((u) => ({ ...u, lists: [...u.lists] })).sort((a, b) => a.unit.localeCompare(b.unit)),
   };
+}
+
+/** The documents a side compares: those the WP0.1 census counted printed
+ * points-list rows on. Dev takes the dev split plus any present document
+ * outside the split; held-out takes the held-out split only. */
+export function documentsToCompare(split, baseline, side) {
+  const heldout = new Set(split.heldout.sets);
+  const withLists = new Set((baseline.per_set ?? []).filter((s) => (s.points_lists?.rows ?? 0) > 0).map((s) => s.id));
+  const pool = side === "heldout" ? split.heldout.sets : [...new Set([...split.dev.sets, ...withLists])].filter((id) => !heldout.has(id));
+  return pool.filter((id) => withLists.has(id));
 }
 
 /** The diffs to classify: every unit that does not agree. */
@@ -178,9 +188,7 @@ async function main() {
   const split = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", "01-split.json"), "utf8"));
   const baseline = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", "00-baseline.json"), "utf8"));
   const heldout = new Set(split.heldout.sets);
-  const withLists = new Set(baseline.per_set.filter((s) => (s.points_list_rows?.rows ?? 0) > 0).map((s) => s.id));
-  const pool = side === "heldout" ? split.heldout.sets : [...new Set([...split.dev.sets, ...withLists])].filter((id) => !heldout.has(id));
-  const setIds = only.length ? only : pool.filter((id) => withLists.has(id));
+  const setIds = only.length ? only : documentsToCompare(split, baseline, side);
   const bad = only.filter((id) => (side === "heldout") !== heldout.has(id));
   if (bad.length) {
     console.error(`not ${side} documents: ${bad.join(", ")}`);
@@ -217,7 +225,7 @@ async function main() {
     mkdirSync(dir, { recursive: true });
     const json = {
       generated_at: new Date().toISOString(), side, documents: setIds, errors,
-      census: "reports/assemblies/00-baseline.json per_set[].points_list_rows (WP0.1)",
+      census: "reports/assemblies/00-baseline.json per_set[].points_lists.rows (WP0.1)",
       total: { units: summary.units, agree: summary.agree, diffs: summary.diffs, by_class: summary.by_class, unclassified: summary.unclassified.length },
       by_family: Object.fromEntries(summary.by_family),
       ...(side === "dev" ? { documents_detail: results } : {}),

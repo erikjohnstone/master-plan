@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { comparePoints, diffsOf, parseClassification, summarizePoints } from "../scripts/assemblies-points-compare.mjs";
+import { comparePoints, diffsOf, documentsToCompare, parseClassification, summarizePoints } from "../scripts/assemblies-points-compare.mjs";
 import { applyAssemblies } from "../../web/src/lib/assemblies/apply.ts";
 import { sanitizeAssemblyDefinitions } from "../../web/src/lib/assemblies/schema.ts";
 
@@ -65,4 +65,15 @@ test("GATE 6: every diff needs a known class and its evidence", () => {
   const full = summarizePoints(units, parseClassification("s,P-2,project_specific,note 3\ns,P-3,typical_unresolved,waits for attr.vfd (schedule prints no drive)\n"));
   assert.equal(full.unclassified.length, 0);
   assert.deepEqual(Object.fromEntries(full.by_family), { PUMP: { units: 3, decided: 2, agree: 1 } });
+});
+
+test("the documents compared come from the WP0.1 census's points-list rows (the real census and split)", () => {
+  const reports = join(dirname(fileURLToPath(import.meta.url)), "../../../opentakeoff-corpus/reports/assemblies");
+  const split = JSON.parse(readFileSync(join(reports, "01-split.json"), "utf8"));
+  const baseline = JSON.parse(readFileSync(join(reports, "00-baseline.json"), "utf8"));
+  // The census counts printed rows on two documents: one dev, one held-out.
+  assert.deepEqual(documentsToCompare(split, baseline, "dev"), ["federal-mech"]);
+  assert.deepEqual(documentsToCompare(split, baseline, "heldout"), ["navfac-cherry-point-atc"]);
+  // A census with no rows names no document (the field the census writes is points_lists).
+  assert.deepEqual(documentsToCompare(split, { per_set: baseline.per_set.map((x) => ({ ...x, points_lists: { rows: 0 } })) }, "dev"), []);
 });
