@@ -8,7 +8,7 @@ here). Coordinator only, one heavy job at a time. Bug catalogue:
 `ASSEMBLIES_BUG_CATALOGUE.md`. Reports: `reports/assemblies/`.
 
 **Gates passed:** GATE 0 (2026-09-23; dev is below the TRUTH size target, a ceiling
-demonstrated in AS-7); GATE 1 (2026-09-23). **Now:** WP2 (structural normalizer).
+demonstrated in AS-7); GATE 1 (2026-09-23); GATE 3 (2026-09-24). GATE 2 measured 2026-09-24: dev fails on exact at a demonstrated extraction ceiling (AS-16); the held-out measurement is running. **Now:** WP4 (starter library).
 
 **SETUP — environment (2026-09-23).** Node 24.21.0 unpacked from the npm
 `node-linux-x64` package (nvm and nodejs.org are unreachable); one root
@@ -211,6 +211,87 @@ Also: test globs were added (web `test/assemblies/*.test.ts`, mcp
 eslint covers .js/.jsx only). The full guard runs after the corpus-eval
 baseline, one heavy job at a time.
 
+
+**WP3 — the assembly engine; GATE 3 passed (2026-09-24).**
+Shared path, `web/src/lib/assemblies/` (pure TS, zod): both surfaces choose,
+expand and roll up through these modules.
+- **expr.ts, the D8 language.** Numbers, text, true/false; attr./var./opt.
+  references; arithmetic, comparison, and/or/not; if, min, max, ceil,
+  floor, round, known.
+  - Parsed and never passed to eval; a test reads the source for eval and
+    Function.
+  - Unknown stays unknown and names the references it waits for. `and` is
+    false and `or` true whatever the unknown side holds; if() with an
+    unknown condition decides only when both branches agree.
+  - checkExpr refuses a reference the family's schema, or the assembly's
+    own variables and options, do not define, naming the token and its
+    position.
+  - A fuzz of 3,000 random token strings raises only ExprError.
+- **schema.ts.** Zod AssemblyDefinition (kinds equipment, project and part;
+  a part is a sub-assembly, never chosen on its own), ApplicationRecord and
+  ExpandedLine, per plan §8.2. The load gate refuses a record whose shape,
+  ids, expressions, references, a point's device, or sub-assembly
+  references (missing or cyclic) fail, with each reason.
+- **select.ts, plan §8.3 and D6/A4.**
+  - The highest-ranked true selector wins; a selector that reads an
+    unknown makes its assembly only possible. A possible assembly at least
+    as specific as the best true one, or a tie, leaves the unit
+    `unresolved` with its candidates and missing references.
+  - Options and variables take the user's value, then the attribute or
+    project variable, then a partner default (which the record names),
+    then the library default for a variable with no source.
+  - Overrides and exclusions carry a reason. Project assemblies apply once
+    per project.
+- **expand.ts, plan §8.4.** A hook-up profile switch that is off drops the
+  line, and one that is unset leaves it unresolved.
+  - `when` false drops the line; unknown leaves it unresolved.
+  - qty_base = qty × the unit's multiplier; waste is applied next, and
+    rounding is left to roll-up.
+  - Parameters carry their sources, and "<selection>" stays as is.
+  - A printed points list or a drawing-declared device replaces the
+    typical's lines of that role and never adds to them.
+  - A part expands under its parent's path and quantity; the container
+    line carries no quantity.
+- **rollup.ts.** Rows by building, floor, system and family × what is
+  bought. The order quantity is rounded here, after summing. Unresolved,
+  replaced and error lines are counted, never summed.
+- **The library home (WP3.1, D7):**
+  - `linear/assemblyLibrary.ts` skips records with a `kind`. Linear
+    records and their resolveLinearAssembly lines are byte-identical to a
+    golden captured before the change: 6 records (seeded, partner-edited,
+    malformed, duplicate), 48 resolutions over rect, round and pipe runs
+    and two settings. That holds with or without equipment assemblies in
+    the same array.
+  - `assemblies/library.ts` lets store.js and profile.js replace either
+    kind without dropping the other. Profile import and export carry
+    both.
+- **Tests:**
+  - web: `expr.test.ts` 8, `engine.test.ts` 12, `assemblyLibraryKind.test.ts` 3.
+  - Property: 40 seeds × 25 random VAV units expand without an exception.
+    Every roll-up (6 breakdowns) conserves qty_base and qty_with_waste and
+    holds every line exactly once.
+  - Determinism: 5 shuffles of units and library give byte-identical
+    output.
+  - Negative controls, each caught by its own test:
+    - a roll-up that drops half a unit (conservation, rounding);
+    - no instance sort (determinism);
+    - evidence that never replaces (precedence);
+    - an unknown condition treated as true (unknown propagation).
+- **GATE 3:**
+  - The tests above are green, the property tests raise nothing, and the
+    linear goldens are byte-identical.
+  - Guard: web typecheck and lint exit 0 (0 errors, the same 3 warnings as
+    SETUP). `npm test` ran 3,604 tests: 3,588 pass and the same 3 fail as
+    SETUP. The build exits 0.
+  - The guard's mcp half ran after WP2 (see WP2). The engine is web-only
+    until WP5: mcp imports nothing new (session.ts reads only
+    SEED_ASSEMBLIES).
+- **Not done here, on purpose:**
+  - No surface uses the engine yet (WP5).
+  - The starter library is WP4.
+  - Profile import and export carry equipment assemblies from now on, so
+    the docs and CHANGELOG entry come with WP5's user-facing
+    behaviour.
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered
