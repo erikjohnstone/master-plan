@@ -16,7 +16,19 @@ the partner review it requests is INPUT 4).
 - held-out fails at 85.8% exact with 2 invented, and must pass at DONE
   (AS-17; closing it needs more dev documents, AS-2).
 
-**Now:** WP5 (apply on the shared path): keys and instrument 3 done, the apply core in; GATE 5 dev 47.5% at the schedule-only ceiling (AS-19).
+**GATE 5, measured 2026-09-24, not passed** (AS-19; `reports/assemblies/05-typical-eval-{dev,heldout}.{json,md}`):
+- Typical eval dev: 116/244 exact (47.5%; needs 98%). This is at the schedule-only ceiling AS-19 demonstrates (at most 123/244). Counting only the rows that reach every drawing-decided option without a library default: 43/244.
+- Held-out: 21/91 exact (23.1%; needs 95%), reported with aggregates only.
+- Undisclosed: 0 on both sides (passes).
+- Parity: green on D04 (records, lines, report and the CSV set).
+- Guard (the working tree after WP7's first changes; logs in the session scratchpad `gate5/guard/`): no new failure against AS-1.
+  - web: typecheck, lint (0 errors, the 3 known warnings), the six BAS benches, bench, bench:linear and build exit 0. `npm test` shows only the 3 AS-1 failures.
+  - mcp: typecheck 0; the pretest suites pass. The main suite showed the 5 AS-1 failures and PARITY. PARITY's check of the PDF producer searched the raw bytes of a compressed PDF, a test bug; it now reads the producer with pdf-lib, and the rerun passes (below).
+  - The conformance worker hung on its idle sidecars again (AS-6); the run ended when the guard's own task was stopped.
+  - `check:tool-count` passes (62 tools). It failed at SETUP (60 vs 61), and WP5's tool-count edits fixed it.
+- NEW-DOCUMENT TEST #1: blocked on INPUT 5 (asked once in WP0, still open). The UI proof on a real PDF is the next heavy job.
+
+**Now:** GATE 5 is measured and not passed. The next lever is D6 from the control drawings: an I/O-count match against schematics bound to units (`ioMatch.ts`, written and unit-tested), pending a census. WP6's instrument is written, but AS-2, AS-22 and the held-out rule leave it little to compare. WP7's CSV set, PDF section and HIT changes are in. WP8's library CSV, presets and persona scenarios and WP9's partner-entered fields are in; their gates wait on the UI proof and the guard.
 
 **Draft PR:** erikjohnstone/master-plan#108 (opened at the end of WP2 per the BRANCH line; never merged by the loop).
 
@@ -527,6 +539,56 @@ Two children hung with defunct worker threads, on 011 (graph) and 083 (tags). Bo
   - Parity test and guard at the new HEAD; GATE 5 measured (dev and held-out).
   - NEW-DOCUMENT TEST #1 waits on INPUT 5 (a partner job PDF).
   - Then D6 evidence (control schematics, points lists and sequences bound to units) and the project settings AS-19 names.
+
+**WP5 continued, and GATE 5 (2026-09-24, later).**
+- **D6, printed points lists (6bfa8be).** The project now carries the rows the BAS points compile maps to units (`printed_points`, `corpusTakeoff.mjs` served-equipment logic, read-only). A unit a list names has its typical's point lines marked `replaced`.
+  - Matching: one spelling of the mark; a dashless spelling only when one scheduled unit reads that way; a dot is part of the number.
+  - A served-equipment mark with no letter is a row number (AS-22: federal-mech's four numbered BMS point schedules map to no unit).
+  - The typical eval does not move, by design: a printed list decides no typical or option.
+- **Register-declared components (the other half of D6) are not read** (AS-21). The register is incomplete by design, and the starter's roles are coarse (three VFD lines on an AHU), so a role match would drop lines. It needs a line identity, and WP6's point matching needs the same. The UI note and the MCP description said otherwise; both were corrected.
+- **Parity** (`mcp/test/assembliesApply.test.mjs`, D04): records, lines and report byte-identical between MCP and the browser's apply of the wire project, and now the CSV set too. The old "every line cites its row" check was wrong for the project assembly's lines (building meters), which cite their rule and no row; it now says so.
+- **GATE 5 measured:** see the GATE 5 block at the top. The held-out run was the first and only look at those documents' typicals (aggregates).
+- **The Takeoff → Assemblies panel:**
+  - it gets accessible names (regions, tables, pressed and expanded states), a keyboard **Details** button per unit and scroll containers for wide tables;
+  - the canvas probe exposes the assemblies project and state, so a browser run can recompute in-page and compare bytes;
+  - `web/scripts/playwright-assemblies.mjs` is the UI proof (its run is pending; see WP8 below).
+- **WP6 instrument 4** (`mcp/scripts/assemblies-points-compare.mjs`, 2 unit tests): per unit a printed list names, the typical's point lines against the printed rows by I/O type. Every diff needs a class and evidence in `reports/assemblies/06-points-diffs.csv`.
+  - Documents: the WP0.1 census's sets with mapped rows (federal-mech; navfac is held-out, aggregates only).
+  - The goal's other named sets (Eglin, Albany, USDA, Orange County 21) are not staged here (AS-2).
+- **WP7 (in part), MCP 0.9.83:**
+  - `exportSet.ts` builds the CSV set (equipment, lines, roll-up, points, valves, damper actuators, sensors, Desigo Select worksheet). Every engineering field has a `*_source` from one closed list, and a test fails on an undocumented column (`docs/ASSEMBLIES_CSV.md`).
+  - `reportPdf.ts` draws the report's PDF section: the takeoff PDF carries it, and the CSV zip and `export_dir` hold it as `assemblies.pdf`.
+  - `apply_assemblies` `export_dir` writes the same bytes the panel's Download CSV set zips. `safewrite` recognizes its own CSV by the header row.
+  - The HIT export adds coil-derived rows from the embedded-coil compile (flagged; GPM printed, System only from printed text, CoilDP blank) and splits past 195 valves, so every row keeps its dropdowns. This applies in the UI, MCP and the CLI script.
+- **Tests:** web assemblies and HIT 141 pass (exportSet 6, reportPdf 2 new). Web and mcp tsc exit 0. The mcp PARITY run with `export_dir` failed in the guard on a test bug (see the GATE 5 block) and passes after the fix.
+
+**WP8 and WP9 (2026-09-24, later; still MCP 0.9.83).**
+- **Library CSV (WP8.1, `libraryCsv.ts`).** One row per record, option, variable and line. Typed cells are encoded so they read back exactly. The same parse and gate as a profile's library, with every problem reported by row and column.
+  - Takeoff → Assemblies → Library has **Export CSV** and **Import CSV…**. A starter row is read-only: an unchanged copy is skipped, and a changed one is refused.
+  - `apply_assemblies` `library_path` takes the CSV; the file is the library.
+  - Lossless: the whole starter through the CSV and back is byte-identical after the gate (mcp library-load test), plus libraryCsv's own 4 tests.
+- **Project settings (`presets.ts`).** The starter's hook-up profile (switches and variables, each with the specifications that make it a choice) and its responsibility presets become project settings. `settingsWithPresets` lays the project's own settings over the defaults and a preset.
+  - The Assemblies view's **Project settings** section sets them, saved with the project.
+  - Over MCP: `settings.hookup_defaults` and `settings.responsibility_preset`.
+- **Scope (`exportSet.ts` `scope`).** `lines.csv` and `lines_rollup.csv` narrow to one party's lines: its trade, or any activity it does. The other files stay whole. The panel's **Scope** menu and `export_scope` set it.
+- **WP9, partner-entered (`partner.ts`).**
+  - A partner line's part number, unit cost, hours and labor category ride on `ExpandedLine.partner` (absent on every starter line) into `lines.csv` and the device files, with `partner_fields` = `partner-entered`.
+  - `lines.csv` extends them: `extended_cost` = `qty_with_waste` × `unit_cost` (the material bought), `extended_hours` = `qty` × `hours` (the installed quantity).
+  - `report.partner` sums the cost, and the hours by labor category. The PDF section prints them under "Partner-entered cost and labor".
+  - Nothing ships with numbers: the starter's grep test (c) passes.
+- **Persona scenarios (WP8.2, `web/test/assemblies/personas.test.ts`).**
+  - (a) The integrator clones the VAV typical, adds a part number, cost and hours, and sends the copy through the CSV gate. It applies and exports points, the Desigo worksheet and HIT, and the figures come back extended and labelled.
+  - (b) The mechanical contractor sets the hook-up profile (kits at 1 in. and below, no hoses, manual balancing), the kit-maker preset and the mechanical scope. Results:
+    - kits are sized from the schedule, with the end type left for selection;
+    - above 1 in. there are loose valves, with unions below 2 in. and flanges at 2 in. and above;
+    - `valves.csv` reads furnish `controls`, install `factory`;
+    - HIT is produced.
+  - (c) The distributor takes the device CSVs, with nothing priced.
+  - (b)'s fixture first left the air handler's coil connection sizes out, so its kit and valve lines were rightly unresolved. The fixture now prints them.
+- **Parity (D04).** The scoped CSV set under the presets, over MCP, is the browser builder's bytes. `export_scope` without `export_dir`, and an unknown preset, are refused. mcp assemblies apply and points compare: 4/4 pass (PARITY 151 s).
+- **Tests:** web assemblies and HIT 158 pass (among them partner 2, presets 3, scope 1, the PDF's partner section 1, personas 3). Web and mcp tsc exit 0. eslint: 0 errors (the 3 known warnings). The full web `npm test` has 3665 tests: 3649 pass, the 3 AS-1 failures, 13 skipped. `npm run build` exits 0.
+- **GATE 9** (unit tests; grep test (c) still green): **passes**. `partner.test.ts`, persona (a) and the PDF test assert the extension and the label; starter.test.ts's grep test (c) is green.
+- **GATE 8** (all three scenarios pass; round-trips lossless; guard green): the scenarios pass and the library round trip is lossless. The guard at this state (the full mcp suite after these `mcp/src` edits) and the UI proof are the next heavy jobs.
 
 2026-09-19 WP7 tag census — corpus expanded to 121 sets, three real
 recognizer bugs found and fixed: the previous WP7 baseline (below) covered

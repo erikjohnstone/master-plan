@@ -146,6 +146,16 @@ and npm test completed. The evidence is saved as
 pattern wraps `export-valve-size-template.mjs` runs: the script writes
 `report.json`, then its sidecars are stopped.
 
+**Again at the GATE 5 guard (2026-09-24):** the same hang, with the worker
+idle and two idle sidecars. This time the session's permission check refused
+a signal to the two sidecar PIDs. The run ended when the guard's own
+background task was stopped: the sidecars went with it, the worker's event
+loop drained, and the runner printed its summary. It reported the file-level
+"Promise resolution is still pending but the event loop has already
+resolved" as cancelled, and the two known AS-1 failures among its 20 tests.
+No other result changed. The per-run workaround now needs either that
+permission or the owning loop's fix.
+
 ---
 
 ## AS-7 — GATE 0's dev size is out of reach in this environment (BLOCKED — AS-2; ceiling demonstrated)
@@ -704,6 +714,36 @@ from the schedule either. GATE 5 cannot pass on schedules.
 - Partner defaults (INPUT 4) for options the drawings leave open.
 Keys are never changed to fit.
 
+**GATE 5, measured 2026-09-24 at 6bfa8be (`reports/assemblies/05-typical-eval-{dev,heldout}.{json,md}`):**
+- Dev: 116 of 244 exact (47.5%; the gate needs 98%). 44 option_wrong, 21
+  wrong_typical, 63 unresolved (one dishonest: bldg5406 AHU-1, AS-16), 0
+  undisclosed, 0 unmatched. Every count is the same as before the printed
+  points evidence (D6) went in, as expected: a printed list replaces a
+  unit's point lines and decides no typical or option. Counting only the
+  rows that reach every drawing-decided option without a library default,
+  43 of 244 are right (17.6%).
+- Held-out: 21 of 91 exact (23.1%; the gate needs 95%). 58 option_wrong, 1
+  wrong_typical, 11 unresolved (5 name a value the attribute key says is
+  printed: the normalizer's held-out misses, AS-17), 0 undisclosed.
+  Aggregates only; held-out was not looked at row by row.
+- No decided record rests on an unprinted value on either side. Parity is
+  green (records, lines, report and the CSV set, on D04).
+- The attribute eval at the same state is unchanged: dev 1,967 of 2,053
+  printed values exact (95.8%), 2 wrong, 0 invented.
+
+**What the next lever needs (LAW L1).** The misses are options the control
+drawings decide. A schematic's instrument labels ("SD", "TT", "DPS") are
+text, and turning them into a device role by pattern would be
+classification by regex. There are two structural routes, where regex only
+confirms:
+- the drawing's own abbreviation or symbol legend, a table the graph reads,
+  maps a label to a device;
+- a schedule's control column ("CONTROL: FAN-A") names the detail that
+  controls the unit, and the detail's printed I/O tokens and instruments
+  belong to it.
+The graph's L4.8 control schematics already bind equipment tags to schedule
+rows and carry explicit I/O tokens (`controlSchematic.ts`, read-only here).
+
 ---
 
 ## AS-20 — a printed hardwired chiller interface counted as a network interface (FIXED — library v1 auto expressions)
@@ -723,3 +763,78 @@ changed and the JSON rebuilt from it. Tests: apply.test.ts "a printed
 hardwired interface is not a network interface (chiller, boiler, RTU)".
 Dev: federal CH-1's `network_interface` now matches its key. The row still
 misses on `chw_isolation_valve` and `ufc_minimum_points` (AS-19).
+
+---
+
+## AS-21 — a register's declared component cannot stand in for a typical's device line by role alone (OPEN — this goal, WP6 with the points compare)
+
+**Found:** 2026-09-24, auditing D6's second evidence source for WP5.1: the
+components the BAS workflow's reviewed assembly register binds to equipment
+(`basAssemblyReview.ts` `basAssemblyView`; `basAssemblyRegister.ts`).
+
+**What the register holds:** per component its kind, the equipment it binds,
+its disposition and condition, and the declaration it rests on. Source
+declarations name a VFD with its fan role (SUPPLY, RETURN, EXHAUST, RELIEF),
+an onboard (factory BACnet) controller, a terminal equipment controller, a
+dual-technology occupancy sensor, a downstream static pressure sensor, or a
+primary supply-air damper. Explicit review decisions can name any of twelve
+kinds (valve, damper actuator, relay, …) with no qualifier. The register is
+incomplete by design (`discovery_complete: false`, `project_complete:
+false`).
+
+**Why a role match is wrong:** the starter's role ids are coarse. An AHU
+typical has `sf-vfd`, `rf-vfd` and `relief-fan-vfd`, all role `vfd`. It has
+`chw-valve`, `hw-valve` and `steam-valve`, all `control-valve`, and up to
+five `damper-actuator` lines. `expand.ts` replaces every device line whose
+role id is declared, so a declared supply-fan VFD would replace the return
+and relief VFD lines as well. Because the register is incomplete, those
+lines would be lost for no drawing reason. Replacing nothing leaves a
+typical's line beside the drawing's declaration, and its responsibility
+cells can contradict the declaration's (a factory-furnished VFD against a
+controls-furnished line), which A2 forbids.
+
+**A register kind names exactly one line only here:**
+- a terminal equipment controller → `terminal-unit-controller`;
+- a dual-technology occupancy sensor → `occupancy-sensor`.
+
+Each typical that has these roles has one line of them. Every other kind
+needs line identity: the fan a VFD drives, the service a valve controls, the
+damper an actuator moves.
+
+**Path:** give device and point lines a structured identity (for example the
+fan, service or position a line serves, as a line parameter the library
+already implies in its labels). Then match declarations to lines by role and
+identity, and printed points-list rows to point lines by I/O type and
+function. The printed points compare (WP6) needs the same identity. Until
+then the register is not read by the apply path, and the goal's WP5.1 bullet
+"drawing-declared components applied per D6" stays open. Printed points
+lists are applied (a unit's list stands instead of all its typical's point
+lines, because a printed list is the unit's whole list).
+
+---
+
+## AS-22 — a numbered points list's row number is read as the equipment its row serves (OPEN — owned by the BAS points compile's loop; guarded on the apply path)
+
+**Found:** 2026-09-24, wiring D6 (printed points lists) into the apply path.
+federal-mech (dev, fixture D04) prints four "HVAC CONTROLS - BMS POINT
+FUNCTION SCHEDULE" lists (CHW system, HHW system, VAV boxes,
+miscellaneous; sheets 19, 20, 23 and 24; 89 rows). Their rows are numbered
+1, 2, 3 and so on. The BAS points compile's served-equipment logic
+(`corpusTakeoff.mjs` `servedEquipmentFromBasRow`, read-only) falls back to
+the row's key, so every row's `served_equipment` is its own number ("1" …
+"32"). A project that also schedules units marked "1", "2" would have taken
+those rows as the units' printed points.
+
+**Guard (this goal, apply.ts `printedPointRows`):** a served-equipment mark
+with no letter is a row number, not a unit, the same rule
+`servingAirHandlers` uses for terminal rows. Tested in `apply.test.ts`, and
+the parity test asserts that D04's lists map to no unit.
+
+**What is lost:** these lists are real printed points for a system (the CHW
+plant, the HHW plant) or for a family (every VAV box). Mapping a list to a
+system or family from its title would be reading words; the owning loop
+would need a structural binding (for example a title that names a
+scheduled unit, or a list that sits inside a control detail bound to its
+equipment). Until then, D6 does not apply to these units and WP6 has no dev
+unit to compare.
+
