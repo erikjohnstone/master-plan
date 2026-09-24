@@ -1,0 +1,23 @@
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/069_ID_ITD_District_2_Laboratory_Heating_Upgrades.attrs.csv, one row each.
+# Sources read: M-501 (page 5) schedules and remarks; M-601 (page 6) heating water control schematic and sequence; M-602 (page 7) chilled water control schematic and sequence.
+#
+sheet,tag,family,typical_id,options,basis_note
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-1,PUMP,pump-vfd,ufc_minimum_points=false,"New secondary pump on VFD-1 (VFD schedule). Heating water control schematic: enable/disable DO, status DI, alarms DI, VFD speed AO. State DOT project (not DoD)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,HWP-2,PUMP,pump-vfd,ufc_minimum_points=false,"New secondary pump on VFD-2 (VFD schedule). Heating water control schematic: enable/disable DO, status DI, alarms DI, VFD speed AO. State DOT project (not DoD)."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-1,PUMP,none,,"New boiler pump started by its boiler: schematic 'BOILER INTERLOCK(N)', sequence 'EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING'. No BAS point on the pump, so no pump typical."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,BP-2,PUMP,none,,"New boiler pump started by its boiler: schematic 'BOILER INTERLOCK(N)', sequence 'EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING'. No BAS point on the pump, so no pump typical."
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-1,PUMP,pump-constant,ufc_minimum_points=false,New constant-speed primary pump (M-602 general: 'TWO (2) NEW CONSTANT SPEED PRIMARY CHILLED WATER PUMPS'); schematic: control relay (enable/disable) and current sensing relay (status). State DOT project (not DoD).
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,CWP-2,PUMP,pump-constant,ufc_minimum_points=false,New constant-speed primary pump (M-602 general: 'TWO (2) NEW CONSTANT SPEED PRIMARY CHILLED WATER PUMPS'); schematic: control relay (enable/disable) and current sensing relay (status). State DOT project (not DoD).
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-1(E),BOILER,none,,Existing unit (schedule remark 1: 'SPECIFICATIONS SHOWN FOR REFERENCE ONLY'); its controls are existing and stay (M-601/M-602: the control contractor modifies the existing DDC package and integrates only the new components). No new controls typical applies; v1 has no re-sequence-only typical. The boiler keeps its unit controller and BACnet interface.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,B-2(E),BOILER,none,,Existing unit (schedule remark 1: 'SPECIFICATIONS SHOWN FOR REFERENCE ONLY'); its controls are existing and stay (M-601/M-602: the control contractor modifies the existing DDC package and integrates only the new components). No new controls typical applies; v1 has no re-sequence-only typical. The boiler keeps its unit controller and BACnet interface.
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5,AHU-1(E),AHU,none,,"Existing unit (schedule remark 1: 'SPECIFICATIONS SHOWN FOR REFERENCE ONLY'); its controls are existing and stay (M-601/M-602: the control contractor modifies the existing DDC package and integrates only the new components). No new controls typical applies; v1 has no re-sequence-only typical. Remark 2 adds a new 3-way valve at the heating coil, a hook-up item on the existing unit."

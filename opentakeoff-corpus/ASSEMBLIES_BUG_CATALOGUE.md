@@ -577,3 +577,66 @@ path, and score held-out again at the next gate. The 6 frozen held-out
 documents never move to dev; the extra documents also give the second
 held-out tier AS-2 describes.
 
+
+---
+
+## AS-18 — 61 of the 244 dev typicals truths depend on context no schedule row carries (OPEN — this goal, WP5; decides how close the auto-proposal can come to GATE 5)
+
+**Found:** 2026-09-24, WP5.5, authoring `keys/*.typicals.csv` for the 11 dev
+documents. Each unit was judged from its schedule row, its remarks and the
+sequences and control schematics the sheets point to. Renders and raw PDF
+text only; the pipeline was not consulted.
+
+**Numbers:** 244 instances. 142 carry a v1 typical and 102 carry `none`.
+- About 41 of the `none` rows are families v1 has no typical for
+  (DUCT_MOUNTED_COIL, CONDENSING_UNIT, FIN_TUBE_RADIATION). The engine
+  gives `no_assembly` for these from the family alone.
+- The other 61 depend on context outside the row:
+
+| Context | Rows | Where it is written |
+|---|---|---|
+| no BAS in the project | 22 | baker (sequence: programmable thermostats), 004 (general controls note 1: factory controls "WITHOUT THE USE OF A BUILDING AUTOMATION SYSTEM") |
+| the unit has no BAS point (standalone) | 17 | itd EF-1..3, EH-7..9; federal UH, condensate pumps; 069 boiler pumps on a boiler interlock |
+| the BAS only monitors the unit | 15 | federal EV-1..6 and itd DFC-1 (split systems with a monitoring sensor); itd EH-1..6 (thermostat control, status and temperature read); itd BP-1/2 (boiler interlock, status read) |
+| existing unit, controls unchanged | 5 | 069 B-1(E), B-2(E), AHU-1(E); 031 WHSE-EUH-1/2 |
+| component of another unit | 2 | 031 WHSE-SF1/RF1, the air handler's fans |
+
+The v1 typicals are packages of new BAS work, so an estimator keys
+`none` in all five cases. The auto-proposal selects on the unit's
+attributes, so it cannot tell any of these cases apart from a BAS-controlled
+unit.
+
+- Two rows need a typical from another family: 094 AHU-07 and itd AHU-1
+  are 100% outdoor-air units keyed `doas`, and itd F-1, a gas furnace
+  claimed in a fan coil table, is keyed `split-dx-indoor`. The engine
+  can only pick within the family, so these are misses today.
+- Some units get a typical with no drawing sign of BAS control at all:
+  031 WHSE-EF1/EF2 and WHSE-P4, and itd EF-4, all on BAS projects. That
+  is flagged in each row's basis note.
+
+**Why:** these are drawing facts (sequences, general notes, `EXISTING`
+titles, `(E)` tags, a serving AHU named in the service column). The
+attribute schema does not carry them, and LAW L1 forbids reading them by
+regex.
+
+**What it means for GATE 5:** dev exact ≥ 98% needs at most 4 misses out of
+244. It cannot pass unless the shared apply path learns these contexts
+from evidence. Candidate paths, each to be audited before building:
+- (a) a project-level `bas_scope` variable, unset until the partner sets it
+  (A3), with the eval run under the key's disclosed setting;
+- (b) lifecycle evidence the pipeline already has, such as the `(E)` tag
+  convention and existing/demolition phasing;
+- (c) sequence reading through the disclosed VLM/AI path (AGENTS.md item 8);
+- (d) served-equipment links, for the AHU component fans.
+If none holds up, the remainder is a demonstrated ceiling. Keys are never
+changed to fit.
+
+**Key conventions (all 11 dev keys):**
+- `none` = no v1 typical fits. A `?` option = the drawings do not decide
+  it; it takes the library default, and an auto option that is not decided
+  is written `opt=?`.
+- An option that does not apply to the unit (a valve option on an electric
+  heater) is marked `?`.
+- DoD owners (Eglin AFB, Davis-Monthan AFB) set `ufc_minimum_points=true`
+  on HVAC typicals. Plumbing pumps set it false, outside UFC 3-410-01's HVAC
+  scope.

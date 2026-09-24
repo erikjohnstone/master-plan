@@ -1,0 +1,22 @@
+# baker-county-eoc.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/baker-county-eoc.attrs.csv, one row each.
+# Sources read: M0.01 (page 36) abbreviations and general notes; M5.01 (page 40) details and RTU sequence; M6.01 (page 41) schedules and remarks.
+#
+sheet,tag,family,typical_id,options,basis_note
+baker-county-eoc-bidset.pdf#41,RTU-1,RTU,none,,"M5.01 detail 5 RTU sequence: the unit's programmable thermostat starts it on its schedule or optimal start, with occupancy override at the thermostat; economizer with powered exhaust, CO2 demand ventilation and FDD annunciated on the zone thermostat, all packaged. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+baker-county-eoc-bidset.pdf#41,RTU-2,RTU,none,,"M5.01 detail 5 RTU sequence: the unit's programmable thermostat starts it on its schedule or optimal start, with occupancy override at the thermostat; economizer with powered exhaust, CO2 demand ventilation and FDD annunciated on the zone thermostat, all packaged. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+baker-county-eoc-bidset.pdf#41,ERV-01,ERV,none,,"Dwelling-unit ERV (85 CFM); remark 2 points to the sequence of operations, and the set has no ERV sequence. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+baker-county-eoc-bidset.pdf#41,EF-1,FAN,none,,"Restroom/custodial exhaust fan; remark 2 'PROVIDE FACTORY MOUNTED SPEED CONTROLLER', remark 1 disconnect by electrical. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+baker-county-eoc-bidset.pdf#41,CU-1,CONDENSING_UNIT,none,,"Split-system heat pump outdoor unit for FCU-1; v1 has no CONDENSING_UNIT typical. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+baker-county-eoc-bidset.pdf#41,CU-2,CONDENSING_UNIT,none,,"Split-system heat pump outdoor unit for FCU-2; v1 has no CONDENSING_UNIT typical. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+baker-county-eoc-bidset.pdf#41,FCU-1,FCU,none,,"Ductless split cassette (DX) on CU-1, the manufacturer's own controls. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
+baker-county-eoc-bidset.pdf#41,FCU-2,FCU,none,,"Ductless split wall unit (DX) on CU-2, the manufacturer's own controls; remark 2 integral condensate pump. The set has no BAS or DDC system: DDC and BMS appear only in the M0.01 abbreviations, and the one sequence (M5.01 detail 5, RTU) runs the units from programmable thermostats. No BAS typical applies."
