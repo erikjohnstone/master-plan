@@ -1,0 +1,18 @@
+# 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.attrs.csv, one row each.
+# Sources read: M-601/M-602 (pages 23-24) schedules; M-701 to M-705 (pages 25-29) controls; M-801/M-802 (pages 30-31) flow diagrams and sequences. HELD-OUT set: scored at gates only.
+#
+sheet,tag,family,typical_id,options,basis_note
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,432PCHW01-1,PUMP,pump-vfd,ufc_minimum_points=false,"M-801 chilled water sequence: 'CHILLED WATER PUMPS MUST BE MONITORED AND CONTROLLED BY THE DDC SYSTEM'; lead/standby, run at the constant speed set at TAB through the VFD, proof of flow by the common differential pressure transducer. No DoD owner or UFC citation on the sheets."
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,432PCHW02-1,PUMP,pump-vfd,ufc_minimum_points=false,"M-801 chilled water sequence: 'CHILLED WATER PUMPS MUST BE MONITORED AND CONTROLLED BY THE DDC SYSTEM'; lead/standby, run at the constant speed set at TAB through the VFD, proof of flow by the common differential pressure transducer. No DoD owner or UFC citation on the sheets."
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,432RCUA01-2H,CONDENSING_UNIT,none,,Condensing unit of the 432ACU08-2H heat pump split system; its points and sequence are the indoor unit's (M-704). v1 has no CONDENSING_UNIT typical.
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,432RCUA02-3H,CONDENSING_UNIT,none,,Condensing unit of the 432ACU09-3H heat pump split system; its points and sequence are the indoor unit's (M-704). v1 has no CONDENSING_UNIT typical.
