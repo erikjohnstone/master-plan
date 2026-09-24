@@ -562,7 +562,10 @@ the unit. Every override asks for a reason and is kept on the record under
 unresolved, without a typical, lines) and one row per unit. Click a unit for its
 options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.
-Clicking a tag paints its schedule row on the drawing.
+Clicking a tag paints its schedule row on the drawing. **Printed points** shows the
+rows of any printed points list that names the unit. That list stands instead of
+the typical's point lines, which show as *replaced*: the drawing's own list wins.
+The typical never adds to it.
 
 **The project keeps its versions.** Applying pins every definition the records
 used into the saved project. A later edit to your library never changes a saved

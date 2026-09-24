@@ -12,7 +12,8 @@ import { readFile } from "node:fs/promises";
 // The starter library is bundled (the published package ships only dist/).
 import starterTypicals from "../../web/src/lib/assemblies/starter/us-typicals-v1.json" with { type: "json" };
 import starterHookups from "../../web/src/lib/assemblies/starter/us-hookups-v1.json" with { type: "json" };
-import { applyAssemblies, compiledProjectOf, type CompiledProject, type HvacCompile } from "../../web/src/lib/assemblies/apply.ts";
+import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type CompiledProject, type HvacCompile } from "../../web/src/lib/assemblies/apply.ts";
+import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { assembliesReport, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
 import { equipmentAssembliesOf } from "../../web/src/lib/assemblies/library.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
@@ -24,14 +25,18 @@ import type { Session } from "./session.ts";
 export const STARTER_FILES = ["us-typicals-v1.json", "us-hookups-v1.json"] as const;
 
 /** The project the apply path reads, from this Session: the hvac_equipment
- * compile (the compile_corpus_takeoff path), its sheet graph and the text
- * spans of the claimed tables' pages. */
+ * compile (the compile_corpus_takeoff path), its sheet graph, the text spans
+ * of the claimed tables' pages, and the printed points-list rows mapped to
+ * units. */
 export async function sessionAssembliesProject(session: Session): Promise<CompiledProject> {
   const graph = await session.graphForPipeline();
   // hvac_equipment: categories of items (the union type also covers kinds
   // whose categories are shaped otherwise).
   const compiled = (await compileProductionTakeoff(session, graph, "hvac_equipment")) as unknown as HvacCompile;
-  return compiledProjectOf(compiled, graph, (sheet) => session.sheetTextSpans(sheet));
+  // The printed points lists and the units their rows serve (D6 evidence):
+  // the compile alone, without the BAS workflow's Python math.
+  const basPoints = compileTakeoff(session, graph, "bas_points") as unknown as BasPointsCompile;
+  return compiledProjectOf(compiled, graph, (sheet) => session.sheetTextSpans(sheet), basPoints);
 }
 
 /** A library through the load gate: every record the gate rejects fails the

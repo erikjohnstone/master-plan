@@ -10,6 +10,9 @@
     outdoor-air air handler is a DOAS, a gas-fired fan coil a furnace, and
     `terminals_served` comes from the terminal rows that name their air
     handler;
+  - attaches drawing evidence (D6): a unit named by a printed points list,
+    through the BAS points compile's own served-equipment mapping, has its
+    typical's point lines replaced by the printed rows;
   - applies the library (the starter US typicals v1 and hook-ups by default).
 
   Every unit gets a record per layer: its typical, options and variables

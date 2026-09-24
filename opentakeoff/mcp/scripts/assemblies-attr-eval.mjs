@@ -364,15 +364,16 @@ async function snapshotSet(corpus, spec, set) {
   const { openPdf, textSpans } = await import("../src/pdf.ts");
   const fileOf = new Map(files.map((f) => [basename(f), f]));
   const docs = new Map();
-  const { items, tables, pages } = await compiledProjectOf(hvac, graph, async (sheet) => {
+  const bas = compileTakeoff(null, graph, "bas_points");
+  const { items, tables, pages, printed_points } = await compiledProjectOf(hvac, graph, async (sheet) => {
     const at = sheetPage(sheet);
     const file = at && fileOf.get(at.file);
     if (!file) return null;
     if (!docs.has(at.file)) docs.set(at.file, await openPdf(file));
     return textSpans(await docs.get(at.file).page(at.page));
-  });
+  }, bas);
   for (const doc of docs.values()) await doc.destroy();
-  return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages };
+  return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages, printed_points };
 }
 
 /** One set's compile snapshot (snapshotSet), taken in a child process so a

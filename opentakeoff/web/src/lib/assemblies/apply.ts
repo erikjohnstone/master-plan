@@ -28,7 +28,11 @@
 //        every air handler when the project schedules no terminal unit and
 //        no duct-mounted (reheat) coil; all of them for the project's only
 //        AHU or RTU when no terminal row names one;
-//   4. the library is applied (select.ts) and expanded (expand.ts).
+//   4. drawing evidence is attached per unit (decision D6): the rows of the
+//      printed points lists the BAS points compile maps to the unit through
+//      its own served-equipment logic (corpusTakeoff.mjs, read-only). A unit
+//      with a printed list has its typical's point lines replaced by it;
+//   5. the library is applied (select.ts) and expanded (expand.ts).
 import type { Value } from "./expr";
 import { expandAll, type DrawingEvidence } from "./expand";
 import { normalizeCompileItem, vfdDrivenTags, type CompileItem, type NormalizedItem, type TableContext } from "./normalize";
@@ -52,12 +56,63 @@ export interface CompiledTable {
   spans?: readonly NoteSpan[];
 }
 
-/** A project's compiled equipment: the rows, the tables they came from and
- * the text spans of those tables' pages (sheet id → spans), when read. */
+/** One row of a printed points list, with the unit the BAS points compile
+ * maps it to (its served-equipment logic, read-only). */
+export interface PrintedPointRow {
+  /** The served equipment's mark, as the compile read it. */
+  unit: string;
+  list_title: string;
+  sheet_id: string;
+  /** The point's own mark (AI01, BO-3, …). */
+  point: string;
+  io: "AI" | "AO" | "BI" | "BO" | null;
+  description: string | null;
+  bbox: number[] | null;
+}
+
+/** A project's compiled equipment: the rows, the tables they came from, the
+ * text spans of those tables' pages (sheet id → spans), when read, and the
+ * printed points-list rows mapped to units, when compiled. */
 export interface CompiledProject {
   items: readonly CompiledItem[];
   tables?: readonly CompiledTable[];
   pages?: Readonly<Record<string, readonly NoteSpan[]>>;
+  printed_points?: readonly PrintedPointRow[];
+}
+
+/** What the apply path reads of a bas_points compile (corpusTakeoff.mjs
+ * compileBasTakeoff). */
+export interface BasPointsCompile {
+  categories?: { points_lists?: { lists?: ReadonlyArray<{
+    title: string;
+    sheet_id: string;
+    items?: ReadonlyArray<{ tag: string; point_type?: string | null; description?: string | null; bbox_px?: number[] | null; served_equipment?: string | null }>;
+  }> } };
+}
+
+const IO = new Set(["AI", "AO", "BI", "BO"]);
+
+/** The printed points-list rows that name the unit they serve. A row the
+ * compile maps to no unit is left out: it cannot replace anything. So is a
+ * row whose served equipment has no letter: a numbered list's row number,
+ * which the compile reads as its key, is not a unit mark (the same rule as
+ * servingAirHandlers). */
+export function printedPointRows(bas: BasPointsCompile | null | undefined): PrintedPointRow[] {
+  const out: PrintedPointRow[] = [];
+  for (const list of bas?.categories?.points_lists?.lists ?? []) {
+    for (const it of list.items ?? []) {
+      const unit = String(it.served_equipment ?? "").trim();
+      if (!/[A-Z]/i.test(unit)) continue;
+      const io = String(it.point_type ?? "").toUpperCase();
+      out.push({
+        unit, list_title: list.title, sheet_id: list.sheet_id, point: it.tag,
+        io: IO.has(io) ? (io as PrintedPointRow["io"]) : null,
+        description: it.description ?? null,
+        bbox: Array.isArray(it.bbox_px) && it.bbox_px.length === 4 ? [...it.bbox_px] : null,
+      });
+    }
+  }
+  return out;
 }
 
 /** The compile's own rule for a table's title (corpusTakeoff.mjs uniqueFamily:
@@ -119,6 +174,7 @@ export async function compiledProjectOf(
   compiled: HvacCompile,
   graph: GraphTables,
   spansOf: (sheet: string) => Promise<readonly NoteSpan[] | null> | readonly NoteSpan[] | null,
+  basPoints: BasPointsCompile | null = null,
 ): Promise<CompiledProject> {
   const { items, tables } = compiledRowsAndTables(compiled, graph);
   const pages: Record<string, NoteSpan[]> = {};
@@ -127,7 +183,7 @@ export async function compiledProjectOf(
     const spans = await spansOf(sheet);
     if (spans) pages[sheet] = spans.map((sp) => ({ str: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, ...(sp.rot ? { rot: sp.rot } : {}) }));
   }
-  return { items, tables, pages };
+  return { items, tables, pages, printed_points: printedPointRows(basPoints) };
 }
 
 interface ReadTable extends CompiledTable {
@@ -190,7 +246,8 @@ export const TERMINAL_FAMILIES: ReadonlySet<string> = new Set(["VAV"]);
 
 /** A tag in one spelling: case, whitespace and dash glyphs never distinguish
  * two units. */
-export const canonTag = (t: string): string => String(t ?? "").toUpperCase().replace(/[‐-―−﹘﹣－]/g, "-").replace(/\s+/g, "");
+const DASH_GLYPHS = /[‐-―−﹘﹣－]/g;
+export const canonTag = (t: string): string => String(t ?? "").toUpperCase().replace(DASH_GLYPHS, "-").replace(/\s+/g, "");
 const dashless = (t: string) => canonTag(t).replace(/[-.]/g, "");
 
 /** The parts of a cell or title that could each be one tag: the whole text,
@@ -260,6 +317,8 @@ export interface AppliedInstance extends Instance {
   derived: Record<string, DerivedAttribute>;
   /** Attributes its row leaves unknown, with the reason. */
   unknown: NormalizedItem["unknown"];
+  /** The printed points-list rows mapped to it (D6 evidence), if any. */
+  printed_points: PrintedPointRow[];
 }
 
 /** Families that serve terminal units from a central fan. */
@@ -316,6 +375,32 @@ export function instancesOf(project: CompiledProject, normalized: readonly Norma
     served.set(central[0], terminals);
     for (const t of terminals) links.set(t, [central[0]]);
   }
+  // Printed points-list rows by the unit they name. A list may spell a mark
+  // without its dash ("AHU 1", "AHU1" for AHU-1): that looser spelling names
+  // a scheduled unit only when no other scheduled unit reads the same way.
+  // When two do (FCU-4 and FCU4), a row names one only in its own spelling,
+  // spaces kept ("FCU 4" names neither). A dot is part of the number
+  // (VAV-1.11 is not VAV-11.1).
+  const looseTag = (t: string) => canonTag(t).replace(/-/g, "");
+  const spelled = (t: string) => String(t ?? "").toUpperCase().replace(DASH_GLYPHS, "-").trim().replace(/\s+/g, " ");
+  const printed = new Map<string, PrintedPointRow[]>();
+  for (const r of project.printed_points ?? []) {
+    const k = looseTag(r.unit);
+    if (!k) continue;
+    if (!printed.has(k)) printed.set(k, []);
+    printed.get(k)!.push(r);
+  }
+  const scheduled = new Map<string, Set<string>>();
+  for (const it of items) {
+    const k = looseTag(it.tag);
+    if (!scheduled.has(k)) scheduled.set(k, new Set());
+    scheduled.get(k)!.add(canonTag(it.tag));
+  }
+  const printedFor = (tag: string) => {
+    const rows = printed.get(looseTag(tag)) ?? [];
+    if ((scheduled.get(looseTag(tag))?.size ?? 0) <= 1) return rows;
+    return rows.filter((r) => spelled(r.unit) === spelled(tag));
+  };
   return items.map((it, i) => {
     const n = normalized[i];
     const family = familyOf(i);
@@ -362,6 +447,7 @@ export function instancesOf(project: CompiledProject, normalized: readonly Norma
       },
       cites: [rowCite(it)],
       multiplier,
+      printed_points: printedFor(it.tag),
     };
   });
 }
@@ -376,6 +462,13 @@ export function applyAssemblies(input: {
   normalized?: readonly NormalizedItem[];
 }): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[] } {
   const instances = instancesOf(input.project, input.normalized);
-  const { applications, lines } = expandAll(instances, input.library, input.settings ?? {}, input.overrides ?? [], input.evidence ?? {});
+  // D6: a unit's printed points list replaces its typical's point lines. An
+  // evidence entry the caller passes for a tag adds to this one.
+  const evidence: Record<string, DrawingEvidence> = {};
+  for (const i of instances) if (i.printed_points.length) evidence[i.tag] = { ...(evidence[i.tag] ?? {}), printedPoints: true };
+  for (const [tag, e] of Object.entries(input.evidence ?? {})) {
+    evidence[tag] = { ...(evidence[tag] ?? {}), ...e, declaredRoles: [...(evidence[tag]?.declaredRoles ?? []), ...(e.declaredRoles ?? [])] };
+  }
+  const { applications, lines } = expandAll(instances, input.library, input.settings ?? {}, input.overrides ?? [], evidence);
   return { instances, applications, lines };
 }

@@ -42,6 +42,11 @@ function UnitDetail({ unit, lines, onOverride }) {
   return (
     <div style={{ padding: "8px 12px 14px 28px", background: "var(--paper)" }} data-assembly-unit-detail={unit.tag}>
       {unit.reason && <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginBottom: 6 }}>Rule: <span style={mono}>{unit.reason}</span></div>}
+      {unit.printed_points && (
+        <div style={{ marginBottom: 8, fontSize: "var(--fs-s)" }}>
+          Printed points list ({unit.printed_points.rows} rows: {unit.printed_points.lists.join("; ")}) stands instead of the typical's point lines (D6).
+        </div>
+      )}
       {derived.length > 0 && (
         <div style={{ marginBottom: 8, fontSize: "var(--fs-s)" }}>
           {derived.map(([k, d]) => <div key={k}>Derived <strong>{k}</strong> = {String(d.value)} <span style={{ color: "var(--ink-muted)" }}>({d.rule}: {d.basis})</span></div>)}
@@ -323,7 +328,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
               {family && <button type="button" style={btn} onClick={() => setFamily("")}>All families</button>}
             </div>
             <table style={{ borderCollapse: "collapse", width: "100%" }}>
-              <thead><tr><th style={th}>Unit</th><th style={th}>Family</th><th style={th}>Layer</th><th style={th}>Typical</th><th style={th}>Status</th><th style={th}>Lines</th></tr></thead>
+              <thead><tr><th style={th}>Unit</th><th style={th}>Family</th><th style={th}>Layer</th><th style={th}>Typical</th><th style={th}>Status</th><th style={th}>Lines</th><th style={th}>Printed points</th></tr></thead>
               <tbody>
                 {units.map((u) => {
                   const k = `${u.tag}|${u.layer}|${JSON.stringify(u.cites[0])}`;
@@ -338,8 +343,11 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                       <td style={{ ...td, ...mono }}>{u.assembly ?? "—"}</td>
                       <td style={{ ...td, color: statusColor(u.status) }}>{u.status}{u.selected_by === "user" ? " (yours)" : ""}</td>
                       <td style={td}>{sum(u.lines)}</td>
+                      <td style={{ ...td, ...mono }} title={u.printed_points ? u.printed_points.lists.join("\n") : "No printed points list names this unit"}>
+                        {u.printed_points ? `${u.printed_points.rows} (${["AI", "AO", "BI", "BO"].map((io) => `${io} ${u.printed_points.by_io[io]}`).join(" ")})` : "—"}
+                      </td>
                     </tr>,
-                    open === k ? <tr key={`${k}-d`}><td colSpan={6} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} /></td></tr> : null,
+                    open === k ? <tr key={`${k}-d`}><td colSpan={7} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} /></td></tr> : null,
                   ];
                 })}
               </tbody>

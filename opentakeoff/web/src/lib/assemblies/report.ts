@@ -6,7 +6,7 @@
 // SHOULD THIS BE ON THE SHARED PATH? Yes: which units wait for what and how
 // many each typical got is the takeoff's answer. The Takeoff panel and the
 // MCP tool both render this object; neither counts on its own.
-import type { AppliedInstance, DerivedAttribute } from "./apply";
+import type { AppliedInstance, DerivedAttribute, PrintedPointRow } from "./apply";
 import type { ApplicationRecord, Cite, ExpandedLine } from "./schema";
 
 type RecordStatus = ApplicationRecord["status"];
@@ -31,6 +31,8 @@ export interface UnitRow {
   waits_for: string[];
   candidates: string[];
   lines: Record<LineStatus, number>;
+  /** The printed points list mapped to the unit (D6): its rows by I/O type. */
+  printed_points: { rows: number; by_io: Record<"AI" | "AO" | "BI" | "BO" | "other", number>; lists: string[] } | null;
   cites: Cite[];
 }
 
@@ -58,6 +60,13 @@ const RECORD_STATUSES: readonly RecordStatus[] = ["ok", "overridden", "unresolve
 const LINE_STATUSES: readonly LineStatus[] = ["ok", "unresolved", "replaced", "error"];
 const zero = <K extends string>(keys: readonly K[]) => Object.fromEntries(keys.map((k) => [k, 0])) as Record<K, number>;
 const keyOf = (tag: string, family: string, layer: string, cite: Cite | undefined) => `${tag}|${family}|${layer}|${JSON.stringify(cite ?? null)}`;
+
+function printedSummary(rows: readonly PrintedPointRow[]): UnitRow["printed_points"] {
+  if (!rows.length) return null;
+  const by_io = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
+  for (const r of rows) by_io[r.io ?? "other"] += 1;
+  return { rows: rows.length, by_io, lists: [...new Set(rows.map((r) => `${r.sheet_id} · ${r.list_title}`))] };
+}
 
 /** The report for one application of the library (applyAssemblies' result). */
 export function assembliesReport(
@@ -91,6 +100,7 @@ export function assembliesReport(
       waits_for: a.unresolved.missing,
       candidates: a.unresolved.candidates,
       lines: lineCounts.get(keyOf(a.instance.tag, a.instance.family, a.layer, a.instance.cites[0])) ?? zero(LINE_STATUSES),
+      printed_points: printedSummary(i?.printed_points ?? []),
       cites: a.instance.cites,
     };
   });

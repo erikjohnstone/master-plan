@@ -80,8 +80,18 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   for (const e of r.data.report.exceptions) assert.ok(e.waits_for.length || e.candidates.length, `${e.tag} names what it waits for`);
   const vav = r.data.report.families.find((f) => f.family === "VAV");
   assert.ok(vav && vav.units >= 50, "the VAV family table");
-  // Every unit and line cites its schedule row.
-  assert.ok(ui.lines.every((l) => l.cites.length && l.cites[0].sheet && l.cites[0].table_title), "every line cites its row");
+  // Every unit's line cites its schedule row. A project assembly's lines
+  // (building meters, a front-end) belong to the project, not to a row: they
+  // carry their rule and no row cite.
+  for (const l of ui.lines) {
+    if (l.tag === "(project)") assert.ok(l.family === "project" && l.rule && l.cites.length === 0, `${l.rule}: a project line`);
+    else assert.ok(l.cites.length && l.cites[0].sheet && l.cites[0].table_title, `${l.tag} ${l.rule} cites its row`);
+  }
+  assert.ok(ui.lines.some((l) => l.tag === "(project)"), "the project's own assemblies apply");
+  // D6: this set's printed lists number their rows ("1", "2", …); the compile
+  // reads that number as the served equipment, and a number names no unit.
+  assert.ok(Array.isArray(project.printed_points));
+  assert.equal(ui.instances.filter((i) => i.printed_points.length).length, 0);
 
   // summary (default) leaves units and lines out; families narrows the reply only.
   const s = await call(client, "apply_assemblies", {});

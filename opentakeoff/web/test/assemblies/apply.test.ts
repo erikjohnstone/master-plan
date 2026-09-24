@@ -4,7 +4,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { applyAssemblies, instancesOf, servingAirHandlers, tableContextOf, type CompiledItem, type CompiledProject } from "../../src/lib/assemblies/apply.ts";
+import { applyAssemblies, instancesOf, printedPointRows, servingAirHandlers, tableContextOf, type CompiledItem, type CompiledProject } from "../../src/lib/assemblies/apply.ts";
+import { assembliesReport } from "../../src/lib/assemblies/report.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
@@ -185,4 +186,55 @@ test("the table context is read once per table and joins every part the compile 
   assert.deepEqual(ctx?.notes, [{ id: "1", text: "PROVIDE WITH VFD." }]);
   assert.equal(ctx?.rows?.length, 1);
   assert.equal(tableContextOf({ sheet_id: "s#9", table_title: "FAN SCHEDULE" }, tables), null);
+});
+
+test("D6: a printed points list the BAS points compile maps to a unit replaces its typical's point lines, and the report says so", () => {
+  const bas = { categories: { points_lists: { lists: [
+    { title: "AHU-1 DDC POINTS LIST", sheet_id: "set.pdf#7", items: [
+      { tag: "AI01", point_type: "AI", description: "SUPPLY AIR TEMPERATURE", bbox_px: [1, 2, 3, 4], served_equipment: "AHU-1" },
+      { tag: "BO01", point_type: "BO", description: "SUPPLY FAN START/STOP", bbox_px: null, served_equipment: "AHU 1" },
+      { tag: "X1", point_type: null, description: "NOTE", served_equipment: null },
+      // A numbered list: the compile reads the row's own number as what it serves.
+      { tag: "7", point_type: "AI", description: null, served_equipment: "7" },
+    ] },
+  ] } } };
+  const rows = printedPointRows(bas);
+  assert.equal(rows.length, 2, "a row that serves no unit cannot replace anything; a mark with no letter is a row number, not a unit");
+  assert.deepEqual(rows[0], { unit: "AHU-1", list_title: "AHU-1 DDC POINTS LIST", sheet_id: "set.pdf#7", point: "AI01", io: "AI", description: "SUPPLY AIR TEMPERATURE", bbox: [1, 2, 3, 4] });
+  const items = [row("AHU", "AHU-1", "AHU SCHEDULE"), row("AHU", "AHU-2", "AHU SCHEDULE")];
+  const normalized = [norm(items[0], { vfd: "no", cooling_type: "chw" }), norm(items[1], { vfd: "no", cooling_type: "chw" })];
+  const { instances, applications, lines } = applyAssemblies({ project: { items, printed_points: rows }, library: LIB, normalized });
+  assert.equal(instances[0].printed_points.length, 2, "matched by the tag in one spelling (AHU 1 = AHU-1)");
+  assert.equal(instances[1].printed_points.length, 0);
+  const points1 = lines.filter((l) => l.tag === "AHU-1" && l.layer === "controls" && l.kind === "point");
+  const points2 = lines.filter((l) => l.tag === "AHU-2" && l.layer === "controls" && l.kind === "point");
+  assert.ok(points1.length > 0 && points1.every((l) => l.status === "replaced"), "the printed list stands instead of the typical's points");
+  assert.ok(points2.every((l) => l.status !== "replaced"), "a unit without a printed list keeps them");
+  assert.ok(lines.filter((l) => l.tag === "AHU-1" && l.kind === "device").some((l) => l.status !== "replaced"), "devices are not points");
+  const r = assembliesReport(instances, applications, lines);
+  const u = r.units.find((x) => x.tag === "AHU-1" && x.layer === "controls")!;
+  assert.deepEqual(u.printed_points, { rows: 2, by_io: { AI: 1, AO: 0, BI: 0, BO: 1, other: 0 }, lists: ["set.pdf#7 · AHU-1 DDC POINTS LIST"] });
+  assert.equal(r.units.find((x) => x.tag === "AHU-2" && x.layer === "controls")!.printed_points, null);
+});
+
+test("D6: a printed unit matches in a looser spelling (no dashes or spaces) only when one scheduled unit reads that way; dots count (VAV-1.11 ≠ VAV-11.1)", () => {
+  const rows = printedPointRows({ categories: { points_lists: { lists: [
+    { title: "VAV POINTS LIST", sheet_id: "set.pdf#8", items: [
+      { tag: "AI01", point_type: "AI", description: "SPACE TEMPERATURE", served_equipment: "VAV-11.1" },
+      { tag: "AI01", point_type: "AI", description: "SPACE TEMPERATURE", served_equipment: "VAV 2.1" },
+      { tag: "AI01", point_type: "AI", description: "SPACE TEMPERATURE", served_equipment: "FCU3" },
+      { tag: "AI01", point_type: "AI", description: "SPACE TEMPERATURE", served_equipment: "FCU 4" },
+    ] },
+  ] } } });
+  const items = [
+    row("VAV", "VAV-1.11", "VAV SCHEDULE"), row("VAV", "VAV-11.1", "VAV SCHEDULE"), row("VAV", "VAV-2.1", "VAV SCHEDULE"), row("VAV", "VAV-21", "VAV SCHEDULE"),
+    row("FCU", "FCU-3", "FCU SCHEDULE"), row("FCU", "FCU-4", "FCU SCHEDULE"), row("FCU", "FCU4", "FCU SCHEDULE"),
+  ];
+  const inst = instancesOf({ items, printed_points: rows }, items.map((it) => norm(it, {})));
+  assert.deepEqual(Object.fromEntries(inst.map((i) => [i.tag, i.printed_points.length])), {
+    "VAV-1.11": 0, "VAV-11.1": 1, "VAV-2.1": 1, "VAV-21": 0,
+    "FCU-3": 1,
+    // Two scheduled units read "FCU4" without the dash: the list's "FCU 4" names neither of them.
+    "FCU-4": 0, "FCU4": 0,
+  });
 });
