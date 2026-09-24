@@ -1,0 +1,3244 @@
+{
+ "library": "us-hookups",
+ "version": "1",
+ "title": "US mechanical hook-ups, starter v1",
+ "notice": "Vendor-neutral starter content: device and component roles with their parameters. Selection, commercial terms and labor allowances are partner data and are not shipped here. NOTICE.md lists the sources, their licenses, and the items a partner must review before use.",
+ "assemblies": [
+  {
+   "id": "hw-coil-hookup",
+   "version": "1",
+   "title": "Hot-water coil hook-up",
+   "kind": "part",
+   "status": "starter",
+   "applies_to": {
+    "family": "ANY",
+    "rank": 0,
+    "layer": "hookup"
+   },
+   "variables": [
+    {
+     "id": "balancing",
+     "from": "project.balancing",
+     "prompt": "Balancing at coils: 'manual' or 'automatic'"
+    },
+    {
+     "id": "valve_body",
+     "from": "project.coil_valve_body",
+     "prompt": "Coil control valve body: '2-way', '3-way' or 'picv'"
+    },
+    {
+     "id": "flange_min_in",
+     "unit": "in",
+     "from": "project.flange_min_in",
+     "prompt": "Unions below, flanges at and above this pipe size (in.)"
+    },
+    {
+     "id": "kit_max_in",
+     "unit": "in",
+     "from": "project.kit_max_in",
+     "prompt": "Coil kits at and below this size (in.); 0 for none"
+    }
+   ],
+   "lines": [
+    {
+     "id": "isolation-valves",
+     "kind": "component",
+     "label": "Isolation valves, supply and return",
+     "when": "not (var.kit_max_in > 0 and attr.hw_conn_in <= var.kit_max_in)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.5: on each side of each piece of equipment",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "unions",
+     "kind": "component",
+     "label": "Unions at the coil and the control valve",
+     "when": "not (var.kit_max_in > 0 and attr.hw_conn_in <= var.kit_max_in) and attr.hw_conn_in < var.flange_min_in",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "union"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.5: unions below 2 in., downstream of valves",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "flanges",
+     "kind": "component",
+     "label": "Flange sets at the coil and the control valve",
+     "when": "attr.hw_conn_in >= var.flange_min_in",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flange-set"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.5: flanges at 2 in. and above",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "strainer",
+     "kind": "component",
+     "label": "Y-strainer, line size, with blowdown valve, hose end and cap",
+     "when": "not (var.kit_max_in > 0 and attr.hw_conn_in <= var.kit_max_in)",
+     "profile_switch": "strainer_at_coils",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "strainer"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §2.7.1",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "balancing-valve",
+     "kind": "component",
+     "label": "Calibrated balancing valve (return)",
+     "when": "not (var.kit_max_in > 0 and attr.hw_conn_in <= var.kit_max_in) and var.valve_body != 'picv' and var.balancing = 'manual'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "balancing-valve"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "gpm": "attr.hw_gpm",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §2.6.8",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "flow-limiter",
+     "kind": "component",
+     "label": "Automatic flow limiter (return)",
+     "when": "not (var.kit_max_in > 0 and attr.hw_conn_in <= var.kit_max_in) and var.valve_body != 'picv' and var.balancing = 'automatic'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flow-limiter"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "gpm": "attr.hw_gpm",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.1 rule 1: NSCS 231000 item 16 requires automatic flow control at terminals; UFGS forbids it with 2-way modulating valves",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "bypass-balancing-valve",
+     "kind": "component",
+     "label": "Bypass balancing valve (3-way valve's bypass leg, set to the coil's pressure drop)",
+     "when": "var.valve_body = '3-way'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "balancing-valve"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "coil_wpd_ft": "attr.hw_wpd_ft",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.1 rule 2: the bypass leg needs a balancing valve set to the coil pressure drop",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "pt-ports",
+     "kind": "component",
+     "label": "Pressure/temperature test ports, in and out",
+     "when": "not (var.kit_max_in > 0 and attr.hw_conn_in <= var.kit_max_in)",
+     "profile_switch": "pt_ports_at_coils",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pt-port"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 05 93 (UF-0593) §3.2.4.1 b: adjacent to inlet and outlet of every coil",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "air-vent",
+     "kind": "component",
+     "label": "Manual air vent at the coil",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "air-vent"
+     },
+     "params": {
+      "size_in": "0.5",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.6: on all water coils",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "drain",
+     "kind": "component",
+     "label": "Drain valve at the coil or low point",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "drain-valve"
+     },
+     "params": {
+      "size_in": "0.75",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.7: low-point drains",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "coil-kit",
+     "kind": "component",
+     "label": "Coil piping kit: isolation, strainer, union, balancing (or PICV body) and test ports, as one assembly",
+     "when": "var.kit_max_in > 0 and attr.hw_conn_in <= var.kit_max_in",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "coil-kit"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "end_type": "<selection>",
+      "gpm": "attr.hw_gpm",
+      "balancing": "var.balancing",
+      "valve_body": "var.valve_body",
+      "service": "'hw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "VA 23 21 13 §2.8 H.3: combination assemblies accepted",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "reducers",
+     "kind": "note",
+     "label": "Reducers at the control valve: 0-2, decided when the valve is selected (VA 23 21 13 §3.1 F; run valves and strainers at line size).",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "VA 23 21 13 §3.1 F",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     },
+     "params": {
+      "service": "'hw'"
+     }
+    },
+    {
+     "id": "control-valve",
+     "kind": "note",
+     "label": "The control valve is the controls typical's device; the mechanical trade installs it (VA 23 09 23 Responsibility Table).",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table: automatic valves",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     },
+     "params": {
+      "service": "'hw'"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §1.1 and §5 (hydronic coil hook-up)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "chw-coil-hookup",
+   "version": "1",
+   "title": "Chilled-water coil hook-up",
+   "kind": "part",
+   "status": "starter",
+   "applies_to": {
+    "family": "ANY",
+    "rank": 0,
+    "layer": "hookup"
+   },
+   "variables": [
+    {
+     "id": "balancing",
+     "from": "project.balancing",
+     "prompt": "Balancing at coils: 'manual' or 'automatic'"
+    },
+    {
+     "id": "valve_body",
+     "from": "project.coil_valve_body",
+     "prompt": "Coil control valve body: '2-way', '3-way' or 'picv'"
+    },
+    {
+     "id": "flange_min_in",
+     "unit": "in",
+     "from": "project.flange_min_in",
+     "prompt": "Unions below, flanges at and above this pipe size (in.)"
+    },
+    {
+     "id": "kit_max_in",
+     "unit": "in",
+     "from": "project.kit_max_in",
+     "prompt": "Coil kits at and below this size (in.); 0 for none"
+    }
+   ],
+   "lines": [
+    {
+     "id": "isolation-valves",
+     "kind": "component",
+     "label": "Isolation valves, supply and return",
+     "when": "not (var.kit_max_in > 0 and attr.chw_conn_in <= var.kit_max_in)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.5: on each side of each piece of equipment",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "unions",
+     "kind": "component",
+     "label": "Unions at the coil and the control valve",
+     "when": "not (var.kit_max_in > 0 and attr.chw_conn_in <= var.kit_max_in) and attr.chw_conn_in < var.flange_min_in",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "union"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.5: unions below 2 in., downstream of valves",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "flanges",
+     "kind": "component",
+     "label": "Flange sets at the coil and the control valve",
+     "when": "attr.chw_conn_in >= var.flange_min_in",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flange-set"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.5: flanges at 2 in. and above",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "strainer",
+     "kind": "component",
+     "label": "Y-strainer, line size, with blowdown valve, hose end and cap",
+     "when": "not (var.kit_max_in > 0 and attr.chw_conn_in <= var.kit_max_in)",
+     "profile_switch": "strainer_at_coils",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "strainer"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §2.7.1",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "balancing-valve",
+     "kind": "component",
+     "label": "Calibrated balancing valve (return)",
+     "when": "not (var.kit_max_in > 0 and attr.chw_conn_in <= var.kit_max_in) and var.valve_body != 'picv' and var.balancing = 'manual'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "balancing-valve"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "gpm": "attr.chw_gpm",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §2.6.8",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "flow-limiter",
+     "kind": "component",
+     "label": "Automatic flow limiter (return)",
+     "when": "not (var.kit_max_in > 0 and attr.chw_conn_in <= var.kit_max_in) and var.valve_body != 'picv' and var.balancing = 'automatic'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flow-limiter"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "gpm": "attr.chw_gpm",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.1 rule 1: NSCS 231000 item 16 requires automatic flow control at terminals; UFGS forbids it with 2-way modulating valves",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "bypass-balancing-valve",
+     "kind": "component",
+     "label": "Bypass balancing valve (3-way valve's bypass leg, set to the coil's pressure drop)",
+     "when": "var.valve_body = '3-way'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "balancing-valve"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "coil_wpd_ft": "attr.chw_wpd_ft",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.1 rule 2: the bypass leg needs a balancing valve set to the coil pressure drop",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "pt-ports",
+     "kind": "component",
+     "label": "Pressure/temperature test ports, in and out",
+     "when": "not (var.kit_max_in > 0 and attr.chw_conn_in <= var.kit_max_in)",
+     "profile_switch": "pt_ports_at_coils",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pt-port"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 05 93 (UF-0593) §3.2.4.1 b: adjacent to inlet and outlet of every coil",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "air-vent",
+     "kind": "component",
+     "label": "Manual air vent at the coil",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "air-vent"
+     },
+     "params": {
+      "size_in": "0.5",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.6: on all water coils",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "drain",
+     "kind": "component",
+     "label": "Drain valve at the coil or low point",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "drain-valve"
+     },
+     "params": {
+      "size_in": "0.75",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.7: low-point drains",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "coil-kit",
+     "kind": "component",
+     "label": "Coil piping kit: isolation, strainer, union, balancing (or PICV body) and test ports, as one assembly",
+     "when": "var.kit_max_in > 0 and attr.chw_conn_in <= var.kit_max_in",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "coil-kit"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "end_type": "<selection>",
+      "gpm": "attr.chw_gpm",
+      "balancing": "var.balancing",
+      "valve_body": "var.valve_body",
+      "service": "'chw'"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "VA 23 21 13 §2.8 H.3: combination assemblies accepted",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "reducers",
+     "kind": "note",
+     "label": "Reducers at the control valve: 0-2, decided when the valve is selected (VA 23 21 13 §3.1 F; run valves and strainers at line size).",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "VA 23 21 13 §3.1 F",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     },
+     "params": {
+      "service": "'chw'"
+     }
+    },
+    {
+     "id": "control-valve",
+     "kind": "note",
+     "label": "The control valve is the controls typical's device; the mechanical trade installs it (VA 23 09 23 Responsibility Table).",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table: automatic valves",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     },
+     "params": {
+      "service": "'chw'"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §1.1 and §5 (hydronic coil hook-up)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "terminal-heater-hookup",
+   "version": "1",
+   "title": "Terminal heating unit hook-up (unit heater, cabinet unit heater, convector)",
+   "kind": "part",
+   "status": "starter",
+   "applies_to": {
+    "family": "ANY",
+    "rank": 0,
+    "layer": "hookup"
+   },
+   "variables": [
+    {
+     "id": "balancing",
+     "from": "project.balancing",
+     "prompt": "Balancing at coils: 'manual' or 'automatic'"
+    },
+    {
+     "id": "valve_body",
+     "from": "project.coil_valve_body",
+     "prompt": "Coil control valve body: '2-way', '3-way' or 'picv'"
+    },
+    {
+     "id": "flange_min_in",
+     "unit": "in",
+     "from": "project.flange_min_in",
+     "prompt": "Unions below, flanges at and above this pipe size (in.)"
+    },
+    {
+     "id": "kit_max_in",
+     "unit": "in",
+     "from": "project.kit_max_in",
+     "prompt": "Coil kits at and below this size (in.); 0 for none"
+    }
+   ],
+   "lines": [
+    {
+     "id": "inlet-stop",
+     "kind": "component",
+     "label": "Inlet stop (radiator) valve",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.9.2: radiator valve on the inlet",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "outlet-balancing",
+     "kind": "component",
+     "label": "Outlet balancing valve",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "balancing-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.9.2: balancing valve on the outlet",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "unions",
+     "kind": "component",
+     "label": "Unions",
+     "when": "attr.conn_in < var.flange_min_in",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "union"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.5",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "air-vent",
+     "kind": "component",
+     "label": "Manual air vent",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "air-vent"
+     },
+     "params": {
+      "size_in": "0.5"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.6",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (terminal heating unit)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "steam-coil-hookup",
+   "version": "1",
+   "title": "Steam coil hook-up (supply and condensate)",
+   "kind": "part",
+   "status": "starter",
+   "applies_to": {
+    "family": "ANY",
+    "rank": 0,
+    "layer": "hookup"
+   },
+   "variables": [
+    {
+     "id": "balancing",
+     "from": "project.balancing",
+     "prompt": "Balancing at coils: 'manual' or 'automatic'"
+    },
+    {
+     "id": "valve_body",
+     "from": "project.coil_valve_body",
+     "prompt": "Coil control valve body: '2-way', '3-way' or 'picv'"
+    },
+    {
+     "id": "flange_min_in",
+     "unit": "in",
+     "from": "project.flange_min_in",
+     "prompt": "Unions below, flanges at and above this pipe size (in.)"
+    },
+    {
+     "id": "kit_max_in",
+     "unit": "in",
+     "from": "project.kit_max_in",
+     "prompt": "Coil kits at and below this size (in.); 0 for none"
+    },
+    {
+     "id": "lift",
+     "from": "project.condensate_lift",
+     "prompt": "Is condensate lifted or returned against back pressure after the trap?"
+    }
+   ],
+   "lines": [
+    {
+     "id": "supply-isolation",
+     "kind": "component",
+     "label": "Supply isolation valve",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3 supply side",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "supply-strainer",
+     "kind": "component",
+     "label": "Supply strainer",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "strainer"
+     },
+     "params": {
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3 supply side",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "supply-union",
+     "kind": "component",
+     "label": "Supply union",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "union"
+     },
+     "params": {
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3 supply side",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "vacuum-breaker",
+     "kind": "component",
+     "label": "Vacuum breaker between the control valve and the coil",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "vacuum-breaker"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 30 00 (UF-3000) §2.13.2.3: on every coil, field or factory installed",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "dirt-pocket",
+     "kind": "component",
+     "label": "Dirt pocket (at least 14 in.) at the coil's return connection",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "dirt-pocket"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3: IMEG 23 22 18 §3.1 A.6; UFGS 23 22 26 §3.1.1.9",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "trap-inlet-isolation",
+     "kind": "component",
+     "label": "Trap inlet shutoff valve",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3: IMEG 23 22 18 §3.1 A.4-5",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "trap-strainer",
+     "kind": "component",
+     "label": "Trap inlet strainer",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "strainer"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 22 26 (UF-2226) §3.1.1.9: dirt pocket and strainer ahead of the trap",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "trap",
+     "kind": "component",
+     "label": "Float-and-thermostatic trap (modulating load), sized 2.5 times the maximum condensate load",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "steam-trap"
+     },
+     "params": {
+      "lb_hr": "attr.steam_lb_hr",
+      "size_in": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3: IMEG 23 22 18 §3.1 A.2-3; NSCS 231000 item 23",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "trap-unions",
+     "kind": "component",
+     "label": "Unions at both ends of the trap",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "union"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3: IMEG 23 22 18 §3.1 A.4-5",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "check-valve",
+     "kind": "component",
+     "label": "Check valve after the trap (lift or back pressure)",
+     "when": "var.lift",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "check-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 22 26 (UF-2226) §3.1.1.9",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "trap-outlet-isolation",
+     "kind": "component",
+     "label": "Trap discharge shutoff valve",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.3: IMEG 23 22 18 §3.1 A.4-5",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "trap-bypass",
+     "kind": "component",
+     "label": "3-valve bypass around the trap",
+     "profile_switch": "steam_trap_bypass",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "bypass-set"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 22 26 (UF-2226) §3.1.1.9: where equipment must stay in service during trap work",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "control-valve",
+     "kind": "note",
+     "label": "The steam control valve is the controls typical's device.",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table: automatic valves",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §1.3 (steam coil hook-up)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "pump-hookup",
+   "version": "1",
+   "title": "Pump hook-up",
+   "kind": "part",
+   "status": "starter",
+   "applies_to": {
+    "family": "ANY",
+    "rank": 0,
+    "layer": "hookup"
+   },
+   "variables": [
+    {
+     "id": "balancing",
+     "from": "project.balancing",
+     "prompt": "Balancing at coils: 'manual' or 'automatic'"
+    },
+    {
+     "id": "valve_body",
+     "from": "project.coil_valve_body",
+     "prompt": "Coil control valve body: '2-way', '3-way' or 'picv'"
+    },
+    {
+     "id": "flange_min_in",
+     "unit": "in",
+     "from": "project.flange_min_in",
+     "prompt": "Unions below, flanges at and above this pipe size (in.)"
+    },
+    {
+     "id": "kit_max_in",
+     "unit": "in",
+     "from": "project.kit_max_in",
+     "prompt": "Coil kits at and below this size (in.); 0 for none"
+    }
+   ],
+   "lines": [
+    {
+     "id": "suction-isolation",
+     "kind": "component",
+     "label": "Suction shutoff valve",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "VA 23 21 23 §2.1 B.12",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "suction-strainer",
+     "kind": "component",
+     "label": "Strainer with blowdown, or a suction diffuser (base-mounted pumps)",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "suction-diffuser"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>",
+      "type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.4: VA 23 21 23 §2.1 B.12; IMEG 23 21 16 §2.6; UFGS 23 21 23 §2.7.4",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "flex-connectors",
+     "kind": "component",
+     "label": "Flexible connectors (pump on isolators or pedestals)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flexible-connector"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 30 00 (UF-3000) §3.2.2",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "discharge-check",
+     "kind": "component",
+     "label": "Check valve, or a triple-duty valve (shutoff, check and throttling)",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "triple-duty-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>",
+      "type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.4: UFGS 23 21 23 §2.6.2; VA 23 21 13 §2.8",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "discharge-isolation",
+     "kind": "component",
+     "label": "Discharge isolation (or balancing) valve",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.4",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "gauges",
+     "kind": "component",
+     "label": "Pressure gauges with needle valves or snubbers, before and after the pump",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pressure-gauge"
+     },
+     "params": {
+      "dial_in": "4.5"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §2.7.5; NSCS 231000 item 32",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "unions-or-flanges",
+     "kind": "component",
+     "label": "Unions or flanges at the pump",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flange-set"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "joint": "if(attr.conn_in >= var.flange_min_in, 'flange', 'union')"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.5",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §1.4 (pump hook-up)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-vav",
+   "version": "1",
+   "title": "VAV terminal hook-up",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": "VAV",
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "hw-coil",
+     "kind": "assembly",
+     "label": "Reheat coil hook-up",
+     "when": "attr.heat_type = 'hw'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "hw-coil-hookup"
+     },
+     "ref": {
+      "id": "hw-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: 1 per coil circuit",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "hoses",
+     "kind": "component",
+     "label": "Flexible hoses at the terminal coil (where the specification allows them)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "hose"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "length_ft": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 81 47 (UF-8147) §2.1.1 l; IMEG forbids them (research 04 §1.1)",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     },
+     "when": "attr.heat_type = 'hw'",
+     "profile_switch": "hoses_at_terminal_coils"
+    },
+    {
+     "id": "access-door",
+     "kind": "component",
+     "label": "Access door upstream of the reheat coil",
+     "when": "attr.heat_type = 'hw' or attr.heat_type = 'electric'",
+     "profile_switch": "access_door_at_reheat_coil",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "access-door"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.6: IMEG 23 36 00 §2.2 F; UFGS 23 30 00 §2.12.2",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-fcu",
+   "version": "1",
+   "title": "Fan coil unit hook-up",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": "FCU",
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "chw-coil",
+     "kind": "assembly",
+     "label": "Chilled-water (or dual-temperature) coil hook-up",
+     "when": "attr.cooling_type = 'chw'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "chw-coil-hookup"
+     },
+     "ref": {
+      "id": "chw-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: a 4-pipe FCU has 2 coil circuits",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "hw-coil",
+     "kind": "assembly",
+     "label": "Hot-water coil hook-up",
+     "when": "attr.heating_type = 'hw' and not (known(attr.pipes) and attr.pipes = 2)",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "hw-coil-hookup"
+     },
+     "ref": {
+      "id": "hw-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: a 4-pipe FCU has 2 coil circuits",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "chw-hoses",
+     "kind": "component",
+     "label": "Flexible hoses at the terminal coil (where the specification allows them)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "hose"
+     },
+     "params": {
+      "size_in": "attr.chw_conn_in",
+      "length_ft": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 81 47 (UF-8147) §2.1.1 l; IMEG forbids them (research 04 §1.1)",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     },
+     "when": "attr.cooling_type = 'chw'",
+     "profile_switch": "hoses_at_terminal_coils"
+    },
+    {
+     "id": "hw-hoses",
+     "kind": "component",
+     "label": "Flexible hoses at the terminal coil (where the specification allows them)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "hose"
+     },
+     "params": {
+      "size_in": "attr.hw_conn_in",
+      "length_ft": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 81 47 (UF-8147) §2.1.1 l; IMEG forbids them (research 04 §1.1)",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     },
+     "when": "attr.heating_type = 'hw' and not (known(attr.pipes) and attr.pipes = 2)",
+     "profile_switch": "hoses_at_terminal_coils"
+    },
+    {
+     "id": "condensate-trap",
+     "kind": "component",
+     "label": "Condensate trap (seal of 2 in. plus the unit's static pressure)",
+     "when": "attr.cooling_type != 'none'",
+     "profile_switch": "condensate_trap_at_fcu",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "condensate-trap"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 30 00 (UF-3000) §3.2.1: room fan coil units may be exempted",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-air-handler",
+   "version": "1",
+   "title": "Air handler hook-up (coils, drain, fan connections)",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": [
+     "AHU",
+     "RTU",
+     "DOAS",
+     "DOAH_UNIT",
+     "DOAH_HANDLING",
+     "OUTDOOR_AIR_UNIT"
+    ],
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "chw-coil",
+     "kind": "assembly",
+     "label": "Cooling coil hook-up",
+     "when": "attr.cooling_type = 'chw'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "chw-coil-hookup"
+     },
+     "ref": {
+      "id": "chw-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: one per coil",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "hw-coil",
+     "kind": "assembly",
+     "label": "Heating coil hook-up",
+     "when": "attr.heating_type = 'hw'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "hw-coil-hookup"
+     },
+     "ref": {
+      "id": "hw-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: one per coil",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "steam-coil",
+     "kind": "assembly",
+     "label": "Steam coil hook-up",
+     "when": "attr.heating_type = 'steam'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "steam-coil-hookup"
+     },
+     "ref": {
+      "id": "steam-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: one per coil",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "coil-thermometers",
+     "kind": "component",
+     "label": "Thermometers at the air handler's water coils (in and out)",
+     "profile_switch": "thermometers_at_ahu_coils",
+     "qty": "2 * (if(attr.cooling_type = 'chw', 1, 0) + if(attr.heating_type = 'hw', 1, 0))",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "thermometer"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.1: NSCS 231000 items 31-32; AHU coils add 2 thermometers",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "coil-gauges",
+     "kind": "component",
+     "label": "Pressure gauges at the air handler's water coils (in and out)",
+     "profile_switch": "thermometers_at_ahu_coils",
+     "qty": "2 * (if(attr.cooling_type = 'chw', 1, 0) + if(attr.heating_type = 'hw', 1, 0))",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pressure-gauge"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.1: NSCS 231000 items 31-32; AHU coils add 2 gauges",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "condensate-trap",
+     "kind": "component",
+     "label": "Condensate trap (2 in. plus the unit's total static pressure)",
+     "when": "attr.cooling_type != 'none'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "condensate-trap"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 30 00 (UF-3000) §3.2.1",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "flex-duct-connectors",
+     "kind": "component",
+     "label": "Flexible duct connectors at the fan connections (supply and return)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flexible-duct-connector"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 30 00 (UF-3000) §2.12.1.3: a flexible connector at each fan connection",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-unit-heater",
+   "version": "1",
+   "title": "Unit heater hook-up",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": [
+     "UNIT_HEATER",
+     "CABINET_UNIT_HEATER"
+    ],
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "hw",
+     "kind": "assembly",
+     "label": "Hot-water terminal heating unit hook-up",
+     "when": "attr.heating_medium = 'hw'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "terminal-heater-hookup"
+     },
+     "ref": {
+      "id": "terminal-heater-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: 1 per unit",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "steam",
+     "kind": "assembly",
+     "label": "Steam unit heater hook-up",
+     "when": "attr.heating_medium = 'steam'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "steam-coil-hookup"
+     },
+     "ref": {
+      "id": "steam-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: 1 per coil",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-pump",
+   "version": "1",
+   "title": "Pump hook-up",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": "PUMP",
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "pump",
+     "kind": "assembly",
+     "label": "Pump hook-up",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pump-hookup"
+     },
+     "ref": {
+      "id": "pump-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §5: 1 per pump",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-heat-pump",
+   "version": "1",
+   "title": "Water-source heat pump hose kit",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": "HEAT_PUMP",
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "hoses",
+     "kind": "component",
+     "label": "Stainless braided hoses, 2 ft, with a swivel on one end",
+     "when": "known(attr.source_gpm)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "hose"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "length_ft": "2"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 81 47 (UF-8147) §2.1.1 g, l, m",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "isolation",
+     "kind": "component",
+     "label": "Ball valves with memory stops (one with a test port)",
+     "when": "known(attr.source_gpm)",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 81 47 (UF-8147) §2.1.1",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "flow-valve",
+     "kind": "component",
+     "label": "Manual flow control valve with test ports",
+     "when": "known(attr.source_gpm)",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "manual-flow-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>",
+      "gpm": "attr.source_gpm"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 81 47 (UF-8147) §2.1.1",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "strainer",
+     "kind": "component",
+     "label": "Y-strainer with blowdown ball valve",
+     "when": "known(attr.source_gpm)",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "strainer"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 81 47 (UF-8147) §2.1.1",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "flushing-bypass",
+     "kind": "component",
+     "label": "Flushing bypass",
+     "when": "known(attr.source_gpm)",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "flushing-bypass"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.1 rule 6",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "valve",
+     "kind": "note",
+     "label": "The 2-position source-water valve is the controls typical's device.",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "[inferred] research 04 §1.1 rule 6",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-boiler",
+   "version": "1",
+   "title": "Boiler trim",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": "BOILER",
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "isolation",
+     "kind": "component",
+     "label": "Isolation valves, supply and return",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.5",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "relief",
+     "kind": "component",
+     "label": "Relief valve, piped to a floor drain",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "relief-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-2113) §3.2.9.3",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "thermometers",
+     "kind": "component",
+     "label": "Thermometers, inlet and outlet",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "thermometer"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: NSCS 231000 item 31",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "pressure-gauge",
+     "kind": "component",
+     "label": "Temperature and pressure gauge within 12 in. of the outlet",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pressure-gauge"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: boiler installation manual (vendor)",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "gas-cock",
+     "kind": "component",
+     "label": "Manual gas shutoff outside the jacket",
+     "when": "attr.fuel = 'gas' or attr.fuel = 'dual_fuel' or attr.fuel = 'propane'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "gas-cock"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: vendor installation manual",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "sediment-trap",
+     "kind": "component",
+     "label": "Gas sediment trap and union",
+     "when": "attr.fuel = 'gas' or attr.fuel = 'dual_fuel' or attr.fuel = 'propane'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "sediment-trap"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: vendor installation manual",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "gas-regulator",
+     "kind": "component",
+     "label": "Gas pressure regulator (supply above 10.5 in. w.c.)",
+     "when": "attr.fuel = 'gas' or attr.fuel = 'dual_fuel' or attr.fuel = 'propane'",
+     "profile_switch": "gas_regulator_at_boilers",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "gas-regulator"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: vendor installation manual",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "flow-switch",
+     "kind": "note",
+     "label": "The flow switch is factory standard on many boilers; where field supplied it follows the matrix's flow-switch row. A low-water cutoff where the boiler sits above the radiation it serves.",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "[inferred] research 04 §1.5",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-chiller",
+   "version": "1",
+   "title": "Chiller barrel trim",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": [
+     "AIR_COOLED_CHILLER",
+     "HEAT_RECOVERY_CHILLER"
+    ],
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "isolation",
+     "kind": "component",
+     "label": "Isolation valves at each barrel (evaporator; condenser when water-cooled)",
+     "qty": "if(attr.condenser = 'water', 4, 2)",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "isolation-valve"
+     },
+     "params": {
+      "size_in": "attr.conn_in",
+      "end_type": "<selection>"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.5",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "thermometers",
+     "kind": "component",
+     "label": "Thermometers in and out of each barrel",
+     "qty": "if(attr.condenser = 'water', 4, 2)",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "thermometer"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §3.1.9",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "pt-ports",
+     "kind": "component",
+     "label": "P/T ports in and out of each barrel",
+     "qty": "if(attr.condenser = 'water', 4, 2)",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pt-port"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 05 93 (UF-0593) §3.2.4.1 b",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "strainer",
+     "kind": "note",
+     "label": "An evaporator inlet strainer with gauge taps appears only in non-US installation manuals (research 04 §6): add it per the project specification.",
+     "qty": "1",
+     "unit": "note",
+     "role": {
+      "vocab": "ot",
+      "id": "note"
+     },
+     "trade": "controls",
+     "source": {
+      "ref": "[inferred] research 04 §1.5, §6",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-tower",
+   "version": "1",
+   "title": "Cooling tower cell trim",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": "COOLING_TOWER",
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "overflow-drain",
+     "kind": "component",
+     "label": "Basin overflow and drain connections",
+     "qty": "attr.cells",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "overflow-drain"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 65 00 (UF-6500) §2.5.4.11",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "makeup-float",
+     "kind": "component",
+     "label": "Float makeup valve (electronic level control is the controls typical's alternative)",
+     "profile_switch": "tower_float_makeup",
+     "qty": "attr.cells",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "fill-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 65 00 (UF-6500) §2.5.4.11",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "equalizer",
+     "kind": "component",
+     "label": "Equalizer pipe isolation valves between cells",
+     "when": "attr.cells > 1",
+     "qty": "attr.cells - 1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "equalizer-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5 (search summary)",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "hookup-hx",
+   "version": "1",
+   "title": "Heat exchanger trim",
+   "kind": "equipment",
+   "status": "starter",
+   "applies_to": {
+    "family": "HEAT_EXCHANGER",
+    "rank": 10,
+    "layer": "hookup"
+   },
+   "lines": [
+    {
+     "id": "vacuum-breaker",
+     "kind": "component",
+     "label": "Shell vacuum breaker",
+     "when": "attr.primary_medium = 'steam'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "vacuum-breaker"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 57 00 §3.2; UFGS 23 57 10 §2.12.4",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "steam-gauge",
+     "kind": "component",
+     "label": "Shell gauge with pigtail siphon",
+     "when": "attr.primary_medium = 'steam'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pressure-gauge"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 57 00 §3.2",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "relief",
+     "kind": "component",
+     "label": "ASME relief valve on the water outlet",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "relief-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 57 00 §3.2; UFGS 23 57 10 §2.12.5",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "thermometer-wells",
+     "kind": "component",
+     "label": "Thermometer wells, water in and out",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "thermometer"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 57 00 §3.2",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "gauges",
+     "kind": "component",
+     "label": "Gauge tappings, water in and out",
+     "qty": "2",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pressure-gauge"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 57 00 §3.2",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "drain",
+     "kind": "component",
+     "label": "Valved drain at the water inlet",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "drain-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 57 00 §3.2",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "condensate",
+     "kind": "assembly",
+     "label": "Steam supply and condensate trim (as a steam coil's)",
+     "when": "attr.primary_medium = 'steam'",
+     "qty": "1",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "steam-coil-hookup"
+     },
+     "ref": {
+      "id": "steam-coil-hookup"
+     },
+     "trade": "mechanical",
+     "source": {
+      "ref": "[inferred] research 04 §1.3, §1.5",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §5 (vendor-neutral hook-up catalogue)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  },
+  {
+   "id": "system-specialties",
+   "version": "1",
+   "title": "Closed water system specialties (once per closed loop)",
+   "kind": "project",
+   "status": "starter",
+   "applies_to": {
+    "family": "project",
+    "selector": "var.loops > 0",
+    "rank": 0,
+    "layer": "hookup"
+   },
+   "variables": [
+    {
+     "id": "loops",
+     "from": "project.closed_loops",
+     "prompt": "Closed water loops (heating, chilled, condenser, glycol)"
+    }
+   ],
+   "lines": [
+    {
+     "id": "air-separator",
+     "kind": "component",
+     "label": "Air separator with blowdown and automatic vent (or a coalescing air and dirt separator)",
+     "qty": "var.loops",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "air-separator"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §2.10; NSCS 231000 item 17",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "expansion-tank",
+     "kind": "component",
+     "label": "Expansion tank with drain, fill, air-charging valve and system connections",
+     "qty": "var.loops",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "expansion-tank"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "UFGS 23 21 13 (UF-6426) §2.9",
+      "license": "LicenseRef-US-Government-Work",
+      "derivation": "paraphrase"
+     }
+    },
+    {
+     "id": "fill-valve",
+     "kind": "component",
+     "label": "Fill (pressure-reducing) valve with manual shutoff",
+     "qty": "var.loops",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "fill-valve"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: fill station",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "backflow",
+     "kind": "component",
+     "label": "Backflow preventer on the fill",
+     "qty": "var.loops",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "backflow-preventer"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: fill with a check valve or backflow preventer",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "pot-feeder",
+     "kind": "component",
+     "label": "Bypass (pot) feeder with inlet, outlet and drain valves",
+     "qty": "var.loops",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "pot-feeder"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical",
+      "wire_lv": "mechanical",
+      "power": "electrical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 25 00 §2.2 A",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "coupon-rack",
+     "kind": "component",
+     "label": "Corrosion coupon rack",
+     "qty": "var.loops",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "coupon-rack"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical",
+      "wire_lv": "mechanical",
+      "power": "electrical"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 25 00 §2.2 A",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    },
+    {
+     "id": "makeup-meter",
+     "kind": "component",
+     "label": "Makeup water meter with a pulse output to the BAS",
+     "qty": "var.loops",
+     "unit": "ea",
+     "role": {
+      "vocab": "ot",
+      "id": "water-meter"
+     },
+     "responsibility": {
+      "furnish": "mechanical",
+      "install": "mechanical",
+      "wire_lv": "controls",
+      "program": "controls",
+      "test": "controls"
+     },
+     "trade": "mechanical",
+     "labor_task": {
+      "task": "component-install",
+      "driver": "per_component_size_end"
+     },
+     "source": {
+      "ref": "[inferred] research 04 §1.5: IMEG 23 25 00 §2.2 A",
+      "license": "Apache-2.0",
+      "derivation": "inferred"
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "source": "research 04 §1.5 (once per closed water system)",
+     "license": "Apache-2.0",
+     "derivation": "inferred"
+    }
+   ]
+  }
+ ]
+}

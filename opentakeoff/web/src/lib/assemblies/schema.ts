@@ -49,6 +49,8 @@ const Source = z.object({
 const Line = z.object({
   id,
   kind: z.enum(LINE_KINDS),
+  /** What the line is, in words (a points schedule's description). */
+  label: z.string().trim().min(1).optional(),
   /** Include the line only when this is true; unknown makes it unresolved. */
   when: expr.optional(),
   /** Per instance, before the instance multiplier. */
@@ -95,9 +97,17 @@ export const AssemblyDefinitionSchema = z.object({
    * part: a sub-assembly, expanded only where another assembly's line names
    * it, never chosen on its own. */
   kind: z.enum(["equipment", "project", "part"]),
-  /** layer: a unit gets one assembly per layer ("controls", the BAS
-   * typical; "hookup", the mechanical hook-up; a partner may add more). */
-  applies_to: z.object({ family: z.string().min(1), selector: expr.optional(), rank: z.number().int(), layer: id.default("controls") }).strict(),
+  /** family: one family, or several that share the recipe (an air handler
+   * drafted as AHU, RTU or DOAS); its expressions may read only attributes
+   * every listed family has. layer: a unit gets one assembly per layer
+   * ("controls", the BAS typical; "hookup", the mechanical hook-up; a
+   * partner may add more). */
+  applies_to: z.object({
+    family: z.union([z.string().min(1), z.array(z.string().min(1)).min(1)]),
+    selector: expr.optional(),
+    rank: z.number().int(),
+    layer: id.default("controls"),
+  }).strict(),
   options: z.array(Option).default([]),
   variables: z.array(Variable).default([]),
   lines: z.array(Line).min(1),
@@ -152,6 +162,7 @@ export interface ExpandedLine {
   /** assembly id@version:line id, with the sub-assembly path when nested. */
   rule: string;
   kind: AssemblyLine["kind"];
+  label: string | null;
   role: AssemblyLine["role"];
   io: AssemblyLine["io"] | null;
   device_role_ref: string | null;
@@ -186,19 +197,28 @@ export interface Rejected {
   errors: string[];
 }
 
+/** The families an assembly applies to, as a list. */
+export function familiesOf(def: Pick<AssemblyDefinition, "applies_to">): string[] {
+  const f = def.applies_to.family;
+  return typeof f === "string" ? [f] : [...f];
+}
+
 /** The names an assembly's expressions may reference. A part for any family
- * ("ANY") may reference any family's attributes; a family the schema does not
+ * ("ANY") may reference any family's attributes; an assembly for several
+ * families only the attributes they all have; a family the schema does not
  * know has none, so its expressions may use only variables and options. */
 export function scopeOf(def: Pick<AssemblyDefinition, "applies_to" | "options" | "variables">): Scope {
-  let attrs: readonly string[] = [];
-  if (def.applies_to.family === "ANY") attrs = [...new Set(ASSEMBLY_FAMILIES.flatMap((f) => familyAttributes(f).all))];
-  else {
+  const known = (family: string): readonly string[] => {
     try {
-      attrs = familyAttributes(def.applies_to.family).all;
+      return familyAttributes(family).all;
     } catch {
-      attrs = [];
+      return [];
     }
-  }
+  };
+  const families = familiesOf(def);
+  let attrs: readonly string[];
+  if (families.includes("ANY")) attrs = [...new Set(ASSEMBLY_FAMILIES.flatMap((f) => familyAttributes(f).all))];
+  else attrs = families.map(known).reduce((acc, a) => acc.filter((x) => a.includes(x)));
   return { attrs: new Set(attrs), vars: new Set(def.variables.map((v) => v.id)), opts: new Set(def.options.map((o) => o.id)) };
 }
 
@@ -220,6 +240,7 @@ export function validateAssembly(raw: unknown): { ok: true; def: AssemblyDefinit
       seen.add(x);
     }
   };
+  dupes("family", familiesOf(def));
   dupes("option", def.options.map((o) => o.id));
   dupes("variable", def.variables.map((v) => v.id));
   dupes("line", def.lines.map((l) => l.id));
@@ -235,7 +256,7 @@ export function validateAssembly(raw: unknown): { ok: true; def: AssemblyDefinit
   check("applies_to.selector", def.applies_to.selector);
   for (const o of def.options) check(`options.${o.id}.auto`, o.auto);
   for (const v of def.variables) {
-    if (v.from?.startsWith("attr.") && !scope.attrs.has(v.from.slice(5))) errors.push(`variables.${v.id}.from: "${v.from}" is not an attribute of ${def.applies_to.family}`);
+    if (v.from?.startsWith("attr.") && !scope.attrs.has(v.from.slice(5))) errors.push(`variables.${v.id}.from: "${v.from}" is not an attribute of ${familiesOf(def).join(" and ")}`);
   }
   const deviceRoles = new Set(def.lines.filter((l) => l.kind === "device").map((l) => l.role.id));
   for (const l of def.lines) {

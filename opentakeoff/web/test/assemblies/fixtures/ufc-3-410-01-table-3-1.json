@@ -1,0 +1,338 @@
+{
+ "document": "UFC 3-410-01, Heating, Ventilating, and Air Conditioning Systems",
+ "date": "28 July 2025",
+ "table": "Table 3-1 DDC Minimum Points List",
+ "distribution": "APPROVED FOR PUBLIC RELEASE; DISTRIBUTION UNLIMITED",
+ "pdf_sha256": "97dbf7058dc82a30acdb00f0566af8fb19a69a834d2da88fe73ee7059c81a1f6",
+ "generator": "web/test/assemblies/fixtures/ufc-3-410-01-table-3-1.py",
+ "footnote_starts": "*For Navy projects: Metering for the building (facility",
+ "lists": [
+  {
+   "list": "Hot Water Heating System",
+   "pdf_page": 44,
+   "printed_page": 34,
+   "items": [
+    {
+     "text": "Hot water pump status",
+     "id": "hwhs-01"
+    },
+    {
+     "text": "Hot water pump start/stop",
+     "id": "hwhs-02"
+    },
+    {
+     "text": "Hot water supply temperature",
+     "id": "hwhs-03"
+    },
+    {
+     "text": "Hot water return temperature",
+     "id": "hwhs-04"
+    },
+    {
+     "text": "Hot water flow rate",
+     "id": "hwhs-05"
+    },
+    {
+     "text": "Hot water mixing valve position",
+     "id": "hwhs-06"
+    },
+    {
+     "text": "Differential pressure across pump",
+     "id": "hwhs-07"
+    },
+    {
+     "text": "Boiler status",
+     "id": "hwhs-08"
+    },
+    {
+     "text": "Boiler enable/disable",
+     "id": "hwhs-09"
+    },
+    {
+     "text": "Boiler failure alarms",
+     "id": "hwhs-10"
+    },
+    {
+     "text": "Heat exchanger inlet temperatures",
+     "id": "hwhs-11"
+    },
+    {
+     "text": "Heat exchanger leaving temperatures",
+     "id": "hwhs-12"
+    },
+    {
+     "text": "Hot water pump speed",
+     "id": "hwhs-13"
+    },
+    {
+     "text": "Condensate return pump status",
+     "id": "hwhs-14"
+    }
+   ]
+  },
+  {
+   "list": "VAV System",
+   "pdf_page": 44,
+   "printed_page": 34,
+   "items": [
+    {
+     "text": "Airflow rate of each VAV box (primary)",
+     "id": "vs-01"
+    },
+    {
+     "text": "VAV box fan control start/stop",
+     "id": "vs-02"
+    },
+    {
+     "text": "VAV box fan status",
+     "id": "vs-03"
+    },
+    {
+     "text": "VAV box damper position",
+     "id": "vs-04"
+    },
+    {
+     "text": "Discharge air temperature at each VAV box",
+     "id": "vs-05"
+    },
+    {
+     "text": "VAV box hot water valve position",
+     "id": "vs-06"
+    },
+    {
+     "text": "Electric reheat (on/off and number of stages)",
+     "id": "vs-07"
+    },
+    {
+     "text": "Zone temperature",
+     "id": "vs-08"
+    },
+    {
+     "text": "Effective zone temperature setpoint (heating/cooling) incorporating setpoint adjustment.",
+     "id": "vs-09"
+    }
+   ]
+  },
+  {
+   "list": "Chilled Water System",
+   "pdf_page": 45,
+   "printed_page": 35,
+   "items": [
+    {
+     "text": "Chiller enable/disable",
+     "id": "cws-01"
+    },
+    {
+     "text": "Chiller status",
+     "id": "cws-02"
+    },
+    {
+     "text": "Chiller failure alarms",
+     "id": "cws-03"
+    },
+    {
+     "text": "Entering and leaving water temperatures at each chiller",
+     "id": "cws-04"
+    },
+    {
+     "text": "Chilled water flow rates for each chiller",
+     "id": "cws-05"
+    },
+    {
+     "text": "Secondary loop chilled water flow rate",
+     "id": "cws-06"
+    },
+    {
+     "text": "Chilled water supply and return temperatures for the central plant",
+     "id": "cws-07"
+    },
+    {
+     "text": "Water temperature in the common piping of the primary/secondary loop",
+     "id": "cws-08"
+    },
+    {
+     "text": "Chilled water system differential pressure at central chilled water plant",
+     "id": "cws-09"
+    },
+    {
+     "text": "Chilled water system differential pressured used for control of secondary pumps",
+     "id": "cws-10"
+    },
+    {
+     "text": "Primary chilled water pump start/stop",
+     "id": "cws-11"
+    },
+    {
+     "text": "Primary chilled water pump status",
+     "id": "cws-12"
+    },
+    {
+     "text": "Cooling tower fan status (high-low-off)",
+     "id": "cws-13"
+    },
+    {
+     "text": "Cooling tower fans - Adjustable frequency drive functions and alarms",
+     "id": "cws-14"
+    },
+    {
+     "text": "Condenser water supply and return temperature",
+     "id": "cws-15"
+    },
+    {
+     "text": "Cooling tower bypass valve position",
+     "id": "cws-16"
+    },
+    {
+     "text": "Variable speed pump drive frequency",
+     "id": "cws-17"
+    },
+    {
+     "text": "Heat exchanger inlet temperatures",
+     "id": "cws-18"
+    },
+    {
+     "text": "Heat exchanger outlet temperatures",
+     "id": "cws-19"
+    }
+   ]
+  },
+  {
+   "list": "Air Distribution System",
+   "pdf_page": 45,
+   "printed_page": 35,
+   "items": [
+    {
+     "text": "Supply air temperature",
+     "id": "ads-01"
+    },
+    {
+     "text": "Supply air dewpoint temperature",
+     "id": "ads-02"
+    },
+    {
+     "text": "Supply air static pressure",
+     "id": "ads-03"
+    },
+    {
+     "text": "Supply airflow rate",
+     "id": "ads-04"
+    },
+    {
+     "text": "Outdoor air temperature",
+     "id": "ads-05"
+    },
+    {
+     "text": "Outdoor air relative humidity",
+     "id": "ads-06"
+    },
+    {
+     "text": "Calculated outdoor air dewpoint temperatures",
+     "id": "ads-07"
+    },
+    {
+     "text": "Return air temperature",
+     "id": "ads-08"
+    },
+    {
+     "text": "Mixed air temperature",
+     "id": "ads-09"
+    },
+    {
+     "text": "Discharge temperature from each heat transfer device",
+     "id": "ads-10"
+    },
+    {
+     "text": "Filter status",
+     "id": "ads-11"
+    },
+    {
+     "text": "Supply/return/exhaust damper positions",
+     "id": "ads-12"
+    },
+    {
+     "text": "Outdoor air damper positions",
+     "id": "ads-13"
+    },
+    {
+     "text": "Chilled water valve positions",
+     "id": "ads-14"
+    },
+    {
+     "text": "Hot water valve positions",
+     "id": "ads-15"
+    },
+    {
+     "text": "Electric heater status (on/off and number of stages energized or % power)",
+     "id": "ads-16"
+    },
+    {
+     "text": "Freezestat status",
+     "id": "ads-17"
+    },
+    {
+     "text": "Smoke detector status",
+     "id": "ads-18"
+    },
+    {
+     "text": "Supply/return fan start/stop",
+     "id": "ads-19"
+    },
+    {
+     "text": "Supply/return fan speed",
+     "id": "ads-20"
+    },
+    {
+     "text": "Supply/return fan status",
+     "id": "ads-21"
+    },
+    {
+     "text": "Supply/return fan alarm",
+     "id": "ads-22"
+    },
+    {
+     "text": "Exhaust fan status",
+     "id": "ads-23"
+    },
+    {
+     "text": "Outdoor air fan status",
+     "id": "ads-24"
+    },
+    {
+     "text": "Energy recovery wheel rotation status",
+     "id": "ads-25"
+    },
+    {
+     "text": "Smoke damper status",
+     "id": "ads-26"
+    }
+   ]
+  },
+  {
+   "list": "General Building Systems",
+   "pdf_page": 45,
+   "printed_page": 35,
+   "items": [
+    {
+     "text": "Building electrical meter*",
+     "id": "gbs-01"
+    },
+    {
+     "text": "Building water meter*",
+     "id": "gbs-02"
+    },
+    {
+     "text": "Building natural gas meter*",
+     "id": "gbs-03"
+    },
+    {
+     "text": "Building steam meter*",
+     "id": "gbs-04"
+    },
+    {
+     "text": "HVAC equipment shutdown switch status",
+     "id": "gbs-05"
+    }
+   ]
+  }
+ ]
+}

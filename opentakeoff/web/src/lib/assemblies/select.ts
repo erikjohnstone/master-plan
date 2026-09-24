@@ -5,7 +5,8 @@
 // is part of the takeoff's answer on every surface.
 //
 // For one unit:
-//   1. candidates are the library's equipment assemblies of its family;
+//   1. candidates are the library's equipment assemblies for its family
+//      (an assembly may list several);
 //   2. a selector that evaluates true makes an assembly applicable, one that
 //      depends on an unknown attribute only possible;
 //   3. the highest-ranked applicable assembly wins — unless a possible one
@@ -21,7 +22,7 @@
 // value the drawing does not give, and the record says so.
 
 import { evaluate, parseExpr, type Env, type Result, type Value } from "./expr";
-import type { ApplicationRecord, AssemblyDefinition, Cite, ValueSource } from "./schema";
+import { familiesOf, type ApplicationRecord, type AssemblyDefinition, type Cite, type ValueSource } from "./schema";
 
 /** A unit to apply assemblies to: its normalized attributes (normalize.ts)
  * and where it is. */
@@ -166,7 +167,7 @@ export const PROJECT_INSTANCE: Instance = {
 export function selectProjectAssemblies(library: readonly AssemblyDefinition[], settings: ProjectSettings = {}): ApplicationRecord[] {
   const out: ApplicationRecord[] = [];
   for (const def of latest(library).filter((a) => a.kind === "project").sort((a, b) => a.id.localeCompare(b.id))) {
-    const app = selectAssembly({ ...PROJECT_INSTANCE, family: def.applies_to.family }, [{ ...def, kind: "equipment" }], settings, undefined, def.applies_to.layer ?? "controls");
+    const app = selectAssembly({ ...PROJECT_INSTANCE, family: familiesOf(def)[0] }, [{ ...def, kind: "equipment" }], settings, undefined, def.applies_to.layer ?? "controls");
     if (app.status === "no_assembly") continue;
     out.push({ ...app, instance: { ...app.instance, family: "project" } });
   }
@@ -176,7 +177,7 @@ export function selectProjectAssemblies(library: readonly AssemblyDefinition[], 
 /** The layers the library offers a family, in name order ("controls" when
  * it offers none). */
 export function layersFor(family: string, library: readonly AssemblyDefinition[]): string[] {
-  const layers = [...new Set(library.filter((a) => a.kind === "equipment" && a.applies_to.family === family).map((a) => a.applies_to.layer ?? "controls"))].sort();
+  const layers = [...new Set(library.filter((a) => a.kind === "equipment" && familiesOf(a).includes(family)).map((a) => a.applies_to.layer ?? "controls"))].sort();
   return layers.length ? layers : ["controls"];
 }
 
@@ -220,7 +221,7 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
   }
 
   // A part is never chosen on its own; it expands where a line names it.
-  const candidates = latest(library).filter((a) => a.kind === "equipment" && a.applies_to.family === instance.family && (a.applies_to.layer ?? "controls") === layer);
+  const candidates = latest(library).filter((a) => a.kind === "equipment" && familiesOf(a).includes(instance.family) && (a.applies_to.layer ?? "controls") === layer);
   if (!candidates.length) return { ...base, ...empty, assembly: null, selected_by: "rule", reason: null, status: "no_assembly" };
   const applicable: AssemblyDefinition[] = [];
   const possible: Array<{ def: AssemblyDefinition; missing: string[] }> = [];

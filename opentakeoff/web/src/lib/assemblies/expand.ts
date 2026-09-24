@@ -22,7 +22,7 @@
 
 import { ExprError, type Value } from "./expr";
 import type { ApplicationRecord, AssemblyDefinition, AssemblyLine, ExpandedLine, ValueSource } from "./schema";
-import { SELECTION } from "./schema";
+import { familiesOf, SELECTION } from "./schema";
 import { envFor, latest, layersFor, PROJECT_INSTANCE, run, selectAssembly, selectProjectAssemblies, type Instance, type Override, type ProjectSettings } from "./select";
 
 /** What the drawing itself says about a unit's controls (read-only inputs from
@@ -126,6 +126,7 @@ export function expandApplication(
         scope: instance.scope,
         rule,
         kind: line.kind,
+        label: line.label ?? null,
         role: line.role,
         io: line.io ?? null,
         device_role_ref: line.device_role_ref ?? null,
@@ -182,7 +183,7 @@ export function expandAll(
   for (const app of selectProjectAssemblies(library, settings)) {
     applications.push(app);
     const def = library.find((a) => a.id === app.assembly?.id && a.version === app.assembly?.version);
-    const inst = { ...PROJECT_INSTANCE, family: def?.applies_to.family ?? "project" };
+    const inst = { ...PROJECT_INSTANCE, family: def ? familiesOf(def)[0] : "project" };
     lines.push(...expandApplication(app, inst, library, settings).map((l) => ({ ...l, family: "project" })));
   }
   return { applications, lines };

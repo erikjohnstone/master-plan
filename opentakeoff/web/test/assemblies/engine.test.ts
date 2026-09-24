@@ -255,3 +255,37 @@ test("every selector false is no assembly, not unresolved", () => {
   assert.equal(selectAssembly(vav("VAV-1", { heat_type: "none" }), onlyHw).status, "no_assembly");
   assert.equal(selectAssembly(vav("VAV-2", {}), onlyHw).status, "unresolved");
 });
+
+test("an assembly may apply to several families; its expressions read only attributes every one of them has", () => {
+  const multi = {
+    id: "air-handler", version: "1", title: "Air handler, any packaging", kind: "equipment", status: "starter",
+    applies_to: { family: ["AHU", "RTU"], selector: "attr.vfd = 'yes'", rank: 10 },
+    lines: [line({ id: "vfd", kind: "device", qty: "1", role: { vocab: "ot", id: "vfd" } })],
+  };
+  const { assemblies, rejected: bad } = sanitizeAssemblyDefinitions([multi]);
+  assert.deepEqual(bad, []);
+  const unit = (tag: string, family: string): Instance => ({ ...vav(tag, { vfd: "yes" }), family });
+  assert.equal(selectAssembly(unit("AHU-1", "AHU"), assemblies).assembly?.id, "air-handler");
+  assert.equal(selectAssembly(unit("RTU-1", "RTU"), assemblies).assembly?.id, "air-handler");
+  assert.equal(selectAssembly(unit("FCU-1", "FCU"), assemblies).status, "no_assembly");
+  assert.deepEqual(expandAll([unit("RTU-2", "RTU")], assemblies).lines.map((l) => [l.family, l.role.id]), [["RTU", "vfd"]]);
+  // terminal_type is a VAV attribute and not an FCU one: refused, token named.
+  const narrow = validateAssembly({ ...multi, applies_to: { family: ["VAV", "FCU"], selector: "attr.terminal_type = 'single_duct'", rank: 1 } });
+  assert.equal(narrow.ok, false);
+  assert.match(narrow.ok ? "" : narrow.rejected.errors.join(), /"attr\.terminal_type" is not an attribute of this family/);
+  const twice = validateAssembly({ ...multi, applies_to: { family: ["AHU", "AHU"], rank: 1 } });
+  assert.match(twice.ok ? "" : twice.rejected.errors.join(), /family "AHU" appears twice/);
+  assert.equal(validateAssembly({ ...multi, applies_to: { family: [], rank: 1 } }).ok, false);
+});
+
+test("a line's label (its description on a points schedule) is carried to the expanded line", () => {
+  const rec = {
+    id: "labelled", version: "1", title: "Labelled", kind: "equipment", status: "starter",
+    applies_to: { family: "VAV", rank: 0 },
+    lines: [line({ id: "zt", kind: "point", io: "AI", qty: "1", label: "Zone temperature", role: { vocab: "xeto", id: "ZoneAirTempSensor" } })],
+  };
+  const { assemblies, rejected: bad } = sanitizeAssemblyDefinitions([rec]);
+  assert.deepEqual(bad, []);
+  assert.deepEqual(expandAll([vav("VAV-1", {})], assemblies).lines.map((l) => l.label), ["Zone temperature"]);
+  assert.equal(validateAssembly({ ...rec, lines: [line({ id: "zt", kind: "point", io: "AI", qty: "1", label: "", role: { vocab: "xeto", id: "x" } })] }).ok, false, "an empty label is refused");
+});

@@ -1,0 +1,587 @@
+{
+ "version": "1",
+ "source": "MBL a3cfdde Buildings/Controls/OBC/ASHRAE/G36/Plants/Chillers/Controller.mo",
+ "note": "Field (AI/AO/BI/BO) connectors of the G36 chiller plant controller, and the starter lines that carry each.",
+ "connectors": [
+  {
+   "connector": "uChiWatPum",
+   "io": "BI",
+   "array": "nChiWatPum",
+   "condition": null,
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "status"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "status"
+    }
+   ]
+  },
+  {
+   "connector": "dpChiWat_local",
+   "io": "AI",
+   "array": null,
+   "condition": "not have_senDpChiWatRemWir",
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "plant-dp-sensor"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "plant-dp"
+    }
+   ]
+  },
+  {
+   "connector": "dpChiWat_remote",
+   "io": "AI",
+   "array": "nSenChiWatPum",
+   "condition": "have_senDpChiWatRemWir",
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "remote-dp-sensor"
+    }
+   ]
+  },
+  {
+   "connector": "VChiWat_flow",
+   "io": "AI",
+   "array": null,
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "flow-meter"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "flow"
+    }
+   ]
+  },
+  {
+   "connector": "uChi",
+   "io": "BI",
+   "array": "nChi",
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "status"
+    }
+   ]
+  },
+  {
+   "connector": "phi",
+   "io": "AI",
+   "array": null,
+   "condition": "have_WSE and not have_airCoo",
+   "covered_by": [
+    {
+     "typical": "building-meters",
+     "line": "oa-rh"
+    }
+   ]
+  },
+  {
+   "connector": "TChiWatRetDow",
+   "io": "AI",
+   "array": null,
+   "condition": "have_WSE",
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "wse-ret-down"
+    }
+   ]
+  },
+  {
+   "connector": "TChiWatRetUp",
+   "io": "AI",
+   "array": null,
+   "condition": "have_WSE",
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "wse-sensors"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "wse-ret-up"
+    }
+   ]
+  },
+  {
+   "connector": "TConWatRet",
+   "io": "AI",
+   "array": "nChi",
+   "condition": "need_heaPreCon and not have_airCoo and have_plaHeaPreCon",
+   "not_in_v1": "Per-chiller condenser-water leaving temperature, read only for plant-level head pressure control (G36 have_plaHeaPreCon); v1 leaves head pressure to the chillers' own controls."
+  },
+  {
+   "connector": "TChiWatSupChi",
+   "io": "AI",
+   "array": "nChi",
+   "condition": "need_heaPreCon and not have_airCoo and have_plaHeaPreCon",
+   "covered_by": [
+    {
+     "typical": "chiller",
+     "line": "chiller-temps"
+    }
+   ]
+  },
+  {
+   "connector": "TChiWatSup",
+   "io": "AI",
+   "array": null,
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "chws-sensor"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "chws-temp"
+    }
+   ]
+  },
+  {
+   "connector": "dpChiWat",
+   "io": "AI",
+   "array": null,
+   "condition": "have_WSE and have_byPasValCon",
+   "not_in_v1": "The waterside economizer's own pressure drop (G36 with a bypass-valve economizer): a partner addition to the economizer option in v1."
+  },
+  {
+   "connector": "uEcoPum",
+   "io": "BI",
+   "array": null,
+   "condition": "have_WSE and not have_byPasValCon and not have_airCoo",
+   "not_in_v1": "The waterside economizer's dedicated heat-exchanger pump: counted by the pump typical when the schedule lists it."
+  },
+  {
+   "connector": "TEntHex",
+   "io": "AI",
+   "array": null,
+   "condition": "have_WSE and not have_byPasValCon and not have_airCoo",
+   "not_in_v1": "Economizer heat-exchanger entering temperature (pumped economizer): a partner addition in v1."
+  },
+  {
+   "connector": "TChiWatEntChi",
+   "io": "AI",
+   "array": null,
+   "condition": null,
+   "covered_by": [
+    {
+     "typical": "chiller",
+     "line": "chiller-temps"
+    }
+   ]
+  },
+  {
+   "connector": "uChiWatIsoVal",
+   "io": "AI",
+   "array": "nChi",
+   "condition": "have_modPosChiVal and chiIsoValTyp == Buildings.Controls.OBC.ASHRAE.G36.Plants.Chillers.Types.Actuator.Modulating",
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "chw-isolation-feedback"
+    }
+   ]
+  },
+  {
+   "connector": "u1ChiWatIsoValOpe",
+   "io": "BI",
+   "array": "nChi",
+   "condition": "have_twoPosEndSwiChiVal and chiIsoValTyp == Buildings.Controls.OBC.ASHRAE.G36.Plants.Chillers.Types.Actuator.TwoPosition",
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "isolation-switches"
+    },
+    {
+     "typical": "chiller",
+     "line": "chw-isolation-open"
+    }
+   ]
+  },
+  {
+   "connector": "u1ChiWatIsoValClo",
+   "io": "BI",
+   "array": "nChi",
+   "condition": "have_twoPosEndSwiChiVal and chiIsoValTyp == Buildings.Controls.OBC.ASHRAE.G36.Plants.Chillers.Types.Actuator.TwoPosition",
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "chw-isolation-closed"
+    }
+   ]
+  },
+  {
+   "connector": "uConWatPum",
+   "io": "BI",
+   "array": "nConWatPum",
+   "condition": "not have_airCoo",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "status"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "status"
+    }
+   ]
+  },
+  {
+   "connector": "TOut",
+   "io": "AI",
+   "array": null,
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "oa-temp-sensor"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "oa-temp"
+    }
+   ]
+  },
+  {
+   "connector": "TConWatTowRet",
+   "io": "AI",
+   "array": null,
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "cw-return"
+    }
+   ]
+  },
+  {
+   "connector": "TConWatSup",
+   "io": "AI",
+   "array": null,
+   "condition": "not closeCoupledPlant and not have_airCoo",
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "cw-temps"
+    },
+    {
+     "typical": "cooling-tower",
+     "line": "cw-supply"
+    }
+   ]
+  },
+  {
+   "connector": "u1TowInlIsoValOpe",
+   "io": "BI",
+   "array": "nTowCel",
+   "condition": "have_towInlIsoVal and have_towIsoValEndSwi and not have_airCoo",
+   "not_in_v1": "Tower cell isolation valve end switches (G36 have_towIsoValEndSwi): a partner addition to the cell isolation valve option in v1."
+  },
+  {
+   "connector": "u1TowOutIsoValOpe",
+   "io": "BI",
+   "array": "nTowCel",
+   "condition": "have_towIsoValEndSwi and have_towOutIsoVal and not have_airCoo",
+   "not_in_v1": "Tower outlet isolation valves (G36 have_towOutIsoVal) are not in v1."
+  },
+  {
+   "connector": "u1TowInlIsoValClo",
+   "io": "BI",
+   "array": "nTowCel",
+   "condition": "have_towInlIsoVal and have_towIsoValEndSwi and not have_airCoo",
+   "not_in_v1": "As u1TowInlIsoValOpe."
+  },
+  {
+   "connector": "u1TowOutIsoValClo",
+   "io": "BI",
+   "array": "nTowCel",
+   "condition": "have_towIsoValEndSwi and have_towOutIsoVal and not have_airCoo",
+   "not_in_v1": "As u1TowOutIsoValOpe."
+  },
+  {
+   "connector": "watLev",
+   "io": "AI",
+   "array": null,
+   "condition": "not have_airCoo",
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "level-sensor"
+    },
+    {
+     "typical": "cooling-tower",
+     "line": "level"
+    }
+   ]
+  },
+  {
+   "connector": "uTowSta",
+   "io": "BI",
+   "array": "nTowCel",
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "fan-status"
+    }
+   ]
+  },
+  {
+   "connector": "yEcoConWatIsoVal",
+   "io": "BO",
+   "array": null,
+   "condition": "have_WSE",
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "wse-cw-valve-actuator"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "wse-cw-valve"
+    }
+   ]
+  },
+  {
+   "connector": "yWseRetVal",
+   "io": "AO",
+   "array": null,
+   "condition": "have_byPasValCon and have_WSE",
+   "not_in_v1": "The economizer's in-line return valve (bypass-valve economizer): a partner addition in v1."
+  },
+  {
+   "connector": "yWsePumOn",
+   "io": "BO",
+   "array": null,
+   "condition": "have_WSE and not have_byPasValCon",
+   "not_in_v1": "The economizer pump's enable: counted by the pump typical when the schedule lists it."
+  },
+  {
+   "connector": "y1WseChiWatBypVal",
+   "io": "BO",
+   "array": null,
+   "condition": "have_WSE and have_priOnl and have_parChi and not have_airCoo",
+   "not_in_v1": "Economizer-only chilled-water bypass valve (primary-only parallel chillers): a partner addition in v1."
+  },
+  {
+   "connector": "yWsePumSpe",
+   "io": "AO",
+   "array": null,
+   "condition": "have_WSE and not have_byPasValCon and not have_airCoo",
+   "not_in_v1": "The economizer pump's speed: counted by the pump typical (variable speed) when the schedule lists it."
+  },
+  {
+   "connector": "yChiWatPum",
+   "io": "BO",
+   "array": "nChiWatPum",
+   "condition": "have_heaChiWatPum",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "cmd"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "cmd"
+    }
+   ]
+  },
+  {
+   "connector": "yChiPumSpe",
+   "io": "AO",
+   "array": null,
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "chw-pump-speed"
+    }
+   ]
+  },
+  {
+   "connector": "yChi",
+   "io": "BO",
+   "array": "nChi",
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "enable"
+    }
+   ]
+  },
+  {
+   "connector": "y1ConWatIsoVal",
+   "io": "BO",
+   "array": "nChi",
+   "condition": "(not have_airCoo) and have_heaConWatPum and (not need_heaPreCon or not have_fixSpeConWatPum and not have_WSE)",
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "cw-isolation-valve"
+    },
+    {
+     "typical": "chiller",
+     "line": "cw-isolation"
+    }
+   ]
+  },
+  {
+   "connector": "yConWatIsoVal",
+   "io": "AO",
+   "array": "nChi",
+   "condition": "(not have_airCoo) and have_heaConWatPum and not (not need_heaPreCon or not have_fixSpeConWatPum and not have_WSE)",
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "cw-isolation-mod"
+    }
+   ]
+  },
+  {
+   "connector": "yConWatPumSpe",
+   "io": "AO",
+   "array": null,
+   "condition": "(not have_airCoo) and not have_fixSpeConWatPum",
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "cw-pump-speed"
+    }
+   ]
+  },
+  {
+   "connector": "yConWatPum",
+   "io": "BO",
+   "array": "nConWatPum",
+   "condition": "not have_airCoo",
+   "covered_by": [
+    {
+     "typical": "pump-constant",
+     "line": "cmd"
+    },
+    {
+     "typical": "pump-vfd",
+     "line": "cmd"
+    }
+   ]
+  },
+  {
+   "connector": "y1ChiWatIsoVal",
+   "io": "BO",
+   "array": "nChi",
+   "condition": "chiIsoValTyp == Buildings.Controls.OBC.ASHRAE.G36.Plants.Chillers.Types.Actuator.TwoPosition",
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "chw-isolation-valve"
+    },
+    {
+     "typical": "chiller",
+     "line": "chw-isolation"
+    }
+   ]
+  },
+  {
+   "connector": "yChiWatIsoVal",
+   "io": "AO",
+   "array": "nChi",
+   "condition": "chiIsoValTyp == Buildings.Controls.OBC.ASHRAE.G36.Plants.Chillers.Types.Actuator.Modulating",
+   "cited_by": [
+    {
+     "typical": "chiller",
+     "line": "chw-isolation-mod"
+    }
+   ]
+  },
+  {
+   "connector": "yMinValPosSet",
+   "io": "AO",
+   "array": null,
+   "condition": null,
+   "cited_by": [
+    {
+     "typical": "chw-plant",
+     "line": "bypass-valve"
+    },
+    {
+     "typical": "chw-plant",
+     "line": "bypass-cmd"
+    }
+   ]
+  },
+  {
+   "connector": "yTowCelIsoVal",
+   "io": "BO",
+   "array": "nTowCel",
+   "condition": "have_towInlIsoVal and not have_airCoo",
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "cell-isolation-valves"
+    },
+    {
+     "typical": "cooling-tower",
+     "line": "cell-isolation"
+    }
+   ]
+  },
+  {
+   "connector": "yTowCel",
+   "io": "BO",
+   "array": "nTowCel",
+   "condition": "not have_airCoo",
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "fan-relays"
+    },
+    {
+     "typical": "cooling-tower",
+     "line": "fan-cmd"
+    }
+   ]
+  },
+  {
+   "connector": "yTowFanSpe",
+   "io": "AO",
+   "array": null,
+   "condition": "not have_airCoo",
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "fan-speed-cmd"
+    }
+   ]
+  },
+  {
+   "connector": "yMakUp",
+   "io": "BO",
+   "array": null,
+   "condition": "not have_airCoo",
+   "cited_by": [
+    {
+     "typical": "cooling-tower",
+     "line": "makeup-valve"
+    },
+    {
+     "typical": "cooling-tower",
+     "line": "makeup"
+    }
+   ]
+  }
+ ]
+}
