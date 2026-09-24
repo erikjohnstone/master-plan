@@ -153,7 +153,9 @@ function renderText(results, summary, { side }) {
   const L = [];
   L.push(`POINTS COMPARE (${side}): typical point lines vs printed points lists, per unit, by I/O type`);
   for (const r of results) {
-    L.push(`  ${r.id}: ${r.printed_rows} printed rows; ${r.units.length} units named; ${r.unmatched.length} printed unit(s) naming no scheduled row${r.unmatched.length ? ` (${r.unmatched.slice(0, 12).map((u) => `${u.unit}×${u.rows}`).join(", ")}${r.unmatched.length > 12 ? ", …" : ""})` : ""}`);
+    // Held-out: counts only, never a tag (the split's rule: aggregates at gates).
+    const names = side === "dev" && r.unmatched.length ? ` (${r.unmatched.slice(0, 12).map((u) => `${u.unit}×${u.rows}`).join(", ")}${r.unmatched.length > 12 ? ", …" : ""})` : "";
+    L.push(`  ${r.id}: ${r.printed_rows} printed rows; ${r.units.length} units named; ${r.unmatched.length} printed unit(s) naming no scheduled row${names}`);
   }
   L.push("");
   L.push("family                    units  decided  agree");
@@ -171,7 +173,9 @@ function renderText(results, summary, { side }) {
     }
   }
   L.push("");
-  L.push(`GATE 6 (${side}): ${summary.diffs} diffs, ${summary.diffs - summary.unclassified.length} classified with evidence (${CLASSES.map((c) => `${c} ${summary.by_class[c]}`).join(", ")}); ${summary.unclassified.length} unclassified → ${summary.unclassified.length ? "FAIL" : "PASS"} (agreement tracked, no target)`);
+  L.push(summary.units === 0
+    ? `GATE 6 (${side}): no unit to compare. No document maps a printed points list to a scheduled unit, so there is no evidence and this is not a pass.`
+    : `GATE 6 (${side}): ${summary.diffs} diffs, ${summary.diffs - summary.unclassified.length} classified with evidence (${CLASSES.map((c) => `${c} ${summary.by_class[c]}`).join(", ")}); ${summary.unclassified.length} unclassified → ${summary.unclassified.length ? "FAIL" : "PASS"} (agreement tracked, no target)`);
   return L.join("\n");
 }
 
@@ -227,6 +231,7 @@ async function main() {
       generated_at: new Date().toISOString(), side, documents: setIds, errors,
       census: "reports/assemblies/00-baseline.json per_set[].points_lists.rows (WP0.1)",
       total: { units: summary.units, agree: summary.agree, diffs: summary.diffs, by_class: summary.by_class, unclassified: summary.unclassified.length },
+      verdict: summary.units === 0 ? "no_evidence" : summary.unclassified.length ? "fail" : "pass",
       by_family: Object.fromEntries(summary.by_family),
       ...(side === "dev" ? { documents_detail: results } : {}),
     };

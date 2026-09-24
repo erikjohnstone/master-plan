@@ -2,9 +2,15 @@
 // D6; AS-19's next lever).
 //
 // SHOULD THIS BE ON THE SHARED PATH? Yes. Which options a unit's typical
-// takes decides its devices and points in every surface; the apply path
-// calls this once, and the Takeoff panel and apply_assemblies read the same
-// records.
+// takes decides its devices and points in every surface, so the apply path is
+// where it belongs, once, for the Takeoff panel and apply_assemblies alike.
+//
+// NOT WIRED YET (ASSEMBLIES_BUG_CATALOGUE AS-19). The dev census found only
+// three units with their own printed I/O: a control schematic that binds that
+// one unit and prints I/O tokens. No dev unit has a printed points list
+// (AS-22). A drawing-decided option with no dev document to validate it on
+// would be an unmeasured change to every record, so the apply path does not
+// call this until a dev document gives per-unit printed I/O.
 //
 // When the drawing fixes how many hardware points of each type a unit has (a
 // printed points list, or a control schematic bound to exactly one schedule
