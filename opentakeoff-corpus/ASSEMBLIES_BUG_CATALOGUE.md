@@ -925,3 +925,49 @@ the build read the JSON either way). `web/test/assemblies/starterLibrary.test.ts
 loads the starter through the gate (47 records) and fails on any dynamic
 import in `web/src` that passes attributes. As a negative control, the
 pre-fix file trips it.
+
+
+## AS-24 — AS-19's ceiling holds for a schedule-only proposal and for I/O-count matching, not for reading the control drawings (OPEN — proposed goal CONTROL_INTENT)
+
+**Found:** 2026-09-24, research for the owner's question on estimator questions
+and AI reading (`plans/05-research/01-dev-miss-evidence.md`; scripts and the
+per-row CSV in `plans/05-research/`).
+
+**What:** AS-19 concluded that "drawing-decided options could reach at most 3
+of the 244 dev rows", because only 3 schematics bind one unit and print its
+I/O. That bound is right for an I/O-count match. It is not a bound on the
+control drawings themselves. Classifying all 128 dev misses by the evidence
+their keys name gives:
+- 31 settled by a project fact: no BAS 20, DoD 4, existing policy 5, motor
+  speed with no VFD scheduled 2;
+- 71 settled by control evidence: sequence prose 15, control details and
+  points schedules 41, absence on a bound detail 12, detail plus DoD 3;
+- 11 settled by the schedule itself, normalizer gaps;
+- 15 settled by floor-plan evidence per zone.
+
+The 71 are reached by reading options from evidence bound through tag lists
+and ranges ("AHU-4, AHU-5 & AHU-8"; "EF-1 THRU EF-3"), schedule
+cross-references (040's CONTROL column "FAN-A" names detail
+"…AHU INTERLOCK - FAN-A") and family-level typical details. No single-unit I/O
+count is needed.
+
+**Numbers:** the sheet graph binds 18 of the 71 to their governing schematic
+today; 2 are printed but unbound; 18 match only a family word in a title; 33
+have nothing, because the title forms, lists, ranges and cross-references
+above are not recognized. Every one of the 71 is in a vector text layer.
+
+**Status:** AS-19's statement "the control drawings cannot close it here"
+should read "an I/O-count match on the control drawings cannot close it
+here". The lever is a deterministic control-evidence map plus
+closed-question reading with cross-checked evidence. That is proposed as
+`goals/CONTROL_INTENT.md` and awaits the owner's decision. Nothing in this
+goal's code changes. The 11 schedule-printed rows are this goal's normalizer
+queue:
+- 031's SPEED CONTROL column;
+- 031's 'NOT USED' row;
+- 031's fan rows whose SERVICE is another scheduled unit;
+- itd-d1-lab's heater remark "NOT CONTROLLED BY DDC";
+- 12_MT's schedule note 2 (modulating valve);
+- bldg5406 AHU-1 (AS-16).
+
+040 EF-1A also prints "BACKDRAFT DAMPER TYPE: MOTORIZED" on its own row.

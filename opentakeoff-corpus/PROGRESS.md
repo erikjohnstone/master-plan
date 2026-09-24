@@ -1,5 +1,28 @@
 ## Active work
 
+### Proposed: control intent (GOAL LOOP C, `goals/CONTROL_INTENT.md`) — research done 2026-09-24, awaiting owner review, not started
+
+The owner asked how estimator questions and AI reading of control drawings
+would work, and for a goal before anything is built. The answer so far:
+- **Research:** `plans/05-research/01–03`, the design plan
+  `plans/05-control-intent-plan.md`, and the goal `goals/CONTROL_INTENT.md`.
+  The pilot scripts and outputs are in `plans/05-research/pilot/`; dev
+  documents only.
+- **Dev misses by deciding evidence:** project fact 31, control drawings 71,
+  schedule 11, floor plan 15. Targeting today binds 18 of the 71. Ceiling for
+  the goal: 218/244.
+- **Pilot:**
+  - text model on the text layer: 4/4 presence options right with verified
+    quotes; abstained on 15/15 absences; 1 of 6 BAS roles wrong (quotes
+    paraphrased, so the check rejected it);
+  - vision model on one bound detail crop: absences right in 2/2 runs; one
+    run misread an economizer.
+- **Finding:** the configured vision model `gemma-4-31b` is no longer served
+  by the platform endpoint, which lists `qwen-3.8-27b` (accepts images) and
+  `gpt-oss-120b` (text only).
+- **Correction:** AS-24 restates AS-19's ceiling as specific to I/O-count
+  matching.
+
 ### Active work: assemblies (GOAL LOOP S, `goals/ASSEMBLIES.md`) — started 2026-09-23
 
 Branch `claude/affectionate-darwin-316fwo` (the goal's BRANCH line names
@@ -28,6 +51,7 @@ here). Coordinator only, one heavy job at a time. Bug catalogue:
 **GATE 5, measured 2026-09-24, not passed** (AS-19; `reports/assemblies/05-typical-eval-{dev,heldout}.{json,md}`):
 - Typical eval dev: 116/244 exact (47.5%; needs 98%). This is at the schedule-only ceiling AS-19 demonstrates (at most 123/244). Counting only the rows that reach every drawing-decided option without a library default: 43/244. Re-measured at the final HEAD with the same result.
 - The D6 census finds only 3 dev units with their own printed I/O, so the control drawings cannot close the gap here (AS-19: a demonstrated ceiling).
+  - Update 2026-09-24 (AS-24): that ceiling is for an I/O-count match. Reading options through evidence bound by tag lists, ranges, cross-references and typical details could settle 71 dev misses (`plans/05-research/01-dev-miss-evidence.md`), proposed as `goals/CONTROL_INTENT.md`.
 - Held-out: 21/91 exact (23.1%; needs 95%), reported with aggregates only.
 - Undisclosed: 0 on both sides (passes).
 - Parity: green on D04 (records, lines, report and the CSV set).
