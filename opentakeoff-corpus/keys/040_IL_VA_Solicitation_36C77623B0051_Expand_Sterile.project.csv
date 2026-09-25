@@ -1,0 +1,13 @@
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-25 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output. What an estimator would answer for this project.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,FMCS SHALL,M401-M403 FMCS control details and sequences
+PQ2,va,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#1,VA  FORM   08 - 6231,VA solicitation 36C77623B0051 (Captain James A. Lovell FHCC)
+PQ3,n/a,,,no keyed unit is flagged existing
+PQ4,n/a,,,no keyed fan or pump waits on an unprinted speed
+PQ5,n/a,,,no packaged or plumbing-service pump keyed

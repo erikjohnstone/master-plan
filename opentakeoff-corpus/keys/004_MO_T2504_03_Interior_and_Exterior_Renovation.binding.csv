@@ -1,0 +1,25 @@
+# 004_MO_T2504_03_Interior_and_Exterior_Renovation.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's controls sheets (PDF text layer and renders), never pipeline output.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/004_MO_T2504_03_Interior_and_Exterior_Renovation.typicals.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,RTU -1,RTU,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,"RTU-1, 2, 3, 4, 6, 7 SEQUENCE OF OPERATIONS",list_range,prefix-carrying list
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,RTU - 2,RTU,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,"RTU-1, 2, 3, 4, 6, 7 SEQUENCE OF OPERATIONS",list_range,prefix-carrying list
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,RTU -3,RTU,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,"RTU-1, 2, 3, 4, 6, 7 SEQUENCE OF OPERATIONS",list_range,prefix-carrying list
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,RTU -4,RTU,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,"RTU-1, 2, 3, 4, 6, 7 SEQUENCE OF OPERATIONS",list_range,prefix-carrying list
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,RTU -6,RTU,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,"RTU-1, 2, 3, 4, 6, 7 SEQUENCE OF OPERATIONS",list_range,prefix-carrying list
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,RTU -7,RTU,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,"RTU-1, 2, 3, 4, 6, 7 SEQUENCE OF OPERATIONS",list_range,prefix-carrying list
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,RTU -5,RTU,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,RTU-5 SEQUENCE OF OPERATIONS,tag,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,DOAS - 1,DOAS,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,KITCHEN HOOD SEQUENCE OF OPERATIONS:,semantic,the kitchen makeup air unit the hood panel runs
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EF - 1,FAN,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,"EF-1 CONTROL SEQUENCE – PUBLIC RESTROOMS, SHOWER ROOMS, AND LOCKER ROOM",tag,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,GEF - 1,FAN,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,KITCHEN HOOD SEQUENCE OF OPERATIONS:,semantic,the grease exhaust fan the hood panel runs (general controls note 7)
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,EF - 2,FAN,004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#40,EF-2 CONTROL SEQUENCE,tag,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39,GUH - 1,UNIT_HEATER,,none,,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SP - 1,PUMP,,none,,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HWRP - 1,PUMP,,none,,
