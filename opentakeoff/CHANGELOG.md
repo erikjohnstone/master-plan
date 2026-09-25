@@ -1,5 +1,12 @@
 # Changelog
 
+- **The platform vision model is `qwen-3.8-27b`.** The earlier default,
+  `gemma-4-31b`, is no longer served: the endpoint's `/v1/models` lists only
+  `gpt-oss-120b` and `qwen-3.8-27b` (checked 2026-09-25). Every vision call
+  on the platform path therefore failed. `web/src/lib/ai.js` `PLATFORM_AI`
+  now names `qwen-3.8-27b`, and a test pins both defaults to the recorded
+  model list. A bring-your-own configuration is unchanged.
+
 - **Assemblies exports: the CSV set, and coil-derived valves in the HIT
   export (MCP 0.9.83).** `web/src/lib/assemblies/exportSet.ts` builds eight
   CSV files from one application of the library: `equipment.csv`,
