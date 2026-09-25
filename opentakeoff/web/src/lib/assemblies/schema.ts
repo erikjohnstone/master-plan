@@ -144,12 +144,31 @@ export interface ApplicationRecord {
   reason: string | null;
   options: Record<string, { value: boolean | null; source: ValueSource | null; missing?: string[] }>;
   variables: Record<string, { value: number | string | boolean | null; source: ValueSource | null }>;
-  status: "ok" | "unresolved" | "overridden" | "excluded" | "no_assembly";
+  /** not_in_scope: a project answer or the unit's control drawings put it
+   * outside the BAS scope (goals/CONTROL_INTENT.md), so it takes no typical. */
+  status: "ok" | "unresolved" | "overridden" | "excluded" | "no_assembly" | "not_in_scope";
   /** What the unit waits for: the references that left a selector, option or
    * line unknown, and the candidates it could not choose between. */
   unresolved: { missing: string[]; candidates: string[] };
   excluded_reason?: string;
   multiplier: { value: number; basis: string };
+  /** The project answers and drawing readings the record rests on (control
+   * intent), each with its rule, basis and cites; absent when there are none. */
+  intent?: IntentUse[];
+}
+
+/** One control-intent fact a record used: its target ("scope", "attr.<id>"
+ * or "opt.<id>"), value, source, rule, basis and cites. */
+export interface IntentUse {
+  target: string;
+  value: number | string | boolean | null;
+  source: "project" | "drawing";
+  rule: string;
+  basis: string;
+  cites: Cite[];
+  /** A fact the record could not use because the schedule prints otherwise
+   * (decision C12): the option stays unresolved. */
+  conflict?: string;
 }
 
 /** One output line (plan §8.2, §8.4): the three quantity stages, what every

@@ -81,7 +81,7 @@ export async function drawAssembliesSection(doc: PDFDocument, report: Assemblies
   const t = report.totals;
   text(c, "Controls assemblies", 13, true);
   if (opts.projectName) text(c, opts.projectName, 9, false, 0.35);
-  text(c, `${t.units} units · ${t.records} records: ${t.by_status.ok ?? 0} ok, ${t.by_status.overridden ?? 0} overridden, ${t.by_status.unresolved ?? 0} unresolved, ${t.by_status.no_assembly ?? 0} without a typical, ${t.by_status.excluded ?? 0} excluded`, 8.5, false, 0.3);
+  text(c, `${t.units} units · ${t.records} records: ${t.by_status.ok ?? 0} ok, ${t.by_status.overridden ?? 0} overridden, ${t.by_status.unresolved ?? 0} unresolved, ${t.by_status.no_assembly ?? 0} without a typical, ${t.by_status.excluded ?? 0} excluded${t.by_status.not_in_scope ? `, ${t.by_status.not_in_scope} outside the BAS scope` : ""}`, 8.5, false, 0.3);
   text(c, `${t.lines} lines: ${t.lines_by_status.ok ?? 0} ok, ${t.lines_by_status.unresolved ?? 0} unresolved, ${t.lines_by_status.replaced ?? 0} replaced by drawing evidence, ${t.lines_by_status.error ?? 0} errors. Every line cites its schedule row and its library rule; nothing is guessed.`, 8.5, false, 0.3);
   c.y -= 6;
 

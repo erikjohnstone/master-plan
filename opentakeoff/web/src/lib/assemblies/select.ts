@@ -22,7 +22,8 @@
 // value the drawing does not give, and the record says so.
 
 import { evaluate, parseExpr, type Env, type Result, type Value } from "./expr";
-import { familiesOf, type ApplicationRecord, type AssemblyDefinition, type Cite, type ValueSource } from "./schema";
+import { familiesOf, type ApplicationRecord, type AssemblyDefinition, type Cite, type IntentUse, type ValueSource } from "./schema";
+import type { IntentFact, UnitIntent } from "../controlIntent/intent";
 
 /** A unit to apply assemblies to: its normalized attributes (normalize.ts)
  * and where it is. */
@@ -34,6 +35,10 @@ export interface Instance {
   cites: Cite[];
   /** How many units the tag stands for, and why (plan §8.4). */
   multiplier?: { value: number; basis: string };
+  /** What the project's answers and the unit's control drawings decide
+   * (controlIntent/intent.ts). Its attributes are already among
+   * `attributes`; its scope and options are applied here. */
+  intent?: UnitIntent;
 }
 
 /** A project's settings for its assemblies: the partner's project variables,
@@ -45,6 +50,9 @@ export interface ProjectSettings {
   partnerDefaults?: Record<string, Value>;
   profile?: Record<string, boolean>;
   responsibility?: Record<string, Partial<Record<string, string>>>;
+  /** The project questions' answers (controlIntent/catalogue.ts), question id
+   * → answer; the apply path turns them into each unit's intent. */
+  answers?: Record<string, string>;
 }
 
 /** A user's choice for one unit, always with a reason; for one layer, or
@@ -133,26 +141,50 @@ function variablesOf(def: AssemblyDefinition, instance: Instance, settings: Proj
   return out;
 }
 
-function optionsOf(def: AssemblyDefinition, instance: Instance, vars: Record<string, Chosen>, settings: ProjectSettings, override?: Override): Record<string, Chosen> {
+/** An intent fact as a chosen value: a project answer is a project value, a
+ * drawing reading a drawing value (D6: above a partner default). */
+const fromFact = (f: IntentFact<boolean>): Chosen => ({ value: f.value, source: f.source === "drawing" ? "drawing" : "project" });
+
+function optionsOf(def: AssemblyDefinition, instance: Instance, vars: Record<string, Chosen>, settings: ProjectSettings, override?: Override, uses?: IntentUse[]): Record<string, Chosen> {
   const out: Record<string, Chosen> = {};
   for (const o of def.options) {
     const user = override?.options?.[o.id];
     if (user !== undefined) { out[o.id] = { value: user, source: "user" }; continue; }
+    const fact = instance.intent?.options?.[o.id];
+    const use = (f: IntentFact<boolean>, conflict?: string): IntentUse => ({ target: `opt.${o.id}`, value: f.value, source: f.source, rule: f.rule, basis: f.basis, cites: f.cites, ...(conflict ? { conflict } : {}) });
     if (o.auto) {
       // An option's condition reads attributes and variables, never another option.
       const r = run(o.auto, envFor(instance, vars));
-      if (r.known) { out[o.id] = { value: r.value === true, source: "attr" }; continue; }
+      if (r.known) {
+        const value = r.value === true;
+        // The schedule decides it; a fact that says otherwise is a conflict
+        // the unit waits on, never an override (decision C12).
+        if (fact && fact.value !== value) {
+          uses?.push(use(fact, `the schedule makes it ${value}`));
+          out[o.id] = { value: null, source: null, missing: [`conflict.opt.${o.id}`] };
+          continue;
+        }
+        out[o.id] = { value, source: "attr" };
+        continue;
+      }
+      if (fact) { uses?.push(use(fact)); out[o.id] = fromFact(fact); continue; }
       const pd = partnerDefault(settings, def, o.id);
       if (typeof pd === "boolean") { out[o.id] = { value: pd, source: "partner_default" }; continue; }
       out[o.id] = { value: null, source: null, missing: r.missing };
       continue;
     }
+    if (fact) { uses?.push(use(fact)); out[o.id] = fromFact(fact); continue; }
     const pd = partnerDefault(settings, def, o.id);
     if (typeof pd === "boolean") { out[o.id] = { value: pd, source: "partner_default" }; continue; }
     out[o.id] = { value: o.default ?? false, source: def.status === "starter" ? "starter_default" : "partner_default" };
   }
   return out;
 }
+
+/** The intent facts on a unit's attributes, as record uses. */
+const attributeUses = (instance: Instance): IntentUse[] => Object.entries(instance.intent?.attributes ?? {}).map(([k, f]) => ({
+  target: `attr.${k}`, value: f.value as IntentUse["value"], source: f.source, rule: f.rule, basis: f.basis, cites: f.cites,
+}));
 
 /** The project itself, as the one "unit" a project assembly applies to (a
  * loop's system specialties, a front-end): no attributes, so its selectors
@@ -194,7 +226,8 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
   }
   const finish = (def: AssemblyDefinition, selectedBy: "rule" | "user", reason: string | null, extraMissing: string[] = []): ApplicationRecord => {
     const variables = variablesOf(def, instance, settings, override);
-    const options = optionsOf(def, instance, variables, settings, override);
+    const uses: IntentUse[] = attributeUses(instance);
+    const options = optionsOf(def, instance, variables, settings, override, uses);
     const missing = [...new Set([
       ...extraMissing,
       ...Object.values(options).flatMap((o) => o.missing ?? []),
@@ -210,8 +243,19 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
       variables: Object.fromEntries(Object.entries(variables).map(([k, v]) => [k, { value: v.value, source: v.source }])),
       status,
       unresolved: { missing, candidates: [] },
+      ...(uses.length ? { intent: uses } : {}),
     };
   };
+
+  // A project answer or the unit's control drawings put it outside the BAS
+  // scope: no typical (a user's own choice of assembly still wins, below).
+  const outOfScope = instance.intent?.out_of_scope;
+  if (outOfScope && !override?.assembly) {
+    return {
+      ...base, ...empty, assembly: null, selected_by: "rule", reason: `${outOfScope.rule}: ${outOfScope.basis}`, status: "not_in_scope",
+      intent: [{ target: "scope", value: false, source: outOfScope.source, rule: outOfScope.rule, basis: outOfScope.basis, cites: outOfScope.cites }],
+    };
+  }
 
   if (override?.assembly) {
     const def = library.filter((a) => a.id === override.assembly!.id && (!override.assembly!.version || a.version === override.assembly!.version));
@@ -247,6 +291,7 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
   // specific as the best applicable one, or only possible ones.
   const cands = [...higherPossible.map((p) => p.def), ...rivals];
   const missing = [...new Set(higherPossible.flatMap((p) => p.missing))];
+  const uses = attributeUses(instance);
   return {
     ...base, ...empty,
     assembly: null,
@@ -254,5 +299,6 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
     reason: rivals.length > 1 ? `${rivals.length} assemblies of rank ${top!.applies_to.rank} apply` : null,
     status: "unresolved",
     unresolved: { missing, candidates: cands.map((a) => `${a.id}@${a.version}`) },
+    ...(uses.length ? { intent: uses } : {}),
   };
 }

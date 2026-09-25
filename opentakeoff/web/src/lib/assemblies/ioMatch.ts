@@ -51,7 +51,7 @@ export function optionsFromPrintedIo(
   layer = "controls",
 ): IoMatch {
   const base = selectAssembly(instance, library, settings, undefined, layer);
-  if (!base.assembly || base.status === "no_assembly" || base.status === "excluded") return { decided: {}, fits: 0, free: [], reason: "the unit has no typical" };
+  if (!base.assembly || base.status === "no_assembly" || base.status === "excluded" || base.status === "not_in_scope") return { decided: {}, fits: 0, free: [], reason: "the unit has no typical" };
   const free = Object.entries(base.options)
     .filter(([, o]) => o.source === null || o.source === "starter_default" || o.source === "partner_default")
     .map(([id]) => id)

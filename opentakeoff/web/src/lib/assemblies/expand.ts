@@ -49,7 +49,7 @@ export function expandApplication(
   settings: ProjectSettings = {},
   evidence: DrawingEvidence = {},
 ): ExpandedLine[] {
-  if (!app.assembly || app.status === "excluded" || app.status === "no_assembly") return [];
+  if (!app.assembly || app.status === "excluded" || app.status === "no_assembly" || app.status === "not_in_scope") return [];
   const def = findAssembly(library, app.assembly.id, app.assembly.version);
   if (!def) return [];
   const vars = Object.fromEntries(Object.entries(app.variables).map(([k, v]) => [k, { value: v.value as Value | null, source: v.source }]));

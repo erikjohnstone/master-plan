@@ -16,6 +16,9 @@
 //   --report   write reports/assemblies/05-typical-eval-<dev|heldout>.{json,md}.
 //   --detail   (dev only) every instance that is not exact, with the record's
 //              reason, what it waits for and the key's basis note.
+//   --answers keys   apply the project-question answers of keys/<set>.project.csv
+//              (goals/CONTROL_INTENT.md instrument 5: the estimator's answers,
+//              "n/a" and "unknown" leaving a question unanswered).
 //
 // Snapshots come from the attribute eval's child (assemblies-attr-eval.mjs
 // --single-json: the cached sheet graph, then the compile), so both
@@ -131,9 +134,9 @@ function keyedAttributes(attrKeyInst) {
  * tables, pages }); `library` the assembly definitions; `settings` the
  * project settings the run applies (none by default).
  */
-export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, settings = {} }) {
+export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, settings = {}, intents }) {
   const project = { items: snapshot.items, tables: snapshot.tables, pages: snapshot.pages, printed_points: snapshot.printed_points ?? [] };
-  const { instances, applications } = applyAssemblies({ project, library, settings });
+  const { instances, applications } = applyAssemblies({ project, library, settings, intents });
   // A record is its row's: the cite of the row's own mark (its family may be
   // one the apply path derived, so it is not part of the key).
   const rowKey = (c, tag) => `${c?.sheet}|${c?.table_title}|${canonTag(tag)}|${JSON.stringify(c?.bbox ?? null)}|${c?.header}`;
@@ -174,7 +177,7 @@ export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, set
     const got = { status: app?.status ?? "no_record", typical: app?.assembly?.id ?? null, reason: app?.reason ?? null, missing: app?.unresolved?.missing ?? [], candidates: app?.unresolved?.candidates ?? [] };
     const o = { ...base, item_family: inst?.family ?? m.item.family, derived: inst?.derived ?? {}, got };
     const keyNone = row.typical_id === "none";
-    const decidedNone = got.status === "no_assembly" || got.status === "excluded";
+    const decidedNone = got.status === "no_assembly" || got.status === "excluded" || got.status === "not_in_scope";
     if (got.status === "unresolved" || got.status === "no_record") {
       const lines = keyedAttributes(ai.inst);
       o.outcome = "unresolved";
@@ -313,11 +316,25 @@ export function renderText(summary, { side, detail, outcomes, settingsLabel }) {
   return L.join("\n");
 }
 
+/** keys/<set>.project.csv → the answers an estimator gave (question → answer);
+ * "n/a" and "unknown" leave a question unanswered. */
+export function parseProjectKeyCsv(text) {
+  const lines = text.split(/\r?\n/).filter((l) => l.trim() && !l.startsWith("#"));
+  const answers = {};
+  for (const line of lines.slice(1)) {
+    const [question, answer] = splitCsvLine(line);
+    if (!/^PQ\d+$/.test(question ?? "")) throw new Error(`bad project key row: ${line}`);
+    if (answer && answer !== "n/a" && answer !== "unknown") answers[question] = answer;
+  }
+  return answers;
+}
+
 // ── CLI ─────────────────────────────────────────────────────────────────────
 async function main() {
   const argv = process.argv.slice(2);
   const flag = (f) => argv.includes(f);
-  const positional = argv.filter((a) => !a.startsWith("--"));
+  // A flag that takes a value (--answers keys) keeps its value out of the set ids.
+  const positional = argv.filter((a, i) => !a.startsWith("--") && argv[i - 1] !== "--answers");
   const [corpusDir, ...only] = positional;
   if (!corpusDir) {
     console.error("usage: node --import tsx scripts/assemblies-typical-eval.mjs <corpus-dir> [setId ...] [--heldout] [--report] [--detail]");
@@ -347,6 +364,11 @@ async function main() {
     process.exit(2);
   }
 
+  const answersFrom = argv.includes("--answers") ? argv[argv.indexOf("--answers") + 1] : null;
+  if (answersFrom && answersFrom !== "keys") {
+    console.error("--answers takes \"keys\" (keys/<set>.project.csv)");
+    process.exit(2);
+  }
   const outcomes = [];
   const errors = [];
   for (const id of setIds) {
@@ -357,10 +379,17 @@ async function main() {
     const attrKey = parseAttrKeyCsv(readFileSync(attrPath, "utf8"), attrPath);
     const snap = await snapshotInChild(corpus, id);
     if (snap.error) { errors.push({ id, error: snap.error.split("\n")[0] }); continue; }
-    outcomes.push(...scoreTypicalSet({ setId: id, typKey, attrKey, snapshot: snap, library }).outcomes);
+    let settings = {};
+    if (answersFrom) {
+      const pPath = join(corpus, "keys", `${id}.project.csv`);
+      if (!existsSync(pPath)) { errors.push({ id, error: `no key ${pPath}` }); continue; }
+      settings = { answers: parseProjectKeyCsv(readFileSync(pPath, "utf8")) };
+    }
+    outcomes.push(...scoreTypicalSet({ setId: id, typKey, attrKey, snapshot: snap, library, settings }).outcomes);
   }
   const summary = summarize(outcomes);
-  const text = renderText(summary, { side, detail, outcomes, settingsLabel: "none (the auto-proposal alone)" });
+  const settingsLabel = answersFrom ? "project answers from keys/<set>.project.csv" : "none (the auto-proposal alone)";
+  const text = renderText(summary, { side, detail, outcomes, settingsLabel });
   console.log(text);
   if (errors.length) {
     console.log(`\nERRORS (${errors.length}) — these documents were not scored, so no gate can pass:`);
@@ -374,7 +403,7 @@ async function main() {
     const json = {
       generated_at: new Date().toISOString(),
       side,
-      settings: {},
+      settings: answersFrom ? { answers: "keys/<set>.project.csv" } : {},
       library_sha256: digest(libraryPath),
       apply_ts_sha256: digest(join(lib, "apply.ts")),
       select_ts_sha256: digest(join(lib, "select.ts")),

@@ -60,7 +60,7 @@ export interface AssembliesReport {
   units: UnitRow[];
 }
 
-const RECORD_STATUSES: readonly RecordStatus[] = ["ok", "overridden", "unresolved", "excluded", "no_assembly"];
+const RECORD_STATUSES: readonly RecordStatus[] = ["ok", "overridden", "unresolved", "excluded", "no_assembly", "not_in_scope"];
 const LINE_STATUSES: readonly LineStatus[] = ["ok", "unresolved", "replaced", "error"];
 const zero = <K extends string>(keys: readonly K[]) => Object.fromEntries(keys.map((k) => [k, 0])) as Record<K, number>;
 const keyOf = (tag: string, family: string, layer: string, cite: Cite | undefined) => `${tag}|${family}|${layer}|${JSON.stringify(cite ?? null)}`;

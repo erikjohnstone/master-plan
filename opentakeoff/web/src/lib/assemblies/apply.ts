@@ -39,6 +39,8 @@ import { normalizeCompileItem, vfdDrivenTags, type CompileItem, type NormalizedI
 import { citedCodeLegend, scheduleLegend, scheduleNotes, type Box, type NoteSpan, type ScheduleNote } from "./scheduleNotes";
 import type { ApplicationRecord, AssemblyDefinition, Cite, ExpandedLine } from "./schema";
 import type { Instance, Override, ProjectSettings } from "./select";
+import { answerIntents, sanitizeAnswers, type AnswerUnit } from "../controlIntent/catalogue";
+import type { IntentFact, UnitIntent } from "../controlIntent/intent";
 
 /** One compiled row: a compileTakeoff("hvac_equipment") item and its family. */
 export type CompiledItem = CompileItem & { family: string };
@@ -452,7 +454,68 @@ export function instancesOf(project: CompiledProject, normalized: readonly Norma
   });
 }
 
-/** Apply the library to a project (step 4): every unit's records and lines. */
+/** What the project-question effects read of each instance (catalogue.ts). */
+export function answerUnitsOf(project: CompiledProject, instances: readonly AppliedInstance[]): AnswerUnit[] {
+  const headersOf = new Map<string, string[]>();
+  for (const t of project.tables ?? []) {
+    const k = `${t.sheet}|${t.title}`;
+    headersOf.set(k, [...new Set([...(headersOf.get(k) ?? []), ...t.headers])]);
+  }
+  return instances.map((inst) => {
+    const it = project.items[inst.item];
+    return {
+      index: inst.item, tag: inst.tag, family: inst.family,
+      attributes: inst.attributes, unknown: inst.unknown as AnswerUnit["unknown"],
+      cells: Object.fromEntries(Object.entries(it.cells ?? {}).map(([h, c]) => [h, String(c?.text ?? "")])),
+      table_title: it.table_title, table_headers: headersOf.get(`${it.sheet_id}|${it.table_title}`) ?? [],
+      cite: inst.cites[0],
+    };
+  });
+}
+
+/** One unit's intent from its drawing readings and the project's answers.
+ * Scope: a project answer first (the estimator's statement about the whole
+ * project, e.g. no BAS, existing units keep their controls). Attributes and
+ * options: the drawing first (evidence about this unit beats a project-wide
+ * default such as "unscheduled speed is constant"). */
+export function combineUnitIntent(drawing: UnitIntent | undefined, answers: UnitIntent | undefined): UnitIntent | undefined {
+  const out: UnitIntent = {};
+  const scope = answers?.out_of_scope ?? drawing?.out_of_scope;
+  if (scope) out.out_of_scope = scope;
+  const pick = <K extends "attributes" | "options">(k: K) => {
+    const m = { ...(answers?.[k] ?? {}), ...(drawing?.[k] ?? {}) } as NonNullable<UnitIntent[K]>;
+    if (Object.keys(m).length) out[k] = m;
+  };
+  pick("attributes");
+  pick("options");
+  return out.out_of_scope || out.attributes || out.options ? out : undefined;
+}
+
+/** Attach each instance's intent: its facts on attributes the row leaves
+ * unknown become attributes (with the rule and basis as a derived value);
+ * a fact on an attribute the row prints is dropped here and never overrides
+ * it (decision C12). */
+export function attachIntents(instances: AppliedInstance[], intents: ReadonlyMap<number, UnitIntent>): void {
+  for (const inst of instances) {
+    const intent = intents.get(inst.item);
+    if (!intent) continue;
+    const attributes: Record<string, IntentFact<Value>> = {};
+    for (const [k, f] of Object.entries(intent.attributes ?? {})) {
+      if (inst.attributes[k] !== undefined) continue;
+      attributes[k] = f;
+      inst.attributes[k] = { value: f.value, cite: f.cites[0] ?? null };
+      inst.derived[k] = { value: f.value, rule: f.rule, basis: f.basis };
+      delete (inst.unknown as Record<string, unknown>)[k];
+    }
+    inst.intent = { ...intent, ...(Object.keys(attributes).length ? { attributes } : { attributes: undefined }) };
+    if (!inst.intent.attributes) delete inst.intent.attributes;
+  }
+}
+
+/** Apply the library to a project (step 4): every unit's records and lines.
+ * `intents` are the drawing readings' facts per instance (the item index),
+ * from the control-intent readers; project answers come from
+ * `settings.answers`. */
 export function applyAssemblies(input: {
   project: CompiledProject;
   library: readonly AssemblyDefinition[];
@@ -460,8 +523,19 @@ export function applyAssemblies(input: {
   overrides?: readonly Override[];
   evidence?: Readonly<Record<string, DrawingEvidence>>;
   normalized?: readonly NormalizedItem[];
+  intents?: ReadonlyMap<number, UnitIntent>;
 }): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[] } {
   const instances = instancesOf(input.project, input.normalized);
+  const answers = sanitizeAnswers(input.settings?.answers);
+  const fromAnswers = Object.keys(answers).length ? answerIntents(answerUnitsOf(input.project, instances), answers, input.library) : new Map<number, UnitIntent>();
+  if (fromAnswers.size || input.intents?.size) {
+    const merged = new Map<number, UnitIntent>();
+    for (const inst of instances) {
+      const it = combineUnitIntent(input.intents?.get(inst.item), fromAnswers.get(inst.item));
+      if (it) merged.set(inst.item, it);
+    }
+    attachIntents(instances, merged);
+  }
   // D6: a unit's printed points list replaces its typical's point lines. An
   // evidence entry the caller passes for a tag adds to this one.
   const evidence: Record<string, DrawingEvidence> = {};
