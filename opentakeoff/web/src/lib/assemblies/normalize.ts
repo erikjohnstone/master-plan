@@ -87,6 +87,10 @@ export interface NormalizedItem {
   tag: string;
   attributes: Record<string, AttributeValue>;
   unknown: Record<string, UnknownAttribute>;
+  /** The table's numbered notes that speak for this row (the ones its REMARKS
+   * / NOTES cell cites, or every one when it cites none); absent when the
+   * table prints none. The control-intent row reader reads them. */
+  notes?: ScheduleNote[];
 }
 
 // ── 1. Header text ──────────────────────────────────────────────────────────
@@ -1351,5 +1355,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
     if (result.attributes[attr]) continue;
     result.unknown[attr] = reasons.get(attr) ?? { reason: "no printed column answers it" };
   }
+  const notes = notesForRow(item, ctx, table?.notes ?? [], table?.rows);
+  if (notes.length) result.notes = notes;
   return result;
 }

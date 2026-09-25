@@ -40,7 +40,8 @@ import { citedCodeLegend, scheduleLegend, scheduleNotes, type Box, type NoteSpan
 import type { ApplicationRecord, AssemblyDefinition, Cite, ExpandedLine } from "./schema";
 import type { Instance, Override, ProjectSettings } from "./select";
 import { answerIntents, sanitizeAnswers, type AnswerUnit } from "../controlIntent/catalogue";
-import type { IntentFact, UnitIntent } from "../controlIntent/intent";
+import { mergeIntents, type IntentFact, type UnitIntent } from "../controlIntent/intent";
+import { rowIntents, type RowUnit } from "../controlIntent/rowReader";
 
 /** One compiled row: a compileTakeoff("hvac_equipment") item and its family. */
 export type CompiledItem = CompileItem & { family: string };
@@ -454,8 +455,10 @@ export function instancesOf(project: CompiledProject, normalized: readonly Norma
   });
 }
 
-/** What the project-question effects read of each instance (catalogue.ts). */
-export function answerUnitsOf(project: CompiledProject, instances: readonly AppliedInstance[]): AnswerUnit[] {
+/** What the project-question effects and the row reader read of each
+ * instance (catalogue.ts, rowReader.ts); `normalized` (by item) adds the
+ * notes that speak for each row. */
+export function answerUnitsOf(project: CompiledProject, instances: readonly AppliedInstance[], normalized?: readonly NormalizedItem[]): RowUnit[] {
   const headersOf = new Map<string, string[]>();
   for (const t of project.tables ?? []) {
     const k = `${t.sheet}|${t.title}`;
@@ -469,6 +472,7 @@ export function answerUnitsOf(project: CompiledProject, instances: readonly Appl
       cells: Object.fromEntries(Object.entries(it.cells ?? {}).map(([h, c]) => [h, String(c?.text ?? "")])),
       table_title: it.table_title, table_headers: headersOf.get(`${it.sheet_id}|${it.table_title}`) ?? [],
       cite: inst.cites[0],
+      ...(normalized?.[inst.item]?.notes ? { notes: normalized[inst.item].notes } : {}),
     };
   });
 }
@@ -525,13 +529,20 @@ export function applyAssemblies(input: {
   normalized?: readonly NormalizedItem[];
   intents?: ReadonlyMap<number, UnitIntent>;
 }): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[] } {
-  const instances = instancesOf(input.project, input.normalized);
+  const normalized = input.normalized ?? normalizeProject(input.project);
+  const instances = instancesOf(input.project, normalized);
+  // Control intent: what the unit's own row prints (the row reader), what the
+  // control drawings bound to it say (`intents`, from the readers), and the
+  // project's answers.
+  const units = answerUnitsOf(input.project, instances, normalized);
+  const fromRows = rowIntents(units);
   const answers = sanitizeAnswers(input.settings?.answers);
-  const fromAnswers = Object.keys(answers).length ? answerIntents(answerUnitsOf(input.project, instances), answers, input.library) : new Map<number, UnitIntent>();
-  if (fromAnswers.size || input.intents?.size) {
+  const fromAnswers = Object.keys(answers).length ? answerIntents(units, answers, input.library) : new Map<number, UnitIntent>();
+  if (fromRows.size || fromAnswers.size || input.intents?.size) {
     const merged = new Map<number, UnitIntent>();
     for (const inst of instances) {
-      const it = combineUnitIntent(input.intents?.get(inst.item), fromAnswers.get(inst.item));
+      const drawing = mergeIntents(fromRows.get(inst.item), input.intents?.get(inst.item));
+      const it = combineUnitIntent(drawing, fromAnswers.get(inst.item));
       if (it) merged.set(inst.item, it);
     }
     attachIntents(instances, merged);

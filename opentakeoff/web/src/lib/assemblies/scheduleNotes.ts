@@ -96,7 +96,15 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
   for (const s of candidates) {
     if (s.box[0] >= stopU) continue;
     if (s.box[1] - bottom > 2.5 * lineH) break;
-    if (NOTES_LABEL.test(s.str)) break;
+    // Another notes label ends the block when it sits over the notes; one
+    // beside them (the next table's REMARKS: to their right) only ends the
+    // block's width where it starts.
+    if (NOTES_LABEL.test(s.str)) {
+      if (overlapsBlock(s)) break;
+      stopU = Math.min(stopU, s.box[0] - lineH);
+      block = block.filter((b) => b.box[0] < stopU);
+      continue;
+    }
     if (/\bSCHEDULE\s*$/i.test(s.str)) {
       if (overlapsBlock(s)) break;
       continue;
