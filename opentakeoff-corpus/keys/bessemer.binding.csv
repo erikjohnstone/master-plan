@@ -1,0 +1,11 @@
+# bessemer.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's sheets (plain PDF text layer), never pipeline output: no control-intent
+# code had run on this held-out document. One row per (keyed instance, governing control packet): the control
+# detail, schematic, sequence section or points schedule that decides the unit's BAS scope and options.
+# packet_title is the title as printed (a line break joined by a space). binding: tag · list_range ·
+# cross_reference · family_detail · semantic (as in the dev keys). packet "none": no control packet governs the
+# instance. Population: every instance of keys/bessemer.typicals.csv. A key that looks wrong later is
+# catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+bessemer-mechanical-bidset.pdf#8,EF-1,FAN,,none,,"the set has no control drawing (no sequence, schematic or points list)"
+bessemer-mechanical-bidset.pdf#8,HP-1,HEAT_PUMP,,none,,"the set has no control drawing (no sequence, schematic or points list)"
