@@ -135,7 +135,7 @@ function keyedAttributes(attrKeyInst) {
  * project settings the run applies (none by default).
  */
 export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, settings = {}, intents }) {
-  const project = { items: snapshot.items, tables: snapshot.tables, pages: snapshot.pages, printed_points: snapshot.printed_points ?? [] };
+  const project = { items: snapshot.items, tables: snapshot.tables, pages: snapshot.pages, printed_points: snapshot.printed_points ?? [], ...(snapshot.control ? { control: snapshot.control } : {}) };
   const { instances, applications } = applyAssemblies({ project, library, settings, intents });
   // A record is its row's: the cite of the row's own mark (its family may be
   // one the apply path derived, so it is not part of the key).

@@ -1,9 +1,38 @@
 ## Active work
 
-### Proposed: control intent (GOAL LOOP C, `goals/CONTROL_INTENT.md`) — research done 2026-09-24, awaiting owner review, not started
+### Active work: control intent (GOAL LOOP C, `goals/CONTROL_INTENT.md`) — started 2026-09-25
 
-The owner asked how estimator questions and AI reading of control drawings
-would work, and for a goal before anything is built. The answer so far:
+The owner's go-ahead (2026-09-25) authorised executing this goal, with
+`qwen-3.8-27b` allowed, and set one hard constraint: schedule extraction and
+schedule↔tag reconciliation must not change. Work runs on
+`claude/affectionate-darwin-316fwo`. Bug catalogue:
+`CONTROL_INTENT_BUG_CATALOGUE.md`.
+
+Done so far (dev only; held-out keys not yet authored):
+- **WP0.2:** dev keys `keys/<set>.project.csv` and `keys/<set>.binding.csv`
+  for all 11 documents (`0aba993`).
+- **WP1.1–1.2:** question catalogue v1 and its effects on selection
+  (`9be31d6`). Row reader R0 (`662d4f4`). Typical eval with key answers:
+  171/244 exact (70.1%), 0 regressions against the 116 baseline.
+- **WP2 (2026-09-25), the control-evidence map:**
+  `web/src/lib/controlIntent/evidence.ts` finds packets and `binding.ts`
+  binds them. The map is built on the shared path (`compiledProjectOf` →
+  `CompiledProject.control`; `applyAssemblies` returns `control`) and is not
+  yet consumed by selection. The typical eval is unchanged at 171/244.
+  - Binding eval (`mcp/scripts/control-intent-binding-eval.mjs`,
+    `reports/control-intent/03-binding-eval-dev.md`):
+    - pair recall 92.9% (300/323), or 97.9% without the key's "semantic" pairs;
+    - confirmed precision 93.2% (317/340);
+    - unit recall 91.9%;
+    - tag, list/range and cross-reference pairs 100%; family details 96.8%.
+  - GATE B1 (95% / 98% / 95%) is not met as the keys stand. CI-1 lists the
+    key rows the printed drawings contradict (not edited; 21 of the 23 false
+    bindings). CI-2 covers the proposals the C5 qualifier rule makes; CI-3 the
+    bindings no structure reaches.
+- **Next:** WP3 readers (R0 term list, then R1 text and R2 vision under
+  record/replay), then apply integration and the reading eval.
+
+The research that proposed the goal (2026-09-24):
 - **Research:** `plans/05-research/01–03`, the design plan
   `plans/05-control-intent-plan.md`, and the goal `goals/CONTROL_INTENT.md`.
   The pilot scripts and outputs are in `plans/05-research/pilot/`; dev

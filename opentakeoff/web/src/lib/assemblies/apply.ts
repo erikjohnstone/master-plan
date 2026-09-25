@@ -42,6 +42,8 @@ import type { Instance, Override, ProjectSettings } from "./select";
 import { answerIntents, sanitizeAnswers, type AnswerUnit } from "../controlIntent/catalogue";
 import { mergeIntents, type IntentFact, type UnitIntent } from "../controlIntent/intent";
 import { rowIntents, type RowUnit } from "../controlIntent/rowReader";
+import { EVIDENCE_VERSION, findPackets, sheetNumberOf, type Packet } from "../controlIntent/evidence";
+import { bindPackets, type Binding } from "../controlIntent/binding";
 
 /** One compiled row: a compileTakeoff("hvac_equipment") item and its family. */
 export type CompiledItem = CompileItem & { family: string };
@@ -81,6 +83,17 @@ export interface CompiledProject {
   tables?: readonly CompiledTable[];
   pages?: Readonly<Record<string, readonly NoteSpan[]>>;
   printed_points?: readonly PrintedPointRow[];
+  /** The control packets printed in the set (control intent WP2), when read. */
+  control?: ControlPages;
+}
+
+/** The set's control evidence as printed: every packet the finder reads on
+ * any page (controlIntent/evidence.ts), and the printed sheet number of each
+ * page that has one (a row's "SEE M6.5" names it). */
+export interface ControlPages {
+  version: string;
+  packets: readonly Packet[];
+  sheet_numbers: Readonly<Record<string, string>>;
 }
 
 /** What the apply path reads of a bas_points compile (corpusTakeoff.mjs
@@ -137,6 +150,7 @@ export interface HvacCompile {
   categories?: Record<string, { items?: ReadonlyArray<{ tag: string; sheet_id: string; table_title: string; cells?: CompileItem["cells"]; building?: string | null; description?: string | null }> }>;
 }
 export interface GraphTables {
+  sheets?: ReadonlyArray<{ key: string }>;
   tables?: ReadonlyArray<{
     sheet: string;
     title?: { text?: string | null } | null;
@@ -181,12 +195,29 @@ export async function compiledProjectOf(
 ): Promise<CompiledProject> {
   const { items, tables } = compiledRowsAndTables(compiled, graph);
   const pages: Record<string, NoteSpan[]> = {};
+  const slim = (spans: readonly NoteSpan[]) => spans.map((sp) => ({ str: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, ...(sp.rot ? { rot: sp.rot } : {}) }));
   for (const sheet of new Set(tables.filter((t) => t.region).map((t) => t.sheet))) {
     if (!sheetPage(sheet)) continue;
     const spans = await spansOf(sheet);
-    if (spans) pages[sheet] = spans.map((sp) => ({ str: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, ...(sp.rot ? { rot: sp.rot } : {}) }));
+    if (spans) pages[sheet] = slim(spans);
   }
-  return { items, tables, pages, printed_points: printedPointRows(basPoints) };
+  // Control evidence: every page's packets (the finder reads its text and the
+  // graph's tables on it), and the sheet number of each page that has some.
+  const packets: Packet[] = [];
+  const sheetNumbers: Record<string, string> = {};
+  for (const { key: sheet } of graph.sheets ?? []) {
+    if (!sheetPage(sheet)) continue;
+    const spans = pages[sheet] ?? (await spansOf(sheet));
+    if (!spans?.length) continue;
+    const hints = (graph.tables ?? []).filter((t) => t.sheet === sheet && t.region && t.title?.text).map((t) => ({ title: String(t.title!.text), region: t.region! }));
+    const found = findPackets(sheet, slim(spans), hints);
+    if (!found.length) continue;
+    packets.push(...found);
+    const no = sheetNumberOf(spans);
+    if (no) sheetNumbers[sheet] = no;
+  }
+  const control: ControlPages = { version: EVIDENCE_VERSION, packets, sheet_numbers: sheetNumbers };
+  return { items, tables, pages, printed_points: printedPointRows(basPoints), control };
 }
 
 interface ReadTable extends CompiledTable {
@@ -528,7 +559,7 @@ export function applyAssemblies(input: {
   evidence?: Readonly<Record<string, DrawingEvidence>>;
   normalized?: readonly NormalizedItem[];
   intents?: ReadonlyMap<number, UnitIntent>;
-}): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[] } {
+}): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[]; control: ControlEvidenceMap } {
   const normalized = input.normalized ?? normalizeProject(input.project);
   const instances = instancesOf(input.project, normalized);
   // Control intent: what the unit's own row prints (the row reader), what the
@@ -536,6 +567,7 @@ export function applyAssemblies(input: {
   // project's answers.
   const units = answerUnitsOf(input.project, instances, normalized);
   const fromRows = rowIntents(units);
+  const control = controlEvidenceMap(input.project, units, fromRows);
   const answers = sanitizeAnswers(input.settings?.answers);
   const fromAnswers = Object.keys(answers).length ? answerIntents(units, answers, input.library) : new Map<number, UnitIntent>();
   if (fromRows.size || fromAnswers.size || input.intents?.size) {
@@ -555,5 +587,24 @@ export function applyAssemblies(input: {
     evidence[tag] = { ...(evidence[tag] ?? {}), ...e, declaredRoles: [...(evidence[tag]?.declaredRoles ?? []), ...(e.declaredRoles ?? [])] };
   }
   const { applications, lines } = expandAll(instances, input.library, input.settings ?? {}, input.overrides ?? [], evidence);
-  return { instances, applications, lines };
+  return { instances, applications, lines, control };
+}
+
+/** The control-evidence map: the set's packets, and each unit's bindings
+ * (compile item index → bindings, strongest first). Empty when the project
+ * carries no control pages. */
+export interface ControlEvidenceMap {
+  version: string | null;
+  packets: readonly Packet[];
+  bindings: Record<number, Binding[]>;
+}
+
+export function controlEvidenceMap(project: CompiledProject, units: readonly RowUnit[], fromRows: ReadonlyMap<number, UnitIntent> = rowIntents(units)): ControlEvidenceMap {
+  const pages = project.control;
+  if (!pages?.packets.length) return { version: pages?.version ?? null, packets: pages?.packets ?? [], bindings: {} };
+  // A row that puts its unit outside the BAS (standalone, not used) keeps
+  // only the bindings a title or a tag makes.
+  const standalone = new Set([...fromRows].filter(([, it]) => /^drawing_read:row\.(?:standalone|not_used)$/.test(it.out_of_scope?.rule ?? "")).map(([i]) => i));
+  const bound = bindPackets(pages.packets, units, { sheetNumbers: pages.sheet_numbers, standalone });
+  return { version: pages.version, packets: pages.packets, bindings: Object.fromEntries([...bound].sort((a, b) => a[0] - b[0])) };
 }

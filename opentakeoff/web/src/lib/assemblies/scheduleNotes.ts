@@ -22,7 +22,7 @@ export interface ScheduleNote { id: string; text: string }
 /** Device box → reading-frame box [u0, v0, u1, v1] for text at `rot`
  * (degrees clockwise in device space, y down): u runs along the text, v down
  * the page as the text reads. */
-function frameBox([x0, y0, x1, y1]: Box, rot: number): Box {
+export function frameBox([x0, y0, x1, y1]: Box, rot: number): Box {
   switch (((rot % 360) + 360) % 360) {
     case 90: return [y0, -x1, y1, -x0];
     case 180: return [-x1, -y1, -x0, -y0];

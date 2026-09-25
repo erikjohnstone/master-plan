@@ -365,7 +365,7 @@ async function snapshotSet(corpus, spec, set, opts = {}) {
   const fileOf = new Map(files.map((f) => [basename(f), f]));
   const docs = new Map();
   const bas = compileTakeoff(null, graph, "bas_points");
-  const { items, tables, pages, printed_points } = await compiledProjectOf(hvac, graph, async (sheet) => {
+  const { items, tables, pages, printed_points, control } = await compiledProjectOf(hvac, graph, async (sheet) => {
     const at = sheetPage(sheet);
     const file = at && fileOf.get(at.file);
     if (!file) return null;
@@ -375,7 +375,7 @@ async function snapshotSet(corpus, spec, set, opts = {}) {
   for (const doc of docs.values()) await doc.destroy();
   // --with-hit (instrument 5): the HIT export's inputs, from the same graph.
   const hit = opts.hit ? { valves: compileTakeoff(null, graph, "control_valves"), coils: compileTakeoff(null, graph, "embedded_coil_gaps") } : undefined;
-  return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages, printed_points, ...(hit ? { hit } : {}) };
+  return { id: set.id, graph: built ? "built" : "cache", seconds: Math.round((Date.now() - t0) / 1000), items, tables, pages, printed_points, control, ...(hit ? { hit } : {}) };
 }
 
 /** One set's compile snapshot (snapshotSet), taken in a child process so a
