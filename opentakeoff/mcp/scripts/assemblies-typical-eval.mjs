@@ -19,6 +19,13 @@
 //   --answers keys   apply the project-question answers of keys/<set>.project.csv
 //              (goals/CONTROL_INTENT.md instrument 5: the estimator's answers,
 //              "n/a" and "unknown" leaving a question unanswered).
+//   --readings off|r0|replay|live   the control-drawing readings applied
+//              (goals/CONTROL_INTENT.md instrument 5; web/src/lib/controlIntent/
+//              record.ts): off (none, the default), r0 (the deterministic
+//              reader alone: model-off), replay (R0 with R1/R2 replayed from
+//              reports/control-intent/runs/<set>.jsonl, never calling a model)
+//              or live (calls the models for what is not recorded, and records
+//              it; needs CEREBRAS_API_KEY).
 //
 // Snapshots come from the attribute eval's child (assemblies-attr-eval.mjs
 // --single-json: the cached sheet graph, then the compile), so both
@@ -134,9 +141,12 @@ function keyedAttributes(attrKeyInst) {
  * tables, pages }); `library` the assembly definitions; `settings` the
  * project settings the run applies (none by default).
  */
-export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, settings = {}, intents }) {
-  const project = { items: snapshot.items, tables: snapshot.tables, pages: snapshot.pages, printed_points: snapshot.printed_points ?? [], ...(snapshot.control ? { control: snapshot.control } : {}) };
-  const { instances, applications } = applyAssemblies({ project, library, settings, intents });
+/** The project a snapshot carries (what applyAssemblies reads). */
+export const snapshotProject = (snapshot) => ({ items: snapshot.items, tables: snapshot.tables, pages: snapshot.pages, printed_points: snapshot.printed_points ?? [], ...(snapshot.control ? { control: snapshot.control } : {}) });
+
+export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, settings = {}, intents, readings }) {
+  const project = snapshotProject(snapshot);
+  const { instances, applications } = applyAssemblies({ project, library, settings, intents, readings });
   // A record is its row's: the cite of the row's own mark (its family may be
   // one the apply path derived, so it is not part of the key).
   const rowKey = (c, tag) => `${c?.sheet}|${c?.table_title}|${canonTag(tag)}|${JSON.stringify(c?.bbox ?? null)}|${c?.header}`;
@@ -175,7 +185,7 @@ export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, set
     const inst = instOf.get(itemIndex.get(m.item));
     const app = recordOf.get(rowKey(rowCite(m.item), m.item.tag));
     const got = { status: app?.status ?? "no_record", typical: app?.assembly?.id ?? null, reason: app?.reason ?? null, missing: app?.unresolved?.missing ?? [], candidates: app?.unresolved?.candidates ?? [] };
-    const o = { ...base, item_family: inst?.family ?? m.item.family, derived: inst?.derived ?? {}, got };
+    const o = { ...base, item: itemIndex.get(m.item), item_family: inst?.family ?? m.item.family, derived: inst?.derived ?? {}, got };
     const keyNone = row.typical_id === "none";
     const decidedNone = got.status === "no_assembly" || got.status === "excluded" || got.status === "not_in_scope";
     if (got.status === "unresolved" || got.status === "no_record") {
@@ -329,12 +339,44 @@ export function parseProjectKeyCsv(text) {
   return answers;
 }
 
+/** The control-drawing readings for the eval (goals/CONTROL_INTENT.md C10):
+ * R0 always; R1/R2 from the recorded runs (reports/control-intent/runs/
+ * <set>.jsonl), and in live mode through the platform endpoint, recording
+ * what they read. */
+export async function readingTools(corpus, mode) {
+  const { readControlIntent } = await import("../../web/src/lib/controlIntent/record.ts");
+  const { memoryRunStore, httpTransport } = await import("../../web/src/lib/controlIntent/runs.ts");
+  const { pdfCropRenderer } = await import("../src/controlIntentCrops.ts");
+  const dir = join(corpus, "reports", "control-intent", "runs");
+  const live = mode === "live";
+  if (live && !process.env.CEREBRAS_API_KEY) throw new Error("--readings live needs CEREBRAS_API_KEY");
+  const transport = live ? httpTransport({ endpoint: process.env.OPENTAKEOFF_AI_ENDPOINT || "https://api.cerebras.ai", apiKey: process.env.CEREBRAS_API_KEY }) : null;
+  const render = live ? pdfCropRenderer((file) => (existsSync(join(corpus, "raw", file)) ? join(corpus, "raw", file) : null)) : null;
+  return {
+    async read(id, project, library, settings) {
+      const path = join(dir, `${id}.jsonl`);
+      const store = memoryRunStore(existsSync(path) ? readFileSync(path, "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l)) : []);
+      const readings = await readControlIntent({ project, library, settings }, {
+        store, transport, render,
+        readers: mode === "r0" ? { r1: false, r2: false } : undefined,
+        concurrency: 6,
+      });
+      if (live) {
+        mkdirSync(dir, { recursive: true });
+        writeFileSync(path, store.all().sort((a, b) => a.hash.localeCompare(b.hash)).map((r) => JSON.stringify(r)).join("\n") + "\n");
+      }
+      return readings;
+    },
+    async close() { await render?.close(); },
+  };
+}
+
 // ── CLI ─────────────────────────────────────────────────────────────────────
 async function main() {
   const argv = process.argv.slice(2);
   const flag = (f) => argv.includes(f);
   // A flag that takes a value (--answers keys) keeps its value out of the set ids.
-  const positional = argv.filter((a, i) => !a.startsWith("--") && argv[i - 1] !== "--answers");
+  const positional = argv.filter((a, i) => !a.startsWith("--") && argv[i - 1] !== "--answers" && argv[i - 1] !== "--readings");
   const [corpusDir, ...only] = positional;
   if (!corpusDir) {
     console.error("usage: node --import tsx scripts/assemblies-typical-eval.mjs <corpus-dir> [setId ...] [--heldout] [--report] [--detail]");
@@ -369,8 +411,15 @@ async function main() {
     console.error("--answers takes \"keys\" (keys/<set>.project.csv)");
     process.exit(2);
   }
+  const readingsMode = argv.includes("--readings") ? argv[argv.indexOf("--readings") + 1] : "off";
+  if (!["off", "r0", "replay", "live"].includes(readingsMode)) {
+    console.error("--readings takes off, r0, replay or live");
+    process.exit(2);
+  }
+  const reading = readingsMode === "off" ? null : await readingTools(corpus, readingsMode);
   const outcomes = [];
   const errors = [];
+  const readStats = [];
   for (const id of setIds) {
     const typPath = join(corpus, "keys", `${id}.typicals.csv`);
     const attrPath = join(corpus, "keys", `${id}.attrs.csv`);
@@ -385,12 +434,22 @@ async function main() {
       if (!existsSync(pPath)) { errors.push({ id, error: `no key ${pPath}` }); continue; }
       settings = { answers: parseProjectKeyCsv(readFileSync(pPath, "utf8")) };
     }
-    outcomes.push(...scoreTypicalSet({ setId: id, typKey, attrKey, snapshot: snap, library, settings }).outcomes);
+    let readings = null;
+    if (reading) {
+      readings = await reading.read(id, snapshotProject(snap), library, settings);
+      readStats.push({ id, units: readings.units.length, calls: readings.calls });
+    }
+    outcomes.push(...scoreTypicalSet({ setId: id, typKey, attrKey, snapshot: snap, library, settings, readings }).outcomes);
   }
+  await reading?.close();
   const summary = summarize(outcomes);
-  const settingsLabel = answersFrom ? "project answers from keys/<set>.project.csv" : "none (the auto-proposal alone)";
+  const settingsLabel = `${answersFrom ? "project answers from keys/<set>.project.csv" : "none (the auto-proposal alone)"}${readingsMode !== "off" ? `; control-drawing readings: ${readingsMode}` : ""}`;
   const text = renderText(summary, { side, detail, outcomes, settingsLabel });
   console.log(text);
+  if (readStats.length) {
+    const sum = (k, r) => readStats.reduce((n, x) => n + (x.calls[r]?.[k] ?? 0), 0);
+    console.log(`\nreadings (${readingsMode}): ${readStats.reduce((n, x) => n + x.units, 0)} units read; R1 ${sum("replayed", "r1")} replayed, ${sum("live", "r1")} live, ${sum("not_recorded", "r1")} not recorded, ${sum("failed", "r1")} failed; R2 ${sum("replayed", "r2")} replayed, ${sum("live", "r2")} live, ${sum("not_recorded", "r2")} not recorded, ${sum("failed", "r2")} failed`);
+  }
   if (errors.length) {
     console.log(`\nERRORS (${errors.length}) — these documents were not scored, so no gate can pass:`);
     for (const e of errors) console.log(`  ${e.id}: ${e.error}`);
@@ -403,7 +462,7 @@ async function main() {
     const json = {
       generated_at: new Date().toISOString(),
       side,
-      settings: answersFrom ? { answers: "keys/<set>.project.csv" } : {},
+      settings: { ...(answersFrom ? { answers: "keys/<set>.project.csv" } : {}), ...(readingsMode !== "off" ? { readings: readingsMode } : {}) },
       library_sha256: digest(libraryPath),
       apply_ts_sha256: digest(join(lib, "apply.ts")),
       select_ts_sha256: digest(join(lib, "select.ts")),

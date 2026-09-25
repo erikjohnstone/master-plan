@@ -21,6 +21,9 @@ import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
 import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
 import type { Override, ProjectSettings } from "../../web/src/lib/assemblies/select.ts";
+import { readControlIntent, type ControlReadings } from "../../web/src/lib/controlIntent/record.ts";
+import { httpTransport, memoryRunStore, type RunStore } from "../../web/src/lib/controlIntent/runs.ts";
+import { pdfCropRenderer } from "./controlIntentCrops.ts";
 import { UserError } from "./format.ts";
 import { compileProductionTakeoff } from "./productionTakeoff.ts";
 import type { Session } from "./session.ts";
@@ -96,6 +99,86 @@ export async function loadAssemblyLibrary(path?: string): Promise<{ library: Ass
   throw new UserError(`library_path ${path}: not an assemblies file ({ assemblies: [...] }, an array) or a profile ({ assembly_library: [...] })`);
 }
 
+// ── Control intent: reading the set's control drawings ─────────────────────
+
+/** How the control drawings are read (goals/CONTROL_INTENT.md C7, C8):
+ * off; deterministic (R0 alone: the term list, exclusion phrases, the I/O a
+ * diagram draws); models (R0 with the text model R1 and the vision model R2,
+ * applied only where readers agree). */
+export type ControlReadingMode = "off" | "deterministic" | "models";
+
+/** The endpoint the model readers use: OPENTAKEOFF_AI_ENDPOINT (the platform
+ * endpoint by default) with OPENTAKEOFF_AI_KEY or CEREBRAS_API_KEY; null when
+ * no key is configured. */
+export function controlModelConfig(env: NodeJS.ProcessEnv = process.env): { endpoint: string; apiKey: string } | null {
+  const apiKey = env.OPENTAKEOFF_AI_KEY || env.CEREBRAS_API_KEY || "";
+  if (!apiKey) return null;
+  return { endpoint: env.OPENTAKEOFF_AI_ENDPOINT || "https://api.cerebras.ai", apiKey };
+}
+
+const MODES: readonly ControlReadingMode[] = ["off", "deterministic", "models"];
+
+/** The mode a call runs when it names none: OPENTAKEOFF_CONTROL_READINGS
+ * when set (the tests pin it), else models when an endpoint is configured,
+ * else deterministic. */
+export const defaultControlReadingMode = (env: NodeJS.ProcessEnv = process.env): ControlReadingMode => {
+  const forced = env.OPENTAKEOFF_CONTROL_READINGS as ControlReadingMode | undefined;
+  if (forced && MODES.includes(forced)) return forced;
+  return controlModelConfig(env) ? "models" : "deterministic";
+};
+
+/** Every model run a Session has read, so applying again replays them. */
+const RUN_STORES = new WeakMap<Session, RunStore>();
+export const sessionRunStore = (session: Session): RunStore => {
+  let store = RUN_STORES.get(session);
+  if (!store) RUN_STORES.set(session, store = memoryRunStore());
+  return store;
+};
+
+/** Read the Session's control drawings for its project (web/src/lib/
+ * controlIntent/record.ts: the same readers every surface runs). */
+export async function sessionControlReadings(session: Session, input: { project: CompiledProject; library: AssemblyDefinition[]; settings?: ProjectSettings; overrides?: Override[] }, mode: ControlReadingMode, store: RunStore = sessionRunStore(session)): Promise<ControlReadings | null> {
+  if (mode === "off") return null;
+  const cfg = mode === "models" ? controlModelConfig() : null;
+  if (mode === "models" && !cfg) throw new UserError("control_readings \"models\" needs a model endpoint: set CEREBRAS_API_KEY (or OPENTAKEOFF_AI_KEY and OPENTAKEOFF_AI_ENDPOINT)");
+  const render = cfg ? pdfCropRenderer((file) => session.documentPath(file)) : null;
+  try {
+    return await readControlIntent(input, {
+      store,
+      transport: cfg ? httpTransport(cfg) : null,
+      render,
+      readers: mode === "deterministic" ? { r1: false, r2: false } : undefined,
+    });
+  } finally {
+    await render?.close();
+  }
+}
+
+/** A reading's decisions for the reply: applied ones first, then proposals
+ * and what the readers left unresolved. */
+export function controlSummary(readings: ControlReadings | null, mode: ControlReadingMode, detail: "summary" | "units" | "lines", families?: ReadonlySet<string> | null) {
+  if (!readings) return { mode, units_read: 0, decisions: { applied: 0, proposal: 0, unresolved: 0 } };
+  const units = readings.units.filter((u) => !families || families.has(u.family));
+  const decided = units.flatMap((u) => u.decisions.filter((d) => d.outcome !== "none").map((d) => ({ tag: u.tag, family: u.family, ...d })));
+  const count = (o: string) => decided.filter((d) => d.outcome === o).length;
+  const order = { applied: 0, unresolved: 1, proposal: 2, none: 3 } as const;
+  return {
+    mode,
+    models: readings.models,
+    versions: readings.versions,
+    units_read: units.length,
+    calls: readings.calls,
+    decisions: { applied: count("applied"), proposal: count("proposal"), unresolved: count("unresolved") },
+    ...(detail !== "summary" ? {
+      readings: decided.sort((a, b) => order[a.outcome] - order[b.outcome] || a.tag.localeCompare(b.tag)).map((d) => ({
+        tag: d.tag, family: d.family, question: d.question, outcome: d.outcome, value: d.value, rule: d.rule, why: d.why,
+        readers: d.answers.map((a) => `${a.reader}${a.run ?? ""}:${a.answer}${a.note ? ` (${a.note})` : ""}`),
+        cites: d.cites.slice(0, 4).map((c) => ({ sheet: c.sheet, packet: c.packet, text: c.text.slice(0, 200), bbox: c.box })),
+      })),
+    } : {}),
+  };
+}
+
 /** Project settings, plus the starter's presets to build them from. */
 export type AssembliesSettingsInput = ProjectSettings & { hookup_defaults?: boolean; responsibility_preset?: string };
 
@@ -109,6 +192,9 @@ export interface ApplyAssembliesOptions {
   csv?: boolean;
   /** One party's lines in the CSV set's lines.csv and lines_rollup.csv. */
   export_scope?: string;
+  /** How the control drawings are read (default: models when an endpoint
+   * is configured, else deterministic). */
+  control_readings?: ControlReadingMode;
 }
 
 export interface ApplyAssembliesResult {
@@ -120,6 +206,8 @@ export interface ApplyAssembliesResult {
    * project's report it was built with (the PDF section's). */
   csv?: Record<ExportFile, string>;
   csvReport?: AssembliesReport;
+  /** What the control drawings read, and decided (controlSummary). */
+  control: ReturnType<typeof controlSummary>;
 }
 
 /** Apply a library to the Session's project and report it. `families`
@@ -135,7 +223,9 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   } catch (e) {
     throw new UserError(e instanceof Error ? e.message : String(e));
   }
-  const { instances, applications, lines } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [] });
+  const mode = opts.control_readings ?? defaultControlReadingMode();
+  const readings = await sessionControlReadings(session, { project, library, settings, overrides: opts.overrides ?? [] }, mode);
+  const { instances, applications, lines } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [], readings });
   const want = opts.families?.length ? new Set(opts.families) : null;
   const inst = want ? instances.filter((i) => want.has(i.family)) : instances;
   const apps = want ? applications.filter((a) => want.has(a.instance.family)) : applications;
@@ -153,6 +243,7 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   }
   return {
     project,
+    control: controlSummary(readings, mode, detail, want),
     library: { source, assemblies: library.length },
     report: detail === "summary" ? summary : report,
     ...(detail === "lines" ? { applications: apps, lines: lns } : {}),

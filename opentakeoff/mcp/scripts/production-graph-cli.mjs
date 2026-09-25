@@ -29,7 +29,8 @@ import { writeJsonAndExit } from "./cliJson.mjs";
 import { Session } from "../src/session.ts";
 import { compileProductionTakeoff, compileProductionTakeoffs } from "../src/productionTakeoff.ts";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
-import { sessionAssembliesProject } from "../src/assemblies.ts";
+import { defaultControlReadingMode, loadAssemblyLibrary, sessionAssembliesProject, sessionControlReadings } from "../src/assemblies.ts";
+import { memoryRunStore } from "../../web/src/lib/controlIntent/runs.ts";
 
 function argsOf(argv, name) {
   const out = [];
@@ -298,8 +299,27 @@ if (mode === "assemblies_project") {
   // applyAssemblies (web/src/lib/assemblies/apply.ts).
   progress("compile", "Compiling HVAC equipment and reading its schedule notes for assemblies…");
   const project = await sessionAssembliesProject(session);
+  // Control intent: the set's control drawings read with the starter library
+  // (goals/CONTROL_INTENT.md; web/src/lib/controlIntent/record.ts). Model runs
+  // are kept per PDF set, so opening the same set again replays them.
+  const readingMode = arg(process.argv, "--control-readings") || defaultControlReadingMode();
+  let control_readings = null;
+  if (readingMode !== "off") {
+    progress("control", readingMode === "models" ? "Reading the control drawings (sequences, schematics, points lists)…" : "Reading the control drawings' printed phrases…");
+    const { mkdirSync, existsSync } = await import("node:fs");
+    const { homedir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "opentakeoff-control-runs");
+    const setKey = createHash("sha256").update(pdfs.map((p) => createHash("sha256").update(readFileSync(p)).digest("hex")).sort().join(",")).digest("hex");
+    const runsPath = join(dir, `${setKey}.jsonl`);
+    const store = memoryRunStore(existsSync(runsPath) ? readFileSync(runsPath, "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l)) : []);
+    const { library } = await loadAssemblyLibrary();
+    control_readings = await sessionControlReadings(session, { project, library }, readingMode, store);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(runsPath, store.all().sort((a, b) => a.hash.localeCompare(b.hash)).map((r) => JSON.stringify(r)).join("\n") + "\n");
+  }
   progress("done", `Assemblies project ready — ${project.items.length} scheduled row${project.items.length === 1 ? "" : "s"}.`, { items: project.items.length });
-  await writeJsonAndExit(project);
+  await writeJsonAndExit(control_readings ? { ...project, control_readings } : project);
 }
 
 if (mode !== "compile") {

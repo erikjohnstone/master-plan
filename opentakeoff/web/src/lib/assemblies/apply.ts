@@ -44,6 +44,7 @@ import { mergeIntents, type IntentFact, type UnitIntent } from "../controlIntent
 import { rowIntents, type RowUnit } from "../controlIntent/rowReader";
 import { EVIDENCE_VERSION, findPackets, sheetNumberOf, type Packet } from "../controlIntent/evidence";
 import { bindPackets, type Binding } from "../controlIntent/binding";
+import { readingIntents, type Decision } from "../controlIntent/combine";
 
 /** One compiled row: a compileTakeoff("hvac_equipment") item and its family. */
 export type CompiledItem = CompileItem & { family: string };
@@ -559,6 +560,9 @@ export function applyAssemblies(input: {
   evidence?: Readonly<Record<string, DrawingEvidence>>;
   normalized?: readonly NormalizedItem[];
   intents?: ReadonlyMap<number, UnitIntent>;
+  /** The project's control-drawing readings (controlIntent/record.ts
+   * readControlIntent), when read: their applied decisions become facts. */
+  readings?: { units: ReadonlyArray<{ item: number; decisions: readonly Decision[] }> } | null;
 }): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[]; control: ControlEvidenceMap } {
   const normalized = input.normalized ?? normalizeProject(input.project);
   const instances = instancesOf(input.project, normalized);
@@ -570,10 +574,13 @@ export function applyAssemblies(input: {
   const control = controlEvidenceMap(input.project, units, fromRows);
   const answers = sanitizeAnswers(input.settings?.answers);
   const fromAnswers = Object.keys(answers).length ? answerIntents(units, answers, input.library) : new Map<number, UnitIntent>();
-  if (fromRows.size || fromAnswers.size || input.intents?.size) {
+  const fromReadings = readingIntents(input.readings);
+  if (fromRows.size || fromAnswers.size || input.intents?.size || fromReadings.size) {
     const merged = new Map<number, UnitIntent>();
     for (const inst of instances) {
-      const drawing = mergeIntents(fromRows.get(inst.item), input.intents?.get(inst.item));
+      // What the unit's own row prints first, then the caller's facts, then
+      // what its control drawings read.
+      const drawing = mergeIntents(fromRows.get(inst.item), input.intents?.get(inst.item), fromReadings.get(inst.item));
       const it = combineUnitIntent(drawing, fromAnswers.get(inst.item));
       if (it) merged.set(inst.item, it);
     }

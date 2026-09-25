@@ -350,6 +350,9 @@ interface Title {
   packet?: PacketKind;
   /** A sequence heading that names nothing but itself. */
   generic?: boolean;
+  /** Printed at the top of a points table (its header row right under it):
+   * the title heads the table. */
+  tableHead?: boolean;
 }
 
 /** The page's printed sheet number: the largest short code set well above
@@ -375,6 +378,9 @@ const ITEM_MARK = /^(?:\(?[A-Z0-9]{1,2}[.)]|\(?[ivx]{1,4}[.)])$/i;
 /** A line under a title that belongs to it: its scale note, a parenthetical
  * subtitle ("(AHU-1)", "(ROOMS 119 / 123)"). */
 const SUBTITLE = /^\(.*\)$/;
+/** A points table's header row: its column groups or its first column's
+ * heading, or three or more I/O types in a row. */
+const POINTS_HEADER = /\b(?:HARDWARE|SOFTWARE)\s+POINTS\b|\bPOINT\s+(?:NAME|DESCRIPTION)\b|^(?:AI|AO|BI|BO|DI|DO|AV|BV)(?:\s+(?:AI|AO|BI|BO|DI|DO|AV|BV)){2,}\b/;
 
 /** The drawing title printed in the page's title block (the lines under its
  * DRAWING TITLE / SHEET TITLE label), or null. */
@@ -508,6 +514,17 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   const owned = (o: Line) => SCALE_NOTE.test(o.text) || SUBTITLE.test(o.text) || DETAIL_NUMBER.test(o.text);
   for (const t of titles) {
     if (t.caption) { t.direction = "above_title"; continue; }
+    // A title printed at the top of a points table, inside its border, has
+    // the table's header row right under it: it heads the table, whatever
+    // is printed above (often the table before it).
+    const w = t.box[2] - t.box[0];
+    if (sameRot(t.rot).some((o) => !t.lines.includes(o) && POINTS_HEADER.test(repairSpacing(o.text))
+      && o.box[1] - t.box[3] >= -0.2 * t.h && o.box[1] - t.box[3] <= 2.5 * Math.max(t.h, body)
+      && o.box[2] > t.box[0] - w && o.box[0] < t.box[2] + w)) {
+      t.direction = "below_title";
+      t.tableHead = true;
+      continue;
+    }
     const near = sameRot(t.rot).filter((o) => !t.lines.includes(o) && !owned(o) && o.box[0] < t.box[2] + 2 * t.h && o.box[2] > t.box[0] - 2 * t.h);
     const gap = (pred: (o: Line) => boolean, dir: 1 | -1, limit: number) => {
       const gs = near.filter(pred).map((o) => dir > 0 ? o.box[1] - t.box[3] : t.box[1] - o.box[3]).filter((g) => g >= -0.2 * t.h && g <= limit);
@@ -639,7 +656,7 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     } else if (!t.kind && !t.generic && (t.caption || t.big) && wordCount(text) >= 2 && text.replace(/\s+/g, "") !== sheetNo
       && !NOT_PACKET.test(text) && !INSTALLATION.test(text) && !SENTENCE.test(text) && !SCHEDULE_WORD.test(text)
       && ((text.match(TAG_TOKEN) ?? []).length > 0 || subjectFamily(text)) && contentHits(region, t.rot) >= 2) {
-      t.packet = "diagram";
+      t.packet = t.tableHead ? "points" : "diagram";
     }
   }
   return { lines, body, strip, titles, sheetTitle: sheetTitleOf(spans), regions };

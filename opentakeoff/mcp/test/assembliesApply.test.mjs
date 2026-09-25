@@ -20,7 +20,12 @@ import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { buildServer } from "../server.ts";
-import { loadAssemblyLibrary, sessionAssembliesProject, STARTER_FILES } from "../src/assemblies.ts";
+import { loadAssemblyLibrary, sessionAssembliesProject, sessionControlReadings, STARTER_FILES } from "../src/assemblies.ts";
+
+// Control drawings are read deterministically here: no model is ever called
+// from the tests (a configured key would otherwise make the tool read with
+// the models by default).
+process.env.OPENTAKEOFF_CONTROL_READINGS = "deterministic";
 import { applyAssemblies } from "../../web/src/lib/assemblies/apply.ts";
 import { assembliesReport } from "../../web/src/lib/assemblies/report.ts";
 import { assembliesCsvSet } from "../../web/src/lib/assemblies/exportSet.ts";
@@ -72,9 +77,12 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   const project = await sessionAssembliesProject(session);
   assert.ok(project.items.length > 100, `${project.items.length} compiled rows`);
   assert.ok(Object.keys(project.pages).length > 0, "the schedule pages' text spans ride with the project");
-  const wire = JSON.parse(JSON.stringify(project));
   const { library } = await loadAssemblyLibrary();
-  const ui = applyAssemblies({ project: wire, library });
+  // The CLI sends the control readings with the project (the same readers,
+  // the same mode); the browser applies with them.
+  const control_readings = await sessionControlReadings(session, { project, library }, "deterministic");
+  const wire = JSON.parse(JSON.stringify({ ...project, control_readings }));
+  const ui = applyAssemblies({ project: wire, library, readings: wire.control_readings });
 
   // MCP: the tool, through a real client/server pair.
   const [ct, st] = InMemoryTransport.createLinkedPair();
@@ -84,6 +92,8 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   await client.connect(ct);
   const r = await call(client, "apply_assemblies", { detail: "lines" });
   assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 500));
+  assert.equal(r.data.control.mode, "deterministic");
+  assert.equal(r.data.control.units_read, control_readings.units.length, "the tool read the same units");
   assert.equal(JSON.stringify(r.data.lines), JSON.stringify(ui.lines), "ExpandedLines byte-identical");
   assert.equal(JSON.stringify(r.data.applications), JSON.stringify(ui.applications), "records byte-identical");
   assert.deepEqual(r.structured.lines.length, ui.lines.length, "structuredContent carries the same lines");

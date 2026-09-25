@@ -181,7 +181,7 @@ const expand = (w: string): string[] => SYNONYMS.find((g) => g.includes(w)) ?? [
 
 /** What a standard tag prefix says a unit is (common US HVAC equipment
  * abbreviations): part of what its row prints. */
-const PREFIX_WORDS: Record<string, string> = {
+export const PREFIX_WORDS: Record<string, string> = {
   EF: "EXHAUST FAN", SF: "SUPPLY FAN", RF: "RETURN FAN", REF: "RELIEF FAN", GEF: "GENERAL EXHAUST FAN", LEF: "LAB EXHAUST FAN",
   TEF: "TOILET EXHAUST FAN", KEF: "KITCHEN EXHAUST FAN", UH: "UNIT HEATER", CUH: "CABINET UNIT HEATER", EUH: "ELECTRIC UNIT HEATER",
   HWP: "HOT WATER PUMP", CWP: "CHILLED WATER PUMP", CHWP: "CHILLED WATER PUMP", HHWP: "HEATING HOT WATER PUMP", CP: "CONDENSATE PUMP",

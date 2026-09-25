@@ -1849,6 +1849,15 @@ export const countMarksOutput = {
 // web/src/lib/assemblies/report.ts, the records and lines schema.ts).
 export const applyAssembliesOutput = {
   library: z.object({ source: z.string(), assemblies: z.number().int() }),
+  control: z.object({
+    mode: z.enum(["off", "deterministic", "models"]),
+    units_read: z.number().int(),
+    decisions: z.object({ applied: z.number().int(), proposal: z.number().int(), unresolved: z.number().int() }),
+    models: z.object({ r1: z.string().nullable(), r2: z.string().nullable() }).optional(),
+    versions: z.record(z.string(), z.string()).optional(),
+    calls: z.record(z.string(), z.record(z.string(), z.number())).optional(),
+    readings: z.array(z.record(z.string(), z.unknown())).optional(),
+  }).describe("What the control drawings read (control_readings): counts of applied, proposed and unresolved readings; with detail units or lines, each reading with its rule, readers and cites"),
   report: z.object({
     schema: z.literal("opentakeoff.assemblies_report.v1"),
     totals: z.object({

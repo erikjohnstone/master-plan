@@ -45,7 +45,58 @@ function askReason(what) {
   return reason && reason.trim() ? reason.trim() : null;
 }
 
-function UnitDetail({ unit, lines, onOverride }) {
+/** What the unit's control drawings read (controlIntent/record.ts): each
+ * decision with its outcome, why, the readers behind it and the printed text
+ * it cites. An applied reading can be rejected and a proposal accepted: both
+ * are overrides with a reason, kept on the record. */
+function ControlReadings({ unit, readings, onOverride, onOpenCitation }) {
+  const shown = (readings || []).filter((d) => d.outcome !== "none");
+  if (!shown.length) return null;
+  const order = { applied: 0, unresolved: 1, proposal: 2 };
+  const label = (d) => (d.question === "role" ? "BAS role" : d.question.slice(4));
+  const value = (d) => (d.question === "role" ? (d.value === "out" ? `outside the BAS's command (${d.role || "not commanded"})` : d.value === "in" ? "commanded by the BAS" : "—") : d.value === null ? "—" : String(d.value));
+  return (
+    <div style={{ marginBottom: 10 }} data-assembly-control-readings={shown.length}>
+      <div style={{ fontSize: "var(--fs-s)", fontWeight: 650, margin: "4px 0" }}>Control drawings</div>
+      <table style={{ borderCollapse: "collapse" }} aria-label={`${unit.tag} control drawing readings`}>
+        <thead><tr><th style={th}>Reading</th><th style={th}>Outcome</th><th style={th}>Why</th><th style={th}>Readers</th><th style={th}><span className="workspace-sr-only">Action</span></th></tr></thead>
+        <tbody>
+          {[...shown].sort((a, b) => order[a.outcome] - order[b.outcome]).map((d) => {
+            const option = d.question.startsWith("opt.") ? d.question.slice(4) : null;
+            const cite = d.cites?.[0];
+            return (
+              <tr key={d.question} style={d.outcome === "applied" ? { background: "color-mix(in srgb, var(--c-accent, #1f3fc7) 8%, transparent)" } : undefined} data-control-reading={d.question} data-control-outcome={d.outcome}>
+                <td style={{ ...td, ...mono }}>{label(d)} = {value(d)}</td>
+                <td style={{ ...td, color: d.outcome === "unresolved" ? "var(--c-danger)" : d.outcome === "applied" ? "var(--ink)" : "var(--ink-muted)" }}>{d.outcome}</td>
+                <td style={td}>
+                  {d.why} <span style={{ ...mono, fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>{d.rule}</span>
+                  {cite && (
+                    <div>
+                      {onOpenCitation
+                        ? <button type="button" style={{ ...btn, padding: "1px 6px", marginTop: 2 }} onClick={() => onOpenCitation({ sheet_id: cite.sheet, bbox_px: cite.box, tag: unit.tag, column: "control drawing", value: cite.text })}>“{cite.text.slice(0, 80)}”</button>
+                        : <span style={{ color: "var(--ink-secondary)" }}>“{cite.text.slice(0, 80)}”</span>}
+                    </div>
+                  )}
+                </td>
+                <td style={{ ...td, ...mono, fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>{(d.answers || []).map((a) => `${a.reader}${a.run || ""}:${a.answer}${a.note ? "!" : ""}`).join(" ")}</td>
+                <td style={td}>
+                  {option && d.outcome === "applied" && typeof d.value === "boolean" && (
+                    <button type="button" style={btn} onClick={() => onOverride({ options: { [option]: !d.value } }, `rejecting the drawing reading ${option} = ${d.value} on ${unit.tag}`)}>Reject</button>
+                  )}
+                  {option && d.outcome === "proposal" && typeof d.value === "boolean" && (
+                    <button type="button" style={btn} onClick={() => onOverride({ options: { [option]: d.value } }, `accepting the drawing reading ${option} = ${d.value} on ${unit.tag}`)}>Accept</button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
   const derived = Object.entries(unit.derived || {});
   return (
     <div style={{ padding: "8px 12px 14px 28px", background: "var(--paper)" }} data-assembly-unit-detail={unit.tag} role="region" aria-label={`${unit.tag} ${unit.layer} details`}>
@@ -60,6 +111,7 @@ function UnitDetail({ unit, lines, onOverride }) {
           {derived.map(([k, d]) => <div key={k}>Derived <strong>{k}</strong> = {String(d.value)} <span style={{ color: "var(--ink-muted)" }}>({d.rule}: {d.basis})</span></div>)}
         </div>
       )}
+      <ControlReadings unit={unit} readings={readings} onOverride={onOverride} onOpenCitation={onOpenCitation} />
       {Object.keys(unit.options || {}).length > 0 && (
         <table style={{ borderCollapse: "collapse", marginBottom: 10 }} aria-label={`${unit.tag} options`}>
           <thead><tr><th style={th}>Option</th><th style={th}>Value</th><th style={th}>Source</th><th style={th}><span className="workspace-sr-only">Override</span></th></tr></thead>
@@ -357,9 +409,18 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   const [exportErr, setExportErr] = useState("");
   const [scope, setScope] = useState("");
   const { library, rejected } = useMemo(() => combinedLibrary(starter, partner), [starter, partner]);
+  // The set's control drawings as read with the project (production-graph-cli
+  // --mode assemblies_project; controlIntent/record.ts): their applied
+  // decisions become facts on the same shared path MCP applies.
+  const readings = project?.control_readings ?? null;
   const applied = useMemo(() => (project ? applyAssemblies({
-    project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [],
-  }) : null), [project, library, state]);
+    project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings,
+  }) : null), [project, library, state, readings]);
+  const readingsOf = (u) => (readings?.units || []).filter((r) => r.tag === u.tag && r.family === u.family).flatMap((r) => r.decisions);
+  const readingCounts = useMemo(() => {
+    const ds = (readings?.units || []).flatMap((u) => u.decisions);
+    return { applied: ds.filter((d) => d.outcome === "applied").length, proposal: ds.filter((d) => d.outcome === "proposal").length, unresolved: ds.filter((d) => d.outcome === "unresolved").length };
+  }, [readings]);
   const report = useMemo(() => (applied ? assembliesReport(applied.instances, applied.applications, applied.lines) : null), [applied]);
   const updates = useMemo(() => (state ? libraryUpdates(state, library) : []), [state, library]);
   // The Takeoff panel's PDF carries this report's section.
@@ -418,6 +479,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
         </button>
         <span style={{ marginLeft: "auto", fontSize: "var(--fs-s)", color: "var(--ink-muted)" }} data-assemblies-count={library.length} data-assemblies-pinned={state?.pinned?.length ?? 0}>
           {library.length} assemblies ({partner.length} yours) · {state?.pinned?.length ?? 0} pinned in this project
+          {readings ? <span data-control-readings-applied={readingCounts.applied}> · control drawings read ({readings.models?.r1 ? "models" : "printed phrases"}): {readingCounts.applied} applied, {readingCounts.proposal} proposed, {readingCounts.unresolved} unresolved</span> : null}
         </span>
       </div>
       {view === "library" ? (
@@ -537,7 +599,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                           onClick={(ev) => { ev.stopPropagation(); setOpen(open === k ? null : k); }}>{open === k ? "Hide" : "Details"}</button>
                       </td>
                     </tr>,
-                    open === k ? <tr key={`${k}-d`}><td colSpan={8} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} /></td></tr> : null,
+                    open === k ? <tr key={`${k}-d`}><td colSpan={8} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} readings={readingsOf(u)} onOpenCitation={onOpenCitation} /></td></tr> : null,
                   ];
                 })}
               </tbody>

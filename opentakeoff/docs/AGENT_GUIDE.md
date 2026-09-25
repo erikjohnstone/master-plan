@@ -200,7 +200,13 @@ the options, variables and expanded lines, each citing the schedule row and the 
 Read `report.exceptions` first. An unresolved unit names what it waits for: an attribute the
 schedule does not print, a project setting, or two typicals that tie. That is the answer, not a
 failure. Report it, or pass the partner's value in `settings` or an override with a reason. Never
-pick a typical or an option the drawing does not decide. A printed points list that names a
+pick a typical or an option the drawing does not decide. `control_readings` reads the control
+drawings bound to each unit (sequences, schematics, points lists): a reading applies only where two
+readers agree or on a phrase that states it outright (a unit printed standalone); one reader alone
+is a proposal, and readers that disagree leave the option unresolved. With `detail: "units"`,
+`control.readings` lists each reading with its rule, readers and cites. Report an applied reading as
+a drawing fact with its cite and a proposal as a question for the estimator, never as a decision.
+A printed points list that names a
 unit stands instead of its typical's point lines. Prices and hours are never OpenTakeoff's: a
 partner library's own part numbers, costs and hours come back as `report.partner` and in
 `lines.csv` labelled partner-entered, and you report them that way. Components declared in a reviewed BAS

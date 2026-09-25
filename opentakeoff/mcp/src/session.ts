@@ -988,6 +988,13 @@ export class Session {
    * (plan.pdf, plan.pdf#2), so two documents never collide; loading the SAME
    * file again under merge is refused (an addendum is a new file — reloading
    * one in place is a replace-the-session decision, not a merge). */
+  /** The absolute path of a loaded document by its name (a sheet id's file
+   * part), or null: what renders a region of it outside the Session (the
+   * control-intent readers' crops, controlIntentCrops.ts). */
+  documentPath(name: string): string | null {
+    return this.docs.get(name)?.path ?? null;
+  }
+
   async loadPlan(filePath: string, opts: { merge?: boolean } = {}) {
     this.basRestoreVersion++; this.basPlanLoads++;
     try { return await this.loadPlanDocument(filePath, opts); }

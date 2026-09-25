@@ -567,6 +567,24 @@ rows of any printed points list that names the unit. That list stands instead of
 the typical's point lines, which show as *replaced*: the drawing's own list wins.
 The typical never adds to it.
 
+**Control drawings.** The set's sequences of operation, control schematics and
+points lists are read for each unit they name (by tag, a tag list or range, a
+schedule cross-reference, or the family's typical detail). The reading answers
+closed questions only: whether the building automation system commands the unit,
+only monitors it, or leaves it standalone, and whether each option of its typical
+is drawn (a motorized damper, a modulating valve, smoke detectors, and so on).
+With the platform AI configured, a text model and a vision model read beside the
+deterministic reader. A reading changes a unit only where two readers agree (or
+the drawing states it in so many words, such as "THIS SYSTEM IS STANDALONE AND NOT
+CONTROLLED BY THE DDC SYSTEM"). One reader alone is a proposal, readers that
+disagree leave the option unresolved, and an option is read as not drawn only
+when the text and two looks at the drawing agree. A unit's **Details** lists
+its readings under **Control drawings**, applied ones first, each with why, the
+readers behind it and the printed text it rests on (click it to see it on the
+sheet). **Reject** turns an applied reading back, and **Accept** applies a
+proposal; both are overrides with a reason. The header counts what was applied,
+proposed and left unresolved.
+
 **Project settings** (above the exceptions) hold what the library asks of the
 project, saved with it. The hook-up profile has switches, for example strainers
 and P/T ports at coils, hoses at terminal coils, and a condensate trap at fan
