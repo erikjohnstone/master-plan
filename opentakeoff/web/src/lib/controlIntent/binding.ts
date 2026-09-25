@@ -35,8 +35,9 @@
 //                    names the one scheduled unit it serves or belongs to
 //                    ("SERVICE: AHU-1") takes that unit's packets
 // A sheet whose title block names control evidence (scope "sheet") binds a
-// unit by a tag in that title, or by family only when no packet on the page
-// binds the unit.
+// unit by a tag in that title; as a sibling when the sheet is about the
+// unit's family and the only units its titles name are those of the title
+// that names the unit; or by family only when no packet binds the unit.
 import type { Packet } from "./evidence";
 import { pageLines, repairSpacing, subjectFamily, subjectWords } from "./evidence";
 import type { RowUnit } from "./rowReader";
@@ -431,6 +432,20 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
         if (p === bp || p.sheet !== bp.sheet || p.scope === "sheet" || p.kind === bp.kind) continue;
         if (equalSubject(p.title, bp.title)) add({ packet: p.id, kind: "sibling", evidence: `"${p.title}" is about the same subject as "${bp.title}" on the same sheet` });
       }
+    }
+    // The sheet a title naming the unit is printed on, when the sheet's own
+    // title is about the unit's family and names no tag, and every tag a
+    // title on the sheet names is one that title names: the whole sheet is
+    // the unit's ("AHU - 1 SEQUENCE OF OPERATIONS" heading columns of text
+    // on "AIR HANDLING UNIT SEQUENCE OF OPERATIONS").
+    for (const b of [...found]) {
+      const bp = byId.get(b.packet)!;
+      if (RANK[b.kind] > 1 || bp.scope === "sheet") continue;
+      const sheet = titled.find((t) => t.p.sheet === bp.sheet && t.p.scope === "sheet");
+      if (!sheet || sheet.tags.length || sheet.family !== u.family) continue;
+      const own = new Set(titled.find((t) => t.p === bp)!.tags.map((x) => keyString(x.key)));
+      if (titled.some((t) => t.p.sheet === bp.sheet && t.tags.some((x) => !own.has(keyString(x.key))))) continue;
+      add({ packet: sheet.p.id, kind: "sibling", evidence: `the sheet "${sheet.p.title}" is about its family, and "${bp.title}" names the only units a title on it names` });
     }
     // Family details, per packet kind, where no title binds the unit to a
     // packet of that kind. The title names the unit's family, or its subject

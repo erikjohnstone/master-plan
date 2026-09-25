@@ -512,6 +512,8 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   //    title), failing that the nearer line of any kind.
   const isBody = (o: Line) => (wordCount(o.text) >= 6 || (wordCount(o.text) >= 4 && /[.:;]\s*$/.test(o.text))) && !SCALE_NOTE.test(o.text) && !SUBTITLE.test(o.text);
   const owned = (o: Line) => SCALE_NOTE.test(o.text) || SUBTITLE.test(o.text) || DETAIL_NUMBER.test(o.text);
+  /** How far below (or above) a text title its block may start. */
+  const textWindow = (t: Title) => Math.max(3 * body, 2.5 * t.h);
   for (const t of titles) {
     if (t.caption) { t.direction = "above_title"; continue; }
     // A title printed at the top of a points table, inside its border, has
@@ -535,7 +537,7 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
       t.direction = gap(() => true, -1, Math.max(8 * t.h, 6 * body)) < Infinity ? "above_title" : "below_title";
       continue;
     }
-    const win = Math.max(3 * body, 2.5 * t.h);
+    const win = textWindow(t);
     let below = gap(isBody, 1, win), above = gap(isBody, -1, win);
     if (below === above) { below = gap(() => true, 1, 8 * t.h); above = gap(() => true, -1, 8 * t.h); }
     t.direction = below < above ? "below_title" : above < below ? "above_title" : "below_title";
@@ -618,8 +620,10 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   }
   /** A heading's block: the lines below it, joined while they touch the
    * block so far (a table grows to its full width row by row), until a gap
-   * or the next title. A points list over an extracted table takes the
-   * table's region. */
+   * or the next title. The first line may be as far below as the window its
+   * direction was read in (step 2): a heading read as heading the text
+   * under it owns that text. A points list over an extracted table takes
+   * the table's region. */
   function headingRegion(t: Title): Box {
     const hint = t.kind === "points" && t.rot === 0 ? tableBoxes.find((tb) => tb.compact === compactTitle(t.text) && uOverlap(tb.region, t.dev) > -4 * t.h && tb.region[1] >= t.dev[1] - 4 * t.h) : undefined;
     if (hint) return union(t.box, hint.region);
@@ -631,7 +635,7 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     let first = true;
     for (const l of below) {
       if (uOverlap(l.box, box) <= -2 * body) continue;
-      if (l.box[1] - bottom > (first ? Math.max(2.5 * body, 2.5 * t.h) : 2.5 * body)) break;
+      if (l.box[1] - bottom > (first ? textWindow(t) : 2.5 * body)) break;
       if (stops.has(l)) break;
       box = union(box, l.box);
       bottom = Math.max(bottom, l.box[3]);

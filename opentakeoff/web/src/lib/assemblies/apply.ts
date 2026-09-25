@@ -45,6 +45,7 @@ import { rowIntents, type RowUnit } from "../controlIntent/rowReader";
 import { EVIDENCE_VERSION, findPackets, sheetNumberOf, type Packet } from "../controlIntent/evidence";
 import { bindPackets, type Binding } from "../controlIntent/binding";
 import { readingIntents, type Decision } from "../controlIntent/combine";
+import { namesZones, readZonePlan, type PageRegion, type ZonePlan } from "../controlIntent/zonePlan";
 
 /** One compiled row: a compileTakeoff("hvac_equipment") item and its family. */
 export type CompiledItem = CompileItem & { family: string };
@@ -95,6 +96,8 @@ export interface ControlPages {
   version: string;
   packets: readonly Packet[];
   sheet_numbers: Readonly<Record<string, string>>;
+  /** The zone plans read on the set's pages (controlIntent/zonePlan.ts). */
+  zones?: readonly ZonePlan[];
 }
 
 /** What the apply path reads of a bas_points compile (corpusTakeoff.mjs
@@ -193,6 +196,7 @@ export async function compiledProjectOf(
   graph: GraphTables,
   spansOf: (sheet: string) => Promise<readonly NoteSpan[] | null> | readonly NoteSpan[] | null,
   basPoints: BasPointsCompile | null = null,
+  regionsOf: ((sheet: string) => Promise<readonly PageRegion[] | null> | readonly PageRegion[] | null) | null = null,
 ): Promise<CompiledProject> {
   const { items, tables } = compiledRowsAndTables(compiled, graph);
   const pages: Record<string, NoteSpan[]> = {};
@@ -203,13 +207,22 @@ export async function compiledProjectOf(
     if (spans) pages[sheet] = slim(spans);
   }
   // Control evidence: every page's packets (the finder reads its text and the
-  // graph's tables on it), and the sheet number of each page that has some.
+  // graph's tables on it), and the sheet number of each page that has some;
+  // and the zone plans (controlIntent/zonePlan.ts), whose pages' regions
+  // are read only when their title names zones.
   const packets: Packet[] = [];
   const sheetNumbers: Record<string, string> = {};
+  const zones: ZonePlan[] = [];
+  const tags = items.map((it) => it.tag).filter((t): t is string => Boolean(t));
   for (const { key: sheet } of graph.sheets ?? []) {
     if (!sheetPage(sheet)) continue;
     const spans = pages[sheet] ?? (await spansOf(sheet));
     if (!spans?.length) continue;
+    if (regionsOf && tags.length && namesZones(spans)) {
+      const regions = await regionsOf(sheet);
+      const plan = regions ? readZonePlan(sheet, slim(spans), regions, tags) : null;
+      if (plan) zones.push(plan);
+    }
     const hints = (graph.tables ?? []).filter((t) => t.sheet === sheet && t.region && t.title?.text).map((t) => ({ title: String(t.title!.text), region: t.region! }));
     const found = findPackets(sheet, slim(spans), hints);
     if (!found.length) continue;
@@ -217,7 +230,7 @@ export async function compiledProjectOf(
     const no = sheetNumberOf(spans);
     if (no) sheetNumbers[sheet] = no;
   }
-  const control: ControlPages = { version: EVIDENCE_VERSION, packets, sheet_numbers: sheetNumbers };
+  const control: ControlPages = { version: EVIDENCE_VERSION, packets, sheet_numbers: sheetNumbers, ...(zones.length ? { zones } : {}) };
   return { items, tables, pages, printed_points: printedPointRows(basPoints), control };
 }
 

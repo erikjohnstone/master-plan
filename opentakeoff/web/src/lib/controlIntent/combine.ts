@@ -6,23 +6,32 @@
 //
 // Per question, from R0 (deterministic), R1 (text model) and R2 (vision
 // model, two runs):
-//   · R2 counts once: its two runs agree, or it says nothing (a run that
-//     disagrees with the other makes R2 a disagreement).
+//   · R2 counts once: its two runs agree on the value, or it says nothing
+//     (a run that disagrees with the other makes R2 a disagreement). Its
+//     false is an absence only when both runs read the device as not drawn.
 //   · A model answer whose quote or label did not verify is UNVERIFIED: it
 //     never counts, and it leaves the question unresolved (CI2).
 //   · APPLIED (C8): two structurally different readers agree and none
-//     disagrees; or R0 alone on a whitelisted phrase (termlist v1: a unit
-//     stated standalone / not controlled by the BAS in its own packet).
+//     disagrees; or a deterministic reading alone on the whitelist: an R0
+//     phrase (termlist v1: a unit stated standalone / not controlled by the
+//     BAS in its own packet), or the zone plan's device symbol drawn inside
+//     the zone the unit's tag labels (zonePlan.ts, geometric and exact).
+//   · An absence read only through packets no title binds to the unit (a
+//     family's typical detail, a shared system drawing) is no vote: a
+//     typical detail need not draw a zone's own devices (R0 reads it so).
 //   · ABSENT decides false only when all of C9 hold: R0 found no term for
 //     the device in any of the unit's packets and a title binds the unit to
 //     a packet of its own; both R2 runs say it is not drawn; R1 does not say
-//     it is there; no binding of the unit is ambiguous.
+//     it is there; no binding of the unit is ambiguous. A false some reader
+//     reads explicitly (the alternative printed, cited) is not an absence:
+//     another reader finding no mention of the device agrees with it (C8).
 //   · PROPOSAL: one reader alone (a model, or R0 off its whitelist), or an
 //     agreement read only through bindings C5 makes proposals.
 //   · UNRESOLVED (C12): readers disagree, or a reading did not verify. Both
 //     sides are kept to be shown.
-//   · Options of one exclusive group (a return fan or a relief fan) both
-//     applied true leave both unresolved.
+//   · Options of one exclusive group (a return fan or a relief fan) are one
+//     choice: one applied true while a verified reader reads another of the
+//     group as there too (the drawings name both) leaves them unresolved.
 import type { Binding } from "./binding";
 import type { IntentFact, UnitIntent } from "./intent";
 import type { Cite } from "../assemblies/schema";
@@ -30,13 +39,13 @@ import type { DrawingCite, ReaderAnswer } from "./readers/r0";
 import type { ReadingQuestion } from "./readers/questions";
 import type { TermList } from "./readers/terms";
 
-export const COMBINE_VERSION = "control_combine_v1";
+export const COMBINE_VERSION = "control_combine_v3";
 
 export type Outcome = "applied" | "proposal" | "unresolved" | "none";
 
 /** A reader answer as the combiner uses it: its reader and value. */
 export interface Vote {
-  reader: "r0" | "r1" | "r2";
+  reader: ReaderAnswer["reader"];
   /** Role: "out" (not commanded by the BAS) or "in"; option: true or false. */
   value: "out" | "in" | boolean;
   /** An option read false because the device is not drawn at all. */
@@ -64,7 +73,7 @@ export interface UnitAnswers {
   bindings: readonly Binding[];
 }
 
-const voteOf = (a: ReaderAnswer, q: ReadingQuestion): Vote | null => {
+const voteOf = (a: ReaderAnswer, q: ReadingQuestion, titled = true): Vote | null => {
   if (a.note === "unverified") return null;
   if (q.kind === "role") {
     if (a.answer === "not_connected" || a.answer === "monitors_only" || a.answer === "local_control") return { reader: a.reader, value: "out" };
@@ -73,9 +82,11 @@ const voteOf = (a: ReaderAnswer, q: ReadingQuestion): Vote | null => {
   }
   if (a.answer === "yes") return { reader: a.reader, value: true };
   if (a.answer === "no") return { reader: a.reader, value: false };
-  if (a.answer === "absent") return { reader: a.reader, value: false, absence: true };
+  if (a.answer === "absent") return titled ? { reader: a.reader, value: false, absence: true } : null;
   return null;
 };
+
+const TITLE_KINDS = new Set(["tag", "list_range", "cross_reference"]);
 
 const packetsOf = (as: readonly ReaderAnswer[]) => new Set(as.flatMap((a) => a.cites.map((c) => c.packet)));
 
@@ -84,33 +95,36 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
   const proposalPackets = new Set(u.bindings.filter((b) => b.proposal).map((b) => b.packet));
   const ambiguous = u.bindings.some((b) => b.ambiguous);
   const allProposal = u.bindings.length > 0 && u.bindings.every((b) => b.proposal);
+  // A title binds the unit to a packet, and nothing about it is doubtful.
+  const titled = u.bindings.some((b) => TITLE_KINDS.has(b.kind) && !b.proposal && !b.ambiguous);
+  const vote = (a: ReaderAnswer, q: ReadingQuestion) => voteOf(a, q, titled);
   const out: Decision[] = [];
   for (const q of u.questions) {
     const as = u.answers.filter((a) => a.question === q.id);
     const r0 = as.find((a) => a.reader === "r0");
     const r1 = as.find((a) => a.reader === "r1");
     const r2s = as.filter((a) => a.reader === "r2");
+    const rp = as.find((a) => a.reader === "rp");
     const unverified = as.filter((a) => a.note === "unverified");
     const base = { question: q.id, answers: as, cites: as.flatMap((a) => a.cites) };
     // R2 counts once, when its runs agree.
-    const r2votes = r2s.map((a) => voteOf(a, q));
+    const r2votes = r2s.map((a) => vote(a, q));
     let r2: Vote | null = null;
     let r2split = false;
     if (r2s.length >= 2 && r2votes.every((v) => v)) {
       const [a, b] = r2votes as Vote[];
-      if (a.value === b.value && Boolean(a.absence) === Boolean(b.absence)) r2 = { ...a };
+      if (a.value === b.value) r2 = { ...a, absence: Boolean(a.absence) && Boolean(b.absence) };
       else r2split = true;
-    } else if (r2votes.filter(Boolean).length === 1 && r2s.length >= 2) {
-      // One run read something, the other nothing: not an agreement.
-      r2split = false;
     }
-    const votes = [r0 ? voteOf(r0, q) : null, r1 ? voteOf(r1, q) : null, r2].filter((v): v is Vote => Boolean(v));
+    // One run read something, the other nothing: not an agreement, and not
+    // a disagreement either (R2 says nothing).
+    const votes = [r0 ? vote(r0, q) : null, r1 ? vote(r1, q) : null, r2, rp ? vote(rp, q) : null].filter((v): v is Vote => Boolean(v));
     const values = new Set(votes.map((v) => String(v.value)));
     const roleOf = () => [r1, ...r2s, r0].find((a) => a && (a.answer === "monitors_only" || a.answer === "not_connected" || a.answer === "local_control"))?.answer;
     // A reading that did not verify is dropped (CI2); one that says the
     // opposite of what the verified readers say still leaves the question
     // unresolved: it may have seen what they missed.
-    const unverifiedValue = (a: ReaderAnswer) => voteOf({ ...a, note: undefined }, q)?.value;
+    const unverifiedValue = (a: ReaderAnswer) => vote({ ...a, note: undefined }, q)?.value;
     const verifiedValues = new Set(votes.map((v) => String(v.value)));
     if (verifiedValues.size === 1 && unverified.some((a) => { const v = unverifiedValue(a); return v !== undefined && !verifiedValues.has(String(v)); })) {
       out.push({ ...base, outcome: "unresolved", value: null, rule: "drawing_read:unverified", why: `a ${unverified.map((a) => `${a.reader}${a.run ?? ""}`).join(", ")} reading that did not verify says otherwise` });
@@ -127,15 +141,16 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
     const value = votes[0].value;
     const readers = [...new Set(votes.map((v) => v.reader))];
     // Through bindings C5 makes proposals only?
-    const deciding = as.filter((a) => voteOf(a, q));
+    const deciding = as.filter((a) => vote(a, q));
     const citedPackets = packetsOf(deciding);
     const viaProposal = citedPackets.size ? [...citedPackets].every((p) => proposalPackets.has(p)) : allProposal;
     const role = q.kind === "role" && value === "out" ? { role: roleOf() } : {};
-    // Absence (C9).
-    if (value === false && votes.some((v) => v.absence)) {
-      const r0absent = r0 && voteOf(r0, q)?.absence;
+    // Absence (C9): a false no reader reads explicitly.
+    const explicitFalse = votes.filter((v) => v.value === false && !v.absence);
+    if (value === false && !explicitFalse.length && votes.some((v) => v.absence)) {
+      const r0absent = r0 && vote(r0, q)?.absence;
       const r2absent = r2?.absence === true;
-      const r1present = r1 && voteOf(r1, q)?.value === true;
+      const r1present = r1 && vote(r1, q)?.value === true;
       if (r0absent && r2absent && !r1present && !ambiguous && !viaProposal) {
         out.push({ ...base, outcome: "applied", value: false, rule: "drawing_read:absence", why: "not drawn: no term for it in the unit's packets, and both vision runs find none" });
       } else {
@@ -143,22 +158,29 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
       }
       continue;
     }
-    // Whitelisted R0 phrase, alone.
-    if (r0?.whitelisted && readers.length === 1 && readers[0] === "r0") {
-      out.push({ ...base, ...role, outcome: viaProposal ? "proposal" : "applied", value, rule: `drawing_read:${r0.rule}`, why: "a whitelisted phrase of the unit's own packet" });
+    // A whitelisted deterministic reading, alone.
+    const white = [r0, rp].find((a) => a?.whitelisted && readers.length === 1 && readers[0] === a.reader);
+    if (white) {
+      out.push({ ...base, ...role, outcome: viaProposal ? "proposal" : "applied", value, rule: `drawing_read:${white.rule}`, why: white.reader === "rp" ? "a device symbol drawn inside the zone the unit's tag labels on the zone plan" : "a whitelisted phrase of the unit's own packet" });
       continue;
     }
     if (readers.length >= 2) {
-      out.push({ ...base, ...role, outcome: viaProposal ? "proposal" : "applied", value, rule: `drawing_read:agree(${readers.join(",")})`, why: viaProposal ? "the readers agree, but only through a family detail whose qualifier the row does not print (C5)" : `${readers.join(" and ")} agree` });
+      const absent = votes.filter((v) => v.absence).map((v) => v.reader);
+      const agree = absent.length ? `${explicitFalse.map((v) => v.reader).join(" and ")} read it false, and ${absent.join(" and ")} ${absent.length > 1 ? "find" : "finds"} no mention of it` : `${readers.join(" and ")} agree`;
+      out.push({ ...base, ...role, outcome: viaProposal ? "proposal" : "applied", value, rule: `drawing_read:agree(${readers.join(",")})`, why: viaProposal ? "the readers agree, but only through a family detail whose qualifier the row does not print (C5)" : agree });
       continue;
     }
     out.push({ ...base, ...role, outcome: "proposal", value, rule: `drawing_read:single(${readers[0]})`, why: `${readers[0]} alone` });
   }
-  // Exclusive options: two applied true are a conflict.
+  // Exclusive options: one applied true while a verified reader reads
+  // another of the group as there is a conflict (C12).
   for (const g of terms?.exclusive ?? []) {
-    const both = out.filter((d) => d.outcome === "applied" && d.value === true && g.options.some((o) => d.question === `opt.${o}`));
-    if (both.length < 2) continue;
-    for (const d of both) { d.outcome = "unresolved"; d.rule = "drawing_read:exclusive"; d.why = `${g.options.join(" and ")} are one choice (${g.why}), and the drawings read as both`; d.value = null; }
+    const group = out.filter((d) => g.options.some((o) => d.question === `opt.${o}`));
+    const applied = group.filter((d) => d.outcome === "applied" && d.value === true);
+    if (!applied.length) continue;
+    const others = group.filter((d) => !applied.includes(d) && d.answers.some((a) => a.note !== "unverified" && a.answer === "yes"));
+    if (applied.length < 2 && !others.length) continue;
+    for (const d of [...applied, ...others]) { d.outcome = "unresolved"; d.rule = "drawing_read:exclusive"; d.why = `${g.options.join(" and ")} are one choice (${g.why}), and the drawings read as both`; d.value = null; }
   }
   return out;
 }

@@ -15,7 +15,9 @@
 //   · ASK: the same closed questions as R1, about the drawn unit.
 //   · CHECK (CI2): every label an answer cites must be printed in the
 //     packet (spacing aside); an answer resting on no printed label, other
-//     than "absent" or "not shown", is UNVERIFIED.
+//     than "absent" or "not shown", is UNVERIFIED. An option read as absent
+//     while the drawing prints the device's name (the term list's mention,
+//     traps aside) is not an absence: it reads as not_shown.
 // Answers from a unit's several drawings are joined per run: an option is
 // there if some drawing shows it and none shows its alternative, absent only
 // if every drawing lacks it; a role is "commands" if any drawing has the BAS
@@ -27,9 +29,10 @@ import type { BoundPacket, DrawingCite, ReaderAnswer } from "./r0";
 import type { ReadingQuestion } from "./questions";
 import type { ReadUnit } from "./r1";
 import { familyWords, questionTexts } from "./r1";
-import { printedIn, squeeze } from "./text";
+import type { TermList } from "./terms";
+import { normText, printedIn, squeeze } from "./text";
 
-export const R2_PROMPT_VERSION = "control_r2_v1";
+export const R2_PROMPT_VERSION = "control_r2_v2";
 export const R2_MODEL = "qwen-3.8-27b";
 
 /** Span space is the page's viewport at sheets.ts RENDER_SCALE (2) px per
@@ -131,7 +134,7 @@ const OPTION = new Set(["yes", "no", "absent", "not_shown"]);
 /** Check one packet's reply: per question, the answer with its printed
  * labels as cites, or UNVERIFIED. `lowRes`: the crop is below 200 dpi, so an
  * "absent" is not taken (only "not_shown"). */
-export function r2PacketAnswers(content: string | null, bp: BoundPacket, questions: readonly ReadingQuestion[], run: string, lowRes = false): ReaderAnswer[] {
+export function r2PacketAnswers(content: string | null, bp: BoundPacket, questions: readonly ReadingQuestion[], run: string, lowRes = false, terms?: TermList): ReaderAnswer[] {
   const json = replyJson(content) as { answers?: Array<{ question?: unknown; answer?: unknown; labels?: unknown }> } | null;
   const out: ReaderAnswer[] = [];
   const seen = new Set<string>();
@@ -144,6 +147,11 @@ export function r2PacketAnswers(content: string | null, bp: BoundPacket, questio
     const base = { reader: "r2" as const, run, question: q.id, rule: `r2.${R2_PROMPT_VERSION}` };
     if (q.kind === "role" ? !ROLE.has(answer) : !OPTION.has(answer)) { out.push({ ...base, answer: "not_shown", cites: [], note: "unverified", why: `"${answer}" is not an answer to this question` }); continue; }
     if (answer === "absent" && lowRes) answer = "not_shown";
+    if (answer === "absent" && q.kind === "option" && terms?.options[q.option!]) {
+      const t = terms.options[q.option!];
+      const label = bp.text.lines.find((l) => t.mention.some((p) => p.re.test(untrap(normText(l.text), t.traps))));
+      if (label) { out.push({ ...base, answer: "not_shown", cites: [], why: `read as absent, but the drawing prints "${label.text.slice(0, 80)}"` }); continue; }
+    }
     if (answer === "not_shown" || answer === "absent") { out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites: [] }); continue; }
     const labels = (Array.isArray(a.labels) ? a.labels : []).map((x) => String(x ?? "")).filter((x) => squeeze(x).length >= 2).slice(0, 8);
     const cites: DrawingCite[] = [];
@@ -164,6 +172,12 @@ export function r2PacketAnswers(content: string | null, bp: BoundPacket, questio
   }
   return out;
 }
+
+const untrap = (text: string, traps: ReadonlyArray<{ re: RegExp }>) => {
+  let t = text;
+  for (const p of traps) t = t.replace(new RegExp(p.re.source, p.re.flags.includes("g") ? p.re.flags : `${p.re.flags}g`), (m) => " ".repeat(m.length));
+  return t;
+};
 
 /** Join one run's answers over a unit's drawings (see the header). */
 export function joinRun(perPacket: ReadonlyArray<readonly ReaderAnswer[]>, questions: readonly ReadingQuestion[], run: string): ReaderAnswer[] {

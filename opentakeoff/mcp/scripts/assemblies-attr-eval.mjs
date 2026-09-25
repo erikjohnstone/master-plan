@@ -361,17 +361,26 @@ async function snapshotSet(corpus, spec, set, opts = {}) {
   // page is this script's own: the PDF opened by path. The parent reads the
   // notes from the spans (scheduleNotes.ts), so a notes-reader change never
   // needs a new snapshot.
-  const { openPdf, textSpans } = await import("../src/pdf.ts");
+  const { openPdf, textSpans, OPS } = await import("../src/pdf.ts");
+  const { pageRegions } = await import("../../web/src/lib/controlIntent/zonePlan.ts");
   const fileOf = new Map(files.map((f) => [basename(f), f]));
   const docs = new Map();
   const bas = compileTakeoff(null, graph, "bas_points");
-  const { items, tables, pages, printed_points, control } = await compiledProjectOf(hvac, graph, async (sheet) => {
+  const pageOf = async (sheet) => {
     const at = sheetPage(sheet);
     const file = at && fileOf.get(at.file);
     if (!file) return null;
     if (!docs.has(at.file)) docs.set(at.file, await openPdf(file));
-    return textSpans(await docs.get(at.file).page(at.page));
-  }, bas);
+    return docs.get(at.file).page(at.page);
+  };
+  const { items, tables, pages, printed_points, control } = await compiledProjectOf(hvac, graph, async (sheet) => {
+    const ph = await pageOf(sheet);
+    return ph ? textSpans(ph) : null;
+  }, bas, async (sheet) => {
+    // A zone plan's regions (apply.ts reads them only where a title names zones).
+    const ph = await pageOf(sheet);
+    return ph ? pageRegions(await ph.operatorList(), ph.viewport.transform, OPS) : null;
+  });
   for (const doc of docs.values()) await doc.destroy();
   // --with-hit (instrument 5): the HIT export's inputs, from the same graph.
   const hit = opts.hit ? { valves: compileTakeoff(null, graph, "control_valves"), coils: compileTakeoff(null, graph, "embedded_coil_gaps") } : undefined;

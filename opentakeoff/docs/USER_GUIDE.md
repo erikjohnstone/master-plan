@@ -578,7 +578,10 @@ deterministic reader. A reading changes a unit only where two readers agree (or
 the drawing states it in so many words, such as "THIS SYSTEM IS STANDALONE AND NOT
 CONTROLLED BY THE DDC SYSTEM"). One reader alone is a proposal, readers that
 disagree leave the option unresolved, and an option is read as not drawn only
-when the text and two looks at the drawing agree. A unit's **Details** lists
+when the text and two looks at the drawing agree. An HVAC zone plan (a sheet
+whose title names zones, such as "HVAC ZONE LEGEND") is read too: a sensor
+symbol drawn inside the zone a unit's tag labels, such as a CO2 sensor, gives
+the unit that option. A unit's **Details** lists
 its readings under **Control drawings**, applied ones first, each with why, the
 readers behind it and the printed text it rests on (click it to see it on the
 sheet). **Reject** turns an applied reading back, and **Accept** applies a

@@ -121,6 +121,27 @@ test("R0: absence is read only through a packet a title binds to the unit; a sha
   assert.ok(!namesUnit("THE PUMPS SHALL RUN", { tag: "BP-1", family: "PUMP" }));
 });
 
+test("text + R0: a section runs from a heading to the next; in a shared packet, a section whose heading names the unit speaks for it", () => {
+  const seq = packet("p3", "AIR HANDLING UNIT SEQUENCE OF OPERATION", [
+    sp("HUMIDIFICATION MODE OF OPERATION :", 100, 100),
+    sp("THE MODE SHALL BE ENABLED WHENEVER THE FOLLOWING CONDITION EXISTS:", 100, 123),
+    sp("1.", 100, 170), sp("ANY SPACE RELATIVE HUMIDITY DECREASES BELOW ITS SET POINT.", 130, 170),
+    sp("2.", 100, 216), sp("SEND AN ENABLE COMMAND TO THE HUMIDIFIER.", 130, 216),
+    sp("DEHUMIDIFICATION MODE OF OPERATION :", 100, 300),
+    sp("1.", 100, 346), sp("THE RETURN AIR HUMIDITY SHALL BE MONITORED.", 130, 346),
+  ], "sequence");
+  const t = packetText(seq);
+  const under = (s: string) => t.paragraphs.find((p) => p.text.includes(s))?.heading;
+  assert.equal(under("ANY SPACE RELATIVE HUMIDITY"), "HUMIDIFICATION MODE OF OPERATION :");
+  assert.equal(under("RETURN AIR HUMIDITY"), "DEHUMIDIFICATION MODE OF OPERATION :");
+  assert.equal(under("THE MODE SHALL BE ENABLED"), "HUMIDIFICATION MODE OF OPERATION :", "a sentence ending in a colon heads nothing");
+  const [hum] = readR0({ tag: "HUM-1", family: "HUMIDIFIER" }, [bound(seq, "tag_body")], [opt("space_humidity")], TERM_LIST);
+  assert.equal(hum.answer, "yes", "the humidification section is the humidifier's; the dehumidification one is not");
+  assert.match(hum.cites[0].text, /SPACE RELATIVE HUMIDITY/);
+  const [fan] = readR0({ tag: "EF-1", family: "FAN" }, [bound(seq, "tag_body")], [opt("space_humidity")], TERM_LIST);
+  assert.equal(fan.answer, "not_shown", "no heading names the fan");
+});
+
 test("R0: outputs in the unit's own diagram mean the BAS commands it; inputs alone decide nothing", () => {
   const cmd = packet("p1", "EF-1 CONTROLS", [sp("BO - FAN START/STOP", 100, 100), sp("BI - FAN STATUS", 100, 300)]);
   assert.equal(readR0({ tag: "EF-1" }, [bound(cmd)], [role], TERM_LIST)[0].answer, "commands");
@@ -167,6 +188,26 @@ test("combine: absence applies only when R0 finds no term and both vision runs f
   assert.equal(d([r0, a, b], [...titled, { packet: "p2", kind: "tag", evidence: "t", ambiguous: true }]).outcome, "proposal");
 });
 
+test("combine: a false read explicitly is not an absence; another reader finding no mention agrees with it (C8)", () => {
+  const q = [opt("duct_smoke_detectors")];
+  const d = (answers: ReaderAnswer[], bindings = titled) => combineUnit({ questions: q, answers, bindings }, TERM_LIST)[0];
+  const no = (run: string) => ans("r2", "opt.duct_smoke_detectors", "no", { run });
+  const absent = (reader: ReaderAnswer["reader"], run?: string) => ans(reader, "opt.duct_smoke_detectors", "absent", run ? { run } : {});
+  const both = d([no("a"), no("b"), absent("r1")]);
+  assert.deepEqual([both.outcome, both.value, both.rule], ["applied", false, "drawing_read:agree(r1,r2)"]);
+  assert.match(both.why, /r2 read it false, and r1 finds no mention of it/);
+  assert.equal(d([no("a"), no("b")]).outcome, "proposal", "one reader alone");
+  // The two runs agree on the value: one printed the alternative, the other
+  // found no device. Together they are R2's explicit false, never an absence.
+  const mixed = d([no("a"), absent("r2", "b"), absent("r0")]);
+  assert.deepEqual([mixed.outcome, mixed.value], ["applied", false]);
+  assert.equal(d([no("a"), absent("r2", "b")]).outcome, "proposal");
+  // An absence alone still needs all of C9.
+  assert.equal(d([absent("r1"), absent("r2", "a"), absent("r2", "b")]).outcome, "proposal");
+  // A "yes" from any reader is a disagreement.
+  assert.equal(d([no("a"), no("b"), ans("r1", "opt.duct_smoke_detectors", "yes")]).outcome, "unresolved");
+});
+
 test("combine: a whitelisted R0 phrase applies alone; one choice read twice leaves both unresolved; the intent carries the facts", () => {
   const w = combineUnit({ questions: [role], answers: [ans("r0", "role", "not_connected", { whitelisted: true })], bindings: titled }, TERM_LIST);
   assert.equal(w[0].outcome, "applied");
@@ -177,6 +218,12 @@ test("combine: a whitelisted R0 phrase applies alone; one choice read twice leav
     ans("r0", "opt.return_fan", "yes"), ans("r1", "opt.return_fan", "yes"), ans("r0", "opt.relief_fan", "yes"), ans("r1", "opt.relief_fan", "yes"),
   ], bindings: titled }, TERM_LIST);
   assert.deepEqual(both.map((x) => x.outcome), ["unresolved", "unresolved"]);
+  // One of the group applied while a verified reader reads the other there
+  // too: the drawings name both.
+  const named = combineUnit({ questions: [opt("return_fan"), opt("relief_fan")], answers: [
+    ans("r0", "opt.relief_fan", "yes"), ans("r1", "opt.relief_fan", "yes"), ans("r0", "opt.return_fan", "yes"),
+  ], bindings: titled }, TERM_LIST);
+  assert.deepEqual(named.map((x) => [x.question, x.outcome]), [["opt.return_fan", "unresolved"], ["opt.relief_fan", "unresolved"]]);
   const one = combineUnit({ questions: [opt("motorized_damper")], answers: [ans("r0", "opt.motorized_damper", "yes"), ans("r1", "opt.motorized_damper", "yes")], bindings: titled }, TERM_LIST);
   assert.deepEqual(decisionIntent(one)?.options?.motorized_damper?.value, true);
 });
@@ -227,6 +274,21 @@ test("R1: a quote must be printed where it says, name the device, and a role nee
   const noSubject = r1Answers(reply([{ ...roleOk, subject_quote: null }]), prep, [role], TERM_LIST);
   assert.equal(noSubject[0].note, "unverified");
   assert.equal(r1Answers("not json", prep, [role], TERM_LIST).length, 0);
+  // "Absent" is "not mentioned anywhere": the paragraphs mention a damper.
+  const absent = r1Answers(reply([{ question: "opt.motorized_damper", answer: "absent", quotes: [], subject_quote: null }]), prep, [opt("motorized_damper")], TERM_LIST);
+  assert.deepEqual([absent[0].answer, absent[0].note], ["not_shown", undefined]);
+  assert.match(absent[0].why ?? "", /mention it/);
+});
+
+test("R1: text an earlier packet on the same sheet carries is sent once; each packet says why it applies", () => {
+  const heading = { ...packet("h", "AHU-1 SEQUENCE OF OPERATIONS", [sp("THE BMS SHALL START THE SUPPLY FAN.", 100, 100)], "sequence"), region: [0, 0, 2000, 2000] as [number, number, number, number] };
+  const sheet = { ...packet("s", "AIR HANDLING UNIT SEQUENCE OF OPERATIONS", [sp("THE BMS SHALL START THE SUPPLY FAN.", 100, 100), sp("THE ECONOMIZER SHALL BE ENABLED.", 3000, 100)], "sequence"), scope: "sheet" as const };
+  const prep = r1Request({ tags: ["AHU-1"], family: "AHU", schedule: "AHU SCHEDULE" }, [bound(heading, "tag"), bound(sheet, "sibling")], [role]);
+  const payload = JSON.parse(prep.req.messages[1].content as string);
+  assert.deepEqual(payload.packets.map((k: { paragraphs: Array<{ text: string }> }) => k.paragraphs.map((p) => p.text)), [["THE BMS SHALL START THE SUPPLY FAN."], ["THE ECONOMIZER SHALL BE ENABLED."]]);
+  assert.deepEqual(payload.packets.map((k: { applies_because: string }) => k.applies_because), ["its title names this unit", "it is about the same subject as a drawing titled for this unit, on the same sheet"]);
+  const typical = r1Request({ tags: ["EH-1"], family: "UNIT_HEATER", schedule: "S" }, [bound({ ...heading, id: "t", title: "ELECTRIC UNIT HEATER SCHEMATIC", subtitle: "(EH-5)" }, "family_detail")], [role]);
+  assert.match(JSON.parse(typical.req.messages[1].content as string).packets[0].applies_because, /names another unit of this kind as the example/);
 });
 
 test("R2: labels must be printed in the drawing; a low-resolution crop never reads absence; runs join over a unit's drawings", () => {
@@ -241,6 +303,9 @@ test("R2: labels must be printed in the drawing; a low-resolution crop never rea
   assert.deepEqual(got.map((a) => a.note ?? "ok"), ["ok", "unverified"]);
   const absent = JSON.stringify({ answers: [{ question: "opt.motorized_damper", answer: "absent", labels: [] }] });
   assert.equal(r2PacketAnswers(absent, bp, q, "a", true)[0].answer, "not_shown");
+  assert.equal(r2PacketAnswers(absent, bp, q, "a")[0].answer, "absent", "the term list is not asked");
+  const said = r2PacketAnswers(absent, bp, q, "a", false, TERM_LIST)[0];
+  assert.deepEqual([said.answer, said.why], ["not_shown", 'read as absent, but the drawing prints "BO - EXHAUST AIR DAMPER"']);
   const yes = [{ reader: "r2", run: "a", question: "opt.motorized_damper", answer: "yes", rule: "t", cites: [] }] as ReaderAnswer[];
   const abs = [{ reader: "r2", run: "a", question: "opt.motorized_damper", answer: "absent", rule: "t", cites: [] }] as ReaderAnswer[];
   assert.equal(joinRun([yes, abs], [opt("motorized_damper")], "a")[0].answer, "yes");

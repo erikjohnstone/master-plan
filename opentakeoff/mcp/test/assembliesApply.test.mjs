@@ -147,7 +147,7 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   const scoped = await call(client, "apply_assemblies", { export_dir: scopedDir, export_scope: "mechanical", settings: presets });
   assert.equal(scoped.isError, false, JSON.stringify(scoped.data).slice(0, 300));
   assert.equal(scoped.data.export_dir.scope, "mechanical");
-  const uiPresets = applyAssemblies({ project: wire, library, settings: settingsWithPresets({}, { hookupDefaults: true, responsibilityPreset: "valve-shipped-to-kit-maker" }) });
+  const uiPresets = applyAssemblies({ project: wire, library, readings: wire.control_readings, settings: settingsWithPresets({}, { hookupDefaults: true, responsibilityPreset: "valve-shipped-to-kit-maker" }) });
   const expectedScoped = assembliesCsvSet({ ...uiPresets, report: assembliesReport(uiPresets.instances, uiPresets.applications, uiPresets.lines), scope: "mechanical" });
   for (const [name, text] of Object.entries(expectedScoped)) assert.equal(await readFile(join(scopedDir, name), "utf8"), text, `${name}: mechanical scope under the presets`);
   assert.notEqual(expectedScoped["lines.csv"], expected["lines.csv"]);

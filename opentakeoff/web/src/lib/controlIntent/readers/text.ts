@@ -16,13 +16,16 @@
 //   · a PARAGRAPH is a run of consecutive lines of one flow, each under the
 //     last (a line gap), overlapping it and of its size: a sentence wrapped
 //     over lines, or a label stacked over two ("MOTORIZED" over "DAMPER");
-//   · a CLAUSE is a paragraph cut at its sentence ends (". ", ":", ";").
+//   · a CLAUSE is a paragraph cut at its sentence ends (". ", ":", ";");
+//   · a SECTION runs from a paragraph whose first line is a heading (a short
+//     line ending in a colon, no list marker, no sentence: "HUMIDIFICATION
+//     MODE OF OPERATION :") to the next one, in reading order.
 import type { Box, NoteSpan } from "../../assemblies/scheduleNotes";
 import type { Packet } from "../evidence";
 import { pageLines, repairSpacing, type Line } from "../evidence";
 import WORDS from "./words.json" with { type: "json" };
 
-export const TEXT_VERSION = "control_text_v1";
+export const TEXT_VERSION = "control_text_v2";
 
 export interface PacketLine {
   /** `L<n>` in reading order, unique in the packet. */
@@ -49,6 +52,8 @@ export interface Paragraph {
   text: string;
   norm: string;
   lines: string[];
+  /** The heading of its section (matching form); absent before the first. */
+  heading?: string;
 }
 
 export interface Clause {
@@ -122,6 +127,17 @@ export const squeeze = (s: unknown): string => normText(s).replace(/[^A-Z0-9]+/g
 const MARKER = /^\(?(?:\d{1,2}|[A-Z]|[IVX]{1,4})[.)]\)?$/i;
 /** A line that starts with one ("1. SEND AN ENABLE COMMAND …"). */
 const ITEM_START = /^\(?(?:\d{1,2}|[A-Z]|[IVX]{1,4})[.)]\)?\s+\S/i;
+/** Words that make a line ending in a colon a sentence, not a heading. */
+const SENTENCE_WORD = /\b(?:SHALL|WILL|MUST|SHOULD|IS|ARE|BE|WHEN|WHENEVER|IF)\b/;
+
+/** A section heading: a short line ending in a colon, with no list marker,
+ * that is not a sentence ("SAFETIES :", "HUMIDIFICATION MODE OF OPERATION :"). */
+export function isHeading(text: string): boolean {
+  const c = clean(text);
+  if (!/:\s*$/.test(c) || ITEM_START.test(c)) return false;
+  const n = normText(c);
+  return n.split(/\s+/).filter((w) => /[A-Z]/.test(w)).length <= 8 && !SENTENCE_WORD.test(n);
+}
 
 const median = (xs: number[]) => {
   const s = [...xs].sort((a, b) => a - b);
@@ -278,10 +294,17 @@ export function packetText(p: Packet): PacketText {
     }
   }
 
+  const byId = new Map(lines.map((l) => [l.id, l]));
+  // Sections: each paragraph under the last heading before it.
+  let heading: string | undefined;
+  for (const pg of paragraphs) {
+    const first = byId.get(pg.lines[0]);
+    if (first && isHeading(first.text)) heading = first.norm;
+    if (heading) pg.heading = heading;
+  }
   // Clauses: paragraphs cut at sentence ends. A cut is kept on the lines it
   // came from: each clause cites the lines its text overlaps.
   const clauses: Clause[] = [];
-  const byId = new Map(lines.map((l) => [l.id, l]));
   for (const pg of paragraphs) {
     // Character offsets of each line inside the paragraph text.
     const offs: Array<{ id: string; a: number; b: number }> = [];

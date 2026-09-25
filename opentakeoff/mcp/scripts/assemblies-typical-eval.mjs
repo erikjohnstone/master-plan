@@ -362,8 +362,11 @@ export async function readingTools(corpus, mode) {
         concurrency: 6,
       });
       if (live) {
+        // The store keeps exactly the runs this reading pinned: a run an
+        // earlier prompt or packet asked for is never replayed again.
+        const used = new Set(readings.runs);
         mkdirSync(dir, { recursive: true });
-        writeFileSync(path, store.all().sort((a, b) => a.hash.localeCompare(b.hash)).map((r) => JSON.stringify(r)).join("\n") + "\n");
+        writeFileSync(path, store.all().filter((r) => used.has(r.hash)).sort((a, b) => a.hash.localeCompare(b.hash)).map((r) => JSON.stringify(r)).join("\n") + "\n");
       }
       return readings;
     },

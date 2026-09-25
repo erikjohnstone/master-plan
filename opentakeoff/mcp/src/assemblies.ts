@@ -32,8 +32,8 @@ export const STARTER_FILES = ["us-typicals-v1.json", "us-hookups-v1.json"] as co
 
 /** The project the apply path reads, from this Session: the hvac_equipment
  * compile (the compile_corpus_takeoff path), its sheet graph, the text spans
- * of the claimed tables' pages, and the printed points-list rows mapped to
- * units. */
+ * of the claimed tables' pages, the printed points-list rows mapped to
+ * units, and the regions of any page whose title names zones (zone plans). */
 export async function sessionAssembliesProject(session: Session): Promise<CompiledProject> {
   const graph = await session.graphForPipeline();
   // hvac_equipment: categories of items (the union type also covers kinds
@@ -42,7 +42,7 @@ export async function sessionAssembliesProject(session: Session): Promise<Compil
   // The printed points lists and the units their rows serve (D6 evidence):
   // the compile alone, without the BAS workflow's Python math.
   const basPoints = compileTakeoff(session, graph, "bas_points") as unknown as BasPointsCompile;
-  return compiledProjectOf(compiled, graph, (sheet) => session.sheetTextSpans(sheet), basPoints);
+  return compiledProjectOf(compiled, graph, (sheet) => session.sheetTextSpans(sheet), basPoints, (sheet) => session.sheetRegions(sheet));
 }
 
 /** A library through the load gate: every record the gate rejects fails the

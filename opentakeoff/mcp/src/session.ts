@@ -14,6 +14,7 @@ import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
 import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
+import { pageRegions, type PageRegion } from "../../web/src/lib/controlIntent/zonePlan.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
@@ -1196,6 +1197,16 @@ export class Session {
     const state = this.sheets.get(key) ?? (key.endsWith("#1") ? this.sheets.get(key.slice(0, -2)) : undefined);
     if (!state) return null;
     return state.spans ?? textSpans(state.page);
+  }
+
+  /** The closed regions (filled or clipping paths) one loaded sheet draws, in
+   * image px like its spans, or null when no loaded sheet has that key.
+   * Read-only, like sheetTextSpans. (CONTROL INTENT: the zone plans
+   * web/src/lib/controlIntent/zonePlan.ts reads.) */
+  async sheetRegions(key: string): Promise<PageRegion[] | null> {
+    const state = this.sheets.get(key) ?? (key.endsWith("#1") ? this.sheets.get(key.slice(0, -2)) : undefined);
+    if (!state) return null;
+    return pageRegions(await state.page.operatorList(), state.page.viewport.transform, OPS);
   }
 
   /** Shared text-only BAS evidence seam. Does not build or modify the graph,

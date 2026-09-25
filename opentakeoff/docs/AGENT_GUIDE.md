@@ -203,7 +203,9 @@ failure. Report it, or pass the partner's value in `settings` or an override wit
 pick a typical or an option the drawing does not decide. `control_readings` reads the control
 drawings bound to each unit (sequences, schematics, points lists): a reading applies only where two
 readers agree or on a phrase that states it outright (a unit printed standalone); one reader alone
-is a proposal, and readers that disagree leave the option unresolved. With `detail: "units"`,
+is a proposal, and readers that disagree leave the option unresolved. A zone plan (a sheet whose
+title names zones) is read the same way: a sensor symbol inside the zone a unit's tag labels (a CO2
+sensor) applies that option, cited to the symbol and the label. With `detail: "units"`,
 `control.readings` lists each reading with its rule, readers and cites. Report an applied reading as
 a drawing fact with its cite and a proposal as a question for the estimator, never as a decision.
 A printed points list that names a

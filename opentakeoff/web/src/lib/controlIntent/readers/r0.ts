@@ -11,8 +11,9 @@
 //     the unit is bound to it by a title (tag, list or range, schedule
 //     cross-reference), by its family's detail, or as the sibling of a packet
 //     a title binds; any other packet (a tag printed in a system schematic,
-//     an owner's packet) is SHARED, and only its clauses that print the
-//     unit's tag speak for the unit;
+//     an owner's packet) is SHARED, and only its clauses that name the unit
+//     (its tag, its family's noun, its tag's words), or whose section's
+//     heading does, speak for the unit;
 //   · ROLE: a not-connected phrase ("THIS SYSTEM IS STANDALONE", "NOT
 //     CONTROLLED BY THE DDC SYSTEM"), whitelisted when an own packet a title
 //     binds prints it of its subject; a local-control phrase (a thermostat,
@@ -32,7 +33,7 @@ import type { PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v1";
+export const R0_VERSION = "control_r0_v2";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
@@ -55,12 +56,15 @@ export interface DrawingCite {
 export type ReaderAnswerValue = RoleAnswer | OptionAnswer | "local_control" | "not_shown";
 
 export interface ReaderAnswer {
-  reader: "r0" | "r1" | "r2";
+  /** r0 deterministic, r1 text model, r2 vision model, rp the zone plan
+   * (zonePlan.ts: a device symbol in the zone the unit's tag labels). */
+  reader: "r0" | "r1" | "r2" | "rp";
   /** Which run, for a reader asked more than once (R2: "a", "b"). */
   run?: string;
   question: string;
   answer: ReaderAnswerValue;
-  /** R0 only: a whitelisted phrase, which applies alone (C8). */
+  /** R0's whitelisted phrase, or the zone plan's symbol in the unit's zone:
+   * a deterministic reading that applies alone (C8). */
   whitelisted?: boolean;
   /** The pattern or the answer's rule. */
   rule: string;
@@ -93,7 +97,9 @@ const FAMILY_NOUN: Readonly<Record<string, RegExp>> = {
   HEAT_RECOVERY_CHILLER: /\bCHILLERS?\b/,
   COOLING_TOWER: /\bCOOLING\s+TOWERS?\b/,
   HEAT_EXCHANGER: /\bHEAT\s+EXCHANGERS?\b/,
-  HUMIDIFIER: /\bHUMIDIFIERS?\b/,
+  // Its function names it too ("HUMIDIFICATION MODE OF OPERATION"; UFGS
+  // 23 09 93 "Humidification Control", and four dev drafters).
+  HUMIDIFIER: /\bHUMIDIFI(?:ERS?|CATION)\b/,
 };
 
 /** Whether a clause of a packet other units share speaks for the unit: it
@@ -186,7 +192,10 @@ export function readR0(unit: { tag: string; family?: string }, bound: readonly B
   // The clauses that speak for the unit, per packet.
   const scoped = bound.map((bp) => {
     const own = ownPacket(bp.binding, all);
-    const clauses = bp.text.clauses.filter((c) => own || namesUnit(c.norm, unit));
+    // In a packet other units share, a clause speaks for the unit when it
+    // names the unit, or the heading of its section does.
+    const heading = new Map(bp.text.paragraphs.map((pg) => [pg.id, pg.heading]));
+    const clauses = bp.text.clauses.filter((c) => own || namesUnit(c.norm, unit) || Boolean(heading.get(c.paragraph) && namesUnit(heading.get(c.paragraph)!, unit)));
     return { bp, own, clauses };
   });
   // "Absent" is read only where a title binds the unit to a packet of its
