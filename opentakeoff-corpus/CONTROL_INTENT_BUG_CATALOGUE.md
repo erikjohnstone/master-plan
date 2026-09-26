@@ -481,3 +481,79 @@ is still not printed.
 - Unseen, 25 sets replayed: 3 more readings apply, all right. 015_VA EF-6's damper and BAS role come from its own
   generator room detail. 009_FL AHU-1's BAS role comes from its points table ("AO4 FAN SPEED COMMAND (%)").
 
+
+## CI-21: title words that say nothing about which unit left family details as proposals (FIXED, next commit)
+
+**Found:** 2026-09-26. The held-out binding aggregate at 1ae6d2b counts 60 of its 171 missed pairs as "bound as a
+proposal only" (aggregate miss reasons, added to the binding eval here; no held-out row was read). A census of the
+family details on every non-held-out set with packets (1,198 bindings, 532 of them proposals) shows why.
+
+**What:** C5 makes a family detail a proposal when a title qualifier is not printed in the unit's row. These words
+were counted as qualifiers, and none says which unit a detail is for:
+- another subject the title joins by AND or "&". "FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION" left all 23
+  condensing units proposals on "FURNACE", and bound none of the 21 furnaces, since the title's family was read as
+  the condensing units' (16_NV). "HEAT PUMP & FAN COIL UNITS SEQUENCE OF OPERATION" did the same (083_MA).
+- a union: "VAV/CAV TERMINAL BOX CONTROL SCHEMATIC", 58 boxes (096_IN).
+- the family's name in another spelling:
+  - "ROOF TOP" repaired to "ROOFTOP" in the title but not in the schedule's title (16_NV);
+  - "(HP)" after "HEAT PUMP TERMINAL UNIT", 15 heat pumps (011_IL);
+  - "ATU", a terminal unit's designator, 15 units (03_FL);
+  - "MAKE UP" (14_OR).
+- a bid alternate: "BID ALTERNATE #2", "(BID ALTERNATE 1)", "ALTERNATE 3" (061_IA, 16_NV, 014_MT).
+- two-position control: "ON OFF" (088_AZ; bldg5406 prints "ON/OFF").
+
+**Fix (`binding.ts`):**
+- A title whose subject parts, joined by AND or "&" within one dash-separated segment, each name a family is a
+  family detail for each of them. The words of the other subjects are no qualifiers. "FAN COIL UNIT (HEATING AND
+  COOLING)" is one subject, since COOLING names no family.
+- "A/B" is no qualifier of a unit whose family is A or B, and is printed when either is.
+- The schedule title's words count in either spacing. A standard designator of the unit's family ("ATU", "TU") is
+  its own word. An abbreviation a title defines for its own words ("(HP)") adds nothing.
+- Bid alternates (CSI MasterFormat 01 23 00 Alternates) and "ON/OFF" are no subject.
+- New with it: a detail titled for a family's plain kind is the plain schedule's when the project schedules a
+  special kind apart ("SMOKE EXHAUST FAN SCHEDULE" beside "EXHAUST FAN SCHEDULE"). For the special kind's units it
+  stays a proposal unless the title names what they add. The same shape is in 015_VA (GATEHOUSE), itd-d1-lab
+  (LAB) and 096_IN (AHU RETURN/EXHAUST). Without it, dropping "ON OFF" had bound 088_AZ's four smoke exhaust fans
+  to the exhaust fans' on/off detail. Those fans are fire alarm fans.
+- Held back: "P&ID" as a drawing kind. With it, 028_TX's "DOAS 1&2 P&ID" bound DOAS-3. The title prints its marks
+  with a space ("DOAS 3"), and titles read only hyphenated marks as tags. Number words then counted as qualifiers
+  and were confirmed wherever a cell printed the digit (a voltage "460/3/60"). Queued with reading "DOAS 3" as a
+  tag.
+
+**Checked:**
+- Non-held-out bindings (46 sets with packets, dev included): 143 change. All were checked by hand against the
+  drawings and schedules: 122 proposals are confirmed, and 21 furnaces and 3 heat pumps take their two-subject
+  sequences. The 11 dev documents' bindings and their evidence are byte-identical.
+- The binder test fails without the fix.
+- Live, on the six audited sets it changes: 25 → 61 applied, 0 lost, 0 changed. The 36 new are right: 16_NV's 21
+  furnaces' fan status ("AND THE SUPPLY FAN STATUS IS ON.") and 03_FL's 15 terminal units' setpoint adjustment ("ZONE
+  TEMPERATURE SENSOR WITH SET POINT ADJUSTMENT").
+- Live, 28 more unseen sets (batch 5; CI-22 below applied to the tally): 102 applied, all right. 096_IN 66
+  (AHU-4's role, relief damper, return fans and economizer; its 58 terminal boxes' occupancy sensors, through the
+  "VAV/CAV" schematic CI-21 confirms; two general exhaust fans' role; AHU-4's supply fans' static pressure
+  control), 088_AZ 23 (fan coil units' role and setpoint adjustment; chillers' role and isolation valves; exhaust
+  fans' role), 077_MT 8, 083_MA 3 (the heat pumps' fan status, through the two-subject sequence), 043_FL 2.
+- Held-out, aggregate only: the binding eval is unchanged (pair recall 10.5%). CI-21 confirms none of its 60
+  proposal-only pairs.
+
+## CI-22: an agreement counted a reader that read only another unit's detail (FIXED, next commit)
+
+**Found:** 2026-09-26, auditing batch 5 (096_IN).
+
+**What:** CH-1 and CH-2, air-cooled chillers, are bound to their own "AIR COOLED CHILLED WATER CONTROL SCHEMATIC"
+by their tags, and to "HEATING RECOVERY CHILLER CONTROL SCHEMATIC" as a C5 proposal ("HEATING", "RECOVERY"
+unconfirmed). Their role and chilled water isolation valve **applied**, by R0, R1 and R2 agreeing. But R2's two runs,
+and R0 for the role, cited only the heat recovery chiller's schematic: "BO-1 HRC-1 START/STOP", "BO-3 HRC-1 CHILLED
+WATER ISOLATION VALVE". That is another unit's evidence. The combiner tested for proposals over the union of the
+deciding readers' cites, so one reader in the unit's own packet made every reader count. The four values happen to
+be right. Their second vote was not the chillers'.
+
+**Fix (`combine.ts`, `control_combine_v6`):** C5 is applied reader by reader. A reader whose every cite lies in
+packets bound to the unit as proposals casts no vote that applies. Two readers must read it in the unit's own
+packets, or the agreement is a proposal that names which reader read what.
+
+**Checked:**
+- The combiner test fails without the fix.
+- Dev: the replay is unchanged: 227/244; 291 applied, 0 wrong; class R 55/71.
+- Unseen, all 53 audited sets replayed (no model call): 342 → 338 applied. The 4 are exactly CH-1's and CH-2's role
+  and isolation valve. Nothing else changes.

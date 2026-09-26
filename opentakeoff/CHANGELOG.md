@@ -86,6 +86,22 @@
   Across 25 unseen sets, 200 readings apply, and all 200 are right (146 with
   145 right before). Dev and extraction are unchanged.
 
+  **A third round covers every unseen set that has both scheduled units and
+  control drawings (53).** Two more fixes on the shared path:
+  - Title words that say nothing about which unit a detail is for no longer
+    leave a family's typical detail as a proposal. A title naming two kinds
+    of unit ("FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION") is each
+    one's. "VAV/CAV", "ROOF TOP" beside "ROOFTOP", a title's own "(HP)", a
+    terminal unit's "ATU", bid alternates and "ON OFF" are no qualifiers. A
+    detail for the plain kind of a family is not the special kind's that the
+    project schedules apart ("SMOKE EXHAUST FAN SCHEDULE").
+  - An agreement needs two readers that read it in the unit's own drawings.
+    A reader that read it only in a detail bound as a proposal (another
+    chiller's schematic) casts no vote that applies.
+  Across the 53 unseen sets, 338 readings apply, and all 338 are right. The
+  binding eval now counts its missed pairs by why. Dev and extraction are
+  unchanged.
+
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
   a child process, decoded per read, so a "°" falling on a 64 KiB boundary

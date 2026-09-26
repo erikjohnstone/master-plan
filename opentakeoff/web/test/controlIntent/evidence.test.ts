@@ -357,6 +357,55 @@ test("variants of one kind: a title names a part the row's columns confirm or de
     ["rh:family_detail:proposal:ambiguous", "co:family_detail:proposal:ambiguous", "s1:family_detail:ambiguous", "s2:family_detail:ambiguous"]);
 });
 
+test("a title's qualifiers are the unit's: another subject joined by AND, the family's name in another spelling, a bid alternate and on/off are none; a detail for the plain kind is not a special kind's scheduled apart", () => {
+  // Robustness finds (unseen sets; census of 1,198 family details, 532 of
+  // them proposals): "FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION" left
+  // every condensing unit a proposal on "FURNACE" and bound no furnace;
+  // "VAV/CAV", "ROOF TOP" beside a repaired "ROOFTOP", "(HP)" and "BID
+  // ALTERNATE #2" were read as qualifiers; "EXHAUST FAN ON OFF CONTROLS" is
+  // the exhaust fans' detail, not the smoke exhaust fans' scheduled apart.
+  const of = (b: Map<number, Array<{ packet: string; kind: string; proposal?: true; ambiguous?: true }>>, i: number) =>
+    b.get(i)?.map((x) => `${x.packet}:${x.kind}${x.proposal ? ":proposal" : ""}${x.ambiguous ? ":ambiguous" : ""}`);
+  const split = bindPackets([
+    packet("soo", "FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION", "sequence"),
+    packet("fdia", "FURNACE CONTROL DIAGRAM", "diagram"),
+    packet("fcu", "FAN COIL UNIT (HEATING AND COOLING) CONTROL DIAGRAM", "diagram"),
+  ], [
+    unit(0, "F-1", "FURNACE", "2-STAGE, GAS FIRED FURNACE SCHEDULE"),
+    unit(1, "CU-1", "CONDENSING_UNIT", "CONDENSING UNIT SCHEDULE"),
+    unit(2, "FC-1", "FCU", "FAN COIL UNIT SCHEDULE"),
+  ]);
+  assert.deepEqual(of(split, 0), ["soo:family_detail", "fdia:family_detail"], "the furnace takes the furnace-and-condensing-unit sequence");
+  assert.deepEqual(of(split, 1), ["soo:family_detail"], "so does the condensing unit: FURNACE is the other subject, not its qualifier");
+  assert.deepEqual(of(split, 2), ["fcu:family_detail:proposal"], "HEATING AND COOLING name no second kind of unit: they stay qualifiers");
+
+  const spell = bindPackets([
+    packet("vav", "VAV/CAV TERMINAL BOX CONTROL SCHEMATIC", "diagram"),
+    packet("cav", "SEQUENCE OF OPERATION - CAV BOXES", "sequence"),
+    packet("rtu", "ROOF TOP UNIT CONTROL DIAGRAM", "diagram"),
+    packet("hp", "SEQUENCE OF OPERATIONS HEAT PUMP TERMINAL UNIT (HP)", "sequence"),
+    packet("alt", "BID ALTERNATE #2 EXHAUST FAN POINTS LIST", "points"),
+  ], [
+    unit(0, "VAV-1-1", "VAV", "VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE"),
+    unit(1, "AC-1", "RTU", "ROOF TOP UNIT SCHEDULE"),
+    unit(2, "HP 12-1", "HEAT_PUMP", "EXISTING HEAT PUMP SCHEDULE"),
+    unit(3, "EF-1", "FAN", "EXHAUST FAN SCHEDULE"),
+  ]);
+  assert.deepEqual(of(spell, 0), ["vav:family_detail", "cav:family_detail:proposal"], "VAV/CAV names either; CAV alone is still a qualifier a VAV row does not print");
+  assert.deepEqual(of(spell, 1), ["rtu:family_detail"], "ROOF TOP is ROOFTOP");
+  assert.deepEqual(of(spell, 2), ["hp:family_detail"], "(HP) abbreviates the title's own HEAT PUMP");
+  assert.deepEqual(of(spell, 3), ["alt:family_detail"], "a bid alternate says when the work is bought, not what the fan is");
+
+  const onOff = packet("ef", "EXHAUST FAN ON OFF CONTROLS", "detail");
+  const apart = bindPackets([onOff], [unit(0, "EF-1", "FAN", "EXHAUST FAN SCHEDULE"), unit(1, "SEF-1", "FAN", "SMOKE EXHAUST FAN SCHEDULE")]);
+  assert.deepEqual(of(apart, 0), ["ef:family_detail"], "ON OFF says how the fan is switched");
+  assert.deepEqual(of(apart, 1), ["ef:family_detail:proposal"], "the project schedules its smoke exhaust fans apart, and the title does not name them");
+  assert.match(apart.get(1)![0].evidence, /schedules "SMOKE EXHAUST FAN SCHEDULE" apart from "EXHAUST FAN SCHEDULE"/);
+  // Scope notes are no kind: two buildings' schedules are one kind.
+  const scoped = bindPackets([onOff], [unit(0, "EF-1", "FAN", "EXHAUST FAN SCHEDULE (BUILDING A)"), unit(1, "EF-2", "FAN", "EXHAUST FAN SCHEDULE (BUILDING B)"), unit(2, "EF-3", "FAN", "EXHAUST FAN SCHEDULE")]);
+  assert.deepEqual([0, 1, 2].map((i) => of(scoped, i)), [["ef:family_detail"], ["ef:family_detail"], ["ef:family_detail"]]);
+});
+
 test("components: a unit in another scheduled unit takes its packets; one located in an unscheduled terminal unit takes that kind's detail", () => {
   const ahuSoo = packet("s", "AHU-1 SEQUENCE OF OPERATIONS", "sequence");
   const tu = packet("tu", "VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM", "diagram");

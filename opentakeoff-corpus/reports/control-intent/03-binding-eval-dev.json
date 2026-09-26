@@ -1,18 +1,18 @@
 {
  "side": "dev",
  "total": {
-  "packets": 124,
+  "packets": 123,
   "pairs": 323,
   "pair_hits": 300,
   "recall": 0.9287925696594427,
   "recall_without_semantic": 0.9786476868327402,
   "recall_with_proposals": 0.9411764705882353,
-  "bindings": 349,
+  "bindings": 347,
   "confirmed_bindings": 340,
-  "precision": 0.9323529411764706,
-  "precision_with_proposals": 0.9197707736389685,
-  "proposals": 9,
-  "ambiguous": 4,
+  "precision": 0.9294117647058824,
+  "precision_with_proposals": 0.9221902017291066,
+  "proposals": 7,
+  "ambiguous": 0,
   "hits_inside": 0,
   "hits_containing": 0,
   "key_packets_not_found": 1,
@@ -49,18 +49,18 @@
     "proposal": 0
    },
    "tag": {
-    "bindings": 32,
-    "correct": 31,
+    "bindings": 31,
+    "correct": 30,
     "proposal": 0
    },
    "family_detail": {
-    "bindings": 166,
+    "bindings": 164,
     "correct": 160,
-    "proposal": 9
+    "proposal": 7
    },
    "component_of": {
     "bindings": 25,
-    "correct": 24,
+    "correct": 23,
     "proposal": 0
    },
    "cross_reference": {
@@ -74,10 +74,16 @@
     "proposal": 0
    },
    "sibling": {
-    "bindings": 30,
-    "correct": 25,
+    "bindings": 31,
+    "correct": 26,
     "proposal": 0
    }
+  },
+  "miss_reasons": {
+   "no binding at all (tag read)": 12,
+   "bound as a proposal only": 4,
+   "key packet not found by the finder": 1,
+   "bound to another packet of that kind": 6
   }
  },
  "results": [
@@ -98,7 +104,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "prefix-carrying list"
+     "note": "prefix-carrying list",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -113,7 +122,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "prefix-carrying list"
+     "note": "prefix-carrying list",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -128,7 +140,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "prefix-carrying list"
+     "note": "prefix-carrying list",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -143,7 +158,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "prefix-carrying list"
+     "note": "prefix-carrying list",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -158,7 +176,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "prefix-carrying list"
+     "note": "prefix-carrying list",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -173,7 +194,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "prefix-carrying list"
+     "note": "prefix-carrying list",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -188,7 +212,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -203,7 +230,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the kitchen makeup air unit the hood panel runs"
+     "note": "the kitchen makeup air unit the hood panel runs",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -218,7 +248,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -233,7 +266,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the grease exhaust fan the hood panel runs (general controls note 7)"
+     "note": "the grease exhaust fan the hood panel runs (general controls note 7)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -248,7 +284,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -535,7 +574,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "the set's one air handler"
+     "note": "the set's one air handler",
+     "bound_same_kind": false,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -550,7 +592,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": false,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -565,7 +610,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -580,7 +628,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -595,7 +646,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -610,7 +664,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -625,7 +682,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -640,7 +700,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": false,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -655,7 +718,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": false,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -670,7 +736,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the reheat water pumps of the heating system detail"
+     "note": "the reheat water pumps of the heating system detail",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -685,7 +754,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the reheat water pumps of the heating system detail"
+     "note": "the reheat water pumps of the heating system detail",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -700,7 +772,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -715,7 +790,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -730,7 +808,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -745,7 +826,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "a component of WHSE-AHU-1 (schedule service)"
+     "note": "a component of WHSE-AHU-1 (schedule service)",
+     "bound_same_kind": false,
+     "bound_any": false,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -760,7 +844,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -775,7 +862,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -790,7 +880,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -805,7 +898,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -820,7 +916,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -835,7 +934,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -850,7 +952,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -865,7 +970,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -880,7 +988,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -895,7 +1006,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -910,7 +1024,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -925,7 +1042,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -940,7 +1060,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the reheat coil of a terminal unit"
+     "note": "the reheat coil of a terminal unit",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -1512,7 +1635,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER"
+     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1527,7 +1653,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER"
+     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1542,7 +1671,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER"
+     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1557,7 +1689,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER"
+     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1572,7 +1707,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER"
+     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1587,7 +1725,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER"
+     "note": "the schedule is UNIT HEATER SCHEDULE - HOT WATER",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1602,7 +1743,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule CONTROL column 'FAN-A'"
+     "note": "schedule CONTROL column 'FAN-A'",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1617,7 +1761,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule CONTROL column 'FAN-A'"
+     "note": "schedule CONTROL column 'FAN-A'",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1632,7 +1779,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule CONTROL column 'FAN-B'"
+     "note": "schedule CONTROL column 'FAN-B'",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1647,7 +1797,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule CONTROL column 'FAN-B'"
+     "note": "schedule CONTROL column 'FAN-B'",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1662,7 +1815,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule CONTROL column 'FAN-B'"
+     "note": "schedule CONTROL column 'FAN-B'",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1677,7 +1833,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule CONTROL column 'FAN-B'"
+     "note": "schedule CONTROL column 'FAN-B'",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1692,7 +1851,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1707,7 +1869,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1722,7 +1887,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -1737,7 +1905,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -2129,7 +2300,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2144,7 +2318,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2159,7 +2336,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2174,7 +2354,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2189,7 +2372,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2204,7 +2390,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2219,7 +2408,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2234,7 +2426,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2249,7 +2444,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2264,7 +2462,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2279,7 +2480,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2294,7 +2498,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2309,7 +2516,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2324,7 +2534,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2339,7 +2552,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2354,7 +2570,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2369,7 +2588,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
@@ -2384,7 +2606,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -2761,7 +2986,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "title fragmented in the text layer; schedule remark 1 integrates it into the BAS"
+     "note": "title fragmented in the text layer; schedule remark 1 integrates it into the BAS",
+     "bound_same_kind": false,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -2816,7 +3044,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "the title drops the leading zero"
+     "note": "the title drops the leading zero",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
@@ -2831,7 +3062,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "the title drops the leading zero"
+     "note": "the title drops the leading zero",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
@@ -2846,7 +3080,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": "the title drops the leading zero"
+     "note": "the title drops the leading zero",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
@@ -2861,7 +3098,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": "the title drops the leading zero"
+     "note": "the title drops the leading zero",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
@@ -2876,7 +3116,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": "the title drops the leading zero"
+     "note": "the title drops the leading zero",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -3040,7 +3283,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "sequence A"
+     "note": "sequence A",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "12_MT_MSU_ReidHall_Renovation",
@@ -3055,7 +3301,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "sequence A"
+     "note": "sequence A",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "12_MT_MSU_ReidHall_Renovation",
@@ -3070,7 +3319,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "sequence A"
+     "note": "sequence A",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "12_MT_MSU_ReidHall_Renovation",
@@ -3085,7 +3337,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "sequence A"
+     "note": "sequence A",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -3261,7 +3516,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "baker-county-eoc",
@@ -3276,7 +3534,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -3389,7 +3650,7 @@
   },
   {
    "setId": "bldg5406-hvac-demo",
-   "packets": 13,
+   "packets": 12,
    "pairs": [
     {
      "set": "bldg5406-hvac-demo",
@@ -3404,7 +3665,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3419,7 +3683,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3434,7 +3701,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3449,7 +3719,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3464,7 +3737,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3479,7 +3755,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3494,7 +3773,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3509,7 +3791,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3524,7 +3809,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3539,7 +3827,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3554,7 +3845,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3569,7 +3863,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3584,7 +3881,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3599,7 +3899,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3614,7 +3917,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3629,7 +3935,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3644,7 +3953,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "bldg5406-hvac-demo",
@@ -3659,7 +3971,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the outdoor unit of AC-1"
+     "note": "the outdoor unit of AC-1",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -4145,36 +4460,6 @@
     },
     {
      "set": "bldg5406-hvac-demo",
-     "tag": "AC-1",
-     "family": "FCU",
-     "packet_sheet": "bldg5406-hvac-demo-mechanical.pdf#11",
-     "packet_title": "MINI SPLIT AIR CONDITIONER (AC-1)",
-     "packet_scope": "detail",
-     "kind": "tag",
-     "evidence": "its title \"MINI SPLIT AIR CONDITIONER (AC-1)\" names AC-1",
-     "proposal": false,
-     "ambiguous": false,
-     "correct": true,
-     "hit_how": "same",
-     "key_none": false
-    },
-    {
-     "set": "bldg5406-hvac-demo",
-     "tag": "ACCU-1",
-     "family": "CONDENSING_UNIT",
-     "packet_sheet": "bldg5406-hvac-demo-mechanical.pdf#11",
-     "packet_title": "MINI SPLIT AIR CONDITIONER (AC-1)",
-     "packet_scope": "detail",
-     "kind": "component_of",
-     "evidence": "its row is the outdoor unit of AC-1, whose packet it is (tag: its title \"MINI SPLIT AIR CONDITIONER (AC-1)\" names AC-1)",
-     "proposal": false,
-     "ambiguous": false,
-     "correct": true,
-     "hit_how": "same",
-     "key_none": false
-    },
-    {
-     "set": "bldg5406-hvac-demo",
      "tag": "ACCU-1",
      "family": "CONDENSING_UNIT",
      "packet_sheet": "bldg5406-hvac-demo-mechanical.pdf#11",
@@ -4381,7 +4666,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4396,7 +4684,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4411,7 +4702,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4426,7 +4720,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4441,7 +4738,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4456,7 +4756,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4471,7 +4774,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4486,7 +4792,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4501,7 +4810,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4516,7 +4828,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4531,7 +4846,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4546,7 +4864,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4561,7 +4882,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4576,7 +4900,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4591,7 +4918,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4606,7 +4936,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4621,7 +4954,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4636,7 +4972,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule service: toilet exhaust"
+     "note": "schedule service: toilet exhaust",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4651,7 +4990,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule service: toilet exhaust"
+     "note": "schedule service: toilet exhaust",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4666,7 +5008,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule service: toilet exhaust"
+     "note": "schedule service: toilet exhaust",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4681,7 +5026,10 @@
      "hit_how": "same",
      "via": "cross_reference",
      "matched": true,
-     "note": "schedule service: mechanical room"
+     "note": "schedule service: mechanical room",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4696,7 +5044,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4711,7 +5062,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4726,7 +5080,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4741,7 +5098,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4756,7 +5116,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4771,7 +5134,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4786,7 +5152,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the heating coil recirculation pump of AHU-1 (points SS-5, CSR-5); its tag is not printed there"
+     "note": "the heating coil recirculation pump of AHU-1 (points SS-5, CSR-5); its tag is not printed there",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4801,7 +5170,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the outdoor unit of a DX split system"
+     "note": "the outdoor unit of a DX split system",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4816,7 +5188,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the outdoor unit of a DX split system"
+     "note": "the outdoor unit of a DX split system",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4831,7 +5206,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the outdoor unit of a DX split system"
+     "note": "the outdoor unit of a DX split system",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4846,7 +5224,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the outdoor unit of a DX split system"
+     "note": "the outdoor unit of a DX split system",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4861,7 +5242,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the outdoor unit of a DX split system"
+     "note": "the outdoor unit of a DX split system",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4876,7 +5260,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "the outdoor unit of a DX split system"
+     "note": "the outdoor unit of a DX split system",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4891,7 +5278,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4906,7 +5296,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4921,7 +5314,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4936,7 +5332,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4951,7 +5350,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4966,7 +5368,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4981,7 +5386,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -4996,7 +5404,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5011,7 +5422,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5026,7 +5440,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5041,7 +5458,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5056,7 +5476,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5071,7 +5494,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5086,7 +5512,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5101,7 +5530,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5116,7 +5548,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5131,7 +5566,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5146,7 +5584,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5161,7 +5602,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5176,7 +5620,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5191,7 +5638,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5206,7 +5656,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5221,7 +5674,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5236,7 +5692,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5251,7 +5710,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5266,7 +5728,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5281,7 +5746,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5296,7 +5764,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5311,7 +5782,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5326,7 +5800,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5341,7 +5818,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5356,7 +5836,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5371,7 +5854,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5386,7 +5872,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5401,7 +5890,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5416,7 +5908,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5431,7 +5926,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5446,7 +5944,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5461,7 +5962,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5476,7 +5980,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5491,7 +5998,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5506,7 +6016,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5521,7 +6034,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5536,7 +6052,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5551,7 +6070,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5566,7 +6088,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5581,7 +6106,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5596,7 +6124,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5611,7 +6142,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5626,7 +6160,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5641,7 +6178,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5656,7 +6196,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5671,7 +6214,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5686,7 +6232,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5701,7 +6250,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5716,7 +6268,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5731,7 +6286,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5746,7 +6304,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5761,7 +6322,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5776,7 +6340,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5791,7 +6358,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5806,7 +6376,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5821,7 +6394,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5836,7 +6412,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5851,7 +6430,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5866,7 +6448,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5881,7 +6466,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5896,7 +6484,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5911,7 +6502,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5926,7 +6520,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5941,7 +6538,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5956,7 +6556,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5971,7 +6574,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -5986,7 +6592,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6001,7 +6610,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6016,7 +6628,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6031,7 +6646,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6046,7 +6664,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6061,7 +6682,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6076,7 +6700,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6091,7 +6718,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6106,7 +6736,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6121,7 +6754,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6136,7 +6772,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6151,7 +6790,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6166,7 +6808,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6181,7 +6826,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6196,7 +6844,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6211,7 +6862,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6226,7 +6880,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6241,7 +6898,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6256,7 +6916,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6271,7 +6934,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6286,7 +6952,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6301,7 +6970,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6316,7 +6988,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6331,7 +7006,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6346,7 +7024,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6361,7 +7042,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6376,7 +7060,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6391,7 +7078,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6406,7 +7096,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6421,7 +7114,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6436,7 +7132,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6451,7 +7150,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6466,7 +7168,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6481,7 +7186,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6496,7 +7204,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6511,7 +7222,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6526,7 +7240,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6541,7 +7258,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6556,7 +7276,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6571,7 +7294,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6586,7 +7312,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6601,7 +7330,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6616,7 +7348,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6631,7 +7366,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6646,7 +7384,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6661,7 +7402,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6676,7 +7420,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6691,7 +7438,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6706,7 +7456,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6721,7 +7474,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6736,7 +7492,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6751,7 +7510,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6766,7 +7528,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6781,7 +7546,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6796,7 +7564,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "federal-mech",
@@ -6811,7 +7582,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -6843,6 +7617,21 @@
      "ambiguous": false,
      "correct": true,
      "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "federal-mech",
+     "tag": "AHU-1",
+     "family": "AHU",
+     "packet_sheet": "federal-attachment4-mechanical.pdf#22",
+     "packet_title": "MECHANICAL CONTROLS - AIR HANDLING UNIT SEQUENCE OF OPERATIONS",
+     "packet_scope": "sheet",
+     "kind": "sibling",
+     "evidence": "the sheet \"MECHANICAL CONTROLS - AIR HANDLING UNIT SEQUENCE OF OPERATIONS\" is about its family, and \"AHU - 1 SEQUENCE OF OPERATIONS\" names the only units a title on it names",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "inside",
      "key_none": false
     },
     {
@@ -7334,6 +8123,21 @@
      "packet_scope": "detail",
      "kind": "component_of",
      "evidence": "its row names as what it serves AHU-1, whose packet it is (tag: its title \"AHU - 1 SEQUENCE OF OPERATIONS\" names AHU-1)",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": false,
+     "hit_how": null,
+     "key_none": false
+    },
+    {
+     "set": "federal-mech",
+     "tag": "HWRP-1",
+     "family": "PUMP",
+     "packet_sheet": "federal-attachment4-mechanical.pdf#22",
+     "packet_title": "MECHANICAL CONTROLS - AIR HANDLING UNIT SEQUENCE OF OPERATIONS",
+     "packet_scope": "sheet",
+     "kind": "component_of",
+     "evidence": "its row names as what it serves AHU-1, whose packet it is (sibling: the sheet \"MECHANICAL CONTROLS - AIR HANDLING UNIT SEQUENCE OF OPERATIONS\" is about its family, and \"AHU - 1 SEQUENCE OF OPERATIONS\" names the only units a title on it names)",
      "proposal": false,
      "ambiguous": false,
      "correct": false,
@@ -10251,7 +11055,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10266,7 +11073,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10281,7 +11091,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": "BP-2 is printed as a second BP-1"
+     "note": "BP-2 is printed as a second BP-1",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10296,7 +11109,10 @@
      "hit_how": "same",
      "via": "component_of",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10311,7 +11127,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10326,7 +11145,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10341,7 +11163,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10356,7 +11181,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10371,7 +11199,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10386,7 +11217,10 @@
      "hit_how": "same",
      "via": "list_range",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10401,7 +11235,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10416,7 +11253,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10431,7 +11271,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10446,7 +11289,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10461,7 +11307,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10476,7 +11325,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10491,7 +11343,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10506,7 +11361,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10521,7 +11379,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10536,7 +11397,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10551,7 +11415,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10566,7 +11433,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10581,7 +11451,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10596,7 +11469,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10611,7 +11487,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10626,7 +11505,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10641,7 +11523,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10656,7 +11541,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10671,7 +11559,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10686,7 +11577,10 @@
      "hit_how": null,
      "via": null,
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10701,7 +11595,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": "the reheat coil of a lab supply air valve"
+     "note": "the reheat coil of a lab supply air valve",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10716,7 +11613,10 @@
      "hit_how": "same",
      "via": "tag_body",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10731,7 +11631,10 @@
      "hit_how": "same",
      "via": "sibling",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10746,7 +11649,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10761,7 +11667,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10776,7 +11685,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10791,7 +11703,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10806,7 +11721,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10821,7 +11739,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10836,7 +11757,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10851,7 +11775,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10866,7 +11793,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)"
+     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10881,7 +11811,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10896,7 +11829,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)"
+     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10911,7 +11847,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10926,7 +11865,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)"
+     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10941,7 +11883,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10956,7 +11901,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)"
+     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10971,7 +11919,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -10986,7 +11937,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -11001,7 +11955,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -11016,7 +11973,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)"
+     "note": "schedule remark 5 points to the M6.5 sequence; the detail is titled (EH-5)",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -11031,7 +11991,10 @@
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -11046,7 +12009,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -11061,7 +12027,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -11076,7 +12045,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     },
     {
      "set": "itd-d1-lab",
@@ -11091,7 +12063,10 @@
      "hit_how": "same",
      "via": "tag",
      "matched": true,
-     "note": ""
+     "note": "",
+     "bound_same_kind": true,
+     "bound_any": true,
+     "tag_read": true
     }
    ],
    "bindings": [
@@ -11255,22 +12230,7 @@
      "kind": "family_detail",
      "evidence": "\"HEAT RELIEF FAN SEQUENCE OF OPERATION\" is a detail for its family (FAN); its row does not print \"HEAT\", \"RELIEF\"",
      "proposal": true,
-     "ambiguous": true,
-     "correct": false,
-     "hit_how": null,
-     "key_none": true
-    },
-    {
-     "set": "itd-d1-lab",
-     "tag": "EF-4",
-     "family": "FAN",
-     "packet_sheet": "itd-d1-lab-mechanical.pdf#21",
-     "packet_title": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
-     "packet_scope": "detail",
-     "kind": "family_detail",
-     "evidence": "\"GENERAL EXHAUST FAN SEQUENCE OF OPERATION\" is a detail for its family (FAN); its row does not print \"GENERAL\"",
-     "proposal": true,
-     "ambiguous": true,
+     "ambiguous": false,
      "correct": false,
      "hit_how": null,
      "key_none": true
@@ -11285,22 +12245,7 @@
      "kind": "family_detail",
      "evidence": "\"HEAT RELIEF FAN CONTROL SCHEMATIC\" is a detail for its family (FAN); its row does not print \"HEAT\", \"RELIEF\"",
      "proposal": true,
-     "ambiguous": true,
-     "correct": false,
-     "hit_how": null,
-     "key_none": true
-    },
-    {
-     "set": "itd-d1-lab",
-     "tag": "EF-4",
-     "family": "FAN",
-     "packet_sheet": "itd-d1-lab-mechanical.pdf#21",
-     "packet_title": "GENERAL EXHAUST FAN CONTROL SCHEMATIC",
-     "packet_scope": "detail",
-     "kind": "family_detail",
-     "evidence": "\"GENERAL EXHAUST FAN CONTROL SCHEMATIC\" is a detail for its family (FAN); its row does not print \"GENERAL\"",
-     "proposal": true,
-     "ambiguous": true,
+     "ambiguous": false,
      "correct": false,
      "hit_how": null,
      "key_none": true

@@ -194,9 +194,61 @@ Done so far (dev only; held-out keys not yet authored):
     - 009_FL +1 (AHU-1's BAS role, from its points table's rows, CI-20).
   - 015_VA's EF-6 keeps its 2, now from its own detail. Check: 145 + 58 + 6
     + 1 − 10 = 200.
-- **Next:** R2's label check for a points-table row read as one label ("BO-2
-  INTAKE DAMPER OPEN/CLOSE"); held-out aggregates; the sweep's three
-  failed sets (01_NY, 07_MO, 058_CA); the zone scan; corpus-eval unchanged.
+- **Fourth robustness batch (next commit): CI-21, CI-22, and miss reasons in the binding eval.**
+  - The binding eval counts each missed pair by why: the key's packet not found, bound as a proposal only, bound to
+    another packet of that kind, to other kinds only, or no binding at all (the binder reads the unit's tag, or
+    not). Counts only; the held-out report prints no row.
+  - **CI-21 (binder):** words that say nothing about which unit a detail is for stop leaving family details as
+    proposals. A title naming two kinds of unit ("FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION") is each
+    one's. "VAV/CAV", "ROOF TOP", "(HP)", "ATU", bid alternates and "ON OFF" are no qualifiers. A detail for a
+    family's plain kind is not the special kind's the project schedules apart ("SMOKE EXHAUST FAN SCHEDULE").
+    Over the 46 non-held-out sets with packets, 143 bindings change, all checked; the dev documents' bindings and
+    evidence are byte-identical.
+  - **CI-22 (combiner):** an agreement needs two readers that read it in the unit's own packets. A reader whose
+    every cite lies in a proposal's packet (096_IN: a heat recovery chiller's schematic, "BO-1 HRC-1 START/STOP",
+    for the air-cooled chillers) casts no applying vote.
+  - Dev: the replay is unchanged. Typical eval 227/244; readings 291 applied, 0 wrong, 43 absence decisions, 0
+    wrong; class R 55/71. GATE A (dev) PASS; GATE B1 (dev) unchanged at 92.9% recall.
+- **Blind live audit, final code: 53 unseen sets, 338 applied, 338 right.**
+  - The 53 are every eligible unseen set (no dev, held-out, twin, near copy or held-out drafter's document) with
+    both scheduled units and control packets: of the 90 eligible, 35 have one without the other, and 2 have no
+    snapshot yet (01_NY, 058_CA).
+  - The 25 sets above: 236 applied (200, plus CI-21's 36: 16_NV's 21 furnaces' fan status, "AND THE SUPPLY FAN
+    STATUS IS ON.", and 03_FL's 15 terminal units' setpoint adjustment).
+  - 28 more sets (batch 5): 102 applied. 096_IN 66, 088_AZ 23, 077_MT 8, 083_MA 3, 043_FL 2; the other 23 apply
+    nothing. Before CI-22 there were 106: 096_IN's two chillers' role and isolation valve rested on a second vote
+    from another unit's schematic. The values were right; they are proposals now.
+  - Replayed without a model call, the 53 sets give 342 applied before CI-22 and 338 after; only those 4 change.
+- **Held-out gates (aggregates only).**
+  - GATE A (questions), six documents: PASS. 12 questions shown (at most 3 in a project), 0 zero-effect, pre-fills
+    3 of 3 right, and the key's answers fix 11 instances and break 0.
+  - GATE B1 (binding), six documents, at 1ae6d2b and unchanged after CI-21/CI-22: pair recall 10.5% (20/191)
+    ✗ (85%), precision 100% over 17 confirmed ✓, unit recall 18.8%. Of the 171 missed pairs: 60 bound as a
+    proposal only, 45 whose key packet the finder does not find, 45 with no binding at all (the binder reads
+    the unit's tag), 20 bound to packets of other kinds only, 1 whose tag the binder does not read.
+  - The three unexposed documents carry 2 of the 191 keyed pairs (both hit). The held-out binding measure is
+    therefore essentially navfac-cherry-point-atc, 060_XX (navfac's drafter) and 30_WA (27_WA's drafter): all
+    three exposed (CI-16).
+  - B2 and C held-out: pending (the live readings on the held-out documents, then the typical eval).
+- **Found, not changed:**
+  - 096_IN: "SEQUENCE OF OPERATION - CAV BOXES:" is read as a caption with its text above it, by one pixel, and
+    swallows "SEQUENCE OF OPERATION - VAV BOXES:" printed above it. A heading ending in a colon introduces what
+    follows, but the same rule turns 040_IL's (dev) three "... TAB SEQUENCE OF OPERATION :" packets into sections,
+    and the boxes the VAV sequence would then bind are constant-volume boxes by their schedule (maximum and minimum
+    airflow equal), so it may not be theirs.
+  - 028_TX: "P&ID" is held back from CI-21 until titles read a mark printed with a space ("DOAS 3") as a tag.
+  - Compound tags ("PRV-25-2", "FCU-N1-1"): the binder reads 72% of scheduled tags over the non-held-out sets,
+    but no packet title and only 10 packet texts print an unread one. No change.
+- **Guard (next commit):**
+  - web: typecheck; lint (0 errors, the 3 known warnings); 3,741 tests with only the 3 AS-1 failures; build.
+  - MCP: typecheck; tool count 64; test:bas 133/133; the assemblies and control-intent tests 40/40.
+  - The assemblies MCP tests now give their whole-document calls a 10-minute request timeout: PARITY had failed
+    once on the SDK's 60 s default while the machine was loaded. Their assertions are unchanged.
+  - The navfac `sweep_schedule_row` conformance test (another loop's) runs one call near that 60 s default.
+    Alone, this branch passed 3 of 4 runs (107–108 s) and failed 1 on the timeout; `main` (5ab7ca8) passed 2 of 2
+    with the same warm ODL cache (110–111 s) and failed 2 of 2 with a cold one. It is timing, the same on both.
+- **Next:** held-out B2 and C (live readings on the six held-out documents, then the typical eval); the two sets
+  the sweep could not snapshot (01_NY, 058_CA); the zone scan; corpus-eval unchanged.
 
 The research that proposed the goal (2026-09-24):
 - **Research:** `plans/05-research/01–03`, the design plan

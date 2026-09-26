@@ -1,0 +1,17 @@
+{
+ "side": "heldout",
+ "total": {
+  "projects": 6,
+  "shown": 12,
+  "max_shown": 3,
+  "zero_shown": 0,
+  "over_cap": 0,
+  "prefills": 3,
+  "right": 3,
+  "wrong": 0,
+  "moot": 0,
+  "fixed": 11,
+  "broken": 0,
+  "prefill_right": 1
+ }
+}

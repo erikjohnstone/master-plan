@@ -1,0 +1,588 @@
+{
+  "generated_at": "2026-09-26T04:57:45.369Z",
+  "side": "dev",
+  "documents": [
+    "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+    "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+    "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+    "094_FL_Orange_County_Regional_History_Center_HVAC",
+    "12_MT_MSU_ReidHall_Renovation",
+    "baker-county-eoc",
+    "bldg5406-hvac-demo",
+    "federal-mech",
+    "itd-d1-lab"
+  ],
+  "errors": [],
+  "gate": {
+    "applied_wrong_max": 0.005,
+    "absence_wrong": 0,
+    "invented": 0,
+    "uncited": 0,
+    "r_exact_min": 57,
+    "verdict": {
+      "applied_wrong": true,
+      "absence_wrong": true,
+      "invented": true,
+      "uncited": true,
+      "r_exact": false
+    }
+  },
+  "summary": {
+    "total": {
+      "applied-right": 291,
+      "applied-wrong": 0,
+      "INVENTED": 0,
+      "proposal-right": 51,
+      "proposal-wrong": 6,
+      "unresolved": 6,
+      "abstained": 293
+    },
+    "applied": 291,
+    "applied_wrong_rate": 0,
+    "absence": {
+      "applied-right": 43,
+      "applied-wrong": 0,
+      "INVENTED": 0,
+      "proposal-right": 32,
+      "proposal-wrong": 0,
+      "unresolved": 0,
+      "abstained": 0
+    },
+    "uncited_applied": 0,
+    "readers": {
+      "r0": {
+        "right": 319,
+        "wrong": 2,
+        "abstained": 325,
+        "unverified": 0,
+        "undecided-key": 1
+      },
+      "r1": {
+        "right": 508,
+        "wrong": 27,
+        "abstained": 71,
+        "unverified": 39,
+        "undecided-key": 2
+      },
+      "r2a": {
+        "right": 304,
+        "wrong": 5,
+        "abstained": 275,
+        "unverified": 15,
+        "undecided-key": 2
+      },
+      "r2b": {
+        "right": 317,
+        "wrong": 1,
+        "abstained": 269,
+        "unverified": 18,
+        "undecided-key": 2
+      },
+      "rp": {
+        "right": 15,
+        "wrong": 0,
+        "abstained": 0,
+        "unverified": 0,
+        "undecided-key": 0
+      }
+    },
+    "by_set": {
+      "federal-mech": {
+        "applied-right": 153,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 8,
+        "proposal-wrong": 1,
+        "unresolved": 4,
+        "abstained": 225
+      },
+      "bldg5406-hvac-demo": {
+        "applied-right": 59,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 18,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 5
+      },
+      "094_FL_Orange_County_Regional_History_Center_HVAC": {
+        "applied-right": 32,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 14,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile": {
+        "applied-right": 22,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 12
+      },
+      "itd-d1-lab": {
+        "applied-right": 21,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 5,
+        "proposal-wrong": 0,
+        "unresolved": 2,
+        "abstained": 6
+      },
+      "12_MT_MSU_ReidHall_Renovation": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 4,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 16
+      },
+      "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 2,
+        "proposal-wrong": 2,
+        "unresolved": 0,
+        "abstained": 12
+      },
+      "004_MO_T2504_03_Interior_and_Exterior_Renovation": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 1,
+        "unresolved": 0,
+        "abstained": 8
+      },
+      "069_ID_ITD_District_2_Laboratory_Heating_Upgrades": {
+        "applied-right": 2,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 2,
+        "unresolved": 0,
+        "abstained": 5
+      },
+      "074_CA_West_Valley_College_STEM_Classroom_HVAC": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 2
+      },
+      "baker-county-eoc": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 2
+      }
+    },
+    "by_family": {
+      "VAV": {
+        "applied-right": 176,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 13,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 233
+      },
+      "AHU": {
+        "applied-right": 33,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 24,
+        "proposal-wrong": 2,
+        "unresolved": 2,
+        "abstained": 11
+      },
+      "FAN": {
+        "applied-right": 32,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 4,
+        "proposal-wrong": 0,
+        "unresolved": 1,
+        "abstained": 3
+      },
+      "UNIT_HEATER": {
+        "applied-right": 20,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 12
+      },
+      "FCU": {
+        "applied-right": 9,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 5,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 5
+      },
+      "PUMP": {
+        "applied-right": 4,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 4,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 9
+      },
+      "BOILER": {
+        "applied-right": 4,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 2,
+        "unresolved": 2,
+        "abstained": 2
+      },
+      "RTU": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 8
+      },
+      "HEAT_EXCHANGER": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 6
+      },
+      "AIR_COOLED_CHILLER": {
+        "applied-right": 3,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 1,
+        "abstained": 2
+      },
+      "DOAS": {
+        "applied-right": 4,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 1,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "HUMIDIFIER": {
+        "applied-right": 2,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 1,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "ERV": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 2
+      },
+      "FURNACE": {
+        "applied-right": 3,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      }
+    },
+    "by_question": {
+      "role": {
+        "applied-right": 124,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 12,
+        "proposal-wrong": 4,
+        "unresolved": 3,
+        "abstained": 25
+      },
+      "opt.setpoint_adjust": {
+        "applied-right": 72,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 11
+      },
+      "opt.occupancy_sensor": {
+        "applied-right": 4,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 10,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 63
+      },
+      "opt.window_switch": {
+        "applied-right": 12,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 63
+      },
+      "opt.co2_sensor": {
+        "applied-right": 27,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 47
+      },
+      "opt.reheat_water_temps": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 58
+      },
+      "opt.motorized_damper": {
+        "applied-right": 10,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 2,
+        "proposal-wrong": 0,
+        "unresolved": 1,
+        "abstained": 0
+      },
+      "opt.scr_heat": {
+        "applied-right": 9,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 1
+      },
+      "opt.duct_smoke_detectors": {
+        "applied-right": 2,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 6,
+        "proposal-wrong": 1,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "opt.freezestat_to_bas": {
+        "applied-right": 5,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 1
+      },
+      "opt.fan_status": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 6
+      },
+      "opt.relief_damper": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 4,
+        "proposal-wrong": 1,
+        "unresolved": 0,
+        "abstained": 1
+      },
+      "opt.relief_fan": {
+        "applied-right": 3,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 1,
+        "abstained": 1
+      },
+      "opt.return_fan": {
+        "applied-right": 3,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 2,
+        "proposal-wrong": 0,
+        "unresolved": 1,
+        "abstained": 0
+      },
+      "opt.enthalpy_economizer": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 3,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 2
+      },
+      "opt.differential_economizer": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 4,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 2
+      },
+      "opt.isolation_valve": {
+        "applied-right": 2,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 4
+      },
+      "opt.modulating_valve": {
+        "applied-right": 6,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "opt.dedicated_min_oa": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 2
+      },
+      "opt.pressure_control": {
+        "applied-right": 3,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "opt.space_humidity": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "opt.condensate_pump": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 2
+      },
+      "opt.variable_speed_wheel": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 1
+      },
+      "opt.variable_speed_fan": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "opt.chw_isolation_valve": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 1
+      },
+      "opt.isolation_end_switches": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 1
+      },
+      "opt.frost_control": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 1
+      },
+      "opt.economizer": {
+        "applied-right": 0,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 1,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      },
+      "opt.exhaust_fan": {
+        "applied-right": 1,
+        "applied-wrong": 0,
+        "INVENTED": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 0,
+        "unresolved": 0,
+        "abstained": 0
+      }
+    }
+  },
+  "control_drawing_instances": {
+    "exact": 55,
+    "total": 71
+  }
+}

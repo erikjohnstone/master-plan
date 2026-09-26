@@ -266,6 +266,25 @@ test("combine: a reading in only one of several packets bound equally is a propo
   ] }, TERM_LIST)[0].outcome, "applied");
 });
 
+test("combine: an agreement needs two readers reading the unit's own packets; one that read it only in a proposal's packet casts no applying vote", () => {
+  // Robustness find (an unseen set): a chiller's role applied by R0, R1 and
+  // R2, but R0 and both vision runs cited only a heat recovery chiller's
+  // schematic, bound to it as a C5 proposal ("BO-1 HRC-1 START/STOP", another
+  // unit). R1 alone read it in the chiller's own schematic.
+  const q = [opt("motorized_damper")];
+  const bindings: Binding[] = [{ packet: "own", kind: "tag_body", evidence: "t" }, { packet: "hrc", kind: "family_detail", evidence: "f", proposal: true, ambiguous: true }];
+  const cite = (packet: string) => ({ packet, sheet: "s#1", lines: ["L1"], text: "X", box: [0, 0, 1, 1] as [number, number, number, number] });
+  const d = (r0: string[], r1: string[], r2: string[]) => combineUnit({ questions: q, bindings, answers: [
+    ans("r0", "opt.motorized_damper", "yes", { cites: r0.map(cite) }), ans("r1", "opt.motorized_damper", "yes", { cites: r1.map(cite) }),
+    ans("r2", "opt.motorized_damper", "yes", { run: "a", cites: r2.map(cite) }), ans("r2", "opt.motorized_damper", "yes", { run: "b", cites: r2.map(cite) }),
+  ] }, TERM_LIST)[0];
+  const partly = d(["hrc"], ["own"], ["hrc"]);
+  assert.equal(partly.outcome, "proposal", "R1 alone read it in the unit's own packet");
+  assert.match(partly.why, /only r1 of them read it in the unit's own packets/);
+  assert.equal(d(["hrc"], ["own"], ["own", "hrc"]).outcome, "applied", "R1 and R2 read it in its own packet");
+  assert.equal(d(["own"], ["own"], ["hrc"]).outcome, "applied", "R0 and R1 read it in its own packet");
+});
+
 test("combine: absence applies only when R0 finds no term and both vision runs find none (C9)", () => {
   const q = [opt("duct_smoke_detectors")];
   const d = (answers: ReaderAnswer[], bindings = titled) => combineUnit({ questions: q, answers, bindings }, TERM_LIST)[0];

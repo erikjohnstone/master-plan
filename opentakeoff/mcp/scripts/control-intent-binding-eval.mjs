@@ -43,12 +43,18 @@
 // and ambiguous bindings are reported apart; GATE B1 reads the confirmed
 // bindings. Pairs the key marks "semantic" (only meaning connects them) are
 // reported apart too, and counted in the gate's recall.
+// Missed pairs are counted by why, the first that holds: the key's packet
+// not found; the instance not matched; bound as a proposal only; bound to
+// another packet of that kind; bound to other kinds only; no binding at all
+// (the binder reads the unit's tag, or does not). Counts only: the held-out
+// report prints no row.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { canonTag, keyTables, matchItem, parseAttrKeyCsv, snapshotInChild } from "./assemblies-attr-eval.mjs";
 import { applyAssemblies } from "../../web/src/lib/assemblies/apply.ts";
 import { sanitizeAssemblyDefinitions } from "../../web/src/lib/assemblies/schema.ts";
+import { tagKey } from "../../web/src/lib/controlIntent/binding.ts";
 
 export const BINDING_KEY_COLUMNS = ["sheet", "tag", "family", "packet_sheet", "packet_title", "binding", "note"];
 /** GATE B1 (goals/CONTROL_INTENT.md WP2). */
@@ -175,8 +181,14 @@ export function scoreBindingSet({ setId, bindKey, attrKey, snapshot, library }) 
     for (const kp of keyed) {
       const hits = found.map((b) => ({ b, hit: hitOf(byId.get(b.packet), kp.packets) })).filter((x) => x.hit);
       const confirmedHits = hits.filter((x) => !x.b.proposal);
+      // What the unit is bound to instead: a confirmed packet of the keyed
+      // packet's kind, other kinds only, or nothing (and whether the binder
+      // reads its tag at all).
+      const kinds = new Set(kp.packets.map((p) => p.kind));
+      const confirmed = found.filter((b) => !b.proposal);
       pairs.push({ set: setId, tag: inst.tag, family: inst.family, kind: kp.row.binding || "(blank)", packet_sheet: kp.row.packet_sheet, packet_title: kp.row.packet_title, key_how: kp.how,
-        hit: confirmedHits.length > 0, hit_any: hits.length > 0, hit_how: (confirmedHits[0] ?? hits[0])?.hit ?? null, via: (confirmedHits[0] ?? hits[0])?.b.kind ?? null, matched: Boolean(item), note: kp.row.note });
+        hit: confirmedHits.length > 0, hit_any: hits.length > 0, hit_how: (confirmedHits[0] ?? hits[0])?.hit ?? null, via: (confirmedHits[0] ?? hits[0])?.b.kind ?? null, matched: Boolean(item), note: kp.row.note,
+        bound_same_kind: confirmed.some((b) => kinds.has(byId.get(b.packet).kind)), bound_any: found.length > 0, tag_read: Boolean(tagKey(item?.tag ?? inst.tag)) });
       if (confirmedHits.length) unit.hit++;
     }
     units.push(unit);
@@ -208,6 +220,20 @@ export function summarize(results) {
     if (b.correct) k.correct++;
     if (b.proposal) k.proposal++;
   }
+  // Why each missed pair is missed, first reason that holds (aggregate
+  // counts: the held-out report prints these and never a row).
+  const missReasons = {};
+  for (const p of pairs) {
+    if (p.hit) continue;
+    const why = p.key_how === "not_found" ? "key packet not found by the finder"
+      : !p.matched ? "instance not matched to a schedule row"
+      : p.hit_any ? "bound as a proposal only"
+      : p.bound_same_kind ? "bound to another packet of that kind"
+      : p.bound_any ? "bound to packets of other kinds only"
+      : p.tag_read ? "no binding at all (tag read)"
+      : "no binding at all (tag not read)";
+    missReasons[why] = (missReasons[why] ?? 0) + 1;
+  }
   const nonSemantic = pairs.filter((p) => p.kind !== "semantic");
   const withPackets = units.filter((u) => u.keyed > 0);
   const ratio = (a, b) => (b ? a / b : null);
@@ -233,6 +259,7 @@ export function summarize(results) {
     none_units_bound: [...new Set(bindings.filter((b) => b.key_none).map((b) => `${b.set}|${b.tag}`))].length,
     by_key_kind: byKind,
     by_binding_kind: bindKinds,
+    miss_reasons: missReasons,
   };
 }
 
@@ -286,6 +313,8 @@ async function main() {
   for (const [k, v] of Object.entries(total.by_key_kind)) lines.push(`| ${k} | ${v.pairs} | ${v.hit} | ${pct(v.hit / v.pairs)} |`);
   lines.push("", "| binding kind | bindings | correct | proposals |", "|---|---:|---:|---:|");
   for (const [k, v] of Object.entries(total.by_binding_kind)) lines.push(`| ${k} | ${v.bindings} | ${v.correct} | ${v.proposal} |`);
+  lines.push("", "| missed pairs, why | pairs |", "|---|---:|");
+  for (const [k, v] of Object.entries(total.miss_reasons).sort((a, b) => b[1] - a[1])) lines.push(`| ${k} | ${v} |`);
   if (side === "dev") {
     lines.push("", "| set | packets | pairs | recall | bindings | precision |", "|---|---:|---:|---:|---:|---:|");
     for (const r of results) {

@@ -37,8 +37,13 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
 const D04 = resolve(CORPUS, "demos/D04-vav-scope-rollup");
 
+// One call applies the whole library to a real 100+-row document. The SDK's
+// 60 s default request timeout is a client default, not what these tests
+// assert: PARITY once failed on it while the machine was loaded.
+const TOOL_TIMEOUT = 10 * 60 * 1000;
+
 async function call(client, name, args) {
-  const res = await client.callTool({ name, arguments: args });
+  const res = await client.callTool({ name, arguments: args }, undefined, { timeout: TOOL_TIMEOUT });
   assert.equal(res.content.length, 1);
   return { isError: !!res.isError, data: JSON.parse(res.content[0].text), structured: res.structuredContent };
 }

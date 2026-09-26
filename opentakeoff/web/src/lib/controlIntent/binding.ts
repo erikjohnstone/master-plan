@@ -260,13 +260,54 @@ const OUTDOOR_FAMILIES = new Set(["CONDENSING_UNIT", "HEAT_PUMP", "VRF_OUTDOOR"]
  * "MINI SPLIT"). */
 const SPLIT = /\bSPLIT\b/;
 
+/** Words in a title that say how the work is bought or how the unit is
+ * switched, never what it is: a bid alternate ("BID ALTERNATE #2",
+ * "ALTERNATE 3", "BASE BID"; CSI MasterFormat 01 23 00 Alternates) and
+ * two-position control ("ON/OFF", "ON OFF"). */
+const NOT_SUBJECT = /\b(?:(?:BID|ADD|DEDUCT)\s+)?ALTERNATES?\s*(?:NO\.?\s*|#\s*)?\d{1,2}[A-Z]?\b|\b(?:BID|ADD|DEDUCT)\s+ALTERNATES?\b|\bBASE\s+BID\b|\bON\s?[-\/]?\s?OFF\b/g;
+
+/** An abbreviation a title defines for its own words ("HEAT PUMP TERMINAL
+ * UNIT (HP)": the letters are the initials of two or more words right
+ * before them) adds nothing those words do not say. */
+function withoutOwnAbbreviations(title: string): string {
+  return title.replace(/\b((?:[A-Z][A-Z0-9]*\s+){0,5}[A-Z][A-Z0-9]*)\s*\(([A-Z]{2,6})\)/g, (all, before: string, abbr: string) =>
+    (before.split(/\s+/).map((w) => w[0]).join("").includes(abbr) ? before : all));
+}
+
+/** The families a title names as two or more subjects joined by AND or "&"
+ * ("FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION", "HEAT PUMP & FAN
+ * COIL UNITS"), each part of one dash-separated segment naming its own
+ * family; and, per family, the words of the other subjects. Empty when the
+ * title names one subject ("FAN COIL UNIT (HEATING AND COOLING)": the part
+ * after AND names no family). */
+function coSubjects(title: string): Map<string, string[]> {
+  const out = new Map<string, string[]>();
+  for (const segment of repairSpacing(title).split(/\s+[-–—]\s+/)) {
+    const parts = segment.split(/\s+AND\s+|\s*&\s*/).map((x) => x.trim()).filter(Boolean);
+    if (parts.length < 2) continue;
+    const named = parts.map((x) => ({ x, family: subjectFamily(x) }));
+    if (named.some((n) => !n.family) || new Set(named.map((n) => n.family)).size < 2) continue;
+    for (const n of named) {
+      const others = named.filter((o) => o.family !== n.family).flatMap((o) => subjectWords(o.x));
+      out.set(n.family!, [...(out.get(n.family!) ?? []), ...others]);
+    }
+  }
+  return out;
+}
+
 /** The title's qualifiers: its subject words that are neither the unit
- * family's own words (as its schedule's title prints them, or the family
- * name), nor a device noun, nor a tag. Multi-word synonyms ("HOT WATER")
- * are read as one qualifier. */
+ * family's own words (as its schedule's title prints them, in either
+ * spacing, the family name, or a standard designator of the family: "ATU"
+ * is a terminal unit's), nor a device noun, nor a tag, nor another subject
+ * the title joins to the unit's by AND. Multi-word synonyms ("HOT WATER")
+ * are read as one qualifier; "VAV/CAV" names either, and is no qualifier
+ * of a unit whose family is one of them. */
 function qualifiers(title: string, u: RowUnit): string[] {
-  const words = subjectWords(title).map((w) => w.replace(/^[(]+|[)]+$/g, "")).filter((w) => w && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !DEVICE_NOUNS.has(w));
-  const own = new Set([...clean(u.table_title).split(/[^A-Z0-9]+/), ...u.family.split("_")]);
+  const others = new Set(coSubjects(title).get(u.family) ?? []);
+  const words = subjectWords(withoutOwnAbbreviations(repairSpacing(title).replace(NOT_SUBJECT, " "))).map((w) => w.replace(/^[(]+|[)]+$/g, ""))
+    .filter((w) => w && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !DEVICE_NOUNS.has(w) && !others.has(w));
+  const own = new Set([...clean(u.table_title).split(/[^A-Z0-9]+/), ...repairSpacing(u.table_title).split(/[^A-Z0-9]+/), ...u.family.split("_"),
+    ...Object.entries(HOST_PREFIX).filter(([, f]) => f === u.family).map(([k]) => k)]);
   const phrases: string[] = [];
   for (let i = 0; i < words.length; i++) {
     const two = `${words[i]} ${words[i + 1] ?? ""}`.trim();
@@ -276,9 +317,36 @@ function qualifiers(title: string, u: RowUnit): string[] {
     const parts = group.split(" ");
     if (parts.every((p) => own.has(p) || own.has(p.replace(/S$/, "")))) continue;
     if (expand(group).some((g) => g.split(" ").every((p) => own.has(p)))) continue;
+    if (/^[A-Z0-9]+(?:\/[A-Z0-9]+)+$/.test(group) && group.split("/").some((a) => own.has(a))) continue;
     phrases.push(group);
   }
   return phrases;
+}
+
+/** Whether a qualifier is printed: "VAV/CAV" when either is. */
+const printedQualifier = (q: string, text: string) => (/^[A-Z0-9]+(?:\/[A-Z0-9]+)+$/.test(q) ? q.split("/") : [q]).some((a) => printed(a, text));
+
+/** What a schedule's title says its units are, one spelling per meaning: no
+ * scope note in parentheses ("(AHU 2)"), device noun, tag or number. */
+function kindWords(tableTitle: string): string[] {
+  return [...new Set(canonSubject(String(tableTitle ?? "").replace(/\([^)]*\)/g, " ")).filter((w) => !DEVICE_NOUNS.has(w) && !/\d/.test(w)))];
+}
+
+/** A special kind of a family the project schedules apart from its plain
+ * kind ("SMOKE EXHAUST FAN SCHEDULE" beside "EXHAUST FAN SCHEDULE"; "LAB
+ * EXHAUST FAN", "GATEHOUSE FAN"): the words the unit's schedule adds to the
+ * plain one's, and the plain schedule's title. A detail titled for the plain
+ * kind is the plain schedule's; for the special kind's units it is a
+ * proposal unless its title names what they add. */
+function scheduledApart(u: RowUnit, titles: ReadonlySet<string>): { words: string[]; plain: string } | null {
+  const own = kindWords(u.table_title);
+  for (const t of titles) {
+    if (t === u.table_title) continue;
+    const plain = kindWords(t);
+    if (!plain.length || plain.length >= own.length || !plain.every((w) => own.includes(w))) continue;
+    return { words: own.filter((w) => !plain.includes(w)), plain: t };
+  }
+  return null;
 }
 
 /** Whether a standard designator printed before a mark ("EF" in "EF-B1")
@@ -476,7 +544,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   const out = new Map<number, Binding[]>();
   const scheduled = units.map((u) => tagKey(u.tag)).filter((k): k is TagKey => Boolean(k));
   // A title's subtitle ("(EF-1, EF-2, & EF-3)") is part of the title.
-  const titled = packets.map((p) => ({ p, tags: titleTags(`${p.title} ${p.subtitle ?? ""}`, scheduled), family: subjectFamily(p.title), designators: designators(p.title) }));
+  const titled = packets.map((p) => ({ p, tags: titleTags(`${p.title} ${p.subtitle ?? ""}`, scheduled), family: subjectFamily(p.title), families: [...coSubjects(p.title).keys()], designators: designators(p.title) }));
   const bodies = new Map(packets.map((p) => [p.id, bodyTags(p)]));
   const labels = new Map(packets.map((p) => [p.id, labelTags(p)]));
   const lists = new Map(packets.map((p) => [p.id, labelLists(p, scheduled)]));
@@ -489,6 +557,8 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   // CU-1") is one half of a split system, and that outdoor unit the other.
   const bySchedule = new Map<string, RowUnit[]>();
   for (const u of units) { const k = `${u.cite?.sheet}|${u.table_title}`; (bySchedule.get(k) ?? bySchedule.set(k, []).get(k)!).push(u); }
+  const familyTitles = new Map<string, Set<string>>();
+  for (const u of units) (familyTitles.get(u.family) ?? familyTitles.set(u.family, new Set()).get(u.family)!).add(u.table_title);
   const byTag = new Map<string, RowUnit[]>();
   for (const u of units) { const k = tagKey(u.tag); if (k) (byTag.get(keyString(k)) ?? byTag.set(keyString(k), []).get(keyString(k))!).push(u); }
   const namedUnits = (v: string) => [...clean(v).matchAll(/(?<![A-Z0-9-])(?:[A-Z]{1,6}-)?[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])/g)]
@@ -670,9 +740,10 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     };
     const familyCands = named ? [] : titled.filter((t) => t.p.scope !== "sheet" && !titleKinds.has(t.p.kind) && (t.tags.length === 0 || typicalFor(t)) && !listsOthers(t)
       && !(chosen?.has(t.p.id) && !found.some((b) => b.packet === t.p.id))
-      && (t.family === u.family || (t.family === null && namesRow(t.p.title, u, typeText(u), paired && SPLIT.test(repairSpacing(t.p.title))))));
-    const byKind = new Map<string, Array<{ t: typeof titled[number]; unconfirmed: string[]; subject: boolean; qualified: number }>>();
+      && (t.family === u.family || t.families.includes(u.family) || (t.family === null && namesRow(t.p.title, u, typeText(u), paired && SPLIT.test(repairSpacing(t.p.title))))));
+    const byKind = new Map<string, Array<{ t: typeof titled[number]; unconfirmed: string[]; apart: string[]; subject: boolean; qualified: number }>>();
     const peers = bySchedule.get(`${u.cite?.sheet}|${u.table_title}`) ?? [u];
+    const special = scheduledApart(u, familyTitles.get(u.family) ?? new Set());
     for (const t of familyCands) {
       const split = paired && SPLIT.test(repairSpacing(t.p.title));
       const quals = qualifiers(t.p.title, u);
@@ -681,8 +752,10 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       // is the other variant.
       const variant = partVariant(t.p.title, u, peers);
       if (variant === "contradicted") continue;
-      const unconfirmed = quals.filter((q) => !printed(q, text) && !(split && q === "SPLIT") && !q.split(" ").every((w) => variant.has(w)));
-      (byKind.get(t.p.kind) ?? byKind.set(t.p.kind, []).get(t.p.kind)!).push({ t, unconfirmed, subject: namesRow(t.p.title, u, typeText(u), split), qualified: quals.length - unconfirmed.length });
+      const unconfirmed = quals.filter((q) => !printedQualifier(q, text) && !(split && q === "SPLIT") && !q.split(" ").every((w) => variant.has(w)));
+      const named = canonSubject(t.p.title);
+      const apart = (special?.words ?? []).filter((w) => !named.includes(w));
+      (byKind.get(t.p.kind) ?? byKind.set(t.p.kind, []).get(t.p.kind)!).push({ t, unconfirmed: [...unconfirmed, ...apart], apart, subject: namesRow(t.p.title, u, typeText(u), split), qualified: quals.length - unconfirmed.length });
     }
     // Several details of one kind are left: the one printed right under or
     // over a detail that is the unit's is its, when each other one is printed
@@ -705,7 +778,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       for (const c of pick) {
         add({
           packet: c.t.p.id, kind: "family_detail",
-          evidence: `"${c.t.p.title}" is a detail for ${c.t.family === u.family ? `its family (${u.family})` : "what its schedule names"}${c.unconfirmed.length ? `; its row does not print ${c.unconfirmed.map((q) => `"${q}"`).join(", ")}` : ""}`,
+          evidence: `"${c.t.p.title}" is a detail for ${c.t.family === u.family ? `its family (${u.family})` : "what its schedule names"}${c.unconfirmed.some((q) => !c.apart.includes(q)) ? `; its row does not print ${c.unconfirmed.filter((q) => !c.apart.includes(q)).map((q) => `"${q}"`).join(", ")}` : ""}${c.apart.length ? `; the project schedules "${u.table_title}" apart from "${special!.plain}", and the title does not name ${c.apart.map((w) => `"${w.replace(/_/g, " ")}"`).join(", ")}` : ""}`,
           ...(c.unconfirmed.length ? { proposal: true as const } : {}),
           ...(pick.length > 1 ? { ambiguous: true as const } : {}),
         });
