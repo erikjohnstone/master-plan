@@ -1,5 +1,33 @@
 # Changelog
 
+- **Assemblies read a fourth tier of drafters' schedules, and schedule
+  notes stay with their own table.** Ten more documents, drawn by seed and
+  keyed from renders before the pipeline ran, taught the shared normalizer
+  and notes reader (`web/src/lib/assemblies/normalize.ts`,
+  `scheduleNotes.ts`) these readings, each with a test on the document's own
+  shape. A notes block now stops at the next table on the sheet (the sheet
+  graph's regions), at a table's NOTES column header, and at an accessories
+  legend; another table's notes beside it narrow the block instead of being
+  read as its continuation, and "NOTES FOR AIR HANDLING UNIT:" is a label.
+  Notes now state a fan coil's "4-PIPE", a pump's "STANDBY" or "N+1" role, an
+  air handler's humidifier and its supply fan count, and "PROVIDE UNIT AT
+  460V/3PH". CLNG, HTNG and TMBH spell out; a hot gas reheat coil is no gas
+  heat and marks DX cooling; a dedicated outdoor air unit's TOTAL OUTSIDE AIR
+  is its supply; heat rated at 47 °F is a heat pump's and an auxiliary
+  electric coil is not the unit's heat; a VRF schedule's HEAT PUMP UNIT
+  columns are the outdoor unit's; a humidifier section's steam is never the
+  unit's; "HP (BHP)" and "2x2" motors, AFTER FILTER, firing-range MIN. ends,
+  DESIGN over SELECTION and MAX flows, GAS TYPE columns, heads printed in
+  feet and psi, HIGH / LOW TEMP exchanger sides with their FLUID and plate
+  count, a PHASE column printing "115/1", voltage ranges' phase, a SPEED
+  CONTROL's stages, TWO-PIPE titles, outdoor-only condensing unit airflow,
+  exhaust terminals and TYPICAL FLOORS are read. On the fourth tier, 71.8% of
+  printed values are now exact (from 65.7%) with 0.1% wrong and none
+  invented; every remaining miss is a compile or extraction issue the
+  catalogue records (368 of the 400 are rows the compile does not produce).
+  Dev, dev 2 and dev 3 read exactly as before, the 12 changes elsewhere on
+  the corpus were checked against the printed cell, and the control-intent
+  readings are unchanged (ASSEMBLIES_BUG_CATALOGUE AS-30).
 - **Assemblies read a third tier of drafters' schedules and notes.** Nine
   more documents, drawn by seed and keyed from renders before the pipeline
   ran, taught the shared normalizer and notes reader

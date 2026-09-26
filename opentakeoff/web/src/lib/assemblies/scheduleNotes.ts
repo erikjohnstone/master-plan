@@ -31,7 +31,15 @@ export function frameBox([x0, y0, x1, y1]: Box, rot: number): Box {
   }
 }
 
-const NOTES_LABEL = /^(?:(?:(?:GENERAL|SCHEDULE|KEYED)\s+)?NOTES?\s*:?|REMARKS\s*:)$/i;
+/** A notes label: NOTES, GENERAL / SCHEDULE / KEYED NOTES, REMARKS:, or one
+ * that names its table and ends in a colon ("NOTES FOR AIR HANDLING UNIT:"). */
+const LABEL_HEAD = String.raw`(?:(?:(?:GENERAL|SCHEDULE|KEYED)\s+)?NOTES?(?:\s+FOR\s+[A-Z0-9][^:]*:)?\s*:?|REMARKS\s*:)`;
+const NOTES_LABEL = new RegExp(`^${LABEL_HEAD}$`, "i");
+const LABEL_PREFIX = new RegExp(`^\\s*${LABEL_HEAD}\\s*`, "i");
+/** The heading of a legend printed under the notes that is not notes: the
+ * numbered accessories a row's ACCESSORIES column cites ("ACCESSORIES:",
+ * "1) BACKDRAFT DAMPER 2) THERMOSTAT …"). */
+const ACCESSORY_LIST = /^(?:[A-Z]+\s+)?ACCESSOR(?:Y|IES)(?:\s+LEGEND)?\s*:?$/i;
 const NOTE_NUMBER = /^\s*(?:\(?\s*(\d{1,2}|[A-Z])\s*[.)]|NOTE\s+(\d{1,2}|[A-Z])\s*[:.-])(?:\s+|$)/i;
 /** The heading of a list printed beside the notes that is not notes
  * (alternate makes): a line of its own that ends in the word. A note's own
@@ -47,8 +55,11 @@ interface Framed { box: Box; str: string }
  * NOTES label below the table's header band — at its left edge, or else a
  * "NOTES:" within its width — and runs until a gap; its notes may be set in
  * several columns, and neither a list of alternate manufacturers beside them
- * nor a legend to their left is part of it. Empty when the table prints none. */
-export function scheduleNotes(spans: readonly NoteSpan[], region: Box): ScheduleNote[] {
+ * nor a legend to their left is part of it. `others` are the regions of the
+ * sheet's other tables: their text is never these notes (one under the notes
+ * ends them; one beside them ends the block's width). Empty when the table
+ * prints none. */
+export function scheduleNotes(spans: readonly NoteSpan[], region: Box, others: readonly Box[] = []): ScheduleNote[] {
   // The table's reading rotation: the one most of its own text runs at.
   const inside = spans.filter((s) => s.x0 >= region[0] - 1 && s.x1 <= region[2] + 1 && s.y0 >= region[1] - 1 && s.y1 <= region[3] + 1);
   const count = new Map<number, number>();
@@ -60,6 +71,16 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
   const lineH = heights.length ? heights[Math.floor(heights.length / 2)] : 8;
   const width = ru1 - ru0;
   const height = rv1 - rv0;
+  // The other tables, in the reading frame. A region that nests in or
+  // repeats this table's is no other table.
+  const area = (b: Box) => Math.max(0, b[2] - b[0]) * Math.max(0, b[3] - b[1]);
+  const siblings = others.map((b) => frameBox(b, rot)).filter((b) =>
+    area([Math.max(b[0], ru0), Math.max(b[1], rv0), Math.min(b[2], ru1), Math.min(b[3], rv1)]) <= 0.25 * Math.min(area(b), width * height));
+  /** The other table a span is printed in: its start and its middle line. */
+  const siblingOf = (s: Framed): Box | null => {
+    const v = (s.box[1] + s.box[3]) / 2;
+    return siblings.find((b) => s.box[0] >= b[0] - 0.5 * lineH && s.box[0] <= b[2] && v >= b[1] && v <= b[3]) ?? null;
+  };
 
   // The label: a NOTES word below the table's header band (a NOTES column
   // header sits in that band) and no further than a few lines past its last
@@ -107,7 +128,7 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
       .sort((a, b) => a.box[1] - b.box[1]);
     let block: Framed[] = [];
     let next: Framed | null = null;
-    const labelRest = label.str.replace(/^\s*(?:(?:(?:GENERAL|SCHEDULE|KEYED)\s+)?NOTES?\s*:?|REMARKS\s*:)\s*/i, "");
+    const labelRest = label.str.replace(LABEL_PREFIX, "");
     if (labelRest) block.push({ box: [label.box[0] + 1, label.box[1], label.box[2], label.box[3]], str: labelRest });
     let bottom = label.box[3];
     // Another table's title ends the block when it sits over the notes; one
@@ -122,13 +143,50 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
       // list's first line. An unlabeled list inside the table ends at any gap
       // wider than a wrapped line's.
       if (s.box[1] - bottom > (unlabeled ? 1.6 : block.length ? 2.5 : 4) * lineH) break;
+      // Another table's text: that table under the notes ends them; one
+      // beside them ends the block's width where it starts.
+      const other = siblingOf(s);
+      if (other) {
+        if (overlapsBlock({ box: other, str: "" })) break;
+        if (other[0] > label.box[0]) {
+          stopU = Math.min(stopU, other[0] - lineH);
+          block = block.filter((b) => b.box[0] < stopU);
+        }
+        continue;
+      }
       // Another notes label ends the block when it sits over the notes; one
       // beside them (the next table's REMARKS: to their right) only ends the
       // block's width where it starts.
       if (NOTES_LABEL.test(s.str)) {
         // A second list printed under this one ("GENERAL NOTES: A. B." then
-        // "NOTES: 1.") is read after it.
-        if (overlapsBlock(s)) { next = s; break; }
+        // "NOTES: 1.") is read after it: it starts in this label's column and
+        // names no other table. Another table's list (its REMARKS: under a
+        // legend that runs beside that table) only ends the block's width.
+        // One in this column that names another table ("NOTES FOR PUMPS:")
+        // ends the block.
+        if (overlapsBlock(s) && Math.abs(s.box[0] - label.box[0]) <= 3 * lineH) {
+          if (!/\bFOR\b/i.test(s.str)) next = s;
+          break;
+        }
+        // A NOTES column header ("MARK  SERVING  CFM … NOTES": no colon, on a
+        // line of short header words that runs from the label's column) is
+        // the header band of a table under the notes: it ends them, and its
+        // line is no note text.
+        const v = (s.box[1] + s.box[3]) / 2;
+        const onLine = (o: Framed) => Math.abs((o.box[1] + o.box[3]) / 2 - v) <= 0.5 * lineH;
+        const headerWords = framed.filter((o) => o !== s && onLine(o) && o.str.split(/\s+/).length <= 3 && !NOTE_NUMBER.test(o.str));
+        if (!/:/.test(s.str) && headerWords.length >= 2 && Math.min(...headerWords.map((o) => o.box[0])) <= label.box[0] + 3 * lineH) {
+          block = block.filter((b) => !onLine(b));
+          break;
+        }
+        stopU = Math.min(stopU, s.box[0] - lineH);
+        block = block.filter((b) => b.box[0] < stopU);
+        continue;
+      }
+      // A legend under the notes (the accessories a row cites by number) ends
+      // them; one beside them ends the block's width where it starts.
+      if (ACCESSORY_LIST.test(s.str) && !followsNumber(s)) {
+        if (overlapsBlock(s)) break;
         stopU = Math.min(stopU, s.box[0] - lineH);
         block = block.filter((b) => b.box[0] < stopU);
         continue;
@@ -263,6 +321,9 @@ export function citedNoteIds(text: string): { all: boolean; ids: string[] } | nu
 
 export interface NoteValue { attr: string; value: string | number; noteId: string; rule: string }
 
+/** Utilization voltages a note's unit power can name. */
+const NOTE_VOLTS = new Set([115, 120, 200, 208, 220, 230, 240, 265, 277, 380, 400, 415, 440, 460, 480, 575, 600]);
+
 /** The water system a sentence opens with ("CHILLED WATER SYSTEM IS 40%
  * PROPYLENE GLYCOL", "HOT WATER SYSTEM IS WATER ONLY"): a test on a row's
  * SERVICE / SYSTEM text, or null when it names none. */
@@ -391,6 +452,34 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>, servi
     if (!/\b(?:ENERGY|HEAT)\s+RECOVERY\b|\b(?:ENTHALPY|ENERGY|HEAT|TOTAL\s+ENERGY)\s+WHEEL\b/.test(sentence) || /\b(?:NO|WITHOUT|NOT)\b/.test(sentence)) continue;
     const kind = /\bWHEEL\b/.test(sentence) ? "wheel" : /\bPLATE\b/.test(sentence) ? "plate" : /\bHEAT\s+PIPE\b/.test(sentence) ? "heat_pipe" : /\bRUN\s*-?\s*AROUND\b/.test(sentence) ? "runaround" : null;
     if (kind) { put("energy_recovery", kind, "note.energy_recovery"); break; }
+  }
+  // "4-PIPE CONFIGURATION.": a fan coil's piping.
+  const pipes = [...new Set([...t.matchAll(/\b(2|4|TWO|FOUR)\s*-?\s*PIPE\b/g)].map((m) => ({ TWO: 2, FOUR: 4 } as Record<string, number>)[m[1]] ?? Number(m[1])))];
+  if (pipes.length === 1) put("pipes", pipes[0], "note.pipes");
+  // A note that is the pump's role ("STANDBY PUMP"), or its set's redundancy
+  // ("N+1 PUMPS."): the arrangement. A spare pump to furnish ("PROVIDE
+  // STANDBY PUMP ON SHELF") is no role.
+  const whole = t.trim().replace(/\.$/, "").trim();
+  if (/^(?:THIS\s+)?(?:PUMP\s+(?:IS\s+)?(?:A\s+)?)?STAND-?\s?BY(?:\s+PUMP)?$/.test(whole)) put("pump_arrangement", "standby", "note.pump_standby");
+  else if (/^N\s*\+\s*1\s+(?:REDUNDANT\s+)?PUMPS?$/.test(whole)) put("pump_arrangement", "duty_standby", "note.pump_n_plus_1");
+  // The unit's humidifier ("REFER TO HUMIDIFIER SCHEDULE FOR AHU HUMIDIFIER",
+  // "… HUMIDIFIER SECTION"), never one it lacks or may get later.
+  if (/\b(?:AHU|UNIT|RTU|DOAS)\s+HUMIDIFIERS?\b|\bHUMIDIFIERS?\s+SECTION\b|\bPROVIDE\b[^.;]*\bHUMIDIFIERS?\b|\bWITH\b[^.;]*\bHUMIDIFIERS?\b/.test(t)
+    && !negated("HUMIDIF") && !/\bFUTURE\b[^.;]*\bHUMIDIF|\bHUMIDIF[^.;]*\bFUTURE\b|\bPROVISIONS?\s+FOR\b[^.;]*\bHUMIDIF/.test(t)) put("humidifier", "yes", "note.humidifier");
+  // "UNIT SHALL CONTAIN TWO SUPPLY FANS": the supply fans in the unit.
+  const supplyFans = t.match(/\b(\d|TWO|THREE|FOUR|FIVE|SIX)\s+SUPPLY\s+FANS\b/);
+  if (supplyFans) put("supply_fan_qty", ({ TWO: 2, THREE: 3, FOUR: 4, FIVE: 5, SIX: 6 } as Record<string, number>)[supplyFans[1]] ?? Number(supplyFans[1]), "note.supply_fan_qty");
+  // "PROVIDE UNIT AT 460V/3PH.": the unit's power, from a sentence about the
+  // unit and no other device (a receptacle, a transformer, a heater).
+  for (const sentence of sentences) {
+    if (!/\bUNIT\b/.test(sentence) || /\b(?:RECEPTACLES?|OUTLETS?|TRANSFORMERS?|CONTROLS?|LIGHTS?|LIGHTING|DAMPERS?|ACTUATORS?|HEATERS?|PUMPS?|HUMIDIFIERS?|STARTERS?)\b/.test(sentence)) continue;
+    // A pair marked as power (V, PH or /60): never a bare "120-1/2" dimension.
+    const vph = [...sentence.matchAll(/\b(\d{3})\s*(V|VOLTS?|VAC)?\s*[/-]\s*([13])\s*(PH|PHASE|Ø)?(\s*[/-]\s*60\s*(?:HZ)?)?(?![\d/])/g)]
+      .filter((m) => NOTE_VOLTS.has(Number(m[1])) && (m[2] || m[4] || m[5]));
+    if (new Set(vph.map((m) => `${m[1]}/${m[3]}`)).size !== 1) continue;
+    put("volts", Number(vph[0][1]), "note.unit_power");
+    put("phase", Number(vph[0][3]), "note.unit_power");
+    break;
   }
   // "PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS": a coil's
   // rows (the normalizer keeps them where the row prints that coil's water).

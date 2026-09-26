@@ -491,3 +491,218 @@ test("dev 3 A/B: a note's outdoor air share is never a mode's", () => {
   assert.deepEqual(v("UNIT SHALL PROVIDE 100% OUTSIDE AIR SMOKE PURGE."), []);
   assert.deepEqual(v("100% OSA UNIT."), [100]);
 });
+
+test("dev 4: a label naming its table; the next table's labeled notes beside them end the block's width, not the notes", () => {
+  // 01_NY page 88: NOTES FOR AIR HANDLING UNIT: 1-11 run down the left, and
+  // the STEAM HUMIDIFIERS table and its NOTES FOR STEAM HUMIDIFIERS: sit to
+  // their right partway down.
+  const spans: NoteSpan[] = [
+    { str: "AIR HANDLING UNIT", x0: 3714.7, y0: 178.2, x1: 3957.9, y1: 203.5 },
+    { str: "UNIT NO", x0: 1816.3, y0: 352.7, x1: 1919.1, y1: 378 },
+    { str: "AHU-1", x0: 1830.2, y0: 387.2, x1: 1905.5, y1: 412.6 },
+    { str: "NOTES FOR AIR HANDLING UNIT:", x0: 1797.8, y0: 472.6, x1: 2098.5, y1: 497.8 },
+    { str: "STEAM HUMIDIFIERS", x0: 4294.6, y0: 479.6, x1: 4550.3, y1: 505 },
+    { str: "1. REFER TO HUMIDIFIER SCHEDULE FOR AHU HUMIDIFIER.", x0: 1797.8, y0: 501.4, x1: 2341.9, y1: 526.6 },
+    { str: "2. SUPPLY AIRFLOWS AND STATIC PRESSURES INDICATED ARE TOTAL FOR UNIT. UNIT SHALL CONTAIN TWO SUPPLY FANS (5", x0: 1797.8, y0: 530.5, x1: 2950.7, y1: 555.6 },
+    { str: "HP EACH) WITH APPROXIMATELY 70% REDUNDANCY. PERFORMANCE WITH ONE FAN OPERATING SHALL BE AS FOLLOWS:", x0: 1814.2, y0: 559.3, x1: 2936.4, y1: 584.4 },
+    { str: "UNIT NO", x0: 2988.2, y0: 585.2, x1: 3091, y1: 610.6 },
+    { str: "LOCATION", x0: 3119.8, y0: 585.2, x1: 3247.7, y1: 610.6 },
+    { str: "NOTES", x0: 5721.1, y0: 585.2, x1: 5807.4, y1: 610.6 },
+    { str: "3815 CFM, 2.7 IN WG TSP, 2425 RPM, 2.8 BHP. FANS SHALL BE CENTRIFUGAL PLENUM FANS, DIRECT DRIVE.", x0: 1814.2, y0: 588.1, x1: 2794.8, y1: 613.2 },
+    { str: "3. 100% OUTDOOR AIR EMERGENCY EPIDEMIC MODE DUTY.", x0: 1797.8, y0: 617.1, x1: 2346.4, y1: 642.2 },
+    { str: "H-1", x0: 3019.4, y0: 619.8, x1: 3059.9, y1: 645.1 },
+    { str: "AHU-1", x0: 3146.1, y0: 619.8, x1: 3221.4, y1: 645.1 },
+    { str: "4. NORMAL MODE DUTY.", x0: 1797.8, y0: 645.9, x1: 2020.7, y1: 671 },
+    { str: "5. BASIS OF DESIGN DAIKIN OAH020GDGM.", x0: 1797.8, y0: 674.7, x1: 2188.5, y1: 699.8 },
+    { str: "NOTES FOR STEAM HUMIDIFIERS:", x0: 2978.4, y0: 696.1, x1: 3288.4, y1: 721.2 },
+    { str: "6. PROVIDE UNIT AT 460V/3PH.", x0: 1797.8, y0: 703.8, x1: 2075.7, y1: 728.9 },
+    { str: "1. PROVIDE INSULATED TUBES AND HEADERS, STAINLESS STEEL MOUNTING FRAME, AND FACTORY RECOMMENDED INLET ADAPTER.", x0: 2978.4, y0: 724.9, x1: 4217, y1: 750 },
+    { str: "7. STEAM COIL BRANCH PIPE SIZE SHALL BE 2\" FOR SUPPLY AND 1-1/2\" FOR RETURN.", x0: 1797.8, y0: 732.6, x1: 2581.6, y1: 757.7 },
+    { str: "2. PROVIDE BACNET MSTP CONTROL INTERFACE, AIR PROVING SWITCH, AND MODULATING DUCT MOUNTED CONTROL AND HIGH LIMIT HUMIDISTATS.", x0: 2978.4, y0: 753.9, x1: 4362.6, y1: 779 },
+    { str: "8. FAN MOTORS SHALL BE VFD COMPATIBLE. PROVIDE FANS WITH GRAVITY BACKDRAFT DAMPERS.", x0: 1797.8, y0: 761.4, x1: 2715.8, y1: 786.5 },
+    { str: "9. TOTAL STATIC PRESSURE INCLUDES SCHEDULED DIRTY FILTER PRESSURE DROP. ESP INCLUDES ONLY EXTERNAL", x0: 1797.8, y0: 790.4, x1: 2883.2, y1: 815.5 },
+    { str: "PRESSURE DROPS.", x0: 1814.2, y0: 819.2, x1: 1993.9, y1: 844.3 },
+    { str: "10. AIRFLOWS SCHEDULED ARE FINAL BALANCING VALUES AT END OF PHASE 2. UNIT SHALL BE BALANCED AT END OF", x0: 1797.8, y0: 848, x1: 2888.1, y1: 873.1 },
+    { str: "PHASE 1 TO THE FOLLOWING AIRFLOWS (TOTAL AIRFLOW FOR UNIT):", x0: 1814.2, y0: 876.8, x1: 2452.5, y1: 901.9 },
+    { str: "MAX CFM: 3055", x0: 1830.2, y0: 905.8, x1: 1968.3, y1: 931 },
+    { str: "MIN CFM: 2405", x0: 1830.2, y0: 934.6, x1: 1961.9, y1: 959.8 },
+    { str: "OA CFM: 1225", x0: 1830.2, y0: 963.4, x1: 1954.7, y1: 988.6 },
+    { str: "11. PROVIDE BLANK OFF PLATES AT EACH SECTION AS REQUIRED.", x0: 1797.8, y0: 992.5, x1: 2411.9, y1: 1017.6 },
+  ];
+  const ahu: [number, number, number, number] = [1795.9, 165.6, 5877.1, 456.2];
+  const humidifiers: [number, number, number, number] = [2967.8, 467, 5877.1, 683.3];
+  for (const others of [[humidifiers], []]) {
+    const notes = scheduleNotes(spans, ahu, others);
+    assert.deepEqual(notes.map((n) => n.id), ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], `${others.length} other tables`);
+    assert.equal(notes[1].text, "SUPPLY AIRFLOWS AND STATIC PRESSURES INDICATED ARE TOTAL FOR UNIT. UNIT SHALL CONTAIN TWO SUPPLY FANS (5 HP EACH) WITH APPROXIMATELY 70% REDUNDANCY. PERFORMANCE WITH ONE FAN OPERATING SHALL BE AS FOLLOWS: 3815 CFM, 2.7 IN WG TSP, 2425 RPM, 2.8 BHP. FANS SHALL BE CENTRIFUGAL PLENUM FANS, DIRECT DRIVE.");
+    assert.equal(notes[5].text, "PROVIDE UNIT AT 460V/3PH.");
+    assert.equal(notes[9].text, "AIRFLOWS SCHEDULED ARE FINAL BALANCING VALUES AT END OF PHASE 2. UNIT SHALL BE BALANCED AT END OF PHASE 1 TO THE FOLLOWING AIRFLOWS (TOTAL AIRFLOW FOR UNIT): MAX CFM: 3055 MIN CFM: 2405 OA CFM: 1225");
+  }
+  // The humidifiers' own notes, under their label.
+  assert.deepEqual(scheduleNotes(spans, humidifiers, [ahu]).map((n) => n.id), ["1", "2"]);
+});
+
+test("dev 4: an accessories legend under the notes ends them; one beside them ends the block's width", () => {
+  // 089_FL page 136: the FAN SCHEDULE's note 1, then ACCESSORIES: 1) 2) 3)
+  // (the numbers its rows cite); the ELECTRIC UNIT HEATER SCHEDULE runs
+  // beside, down to its own REMARKS:.
+  const spans: NoteSpan[] = [
+    { str: "EF-2", x0: 275.8, y0: 1041.7, x1: 309.6, y1: 1061.3 },
+    { str: "PROPELLER BELT DRIVEN", x0: 552.7, y0: 1041.7, x1: 756.4, y1: 1061.3 },
+    { str: "IF-1", x0: 278.9, y0: 1077.7, x1: 306.5, y1: 1097.3 },
+    { str: "EUH-3", x0: 2310, y0: 1090.7, x1: 2366.7, y1: 1110.2 },
+    { str: "NOTES:", x0: 273.8, y0: 1153.8, x1: 332.5, y1: 1173.4 },
+    { str: "EUH-5", x0: 2310, y0: 1167.7, x1: 2366.7, y1: 1187.3 },
+    { str: "1. MODEL NUMBERS AND FAN SELECTION ARE BASED ON GREENHECK.", x0: 273.8, y0: 1180.5, x1: 830.9, y1: 1200 },
+    { str: "EUH-6", x0: 2310, y0: 1206.1, x1: 2366.7, y1: 1225.7 },
+    { str: "ACCESSORIES:", x0: 281, y0: 1232.8, x1: 399.5, y1: 1252.3 },
+    { str: "EUH-7", x0: 2310, y0: 1244.5, x1: 2366.7, y1: 1264.1 },
+    { str: "1) BACKDRAFT DAMPER", x0: 275.5, y0: 1266.1, x1: 463.6, y1: 1285.7 },
+    { str: "8) INLET SCREEN", x0: 666.2, y0: 1266.1, x1: 798.9, y1: 1285.7 },
+    { str: "2) THERMOSTAT", x0: 274.1, y0: 1290.6, x1: 400.5, y1: 1310.2 },
+    { str: "3) BIRDSCREEN", x0: 274.1, y0: 1315.3, x1: 395.5, y1: 1334.9 },
+    { str: "REMARKS:", x0: 2319.4, y0: 1329.3, x1: 2420.2, y1: 1348.8 },
+    { str: "1. PROVIDE BUILT-IN THERMOSTAT.", x0: 2319.4, y0: 1353.3, x1: 2700, y1: 1372.8 },
+    { str: "2. PROVIDE LINE VOLTAGE THERMOSTAT AND SUMMER/WINTER BUILT-IN FAN SWITCH.", x0: 2319.4, y0: 1377.8, x1: 3200, y1: 1397.3 },
+  ];
+  assert.deepEqual(scheduleNotes(spans, [276, 866, 3576, 1111]), [{ id: "1", text: "MODEL NUMBERS AND FAN SELECTION ARE BASED ON GREENHECK." }]);
+  // 077_MT page 3: REMARKS: 1-4 with the ACCESSORIES: 1-6 legend beside them.
+  const grd: NoteSpan[] = [
+    { str: "GRILLE, REGISTER AND DIFFUSER SCHEDULE", x0: 2651.3, y0: 907.1, x1: 3781.5, y1: 957.6 },
+    { str: "REMARKS:", x0: 1768.1, y0: 977.3, x1: 1866, y1: 996.2 },
+    { str: "ACCESSORIES:", x0: 3161.3, y0: 977.3, x1: 3302.1, y1: 996.2 },
+    { str: "1. THE CONTRACTOR SHALL BE RESPONSIBLE FOR PROVIDING ALL FITTINGS AND ACCESSORIES REQUIRED FOR A COMPLETE INSTALLATION.", x0: 1768.1, y0: 998.5, x1: 3084.9, y1: 1017.4 },
+    { str: "1. PROVIDE FRAME FOR INSTALLATION IN RELEVANT CEILING TYPE. REFER TO ARCHITECTURAL RCP FOR CEILING TYPE.", x0: 3161.3, y0: 998.5, x1: 4279.4, y1: 1017.4 },
+    { str: "2. THE N.C. VALUES LISTED ARE VALID FOR THE SCHEDULED AIRFLOW ONLY AND REPRESENT A MAXIMUM ACCEPTABLE VALUE. SUBSTITUTE", x0: 1768.1, y0: 1019.6, x1: 3078.1, y1: 1038.5 },
+    { str: "2. REMOTE DAMPERS SHALL BE GREENHECK MODEL RBDR-50 WITH REMOTE WALL PLATE(S) IN LOCATION(S) SHOWN ON DRAWINGS.", x0: 3161.3, y0: 1019.6, x1: 4394.1, y1: 1038.5 },
+    { str: "EQUIPMENT SHALL HAVE N.C. VALUE EQUAL TO OR BELOW THE VALUE SCHEDULED.", x0: 1768.1, y0: 1040.7, x1: 2551.7, y1: 1059.6 },
+    { str: "3. PAINT INTERIOR OF VISIBLE RETURN DUCTS & PLENUMS BLACK.", x0: 1768.1, y0: 1061.8, x1: 2384.9, y1: 1080.7 },
+    { str: "4. COORDINATE LINEAR SLOT WIDTHS WITH THE WIDTH OF THE WOOD SLAT CEILINGS THEY WILL BE INSTALLED IN PRIOR TO ORDERING.", x0: 1768.1, y0: 1083.2, x1: 3039.3, y1: 1102.1 },
+  ];
+  const remarks = scheduleNotes(grd, [1763.5, 905.3, 4669, 1421.8]);
+  assert.deepEqual(remarks.map((n) => n.id), ["1", "2", "3", "4"]);
+  assert.equal(remarks[1].text, "THE N.C. VALUES LISTED ARE VALID FOR THE SCHEDULED AIRFLOW ONLY AND REPRESENT A MAXIMUM ACCEPTABLE VALUE. SUBSTITUTE EQUIPMENT SHALL HAVE N.C. VALUE EQUAL TO OR BELOW THE VALUE SCHEDULED.");
+});
+
+test("dev 4 A/B: the table under the notes ends them (a title with no SCHEDULE word, a NOTES column header), and its notes are never these", () => {
+  // 14_OR page 2: the AIR COOLED CHILLER's notes 1-5, the HOT WATER
+  // CONDENSING BOILER table under them with its own notes 1-7, then the
+  // EXHAUST FANS table (no region: the sheet graph did not read it).
+  const spans: NoteSpan[] = [
+    { str: "NOTES:", x0: 304.8, y0: 2068.3, x1: 367.6, y1: 2089 },
+    { str: "1. SOUND PRESSURE: 94 DBA OVERALL. SOUND POWER: 93 DBA OVERALL.", x0: 351.8, y0: 2100.5, x1: 978.9, y1: 2121.1 },
+    { str: "2. PROVIDE COMPRESSOR SOUND BLANKETS.", x0: 351.8, y0: 2126.4, x1: 737.9, y1: 2147 },
+    { str: "3. SINGLE POINT POWER CONNECTION AND DISCONNECT. PHASE AND UNDER/OVER VOLTAGE PROTECTION.", x0: 351.8, y0: 2152.6, x1: 1266.2, y1: 2173.2 },
+    { str: "4. ", x0: 351.8, y0: 2178.2, x1: 379.7, y1: 2198.9 },
+    { str: "INSTALL ON XXX (CONCRETE PAD) . SEE X/M701 FOR DETAILS.", x0: 379.7, y0: 2184, x1: 893.4, y1: 2204.6 },
+    { str: "5. SEE 1/M502 FOR PIPING DIAGRAM. HEAT TRACE EXTERIOR PIPES.", x0: 351.8, y0: 2204.4, x1: 924.6, y1: 2225 },
+    { str: "HOT WATER CONDENSING BOILER", x0: 1406.9, y0: 2271.3, x1: 1987.8, y1: 2312.4 },
+    { str: "INPUT", x0: 555.8, y0: 2331.8, x1: 609.7, y1: 2352.5 },
+    { str: "HIGH FIRE", x0: 655.2, y0: 2331.8, x1: 740.4, y1: 2352.5 },
+    { str: "MARK", x0: 308.4, y0: 2344.3, x1: 361.5, y1: 2365 },
+    { str: "LOCATION", x0: 414.2, y0: 2344.3, x1: 503.2, y1: 2365 },
+    { str: "[MBH]", x0: 554.9, y0: 2356.8, x1: 610.8, y1: 2377.4 },
+    { str: "OUTPUT [MBH]", x0: 631.7, y0: 2356.8, x1: 763.9, y1: 2377.4 },
+    { str: "B-1", x0: 320.6, y0: 2397.8, x1: 348.9, y1: 2418.5 },
+    { str: "BOILER RM", x0: 411.4, y0: 2397.8, x1: 506.4, y1: 2418.5 },
+    { str: "600", x0: 567.1, y0: 2397.8, x1: 598.5, y1: 2418.5 },
+    { str: "B-2", x0: 320.6, y0: 2427.4, x1: 348.9, y1: 2448 },
+    { str: "BOILER RM", x0: 411.4, y0: 2427.4, x1: 506.4, y1: 2448 },
+    { str: "600", x0: 567.1, y0: 2427.4, x1: 598.5, y1: 2448 },
+    { str: "NOTES:", x0: 314.2, y0: 2455.4, x1: 377, y1: 2476.1 },
+    { str: "1. PROVIDE ONE ANSI CERTIFIED GAS REGULATOR WITH EACH BOILER. CONTRACTOR TO VENT REGULATOR OUTDOORS.", x0: 361.2, y0: 2484.2, x1: 1372, y1: 2504.9 },
+    { str: "2. PROVIDE MANUFACTURER'S CONDENSATE NEUTRALIZER. ONE PER BOILER.", x0: 361.2, y0: 2513.3, x1: 1016.6, y1: 2533.9 },
+    { str: "3. PROVIDE MANUFACTURER'S CONCENTRIC VENT KIT. ONE PER BOILER.", x0: 361.2, y0: 2542.1, x1: 971.9, y1: 2562.7 },
+    { str: "4. PROVIDE 6\" CONCRETE SERVICE PAD.", x0: 361.2, y0: 2571.1, x1: 698.8, y1: 2591.8 },
+    { str: "5. PROVIDE WITH BACNET MSTP OPTION FOR INTEGRATION INTO BAS. PROVIDE WITH FLOW SWITCH.", x0: 361.2, y0: 2599.9, x1: 1218.6, y1: 2620.6 },
+    { str: "6. PROVIDE HIGH ALTITUDE OPTION IF REQUIRED", x0: 361.2, y0: 2629, x1: 779.5, y1: 2649.6 },
+    { str: "7. SEE M501 FOR PIPING DIAGRAM", x0: 361.2, y0: 2659.2, x1: 661.1, y1: 2679.8 },
+    { str: "EXHAUST FANS", x0: 970.3, y0: 2729.9, x1: 1229, y1: 2771 },
+    { str: "MOTOR", x0: 1066.1, y0: 2793.6, x1: 1133.6, y1: 2814.2 },
+    { str: "MARK", x0: 333.4, y0: 2813.5, x1: 386.4, y1: 2834.2 },
+    { str: "SERVING", x0: 544.1, y0: 2813.5, x1: 619.1, y1: 2834.2 },
+    { str: "CFM", x0: 747.6, y0: 2813.5, x1: 786, y1: 2834.2 },
+    { str: "MAKE & MODEL", x0: 1511.3, y0: 2813.5, x1: 1649.9, y1: 2834.2 },
+    { str: "NOTES", x0: 1810.8, y0: 2813.5, x1: 1867.8, y1: 2834.2 },
+    { str: "KITCHEN GREASE HOOD", x0: 481.9, y0: 2873.5, x1: 681.8, y1: 2894.2 },
+    { str: "1, 2, 3", x0: 1813.9, y0: 2873.5, x1: 1864.5, y1: 2894.2 },
+    { str: "KEF-1", x0: 336.5, y0: 2877.6, x1: 383.4, y1: 2898.2 },
+  ];
+  const chiller: [number, number, number, number] = [299.8, 1871.8, 2910.7, 2231.8];
+  const boiler: [number, number, number, number] = [287, 2265.8, 3108, 2455.9];
+  const ch = scheduleNotes(spans, chiller, [boiler]);
+  assert.deepEqual(ch.map((n) => n.id), ["1", "2", "3", "4", "5"], "the boiler's notes 6 and 7 are not the chiller's");
+  assert.equal(ch[3].text, "INSTALL ON XXX (CONCRETE PAD) . SEE X/M701 FOR DETAILS.");
+  assert.equal(ch[4].text, "SEE 1/M502 FOR PIPING DIAGRAM. HEAT TRACE EXTERIOR PIPES.", "no header of the boiler");
+  const b = scheduleNotes(spans, boiler, [chiller]);
+  assert.deepEqual(b.map((n) => n.id), ["1", "2", "3", "4", "5", "6", "7"]);
+  assert.equal(b[6].text, "SEE M501 FOR PIPING DIAGRAM", "the exhaust fans' header line and rows are not note 7");
+});
+
+test("dev 4 A/B: another table's notes beside or under these are never read as their continuation", () => {
+  // federal-mech page 14: the chiller prints notes 1, 3 and 4 (no 2); the
+  // boiler table to the right and below prints its own NOTES: 1, 2.
+  const spans: NoteSpan[] = [
+    { str: "TAG", x0: 906.5, y0: 1448.7, x1: 958.1, y1: 1474.1 },
+    { str: "CH-1", x0: 910.6, y0: 1547.1, x1: 954.2, y1: 1566 },
+    { str: "NOTES:", x0: 879.1, y0: 1641.7, x1: 939.8, y1: 1660.8 },
+    { str: "1.", x0: 879.1, y0: 1663.5, x1: 892.5, y1: 1682.6 },
+    { str: "PROVIDE THE FOLLOWING:", x0: 909.6, y0: 1663.5, x1: 1126.5, y1: 1682.6 },
+    { str: "3.", x0: 1311.1, y0: 1663.5, x1: 1324.5, y1: 1682.6 },
+    { str: "CHILLER SHALL EXCEED ASHRAE 90.1", x0: 1341.8, y0: 1663.5, x1: 1643.9, y1: 1682.6 },
+    { str: "PERFORMANCE REQUIREMENTS, AS FOLLOWS:", x0: 1341.8, y0: 1685.1, x1: 1723.6, y1: 1704.2 },
+    { str: "4.", x0: 1311.1, y0: 1750.4, x1: 1324.5, y1: 1769.5 },
+    { str: "PROVIDE HARDWIRE INTERFACE BETWEEN CHILLER", x0: 1341.8, y0: 1750.4, x1: 1762.5, y1: 1769.5 },
+    { str: "HOT WATER CONDENSING BOILER SCHEDULE", x0: 3319.9, y0: 1767.8, x1: 4456.2, y1: 1818.2 },
+    { str: "PANEL AND SITE DDC CONTROLS.", x0: 1341.8, y0: 1772, x1: 1613.5, y1: 1791.1 },
+    { str: "TAG", x0: 2451.4, y0: 1892.7, x1: 2503, y1: 1918.1 },
+    { str: "B-1", x0: 2462.4, y0: 1988.2, x1: 2491.6, y1: 2007.1 },
+    { str: "NOTES:", x0: 2431.9, y0: 2058.3, x1: 2492.6, y1: 2077.4 },
+    { str: "1.", x0: 2431.9, y0: 2080.1, x1: 2445.3, y1: 2099.3 },
+    { str: "PROVIDE STAINLESS STEEL EXHAUST AND PVC INLET.", x0: 2462.6, y0: 2080.1, x1: 2897, y1: 2099.3 },
+    { str: "2.", x0: 2431.9, y0: 2102, x1: 2445.3, y1: 2121.1 },
+    { str: "SEE SHEET M5.1 FOR HOT WATER PIPING DIAGRAM AND ADDITIONAL HOT WATER SYSTEM COMPONENTS.", x0: 2462.6, y0: 2102, x1: 3314.8, y1: 2121.1 },
+  ];
+  const chiller: [number, number, number, number] = [867.6, 1325.3, 5376.2, 1572.7];
+  const boiler: [number, number, number, number] = [2405.3, 1771.9, 5370.9, 2040];
+  for (const others of [[boiler], []]) assert.deepEqual(scheduleNotes(spans, chiller, others).map((n) => n.id), ["1", "3", "4"], `${others.length} other tables`);
+  // 009_FL page 18: the valve schedule's unlabeled notes, the AIR HANDLING
+  // UNIT SCHEDULE's rows and NOTES: to their right.
+  const valves: NoteSpan[] = [
+    { str: "HYDRONIC CONTROL VALVE SCHEDULE", x0: 2700, y0: 1880, x1: 3400, y1: 1905.2 },
+    { str: "CV-2", x0: 2477.8, y0: 2155.7, x1: 2522.2, y1: 2180.9 },
+    { str: "3-WAY", x0: 3276.5, y0: 2155.7, x1: 3338.5, y1: 2180.9 },
+    { str: "1. CV-1 SERVES AHU-1", x0: 2437, y0: 2216.9, x1: 2652.8, y1: 2242.1 },
+    { str: "AHU-1", x0: 3800.6, y0: 2243.3, x1: 3859.3, y1: 2268.5 },
+    { str: "2. CV-2 SERVES AHU-2", x0: 2437, y0: 2247.4, x1: 2652.8, y1: 2272.6 },
+    { str: "AHU-2", x0: 3800.6, y0: 2275.5, x1: 3859.3, y1: 2300.6 },
+    { str: "NOTES:", x0: 3783.8, y0: 2339.3, x1: 3856.5, y1: 2364.5 },
+    { str: "1. EXISTING UNIT. INFORMATION PROVIDED FOR BALANCING.", x0: 3783.8, y0: 2371.5, x1: 4375.8, y1: 2396.6 },
+    { str: "2. CLEAN ALL COILS, REPLACE FAN BELTS, AND DAMPER ACTUATORS. ENSURE DAMPER ARE IN OPERATING CONDITION.", x0: 3783.8, y0: 2403.4, x1: 4954, y1: 2428.6 },
+  ];
+  const valveRegion: [number, number, number, number] = [2432.6, 1874.9, 3743.5, 2333.8];
+  const ahuRegion: [number, number, number, number] = [3779.5, 1876.3, 5432.6, 2533.7];
+  for (const others of [[ahuRegion], []]) {
+    assert.deepEqual(scheduleNotes(valves, valveRegion, others), [{ id: "1", text: "CV-1 SERVES AHU-1" }, { id: "2", text: "CV-2 SERVES AHU-2" }], `${others.length} other tables`);
+  }
+});
+
+test("dev 4: notes that state a fan coil's piping, a pump's role, an air handler's humidifier, supply fans and power", () => {
+  const v = (text: string, attrs: string[]) => noteValues({ id: "1", text }, new Set(attrs)).map((x) => `${x.attr}=${x.value}`);
+  assert.deepEqual(v("4-PIPE CONFIGURATION.", ["pipes"]), ["pipes=4"]); // 028_TX
+  assert.deepEqual(v("PROVIDE TWO PIPE FAN COIL UNITS.", ["pipes"]), ["pipes=2"]);
+  assert.deepEqual(v("UNITS ARE 2-PIPE OR 4-PIPE AS SCHEDULED.", ["pipes"]), [], "two counts: not one");
+  assert.deepEqual(v("STANDBY PUMP", ["pump_arrangement"]), ["pump_arrangement=standby"]); // 033_MN P-13
+  assert.deepEqual(v("PROVIDE STANDBY PUMP ON SHELF.", ["pump_arrangement"]), [], "a spare to furnish is no role");
+  assert.deepEqual(v("N+1 PUMPS.", ["pump_arrangement"]), ["pump_arrangement=duty_standby"]); // 067_CA
+  assert.deepEqual(v("REFER TO HUMIDIFIER SCHEDULE FOR AHU HUMIDIFIER.", ["humidifier"]), ["humidifier=yes"]); // 01_NY
+  assert.deepEqual(v("PROVIDE UNIT WITH STEAM HUMIDIFIER SECTION.", ["humidifier"]), ["humidifier=yes"]);
+  assert.deepEqual(v("PROVISIONS FOR FUTURE HUMIDIFIER.", ["humidifier"]), []);
+  assert.deepEqual(v("UNIT SHALL NOT BE PROVIDED WITH HUMIDIFIER.", ["humidifier"]), []);
+  assert.deepEqual(v("UNIT SHALL CONTAIN TWO SUPPLY FANS (5 HP EACH) WITH APPROXIMATELY 70% REDUNDANCY.", ["supply_fan_qty"]), ["supply_fan_qty=2"]); // 01_NY
+  assert.deepEqual(v("PROVIDE UNIT AT 460V/3PH.", ["volts", "phase"]), ["volts=460", "phase=3"]); // 01_NY
+  assert.deepEqual(v("PROVIDE 120V/1PH RECEPTACLE IN UNIT.", ["volts", "phase"]), [], "a receptacle's power");
+  assert.deepEqual(v("UNIT IS 120-1/2 INCHES LONG.", ["volts", "phase"]), [], "a dimension, no power");
+  assert.deepEqual(v("UNIT SHALL BE 460V/3PH OR 208V/3PH.", ["volts", "phase"]), [], "two powers: not one");
+  assert.deepEqual(v("PROVIDE UNIT AT 460V/3PH. PROVIDE 120V/1PH RECEPTACLE AT UNIT.", ["volts", "phase"]), ["volts=460", "phase=3"], "the receptacle's sentence is another device's");
+});

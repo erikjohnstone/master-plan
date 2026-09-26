@@ -228,6 +228,22 @@ goal never touches extraction. When the claims change, the census re-runs
 and dev keys are authored for the newly claimed tables. Held-out keys do not
 change.
 
+**Addendum 2026-09-26 — the fourth dev tier's documents (keyed from renders,
+AS-17).** 26_CA (the Transbay Tower's mechanical set) prints its equipment in
+row schedules no family claims. Sheet M0.09 MECHANICAL SCHEDULES (page 9)
+prints CUSTOM FACTORY-BUILT TRI-PATH MULTI-ZONE AIR HANDLING UNITS (in two
+parts), AIR HANDLING UNIT (COOLING) (AHU-2-1 to AHU-62-1), CHILLER (WCU-2-1 to
+WCU-2-4), COOLING TOWER (CT-R-1 to CT-R-4), PUMPS (CHWP-2-1 THRU 3 to P-1-3),
+HOT WATER BOILER (B-2-1 THRU 4), PLATE AND FRAME HEAT EXCHANGER (HEX-2-1 to
+HEX-35-2) and FAN COIL (BCU-P3-1 to FCU-62-3); sheet M0.10 (page 10) prints
+AIR CONDITIONING UNITS - AIR COOLED SYSTEMS (AC-P3-1 with ACCU-P3-1 and
+others), the FAN POWERED TERMINAL UNIT SCHEDULE (FPB-3-11 on) and FANS. The
+census claims none of them. Its 26_CA claims are two water riser diagrams
+(as AHU, AS-9, and one expansion tank), page 10's EXPANSION TANK schedule and
+page 11's SINGLE DUCT CAV EXHAUST TERMINAL, SOUND TRAP SCHEDULE and WATER
+FILTRATION UNIT. The seed drew a riser diagram for the document's AHU stratum,
+since no AHU schedule is claimed.
+
 ---
 
 ## AS-9 — claimed tables that print no instance of their claimed family (OPEN — owned by the table/compile loops)
@@ -289,6 +305,24 @@ print no instance of their family, each claimed under no title:
   Its FOOD SERVICE EQUIPMENT SCHEDULE ends in three EXHAUST HOOD rows (H1-H3)
   that print nothing else; the page prints no fan.
 Both are keyed "rows: none", as the protocol keys every such claim.
+
+**Addendum 2026-09-26 — the fourth dev tier's claims (keyed from renders,
+AS-17).** Three of dev 4's 34 drawn tables print no instance of their family,
+each claimed under no title, and are keyed `rows: none`:
+- 01_NY page 87 (HUMIDIFIER, census 1 row) is M601 MECHANICAL CONTROLS: the
+  AHU-1 control diagram, its sequence, two point summaries, an AIR FLOW
+  SCHEDULE and an INTERLOCK SCHEDULE whose row names humidifier H-1 among
+  AHU-1's interlocked equipment. H-1's schedule is page 88's STEAM
+  HUMIDIFIERS.
+- 08_ME page 1 (PUMP, census 3 rows) is the cover sheet's DRAWING LIST
+  (SHEET NUMBER / SHEET NAME / SCALE): its P 101, P 102 and P 103 rows are
+  plumbing drawing numbers read as pump marks. The document schedules no
+  pump; its pages 28-32 (P 101 to M 102) carry no text layer and were read by
+  eye.
+- 26_CA page 57 (AHU, census 11 rows; page 58, the diagram's continuation, 6
+  more) is M4.05 MECHANICAL WATER RISER DIAGRAM: an air handler symbol per
+  level (AHU 22-1 to 46-1 and 22-2 to 46-2) on the chilled- and hot-water
+  risers. Its schedules are AS-8's unclaimed ones.
 
 ---
 
@@ -1537,3 +1571,135 @@ freeze), 0 wrong, 2 invented; held-out 2 302 of 472 exact (64.0%, from
 56.4%), 1 wrong (0.2%), 2 invented. Both still fail on exact and invented.
 The gain is AS-28's and AS-29's rules together: held-out 2 was last measured
 before either, and neither was taken from its rows.
+
+## AS-30 — the fourth dev tier's misses: rules its drafters taught, and the ceilings they show (FIXED for the shapes below; OPEN for the ceilings — this goal)
+
+**Found:** 2026-09-26, measuring the frozen normalizer cold on dev 4
+(tier4/01-split.json, seed 20260928: 10 documents, 34 drawn tables, 154
+instances, 1,421 printed values), keyed from renders before the pipeline ran
+on any of its sheets (71e0e5a). Cold (02-attr-eval-dev4-cold.md): 934 of
+1,421 exact (65.7%), 13 wrong (0.9%), 474 missed, 3 invented; 128 of the 154
+key instances have a compile item.
+
+**Fixed (each from a dev-4 miss, with a unit test on its own shape):**
+
+The notes reader (scheduleNotes.ts, and apply.ts, which now passes it the
+sheet's other tables):
+- A label that names its table and ends in a colon ("NOTES FOR AIR HANDLING
+  UNIT:") is a notes label (01_NY: the AHU's 11 notes and the VAV's 2, none
+  read before).
+- The next table's notes beside these (its "NOTES FOR STEAM HUMIDIFIERS:",
+  an AHU schedule's NOTES: to the right) end the block's width, never the
+  notes, and are never read as their continuation: a second list continues
+  the first only in the first label's column, naming no other table.
+  federal-mech's chiller no longer takes the boiler's note 2; 009_FL's valve
+  schedule reads its own note 2, no longer the AHU's notes 2 and 3.
+- An accessories legend under the notes ("ACCESSORIES: 1) BACKDRAFT DAMPER
+  2) THERMOSTAT …", the numbers the rows cite) ends them; one beside them
+  ends the block's width. 089_FL's fans read note 1 alone (their control was
+  2 wrong from the legend and the heaters' REMARKS); 077_MT's REMARKS: 1-4
+  beside its ACCESSORIES: 1-6 are read, none before.
+- The sheet's other tables (the sheet graph's regions) bound the block: one
+  under the notes ends them, one beside them ends their width. 14_OR's
+  chiller no longer runs into the boiler's title, header and notes 6-7, nor
+  its DOAS note 5 into the chiller's header and row. A region that nests in
+  or repeats the table's own (089_FL's fans and heaters, compiled merged) is
+  no other table.
+- A NOTES column header of a table under the notes (no colon, on a line of
+  short header words that runs from the label's column) ends them, and its
+  line is no note text: 14_OR's boiler note 7 and 05_MO's pumps and
+  condensing units lose "MARK …".
+- Formulaic notes: "4-PIPE CONFIGURATION." is the fan coils' piping (028_TX,
+  one count only); "STANDBY PUMP" is the pump's role (033_MN; a spare to
+  furnish is none) and "N+1 PUMPS." duty and standby (067_CA); an AHU
+  humidifier the note provides or refers to (01_NY; never one it lacks, a
+  future one, or provisions for one); "TWO SUPPLY FANS" (01_NY); "PROVIDE
+  UNIT AT 460V/3PH." (01_NY: a sentence about the unit and no other device,
+  one voltage and phase pair marked as power).
+
+The columns (normalize.ts):
+- CLNG and HTNG are COOLING and HEATING, TMBH a TOTAL MBH (089_FL's heat
+  pumps; 017_MD's cooling coils, dev 3, unkeyed).
+- A refrigerant's HOT GAS is no gas firing, and a hot gas reheat coil with a
+  value is the unit's own DX circuit (22_GA's DOAS cools by DX; 089_FL's
+  DOAS read "gas": 1 wrong fixed).
+- A dedicated outdoor air unit's TOTAL OUTSIDE AIR, neither MIN nor MAX, is
+  its supply airflow, never a minimum (089_FL: 1 invented gone).
+- A heating capacity rated at 47 °F is a heat pump's; an electric coil named
+  AUX, SUPPLEMENTAL, BACK-UP or EMERGENCY is not the unit's heat; "KW /
+  STEPS" printing "13 / 1" is 13 kW (089_FL's DOAS).
+- A VRF schedule's HEAT PUMP UNIT columns are the outdoor unit's, never its
+  air handler's (089_FL's AC-1: 208 V, 1 phase; 2 wrong fixed).
+- A steam preheat coil's STEAM LB/HR is steam heat (01_NY); a humidifier
+  section's steam flow and pressure are the humidifier's, never the unit's
+  (033_MN's AHU-6: 2 invented gone).
+- A heating coil's flow and water pressure drop are a hot water coil block
+  (028_TX's DOAS).
+- "HP (BHP)" printing "5 (4.1)" is the 5 hp motor (01_NY); "2x2" is two 2 hp
+  motors (22_GA); an AFTER FILTER is the final filter (01_NY's MERV-14).
+- A firing range's MIN. end ranks below its MAX. (028_TX's boiler); an
+  exchanger's DESIGN capacity over its MAX, and a DESIGN flow over a
+  SELECTION or MAX one (067_CA).
+- A GAS TYPE column naming a gas is a gas-fired heater (028_TX's unit
+  heaters).
+- A head printed in feet and psi ("(FT WG/PSI)" = "277/120") is the feet, the
+  pair checked at 2.31 ft a psi (067_CA's pumps).
+- HIGH and LOW TEMP (WATER) SIDE are an exchanger's hot and cold sides, and
+  LOW there is no minimum; each side's FLUID names its medium ("CHW"; a
+  process loop's "PCW" is one the list does not name); a plate count is a
+  plate exchanger's, never a unit count (067_CA).
+- A PHASE column printing a V/PH pair ("115/1": its header's VOLT/ lost) is
+  the phase and, below a VOLTS column's, the voltage (089_FL's fans). A
+  voltage range ("208-230V 1ph") is no one voltage, though its phase is one
+  (028_TX's fan coils).
+- A SPEED CONTROL's "3-STAGE" is the fan's speeds; a TWO-PIPE (or FOUR PIPE)
+  title is the fan coils' piping, never a title of both kinds (030_NY).
+- A table of outdoor units alone (no indoor half in its row, its columns or
+  its title) prints the unit's own airflow (030_NY's CRAC condensing units).
+- An EXHAUST terminal title is an exhaust terminal (26_CA: 7 wrong fixed); a
+  TYPICAL FLOORS cell naming one level is the unit's floor, several are not
+  one.
+- An air-to-air exchanger's exhaust stream may print as EXHAUST ENTERING
+  (030_NY's DOAS heat exchanger).
+
+**Measured:**
+- Dev 4: 1,020 of 1,421 exact (71.8%), 1 wrong (0.1%), 400 missed, 0
+  invented (02-attr-eval-dev4.md).
+- Dev, dev 2 and dev 3: the frozen reports' lines (1,965 of 2,053; 1,259 of
+  1,451; 1,269 of 1,377).
+- Outside dev 4, 12 values change over the 86 cached documents, each read
+  against its print: 017_MD's six cooling coils' TOTAL COOLING CAPACITY
+  (TMBH) (dev 3, unkeyed: 826 MBH beside 110 GPM over a 15 °F range) and
+  05_MO's six COOLING ONLY TWO PIPE fan coils' piping (unseen).
+- The notes reader changes 13 of the 397 cached tables, each read against
+  the page: the ones above, and 014_MT's condensing units (unseen), whose
+  rows print ADDITIONAL DETAILS "SEE BELOW" over four headed lists. The
+  unlabeled list at the table's left edge is now its accessories list, which
+  the block reads to its end; before, one pixel of height had put the
+  controls list's first number first.
+- The control-intent readings of the eleven dev documents, replayed from
+  their recorded runs, are identical decision by decision; the unseen audit
+  replays with 0 new and 0 gone (20 sets read, 68 applied), no recorded call
+  missing.
+- The key-free sweeps over the 86 cached documents: the same 12 flags as at
+  dev 3 (each by design, AS-29); 85 more values; 23 fewer expanded lines, as
+  028_TX's gas unit heaters and hot-water DOAS no longer carry both heat
+  options.
+
+**The ceilings (OPEN; every remaining dev-4 miss is outside the
+normalizer):**
+- 368 of the 400 missed values have no compile item: 028_TX's CHILLED WATER
+  FAN COIL UNIT SCHEDULE compiles 11 of its 23 rows (the FCC rows, 204
+  values), 030_NY's TWO-PIPE FAN COIL UNIT SCHEDULE 1 of 14 (156 values),
+  089_FL's FAN SCHEDULE 2 of 3 fans (IF-1, 8 values). The rows are the
+  compile's loop's.
+- 089_FL's FAN SCHEDULE is compiled merged with the ELECTRIC UNIT HEATER
+  SCHEDULE beside it (EF-1's CFM cell reads "/ 10"): 8 values.
+- 033_MN AHU-6's fan, DX coil and electrical sub-headers reach the compile
+  as "SUPPLY FAN NUMBER OF FANS 2" to "… 10": 9 values; reading them by
+  value alone would break LAW L1.
+- 030_NY's condensate pumps' OPERATING POINT @10' WC (GPM) reaches the
+  compile as "WC (GPM)", the head it rates the flow at lost: 14 values.
+- 01_NY prints AHU-1 twice, in epidemic mode (note 3) and normal mode (note
+  4); the compile keeps the first row, the key the normal mode's minimum
+  outdoor air: 1 wrong.

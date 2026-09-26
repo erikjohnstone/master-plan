@@ -262,7 +262,11 @@ export function tableContextOf(
     if (!t) cache.set(table, t = { ...table });
     for (const h of t.headers) if (!headers.includes(h)) headers.push(h);
     const spans = pages[t.sheet] ?? t.spans;
-    t.readNotes ??= spans && t.region ? scheduleNotes(spans, t.region) : (t.notes ?? []);
+    // The sheet's other tables bound the notes block (their text is never
+    // this table's notes).
+    t.readNotes ??= spans && t.region
+      ? scheduleNotes(spans, t.region, tables.filter((o) => o !== table && o.sheet === t!.sheet && o.region).map((o) => o.region!))
+      : (t.notes ?? []);
     for (const n of t.readNotes) if (!notes.some((x) => x.id === n.id)) notes.push(n);
     for (const r of t.rows ?? []) rows.push(r);
     if (spans) {
