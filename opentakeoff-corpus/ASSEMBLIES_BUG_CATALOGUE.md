@@ -1703,3 +1703,10 @@ normalizer):**
 - 01_NY prints AHU-1 twice, in epidemic mode (note 3) and normal mode (note
   4); the compile keeps the first row, the key the normal mode's minimum
   outdoor air: 1 wrong.
+
+**GATE 2 at the freeze after dev 4 (1847736; aggregates only, nothing tuned
+on them):** held-out 897 of 1,008 exact (89.0%, unchanged; the report
+differs from the last freeze's only in its date and code hashes), 0 wrong,
+2 invented; held-out 2 334 of 472 exact (70.8%, from 64.0%), 1 wrong
+(0.2%), 2 invented. Both still fail on exact and invented. No rule was taken
+from either's rows, and only these aggregates were read.

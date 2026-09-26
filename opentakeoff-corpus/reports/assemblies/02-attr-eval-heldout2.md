@@ -5,13 +5,13 @@ ATTRIBUTE EVAL (instrument 2) — heldout2, normalizer: normalize.ts
 key instances matched to a compile item: 79/81; out-of-key-scope compile items in keyed tables: 12; unscored values (extensions): 3
 
                                     lines printed  exact  wrong missed    oos | empty c-unkn invent | exact%  wrong%
-ALL                                  2052     472    302      1    169      0 |  1580   1578      2 |  64.0%   0.2%
-  slice: grid                        1874     306    225      1     80      0 |  1568   1568      0 |  73.5%   0.3%
+ALL                                  2052     472    334      1    137      0 |  1580   1578      2 |  70.8%   0.2%
+  slice: grid                        1874     306    257      1     48      0 |  1568   1568      0 |  84.0%   0.3%
   slice: reading                      132     132     75      0     57      0 |     0      0      0 |  56.8%   0.0%
   slice: notes                         46      34      2      0     32      0 |    12     10      2 |   5.9%   0.0%
 
 per family
-  FCU                                 960     256    163      0     93      0 |   704    704      0 |  63.7%   0.0%
+  FCU                                 960     256    195      0     61      0 |   704    704      0 |  76.2%   0.0%
   VAV                                 690      90     60      1     29      0 |   600    600      0 |  66.7%   1.1%
   PUMP                                 90      40     28      0     12      0 |    50     50      0 |  70.0%   0.0%
   AHU                                 135      31     26      0      5      0 |   104    102      2 |  83.9%   0.0%
@@ -22,20 +22,20 @@ per family
   DUCT_MOUNTED_COIL                    40       2      2      0      0      0 |    38     38      0 | 100.0%   0.0%
 
 per set
-  11_CA_SDSU_EngSciences_Complex_1   1572     326    202      1    123      0 |  1246   1244      2 |  62.0%   0.3%
-  092_IL_Guaranteed_Rate_Field_HVA    210      83     64      0     19      0 |   127    127      0 |  77.1%   0.0%
-  045_FL_VA_Project_516_21_107_EHR    270      63     36      0     27      0 |   207    207      0 |  57.1%   0.0%
+  11_CA_SDSU_EngSciences_Complex_1   1572     326    220      1    105      0 |  1246   1244      2 |  67.5%   0.3%
+  092_IL_Guaranteed_Rate_Field_HVA    210      83     69      0     14      0 |   127    127      0 |  83.1%   0.0%
+  045_FL_VA_Project_516_21_107_EHR    270      63     45      0     18      0 |   207    207      0 |  71.4%   0.0%
 
 per attribute
   area_served                          81      40     38      0      2      0 |    41     41      0 |  95.0%   0.0%
   phase                                79      38     36      0      2      0 |    41     41      0 |  94.7%   0.0%
   volts                                79      38     36      0      2      0 |    41     41      0 |  94.7%   0.0%
   cfm                                  39      36     34      0      2      0 |     3      3      0 |  94.4%   0.0%
-  cooling_type                         35      33      5      0     28      0 |     2      2      0 |  15.2%   0.0%
+  cooling_type                         35      33     14      0     19      0 |     2      2      0 |  42.4%   0.0%
   cfm_max                              30      30     30      0      0      0 |     0      0      0 | 100.0%   0.0%
   heat_type                            30      30      0      1     29      0 |     0      0      0 |   0.0%   3.3%
   floor                                81      29      5      0     24      0 |    52     52      0 |  17.2%   0.0%
-  pipes                                32      23      0      0     23      0 |     9      9      0 |   0.0%   0.0%
+  pipes                                32      23     23      0      0      0 |     9      9      0 | 100.0%   0.0%
   ecm                                  64      18     18      0      0      0 |    46     46      0 | 100.0%   0.0%
   chw_ewt_f                            40      14      5      0      9      0 |    26     26      0 |  35.7%   0.0%
   chw_gpm                              40      14     14      0      0      0 |    26     26      0 | 100.0%   0.0%
@@ -114,5 +114,5 @@ per attribute
 
 key instances with no compile item (2)
 
-GATE 2 (heldout2): exact 64.0% (need >= 95.0%) FAIL · wrong 0.2% (need <= 1.0%) ok · invented 2 (need = 0) FAIL → FAIL
+GATE 2 (heldout2): exact 70.8% (need >= 95.0%) FAIL · wrong 0.2% (need <= 1.0%) ok · invented 2 (need = 0) FAIL → FAIL
 ```
