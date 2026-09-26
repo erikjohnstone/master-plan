@@ -1,0 +1,1193 @@
+# 16_NV_CarsonValleyMS_HVAC_Replacement.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/16_NV_CarsonValleyMS_HVAC_Replacement.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M0.02 and M0.03 (pages 3 and 4) of the Carson Valley Middle School phase 1 HVAC replacement bid/permit set, Gardnerville, Nevada (CR Engineering), the tables the second tier's seed drew for its FURNACE, CONDENSING_UNIT, ERV, OUTDOOR_AIR_UNIT and RTU strata.
+#   16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 | 2-STAGE, GAS FIRED FURNACE SCHEDULE | FURNACE | all 21 printed rows | render: page 3 crop 1040,120,1715,442 at 3x in 6 tiles (MARK column repeated) and notes crop 1040,558,1715,134 at 150 dpi; second read at 4x (crop 1040,176,1715,386) of all 21 rows, every cell
+#   16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 | CONDENSING UNIT SCHEDULE | CONDENSING_UNIT | all 23 printed rows | render: page 3 crop 643,752,1069,488 at 3x in 4 tiles (MARK column repeated) and notes crop 643,1236,1069,114 at 200 dpi; second read at 4x (crop 643,815,1069,425) of all 23 rows, every cell
+#   16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 | ENERGY RECOVERY VENTILATOR SCHEDULE | ERV | all 2 printed rows | render: page 3 crop 643,1413,2112,99 at 3x in 8 tiles (MARK column repeated) and notes crop 643,1508,1357,177 at 170 dpi; second read at 4x (crop 643,1476,2112,36) of both rows, every cell
+#   16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3 | OUTDOOR AIR UNIT SCHEDULE | OUTDOOR_AIR_UNIT | all 2 printed rows | render: page 3 crop 1157,1753,1598,115 at 3x in 6 tiles (MARK column repeated) and notes crop 1157,1864,1598,151 at 150 dpi; second read at 4x (crop 1157,1832,1598,36) of both rows, every cell
+#   16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4 | EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY) | RTU | all 4 printed rows | render: page 4 crop 640,700,740,245 at 3x in 3 tiles (MARK column repeated); second read at 4x (crop 640,842,740,103) of all 4 rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, weight, unit width, outside air and static pressures, MCA/MOCP/FLA, gas input where the family keys none, the first-stage furnace ratings, air temperatures and design conditions, efficiencies (SEER, EER), sensible capacity, fan quantities, recovery performance, coil airflow, pressure drops, rows and fins, unit options, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 16_NV_CarsonValleyMS_HVAC_Replacement: 5 table(s), 52 instance(s), 1172 keyed attribute value(s) (243 printed, 929 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,area_served,CLASSROOM 23,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B1,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,area_served,CLASSROOM 24,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B2,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,area_served,"CLASSROOM 25, CORRIDOR B101",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B3,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,area_served,CLASSROOM 26,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B4,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,area_served,CLASSROOM 27,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B5,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,area_served,CLS CLASSROOM 29,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B6,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,area_served,CLASROOM 28,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B7,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,area_served,"CORRIDOR B101, UNISEX RR 29A, BOYS RR 30A, GIRLS RR 30B, WOMENS RR 30C, MENS RR 30D",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,cfm,1050,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,050'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,heating_mbh,63,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B8,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,area_served,"STORAGE ROOM 21, OFFICE ROOM 22, ROOM B3, OFFICE ROOM 22A, OFFICE ROOM 22B, VESTIBULE B100, STORAGE ROOM 22",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",B9,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,area_served,"CLASSROOM 41, CORRIDOR 40A",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C1,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,area_served,CLASSROOM 40,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C2,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,area_served,"CLASSROOM 43, CORRIDOR 40A",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C3,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,area_served,CLASSROOM 42,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C4,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,area_served,"CLASSROOM 45, RESTROOM 47A",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C5,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,area_served,"CLASSROOM 44, MECHANICAL 44A, MECHANICAL 44B",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C6,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,area_served,"CLASSROOM 47, RESTROOM 47B",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C7,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,area_served,"CLASSROOM 46, ROOM 46A, ROOM 46B",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C8,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,area_served,"CLASSROOM 49, CORRIDOR 40A",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C9,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,area_served,CLASSROOM 48,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C10,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,area_served,CLASSROOM 51,,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C11,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,area_served,"CLASSROOM 50, CORRIDOR 40A",,SERVICE: the rooms the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,cfm,1600,cfm,GENERAL UNIT DATA / AIRFLOW (ACFM),"printed '1,600'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,heating_mbh,60,MBH,"HEATING PERFORMANCE / OUTPUT CAPACITY, SECOND STAGE/FIRST STAGE (MBH): the second, full-fire stage part",author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,volts,115,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",C12,FURNACE,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,area_served,F-B1 AND EC-B1,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,cooling_mbh,30.9,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B1,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,area_served,F-B2 AND EC-B2,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,cooling_mbh,32.4,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B2,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,area_served,F-B3 AND EC-B3,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,cooling_mbh,35.3,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B3,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,area_served,F-B4 AND EC-B4,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,cooling_mbh,30.9,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B4,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,area_served,F-B5 AND EC-B5,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,cooling_mbh,36.8,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B5,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,area_served,F-B6 AND EC-B6,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,cooling_mbh,36.8,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B6,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,area_served,F-B7 AND EC-B7,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,cooling_mbh,30.9,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B7,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,area_served,F-B8 AND EC-B8,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,cooling_mbh,24.2,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B8,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,area_served,F-B9 AND EC-B9,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,cooling_mbh,35.3,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,B9,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,area_served,OAU-B1,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,cooling_mbh,50,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO1,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,area_served,OAU-B2,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,cooling_mbh,50,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,BO2,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,area_served,F-C1 AND EC-C1,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,cooling_mbh,33.9,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C1,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,area_served,F-C2 AND EC-C2,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,cooling_mbh,29.5,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C2,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,area_served,F-C3 AND EC-C3,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,cooling_mbh,32.4,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C3,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,area_served,F-C4 AND EC-C4,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,cooling_mbh,29.5,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C4,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,area_served,F-C5 AND EC-C5,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,cooling_mbh,32.4,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C5,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,area_served,F-C6 AND EC-C6,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,cooling_mbh,32.4,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C6,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,area_served,F-C7 AND EC-C7,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,cooling_mbh,32.4,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C7,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,area_served,F-C8 AND EC-C8,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,cooling_mbh,38.3,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C8,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,area_served,F-C9 AND EC-C9,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,cooling_mbh,32.4,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C9,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,area_served,F-C10 AND EC-C10,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,cooling_mbh,29.5,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C10,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,area_served,F-C11 AND EC-C11,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,cooling_mbh,29.5,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C11,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,area_served,F-C12 AND EC-C12,,SERVICE: the equipment the unit serves,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,cooling_mbh,33.9,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,motor_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,C12,CONDENSING_UNIT,phase,1,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,area_served,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,recovery_type,,,NOTE 1 of the GENERAL NOTES and UNIT FEATURE 4: the recovery type,printed 'ENTHALPY WHEEL TYPE (general note 1) and POLYMER MEMBRANE ENERGY RECOVERY CORE (unit feature 4)' — not a single value for this attribute
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,supply_cfm,3300,cfm,OUTDOOR AIR PERFORMANCE / AIR VOLUME (CFM),"printed '3,300'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,exhaust_cfm,2950,cfm,EXHAUST AIR PERFORMANCE / AIR VOLUME (CFM),"printed '2,950'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,supply_fan_hp,3.2,hp,OUTDOOR AIR PERFORMANCE / MOTOR SIZE (HP),
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,exhaust_fan_hp,3.2,hp,EXHAUST AIR PERFORMANCE / MOTOR SIZE (HP),
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,volts,460,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C1,ERV,phase,3,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,area_served,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,recovery_type,,,NOTE 1 of the GENERAL NOTES and UNIT FEATURE 4: the recovery type,printed 'ENTHALPY WHEEL TYPE (general note 1) and POLYMER MEMBRANE ENERGY RECOVERY CORE (unit feature 4)' — not a single value for this attribute
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,supply_cfm,3325,cfm,OUTDOOR AIR PERFORMANCE / AIR VOLUME (CFM),"printed '3,325'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,exhaust_cfm,2750,cfm,EXHAUST AIR PERFORMANCE / AIR VOLUME (CFM),"printed '2,750'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,supply_fan_hp,3.2,hp,OUTDOOR AIR PERFORMANCE / MOTOR SIZE (HP),
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,exhaust_fan_hp,3.2,hp,EXHAUST AIR PERFORMANCE / MOTOR SIZE (HP),
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,volts,460,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,C2,ERV,phase,3,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,area_served,BUILDING B,,SERVICE: the area the unit's outside air serves,printed 'BUILDING B OUTSIDE AIR'; author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,supply_cfm,2200,cfm,SUPPLY FAN / AIRFLOW (CFM),"printed '2,200'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,oa_cfm_min,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,supply_fan_hp,1.5,hp,SUPPLY FAN / MOTOR (HP),
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,supply_fan_qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,return_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,exhaust_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,vfd,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,economizer,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,outdoor_air_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,cooling_type,dx,,NOTE 1 of the UNIT FEATURES,"unit feature 1: 'R410A REFRIGERANT SYSTEM', with the COOLING PERFORMANCE block's refrigerant coil (the author's reading)"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,cooling_mbh,50,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,printed '50.0'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,dx_stages,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,chw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,heating_type,none,,HOT WATER HEATING PERFORMANCE,every cell of the block prints N/A (the author's reading)
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,heating_mbh,,MBH,HOT WATER HEATING PERFORMANCE / CAPACITY (MBH),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_gpm,,gpm,HOT WATER HEATING PERFORMANCE / FLUID FLOW (GPM),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_ewt_f,,F,HOT WATER HEATING PERFORMANCE / EWT (°F),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_lwt_f,,F,HOT WATER HEATING PERFORMANCE / LWT (°F),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_wpd_ft,,ft,HOT WATER HEATING PERFORMANCE / MAX WPD (FT WC),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_rows,,,HOT WATER HEATING PERFORMANCE / ROWS,printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,hw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,steam_psig,,psig,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,steam_lb_hr,,lb/hr,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,gas_input_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,humidifier,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,energy_recovery,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,filter_merv,8,,NOTE 1 of the AIR FILTER DATA,"air filter data 1: 'FINAL FILTERS: 2"" PLEATED, MERV 8'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B1,OUTDOOR_AIR_UNIT,phase,3,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,area_served,BUILDING B,,SERVICE: the area the unit's outside air serves,printed 'BUILDING B OUTSIDE AIR'; author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,supply_cfm,2200,cfm,SUPPLY FAN / AIRFLOW (CFM),"printed '2,200'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,oa_cfm_min,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,supply_fan_hp,1.5,hp,SUPPLY FAN / MOTOR (HP),
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,supply_fan_qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,return_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,exhaust_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,vfd,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,economizer,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,outdoor_air_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,cooling_type,dx,,NOTE 1 of the UNIT FEATURES,"unit feature 1: 'R410A REFRIGERANT SYSTEM', with the COOLING PERFORMANCE block's refrigerant coil (the author's reading)"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,cooling_mbh,50,MBH,COOLING PERFORMANCE / CAPACITY (MBH) / TOTAL,printed '50.0'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,dx_stages,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,chw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,heating_type,none,,HOT WATER HEATING PERFORMANCE,every cell of the block prints N/A (the author's reading)
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,heating_mbh,,MBH,HOT WATER HEATING PERFORMANCE / CAPACITY (MBH),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_gpm,,gpm,HOT WATER HEATING PERFORMANCE / FLUID FLOW (GPM),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_ewt_f,,F,HOT WATER HEATING PERFORMANCE / EWT (°F),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_lwt_f,,F,HOT WATER HEATING PERFORMANCE / LWT (°F),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_wpd_ft,,ft,HOT WATER HEATING PERFORMANCE / MAX WPD (FT WC),printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_rows,,,HOT WATER HEATING PERFORMANCE / ROWS,printed 'N/A'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,hw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,steam_psig,,psig,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,steam_lb_hr,,lb/hr,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,gas_input_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,humidifier,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,energy_recovery,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,filter_merv,8,,NOTE 1 of the AIR FILTER DATA,"air filter data 1: 'FINAL FILTERS: 2"" PLEATED, MERV 8'"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,volts,208,V,ELECTRICAL / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,B2,OUTDOOR_AIR_UNIT,phase,3,,ELECTRICAL / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,area_served,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,supply_cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,oa_cfm_min,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,supply_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,supply_fan_qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,return_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,exhaust_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,vfd,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,economizer,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,outdoor_air_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,cooling_type,dx,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,dx_stages,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,chw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,heating_type,gas,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'; every row prints an EXISTING UNIT GAS INPUT
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,hw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,steam_psig,,psig,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,steam_lb_hr,,lb/hr,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,gas_input_mbh,,MBH,HEATING / EXISTING UNIT GAS INPUT (MBH),printed '82/115' — not a single value for this attribute
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,humidifier,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,energy_recovery,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,filter_merv,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,volts,208,V,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),2,RTU,phase,3,,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,area_served,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,supply_cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,oa_cfm_min,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,supply_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,supply_fan_qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,return_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,exhaust_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,vfd,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,economizer,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,outdoor_air_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,cooling_type,dx,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,dx_stages,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,chw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,heating_type,gas,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'; every row prints an EXISTING UNIT GAS INPUT
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,hw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,steam_psig,,psig,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,steam_lb_hr,,lb/hr,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,gas_input_mbh,,MBH,HEATING / EXISTING UNIT GAS INPUT (MBH),printed '50/72' — not a single value for this attribute
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,humidifier,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,energy_recovery,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,filter_merv,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,volts,208,V,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),3,RTU,phase,3,,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,area_served,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,supply_cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,oa_cfm_min,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,supply_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,supply_fan_qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,return_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,exhaust_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,vfd,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,economizer,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,outdoor_air_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,cooling_type,dx,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,dx_stages,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,chw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,heating_type,gas,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'; every row prints an EXISTING UNIT GAS INPUT
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,hw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,steam_psig,,psig,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,steam_lb_hr,,lb/hr,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,gas_input_mbh,,MBH,HEATING / EXISTING UNIT GAS INPUT (MBH),printed '50/72' — not a single value for this attribute
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,humidifier,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,energy_recovery,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,filter_merv,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,volts,208,V,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),4,RTU,phase,3,,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: phase part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,building,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,floor,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,area_served,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,supply_cfm,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,oa_cfm_min,,cfm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,supply_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,supply_fan_qty,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,return_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,exhaust_fan_hp,,hp,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,vfd,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,economizer,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,outdoor_air_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,cooling_type,dx,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,cooling_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,cooling_tons,,tons,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,dx_stages,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,chw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,heating_type,gas,,TABLE TITLE,title printed 'EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)'; every row prints an EXISTING UNIT GAS INPUT
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,heating_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_gpm,,gpm,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_ewt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_lwt_f,,F,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_wpd_ft,,ft,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_mbh,,MBH,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_rows,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_conn_in,,in,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,hw_glycol_pct,,%,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,steam_psig,,psig,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,steam_lb_hr,,lb/hr,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,gas_input_mbh,,MBH,HEATING / EXISTING UNIT GAS INPUT (MBH),printed '50/72' — not a single value for this attribute
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,eh_kw,,kW,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,humidifier,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,energy_recovery,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,filter_merv,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,bas_interface,,,,not printed
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,volts,208,V,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: volts part,author's reading of the printed row
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#4,EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY),5,RTU,phase,3,,ELECTRICAL / EXISTING UNIT / VOLTS/Ø/Hz: phase part,author's reading of the printed row
