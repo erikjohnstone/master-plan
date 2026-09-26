@@ -121,6 +121,23 @@ test("R0: absence is read only through a packet a title binds to the unit; a sha
   assert.ok(!namesUnit("THE PUMPS SHALL RUN", { tag: "BP-1", family: "PUMP" }));
 });
 
+test("R0: in a packet titled for other units of its family, the family's noun is theirs; only the unit's own tag speaks for it", () => {
+  // Robustness find (an unseen set): EF-3, printed in the body of "EXHAUST
+  // FAN (EF-1,2) SEQUENCE", took "EXHAUST FAN SHALL OPEN THE ... DAMPER".
+  const seq = packet("p4", "EXHAUST FAN (EF-1,2) SEQUENCE OF OPERATION", [
+    sp("1. WHEN COMMANDED TO RUN, EXHAUST FAN SHALL OPEN THE INTERLOCKED MOTORIZED DAMPER.", 100, 100),
+    sp("2. EF-3 SHALL RUN WHENEVER EF-1 RUNS.", 100, 146),
+  ], "sequence");
+  const shared = { ...bound(seq, "tag_body"), othersTitled: true };
+  const [damper] = readR0({ tag: "EF-3", family: "FAN" }, [shared], [opt("motorized_damper")], TERM_LIST);
+  assert.equal(damper.answer, "not_shown", "the damper clause is EF-1 and EF-2's");
+  // Without a title for other fans, the family's noun still names it.
+  const [system] = readR0({ tag: "EF-3", family: "FAN" }, [bound(seq, "tag_body")], [opt("motorized_damper")], TERM_LIST);
+  assert.equal(system.answer, "yes");
+  assert.ok(!namesUnit("EXHAUST FAN SHALL OPEN THE DAMPER", { tag: "EF-3", family: "FAN" }, true));
+  assert.ok(namesUnit("EF-3 SHALL RUN WHENEVER EF-1 RUNS", { tag: "EF-3", family: "FAN" }, true));
+});
+
 test("text + R0: a section runs from a heading to the next; in a shared packet, a section whose heading names the unit speaks for it", () => {
   const seq = packet("p3", "AIR HANDLING UNIT SEQUENCE OF OPERATION", [
     sp("HUMIDIFICATION MODE OF OPERATION :", 100, 100),
@@ -204,6 +221,27 @@ test("combine: two readers agree → applied; one model alone → proposal; a di
   assert.equal(d(r2split).outcome, "unresolved", "two vision runs that disagree");
   // Through a binding C5 makes a proposal, an agreement is a proposal.
   assert.equal(d([ans("r0", "opt.motorized_damper", "yes"), ans("r1", "opt.motorized_damper", "yes")], [{ packet: "p1", kind: "family_detail", evidence: "f", proposal: true }]).outcome, "proposal");
+});
+
+test("combine: a reading in only one of several packets bound equally is a proposal; one every such packet gives applies", () => {
+  // Robustness find (an unseen set): two same-titled VAV sequences, one per
+  // box type, both bound to every box; one's CO2 clause applied to all.
+  const q = [opt("co2_sensor")];
+  const equally: Binding[] = [
+    { packet: "p1", kind: "family_detail", evidence: "f", ambiguous: true },
+    { packet: "p2", kind: "family_detail", evidence: "f", ambiguous: true },
+  ];
+  const cite = (packet: string) => ({ packet, sheet: "s#1", lines: ["L1"], text: "X", box: [0, 0, 1, 1] as [number, number, number, number] });
+  const d = (packets: string[]) => combineUnit({ questions: q, bindings: equally, answers: [
+    ans("r0", "opt.co2_sensor", "yes", { cites: packets.map(cite) }), ans("r1", "opt.co2_sensor", "yes", { cites: packets.map(cite) }),
+  ] }, TERM_LIST)[0];
+  assert.equal(d(["p2"]).outcome, "proposal");
+  assert.match(d(["p2"]).why, /one of the packets bound to the unit equally/);
+  assert.equal(d(["p1", "p2"]).outcome, "applied", "both box types' sequences say so");
+  // A title binding besides them is no doubt.
+  assert.equal(combineUnit({ questions: q, bindings: [...equally, { packet: "p3", kind: "tag", evidence: "t" }], answers: [
+    ans("r0", "opt.co2_sensor", "yes", { cites: [cite("p3")] }), ans("r1", "opt.co2_sensor", "yes", { cites: [cite("p3")] }),
+  ] }, TERM_LIST)[0].outcome, "applied");
 });
 
 test("combine: absence applies only when R0 finds no term and both vision runs find none (C9)", () => {

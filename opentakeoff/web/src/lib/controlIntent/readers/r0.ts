@@ -33,13 +33,18 @@ import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v3";
+export const R0_VERSION = "control_r0_v4";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
   packet: Packet;
   text: PacketText;
   binding: Binding;
+  /** A title binds the packet to other units of the unit's family, and not
+   * to the unit ("EXHAUST FAN (EF-1,2) SEQUENCE" read for EF-3): its family's
+   * noun there means those units, so only a clause printing the unit's tag
+   * speaks for it. */
+  othersTitled?: boolean;
 }
 
 /** The printed text a reading rests on. */
@@ -76,7 +81,7 @@ export interface ReaderAnswer {
 }
 
 const OWN_KINDS = new Set(["tag", "list_range", "cross_reference", "family_detail"]);
-const TITLE_KINDS = new Set(["tag", "list_range", "cross_reference"]);
+export const TITLE_KINDS: ReadonlySet<string> = new Set(["tag", "list_range", "cross_reference"]);
 
 /** Whether a bound packet is the unit's own (see the header). */
 export function ownPacket(b: Binding, all: readonly Binding[]): boolean {
@@ -104,9 +109,11 @@ const FAMILY_NOUN: Readonly<Record<string, RegExp>> = {
 
 /** Whether a clause of a packet other units share speaks for the unit: it
  * prints the unit's tag, its family's name (a family a system has one kind
- * of), or what its tag's letters stand for ("HOT WATER PUMP" for HWP). */
-export function namesUnit(text: string, unit: { tag: string; family?: string }): boolean {
+ * of), or what its tag's letters stand for ("HOT WATER PUMP" for HWP). In a
+ * packet titled for other units of its family (`tagOnly`), only its tag. */
+export function namesUnit(text: string, unit: { tag: string; family?: string }, tagOnly = false): boolean {
   if (namesTag(text, unit.tag)) return true;
+  if (tagOnly) return false;
   const noun = unit.family ? FAMILY_NOUN[unit.family] : undefined;
   if (noun?.test(text)) return true;
   const words = PREFIX_WORDS[tagKey(unit.tag)?.prefix ?? ""];
@@ -211,7 +218,8 @@ export function readR0(unit: { tag: string; family?: string }, bound: readonly B
     // In a packet other units share, a clause speaks for the unit when it
     // names the unit, or the heading of its section does.
     const heading = new Map(bp.text.paragraphs.map((pg) => [pg.id, pg.heading]));
-    const clauses = bp.text.clauses.filter((c) => own || namesUnit(c.norm, unit) || Boolean(heading.get(c.paragraph) && namesUnit(heading.get(c.paragraph)!, unit)));
+    const tagOnly = Boolean(bp.othersTitled);
+    const clauses = bp.text.clauses.filter((c) => own || namesUnit(c.norm, unit, tagOnly) || Boolean(heading.get(c.paragraph) && namesUnit(heading.get(c.paragraph)!, unit, tagOnly)));
     return { bp, own, clauses };
   });
   // "Absent" is read only where a title binds the unit to a packet of its

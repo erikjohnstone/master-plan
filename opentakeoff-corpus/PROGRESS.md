@@ -110,9 +110,31 @@ Done so far (dev only; held-out keys not yet authored):
     as in AS-1; 16_NV, 04_NV, 26_CA and 21_VA fail as newly staged sets.
     `main` (5ab7ca8) gives byte-identical compile triplets and the same
     outcomes for all 9. Their sheet graphs differ only in timing fields.
-- **Next:** the CI-12 finder batch (with 008_MO's period-ended title); more
-  of the audit; the rest of the sweep and its zone scan; held-out
-  aggregates; corpus-eval unchanged.
+- **Second robustness batch (next commit): CI-12, CI-13, CI-14.**
+  - Finder: two sequences printed one under the other are two packets; a
+    caption naming control evidence keeps its closing period; other trades'
+    "control" (seismic, vibration, noise, erosion) is no packet.
+  - Readers: in a packet titled for other units of a unit's family, only
+    its tag speaks for it.
+  - Combiner: a reading in only one of several equally bound packets is a
+    proposal.
+  - Dev: all 11 documents re-snapshotted. Extraction and packets are
+    byte-identical, and the replay is unchanged (227/244; 291 applied, 0
+    wrong; the same proposals).
+  - Unseen: 15 sets re-snapshotted, extraction byte-identical. The packet
+    changes are the intended ones (008_MO, 27_WA, and 06_MO's five erosion
+    details).
+- **Blind live audit, final code: 15 unseen sets, 157 applied, 157 right, 0
+  wrong.**
+  - Applied: 16_NV 12, 27_WA 8, 21_VA 57, 001_NC 30, 009_FL 19, 06_MO 16,
+    061_IA 12, 05_MO 2, 03_FL 1. The other six sets apply nothing.
+  - Before this round's fixes, these sets had 4 wrong: 16_NV 1, 27_WA 2,
+    21_VA 1.
+  - Recall cost, taken on purpose: 21_VA's CO2 on its 56 reheat boxes is a
+    proposal until the binder can pair each box type with its own sequence
+    (CI-15).
+- **Next:** CI-15 (recall); held-out aggregates; the rest of the sweep and
+  its zone scan; corpus-eval unchanged.
 
 The research that proposed the goal (2026-09-24):
 - **Research:** `plans/05-research/01–03`, the design plan

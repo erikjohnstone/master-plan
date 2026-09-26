@@ -29,7 +29,7 @@ import { sha256Hex } from "../graphKeys.js";
 import { COMBINE_VERSION, combineUnit, type Decision } from "./combine";
 import { memoryRunStore, PENDING_IMAGE, recordedCall, RUNS_VERSION, type ModelRequest, type RunStore, type Transport } from "./runs";
 import { QUESTIONS_VERSION, unitQuestions, type ReadingQuestion } from "./readers/questions";
-import { namesUnit, ownPacket, R0_VERSION, readR0, type BoundPacket, type ReaderAnswer } from "./readers/r0";
+import { namesUnit, ownPacket, R0_VERSION, readR0, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
 import { R1_MODEL, R1_PROMPT_VERSION, r1Answers, r1Request, type ReadUnit } from "./readers/r1";
 import { cropSpec, joinRun, R2_MODEL, R2_PROMPT_VERSION, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
 import { TERM_LIST, type TermList } from "./readers/terms";
@@ -104,6 +104,14 @@ export async function readControlIntent(input: {
   // 1. The first apply: records and bindings.
   const first = applyAssemblies({ project: input.project, library: input.library, settings: input.settings, overrides: input.overrides });
   const packets = new Map<string, Packet>(first.control.packets.map((p) => [p.id, p]));
+  // The units a title binds each packet to ("EXHAUST FAN (EF-1,2) SEQUENCE"
+  // is EF-1's and EF-2's).
+  const titledTo = new Map<string, Array<{ item: number; family: string }>>();
+  for (const inst of first.instances) {
+    for (const b of first.control.bindings[inst.item] ?? []) {
+      if (TITLE_KINDS.has(b.kind) && !b.proposal) (titledTo.get(b.packet) ?? titledTo.set(b.packet, []).get(b.packet)!).push({ item: inst.item, family: inst.family });
+    }
+  }
   const texts = new Map<string, PacketText>();
   const textOf = (p: Packet) => texts.get(p.id) ?? texts.set(p.id, packetText(p)).get(p.id)!;
   type Unit = { reading: UnitReading; bound: BoundPacket[]; read: ReadUnit };
@@ -125,7 +133,10 @@ export async function readControlIntent(input: {
     const app = selectAssembly(inst, input.library, input.settings ?? {}, override, layer);
     const questions = unitQuestions(app, input.library, TERM_LIST);
     if (!questions.length) continue;
-    const bound = bindings.map((b) => ({ packet: packets.get(b.packet)!, text: textOf(packets.get(b.packet)!), binding: b })).filter((b) => b.packet);
+    const bound = bindings.filter((b) => packets.has(b.packet)).map((b): BoundPacket => ({
+      packet: packets.get(b.packet)!, text: textOf(packets.get(b.packet)!), binding: b,
+      ...(!TITLE_KINDS.has(b.kind) && (titledTo.get(b.packet) ?? []).some((o) => o.item !== inst.item && o.family === inst.family) ? { othersTitled: true } : {}),
+    }));
     const item = input.project.items[inst.item];
     const description = Object.entries(item?.cells ?? {}).filter(([h]) => TYPE_HEADER.test(h)).map(([h, c]) => [h, String(c?.text ?? "").trim()]).filter(([, v]) => v && v !== "-").map(([h, v]) => `${h}: ${v}`).join("; ");
     const answers = [...(bound.length ? readR0(inst, bound, questions, TERM_LIST) : []), ...zoneAnswers(zones, questions, TERM_LIST)];
@@ -212,10 +223,11 @@ export async function readControlIntent(input: {
     if (own) return a;
     const unit = { tag: m.reading.tag, family: m.reading.family };
     const names = a.cites.some((c) => {
-      if (namesUnit(normText(c.text), unit)) return true;
       const b = bp(c.packet);
+      const tagOnly = Boolean(b?.othersTitled);
+      if (namesUnit(normText(c.text), unit, tagOnly)) return true;
       const heading = b?.text.paragraphs.find((pg) => pg.lines.some((id) => c.lines.includes(id)))?.heading;
-      return Boolean(heading && namesUnit(heading, unit));
+      return Boolean(heading && namesUnit(heading, unit, tagOnly));
     });
     return names ? a : { ...a, note: "unverified", why: `its evidence is from drawings ${m.reading.tag} shares with other units, and names no part of it` };
   }

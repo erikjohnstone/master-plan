@@ -165,8 +165,10 @@ const K_CONTROL = rx(`${word("CONTROL", true)}(?!\\s+(?:VALVES?|DAMPERS?|PANELS?
  * piping or flow diagram: it is a control packet only over control content. */
 const CONTROL_WORD = rx(`${word("CONTROL", true)}|${word("SEQUENCE", true)}|${word("POINT", true)}`);
 /** Titles that are never control packets: legends, notes, schedules of
- * other things, title-block and index headings, piping and riser diagrams. */
-const NOT_PACKET = rx(`${word("LEGEND", true)}|${word("SYMBOL", true)}|${word("ABBREVIATION", true)}|${word("ARCHITECTURE")}|${word("RISER", true)}|${word("NETWORK")}|${word("WIRING")}|${word("SPECIFICATION", true)}|${word("INDEX")}|${word("NOTE", true)}|${word("PIPING")}|${word("FLOW")}\\s+${word("DIAGRAM")}|${word("KEY")}\\s+${word("PLAN")}`);
+ * other things, title-block and index headings, piping and riser diagrams,
+ * and the other trades' "control" (seismic and vibration control, noise
+ * control, erosion and sediment control). */
+const NOT_PACKET = rx(`${word("LEGEND", true)}|${word("SYMBOL", true)}|${word("ABBREVIATION", true)}|${word("ARCHITECTURE")}|${word("RISER", true)}|${word("NETWORK")}|${word("WIRING")}|${word("SPECIFICATION", true)}|${word("INDEX")}|${word("NOTE", true)}|${word("PIPING")}|${word("FLOW")}\\s+${word("DIAGRAM")}|${word("KEY")}\\s+${word("PLAN")}|${word("SEISMIC")}|${word("VIBRATION")}|${word("NOISE")}|${word("EROSION")}|${word("SEDIMENT")}`);
 const SCHEDULE_WORD = rx(word("SCHEDULE", true));
 /** A drawing of how something is built, not how it is controlled. */
 const INSTALLATION = /\b(?:DETAILS?|SECTIONS?|ELEVATIONS?|PLANS?|MOUNTING|INSTALLATION|SUPPORTS?|HANGING|HANGERS?|CONNECTIONS?|PIPING|DUCTWORK|ROUGH-?IN|ENLARGED|ISOMETRIC)\b/;
@@ -221,14 +223,17 @@ export function subjectWords(title: string): string[] {
     .filter((w) => w && /[A-Z0-9]/.test(w) && !GENERIC.has(w));
 }
 
-/** The kind of control evidence a title names by its words, or null. */
-export function packetKind(title: string): PacketKind | null {
+/** The kind of control evidence a title names by its words, or null.
+ * `titled`: the text is set as a title (big, a caption, a title block's
+ * drawing title), so a closing period is punctuation, not a sentence's
+ * ("LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM."). */
+export function packetKind(title: string, opts: { titled?: boolean } = {}): PacketKind | null {
   const t = repairSpacing(title);
   if (!t || t.length > 180 || NOT_PACKET.test(t)) return null;
   const kind: PacketKind | null = K_SEQUENCE.test(t) ? "sequence" : K_POINTS.test(t) ? "points" : K_DIAGRAM.test(t) ? "diagram" : K_CONTROL.test(t) ? "detail" : null;
   if (!kind) return null;
   if (kind !== "points" && SCHEDULE_WORD.test(t)) return null;
-  if (SENTENCE.test(t) || (/\.\s*$/.test(t) && t.split(" ").length >= 6)) return null;
+  if (SENTENCE.test(t) || (!opts.titled && /\.\s*$/.test(t) && t.split(" ").length >= 6)) return null;
   if (t.split(" ").length > 22) return null;
   return subjectWords(t).length ? kind : null;
 }
@@ -353,6 +358,9 @@ interface Title {
   /** Printed at the top of a points table (its header row right under it):
    * the title heads the table. */
   tableHead?: boolean;
+  /** A heading read as starting a block right after the last sentence of
+   * the text above it: its text is below it, never that text. */
+  heads?: boolean;
 }
 
 /** The page's printed sheet number: the largest short code set well above
@@ -450,7 +458,7 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
       && (Math.abs(s.box[0] - box[0]) <= 3 * h || (s.box[0] >= box[0] - h && s.box[2] <= box[2] + h)));
     const subtitle = rows.filter((s) => !group.includes(s) && SUBTITLE.test(s.text) && s.box[1] - box[3] >= -0.2 * h && s.box[1] - box[3] <= 1.5 * h
       && uOverlap(s.box, box) > 0).sort((a, b) => a.box[1] - b.box[1])[0];
-    return { lines: group, rot: group[0].rot, box, dev, h, text, kind: packetKind(text), caption: Boolean(bubble || scale), big, bubble, scale, subtitle };
+    return { lines: group, rot: group[0].rot, box, dev, h, text, kind: packetKind(text, { titled: big || Boolean(bubble || scale) }), caption: Boolean(bubble || scale), big, bubble, scale, subtitle };
   }
 
   // 1. Titles. Big lines, alone on their baseline (a table row in a large
@@ -485,21 +493,38 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   //    section of a sequence, never a packet), and generic sequence headings
   //    (their items become packets). Body-size captions: marked by a scale
   //    note or a detail number.
-  const startsBlock = (l: Line) => {
+  //    A heading that names its equipment and what it is ("EXHAUST FAN
+  //    (EF-3) SEQUENCE OF OPERATION") also starts a block one line under
+  //    the last sentence of the text before it: two sequences printed one
+  //    under the other are two packets.
+  /** "free": nothing of its size printed right above it; "after": only
+   * lines that end a sentence, and it names its equipment; with something
+   * below it either way. */
+  const startsBlock = (l: Line, named = false): "free" | "after" | null => {
     const rows = sameRot(l.rot);
-    const above = rows.some((o) => o !== l && Math.abs(o.h - l.h) <= 0.3 * l.h && uOverlap(o.box, l.box) > 0.3 * Math.min(o.box[2] - o.box[0], l.box[2] - l.box[0])
+    const above = rows.filter((o) => o !== l && Math.abs(o.h - l.h) <= 0.3 * l.h && uOverlap(o.box, l.box) > 0.3 * Math.min(o.box[2] - o.box[0], l.box[2] - l.box[0])
       && l.box[1] - o.box[3] >= -0.2 * l.h && l.box[1] - o.box[3] <= 1.2 * l.h);
     const below = rows.some((o) => o !== l && o.box[1] - l.box[3] >= -0.2 * l.h && o.box[1] - l.box[3] <= 3 * l.h
       && o.box[0] >= l.box[0] - 2 * l.h && o.box[0] <= l.box[0] + 4 * l.h);
-    return !above && below;
+    if (!below) return null;
+    if (!above.length) return "free";
+    return named && above.every((o) => /[.:;]\s*$/.test(o.text)) ? "after" : null;
   };
   for (const l of lines) {
-    if (used.has(l) || l.h >= 1.2 * body || ROW_NUMBER.test(l.text) || wordCount(l.text) > 14 || /[.,]\s*$/.test(l.text) || inTable(l)) continue;
+    if (used.has(l) || l.h >= 1.2 * body || ROW_NUMBER.test(l.text) || wordCount(l.text) > 14 || inTable(l)) continue;
     const t = titleOf([l], false);
-    if (t.caption) { titles.push(t); continue; }
+    // A caption that names control evidence keeps its period ("… CONTROL
+    // DIAGRAM."); any other line ending in one is a sentence or an
+    // abbreviated label ("DIFF. PRESS.").
+    const period = /[.,]\s*$/.test(l.text);
+    if (t.caption && (!period || t.kind)) { titles.push(t); continue; }
+    if (period) continue;
     const generic = GENERIC_SEQUENCE.test(repairSpacing(l.text));
     if (!generic && t.kind !== "sequence" && t.kind !== "points" && t.kind !== "diagram") continue;
-    if (startsBlock(l)) titles.push(generic ? { ...t, kind: null, generic: true } as Title : t);
+    const named = !generic && (t.kind === "sequence" || t.kind === "points")
+      && ((repairSpacing(l.text).match(TAG_TOKEN) ?? []).length > 0 || Boolean(subjectFamily(l.text)));
+    const starts = startsBlock(l, named);
+    if (starts) titles.push(generic ? { ...t, kind: null, generic: true } as Title : starts === "after" ? { ...t, heads: true } : t);
   }
 
   // 2. Which way each title's content runs. A caption has its drawing or
@@ -516,6 +541,7 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   const textWindow = (t: Title) => Math.max(3 * body, 2.5 * t.h);
   for (const t of titles) {
     if (t.caption) { t.direction = "above_title"; continue; }
+    if (t.heads) { t.direction = "below_title"; continue; }
     // A title printed at the top of a points table, inside its border, has
     // the table's header row right under it: it heads the table, whatever
     // is printed above (often the table before it).
@@ -734,7 +760,7 @@ export function findPackets(sheet: string, spans: readonly NoteSpan[], tables: r
   }
   // The sheet itself, when its title block names control evidence about
   // something ("AHU-1 DIAGRAM AND POINT LIST"): the drawing field.
-  const kind = page.sheetTitle ? packetKind(page.sheetTitle) : null;
+  const kind = page.sheetTitle ? packetKind(page.sheetTitle, { titled: true }) : null;
   if (kind && page.lines.length) {
     const field = page.lines.map((l) => l.dev).reduce(union);
     push({ rot: 0, box: field, title: page.sheetTitle!, kind, direction: "sheet", scope: "sheet", titleDev: field }, field);

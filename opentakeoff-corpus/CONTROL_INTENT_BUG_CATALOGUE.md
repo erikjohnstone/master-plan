@@ -250,7 +250,7 @@ snapshot's tags.
 families, but the right-headed rule reads only the condensing unit. The furnaces do not get the sequence, and the
 condensing units get it as a proposal because their rows do not print "FURNACE".
 
-## CI-12: two sequences printed one under the other were found as one packet (OPEN, next finder batch)
+## CI-12: two sequences printed one under the other were found as one packet (FIXED, next commit)
 
 **Found:** 2026-09-26, the blind live audit on an unseen set (27_WA, sheet 18).
 
@@ -261,5 +261,72 @@ above it, so the second heading and its text joined the first packet. EF-1 and E
 title, so R0 and R1 **applied** their motorized damper from EF-3's clause. That is 2 wrong decisions among 64
 audited.
 
-**Next:** a body-size heading that names equipment by tag and a sequence, points list or diagram starts its own
-packet when the line above it ends a sentence. This is a finder change: re-snapshot dev and re-measure.
+**Fix (`evidence.ts`):** a body-size heading that names its equipment (a tag, or a family the compile's schedule
+rules read) and a sequence or points list starts its own packet when every line right above it ends a sentence.
+
+**Also in this finder batch:**
+- A caption or a big title that names control evidence keeps a closing period ("LIGHTNG AND EXHAUST FAN CONTROL
+  DIAGRAM.", 008_MO). An abbreviated label ending in one ("DIFF. PRESS.") is still no title.
+- Other trades' "control" is no packet: seismic and vibration control, noise control, erosion and sediment control
+  ("SEISMIC AND VIBRATION CONTROL" held 27_WA's pumps by tag).
+- A reader-side guard (CI-13) keeps the same mistake from applying when the finder misses a split.
+
+**Numbers:**
+- Dev: all 11 documents were re-snapshotted with the new finder. Extraction (items, tables, printed points, pages)
+  is byte-identical, and so are the packets: 0 added, 0 removed, 0 changed. The dev readings cannot move.
+- Unseen, 15 sets re-snapshotted:
+  - 008_MO gains its diagram;
+  - 27_WA gains the EF-3 and HWP-5,6 sequences, loses the seismic detail, and the EF-1,2 and unit-heater sequences
+    shrink to their own text;
+  - 06_MO loses five civil "EROSION CONTROL" details it had read as control packets;
+  - the other 12 are unchanged.
+  Extraction is byte-identical on all 15.
+- 27_WA live, re-read: 8 applied, all right (EF-3's damper from its own sequence; the unit heaters' standalone
+  thermostats). Before, 14 applied with 2 wrong.
+- A heading admitted this way heads the text below it, even when that text is further away than the sentence above
+  (a second test covers it, and fails without the rule).
+
+## CI-13: in a packet titled for other units of its family, the family noun was read for the unit too (FIXED, next commit)
+
+**Found:** 2026-09-26, with CI-12. 27_WA's EF-3 was bound, by its tag printed in the body, to the packet titled
+"EXHAUST FAN (EF-1,2) SEQUENCE OF OPERATION". A shared packet speaks for a unit where a clause names it: by its tag,
+its family's noun, or its tag's words. There, "EXHAUST FAN SHALL OPEN THE INTERLOCKED MOTORIZED DAMPER" named EF-3
+through "EXHAUST FAN", although the title makes those fans EF-1 and EF-2.
+
+**Fix (`record.ts`, `readers/r0.ts`):** when a title binds the packet to other units of the unit's family, and not
+to the unit, only a clause (or its section heading) that prints the unit's tag speaks for it, in R0 and in the model
+answers' attribution. A component keeps its parent's packet: SF-1 in "AHU-1 SEQUENCE", a packet titled for another
+family, is still named by "SUPPLY FAN". R0 is now `control_r0_v4`.
+
+**Numbers:** the dev replay on the saved snapshots is unchanged: 227/244 exact; 291 applied, 0 wrong; the same
+proposals and unresolved decisions, line for line.
+
+## CI-14: a reading through one of several equally bound packets applied to units the other packet governs (FIXED, next commit)
+
+**Found:** 2026-09-26, the blind live audit on an unseen set (21_VA, sheet 55).
+
+**What:** the sheet draws "VAV BOX WITH HEATING COIL CONTROL DIAGRAM" and "COOLING ONLY VAV BOX CONTROL DIAGRAM", each with
+its own "VAV BOX SEQUENCE OF OPERATION". The two sequences carry the same title, so every VAV box was bound to both,
+flagged ambiguous. Only the reheat boxes' sequence measures room CO2, and R0 and R1 read that clause for all 57 boxes.
+The schedule gives 56 boxes reheat coil data; VAV-1-16 has none (a cooling-only box), so its CO2 sensor was applied
+wrong. Ambiguity blocked only absences (C9), not applications.
+
+**Fix (`combine.ts`, `control_combine_v5`):** a reading that rests only on doubtful packets (C5 proposals, or one of
+several packets bound equally) applies only when every equally bound packet is among its cites. Otherwise it is a
+proposal. In 21_VA the boxes' role (both sequences: the DDC modulates the damper) still applies; CO2 becomes a
+proposal for all 57.
+
+**Numbers:** 21_VA 114 applied with 1 wrong before, 57 applied with 0 wrong after. The dev replay is unchanged:
+227/244 exact; 291 applied, 0 wrong; the same proposals and unresolved decisions, line for line.
+
+## CI-15: a detail per unit type on one sheet, each with a same-titled sequence (OPEN, recall)
+
+**What:** 21_VA's reheat boxes and its cooling-only box each have a diagram and a sequence, but the binder cannot yet
+tell them apart:
+- "VAV BOX WITH HEATING COIL" is read right-headed as a coil, so the reheat diagram binds no VAV box. Its subject is
+  the part before "WITH".
+- The qualifier "HEATING COIL" is printed in the schedule's header ("REHEAT COIL DATA"), and the row fills it with
+  values. Qualifiers are confirmed only from the row's own cells, never from its headers.
+- Nothing pairs each "VAV BOX SEQUENCE OF OPERATION" with the diagram above it in its column.
+
+With all three, the 56 reheat boxes would read CO2 from their own sequence, and apply it.

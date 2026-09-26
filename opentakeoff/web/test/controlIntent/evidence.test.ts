@@ -77,6 +77,42 @@ test("headings: a body-size sequence heading owns the block under it; a numbered
   assert.ok(packets[0].spans.some((s) => s.str === "2. TEMPERATURE CONTROL"), "its sections are part of it");
 });
 
+test("two sequences one under the other are two packets; a caption keeps its period; other trades' control is no packet", () => {
+  // Robustness finds (unseen sets): a second fan's sequence printed one line
+  // under the first's last sentence joined the first packet, and a detail
+  // caption ending in a period was read as a sentence.
+  const spans = [
+    sp("EXHAUST FAN (EF-1,2) SEQUENCE OF OPERATION", 500, 100),
+    sp("THESE FANS AND ASSOCIATED LOUVERS SHALL BE OPERATED BY A MANUAL SWITCH.", 500, 123),
+    sp("1. WHEN COMMANDED TO RUN, EXHAUST FAN AND INTERLOCKED LOUVER SHALL OPEN.", 510, 146),
+    // Closer to the sentence above it than to its own text below: it still
+    // heads the text below.
+    sp("EXHAUST FAN (EF-3) SEQUENCE OF OPERATION", 500, 168),
+    sp("THE MAIN PLC SHALL CONTROL THESE FANS AND ASSOCIATED LOUVERS.", 500, 198),
+    sp("1. WHEN COMMANDED TO RUN, EXHAUST FAN SHALL OPEN THE INTERLOCKED MOTORIZED DAMPER.", 510, 221),
+    ...para(3000, 300, 12),
+  ];
+  const packets = findPackets("s.pdf#3", spans);
+  assert.deepEqual(packets.map((p) => p.title), ["EXHAUST FAN (EF-1,2) SEQUENCE OF OPERATION", "EXHAUST FAN (EF-3) SEQUENCE OF OPERATION"]);
+  assert.ok(!packets[0].spans.some((s) => /MOTORIZED DAMPER/.test(s.str)), "EF-3's clause is not EF-1 and EF-2's");
+  assert.equal(packets[1].direction, "below_title");
+  assert.ok(packets[1].spans.some((s) => /MOTORIZED DAMPER/.test(s.str)));
+  assert.ok(!packets[1].spans.some((s) => /MANUAL SWITCH/.test(s.str)), "the text above it is the first sequence's");
+  // A line inside one sequence that names no equipment still does not split it.
+  const one = findPackets("s.pdf#4", [
+    sp("AHU-1 SEQUENCE OF OPERATION", 500, 100), ...para(500, 123, 3),
+    sp("SEQUENCE OF OPERATION NOTES CONTINUED", 500, 192), ...para(500, 215, 3),
+    ...para(3000, 300, 12),
+  ]);
+  assert.deepEqual(one.map((p) => p.title), ["AHU-1 SEQUENCE OF OPERATION"]);
+  // A title set as a title keeps its closing period; a sentence does not.
+  assert.equal(packetKind("LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM.", { titled: true }), "diagram");
+  assert.equal(packetKind("LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM."), null);
+  // Seismic, vibration, noise and erosion control are other trades'.
+  assert.equal(packetKind("SEISMIC AND VIBRATION CONTROL"), null);
+  assert.equal(packetKind("NOISE CONTROL DETAILS"), null);
+});
+
 test("the title block: a strip of field labels holds no packet; its drawing title is read under DRAWING TITLE", () => {
   const spans = [
     sp("CHILLED WATER SYSTEM - CONTROL DIAGRAM", 1600, 1400, 31), sp("CH-1", 1700, 900), sp("DDC", 1800, 1000), sp("STATUS", 1900, 1100), sp("AO", 1950, 1150),

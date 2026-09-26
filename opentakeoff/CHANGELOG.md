@@ -45,6 +45,22 @@
   journal whose chain does not check out is reported, and none of its answers
   applies. 64 tools.
 
+  **Checked on documents it was never tuned on.** A blind audit reads unseen
+  corpus sets with the live models, and every applied reading is checked
+  against its cites and the drawing. What it found is fixed on the shared
+  path:
+  - A tag keeps the letters before its mark, so "EF-B1" is an exhaust fan's,
+    not the furnace "B1"'s.
+  - A mark several kinds of unit share binds through a title only when the
+    title names the unit's family.
+  - A point label such as "BO-1" is never a tag.
+  - Two sequences printed one under the other are two packets.
+  - In a packet titled for other units of a unit's family, only a clause
+    that prints the unit's tag speaks for it.
+  - A reading found in only one of several packets bound equally is a
+    proposal.
+  Across 15 unseen sets, 157 readings apply, and all 157 are right.
+
 - **The platform vision model is `qwen-3.8-27b`.** The earlier default,
   `gemma-4-31b`, is no longer served: the endpoint's `/v1/models` lists only
   `gpt-oss-120b` and `qwen-3.8-27b` (checked 2026-09-25). Every vision call

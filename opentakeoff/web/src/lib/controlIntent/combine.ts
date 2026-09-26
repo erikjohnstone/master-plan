@@ -41,7 +41,7 @@ import type { DrawingCite, ReaderAnswer } from "./readers/r0";
 import type { ReadingQuestion } from "./readers/questions";
 import type { TermList } from "./readers/terms";
 
-export const COMBINE_VERSION = "control_combine_v4";
+export const COMBINE_VERSION = "control_combine_v5";
 
 export type Outcome = "applied" | "proposal" | "unresolved" | "none";
 
@@ -96,6 +96,10 @@ const packetsOf = (as: readonly ReaderAnswer[]) => new Set(as.flatMap((a) => a.c
 export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
   const proposalPackets = new Set(u.bindings.filter((b) => b.proposal).map((b) => b.packet));
   const ambiguous = u.bindings.some((b) => b.ambiguous);
+  // Packets bound with a doubt (C5's proposals, or one of several packets of
+  // a kind bound equally), and the equally bound ones.
+  const doubtful = new Set(u.bindings.filter((b) => b.proposal || b.ambiguous).map((b) => b.packet));
+  const equallyBound = u.bindings.filter((b) => b.ambiguous && !b.proposal).map((b) => b.packet);
   const allProposal = u.bindings.length > 0 && u.bindings.every((b) => b.proposal);
   // A title binds the unit to a packet, and nothing about it is doubtful.
   const titled = u.bindings.some((b) => TITLE_KINDS.has(b.kind) && !b.proposal && !b.ambiguous);
@@ -146,6 +150,12 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
     const deciding = as.filter((a) => vote(a, q));
     const citedPackets = packetsOf(deciding);
     const viaProposal = citedPackets.size ? [...citedPackets].every((p) => proposalPackets.has(p)) : allProposal;
+    // Read only through doubtful packets, and not in every packet bound
+    // equally: those packets may be other units' ("VAV BOX SEQUENCE OF
+    // OPERATION" twice on a sheet, one for boxes with reheat and one for
+    // cooling-only boxes). Every equally bound packet saying so applies.
+    const viaOneOfSeveral = citedPackets.size > 0 && [...citedPackets].every((p) => doubtful.has(p)) && equallyBound.some((p) => !citedPackets.has(p));
+    const doubt = viaProposal || viaOneOfSeveral;
     const role = q.kind === "role" && value === "out" ? { role: roleOf() } : {};
     // Absence (C9): a false no reader reads explicitly.
     const explicitFalse = votes.filter((v) => v.value === false && !v.absence);
@@ -163,13 +173,15 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
     // A whitelisted deterministic reading, alone.
     const white = [r0, rp].find((a) => a?.whitelisted && readers.length === 1 && readers[0] === a.reader);
     if (white) {
-      out.push({ ...base, ...role, outcome: viaProposal ? "proposal" : "applied", value, rule: `drawing_read:${white.rule}`, why: white.reader === "rp" ? "a device symbol drawn inside the zone the unit's tag labels on the zone plan" : "a whitelisted phrase of the unit's own packet" });
+      out.push({ ...base, ...role, outcome: doubt ? "proposal" : "applied", value, rule: `drawing_read:${white.rule}`, why: white.reader === "rp" ? "a device symbol drawn inside the zone the unit's tag labels on the zone plan" : "a whitelisted phrase of the unit's own packet" });
       continue;
     }
     if (readers.length >= 2) {
       const absent = votes.filter((v) => v.absence).map((v) => v.reader);
       const agree = absent.length ? `${explicitFalse.map((v) => v.reader).join(" and ")} read it false, and ${absent.join(" and ")} ${absent.length > 1 ? "find" : "finds"} no mention of it` : `${readers.join(" and ")} agree`;
-      out.push({ ...base, ...role, outcome: viaProposal ? "proposal" : "applied", value, rule: `drawing_read:agree(${readers.join(",")})`, why: viaProposal ? "the readers agree, but only through a family detail whose qualifier the row does not print (C5)" : agree });
+      const why = viaProposal ? "the readers agree, but only through a family detail whose qualifier the row does not print (C5)"
+        : viaOneOfSeveral ? "the readers agree, but only in one of the packets bound to the unit equally, which may be another kind of unit's" : agree;
+      out.push({ ...base, ...role, outcome: doubt ? "proposal" : "applied", value, rule: `drawing_read:agree(${readers.join(",")})`, why });
       continue;
     }
     out.push({ ...base, ...role, outcome: "proposal", value, rule: `drawing_read:single(${readers[0]})`, why: `${readers[0]} alone` });
