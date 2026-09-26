@@ -99,7 +99,10 @@ const keyString = (k: TagKey) => `${k.prefix}-${k.n}${k.suffix}`;
  * "THRU" between; any other word ends it. A mark printed with a space
  * ("DOAS 3 P&ID", "DOAS 1&2 P&ID") is a tag when its letters and number make
  * a scheduled unit's mark: never a number or word that happens to follow
- * ("LEVEL 2", "VAV 100% OA" beside no VAV-100). */
+ * ("LEVEL 2", "VAV 100% OA" beside no VAV-100). A bare mark right after
+ * SEQUENCE names the sequence, not a unit ("SEQUENCE "B1"", "SEQUENCE B1:",
+ * "SEQUENCE NO. 3": a sequence the schedule refers to, or a construction
+ * phase). */
 export function titleTags(title: string, scheduled: readonly TagKey[]): Array<{ key: TagKey; how: "tag" | "list_range" }> {
   const text = repairSpacing(title).replace(/[‐-―−﹘﹣－]/g, "-");
   // A qualified mark ("EF-B1", "WHSE-AHU-1") is one tag, never its mark alone.
@@ -113,11 +116,20 @@ export function titleTags(title: string, scheduled: readonly TagKey[]): Array<{ 
   let last: TagKey | null = null;
   let pending: "list" | "range" | null = null;
   let word: string | null = null;
+  let afterSequence = false;
   for (const tok of toks) {
     const t = tok.replace(/\s+/g, "");
     const prev = last as TagKey | null;
     const before = word;
     word = /^[A-Z]{1,6}$/.test(t) ? t : null;
+    // A sequence's own name: the bare mark after SEQUENCE (a quote, NO. or #
+    // between).
+    if (/^(?:SEQUENCE|SEQ\.?)$/.test(t)) { afterSequence = true; last = null; pending = null; continue; }
+    if (afterSequence && /^(?:["'“”]|NO\.?|#)$/.test(t)) continue;
+    if (afterSequence) {
+      afterSequence = false;
+      if (/^[A-Z]{0,3}\d{1,3}[A-Z]?$|^[A-Z]$/.test(t)) { last = null; pending = null; word = null; continue; }
+    }
     const spaced = before && !pending && /^\d{1,4}[A-Z]{0,2}$/.test(t) ? tagKey(`${before}-${t}`) : null;
     const k: TagKey | null = /^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(t) ? tagKey(t)
       : spaced && marks.has(keyString(spaced)) ? spaced

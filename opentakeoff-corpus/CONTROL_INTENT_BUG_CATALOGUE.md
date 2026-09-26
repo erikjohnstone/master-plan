@@ -812,3 +812,28 @@ The qualifier check is doing its work there. Three groups were never qualifiers:
 
 **Watch:** the packet "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC" also takes in a heat recovery chiller's
 sequence printed above it (its region is the finder's, CI-26). Nothing was read from that part for the unit heaters.
+
+## CI-30: "SEQUENCE B1:", a construction phase, bound boiler B-1 by its tag (FIXED, next commit)
+
+**Found:** 2026-09-26, the census of the drawings that bind nothing. 03_FL's lettered sequences ("SEQUENCE "A"",
+"SEQUENCE "B1"", "SEQUENCE B1:" … "SEQUENCE D:") are construction phasing notes ("SEQUENCE B1: SCOPE OF WORK WILL BE
+LIMITED TO ALL RENOVATION EFFORTS IN BOTH AREAS "B1" AND "B2". TEMPORARY RELOCATION OF OCCUPANTS…"). The finder
+takes them as sequences, and the binder read "B1" as the tag of the set's one boiler, B-1. Nothing was applied
+through them. The binding was still wrong, and it kept CI-27 from giving B-1 its heating water sequence, since B-1
+"had" a sequence.
+
+**Fix (`binding.ts`, `titleTags`):** a bare mark right after SEQUENCE (or SEQ.; a quote, "NO." or "#" between) names
+the sequence: a sequence a schedule refers to by letter or number, or a construction phase. It is never a unit's
+tag. A hyphenated tag after SEQUENCE ("SEQUENCE AHU-1") and a tag list after "SEQUENCE OF OPERATION:" still name
+their units.
+
+**Checked:**
+- The new binder test fails without the fix.
+- Over the non-held-out sets, only 03_FL's B-1 changes: the two phasing notes drop, and B-1 is bound to "SEQUENCE OF
+  OPERATIONS HEATING WATER SYSTEM" and "HOT WATER SYSTEM CONTROL SCHEMATIC", which print its tag ("CONDENSING BOILER
+  (B - 1)"). The dev documents' bindings are byte-identical.
+- 03_FL read live: 17 applied before and after, none new and none lost. The 53 unseen sets replayed: 412 applied,
+  412 right. Dev replay unchanged; held-out B1 unchanged (aggregates).
+
+**Watch:** the finder still takes a phasing note titled "SEQUENCE …" for a sequence of operation (CI-26's finder
+batch). Only the false binding is fixed here.

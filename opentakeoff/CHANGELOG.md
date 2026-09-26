@@ -152,6 +152,16 @@
   variable speed wheels and role; fan coils' role; cabinet unit heaters'
   modulating valve. 412 of 412 across the 53 unseen sets.
 
+  **A mark right after SEQUENCE names the sequence.** "SEQUENCE B1:" and
+  'SEQUENCE "B1"' on one unseen set are construction phasing notes
+  ("…RENOVATION EFFORTS IN BOTH AREAS "B1" AND "B2""), and the binder read
+  "B1" as boiler B-1's tag. A bare mark after SEQUENCE (or SEQ., NO., #, a
+  quote) now names the sequence, a construction phase or a sequence the
+  schedule refers to, never a unit; a hyphenated tag ("SEQUENCE AHU-1")
+  still does. The boiler now binds to the heating water sequence and
+  schematic that print its tag. Nothing applied changes (412 of 412), and
+  the dev bindings are byte-identical.
+
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
   a child process, decoded per read, so a "°" falling on a 64 KiB boundary

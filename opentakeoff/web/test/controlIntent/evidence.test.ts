@@ -510,3 +510,20 @@ test("what a title says about the drawing is no qualifier (BAS INTERFACE); a hea
   const two = bindPackets([packet("p", "2-PIPE FAN COIL UNIT CONTROL DIAGRAM", "diagram")], [unit(0, "FCU-01", "FCU", "TWO-PIPE FAN COIL UNIT SCHEDULE")]);
   assert.deepEqual(kinds(two, 0), [["p", "family_detail", false]]);
 });
+
+test("a bare mark right after SEQUENCE names the sequence, not a unit: a construction phase or a sequence the schedule refers to is no boiler B-1's", () => {
+  const sched = ["B-1", "HP-1A", "HP-2A", "AHU-1"].map((t) => tagKey(t)!);
+  const tags = (t: string) => titleTags(t, sched).map((x) => `${x.key.prefix}-${x.key.n}${x.key.suffix}`);
+  assert.deepEqual(tags('SEQUENCE "B1"'), []);
+  assert.deepEqual(tags("SEQUENCE B1:"), []);
+  assert.deepEqual(tags("SEQUENCE NO. 3"), []);
+  assert.deepEqual(tags("B-1 SEQUENCE OF OPERATION"), ["B-1"]);
+  assert.deepEqual(tags("SEQUENCE OF OPERATION: HP-1A, HP-2A"), ["HP-1A", "HP-2A"]);
+  assert.deepEqual(tags("SEQUENCE AHU-1"), ["AHU-1"], "a hyphenated tag is still the unit's");
+  // A phasing note titled "SEQUENCE B1:" binds no boiler; the heating water
+  // sequence that prints the boiler's tag does.
+  const phase = packet("ph", "SEQUENCE B1:", "sequence", [sp("SEQUENCE B1: SCOPE OF WORK WILL BE LIMITED TO ALL RENOVATION EFFORTS IN AREAS B1 AND B2.", 0, 20)]);
+  const hw = packet("hw", "SEQUENCE OF OPERATIONS HEATING WATER SYSTEM", "sequence", [sp("ONE (1) CONDENSING BOILER (B-1)", 0, 20)]);
+  const b = bindPackets([phase, hw], [unit(0, "B-1", "BOILER", "CONDENSING BOILER SCHEDULE")]);
+  assert.deepEqual(b.get(0)?.map((x) => [x.packet, x.kind]), [["hw", "tag_body"]]);
+});
