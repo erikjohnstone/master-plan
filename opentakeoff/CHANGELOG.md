@@ -196,6 +196,16 @@
   - GATE D's live re-run changes 2.8% of dev decisions (the limit is 2%), none
     to a wrong value.
 
+  **The hygiene scan also finds a held-out drafter by its web address.**
+  038_NC prints the Coffman Engineers logo as an image, so its text layer
+  names the firm only as "www.coffman.com", on all 54 sheets. Coffman
+  drafted a held-out document, and the scan, which matched the firm's
+  printed name only, let 038_NC through as unseen. It now matches the
+  address too; 038_NC is a held-out drafter's document. The audit had read
+  it (4 units, 3 control drawings) and applied nothing there. A set that
+  stops being unseen now leaves the audit's record, decisions and all, and
+  the record keeps naming it.
+
 - **Eval harness: a scorer's per-set child no longer re-scores its set
   forever** (AS-15). Each corpus-eval scorer (`takeoff-eval`, `graph-eval`,
   `tag-eval`, `table-recall-eval`), and `reference-eval` and

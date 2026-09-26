@@ -6,6 +6,7 @@
   ],
   "heldout_drafter": [
    "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+   "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
    "075_MT_Renne_Library_Innovation_Learning_Studio",
    "27_WA_ColvilleTribes_Hatchery_Lab"
   ],
@@ -120,14 +121,21 @@
    "relation": "drafter",
    "of": "coffman-engineers",
    "side": "heldout",
-   "pages": 1
+   "pages": 36
+  },
+  {
+   "set": "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+   "relation": "drafter",
+   "of": "coffman-engineers",
+   "side": "heldout",
+   "pages": 54
   },
   {
    "set": "075_MT_Renne_Library_Innovation_Learning_Studio",
    "relation": "drafter",
    "of": "coffman-engineers",
    "side": "heldout",
-   "pages": 1
+   "pages": 3
   },
   {
    "set": "27_WA_ColvilleTribes_Hatchery_Lab",

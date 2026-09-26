@@ -77,10 +77,15 @@ export function compareWithRecord(applied, record) {
 /** A run over some sets (`ids`) against the record: it is compared with
  * those sets' part of the record only, and the record it leaves keeps every
  * other set's decisions, verdicts and status as they were. A new decision is
- * "unaudited" until a person checks it. */
-export function mergeRun(record, ids, sets, applied) {
+ * "unaudited" until a person checks it. A set that is no longer unseen (not
+ * in `eligible`: a later hygiene scan found it a held-out drafter's, or a
+ * dev draw took it) is withdrawn from the record, decisions and all. */
+export function mergeRun(record, ids, sets, applied, eligible = null) {
   const inRun = new Set(ids);
-  const prior = record.decisions ?? [];
+  const still = (id) => !eligible || eligible.includes(id);
+  // The record keeps naming what it withdrew, so the audit's history stays visible.
+  const withdrawn = [...new Set([...(record.totals?.withdrawn ?? []), ...(record.sets ?? []).map((s) => s.id), ...(record.decisions ?? []).map((r) => r.set)])].filter((id) => !still(id));
+  const prior = (record.decisions ?? []).filter((r) => still(r.set));
   const cmp = compareWithRecord(applied, prior.filter((r) => inRun.has(r.set)));
   const kept = prior.filter((r) => !inRun.has(r.set));
   const had = new Map(prior.map((r) => [decisionKey(r), r]));
@@ -88,7 +93,7 @@ export function mergeRun(record, ids, sets, applied) {
     const h = had.get(decisionKey(d));
     return { set: d.set, tag: d.tag, family: d.family, question: d.question, value: d.value, rule: d.rule, readers: d.readers, cite: d.cite, verdict: h?.verdict ?? "unaudited", ...(h?.checked ? { checked: h.checked } : {}), ...(h?.note ? { note: h.note } : {}) };
   })];
-  return { cmp, kept, decisions, sets: [...(record.sets ?? []).filter((s) => !inRun.has(s.id)), ...sets] };
+  return { cmp, kept, decisions, sets: [...(record.sets ?? []).filter((s) => !inRun.has(s.id) && still(s.id)), ...sets], withdrawn };
 }
 
 async function main() {
@@ -156,7 +161,7 @@ async function main() {
   // A run over some of the sets is compared with their part of the record
   // only, and --report rewrites only that part: the other sets' decisions,
   // verdicts and statuses stay as recorded.
-  const merged = mergeRun(recordFile, ids, sets, applied);
+  const merged = mergeRun(recordFile, ids, sets, applied, eligible);
   const { cmp } = merged;
   const count = (xs, v) => xs.filter((d) => d.verdict === v).length;
   const summary = (setList, kept) => {
@@ -173,6 +178,7 @@ async function main() {
     for (const d of [...k, ...cmp.audited].filter((x) => x.verdict === "wrong")) L.push(`  WRONG ${d.set.slice(0, 24)} ${d.tag} ${d.question}=${JSON.stringify(d.value)} [${d.rule}]`);
     const perSet = read.filter((s) => s.applied).sort((a, b) => b.applied - a.applied).map((s) => `${s.id.slice(0, 6)} ${s.applied}`).join(", ");
     if (perSet) L.push(`  per set: ${perSet}`);
+    if (merged.withdrawn.length) L.push(`  withdrawn from the record, no longer unseen: ${merged.withdrawn.join(", ")}`);
     return L;
   };
   // What this run read; with --report, the record after it.
@@ -183,7 +189,7 @@ async function main() {
     const out = {
       about: "Every decision the readers apply on the unseen corpus sets, with a person's verdict against its cites and the drawing (right, wrong, or unaudited until checked). mcp/scripts/control-intent-unseen-audit.mjs replays the recorded runs (unseen-runs/) and compares.",
       sets: allSets,
-      totals: { eligible: eligible.length, read: allSets.filter((s) => s.status === "read").length, applied: decisions.length, right: count(decisions, "right"), wrong: count(decisions, "wrong"), unaudited: decisions.length - count(decisions, "right") - count(decisions, "wrong"), gone: cmp.gone.map((d) => ({ set: d.set, tag: d.tag, question: d.question, value: d.value, rule: d.rule })) },
+      totals: { eligible: eligible.length, read: allSets.filter((s) => s.status === "read").length, applied: decisions.length, right: count(decisions, "right"), wrong: count(decisions, "wrong"), unaudited: decisions.length - count(decisions, "right") - count(decisions, "wrong"), gone: cmp.gone.map((d) => ({ set: d.set, tag: d.tag, question: d.question, value: d.value, rule: d.rule })), ...(merged.withdrawn.length ? { withdrawn: merged.withdrawn } : {}) },
       decisions,
     };
     writeFileSync(recordPath, `${JSON.stringify(out, null, 1)}\n`);

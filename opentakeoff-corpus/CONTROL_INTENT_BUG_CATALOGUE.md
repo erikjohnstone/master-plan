@@ -888,3 +888,31 @@ about what counts changed: a retry's answers pass the same label check (CI2) and
   (unchanged); 13 proposals right, 6 wrong; 228 abstained. Vision run a: 41 right, 9 wrong, 29 abstained, 2
   unverified (was 28 and 1). GATE C 33/91, unchanged. B1 is not re-measured: no binding changed.
 - Tests: web control intent and assemblies 215/215; the new record test fails without the retry.
+
+## CI-32: a held-out drafter's document read as unseen, because its title block prints the firm's logo as an image (PROCESS NOTE; FIXED, next commit)
+
+**Found:** 2026-09-26, while naming the drafter of every eligible unseen document for the assemblies second tier
+(AS-17). 038_NC's text layer carries "www.coffman.com" on all 54 sheets, and a render of its title block shows why:
+the Coffman Engineers logo is an image, with the Raleigh office's address and web address as text under it. Coffman
+drafted held-out `30_WA_SpokaneTransit_CoolingTower`. `corpus-hygiene.py` matched the firm's printed name
+(`COFFMAN\s+ENGINEERS`) only, so 038_NC stayed eligible. 034_NC, the same VA project, was already withheld on the
+one sheet that spells the name out.
+
+**Exposure:** the unseen audit read 038_NC: 4 scheduled units, 3 control packets, their model runs recorded, 0
+decisions applied. No decision there was checked, no fix cites it, and it fed only the aggregate recall censuses.
+The exposure of `30_WA` through Coffman was already disclosed (CI-16, through 27_WA).
+
+**Fix:**
+- `corpus-hygiene.py`: a held-out firm's pattern also matches its web address (`COFFMAN\.COM`, `BURNSMCD\.COM`).
+  The rescan adds 038_NC (54 sheets) and finds 034_NC on 36 sheets (was 1) and 075_MT on 3 (was 1); nothing else
+  moves.
+- A search of every eligible document's text (up to 300 pages each) for the five held-out firms by the looser
+  tokens "COFFMAN", "BURNS … MCDONNELL", "BURNSMCD", "CROCKETT", "TIMBERLAKE", "U.P. ENGINEERS", "UPENGINEERS",
+  "STONEVILLE" and "SOUTHEAST AREA" finds 038_NC's address and nothing else. A firm printed only as an image, with
+  no name or address in the text layer, is beyond any text scan; the second tier's draw checks the title-block render
+  of every document it keys (AS-17).
+- `control-intent-unseen-audit.mjs`: a set that is no longer eligible leaves the audit's record with its decisions,
+  and the record keeps naming it under `totals.withdrawn`. Before, a full run kept a withdrawn set's old entry as if
+  it had not been part of the run. Test: `controlIntentUnseenAudit.test.mjs` (4/4).
+- The audit record drops 038_NC at its next run.
+

@@ -42,10 +42,13 @@ WORD = re.compile(r"[A-Z0-9]{2,}")
 NEAR = 0.15
 MAX_PAGES = 300
 # The printed name of each held-out drafter group's firm, as its title
-# blocks print it (reports/assemblies/drafters.json quotes the evidence).
+# blocks print it (reports/assemblies/drafters.json quotes the evidence), and
+# its web address: a title block whose firm logo is an image carries only the
+# address in its text layer (038_NC prints the Coffman Engineers logo as an
+# image and "www.coffman.com" as text, on every sheet).
 FIRM_TEXT = {
-    "burns-mcdonnell": r"BURNS\s*(?:&|AND)?\s*MC\s*DONNELL",
-    "coffman-engineers": r"COFFMAN\s+ENGINEERS",
+    "burns-mcdonnell": r"BURNS\s*(?:&|AND)?\s*MC\s*DONNELL|BURNSMCD\.COM",
+    "coffman-engineers": r"COFFMAN\s+ENGINEERS|COFFMAN\.COM",
     "crockett-engineering": r"CROCKETT\s+ENGINEERING|TIMBERLAKE\s+ENGINEERING",
     "up-engineers-architects": r"U\.?\s*P\.?\s+ENGINEERS",
     "usda-ars-southeast-area": r"SOUTHEAST\s+AREA|STONEVILLE",

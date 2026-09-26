@@ -58,3 +58,22 @@ test("a run over some sets is compared with their part of the record only, and l
   assert.deepEqual(all.kept, []);
   assert.deepEqual(all.cmp.gone.map((x) => `${x.set} ${x.tag}`), ["a EF-1", "b P-1"]);
 });
+
+test("a set that is no longer unseen leaves the record with its decisions, and the record keeps naming it", () => {
+  const d = (set, tag, question, value, rule = "drawing_read:agree(r0,r1)") => ({ set, tag, question, value, rule });
+  const record = {
+    sets: [{ id: "a", status: "read", applied: 1 }, { id: "d", status: "read", applied: 1 }, { id: "e", status: "no_scheduled_units" }],
+    decisions: [{ ...d("a", "AHU-1", "role", "in"), verdict: "right" }, { ...d("d", "EF-1", "role", "in"), verdict: "right" }],
+  };
+  // A later hygiene scan finds set d a held-out drafter's and a dev draw takes set e: neither is eligible now.
+  const m = mergeRun(record, ["a"], [{ id: "a", status: "read", applied: 1 }], [d("a", "AHU-1", "role", "in")], ["a", "b"]);
+  assert.deepEqual(m.withdrawn, ["d", "e"]);
+  assert.deepEqual(m.decisions.map((x) => `${x.set} ${x.tag} ${x.verdict}`), ["a AHU-1 right"]);
+  assert.deepEqual(m.sets.map((s) => s.id), ["a"]);
+  assert.deepEqual([m.cmp.new.length, m.cmp.gone.length], [0, 0]);
+  // The next run's record no longer holds d or e, and still names them.
+  const next = mergeRun({ sets: m.sets, decisions: m.decisions, totals: { withdrawn: m.withdrawn } }, ["a", "b"], [{ id: "a", status: "read", applied: 1 }, { id: "b", status: "no_snapshot" }], [d("a", "AHU-1", "role", "in")], ["a", "b"]);
+  assert.deepEqual(next.withdrawn, ["d", "e"]);
+  // Without an eligible list nothing is withdrawn.
+  assert.deepEqual(mergeRun(record, ["a"], [], [], null).withdrawn, []);
+});
