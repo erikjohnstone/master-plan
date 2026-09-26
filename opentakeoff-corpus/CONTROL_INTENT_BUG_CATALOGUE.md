@@ -765,3 +765,50 @@ A narrower attribution rule was tried and rejected: in a packet that prints othe
 a clause printing its tag would speak for it. It blocks EF-5, but it also loses a right decision (03_FL HWP-1's
 role, read in its system sequence's "SECONDARY HOT WATER PUMP START/STOP: THE DDC CONTROLLER SHALL START THE HOT
 WATER PUMP"), and it would cost system sequences generally. The fix ships with CI-26's finder split.
+
+## CI-29: words that say what a drawing is, and a unit's own variant, left its detail a proposal (FIXED, next commit)
+
+**Found:** 2026-09-26, the proposal census again (209 units bound only by proposals after CI-27), now grouped by
+whether another detail contests the unit's and whether its row contradicts the qualifier. Confirming every
+uncontested, uncontradicted proposal was measured and rejected: it would confirm a gatehouse fan on "GENERATOR
+EXHAUST FAN POINTS LIST" (CI-17's case), condensate pumps on "DOMESTIC WATER BOOSTER PUMP SEQUENCE", exhaust fans on
+"DESTRATIFICATION FAN DDC CONTROL DIAGRAM" and general fan coils on "TELECOM ROOM FAN COIL UNITS CONTROL SCHEMATIC".
+The qualifier check is doing its work there. Three groups were never qualifiers:
+- 14_OR titles its sequences "… - SEQUENCE OF OPERATION & BAS INTERFACE". "INTERFACE" was left as a qualifier, so its
+  20 fan coils, 4 DOAS units and 3 electric heaters took their own sequences as proposals.
+- 096_IN's "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC" and "FAN COIL UNIT (HEATING AND COOLING) CONTROL
+  SCHEMATIC": a unit heater's schedule has no cooling columns to confirm "heating only", and "heating and cooling"
+  was no variant CI-15 read.
+- 030_NY's "2-PIPE FAN COIL UNIT CONTROL DIAGRAM" beside its "TWO-PIPE FAN COIL UNIT SCHEDULE".
+
+**Fix (`binding.ts`):**
+- "BAS INTERFACE" (or BMS, DDC, EMS, EMCS, FMCS) says what the drawing is, as "P&ID" does: no qualifier.
+- "(HEATING AND COOLING)" names both parts CI-15 reads from the row's coil columns. It is confirmed when the row fills
+  both, and contradicted when the row's cooling columns are empty while a peer's are filled.
+- A kind that never cools (a unit heater, a cabinet unit heater, finned tube) is its "HEATING ONLY" variant with no
+  column to say so; a fan coil that fills its cooling columns is not.
+- "2-PIPE" is "TWO-PIPE", and "4-PIPE" is "FOUR-PIPE".
+
+**Checked:**
+- The new binder test fails without the fix.
+- Over the non-held-out sets, 38 bindings change in 3 sets and none elsewhere:
+  - 14_OR's 27 units and 096_IN's 8 take their details as confirmed;
+  - 030_NY's two-pipe fan coil takes the two-pipe diagram, and loses the two telecom room diagrams it held as
+    ambiguous proposals (its row names no telecom room).
+  The dev documents' bindings are byte-identical.
+- Read live: 42 more readings apply, all right against their cites and the drawings, and none is lost:
+  - 14_OR DOAS-1 to DOAS-4, role: "THE BUILDING AUTOMATION SYSTEM (BAS) WILL SEND OCCUPIED, UNOCCUPIED, OPTIMAL
+    START, NIGHT HEAT / COOL AND TIMED OVERRIDE COMMANDS";
+  - their duct smoke detectors: "SUPPLY FANS SHALL SHUT DOWN WHENEVER THE RELATED DUCT SMOKE DETECTOR ALARMS";
+  - their exhaust fans: "… TO CONTROL ALL DOAS UNIT COMPONENTS INCLUDING SUPPLY FANS, EXHAUST FANS, ENERGY RECOVERY
+    WHEEL, AND COIL CONTROL VALVES";
+  - their variable speed wheels: "THE ENERGY RECOVERY WHEEL IS ENABLED AND SPEED IS MODULATED VIA VFD AND OUTPUT
+    SIGNAL FROM BAS";
+  - 14_OR's 18 fan coils, role: the same BAS commands;
+  - 096_IN FCU-1 to FCU-3, role: the schematic's AO-1, AO-2 and BO-1;
+  - 096_IN CUH-1 to CUH-5 (hot water: 140 °F entering, 110 °F leaving), a modulating valve: "BELOW 55° OAT THE UNIT
+    COIL VALVE IS MODULATED TO ACHIEVE A SPACE TEMPERATURE SET AT 70°", printed in the unit heater detail's own column.
+- The 53 unseen sets replayed: 412 applied, 412 right. Dev replay unchanged: 227/244; 291 applied, 0 applied-wrong.
+
+**Watch:** the packet "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC" also takes in a heat recovery chiller's
+sequence printed above it (its region is the finder's, CI-26). Nothing was read from that part for the unit heaters.

@@ -140,6 +140,18 @@
   chillers' role and chilled water isolation valve, a chilled water pump's
   role): 370 of 370 across the 53 unseen sets.
 
+  **Words that say what a drawing is, and a unit's own variant, are no
+  qualifiers.** "BAS INTERFACE" in "FAN COIL UNITS - SEQUENCE OF OPERATION &
+  BAS INTERFACE" says what the drawing is, as "P&ID" does. "(HEATING AND
+  COOLING)" is read from the row's coil columns, as "COOLING ONLY" is. A
+  unit heater never cools, so "(HEATING ONLY)" is its own variant with no
+  column to say so, and "2-PIPE" is "TWO-PIPE". Each had left a unit's own
+  detail a proposal. Over the unseen sets, 38 bindings change in 3 sets and
+  none elsewhere; the dev bindings are byte-identical. Read live, 42 more
+  readings apply, all right: DOAS units' smoke detectors, exhaust fans,
+  variable speed wheels and role; fan coils' role; cabinet unit heaters'
+  modulating valve. 412 of 412 across the 53 unseen sets.
+
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
   a child process, decoded per read, so a "°" falling on a 64 KiB boundary

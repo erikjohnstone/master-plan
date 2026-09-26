@@ -485,3 +485,28 @@ test("a hydronic plant's drawings bind its equipment: chillers, boilers and towe
   ]);
   assert.deepEqual([0, 1, 2].map((i) => listed.get(i)?.map((x) => x.kind) ?? null), [["list_range"], null, ["list_range"]]);
 });
+
+test("what a title says about the drawing is no qualifier (BAS INTERFACE); a heating-and-cooling variant is read from the row's coil columns; a kind that never cools is heating only; 2-PIPE is TWO-PIPE", () => {
+  const kinds = (b: Map<number, Array<{ packet: string; kind: string; proposal?: true }>>, i: number) => (b.get(i) ?? []).map((x) => [x.packet, x.kind, Boolean(x.proposal)]);
+  // A sequence "& BAS INTERFACE" is the family's, with nothing left to confirm.
+  const fcus = [unit(0, "FC-101", "FCU", "FAN COIL UNIT SCHEDULE"), unit(1, "FC-102", "FCU", "FAN COIL UNIT SCHEDULE")];
+  const bi = bindPackets([packet("s", "FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE", "sequence")], fcus);
+  assert.deepEqual([kinds(bi, 0), kinds(bi, 1)], [[["s", "family_detail", false]], [["s", "family_detail", false]]]);
+  // "(HEATING AND COOLING)": the row fills both coils' columns; a fan coil
+  // whose cooling columns are empty while a peer's are filled is the other
+  // variant.
+  const coils = (hw: string, chw: string) => ({ "HEATING COIL GPM": hw, "COOLING COIL GPM": chw });
+  const hc = [unit(0, "FCU-1", "FCU", "FAN COIL UNIT SCHEDULE", coils("2.0", "4.5")), unit(1, "FCU-2", "FCU", "FAN COIL UNIT SCHEDULE", coils("2.0", "-"))];
+  const bhc = bindPackets([packet("d", "FAN COIL UNIT (HEATING AND COOLING) CONTROL SCHEMATIC", "diagram")], hc);
+  assert.deepEqual(kinds(bhc, 0), [["d", "family_detail", false]]);
+  assert.equal(bhc.get(1), undefined, "FCU-2 has no cooling coil");
+  // "(HEATING ONLY)": a unit heater never cools; a fan coil with a cooling
+  // coil is not the heating-only variant.
+  const uh = bindPackets([packet("u", "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC", "diagram")], [unit(0, "CUH-1", "UNIT_HEATER", "UNIT HEATER SCHEDULE", { DESCRIPTION: "CABINET UNIT HEATER" })]);
+  assert.deepEqual(kinds(uh, 0), [["u", "family_detail", false]]);
+  const fho = bindPackets([packet("f", "FAN COIL UNIT (HEATING ONLY) CONTROL SCHEMATIC", "diagram")], hc);
+  assert.equal(fho.get(0), undefined, "FCU-1 cools");
+  // A number spelled out is the same number.
+  const two = bindPackets([packet("p", "2-PIPE FAN COIL UNIT CONTROL DIAGRAM", "diagram")], [unit(0, "FCU-01", "FCU", "TWO-PIPE FAN COIL UNIT SCHEDULE")]);
+  assert.deepEqual(kinds(two, 0), [["p", "family_detail", false]]);
+});

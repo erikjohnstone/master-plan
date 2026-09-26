@@ -224,6 +224,8 @@ const SYNONYMS: string[][] = [
   ["MINIMUM", "MIN"],
   ["MAXIMUM", "MAX"],
   ["RADIATION", "RADIATOR", "RADIATORS"],
+  ["TWO PIPE", "TWO-PIPE", "2-PIPE", "2 PIPE"],
+  ["FOUR PIPE", "FOUR-PIPE", "4-PIPE", "4 PIPE"],
 ];
 const expand = (w: string): string[] => SYNONYMS.find((g) => g.includes(w)) ?? [w];
 
@@ -286,8 +288,10 @@ const SPLIT = /\bSPLIT\b/;
 /** Words in a title that say how the work is bought or how the unit is
  * switched, never what it is: a bid alternate ("BID ALTERNATE #2",
  * "ALTERNATE 3", "BASE BID"; CSI MasterFormat 01 23 00 Alternates) and
- * two-position control ("ON/OFF", "ON OFF"). */
-const NOT_SUBJECT = /\b(?:(?:BID|ADD|DEDUCT)\s+)?ALTERNATES?\s*(?:NO\.?\s*|#\s*)?\d{1,2}[A-Z]?\b|\b(?:BID|ADD|DEDUCT)\s+ALTERNATES?\b|\bBASE\s+BID\b|\bON\s?[-\/]?\s?OFF\b|\bP\s?&\s?ID\b/g;
+ * two-position control ("ON/OFF", "ON OFF"); or what the drawing is: a
+ * piping and instrumentation diagram (P&ID), its interface to the BAS
+ * ("SEQUENCE OF OPERATION & BAS INTERFACE"). */
+const NOT_SUBJECT = /\b(?:(?:BID|ADD|DEDUCT)\s+)?ALTERNATES?\s*(?:NO\.?\s*|#\s*)?\d{1,2}[A-Z]?\b|\b(?:BID|ADD|DEDUCT)\s+ALTERNATES?\b|\bBASE\s+BID\b|\bON\s?[-\/]?\s?OFF\b|\bP\s?&\s?ID\b|\b(?:BAS|BMS|DDC|EMS|EMCS|FMCS)\s+INTERFACE\b/g;
 
 /** An abbreviation a title defines for its own words ("HEAT PUMP TERMINAL
  * UNIT (HP)": the letters are the initials of two or more words right
@@ -417,17 +421,20 @@ function tagFit(k: TagKey, u: RowUnit, title: string, sharing: readonly RowUnit[
 /** Parts a unit may or may not carry, by which a detail's title names a
  * variant of its kind (ASHRAE Guideline 36 names VAV terminal units "cooling
  * only" and "with reheat"; fan coils and unit ventilators are drawn "with
- * electric heat"), and the schedule columns that describe each part. */
-const PARTS: ReadonlyArray<{ has: RegExp; lacks: RegExp; header: RegExp }> = [
+ * electric heat", or "heating and cooling"), and the schedule columns that
+ * describe each part. A kind that never carries a part (a unit heater never
+ * cools) is its "only" variant with no column to say so. */
+const PARTS: ReadonlyArray<{ has: RegExp; lacks: RegExp; header: RegExp; never?: ReadonlySet<string> }> = [
   { // heating: a reheat or heating coil, an electric heater
-    has: /\b(?:WITH|W\/)\s+(?:(?:HOT\s+WATER|HW|HHW|HYDRONIC|ELECTRIC|ELEC\.?)\s+)?(?:RE-?HEAT(?:ING)?(?:\s+COILS?)?|HEATING(?:\s+COILS?)?|HEAT(?:ERS?)?|(?:HOT\s+WATER|HW|HHW)\s+COILS?)\b/,
+    has: /\b(?:WITH|W\/)\s+(?:(?:HOT\s+WATER|HW|HHW|HYDRONIC|ELECTRIC|ELEC\.?)\s+)?(?:RE-?HEAT(?:ING)?(?:\s+COILS?)?|HEATING(?:\s+COILS?)?|HEAT(?:ERS?)?|(?:HOT\s+WATER|HW|HHW)\s+COILS?)\b|\bHEATING\s+(?:AND|&|\/)\s+COOLING\b/,
     lacks: /\bCOOLING[\s-]+ONLY\b|\b(?:NO|WITHOUT|W\/O)\s+(?:RE-?HEAT|HEAT(?:ING)?)\b/,
     header: /\bRE-?HEAT|\bHEATING\s+COIL|\b(?:HOT\s+WATER|HW|HHW)\s+COIL|\bELEC(?:TRIC)?\.?\s+HEAT/,
   },
   { // cooling: a chilled water or DX coil
-    has: /\b(?:WITH|W\/)\s+(?:(?:CHILLED\s+WATER|CHW|DX)\s+)?COOLING(?:\s+COILS?)?\b|\b(?:WITH|W\/)\s+(?:CHILLED\s+WATER|CHW|DX)\s+COILS?\b/,
+    has: /\b(?:WITH|W\/)\s+(?:(?:CHILLED\s+WATER|CHW|DX)\s+)?COOLING(?:\s+COILS?)?\b|\b(?:WITH|W\/)\s+(?:CHILLED\s+WATER|CHW|DX)\s+COILS?\b|\bHEATING\s+(?:AND|&|\/)\s+COOLING\b/,
     lacks: /\bHEATING[\s-]+ONLY\b|\b(?:NO|WITHOUT|W\/O)\s+COOLING\b/,
     header: /\bCOOLING\s+COIL|\b(?:CHILLED\s+WATER|CHW|DX)\s+COIL/,
+    never: new Set(["UNIT_HEATER", "CABINET_UNIT_HEATER", "FIN_TUBE_RADIATION"]),
   },
 ];
 /** A cell that prints nothing for its column. */
@@ -455,7 +462,7 @@ function partVariant(title: string, u: RowUnit, peers: readonly RowUnit[]): Set<
   for (const part of PARTS) {
     const has = part.has.exec(t), lacks = has ? null : part.lacks.exec(t);
     if (!has && !lacks) continue;
-    const row = carries(u, part.header, peers);
+    const row = carries(u, part.header, peers) ?? (part.never?.has(u.family) ? "lacks" : null);
     if (row === null) continue;
     if ((row === "has") !== Boolean(has)) return "contradicted";
     for (const w of subjectWords((has ?? lacks)![0])) words.add(w);
