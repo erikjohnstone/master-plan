@@ -1481,6 +1481,26 @@ The columns (normalize.ts):
 - Dev 3's unkeyed tables and rows: 13 changes, read by hand (017_MD's cooling
   coils: 6 host units gone from area served, 6 coil counts; 096_IN's KEF-1
   control without "SAFETY CABLE").
+- The control-intent unseen audit, re-run because the rows' notes feed the
+  binder and the row reader (`control-intent-unseen-audit.mjs --report`, every
+  set but 058_CA, whose compile this container cannot hold): 56 eligible sets
+  (dev 3's nine documents and 09_ME, a near copy of a dev-3 document, are
+  withdrawn from the record), 29 read, 93 applied, all 93 audited right, 0 new,
+  0 gone; 178 recorded calls replay, none missing. The 148 rows' notes change
+  no applied decision.
+- Two key-free sweeps over every cached compile (86 documents: dev, dev 2,
+  dev 3 and the unseen corpus; 1,705 rows, 7,695 values, 16,760 expanded
+  lines). Invariants: no apply throws; every value is its family's attribute,
+  finite, in its enum, and cites its own row's printed cell, except by design
+  (a pump's VFD cites the drive schedule's row; a split V/PH/HZ header is
+  cited as its joined cells); no line quantity is negative or non-finite.
+  Physics: water-side capacity against 0.5 × gpm × ΔT, coil and chiller
+  temperature direction, VAV minimum against maximum, phase and voltage,
+  boiler output against input, tons against MBH. Every flag read by hand is
+  faithful to its print: 028_TX's fan coils print "HP 8.0" beside "MCA 0.63",
+  044_NY prints 12,000 under "(MBH)" for a single-phase condensing unit,
+  14_OR's DOAS prints a 46 → 50.9 °F coil with 11 GPM for 83.2 MBH, small
+  reheat coils print their minimum GPM. No rule guesses past a printed unit.
 
 **The ceilings (OPEN; every remaining dev-3 miss is outside the normalizer):**
 - 071_ME's PACKAGED ROOF TOP UNIT SCHEDULE is compiled transposed (its items
