@@ -1,0 +1,68 @@
+# 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M-601 (page 23) of the Missouri National Guard Bellefontaine Readiness Center unheated storage building repairs, St. Louis MO (G&W Engineering), the tables the third tier's seed drew for its FAN and UNIT_HEATER strata.
+#   008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23 | FAN SCHEDULE * EQUAL TO GREENHECK | FAN | all 1 printed row | render: page 23 overview at 40 dpi; crop 1720,140,560,165 at 3x (the whole table and its notes); second read at 4x (crop 1720,218,560,22) of EF-1, every cell
+#   008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23 | GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE | UNIT_HEATER | all 2 printed rows | render: page 23 overview at 40 dpi; crop 1575,455,700,160 at 3x (the whole table and its notes); second read at 4x (crop 1575,520,700,36) of UH-1 and UH-2, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Model numbers, dampers, MOCP, heater input rating and flue diameter, weights, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated: 2 table(s), 3 instance(s), 50 keyed attribute value(s) (20 printed, 30 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,building,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,floor,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,area_served,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,qty,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,service,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,cfm,280,cfm,CFM,
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,esp_in,0.25,in. w.c.,"ESP ""W.C. HEIGHT",
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,motor_hp,0.1,hp,LOAD / HP (W),printed '0.10'
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,motor_watts,,W,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,rpm,1056,rpm,FAN RPM,
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,vfd,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,ecm,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,control,INTEGRAL FAN SPEED CONTROLLER,,"NOTE 1, where the row's NOTES cite it: the fan's speed controller","printed 'PROVIDE FACTORY-INSTALLED DISCONNECT SWITCH, INTEGRAL FAN SPEED CONTROLLER AND BIRD SCREEN.'; author's reading of the printed row"
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,volts,115,V,V/PH/HZ: volts part,author's reading of the printed row
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,FAN SCHEDULE * EQUAL TO GREENHECK,EF-1,FAN,phase,1,,V/PH/HZ: phase part,author's reading of the printed row
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,building,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,floor,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,area_served,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,qty,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,heating_medium,gas,,TABLE TITLE,title printed 'GAS UNIT HEATER SCHEDULE'
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,cfm,1490,cfm,CFM,
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,heating_mbh,82,MBH,HEATING CAP. (MBH) / OUTPUT,
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,eh_kw,,kW,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,motor_hp,0.16666666666666666,hp,HP,printed '1/6'
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,conn_in,,in,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,volts,115,V,VOLTS/PH: volts part,author's reading of the printed row
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-1,UNIT_HEATER,phase,1,,VOLTS/PH: phase part,author's reading of the printed row
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,building,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,floor,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,area_served,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,qty,,,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,heating_medium,gas,,TABLE TITLE,title printed 'GAS UNIT HEATER SCHEDULE'
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,cfm,1490,cfm,CFM,
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,heating_mbh,82,MBH,HEATING CAP. (MBH) / OUTPUT,
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,hw_gpm,,gpm,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,hw_ewt_f,,F,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,hw_lwt_f,,F,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,eh_kw,,kW,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,motor_hp,0.16666666666666666,hp,HP,printed '1/6'
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,conn_in,,in,,not printed
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,volts,115,V,VOLTS/PH: volts part,author's reading of the printed row
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23,GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE,UH-2,UNIT_HEATER,phase,1,,VOLTS/PH: phase part,author's reading of the printed row
