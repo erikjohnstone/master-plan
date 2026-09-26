@@ -16,6 +16,10 @@
 //   cross_reference  a cell of the unit's row equals a designator in the
 //                    title ("FAN-A"), or the row's notes name the packet's
 //                    sheet ("SEE M6.5") and the packet there is the unit's kind
+//   label_list       the packet's own label lists the unit ("EXHAUST FAN
+//                    (EF-1, 2, 3, 4, & 5)" over a diagram of the unit's family):
+//                    the packet is the unit's, as a title list's is, but no
+//                    title names the unit
 //   tag_body         the unit's tag is printed inside the packet, and no title
 //                    names the unit anywhere (a title that names it wins; a
 //                    tag in another unit's detail is usually a reference)
@@ -39,11 +43,11 @@
 // unit's family and the only units its titles name are those of the title
 // that names the unit; or by family only when no packet binds the unit.
 import type { Packet } from "./evidence";
-import { pageLines, repairSpacing, subjectFamily, subjectWords } from "./evidence";
+import { pageLines, repairSpacing, SENTENCE, subjectFamily, subjectWords } from "./evidence";
 import type { RowUnit } from "./rowReader";
 import { frameBox } from "../assemblies/scheduleNotes";
 
-export type BindingKind = "tag" | "list_range" | "cross_reference" | "tag_body" | "sibling" | "family_detail" | "component_of";
+export type BindingKind = "tag" | "list_range" | "cross_reference" | "label_list" | "tag_body" | "sibling" | "family_detail" | "component_of";
 
 export interface Binding {
   packet: string;
@@ -57,7 +61,7 @@ export interface Binding {
   ambiguous?: true;
 }
 
-const RANK: Record<BindingKind, number> = { tag: 1, list_range: 1, cross_reference: 2, tag_body: 3, sibling: 4, family_detail: 5, component_of: 6 };
+const RANK: Record<BindingKind, number> = { tag: 1, list_range: 1, cross_reference: 2, label_list: 3, tag_body: 3, sibling: 4, family_detail: 5, component_of: 6 };
 
 // ── Tags ────────────────────────────────────────────────────────────────────
 
@@ -311,6 +315,81 @@ function tagFit(k: TagKey, u: RowUnit, title: string, sharing: readonly RowUnit[
   return new Set(named.map(identity)).size === 1 ? "yes" : "proposal";
 }
 
+// ── What a unit carries ─────────────────────────────────────────────────────
+
+/** Parts a unit may or may not carry, by which a detail's title names a
+ * variant of its kind (ASHRAE Guideline 36 names VAV terminal units "cooling
+ * only" and "with reheat"; fan coils and unit ventilators are drawn "with
+ * electric heat"), and the schedule columns that describe each part. */
+const PARTS: ReadonlyArray<{ has: RegExp; lacks: RegExp; header: RegExp }> = [
+  { // heating: a reheat or heating coil, an electric heater
+    has: /\b(?:WITH|W\/)\s+(?:(?:HOT\s+WATER|HW|HHW|HYDRONIC|ELECTRIC|ELEC\.?)\s+)?(?:RE-?HEAT(?:ING)?(?:\s+COILS?)?|HEATING(?:\s+COILS?)?|HEAT(?:ERS?)?|(?:HOT\s+WATER|HW|HHW)\s+COILS?)\b/,
+    lacks: /\bCOOLING[\s-]+ONLY\b|\b(?:NO|WITHOUT|W\/O)\s+(?:RE-?HEAT|HEAT(?:ING)?)\b/,
+    header: /\bRE-?HEAT|\bHEATING\s+COIL|\b(?:HOT\s+WATER|HW|HHW)\s+COIL|\bELEC(?:TRIC)?\.?\s+HEAT/,
+  },
+  { // cooling: a chilled water or DX coil
+    has: /\b(?:WITH|W\/)\s+(?:(?:CHILLED\s+WATER|CHW|DX)\s+)?COOLING(?:\s+COILS?)?\b|\b(?:WITH|W\/)\s+(?:CHILLED\s+WATER|CHW|DX)\s+COILS?\b/,
+    lacks: /\bHEATING[\s-]+ONLY\b|\b(?:NO|WITHOUT|W\/O)\s+COOLING\b/,
+    header: /\bCOOLING\s+COIL|\b(?:CHILLED\s+WATER|CHW|DX)\s+COIL/,
+  },
+];
+/** A cell that prints nothing for its column. */
+const EMPTY_CELL = /^(?:|-+|—|–|N\/?A|NONE|0(?:\.0+)?)$/;
+
+/** Whether a unit's row fills the columns its schedule gives a part: "has"
+ * when it fills most of them, "lacks" when it fills at most a quarter while
+ * another row of the schedule fills most (the part is real there), else
+ * null. */
+function carries(u: RowUnit, header: RegExp, peers: readonly RowUnit[]): "has" | "lacks" | null {
+  const cols = Object.keys(u.cells).filter((h) => header.test(clean(h)));
+  if (!cols.length) return null;
+  const share = (x: RowUnit) => cols.filter((h) => !EMPTY_CELL.test(clean(x.cells[h]))).length / cols.length;
+  const own = share(u);
+  if (own > 0.5) return "has";
+  return own <= 0.25 && peers.some((o) => o !== u && share(o) > 0.5) ? "lacks" : null;
+}
+
+/** The words of a title's variant ("HEATING COIL", "COOLING ONLY") that the
+ * unit's row confirms; "contradicted" when the row says the unit is the
+ * other variant. */
+function partVariant(title: string, u: RowUnit, peers: readonly RowUnit[]): Set<string> | "contradicted" {
+  const t = repairSpacing(title);
+  const words = new Set<string>();
+  for (const part of PARTS) {
+    const has = part.has.exec(t), lacks = has ? null : part.lacks.exec(t);
+    if (!has && !lacks) continue;
+    const row = carries(u, part.header, peers);
+    if (row === null) continue;
+    if ((row === "has") !== Boolean(has)) return "contradicted";
+    for (const w of subjectWords((has ?? lacks)![0])) words.add(w);
+    if (lacks) for (const w of (lacks[0].match(/[A-Z]+/g) ?? [])) words.add(w);
+  }
+  return words;
+}
+
+/** The packets printed right under or over a packet in its column (a
+ * detail's diagram over its sequence): the same sheet and reading frame,
+ * overlapping across by half the narrower, at most three title heights
+ * apart. */
+function stackedWith(p: Packet, packets: readonly Packet[]): Packet[] {
+  const rotOf = (x: Packet) => {
+    const n = new Map<number, number>();
+    for (const sp of x.spans) { const r = (((Math.round(Number(sp.rot ?? 0) / 90) * 90) % 360) + 360) % 360; n.set(r, (n.get(r) ?? 0) + 1); }
+    return [...n].sort((a, b) => b[1] - a[1])[0]?.[0] ?? 0;
+  };
+  const rot = rotOf(p);
+  const box = frameBox(p.region, rot), title = frameBox(p.title_box, rot);
+  const h = Math.max(1, title[3] - title[1]);
+  return packets.filter((q) => {
+    if (q === p || q.sheet !== p.sheet || q.scope === "sheet" || rotOf(q) !== rot) return false;
+    const b = frameBox(q.region, rot);
+    const across = Math.min(box[2], b[2]) - Math.max(box[0], b[0]);
+    if (across < 0.5 * Math.min(box[2] - box[0], b[2] - b[0])) return false;
+    const gap = b[1] >= box[1] ? b[1] - box[3] : box[1] - b[3];
+    return gap >= -0.5 * h && gap <= 3 * h;
+  });
+}
+
 // ── Binding ─────────────────────────────────────────────────────────────────
 
 export interface BindOptions {
@@ -352,6 +431,34 @@ function labelTags(p: Packet): TagKey[] {
   return bodyTags(p, 4);
 }
 
+/** The units a packet's own label lists ("EXHAUST FAN (EF-1, 2, 3, 4, &
+ * 5)" over a diagram; "TYP. FANS EF-A1, / EF-A3, & SEF-A3" over two lines):
+ * a printed line that is no sentence and names two or more scheduled tags,
+ * lists and ranges expanded; a line ending in a list's joiner continues on
+ * the line right under it. "TYP." on a list is typical for the units it
+ * lists; a label that says "ALL" speaks for more than it lists. */
+function labelLists(p: Packet, scheduled: readonly TagKey[]): Array<{ line: string; keys: TagKey[]; all: boolean }> {
+  const out: Array<{ line: string; keys: TagKey[]; all: boolean }> = [];
+  const lines = pageLines(p.spans);
+  for (let i = 0; i < lines.length; i++) {
+    let line = repairSpacing(lines[i].text);
+    let last = lines[i];
+    // A list that runs on: the next line starts right under this one.
+    while (/(?:[,&]|\bAND|\bTHRU)$/.test(line) && i + 1 < lines.length) {
+      const next = lines[i + 1];
+      const gap = next.box[1] - last.box[3];
+      if (next.rot !== last.rot || gap < -0.5 * last.h || gap > 1.2 * last.h || next.box[0] > last.box[2] || next.box[2] < last.box[0]) break;
+      line = `${line} ${repairSpacing(next.text)}`;
+      last = next;
+      i++;
+    }
+    if (line.split(" ").length > 16 || SENTENCE.test(line)) continue;
+    const keys = titleTags(line, scheduled).map((x) => x.key);
+    if (keys.length >= 2) out.push({ line, keys, all: /\bALL\b/.test(line) });
+  }
+  return out;
+}
+
 /** A packet's printed lines, left to right (spans on one baseline joined). */
 function groupLines(p: Packet): string[] {
   const rows: Array<{ y: number; h: number; parts: Array<{ x: number; s: string }> }> = [];
@@ -372,6 +479,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   const titled = packets.map((p) => ({ p, tags: titleTags(`${p.title} ${p.subtitle ?? ""}`, scheduled), family: subjectFamily(p.title), designators: designators(p.title) }));
   const bodies = new Map(packets.map((p) => [p.id, bodyTags(p)]));
   const labels = new Map(packets.map((p) => [p.id, labelTags(p)]));
+  const lists = new Map(packets.map((p) => [p.id, labelLists(p, scheduled)]));
   const sheetByNumber = new Map<string, string[]>();
   for (const [sheet, no] of Object.entries(opts.sheetNumbers ?? {})) (sheetByNumber.get(compact(no)) ?? sheetByNumber.set(compact(no), []).get(compact(no))!).push(sheet);
   const byId = new Map(packets.map((p) => [p.id, p]));
@@ -379,6 +487,8 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
 
   // Split systems: an indoor unit whose row names its outdoor unit ("SYSTEM:
   // CU-1") is one half of a split system, and that outdoor unit the other.
+  const bySchedule = new Map<string, RowUnit[]>();
+  for (const u of units) { const k = `${u.cite?.sheet}|${u.table_title}`; (bySchedule.get(k) ?? bySchedule.set(k, []).get(k)!).push(u); }
   const byTag = new Map<string, RowUnit[]>();
   for (const u of units) { const k = tagKey(u.tag); if (k) (byTag.get(keyString(k)) ?? byTag.set(keyString(k), []).get(keyString(k))!).push(u); }
   const namedUnits = (v: string) => [...clean(v).matchAll(/(?<![A-Z0-9-])(?:[A-Z]{1,6}-)?[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])/g)]
@@ -448,7 +558,15 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
         if (t.p.scope === "sheet") continue;
         const asLabel = (labels.get(t.p.id) ?? []).some((k) => sameTag(k, key));
         const inText = (t.family === null || t.family === u.family) && (bodies.get(t.p.id) ?? []).some((k) => sameTag(k, key));
-        if (asLabel || inText) add({ packet: t.p.id, kind: "tag_body", evidence: `${u.tag} is printed inside "${t.p.title}"${asLabel ? " as a label" : ""}` });
+        // A list in a detail about the unit's own family names its units; in
+        // a system's detail (an emergency shutdown) it names what the system
+        // acts on.
+        const listed = t.family === u.family
+          ? (lists.get(t.p.id) ?? []).find((x) => x.keys.some((k) => sameTag(k, key) && fitOf(k, u, x.line) === "yes")) : undefined;
+        // A detail's own label that lists its units ("EXHAUST FAN (EF-1, 2,
+        // 3, 4, & 5)") says whose it is, as a title list does.
+        if (listed) add({ packet: t.p.id, kind: "label_list", evidence: `"${t.p.title}" is labelled for ${u.tag} in the list "${listed.line}"` });
+        else if (asLabel || inText) add({ packet: t.p.id, kind: "tag_body", evidence: `${u.tag} is printed inside "${t.p.title}"${asLabel ? " as a label" : ""}` });
       }
     }
     direct.set(u.index, found);
@@ -528,7 +646,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     // A proposal (a mark other kinds of unit share) binds nothing more
     // specifically.
     const titleKinds = new Set(found.filter((b) => !b.proposal && (RANK[b.kind] <= 2 || b.kind === "sibling"
-      || (b.kind === "tag_body" && titled.find((t) => t.p.id === b.packet)?.family === u.family))).map(kindOf));
+      || ((b.kind === "tag_body" || b.kind === "label_list") && titled.find((t) => t.p.id === b.packet)?.family === u.family))).map(kindOf));
     // A unit a title names (its tag, its list, a cross-reference) has its own
     // packets: no family detail of any kind is added to them (their sequence
     // or schematic of the same subject comes in as a sibling).
@@ -541,16 +659,35 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     const sentToControls = [...(u.notes ?? []).map((n) => n.text), ...Object.values(u.cells)].some((x) => CONTROLS_REF.test(clean(x)));
     const typicalFor = (t: typeof titled[number]) => sentToControls && t.tags.length > 0
       && t.tags.every((x) => (byTag.get(keyString(x.key)) ?? []).some((o) => o.family === u.family && o !== u && fitOf(x.key, o, t.p.title) === "yes"));
-    const familyCands = named ? [] : titled.filter((t) => t.p.scope !== "sheet" && !titleKinds.has(t.p.kind) && (t.tags.length === 0 || typicalFor(t))
+    // A detail whose own label lists units of the family ("EXHAUST FAN
+    // (EF-1, 2, 3, 4, & 5)") is theirs: another unit of the family does not
+    // take it by family.
+    const listsOthers = (t: typeof titled[number]) => {
+      const own = tagKey(u.tag);
+      const listed = lists.get(t.p.id) ?? [];
+      if (listed.some((x) => x.all) || listed.some((x) => own && x.keys.some((k) => sameTag(k, own)))) return false;
+      return listed.some((x) => x.keys.filter((k) => (byTag.get(keyString(k)) ?? []).some((o) => o.family === u.family && fitOf(k, o, x.line) === "yes")).length >= 2);
+    };
+    const familyCands = named ? [] : titled.filter((t) => t.p.scope !== "sheet" && !titleKinds.has(t.p.kind) && (t.tags.length === 0 || typicalFor(t)) && !listsOthers(t)
       && !(chosen?.has(t.p.id) && !found.some((b) => b.packet === t.p.id))
       && (t.family === u.family || (t.family === null && namesRow(t.p.title, u, typeText(u), paired && SPLIT.test(repairSpacing(t.p.title))))));
     const byKind = new Map<string, Array<{ t: typeof titled[number]; unconfirmed: string[]; subject: boolean; qualified: number }>>();
+    const peers = bySchedule.get(`${u.cite?.sheet}|${u.table_title}`) ?? [u];
     for (const t of familyCands) {
       const split = paired && SPLIT.test(repairSpacing(t.p.title));
       const quals = qualifiers(t.p.title, u);
-      const unconfirmed = quals.filter((q) => !printed(q, text) && !(split && q === "SPLIT"));
+      // A variant the title names by a part ("WITH HEATING COIL", "COOLING
+      // ONLY"): the row's columns for that part confirm it, or say the unit
+      // is the other variant.
+      const variant = partVariant(t.p.title, u, peers);
+      if (variant === "contradicted") continue;
+      const unconfirmed = quals.filter((q) => !printed(q, text) && !(split && q === "SPLIT") && !q.split(" ").every((w) => variant.has(w)));
       (byKind.get(t.p.kind) ?? byKind.set(t.p.kind, []).get(t.p.kind)!).push({ t, unconfirmed, subject: namesRow(t.p.title, u, typeText(u), split), qualified: quals.length - unconfirmed.length });
     }
+    // Several details of one kind are left: the one printed right under or
+    // over a detail that is the unit's is its, when each other one is printed
+    // with a detail that is not.
+    const several: Array<Array<{ t: typeof titled[number]; unconfirmed: string[] }>> = [];
     for (const cands of byKind.values()) {
       // Strongest first: the row prints the title's whole subject, then every
       // qualifier confirmed, then the rest (proposals). Of confirmed titles,
@@ -564,6 +701,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
         const most = Math.max(...pick.map((c) => c.qualified));
         pick = pick.filter((c) => c.qualified === most);
       }
+      if (pick.length > 1 && pick.every((c) => !c.unconfirmed.length)) { several.push(pick); continue; }
       for (const c of pick) {
         add({
           packet: c.t.p.id, kind: "family_detail",
@@ -571,6 +709,21 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
           ...(c.unconfirmed.length ? { proposal: true as const } : {}),
           ...(pick.length > 1 ? { ambiguous: true as const } : {}),
         });
+      }
+    }
+    for (const pick of several) {
+      const mine = new Set(found.filter((b) => !b.proposal && !b.ambiguous).map((b) => b.packet));
+      const partners = pick.map((c) => stackedWith(c.t.p, packets).filter((q) => q.kind !== c.t.p.kind));
+      const ours = pick.filter((_, i) => partners[i].some((q) => mine.has(q.id)));
+      const theirs = pick.filter((_, i) => partners[i].length > 0 && !partners[i].some((q) => mine.has(q.id)));
+      if (ours.length === 1 && ours.length + theirs.length === pick.length) {
+        const c = ours[0];
+        const with_ = partners[pick.indexOf(c)].find((q) => mine.has(q.id))!;
+        add({ packet: c.t.p.id, kind: "family_detail", evidence: `"${c.t.p.title}" is a detail for its family (${u.family}), printed with "${with_.title}", which is its; each other one of that title is printed with a detail that is not its` });
+        continue;
+      }
+      for (const c of pick) {
+        add({ packet: c.t.p.id, kind: "family_detail", evidence: `"${c.t.p.title}" is a detail for ${c.t.family === u.family ? `its family (${u.family})` : "what its schedule names"}`, ambiguous: true });
       }
     }
     // A drive's detail ("VARIABLE FREQUENCY DRIVE CONTROL"): a unit whose

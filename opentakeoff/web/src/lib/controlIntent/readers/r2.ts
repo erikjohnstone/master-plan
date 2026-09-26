@@ -23,6 +23,7 @@
 // if every drawing lacks it; a role is "commands" if any drawing has the BAS
 // command the unit.
 import type { Box } from "../../assemblies/scheduleNotes";
+import { frameBox } from "../../assemblies/scheduleNotes";
 import type { ModelRequest } from "../runs";
 import { replyJson } from "../runs";
 import type { BoundPacket, DrawingCite, ReaderAnswer } from "./r0";
@@ -128,6 +129,23 @@ export function r2Request(unit: ReadUnit, bp: BoundPacket, questions: readonly R
   return { req, summary: { units: unit.tags, family: unit.family, packet: bp.packet.id, run, crop: spec, questions: questions.map((q) => q.id) } };
 }
 
+/** A packet's rows: the lines printed on one baseline, left to right in
+ * their reading frame (a points table's row: "BO-2" | "INTAKE DAMPER
+ * OPEN/CLOSE" | "YES"). A model reads a row as one label. */
+function packetRows(lines: BoundPacket["text"]["lines"]): Array<{ ids: string[]; text: string }> {
+  const framed = lines.map((l) => ({ l, b: frameBox(l.box, l.rot) }));
+  const rows: Array<{ rot: number; v0: number; v1: number; members: typeof framed }> = [];
+  for (const f of [...framed].sort((a, b) => (a.b[1] + a.b[3]) - (b.b[1] + b.b[3]))) {
+    const h = f.b[3] - f.b[1];
+    const row = rows.find((r) => r.rot === f.l.rot && Math.min(r.v1, f.b[3]) - Math.max(r.v0, f.b[1]) >= 0.6 * Math.min(h, r.v1 - r.v0));
+    if (row) row.members.push(f); else rows.push({ rot: f.l.rot, v0: f.b[1], v1: f.b[3], members: [f] });
+  }
+  return rows.filter((r) => r.members.length > 1).map((r) => {
+    const ms = [...r.members].sort((a, b) => a.b[0] - b.b[0]);
+    return { ids: ms.map((m) => m.l.id), text: ms.map((m) => m.l.text).join(" ") };
+  });
+}
+
 const ROLE = new Set(["commands", "monitors_only", "not_connected", "not_shown"]);
 const OPTION = new Set(["yes", "no", "absent", "not_shown"]);
 
@@ -155,17 +173,20 @@ export function r2PacketAnswers(content: string | null, bp: BoundPacket, questio
     if (answer === "not_shown" || answer === "absent") { out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites: [] }); continue; }
     const labels = (Array.isArray(a.labels) ? a.labels : []).map((x) => String(x ?? "")).filter((x) => squeeze(x).length >= 2).slice(0, 8);
     const cites: DrawingCite[] = [];
+    let rows: ReturnType<typeof packetRows> | null = null;
     for (const label of labels) {
       const line = bp.text.lines.find((l) => printedIn(label, l.text));
       const pg = line ? null : bp.text.paragraphs.find((p) => printedIn(label, p.text));
-      const ids = line ? [line.id] : pg ? pg.lines : null;
+      // A label read across one printed row, cell to cell.
+      const row = line || pg ? null : (rows ??= packetRows(bp.text.lines)).find((r) => printedIn(label, r.text));
+      const ids = line ? [line.id] : pg ? pg.lines : row ? row.ids : null;
       if (!ids) continue;
       const ls = bp.text.lines.filter((l) => ids.includes(l.id));
       const box = ls.map((l) => l.box).reduce((m, b) => [Math.min(m[0], b[0]), Math.min(m[1], b[1]), Math.max(m[2], b[2]), Math.max(m[3], b[3])] as Box);
       cites.push({ packet: bp.packet.id, sheet: bp.packet.sheet, lines: ids, text: label, box });
     }
     if (!cites.length || cites.length < Math.ceil(labels.length / 2)) {
-      out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites, note: "unverified", why: labels.length ? `labels not printed in the drawing: ${labels.filter((l) => !texts.some((t) => printedIn(l, t))).slice(0, 4).join(" | ")}` : "no label given" });
+      out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites, note: "unverified", why: labels.length ? `labels not printed in the drawing: ${labels.filter((l) => !texts.some((t) => printedIn(l, t)) && !(rows ?? []).some((r) => printedIn(l, r.text))).slice(0, 4).join(" | ")}` : "no label given" });
       continue;
     }
     out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites });

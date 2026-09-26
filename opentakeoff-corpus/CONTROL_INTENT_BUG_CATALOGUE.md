@@ -319,17 +319,38 @@ proposal for all 57.
 **Numbers:** 21_VA 114 applied with 1 wrong before, 57 applied with 0 wrong after. The dev replay is unchanged:
 227/244 exact; 291 applied, 0 wrong; the same proposals and unresolved decisions, line for line.
 
-## CI-15: a detail per unit type on one sheet, each with a same-titled sequence (OPEN, recall)
+## CI-15: a detail per unit type on one sheet, each with a same-titled sequence (FIXED, next commit)
 
-**What:** 21_VA's reheat boxes and its cooling-only box each have a diagram and a sequence, but the binder cannot yet
+**What:** 21_VA's reheat boxes and its cooling-only box each have a diagram and a sequence, but the binder could not
 tell them apart:
-- "VAV BOX WITH HEATING COIL" is read right-headed as a coil, so the reheat diagram binds no VAV box. Its subject is
+- "VAV BOX WITH HEATING COIL" was read right-headed as a coil, so the reheat diagram bound no VAV box. Its subject is
   the part before "WITH".
 - The qualifier "HEATING COIL" is printed in the schedule's header ("REHEAT COIL DATA"), and the row fills it with
-  values. Qualifiers are confirmed only from the row's own cells, never from its headers.
-- Nothing pairs each "VAV BOX SEQUENCE OF OPERATION" with the diagram above it in its column.
+  values. Qualifiers were confirmed only from the row's own cells.
+- Nothing paired each "VAV BOX SEQUENCE OF OPERATION" with the diagram above it in its column.
 
-With all three, the 56 reheat boxes would read CO2 from their own sequence, and apply it.
+**Fix (`evidence.ts`, `binding.ts`, the shared finder and binder):**
+- A title's subject is the part before "WITH" when that part names a family ("VAV BOX WITH HEATING COIL" is a VAV
+  box's). Otherwise the whole part answers, as before.
+- A title that names a variant by a part the unit may carry ("WITH HEATING COIL", "W/ ELECTRIC HEAT", "COOLING ONLY";
+  ASHRAE Guideline 36 names VAV terminal units "cooling only" and "with reheat") is checked against the columns the
+  unit's schedule gives that part:
+  - the row fills most of them: the variant is confirmed;
+  - the row fills at most a quarter while another row of the schedule fills most: the unit is the other variant, and
+    the title is not its.
+  - Otherwise nothing is decided, as before.
+- Several same-titled details of one kind left for a unit: the one printed right under or over a detail that is the
+  unit's is its, when each other one is printed with a detail that is not.
+
+**Checked:**
+- 21_VA: the 56 reheat boxes take "VAV BOX WITH HEATING COIL CONTROL DIAGRAM" and the sequence printed under it;
+  VAV-1-16, the cooling-only box, takes its own diagram and sequence.
+- Dev: all 11 documents re-snapshotted. Extraction and packets are byte-identical; the binding rows and the replay
+  are unchanged (see CI-17 for the one change).
+- Unseen: 25 sets re-snapshotted with the change. Extraction and packets are byte-identical on all 25. The binder
+  changes only 21_VA's 57 boxes.
+- Live, with CI-17, CI-18 and CI-20: 21_VA applies 115 readings, all right. Each box's BAS role (57), each reheat box's
+  setpoint adjustment (56), and CO2 for exactly the two boxes its sequence names (CI-18). Before: 57.
 
 ## CI-16: the robustness work read a held-out document under another corpus id, and tuned on a held-out drafter's document (PROCESS NOTE, disclosed)
 
@@ -363,3 +384,100 @@ With all three, the 56 reheat boxes would read CO2 from their own sequence, and 
   - 30_WA: 27_WA, by the same drafter, was tuned on.
 - **Robustness work now skips every set the report lists.** A held-out twin is never read. A held-out drafter's set
   is never audited or tuned on. A copy of a dev document counts as dev.
+
+## CI-17: a detail whose own label lists units of its family bound every unit of the family (FIXED, next commit)
+
+**Found:** 2026-09-26, the blind live audit on an unseen set (015_VA, sheet AM704).
+
+**What:** "EXHAUST FAN CONTROLS" is drawn over a diagram labelled "EXHAUST FAN (EF-1, 2, 3, 4, & 5)", with the
+fans' motorized intake damper. The title names no tag, so the detail bound every fan by family, including EF-7, a
+50 CFM toilet-room roof fan from the gatehouse schedule. R0 and R2 **applied** EF-7's motorized damper from EF-1–5's
+diagram: 1 wrong among 27 applied on 12 new unseen sets.
+
+**Fix (`binding.ts`):**
+- A printed line that is no sentence and lists two or more scheduled tags is the packet's label list. Lists and
+  ranges expand, and a line ending in a list's joiner continues on the line right under it ("TYP. FANS EF-A1, /
+  EF-A3, & SEF-A3").
+- A unit it lists binds by a new kind, `label_list`. The packet is the unit's own, as a title list's is: its
+  evidence need not name the unit. But it is no title: other kinds of detail still bind by family.
+- A detail whose label lists other units of the family, and not the unit, is no family detail for it. A label that
+  says "ALL" still speaks for all.
+- A list in a detail about no one family (an emergency shutdown) names what the system acts on, not its units.
+
+**Checked:**
+- Dev: the 657 pair and binding rows are unchanged, except itd-d1-lab EF-4. It loses two false family proposals (a
+  general exhaust fan detail that lists other fans), and two other proposals are no longer ambiguous. The replay is
+  unchanged (227/244, 291 applied, 0 wrong) after the three model calls EF-4's new prompts asked for were recorded.
+- Unseen: 4 sets change, as intended.
+  - 015_VA: EF-1–5 are bound by their label, and EF-6, EF-7 and the dampers that serve them lose it.
+  - 014_MT: the three fans "TYP. FANS EF-A1, EF-A3, & SEF-A3" lists take their detail; the other five lose it.
+  - 061_IA: the supply and return fans lose an exhaust fans' sequence.
+  - 062_ID changes as its dev copy does.
+- Live:
+  - 015_VA applies 7, all right: EF-1–5's dampers, and EF-6's damper and BAS role from its own generator room detail
+    (with CI-20). EF-7's wrong damper is gone.
+  - EF-6's readings had rested partly on EF-1–5's detail. Its own detail binds it only by its tag in the body. One
+    vision run's labels there join two cells of a points table, which the label check accepts only since CI-20.
+  - 014_MT gains 6 right (the three fans' damper and BAS role, which their schedule confirms: CONTROL 4 "INTERLOCK TO
+    INTAKE CONTROL DAMPER", CONTROL 6 "DDC INTERFACE").
+  - Two destratification fans' roles, which had rested on another unit's detail, are proposals now.
+  - 061_IA: 8 right readings are proposals now. R1 answered the changed prompts "not shown".
+
+## CI-18: a section headed for particular units was read for every unit of the packet (FIXED, next commit)
+
+**Found:** 2026-09-26, auditing CI-15's first live run (21_VA).
+
+**What:** the reheat boxes' sequence carries "MULTI-PURPOSE ROOM (VAV-1-26 AND VAV-1-29) - AHU-1 VENTILATION
+CONTROL:", and its diagram marks the CO2 sensor "MULTI-PURPOSE ROOM A-109 REFER TO FLOOR PLANS FOR LOCATIONS". The
+packet is every reheat box's own, so R0 read "THE DDC SYSTEM SHALL MEASURE THE ROOM CO2 LEVEL" for all 56. R2 agreed
+from the diagram's typical symbol, and CO2 **applied** to 54 boxes that have none. R1 had answered "not shown". The
+earlier note that CO2 on the 56 boxes was a recall cost (CI-14, CI-15) was wrong: it was never applied, and it is
+right for two boxes only.
+
+**Fix (`readers/r0.ts`, `record.ts`):** a section whose heading names units by tags of the unit's own letters, and
+not the unit, is those units' ("VAV-1-26 AND VAV-1-29"), in any packet:
+- R0 does not read its clauses for other units.
+- A model answer whose every cite lies in such sections is unverified for them.
+- Tags compare as their letters and number groups ("VAV-1-01" is "VAV-1-1"; "VAV-11" is not). A heading naming
+  another kind's unit ("AHU-2 ONLY") scopes nothing. R0 is now `control_r0_v5`.
+
+**Checked:**
+- Dev: the replay is unchanged (227/244; 291 applied, 0 wrong; the same misses).
+- 21_VA: CO2 applies to VAV-1-26 and VAV-1-29 only; the other 54 are proposals.
+
+## CI-19: the eval harness corrupted characters that fell on a 64 KiB pipe read (FIXED in the assemblies scripts, next commit)
+
+**Found:** 2026-09-26. Re-snapshotting dev with CI-15 showed 031_MO's heating coil schedule header "HOT WATER LWT
+[°C]" as "HOT WATER LWT [��C]". A cold rebuild gave "°", and every cached sheet graph of the set holds "°".
+
+**What:** the snapshot child writes its JSON to stdout, and `snapshotInChild` collected it with `out += chunk`, which
+decodes each pipe read on its own. A two-byte character split across two reads becomes two U+FFFD. Where the reads
+split depends only on the output's length: the same snapshot broke the same way every time, and a one-digit change
+in a timing field moved the boundary. It looked like nondeterministic extraction. Extraction was never involved.
+
+**Fix:** `mcp/scripts/childText.mjs` decodes a child's whole stdout as one stream. `assemblies-attr-eval.mjs` and
+`assemblies-baseline.mjs` use it, and a test fails without it (a child writes "x" and 100,000 "°"). Six other eval
+scripts read their children the same way (takeoff-eval, graph-eval, reference-eval, tag-eval, table-box-eval,
+table-recall-eval). They belong to other loops and are left as they are, noted for their owners.
+
+**Open:** whether any committed assemblies report was affected. A dev attribute eval through the fixed transport
+was run, but reading its result was blocked in this session.
+
+## CI-20: the vision reader's labels read across a points table's row were not found (FIXED, next commit)
+
+**Found:** 2026-09-26, with CI-17 (015_VA EF-6).
+
+**What:** R2 must cite labels printed in the drawing. The model reads a points table's row as one label: "BO-2 INTAKE
+DAMPER OPEN/CLOSE", "AO1 RETURN AIR DAMPER COMMAND (%)". The designator and the description are printed in two
+cells, two lines of the packet's text, so the check found neither one alone and marked the run unverified. EF-6's
+motorized damper and BAS role then rested on one reader.
+
+**Fix (`readers/r2.ts`):** a label not printed in one line or paragraph is looked for in the packet's rows: the lines
+on one baseline in their reading frame, left to right. The row's lines are the cite. A label joined across two rows
+is still not printed.
+
+**Checked:**
+- Dev: the replay is unchanged (227/244; 291 applied, 0 wrong).
+- Unseen, 25 sets replayed: 3 more readings apply, all right. 015_VA EF-6's damper and BAS role come from its own
+  generator room detail. 009_FL AHU-1's BAS role comes from its points table ("AO4 FAN SPEED COMMAND (%)").
+

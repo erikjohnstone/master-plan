@@ -145,6 +145,7 @@ export function appliesBecause(bp: BoundPacket, unit: ReadUnit): string {
   switch (bp.binding.kind) {
     case "tag": case "list_range": return "its title names this unit";
     case "cross_reference": return "this unit's schedule row refers to it";
+    case "label_list": return "its own label lists this unit";
     case "tag_body": return "this unit's tag is printed in it";
     case "sibling": return "it is about the same subject as a drawing titled for this unit, on the same sheet";
     case "component_of": return "it is the drawing of the unit this one serves or belongs to";

@@ -33,7 +33,7 @@ import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v4";
+export const R0_VERSION = "control_r0_v5";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
@@ -80,7 +80,7 @@ export interface ReaderAnswer {
   why?: string;
 }
 
-const OWN_KINDS = new Set(["tag", "list_range", "cross_reference", "family_detail"]);
+const OWN_KINDS = new Set(["tag", "list_range", "cross_reference", "label_list", "family_detail"]);
 export const TITLE_KINDS: ReadonlySet<string> = new Set(["tag", "list_range", "cross_reference"]);
 
 /** Whether a bound packet is the unit's own (see the header). */
@@ -118,6 +118,27 @@ export function namesUnit(text: string, unit: { tag: string; family?: string }, 
   if (noun?.test(text)) return true;
   const words = PREFIX_WORDS[tagKey(unit.tag)?.prefix ?? ""];
   return Boolean(words && new RegExp(`\\b${words.replace(/\s+/g, "\\s+")}S?\\b`).test(text));
+}
+
+/** A tag in one spelling: its letters and each number group as an integer,
+ * with any letters after it ("VAV-1-01" and "VAV-1-1" are one tag, as are
+ * "VAV101" and "VAV-101"; "VAV-11" is not "VAV-1-1"). */
+const tagSpelling = (tag: string) => {
+  const t = tag.toUpperCase();
+  const groups = (t.replace(/^[^0-9]*/, "").match(/\d+[A-Z]*/g) ?? []).map((g) => `${Number(g.match(/^\d+/)![0])}${g.replace(/^\d+/, "")}`);
+  return `${t.match(/[A-Z]+/)?.[0] ?? ""}:${groups.join(".")}`;
+};
+
+/** Whether a section heading is about other units of the unit's kind: it
+ * names units by tags of the unit's letters, and not the unit ("MULTI-
+ * PURPOSE ROOM (VAV-1-26 AND VAV-1-29) - AHU-1 VENTILATION CONTROL" is
+ * about those two boxes, not VAV-1-01). Its clauses speak for them only. */
+export function headsOthers(heading: string, unit: { tag: string }): boolean {
+  const letters = unit.tag.toUpperCase().match(/^\s*([A-Z]{1,6})/)?.[1];
+  if (!letters) return false;
+  const re = new RegExp(`(?<![A-Z0-9])${letters}\\s?-?\\s?\\d{1,4}[A-Z]{0,2}(?:\\s?-\\s?\\d{1,4}[A-Z]{0,2})*(?![A-Z0-9])`, "g");
+  const named = [...heading.toUpperCase().matchAll(re)].map((m) => tagSpelling(m[0]));
+  return named.length > 0 && !named.includes(tagSpelling(unit.tag));
 }
 
 const TAG_IN_TEXT = /\b[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}\b/g;
@@ -219,7 +240,12 @@ export function readR0(unit: { tag: string; family?: string }, bound: readonly B
     // names the unit, or the heading of its section does.
     const heading = new Map(bp.text.paragraphs.map((pg) => [pg.id, pg.heading]));
     const tagOnly = Boolean(bp.othersTitled);
-    const clauses = bp.text.clauses.filter((c) => own || namesUnit(c.norm, unit, tagOnly) || Boolean(heading.get(c.paragraph) && namesUnit(heading.get(c.paragraph)!, unit, tagOnly)));
+    // A section headed for other units of its kind is theirs, in any packet.
+    const clauses = bp.text.clauses.filter((c) => {
+      const h = heading.get(c.paragraph);
+      if (h && headsOthers(h, unit)) return false;
+      return own || namesUnit(c.norm, unit, tagOnly) || Boolean(h && namesUnit(h, unit, tagOnly));
+    });
     return { bp, own, clauses };
   });
   // "Absent" is read only where a title binds the unit to a packet of its

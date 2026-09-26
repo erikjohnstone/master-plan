@@ -173,7 +173,7 @@ const SCHEDULE_WORD = rx(word("SCHEDULE", true));
 /** A drawing of how something is built, not how it is controlled. */
 const INSTALLATION = /\b(?:DETAILS?|SECTIONS?|ELEVATIONS?|PLANS?|MOUNTING|INSTALLATION|SUPPORTS?|HANGING|HANGERS?|CONNECTIONS?|PIPING|DUCTWORK|ROUGH-?IN|ENLARGED|ISOMETRIC)\b/;
 /** A sentence, not a title: a verb of an instruction or a statement. */
-const SENTENCE = /\b(?:SHALL|WILL|MUST|SHOULD|WHEN|WHENEVER|PROVIDE[DS]?|VERIFY|REFER|SEE|INSTALL(?:ED)?|CONNECT(?:ED)?|COORDINATE|FURNISH(?:ED)?|ENSURE|ARE|IS|BE|BEEN|THAT|WHICH|THIS|THESE|THEY|BY)\b/;
+export const SENTENCE = /\b(?:SHALL|WILL|MUST|SHOULD|WHEN|WHENEVER|PROVIDE[DS]?|VERIFY|REFER|SEE|INSTALL(?:ED)?|CONNECT(?:ED)?|COORDINATE|FURNISH(?:ED)?|ENSURE|ARE|IS|BE|BEEN|THAT|WHICH|THIS|THESE|THEY|BY)\b/;
 /** A row of a numbered list or table ("2. TEMPERATURE CONTROL", "6 EXHAUST
  * FAN START/STOP"): a section of something, never a packet's title. */
 const ROW_NUMBER = /^\(?\d{1,3}(?:\.\d{1,2})*[.)]?\s+\S/;
@@ -276,30 +276,42 @@ export function subjectFamily(title: string): string | null {
   const parts = repairSpacing(title).split(/\s+[-–—]\s+|[(),:]/).map((p) => clean(p)).filter(Boolean);
   const found: Array<{ family: string; keyword: boolean }> = [];
   for (const part of parts) {
-    const subject = subjectWords(part).join(" ");
-    if (!subject) continue;
     const keyword = K_CONTROL.test(part) || K_SEQUENCE.test(part) || K_DIAGRAM.test(part) || K_POINTS.test(part);
-    const variants = [subject, subject.replace(/\b([A-Z]{2,}[^S\s])S\b/g, "$1")];
-    let best: { family: string; end: number } | null = null;
-    for (const v of variants) {
-      for (const probe of [`${v} SCHEDULE`, v]) {
-        for (const [family, spec] of Object.entries(FAMILY_SPECS)) {
-          if (!spec.titleRe || !scheduleTitleMatches(probe, spec.titleRe, spec.exclude)) continue;
-          const g = new RegExp(spec.titleRe.source, spec.titleRe.flags.includes("g") ? spec.titleRe.flags : `${spec.titleRe.flags}g`);
-          let end = -1;
-          for (const m of probe.toUpperCase().matchAll(g)) end = Math.max(end, (m.index ?? 0) + m[0].replace(/\s*SCHEDULE$/i, "").length);
-          if (!best || end > best.end) best = { family, end };
-        }
-      }
-    }
-    if (best) { found.push({ family: best.family, keyword }); continue; }
-    const byPrefix = new Set(subject.split(" ").map((w) => PREFIX_FAMILY.get(w)).filter((f): f is string => Boolean(f)));
-    if (byPrefix.size === 1) found.push({ family: [...byPrefix][0], keyword });
+    // "VAV BOX WITH HEATING COIL" is about the box: what comes after WITH is
+    // what the subject carries. The whole part answers only when its head
+    // names no family.
+    const head = part.split(/\s+(?:WITH|W\/)\s+/)[0];
+    const headFamily = head !== part ? familyOfPart(head) : null;
+    const family = headFamily ?? familyOfPart(part);
+    if (family) found.push({ family, keyword });
   }
   const families = new Set(found.map((f) => f.family));
   if (families.size === 1) return [...families][0];
   const keyed = new Set(found.filter((f) => f.keyword).map((f) => f.family));
   return keyed.size === 1 ? [...keyed][0] : null;
+}
+
+/** The family one part of a title names by its subject words: the schedule-
+ * title rule that reads the most of them, else a standard tag prefix. */
+function familyOfPart(part: string): string | null {
+  const subject = subjectWords(part).join(" ");
+  if (!subject) return null;
+  const variants = [subject, subject.replace(/\b([A-Z]{2,}[^S\s])S\b/g, "$1")];
+  let best: { family: string; end: number } | null = null;
+  for (const v of variants) {
+    for (const probe of [`${v} SCHEDULE`, v]) {
+      for (const [family, spec] of Object.entries(FAMILY_SPECS)) {
+        if (!spec.titleRe || !scheduleTitleMatches(probe, spec.titleRe, spec.exclude)) continue;
+        const g = new RegExp(spec.titleRe.source, spec.titleRe.flags.includes("g") ? spec.titleRe.flags : `${spec.titleRe.flags}g`);
+        let end = -1;
+        for (const m of probe.toUpperCase().matchAll(g)) end = Math.max(end, (m.index ?? 0) + m[0].replace(/\s*SCHEDULE$/i, "").length);
+        if (!best || end > best.end) best = { family, end };
+      }
+    }
+  }
+  if (best) return best.family;
+  const byPrefix = new Set(subject.split(" ").map((w) => PREFIX_FAMILY.get(w)).filter((f): f is string => Boolean(f)));
+  return byPrefix.size === 1 ? [...byPrefix][0] : null;
 }
 
 // ── Page structure ──────────────────────────────────────────────────────────

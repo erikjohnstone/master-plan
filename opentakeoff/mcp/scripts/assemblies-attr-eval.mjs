@@ -39,6 +39,7 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
+import { childStdoutText } from "./childText.mjs";
 import { createHash } from "node:crypto";
 import { attributeSpec, canonicalAttributeFor, keyValueToCanonical } from "../../web/src/lib/assemblies/attributes.ts";
 import { vfdDrivenTags } from "../../web/src/lib/assemblies/normalize.ts";
@@ -397,7 +398,6 @@ export function snapshotInChild(corpus, id, opts = {}) {
     const started = Date.now();
     process.stderr.write(`· ${id} …\n`);
     const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", id, ...(opts.hit ? ["--with-hit"] : [])], { stdio: ["ignore", "pipe", "inherit"] });
-    let out = "";
     let settled = false;
     const finish = (value) => {
       if (settled) return;
@@ -407,8 +407,9 @@ export function snapshotInChild(corpus, id, opts = {}) {
       res(value);
     };
     const timer = setTimeout(() => { child.kill("SIGKILL"); finish({ id, error: `timed out after ${TIMEOUT_MS}ms` }); }, TIMEOUT_MS);
-    child.stdout.on("data", (d) => { out += d; });
+    const text = childStdoutText(child);
     child.on("close", (code) => {
+      const out = text();
       if (code !== 0 || !out.trim()) return finish({ id, error: `child exited ${code} with no result` });
       try { finish(JSON.parse(out)); } catch (e) { finish({ id, error: `bad child JSON: ${e?.message || e}` }); }
     });

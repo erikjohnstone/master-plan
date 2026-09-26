@@ -148,8 +148,55 @@ Done so far (dev only; held-out keys not yet authored):
     the three unexposed (018_GA, 024_MO, bessemer).
   - From now on the robustness work skips held-out twins and held-out
     drafters' sets, and counts copies of dev documents as dev.
-- **Next:** CI-15 (recall); held-out aggregates; the rest of the sweep and
-  its zone scan; corpus-eval unchanged.
+- **Third robustness batch (next commit): CI-15, CI-17, CI-18, CI-19, CI-20.**
+  - 12 new unseen sets audited live with 7200928: 27 applied, 26 right, 1
+    wrong. 015_VA's EF-7, a gatehouse toilet fan, took EF-1–5's intake
+    damper through a detail labelled "EXHAUST FAN (EF-1, 2, 3, 4, & 5)".
+  - **CI-17 (binder):** a detail's own label list binds the units it lists
+    (`label_list`), and no other unit of the family by family.
+  - **CI-15 (finder, binder):**
+    - "X WITH Y" is about X;
+    - a title's variant ("WITH HEATING COIL", "COOLING ONLY") is confirmed or
+      contradicted by the columns the row fills;
+    - of same-titled sequences, the one printed under the unit's diagram is
+      its.
+  - **CI-18 (readers):** a section headed for particular units ("(VAV-1-26 AND
+    VAV-1-29)") is theirs in any packet. CI-15's first live run had applied
+    CO2 to 54 VAV boxes that have none, and the audit caught it before any
+    commit.
+  - **CI-20 (R2):** a label the vision model reads across one row of a
+    points table ("BO-2 INTAKE DAMPER OPEN/CLOSE", two cells) is printed. A
+    label joined across two rows is not. Dev is unchanged.
+  - **CI-19 (eval harness):** a snapshot child's JSON was decoded per pipe
+    read, so a "°" on a 64 KiB boundary came back as two U+FFFD. The
+    assemblies scripts now decode one stream. Six other loops' eval scripts
+    have the same pattern and are noted for their owners.
+  - Dev: all 11 re-snapshotted. Extraction and packets are byte-identical;
+    the binding rows are identical but for itd-d1-lab EF-4 (two false
+    proposals fewer). The replay is unchanged: 227/244, 291 applied, 0 wrong,
+    class R 55/71, 0 calls unrecorded after a 3-call top-up.
+- **Blind live audit, final code: 25 unseen sets, 200 applied, 200 right, 0
+  wrong.**
+  - The sets: the 14 above minus 27_WA (a held-out drafter's, CI-16), plus
+    the 12 new ones.
+  - Applied: 21_VA 115, 009_FL 20, 014_MT 16, 06_MO 16, 16_NV 12, 015_VA 7,
+    021_XX 6, 061_IA 4, 05_MO 2, 03_FL 1, 14_OR 1. The other 14 apply
+    nothing.
+  - The same 25 sets with 7200928: 146 applied, 145 right.
+  - Extraction and packets are byte-identical on all 25 before and after.
+  - 10 right readings are proposals now:
+    - 014_MT's destratification fans (2) had rested on another unit's
+      detail;
+    - 061_IA's 8 are R1 answering changed prompts "not shown".
+  - Gains:
+    - 21_VA +58 (setpoint adjustment on 56 boxes, CO2 on its 2);
+    - 014_MT +6;
+    - 009_FL +1 (AHU-1's BAS role, from its points table's rows, CI-20).
+  - 015_VA's EF-6 keeps its 2, now from its own detail. Check: 145 + 58 + 6
+    + 1 − 10 = 200.
+- **Next:** R2's label check for a points-table row read as one label ("BO-2
+  INTAKE DAMPER OPEN/CLOSE"); held-out aggregates; the sweep's three
+  failed sets (01_NY, 07_MO, 058_CA); the zone scan; corpus-eval unchanged.
 
 The research that proposed the goal (2026-09-24):
 - **Research:** `plans/05-research/01–03`, the design plan

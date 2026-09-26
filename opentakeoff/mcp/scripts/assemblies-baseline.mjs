@@ -44,6 +44,7 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
+import { childStdoutText } from "./childText.mjs";
 import { createHash } from "node:crypto";
 import pLimit from "p-limit";
 import { resolveSetFiles, validateSets } from "./corpusFiles.mjs";
@@ -360,7 +361,6 @@ if (splitSeed !== null) {
     process.stderr.write(`· ${set.id} …\n`);
     const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", set.id],
       { stdio: ["ignore", "pipe", "inherit"] });
-    let out = "";
     let settled = false;
     const finish = (value) => {
       if (settled) return;
@@ -370,8 +370,9 @@ if (splitSeed !== null) {
       res(value);
     };
     const timer = setTimeout(() => { child.kill("SIGKILL"); finish({ id: set.id, error: `timed out after ${PER_SET_TIMEOUT_MS}ms` }); }, PER_SET_TIMEOUT_MS);
-    child.stdout.on("data", (d) => { out += d; });
+    const text = childStdoutText(child);
     child.on("close", (code) => {
+      const out = text();
       if (code !== 0 || !out.trim()) return finish({ id: set.id, error: `child exited ${code} with no result` });
       try { finish(JSON.parse(out)); } catch (e) { finish({ id: set.id, error: `bad child JSON: ${e?.message || e}` }); }
     });

@@ -29,7 +29,7 @@ import { sha256Hex } from "../graphKeys.js";
 import { COMBINE_VERSION, combineUnit, type Decision } from "./combine";
 import { memoryRunStore, PENDING_IMAGE, recordedCall, RUNS_VERSION, type ModelRequest, type RunStore, type Transport } from "./runs";
 import { QUESTIONS_VERSION, unitQuestions, type ReadingQuestion } from "./readers/questions";
-import { namesUnit, ownPacket, R0_VERSION, readR0, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
+import { headsOthers, namesUnit, ownPacket, R0_VERSION, readR0, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
 import { R1_MODEL, R1_PROMPT_VERSION, r1Answers, r1Request, type ReadUnit } from "./readers/r1";
 import { cropSpec, joinRun, R2_MODEL, R2_PROMPT_VERSION, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
 import { TERM_LIST, type TermList } from "./readers/terms";
@@ -219,6 +219,11 @@ export async function readControlIntent(input: {
     if (a.note || !a.cites.length) return a;
     const all = m.bound.map((b) => b.binding);
     const bp = (id: string) => m.bound.find((b) => b.packet.id === id);
+    // Evidence only from sections headed for other units of its kind ("…
+    // (VAV-1-26 AND VAV-1-29) …") is theirs, in any packet.
+    const headingOf = (c: ReaderAnswer["cites"][number]) => bp(c.packet)?.text.paragraphs.find((pg) => pg.lines.some((id) => c.lines.includes(id)))?.heading;
+    const theirs = a.cites.filter((c) => { const h = headingOf(c); return Boolean(h && headsOthers(h, { tag: m.reading.tag })); });
+    if (theirs.length === a.cites.length) return { ...a, note: "unverified", why: `its evidence is from a section headed for other units ("${String(headingOf(theirs[0])).slice(0, 80)}")` };
     const own = a.cites.some((c) => { const b = bp(c.packet); return Boolean(b && ownPacket(b.binding, all)); });
     if (own) return a;
     const unit = { tag: m.reading.tag, family: m.reading.family };

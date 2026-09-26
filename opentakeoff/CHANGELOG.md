@@ -65,6 +65,32 @@
   input PDFs, `mcp/scripts/corpus-hygiene.py`, now lists such copies, and
   the robustness work skips them.)
 
+  **A second round on 12 more unseen sets** found one wrong reading: a detail
+  labelled "EXHAUST FAN (EF-1, 2, 3, 4, & 5)" gave its intake damper to a
+  gatehouse toilet fan. Fixed on the shared path, with the recall work it led
+  to:
+  - A detail's own label list ("EXHAUST FAN (EF-1, 2, 3, 4, & 5)", or a list
+    that runs on over two lines) binds the units it lists, and no other unit
+    of the family by family.
+  - "VAV BOX WITH HEATING COIL" is about the box.
+  - A title's variant ("WITH HEATING COIL", "COOLING ONLY") is checked against
+    the schedule columns the unit's row fills: a cooling-only box never takes
+    the reheat box's diagram.
+  - Of two same-titled sequences on a sheet, the one printed under the unit's
+    own diagram is its.
+  - A section headed for particular units ("MULTI-PURPOSE ROOM (VAV-1-26 AND
+    VAV-1-29)") is read for those units only.
+  - A label the vision model reads across one row of a points table ("BO-2
+    INTAKE DAMPER OPEN/CLOSE") counts as printed; one joined across two rows
+    does not.
+  Across 25 unseen sets, 200 readings apply, and all 200 are right (146 with
+  145 right before). Dev and extraction are unchanged.
+
+- **Eval harness: a character split across two pipe reads no longer
+  corrupts a snapshot.** The assemblies evals read each document's JSON from
+  a child process, decoded per read, so a "°" falling on a 64 KiB boundary
+  came back as "��". `mcp/scripts/childText.mjs` decodes the whole stream.
+
 - **The platform vision model is `qwen-3.8-27b`.** The earlier default,
   `gemma-4-31b`, is no longer served: the endpoint's `/v1/models` lists only
   `gpt-oss-120b` and `qwen-3.8-27b` (checked 2026-09-25). Every vision call

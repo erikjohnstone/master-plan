@@ -300,6 +300,63 @@ test("marks several kinds of unit share: a qualified tag is only its kind's; a b
   assert.deepEqual(of(8), ["ef7:tag"], "EF names an exhaust fan: the fan schedule's B7");
 });
 
+test("a detail whose own label lists units of its family is theirs; a list may run on over two lines; one that says ALL is typical for all", () => {
+  // Robustness finds (unseen sets): "EXHAUST FAN CONTROLS" over a diagram
+  // labelled "EXHAUST FAN (EF-1, 2, 3, 4, & 5)" bound a gatehouse toilet fan,
+  // EF-7, by family, and its intake damper was read for it; "TYP. FANS
+  // EF-A1, / EF-A3, & SEF-A3" is set on two lines.
+  const packets = [
+    packet("ef", "EXHAUST FAN CONTROLS", "detail", [sp("EXHAUST FAN (EF - 1, 2, 3, 4, & 5)", 100, 100), sp("INTAKE DAMPER OPEN/CLOSE", 100, 140)]),
+    packet("gef", "GENERAL EXHAUST FAN DDC CONTROL DETAIL", "detail", [sp("TYP. FANS EF-A1 ,", 100, 100), sp("EF-A3 , & SEF-A3", 100, 121)]),
+    packet("uh", "UNIT HEATER CONTROL DIAGRAM", "diagram", [sp("UH-1, UH-2 (TYPICAL OF ALL)", 100, 100)]),
+    packet("esd", "EMERGENCY SHUTDOWN - CONTROL DIAGRAM", "diagram", [sp("EF-1, 2 & 3", 100, 100)]),
+  ];
+  const fans = ["EF-1", "EF-2", "EF-3", "EF-4", "EF-5", "EF-7", "EF-A1", "EF-A2", "EF-A3", "SEF-A3"];
+  const b = bindPackets(packets, [
+    ...fans.map((t, i) => unit(i, t, "FAN", "EXHAUST FAN SCHEDULE")),
+    ...["UH-1", "UH-2", "UH-3"].map((t, i) => unit(20 + i, t, "UNIT_HEATER", "UNIT HEATER SCHEDULE")),
+  ]);
+  const of = (i: number) => b.get(i)?.map((x) => `${x.packet}:${x.kind}${x.proposal ? ":proposal" : ""}`);
+  assert.deepEqual(of(2), ["ef:label_list"], "EF-3 is listed by its detail's own label");
+  assert.equal(b.get(5), undefined, "EF-7 is in neither list: neither detail is its");
+  assert.deepEqual(of(6), ["gef:label_list"], "EF-A1 is listed on the line the list runs on from");
+  assert.deepEqual(of(9), ["gef:label_list"]);
+  assert.equal(b.get(7), undefined, "EF-A2 is in neither list");
+  assert.deepEqual(of(22), ["uh:family_detail"], "a label typical of all speaks for UH-3 too");
+  assert.deepEqual(of(1), ["ef:label_list"], "a system's list (an emergency shutdown) names what it acts on, not its units");
+});
+
+test("variants of one kind: a title names a part the row's columns confirm or deny; a sequence printed under its variant's diagram is that variant's", () => {
+  // Robustness find (unseen set): "VAV BOX WITH HEATING COIL CONTROL
+  // DIAGRAM" and "COOLING ONLY VAV BOX CONTROL DIAGRAM", each over its own
+  // "VAV BOX SEQUENCE OF OPERATION"; the schedule's reheat coil columns are
+  // filled for the reheat boxes and blank ("-") for the cooling-only box.
+  assert.equal(subjectFamily("VAV BOX WITH HEATING COIL CONTROL DIAGRAM"), "VAV", "what comes after WITH is what the box carries");
+  const at = (x0: number, y0: number, x1: number, y1: number, ty: number) => ({ region: [x0, y0, x1, y1] as [number, number, number, number], title_box: [x0, ty, x0 + 600, ty + 38] as [number, number, number, number] });
+  const packets = [
+    packet("rh", "VAV BOX WITH HEATING COIL CONTROL DIAGRAM", "diagram", [], at(180, 30, 1740, 1210, 1144)),
+    packet("co", "COOLING ONLY VAV BOX CONTROL DIAGRAM", "diagram", [], at(1920, 30, 3160, 1000, 933)),
+    packet("s1", "VAV BOX SEQUENCE OF OPERATION", "sequence", [], { ...at(420, 1238, 1650, 2120, 1238), direction: "below_title" }),
+    packet("s2", "VAV BOX SEQUENCE OF OPERATION", "sequence", [], { ...at(1890, 1054, 3095, 1476, 1054), direction: "below_title" }),
+  ];
+  const coil = (mbh: string, gpm: string, rows: string) => ({ "REHEAT COIL DATA E.A.T DEG. F": "55.0", "REHEAT COIL DATA MBH": mbh, "REHEAT COIL DATA GPM": gpm, "REHEAT COIL DATA ROWS": rows });
+  const units = [
+    unit(0, "VAV-1-01", "VAV", "VAV TERMINAL BOX SCHEDULE", coil("5.2", "0.4", "1")),
+    unit(1, "VAV-1-02", "VAV", "VAV TERMINAL BOX SCHEDULE", coil("7.9", "0.6", "2")),
+    unit(2, "VAV-1-16", "VAV", "VAV TERMINAL BOX SCHEDULE", coil("-", "-", "-")),
+  ];
+  const b = bindPackets(packets, units);
+  const of = (i: number) => b.get(i)?.map((x) => `${x.packet}:${x.kind}${x.proposal ? ":proposal" : ""}${x.ambiguous ? ":ambiguous" : ""}`);
+  assert.deepEqual(of(0), ["rh:family_detail", "s1:family_detail"], "a reheat box: the heating-coil diagram and the sequence under it");
+  assert.deepEqual(of(1), ["rh:family_detail", "s1:family_detail"]);
+  assert.deepEqual(of(2), ["co:family_detail", "s2:family_detail"], "the cooling-only box: its diagram and the sequence under that");
+  // With no filled coil column anywhere, no row says which variant a box is:
+  // the titles' parts only propose, and the two sequences stay ambiguous.
+  const bare = bindPackets(packets, [unit(0, "VAV-1", "VAV", "VAV TERMINAL BOX SCHEDULE", { "CFM DESIGN": "220" }), unit(1, "VAV-2", "VAV", "VAV TERMINAL BOX SCHEDULE", { "CFM DESIGN": "400" })]);
+  assert.deepEqual(bare.get(0)?.map((x) => `${x.packet}:${x.kind}${x.proposal ? ":proposal" : ""}${x.ambiguous ? ":ambiguous" : ""}`),
+    ["rh:family_detail:proposal:ambiguous", "co:family_detail:proposal:ambiguous", "s1:family_detail:ambiguous", "s2:family_detail:ambiguous"]);
+});
+
 test("components: a unit in another scheduled unit takes its packets; one located in an unscheduled terminal unit takes that kind's detail", () => {
   const ahuSoo = packet("s", "AHU-1 SEQUENCE OF OPERATIONS", "sequence");
   const tu = packet("tu", "VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM", "diagram");

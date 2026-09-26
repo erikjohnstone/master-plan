@@ -8,7 +8,9 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
 import { expandTranscription, parseTranscription } from "../scripts/assemblies-key-transcribe.mjs";
+import { childStdoutText } from "../scripts/childText.mjs";
 import {
   KEY_COLUMNS, canonTag, compileTableTitle, gateVerdict, keyTables, lineSlice, parseAttrKeyCsv,
   sameCanonical, scoreSet, summarize, tally,
@@ -184,4 +186,16 @@ test("slices and the gate", () => {
   assert.equal(gateVerdict({ ...pass, invented: 1 }, "dev").pass, false);
   assert.equal(gateVerdict({ ...pass, exact_pct: 0.979 }, "dev").pass, false);
   assert.equal(gateVerdict({ ...pass, exact_pct: 0.96, wrong_pct: 0.009 }, "heldout").pass, true);
+});
+
+test("a child's JSON comes back whole: a character split across two pipe reads is never two U+FFFD", async () => {
+  // Found live: a schedule header "HOT WATER LWT [°C]" came back from the
+  // snapshot child as "[��C]" whenever its "°" fell on a 64 KiB read.
+  // Two-byte characters from an odd offset: every even read boundary splits one.
+  const text = `x${"°".repeat(100000)}C`;
+  const child = spawn(process.execPath, ["-e", 'process.stdout.write(`x${"°".repeat(100000)}C`)'], { stdio: ["ignore", "pipe", "inherit"] });
+  const out = childStdoutText(child);
+  await new Promise((ok) => child.on("close", ok));
+  assert.equal(out().length, text.length);
+  assert.equal(out(), text);
 });

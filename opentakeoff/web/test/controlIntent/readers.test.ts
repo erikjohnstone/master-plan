@@ -10,7 +10,7 @@ import { findPackets, type Packet } from "../../src/lib/controlIntent/evidence.t
 import type { Binding } from "../../src/lib/controlIntent/binding.ts";
 import { closeLetterSpacing, leadSubject, normText, packetText, printedIn } from "../../src/lib/controlIntent/readers/text.ts";
 import { compileTermList, TERM_LIST } from "../../src/lib/controlIntent/readers/terms.ts";
-import { readR0, namesUnit, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
+import { headsOthers, readR0, namesUnit, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
 import type { ReadingQuestion } from "../../src/lib/controlIntent/readers/questions.ts";
 import { r1Answers, r1Request } from "../../src/lib/controlIntent/readers/r1.ts";
 import { cropSpec, joinRun, r2PacketAnswers, SPAN_PX_PER_PT } from "../../src/lib/controlIntent/readers/r2.ts";
@@ -136,6 +136,28 @@ test("R0: in a packet titled for other units of its family, the family's noun is
   assert.equal(system.answer, "yes");
   assert.ok(!namesUnit("EXHAUST FAN SHALL OPEN THE DAMPER", { tag: "EF-3", family: "FAN" }, true));
   assert.ok(namesUnit("EF-3 SHALL RUN WHENEVER EF-1 RUNS", { tag: "EF-3", family: "FAN" }, true));
+});
+
+test("R0: a section headed for other units of the unit's kind is theirs, even in the unit's own family detail", () => {
+  // Robustness find (an unseen set): a VAV box sequence, every box's by
+  // family, carries "MULTI-PURPOSE ROOM (VAV-1-26 AND VAV-1-29) - AHU-1
+  // VENTILATION CONTROL:"; its CO2 clause was read for all 56 boxes.
+  const seq = packet("p6", "VAV BOX SEQUENCE OF OPERATION", [
+    sp("VARIABLE AIR VOLUME CONTROL:", 100, 100),
+    sp("THE DDC SYSTEM SHALL MODULATE THE PRIMARY AIR DAMPER TO MAINTAIN ROOM TEMPERATURE SETPOINTS.", 100, 123),
+    sp("MULTI-PURPOSE ROOM (VAV-1-26 AND VAV-1-29) - AHU-1 VENTILATION CONTROL:", 100, 200),
+    sp("WHEN IN THE OCCUPIED MODE, THE DDC SYSTEM SHALL MEASURE THE ROOM CO2 LEVEL AND MODULATE THE PRIMARY AIR VALVE.", 100, 223),
+  ], "sequence");
+  const own = bound(seq, "family_detail");
+  const [other] = readR0({ tag: "VAV-1-01", family: "VAV" }, [own], [opt("co2_sensor")], TERM_LIST);
+  assert.equal(other.answer, "not_shown", "the CO2 section is VAV-1-26's and VAV-1-29's");
+  const [named] = readR0({ tag: "VAV-1-26", family: "VAV" }, [own], [opt("co2_sensor")], TERM_LIST);
+  assert.equal(named.answer, "yes");
+  // A heading that names another kind's unit (the AHU) scopes nothing.
+  assert.ok(!headsOthers("UNOCCUPIED NIGHT SETBACK (AHU-2 ONLY)", { tag: "VAV-1-01" }));
+  assert.ok(headsOthers("EXHAUST FAN EF-1", { tag: "EF-2" }));
+  assert.ok(!headsOthers("EXHAUST FAN EF-01", { tag: "EF-1" }), "one tag in any spelling");
+  assert.ok(headsOthers("VAV-11", { tag: "VAV-1-1" }));
 });
 
 test("text + R0: a section runs from a heading to the next; in a shared packet, a section whose heading names the unit speaks for it", () => {
@@ -399,6 +421,24 @@ test("R2: labels must be printed in the drawing; a low-resolution crop never rea
   const spec = cropSpec(bp, 200);
   assert.equal(spec.dpi <= 200, true);
   assert.ok(spec.long_edge <= 3200);
+});
+
+test("R2: a label read across one row of a points table, cell to cell, is printed; one joined across two rows is not", () => {
+  // Robustness find (unseen sets): the vision model cites a points table's
+  // row as one label ("BO-2 INTAKE DAMPER OPEN/CLOSE"); its designator and
+  // description are printed in two cells.
+  const p = packet("p2", "EXHAUST FAN CONTROLS", [
+    sp("BO-2", 100, 100), sp("INTAKE DAMPER OPEN/CLOSE", 300, 100), sp("YES", 900, 100),
+    sp("BI-1", 100, 140), sp("FAN STATUS", 300, 140), sp("NO", 900, 140),
+  ]);
+  const q = [opt("motorized_damper"), opt("fan_status")];
+  const reply = JSON.stringify({ answers: [
+    { question: "opt.motorized_damper", answer: "yes", labels: ["BO-2 INTAKE DAMPER OPEN/CLOSE"] },
+    { question: "opt.fan_status", answer: "yes", labels: ["BO-2 FAN STATUS"] },
+  ] });
+  const got = r2PacketAnswers(reply, bound(p), q, "a");
+  assert.deepEqual(got.map((a) => a.note ?? "ok"), ["ok", "unverified"]);
+  assert.equal(got[0].cites[0].lines.length, 3, "the row's cells are the cite");
 });
 
 // ── the record, end to end ──────────────────────────────────────────────────
