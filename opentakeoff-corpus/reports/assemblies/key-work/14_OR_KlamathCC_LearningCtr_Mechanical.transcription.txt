@@ -1,0 +1,416 @@
+# 14_OR_KlamathCC_LearningCtr_Mechanical — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheets M002 (PDF page 2) and M003 (page 3): an overview of each page
+# at 60 dpi, then each table at 3x (216 dpi) in tiles with the MARK column repeated,
+# rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second read
+# at 4x of every keyed row, every cell. Each drawn title was found with the PDF's own text
+# layer (pymupdf search_for). The pipeline's output for these sheets was not consulted. The
+# second tier keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+SET 14_OR_KlamathCC_LearningCtr_Mechanical
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheets M002 and M003 (pages 2 and 3) of the Klamath Community College childcare learning center bid and permit set (Pivot Architecture, with ColeBreit Engineering), the tables the second tier's seed drew for its DOAS, AIR_COOLED_CHILLER, BOILER, PUMP, FCU, HEAT_PUMP, OUTDOOR_AIR_UNIT, UNIT_HEATER and HEAT_EXCHANGER strata.
+EXCLUDES Manufacturer/model, weight, static pressures, brake horsepower, fan and motor speeds other than a pump's operating speed, energy-recovery temperatures and effectiveness, coil air temperatures, sensible capacity, MCA/MOCP/SCCR/FLA/amps, compressor and condenser-fan data, refrigerant data, efficiencies (EER, IPLV, AFUE, SEER, SEER2, HSPF2, duty efficiency), NPSH, gas pressures, turndown, flow limits, pressure drops, flue/air/gas connection sizes, LMTD, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# DEDICATED OUTDOOR AIR SYSTEM (page 2): four rows. The table has no NOTES column, so its
+# five notes apply to every unit. LOCATION prints a room and the level ("RR 136 MEZZ"): it
+# names the mezzanine, keyed floor as printed (MEZZ; note 3 says "UNIT MOUNTED ON
+# MEZZANINE."). SERVING prints the building sector each unit serves (area_served). SUPPLY
+# FAN / MOTOR / HP keys supply_fan_hp and EXHAUST FAN / MOTOR / HP keys exhaust_fan_hp
+# (DOAS-2 prints 1.34 there, typed as printed). The supply motor's CONTROL prints ECM on
+# every row: an EC motor, no VFD, keyed vfd = no as the schema's vfd example reads a speed
+# control column (the author's reading; note 1 puts EC motors on both fans). An unlabeled
+# column with no header and a blank cell in every row sits between the exhaust fan and the
+# energy-recovery block. The WINTER/SUMMER blocks are the plate recovery's temperatures and
+# effectiveness (keyed nothing). HEATING WATER COIL / HEAT MBH keys heating_mbh and CHILLED
+# WATER COIL / TOTAL COOL MBH keys cooling_mbh (as 069_ID and 03_FL key an AHU's coils); the
+# coils' water sides and rows key hw_* and chw_*. ELECTRICAL / V/PH prints "208/3", keyed as
+# its volts part and its phase part. Note 2 ("100% OSA UNIT WITH STATIC PLATE ENERGY
+# RECOVERY.") keys energy_recovery and outdoor_air_pct; notes 3-5 (mounting, duct smoke
+# detectors, motorized dampers) key nothing.
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2
+title: DEDICATED OUTDOOR AIR SYSTEM
+family: DOAS
+render: page 2 crop 150,696,2000,146 at 3x in 7 tiles (MARK column repeated) and notes crop 150,840,950,80 at 3x; second read at 4x (crop 150,712,2000,130) of all 4 rows, every cell
+rows: all 4 printed rows
+col: MARK => tag
+col: LOCATION => -
+col: [LOCATION names a level] => floor
+col: SERVING => area_served
+col: SUPPLY FAN / AIRFLOW CFM => supply_cfm
+col: SUPPLY FAN / ESP IN WG => -
+col: SUPPLY FAN / MOTOR / BHP => -
+col: SUPPLY FAN / MOTOR / HP => supply_fan_hp
+col: SUPPLY FAN / MOTOR / RPM => -
+col: [SUPPLY FAN / MOTOR / CONTROL: VFD, or an ECM motor with no VFD] => vfd
+col: EXHAUST FAN / AIRFLOW CFM => -
+col: EXHAUST FAN / ESP IN WG => -
+col: EXHAUST FAN / MOTOR / BHP => -
+col: EXHAUST FAN / MOTOR / HP => exhaust_fan_hp
+col: EXHAUST FAN / MOTOR / RPM => -
+col: [an unlabeled column, blank in every row] => -
+col: WINTER (HEATING) / OSA EAT => -
+col: WINTER (HEATING) / OSA LAT => -
+col: WINTER (HEATING) / EA EAT => -
+col: WINTER (HEATING) / EA LAT => -
+col: WINTER (HEATING) / TOT EFF. % => -
+col: SUMMER (COOLING) / OSA EAT => -
+col: SUMMER (COOLING) / OSA LAT => -
+col: SUMMER (COOLING) / EA EAT => -
+col: SUMMER (COOLING) / EA LAT => -
+col: SUMMER (COOLING) / TOT EFF. % => -
+col: HEATING WATER COIL / HEAT MBH => heating_mbh
+col: HEATING WATER COIL / EAT => -
+col: HEATING WATER COIL / LAT => -
+col: HEATING WATER COIL / EWT => hw_ewt_f
+col: HEATING WATER COIL / LWT => hw_lwt_f
+col: HEATING WATER COIL / FLOW GPM => hw_gpm
+col: HEATING WATER COIL / ROWS => hw_rows
+col: HEATING WATER COIL / WTR PD FT => hw_wpd_ft
+col: CHILLED WATER COIL / TOTAL COOL MBH => cooling_mbh
+col: CHILLED WATER COIL / EAT => -
+col: CHILLED WATER COIL / LAT => -
+col: CHILLED WATER COIL / EWT => chw_ewt_f
+col: CHILLED WATER COIL / LWT => chw_lwt_f
+col: CHILLED WATER COIL / FLOW GPM => chw_gpm
+col: CHILLED WATER COIL / ROWS => chw_rows
+col: CHILLED WATER COIL / WTR PD FT => chw_wpd_ft
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: WT LBS => -
+col: MAKE & MODEL => -
+derive: cooling_type = chw ; header=CHILLED WATER COIL ; note=every row prints the CHILLED WATER COIL block (water side EWT 46)
+derive: heating_type = hw ; header=HEATING WATER COIL ; note=every row prints the HEATING WATER COIL block (water side EWT 130 / LWT 110)
+derive: energy_recovery = plate ; header=NOTE 2 ; note=note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+derive: outdoor_air_pct = 100 ; header=NOTE 2 ; note=note 2 (the table has no NOTES column; its notes apply to every unit): '100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY.'
+grid:
+DOAS-1 | RR 136 MEZZ | =MEZZ (RR 136 MEZZ) | SECTOR A - WEST | 2300 | 2.40 | 1.27 | 2 | 1777 | no (ECM) | 2300 | 1.37 | 0.7 | 4 | 1216 |  | 10 | 53 | 70 | 28.3 | 68.7 | 91 | 79.3 | 75 | 86.6 | 70.4 | 88.4 | 53 | 92.7 | 130 | 110 | 9 | 2 | 0.7 | 83.2 | 79.3 | 56.6 | 46 | 50.9 | 11 | 6 | 4.2 | 208/3 | 208 | 3 | 16 | 20 | 1875 | AAON V3
+DOAS-2 | RR 160 MEZZ | =MEZZ (RR 160 MEZZ) | SECTOR B - NORTH | 1290 | 2.28 | 0.85 | 1 | 2015 | no (ECM) | 1290 | 1.24 | 0.37 | 1.34 | 1769 |  | 10 | 53 | 70 | 27 | 71.2 | 91 | 79.2 | 75 | 86.7 | 72 | 43.6 | 53.3 | 88.3 | 130 | 110 | 3 | 2 | 1.2 | 47.7 | 79.2 | 55.1 | 46 | 53.8 | 8.5 | 6 | 5.2 | 208/3 | 208 | 3 | 6 | 15 | 1556 | AAON V3
+DOAS-3 | RR 133 MEZZ | =MEZZ (RR 133 MEZZ) | SECTOR A - EAST | 2215 | 2.40 | 1.21 | 2 | 1748 | no (ECM) | 2215 | 1.34 | 0.66 | 4 | 1195 |  | 10 | 53 | 70 | 28.1 | 69.1 | 91 | 79.2 | 75 | 86.6 | 70.7 | 82.5 | 54 | 80 | 130 | 110 | 5.5 | 2 | 2.1 | 82.5 | 79.2 | 55.0 | 46 | 55.6 | 12 | 6 | 6.2 | 208/3 | 208 | 3 | 16 | 20 | 1875 | AAON V3
+DOAS-4 | RR 162 MEZZ | =MEZZ (RR 162 MEZZ) | SECTOR B - SOUTH | 1830 | 3.73 | 1.65 | 2 | 2511 | no (ECM) | 1830 | 1.5 | 0.69 | 1 | 2222 |  | 10 | 53 | 70 | 29.1 | 67.1 | 91 | 79.2 | 75 | 86.5 | 69.4 | 48 | 54 | 80 | 130 | 110 | 4 | 2 | 2 | 62.0 | 79.2 | 58.9 | 46 | 53.0 | 12 | 6 | 7.9 | 208/3 | 208 | 3 | 9 | 15 | 1556 | AAON V3
+END
+
+# AIR COOLED CHILLER (page 2): one row, CH-1, whose NOTES cell says ALL. The EVAPORATOR -
+# OPERATING CONDITION block carries TONS and the chilled-water side: EWT 61 / LWT 46 key
+# chw_*, and DESIGN FLOW (GPM) keys chw_gpm (MIN. FLOW is the evaporator's minimum, keyed
+# nothing). ELECTRICAL / V/PH prints "208/3", keyed as its volts part and its phase part.
+# GLYCOL (%) prints 30; this family's vocabulary has no glycol attribute (the pump schedule's
+# general note B says the chilled water system is 40% propylene glycol: the sheets disagree,
+# and neither is keyed here). The title prints the condenser type. The five notes (sound,
+# compressor blankets, single-point power, pad, piping and heat trace) key nothing.
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2
+title: AIR COOLED CHILLER
+family: AIR_COOLED_CHILLER
+render: page 2 crop 138,962,1327,72 at 3x in 5 tiles (MARK column repeated) and notes crop 138,1034,862,84 at 3x; second read at 4x (crop 138,990,1327,42) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: EVAPORATOR - OPERATING CONDITION / TONS => tons
+col: EVAPORATOR - OPERATING CONDITION / EWT (F) => chw_ewt_f
+col: EVAPORATOR - OPERATING CONDITION / LWT (F) => chw_lwt_f
+col: EVAPORATOR - OPERATING CONDITION / MIN. FLOW (GPM) => -
+col: EVAPORATOR - OPERATING CONDITION / DESIGN FLOW (GPM) => chw_gpm
+col: EVAPORATOR - OPERATING CONDITION / WPD (FT. WC) => -
+col: CONDENSER FANS / OADB (F) => -
+col: CONDENSER FANS / QTY => -
+col: CONDENSER FANS / FLA (EACH) => -
+col: COMPRESSORS / TYPE => -
+col: COMPRESSORS / QTY => -
+col: ELECTRICAL / V/PH => -
+col: [ELECTRICAL / V/PH: volts part] => volts
+col: [ELECTRICAL / V/PH: phase part] => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: ELECTRICAL / SCCR => -
+col: EER => -
+col: IPLV => -
+col: GLYCOL (%) => -
+col: REFRIGERANT => -
+col: REFRIGERANT CHARGE (LBS) => -
+col: WT (LBS) => -
+col: MAKE & MODEL => -
+col: NOTES => -
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'AIR COOLED CHILLER'; the row prints a CONDENSER FANS block
+grid:
+CH-1 | 50 | 61 | 46 | 48 | 83.86 | 8 | 91 | 2 | 7.6 | SCROLL | 4 | 208/3 | 208 | 3 | 235 | 250 | 250 | 11.8 | 18 | 30 | R454B | 66 | 3503 | YORK YLAA0048J17XCB | ALL
+END
+
+# HOT WATER CONDENSING BOILER (page 2): two rows, each citing notes 1-7. INPUT [MBH] keys
+# input_mbh and HIGH FIRE OUTPUT [MBH] output_mbh. MAX GPM and MIN GPM are the boiler's
+# allowed flow range, not a design flow (gpm stays not printed). EWT 110 / LWT 130 key
+# ewt_f / lwt_f. GAS INLET [IN] is the gas connection, not the boiler's water hook-up
+# (conn_in stays not printed). ELEC [V/H/P] prints "120/1": two parts under a three-part
+# header; the second is the phase (1 is no supply frequency), keyed as the author's reading.
+# No column names the fuel, but every row prints gas supply pressures and a GAS INLET, and
+# note 1 provides a gas regulator with each boiler: fuel = gas (the author's reading). Note 5
+# ("PROVIDE WITH BACNET MSTP OPTION FOR INTEGRATION INTO BAS. ...") keys bas_interface with
+# the printed protocol term. Notes 2-4, 6 and 7 key nothing.
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2
+title: HOT WATER CONDENSING BOILER
+family: BOILER
+render: page 2 crop 138,1160,1424,70 at 3x in 5 tiles (MARK column repeated) and notes crop 138,1228,862,117 at 3x; second read at 4x (crop 138,1175,1424,55) of both rows, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: LOCATION => -
+col: INPUT [MBH] => input_mbh
+col: HIGH FIRE OUTPUT [MBH] => output_mbh
+col: AFUE [%] => -
+col: MIN GAS PRESS [IN. WC] => -
+col: MAX GAS PRESS [IN. WC] => -
+col: TURNDOWN => -
+col: MAX GPM => -
+col: MIN GPM => -
+col: MAX PD [PSIG] => -
+col: EWT [°F] => ewt_f
+col: LWT [°F] => lwt_f
+col: MAX PRESS [PSIG] => -
+col: FLUE DIAM [IN] => -
+col: AIR INLET [IN] => -
+col: GAS INLET [IN] => -
+col: ELEC [V/H/P] => -
+col: [ELEC [V/H/P]: volts part] => volts
+col: [ELEC [V/H/P]: phase part, printed second (the cell prints volts and phase, no hertz)] => phase
+col: FLA => -
+col: MANUFACTURER => -
+col: MODEL => -
+col: OPER WEIGHT [LBS] => -
+col: NOTES => -
+derive: fuel = gas ; header=MIN GAS PRESS [IN. WC] ; note=every row prints minimum and maximum gas pressures and a GAS INLET; note 1 provides a gas regulator with each boiler (the author's reading)
+derive: bas_interface = BACNET MSTP ; header=NOTE 5 ; note=note 5, cited by every row: 'PROVIDE WITH BACNET MSTP OPTION FOR INTEGRATION INTO BAS. PROVIDE WITH FLOW SWITCH.'
+grid:
+B-1 | BOILER RM | 600 | 585 | 97.5 | 5 | 14 | 7:1 | 105 | 10 | 160 | 110 | 130 | 160 | 4 | 4 | 1 | 120/1 | 120 | 1 | 6 | LOCHINVAR | FTX600 | 560 | 1, 2, 3, 4, 5, 6, 7
+B-2 | BOILER RM | 600 | 585 | 97.5 | 5 | 14 | 7:1 | 105 | 10 | 160 | 110 | 130 | 160 | 4 | 4 | 1 | 120/1 | 120 | 1 | 6 | LOCHINVAR | FTX600 | 560 | 1, 2, 3, 4, 5, 6, 7
+END
+
+# HYDRONIC PUMPS (page 3): eight rows. SERVICE keys service. OPER. RPM is the pump's
+# operating speed, keyed rpm; MOTOR / RPM (printed for the VFD pumps only) keys nothing.
+# MOTOR / V/PH is keyed as its volts part and its phase part; SP-2 prints "115/5" where SP-1
+# prints "115/1", typed as printed (5 is no phase count; the key follows the print). MOTOR /
+# CONTROL prints VFD or ECM, keyed vfd as the schema's vfd example reads a speed control
+# column (ECM: an EC motor, no VFD). The snowmelt pumps print ECM but also cite note 1
+# ("PROVIDE WITH INVERTER DUTY MOTOR AND INTEGRATED VFD."): the row disagrees with itself,
+# so their vfd is not one value ("?"). Every row cites note 2, which the table does not
+# print. General note B ("CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS
+# WATER ONLY.") keys glycol_pct by each row's SERVICE: 40 for chilled water, 0 for the
+# primary and secondary hot water; it names no snowmelt system, so the snowmelt pumps'
+# glycol stays not printed. Duty efficiencies (HWP-1 32.8, HWP-2 62.8) are typed as printed.
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3
+title: HYDRONIC PUMPS
+family: PUMP
+render: page 3 crop 192,73,1308,195 at 3x in 5 tiles (MARK column repeated) and notes crop 192,264,908,104 at 3x; second read at 4x (crop 192,90,1308,178) of all 8 rows, every cell
+rows: all 8 printed rows
+col: MARK => tag
+col: SERVICE => service
+col: LOCATION => -
+col: TYPE => -
+col: FLOW GPM => gpm
+col: HEAD FT => head_ft
+col: DUTY EFF % => -
+col: NPSH FT => -
+col: OPER. RPM => rpm
+col: MOTOR / BHP => -
+col: MOTOR / HP => motor_hp
+col: MOTOR / RPM => -
+col: MOTOR / V/PH => -
+col: [MOTOR / V/PH: volts part] => volts
+col: [MOTOR / V/PH: phase part] => phase
+col: [MOTOR / CONTROL: VFD, or an ECM motor with no VFD] => vfd
+col: MOTOR / TYPE => -
+col: WT LBS => -
+col: MAKE & MODEL => -
+col: NOTES => -
+col: [NOTE B of the GENERAL NOTES, by the row's SERVICE: CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.] => glycol_pct
+grid:
+CHP-1 | CHILLED WATER | BOILER ROOM | VERT. IN-LINE | 106 | 55 | 58.2 | 5.8 | 1893 | 2.6 | 3 | 2000 | 208/3 | 208 | 3 | yes (VFD) | TEFC | 185 | BG E-80X 2X7B | 1,2 | 40
+CHP-2 | CHILLED WATER | BOILER ROOM | VERT. IN-LINE | 106 | 55 | 58.2 | 5.8 | 1893 | 2.6 | 3 | 2000 | 208/3 | 208 | 3 | yes (VFD) | TEFC | 185 | BG E-80X 2X7B | 1,2 | 40
+BP-1 | PRIMARY HW | BOILER ROOM | CIRC. IN-LINE | 50 | 12 | 56.4 | - | 2576 | - | 0.5 | - | 208/1 | 208 | 1 | no (ECM) | - | 35 | BG ECOCIRC XL 20-140 | 2 | 0
+BP-2 | PRIMARY HW | BOILER ROOM | CIRC. IN-LINE | 50 | 12 | 56.4 | - | 2576 | - | 0.5 | - | 208/1 | 208 | 1 | no (ECM) | - | 35 | BG ECOCIRC XL 20-140 | 2 | 0
+HWP-1 | SECONDARY HW | BOILER ROOM | VERT. IN-LINE | 116 | 40 | 32.8 | 4.7 | 1681 | 1.8 | 3 | 2000 | 208/3 | 208 | 3 | yes (VFD) | TEFC | 215 | BG E-80X 2.5X7B | 1,2 | 0
+HWP-2 | SECONDARY HW | BOILER ROOM | VERT. IN-LINE | 116 | 40 | 62.8 | 4.7 | 1681 | 1.8 | 3 | 2000 | 208/3 | 208 | 3 | yes (VFD) | TEFC | 215 | BG E-80X 2.5X7B | 1,2 | 0
+SP-1 | SNOWMELT | BOILER ROOM | CIRC. IN-LINE | 17 | 20 | 45.8 | - | 3417 | - | 0.167 | - | 115/1 | 115 | 1 | ?ECM, while the row also cites note 1 (INTEGRATED VFD) | - | 16 | BG ECOCIRC XL 36-45 | 1,2 |
+SP-2 | SNOWMELT | BOILER ROOM | CIRC. IN-LINE | 17 | 20 | 45.8 | - | 3417 | - | 0.167 | - | 115/5 | 115 | 5 | ?ECM, while the row also cites note 1 (INTEGRATED VFD) | - | 16 | BG ECOCIRC XL 36-45 | 1,2 |
+END
+
+# SPLIT SYSTEM HEAT PUMPS (page 3): two outdoor units (HP-01, HP-02), each paired with an
+# indoor unit printed below it (FC-01, FC-02). The second tier drew the table for FCU and for
+# HEAT_PUMP, so it is keyed as two blocks: the indoor units as FCU here, the outdoor units as
+# HEAT_PUMP below. SERVING, TC, SC and HEAT MBH print one merged cell across each pair,
+# typed in both rows. The indoor units print CFM and a dash for V/PH (note 5: "INDOOR UNIT
+# POWERED BY OUTDOOR UNIT."); MCA and MOCP print one merged dash. The FCU vocabulary has no
+# DX or heat-pump capacity (chw_mbh and hw_mbh are water coils'), so TC, SC and HEAT MBH key
+# nothing for the indoor units, as federal-mech keys its DX fan coils. The title and the
+# pair's refrigerant data make each indoor unit a DX fan coil heated by the heat pump
+# (cooling_type dx, heating_type heat_pump; the author's reading). The indoor units cite
+# notes 1-5 (thermostat and condensate pump, a DDC room sensor, refrigerant lines, leak
+# detector, power), which key nothing in this vocabulary.
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3
+title: SPLIT SYSTEM HEAT PUMPS
+family: FCU
+render: page 3 crop 192,411,1133,125 at 3x in 4 tiles (MARK column repeated) and notes crop 192,534,1133,96 at 3x; second read at 4x (crop 192,440,1133,96) of all 4 rows, every cell
+rows: the 2 indoor units (FC-01, FC-02); the outdoor units HP-01 and HP-02 are keyed as HEAT_PUMP in the next block
+col: MARK => tag
+col: SERVING => area_served
+col: COOL MBH / TC => -
+col: COOL MBH / SC => -
+col: HEAT MBH => -
+col: CFM => cfm
+col: ELECTRICAL DATA / V/PH => -
+col: [ELECTRICAL DATA / V/PH: volts part] => volts
+col: [ELECTRICAL DATA / V/PH: phase part] => phase
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: REFRIGERANT DATA / TYPE => -
+col: REFRIGERANT DATA / LINE LENGTH => -
+col: REFRIGERANT DATA / CHARGE (LBS) => -
+col: SEER2 => -
+col: HSPF2 => -
+col: WT LBS => -
+col: MAKE & MODEL => -
+col: NOTES => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title 'SPLIT SYSTEM HEAT PUMPS'; the pair prints REFRIGERANT DATA (R-32) and no water coil: a DX indoor unit (the author's reading)
+derive: heating_type = heat_pump ; header=TABLE TITLE ; note=title 'SPLIT SYSTEM HEAT PUMPS'; the pair prints HEAT MBH and an HSPF2 rating: heated by the heat pump (the author's reading)
+grid:
+FC-01 | MDF | 30 | 22 | 30 | 389 | - | - | - | - | - | - |  | - | - | - | 36.6 | LG-KNSAP241A | 1,2,3,4,5
+FC-02 | MDF | 14 | 12 | 12 | 194 | - | - | - | - | - | - |  | - | - | - | 19.73 | LG - KNUAB121A | 1,2,3,4,5
+END
+
+# SPLIT SYSTEM HEAT PUMPS, the outdoor units (page 3): HP-01 and HP-02. The pair's merged TC
+# keys cooling_mbh and HEAT MBH heating_mbh (the heat pump's ratings). CFM prints a dash.
+# ELECTRICAL DATA / V/PH prints "208/1", keyed as its volts part and its phase part. Both
+# cite note 6 (stand and housekeeping pad), which keys nothing.
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3
+title: SPLIT SYSTEM HEAT PUMPS
+family: HEAT_PUMP
+render: page 3 crop 192,411,1133,125 at 3x in 4 tiles (MARK column repeated) and notes crop 192,534,1133,96 at 3x; second read at 4x (crop 192,440,1133,96) of all 4 rows, every cell
+rows: the 2 outdoor units (HP-01, HP-02); the indoor units FC-01 and FC-02 are keyed as FCU in the block above
+col: MARK => tag
+col: SERVING => area_served
+col: COOL MBH / TC => cooling_mbh
+col: COOL MBH / SC => -
+col: HEAT MBH => heating_mbh
+col: CFM => cfm
+col: ELECTRICAL DATA / V/PH => -
+col: [ELECTRICAL DATA / V/PH: volts part] => volts
+col: [ELECTRICAL DATA / V/PH: phase part] => phase
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: REFRIGERANT DATA / TYPE => -
+col: REFRIGERANT DATA / LINE LENGTH => -
+col: REFRIGERANT DATA / CHARGE (LBS) => -
+col: SEER2 => -
+col: HSPF2 => -
+col: WT LBS => -
+col: MAKE & MODEL => -
+col: NOTES => -
+grid:
+HP-01 | MDF | 30 | 22 | 30 | - | 208/1 | 208 | 1 | 19 | 30 | R-32 | 168 FT | 4.081 | 22 | 9.7 | 135.4 | LG-KUSAP241A | 6
+HP-02 | MDF | 14 | 12 | 12 | - | 208/1 | 208 | 1 | 12 | 15 | R-32 | 82 FT | 1.81 | 22.5 | 10.5 | 68.8 | LG - KSUAB121A | 6
+END
+
+# MAKE UP AIR UNITS (page 3): one row, MAU-1, citing note 1 (manufacturer's installation
+# drawings). COOL MBH / TC keys cooling_mbh and TONS cooling_tons; CFM keys supply_cfm and
+# MOTOR / HP supply_fan_hp; MOTOR / V/PH ("208/3") keys volts and phase. HEAT MBH prints an
+# input (IN 174) and an output (OUT 141) at HEAT EFF. 92%: a fuel-fired heater, so IN keys
+# gas_input_mbh and OUT heating_mbh, and heating_type is gas (the enum's one fuel-fired
+# medium; the author's reading, as no cell names the fuel). The COOL MBH, TONS and SEER
+# ratings make the cooling a packaged DX unit's (the author's reading).
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3
+title: MAKE UP AIR UNITS
+family: OUTDOOR_AIR_UNIT
+render: page 3 crop 192,682,1058,104 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 192,700,1058,48) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: SERVING => area_served
+col: COOL MBH / TC => cooling_mbh
+col: COOL MBH / SC => -
+col: [HEAT MBH / IN: the fuel-fired heater's input] => gas_input_mbh
+col: HEAT MBH / OUT => heating_mbh
+col: TONS => cooling_tons
+col: CFM => supply_cfm
+col: ESP => -
+col: FAN RPM => -
+col: MOTOR / HP => supply_fan_hp
+col: MOTOR / V/PH => -
+col: [MOTOR / V/PH: volts part] => volts
+col: [MOTOR / V/PH: phase part] => phase
+col: UNIT / MCA => -
+col: UNIT / MOCP => -
+col: WT LBS => -
+col: SEER => -
+col: HEAT EFF. => -
+col: MAKE & MODEL => -
+col: NOTES => -
+derive: cooling_type = dx ; header=SEER ; note=the row prints COOL MBH, TONS and a SEER rating: a packaged DX unit (the author's reading)
+derive: heating_type = gas ; header=HEAT MBH ; note=HEAT MBH prints an input (174) and an output (141) at HEAT EFF. 92%: a fuel-fired heater (the author's reading)
+grid:
+MAU-1 | KITCHEN | 91 | 90 | 174 | 141 | 7.5 | 2150 | 0.5 | 2175 | 1.5 | 208/3 | 208 | 3 | 33.9 | 35 | 726 | 18.6 | 92% | CAPTIVEAIRE CAS-HVAC1-I.200-18-7.5T | 1
+END
+
+# ELECTRIC HEATERS (page 3): three wall heaters, keyed as the UNIT_HEATER instances the
+# second tier drew them for. SERVING prints each room (area_served); KW keys eh_kw; V/PH
+# ("120/1") keys volts and phase. The title prints the heating medium. Notes 1 (wall mounted,
+# recessed) and 2 (built-in thermostat set no higher than 60 DEG F) key nothing.
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3
+title: ELECTRIC HEATERS
+family: UNIT_HEATER
+render: page 3 crop 192,1388,803,157 at 3x in 3 tiles (MARK column repeated), notes included; second read at 4x (crop 192,1410,803,85) of all 3 rows, every cell
+rows: all 3 printed rows
+col: MARK => tag
+col: SERVING => area_served
+col: CFM => cfm
+col: KW => eh_kw
+col: AMPS => -
+col: V/PH => -
+col: [V/PH: volts part] => volts
+col: [V/PH: phase part] => phase
+col: WT LBS => -
+col: MAKE & MODEL => -
+col: NOTES => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC HEATERS'; every row prints KW
+grid:
+EH-1 | BOILER 149 | 100 | 1.5 | 12.5 | 120/1 | 120 | 1 | 22 | BERKO FRA1512F | 1, 2
+EH-2 | FIRE RISER 167 | 100 | 1.5 | 12.5 | 120/1 | 120 | 1 | 22 | BERKO FRA1512F | 1, 2
+EH-3 | VESTIBULE 100 | 100 | 1.5 | 12.5 | 120/1 | 120 | 1 | 22 | BERKO FRA1512F | 1, 2
+END
+
+# HEAT EXCHANGER (page 3): one row, HX-1, citing note 1 ("FLOOR MOUNTED, SNOW MELT HEAT
+# EXCHANGER WITH 40% PROPYLENE GLYCOL"). HOT SIDE is the primary (source) side and COLD SIDE
+# the secondary (load) side: their flows and inlet/outlet temperatures key primary_* and
+# secondary_*. Note 1 makes the heated snow-melt side 40% propylene glycol (secondary_medium
+# glycol). The hot side enters at 130 °F and leaves at 100 °F in the BOILER room: the
+# heating hot water (primary_medium hw, the author's reading). The make and model print no
+# exchanger type (hx_type stays not printed).
+TABLE
+sheet: 14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3
+title: HEAT EXCHANGER
+family: HEAT_EXCHANGER
+render: page 3 crop 1240,1349,1015,111 at 3x in 4 tiles (MARK column repeated), notes included; second read at 4x (crop 1240,1370,1015,55) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: LOCATION => -
+col: HOT SIDE / FLOW (GPM) => primary_gpm
+col: HOT SIDE / INLET TEMP (ºF) => primary_ewt_f
+col: HOT SIDE / OUTLET TEMP (ºF) => primary_lwt_f
+col: HOT SIDE / PRESSURE DROP (PSI) => -
+col: COLD SIDE / FLOW (GPM) => secondary_gpm
+col: COLD SIDE / INLET TEMP (ºF) => secondary_ewt_f
+col: COLD SIDE / OUTLET TEMP (ºF) => secondary_lwt_f
+col: COLD SIDE / PRESSURE DROP (PSI) => -
+col: LMTD => -
+col: WEIGHT (LBS) => -
+col: MAKE & MODEL => -
+col: NOTES => -
+derive: primary_medium = hw ; header=HOT SIDE ; note=the HOT SIDE enters at 130 °F and leaves at 100 °F in the BOILER room, heating the snow-melt loop of note 1: the heating hot water (the author's reading)
+derive: secondary_medium = glycol ; header=NOTE 1 ; note=note 1, cited by the row: 'FLOOR MOUNTED, SNOW MELT HEAT EXCHANGER WITH 40% PROPYLENE GLYCOL' (the heated snow-melt side)
+grid:
+HX-1 | BOILER | 15.8 | 130 | 100 | 1.188 | 17 | 85 | 115 | 2.282 | 8.33 | 182 | TACO PF 09-35-1-NH | 1
+END
