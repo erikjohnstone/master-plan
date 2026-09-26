@@ -1,0 +1,641 @@
+# 01_NY_VA_Northport_Dialysis_100CD.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/01_NY_VA_Northport_Dialysis_100CD.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M701 MECHANICAL SCHEDULES (page 88) and M601 MECHANICAL CONTROLS (page 87) of the Renovate Dialysis project, Northport VAMC NY (TLC Engineering for The Pettit Group), the tables the fourth tier's seed drew for its AHU, VAV and HUMIDIFIER strata.
+#   01_NY_VA_Northport_Dialysis_100CD.pdf#88 | AIR HANDLING UNIT | AHU | the 2 printed rows of the one unit AHU-1 (its duty in epidemic mode, note 3, and in normal mode, note 4), keyed as one instance | render: page 88 overview at 40 dpi; crop 895,88,2065,135 at 2.6x in 4 tiles (UNIT NO column repeated), notes included (crop 895,228,620,290 read in the text layer and on the overview); second read at 3x of both rows, every keyed cell
+#   01_NY_VA_Northport_Dialysis_100CD.pdf#88 | SINGLE DUCT AIR TERMINAL UNITS | VAV | all 25 printed rows | render: page 88 overview at 40 dpi; crop 2085,808,880,110 at 3x (headers) and crop 2065,1075,905,240 at 2.2x (VAV-12 to VAV-25), notes included; second read at 3x of VAV-1, VAV-13 and VAV-25, every cell
+#   01_NY_VA_Northport_Dialysis_100CD.pdf#87 | (untitled) | HUMIDIFIER | none — a controls sheet (M601): its INTERLOCK SCHEDULE names H-1 as AHU-1's interlocked humidifier and its sequence and point summaries describe humidification; no table schedules a humidifier | render: page 87 overview at 40 dpi; the page's text layer searched for HUMIDIFIER (pymupdf search_for): the interlock schedule's HUMIDIFIER column and the sequence's humidification clauses
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Pressure drops of air and filters, fan speeds and brake horsepower, air temperatures, face velocities, sensible capacities, duct branch sizes, control sequence letters, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 01_NY_VA_Northport_Dialysis_100CD: 3 table(s), 26 instance(s), 620 keyed attribute value(s) (320 printed, 300 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,floor,ROOF,,LOCATION: names a level,printed 'ROOF'; author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,area_served,DIALYSIS,,SERVICE: the area the unit serves,author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,qty,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,supply_cfm,5465,cfm,SUPPLY FAN DATA (NOTE 2) / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,oa_cfm_min,2185,cfm,"OA CFM: the normal-mode row (4), the unit's minimum outside air",author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,supply_fan_hp,5,hp,"SUPPLY FAN DATA (NOTE 2) / HP (BHP): its HP part, 5 in both rows",author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,supply_fan_qty,2,,NOTE 2,note 2: 'UNIT SHALL CONTAIN TWO SUPPLY FANS (5 HP EACH) WITH APPROXIMATELY 70% REDUNDANCY.' (NOTES: ALL)
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,return_fan_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,exhaust_fan_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,vfd,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,economizer,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,outdoor_air_pct,,%,"NOTE 3: 100% OUTDOOR AIR EMERGENCY EPIDEMIC MODE DUTY, the epidemic-mode row only",printed '100% OUTDOOR AIR in the epidemic-mode row (note 3); the normal-mode row takes 2185 of its 5465 CFM' — not a single value for this attribute
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,cooling_type,chw,,COOLING COIL / CHILLED WATER,both rows print the chilled-water coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,cooling_mbh,412,MBH,COOLING COIL / TOTAL MBH: the design-maximum row (3),author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,cooling_tons,,tons,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,dx_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_gpm,75,gpm,COOLING COIL / CHILLED WATER / GPM: the design-maximum row (3),printed '75.0'; author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_ewt_f,46,F,COOLING COIL / CHILLED WATER / EWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_lwt_f,57,F,COOLING COIL / CHILLED WATER / LWT: the design-maximum row (3),author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_wpd_ft,12,ft,COOLING COIL / CHILLED WATER / WPD: the design-maximum row (3),author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_mbh,,MBH,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_conn_in,,in,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,chw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,heating_type,steam,,INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL,both rows print the steam preheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,heating_mbh,325,MBH,INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL / MBH: the design-maximum row (3),printed '325.0'; author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_gpm,,gpm,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_ewt_f,,F,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_lwt_f,,F,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_wpd_ft,,ft,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_mbh,,MBH,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_conn_in,,in,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,steam_psig,24,psig,INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL / STEAM / PSI AT CONTROL VALVE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,steam_lb_hr,350,lb/hr,INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL / STEAM / LB/HR: the design-maximum row (3),printed '350.0'; author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,gas_input_mbh,,MBH,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,humidifier,yes,,NOTE 1,note 1: 'REFER TO HUMIDIFIER SCHEDULE FOR AHU HUMIDIFIER.' (NOTES: ALL)
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,energy_recovery,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,filter_merv,14,,FILTERS / AFTER FILTER / TYPE: the final filter's MERV,author's reading of the printed row
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,bas_interface,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,volts,460,V,NOTE 6,note 6: 'PROVIDE UNIT AT 460V/3PH.' (NOTES: ALL)
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,AIR HANDLING UNIT,AHU-1,AHU,phase,3,,NOTE 6,note 6: 'PROVIDE UNIT AT 460V/3PH.' (NOTES: ALL)
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,inlet_size_in,9,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,cfm_max,650,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,cfm_min,350,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,cfm_heat,350,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_gpm,1.1,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_lwt_f,130.7,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_mbh,13.4,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-1,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,cfm_max,115,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,cfm_min,115,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,cfm_heat,115,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_gpm,0.9,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_lwt_f,149.3,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_mbh,4.5,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-2,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,cfm_max,130,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,cfm_min,75,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,cfm_heat,75,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_lwt_f,144.5,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_mbh,3.2,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-3,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,inlet_size_in,9,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,cfm_max,645,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,cfm_min,575,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,cfm_heat,575,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_gpm,1.2,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_lwt_f,138.6,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_mbh,12.4,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-4,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,cfm_max,80,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,cfm_min,70,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,cfm_heat,70,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_lwt_f,143,F,HOT WATER REHEAT COIL / LWT,printed '143.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_mbh,1.8,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-5,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,cfm_max,70,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,cfm_min,70,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,cfm_heat,70,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_lwt_f,143,F,HOT WATER REHEAT COIL / LWT,printed '143.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_mbh,1.5,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-6,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,cfm_max,170,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,cfm_min,170,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,cfm_heat,170,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_lwt_f,135.3,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_mbh,3.7,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-7,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,cfm_max,170,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,cfm_min,170,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,cfm_heat,170,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_lwt_f,135.3,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_mbh,3.7,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-8,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,cfm_max,250,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,cfm_min,250,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,cfm_heat,250,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_lwt_f,135.3,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_mbh,5.4,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-9,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,cfm_max,125,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,cfm_min,50,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,cfm_heat,65,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_lwt_f,143.6,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_mbh,2.3,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-10,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,cfm_max,185,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,cfm_min,75,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,cfm_heat,80,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_gpm,0.5,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_lwt_f,145.4,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_mbh,3.4,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-11,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,cfm_max,150,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,cfm_min,75,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,cfm_heat,75,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_lwt_f,142.4,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_mbh,2.8,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-12,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,inlet_size_in,7,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,cfm_max,325,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,cfm_min,125,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,cfm_heat,150,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_gpm,1,gpm,HOT WATER REHEAT COIL / GPM,printed '1.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_lwt_f,147.9,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_mbh,5.9,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-13,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,cfm_max,100,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,cfm_min,100,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,cfm_heat,100,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_lwt_f,139.9,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_mbh,2.7,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-14,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,inlet_size_in,6,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,cfm_max,340,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,cfm_min,155,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,cfm_heat,155,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_gpm,0.8,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_lwt_f,147.4,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_mbh,5.2,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-15,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,cfm_max,290,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,cfm_min,225,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,cfm_heat,225,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_gpm,0.8,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_lwt_f,135.5,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_mbh,9.3,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-16,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,cfm_max,175,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,cfm_min,175,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,cfm_heat,175,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_lwt_f,135,F,HOT WATER REHEAT COIL / LWT,printed '135.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_mbh,3.8,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-17,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,inlet_size_in,4,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,cfm_max,60,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,cfm_min,60,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,cfm_heat,60,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_gpm,0.3,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_lwt_f,142.3,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_mbh,2.6,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-18,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,cfm_max,100,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,cfm_min,100,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,cfm_heat,100,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_lwt_f,139.9,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_mbh,2.2,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-19,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,cfm_max,150,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,cfm_min,50,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,cfm_heat,65,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_lwt_f,143.6,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_mbh,2.3,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-20,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,inlet_size_in,8,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,cfm_max,410,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,cfm_min,360,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,cfm_heat,360,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_gpm,0.8,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_lwt_f,138.3,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_mbh,8.5,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-21,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,cfm_max,100,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,cfm_min,100,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,cfm_heat,100,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_lwt_f,139.9,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_mbh,2.8,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-22,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,cfm_max,280,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,cfm_min,215,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,cfm_heat,215,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_gpm,1,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_lwt_f,147.4,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_mbh,6.2,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-23,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,inlet_size_in,5,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,cfm_max,75,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,cfm_min,75,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,cfm_heat,75,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_gpm,0.4,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_lwt_f,142.4,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_mbh,1.6,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-24,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,building,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,floor,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,area_served,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,terminal_type,single_duct,,TABLE TITLE,title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,inlet_size_in,6,in,INLET SIZE,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,cfm_max,320,cfm,AIRFLOWS / MAX CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,cfm_min,100,cfm,AIRFLOWS / MIN CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,cfm_heat,100,cfm,AIRFLOWS / MAX HEATING CFM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,heat_type,hw,,HOT WATER REHEAT COIL,every row prints the hot water reheat coil block
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_gpm,0.5,gpm,HOT WATER REHEAT COIL / GPM,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_ewt_f,160,F,HOT WATER REHEAT COIL / EWT,printed '160.0'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_lwt_f,144.3,F,HOT WATER REHEAT COIL / LWT,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_wpd_ft,5,ft,HOT WATER REHEAT COIL / WPD,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_mbh,3.8,MBH,HOT WATER REHEAT COIL / MBH,
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_rows,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_conn_in,0.75,in,HOT WATER REHEAT COIL / BRANCH PIPE SIZE,printed '3/4'
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,hw_glycol_pct,,%,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,eh_kw,,kW,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,eh_stages,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,motor_hp,,hp,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,ecm,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,volts,,V,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#88,SINGLE DUCT AIR TERMINAL UNITS,VAV-25,VAV,phase,,,,not printed
+01_NY_VA_Northport_Dialysis_100CD.pdf#87,,,HUMIDIFIER,,,,,no HUMIDIFIER instance printed: none — a controls sheet (M601): its INTERLOCK SCHEDULE names H-1 as AHU-1's interlocked humidifier and its sequence and point summaries describe humidification; no table schedules a humidifier

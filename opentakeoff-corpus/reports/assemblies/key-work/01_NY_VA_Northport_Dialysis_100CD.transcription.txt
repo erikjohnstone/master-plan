@@ -1,0 +1,158 @@
+# 01_NY_VA_Northport_Dialysis_100CD — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheets M701 MECHANICAL SCHEDULES (PDF page 88) and M601 MECHANICAL
+# CONTROLS (page 87), both unrotated, of the Renovate Dialysis project at the Northport VAMC NY
+# (The Pettit Group; TLC Engineering, mechanical): an overview of each page at 40 dpi, then each
+# table at 2.2x-3x (158-216 dpi) in tiles with the UNIT NO column repeated, rendered with MuPDF
+# (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26, with the PDF's own text layer (pymupdf
+# words, row by row) as a reading aid; every keyed cell was checked on the render. Each drawn title
+# was found with the text layer (pymupdf search_for). The pipeline's output for these tables was
+# not consulted while keying; the census's own record of the claimed tables (their titles and row
+# counts, which the draw carries) named page 87's untitled claim. Disclosed before the draw: AS-29's
+# unseen A/B read this document's humidifier notes and its epidemic-mode note against their cells,
+# and AS-28's census read the column names the normalizer left unread across the unseen corpus,
+# this document's among them. The fourth tier keys the tables its seed drew (tier4/01-split.md).
+SET 01_NY_VA_Northport_Dialysis_100CD
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheets M701 MECHANICAL SCHEDULES (page 88) and M601 MECHANICAL CONTROLS (page 87) of the Renovate Dialysis project, Northport VAMC NY (TLC Engineering for The Pettit Group), the tables the fourth tier's seed drew for its AHU, VAV and HUMIDIFIER strata.
+EXCLUDES Pressure drops of air and filters, fan speeds and brake horsepower, air temperatures, face velocities, sensible capacities, duct branch sizes, control sequence letters, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT (page 88): one unit, AHU-1, printed in two rows: "AHU-1 (3)" and "AHU-1 (4)"
+# with circled references to notes 3 ("100% OUTDOOR AIR EMERGENCY EPIDEMIC MODE DUTY.") and 4
+# ("NORMAL MODE DUTY."). The two rows share the unit's supply airflow, fans, filters, water
+# temperatures entering and steam pressures; they differ in outside air, coil capacities, flows and
+# leaving temperatures. The unit is selected for the epidemic mode's full outside air, so its
+# capacities and flows key the design-maximum row (3), and its minimum outside air the normal-mode
+# row (4) (the author's reading, marked on each column); its outdoor-air share is 100% in one mode
+# and not printed in the other, not one value ("?"). LOCATION ROOF names a level: floor. SERVICE
+# DIALYSIS names the area the unit serves. SUPPLY FAN DATA / MAX CFM keys supply_cfm; HP (BHP)
+# prints "5 (4.1)" and "5 (3.8)", its HP part 5 in both, keyed supply_fan_hp; note 2 ("UNIT SHALL
+# CONTAIN TWO SUPPLY FANS (5 HP EACH)") keys supply_fan_qty 2. The AFTER FILTER is MERV-14, the
+# final filter: filter_merv 14. The COOLING COIL is chilled water (cooling_type chw): TOTAL MBH
+# keys cooling_mbh, CHILLED WATER GPM chw_gpm, EWT chw_ewt_f, LWT chw_lwt_f, WPD chw_wpd_ft (feet
+# of water, general note 7). The INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL is steam
+# (heating_type steam): MBH keys heating_mbh, STEAM LB/HR steam_lb_hr, PSI AT CONTROL VALVE
+# steam_psig (PSI AT COIL prints the same 24 and keys nothing). The NOTES column prints ALL: note 1
+# ("REFER TO HUMIDIFIER SCHEDULE FOR AHU HUMIDIFIER.") keys humidifier yes, note 6 ("PROVIDE UNIT
+# AT 460V/3PH.") volts 460 and phase 3. Note 8 ("FAN MOTORS SHALL BE VFD COMPATIBLE.") asks for a
+# motor fit for a drive, not a drive, so vfd stays not printed; notes 5, 7 and 9-11 (basis of
+# design, branch pipe sizes, static pressure, phase 1 balancing, blank-off plates) key nothing.
+TABLE
+sheet: 01_NY_VA_Northport_Dialysis_100CD.pdf#88
+title: AIR HANDLING UNIT
+family: AHU
+render: page 88 overview at 40 dpi; crop 895,88,2065,135 at 2.6x in 4 tiles (UNIT NO column repeated), notes included (crop 895,228,620,290 read in the text layer and on the overview); second read at 3x of both rows, every keyed cell
+rows: the 2 printed rows of the one unit AHU-1 (its duty in epidemic mode, note 3, and in normal mode, note 4), keyed as one instance
+col: UNIT NO => tag
+col: [LOCATION: names a level] => floor
+col: [SERVICE: the area the unit serves] => area_served
+col: OA CFM => -
+col: [OA CFM: the normal-mode row (4), the unit's minimum outside air] => oa_cfm_min
+col: SUPPLY FAN DATA (NOTE 2) / MAX CFM => supply_cfm
+col: SUPPLY FAN DATA (NOTE 2) / MIN CFM => -
+col: SUPPLY FAN DATA (NOTE 2) / TSP (NOTE 9) => -
+col: SUPPLY FAN DATA (NOTE 2) / ESP => -
+col: SUPPLY FAN DATA (NOTE 2) / RPM => -
+col: SUPPLY FAN DATA (NOTE 2) / HP (BHP) => -
+col: [SUPPLY FAN DATA (NOTE 2) / HP (BHP): its HP part, 5 in both rows] => supply_fan_hp
+col: FILTERS / PRE-FILTER 1 / TYPE => -
+col: FILTERS / PRE-FILTER 2 / TYPE => -
+col: FILTERS / AFTER FILTER / TYPE => -
+col: [FILTERS / AFTER FILTER / TYPE: the final filter's MERV] => filter_merv
+col: [COOLING COIL / TOTAL MBH: the design-maximum row (3)] => cooling_mbh
+col: COOLING COIL / SENS MBH => -
+col: [COOLING COIL / CHILLED WATER / GPM: the design-maximum row (3)] => chw_gpm
+col: COOLING COIL / CHILLED WATER / EWT => chw_ewt_f
+col: [COOLING COIL / CHILLED WATER / LWT: the design-maximum row (3)] => chw_lwt_f
+col: [COOLING COIL / CHILLED WATER / WPD: the design-maximum row (3)] => chw_wpd_ft
+col: [INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL / MBH: the design-maximum row (3)] => heating_mbh
+col: [INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL / STEAM / LB/HR: the design-maximum row (3)] => steam_lb_hr
+col: INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL / STEAM / PSI AT CONTROL VALVE => steam_psig
+col: INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL / STEAM / PSI AT COIL => -
+col: NOTES => -
+col: [NOTE 3: 100% OUTDOOR AIR EMERGENCY EPIDEMIC MODE DUTY, the epidemic-mode row only] => outdoor_air_pct
+derive: cooling_type = chw ; header=COOLING COIL / CHILLED WATER ; note=both rows print the chilled-water coil block
+derive: heating_type = steam ; header=INTEGRAL FACE AND BYPASS STEAM PREHEAT COIL ; note=both rows print the steam preheat coil block
+derive: supply_fan_qty = 2 ; header=NOTE 2 ; note=note 2: 'UNIT SHALL CONTAIN TWO SUPPLY FANS (5 HP EACH) WITH APPROXIMATELY 70% REDUNDANCY.' (NOTES: ALL)
+derive: humidifier = yes ; header=NOTE 1 ; note=note 1: 'REFER TO HUMIDIFIER SCHEDULE FOR AHU HUMIDIFIER.' (NOTES: ALL)
+derive: volts = 460 ; header=NOTE 6 ; note=note 6: 'PROVIDE UNIT AT 460V/3PH.' (NOTES: ALL)
+derive: phase = 3 ; header=NOTE 6 ; note=note 6: 'PROVIDE UNIT AT 460V/3PH.' (NOTES: ALL)
+grid:
+AHU-1 | =ROOF (ROOF) | DIALYSIS | 5465 (3), 2185 (4) | 2185 | 5465 | 3885 | 5.6 | 1.85 | 3475 (3), 3335 (4) | 5 (4.1) (3), 5 (3.8) (4) | 5 | MERV-8 | MERV-11 | MERV-14 | 14 | 412 | 244 (3), 181 (4) | 75.0 | 46 | 57 | 12 | 325.0 | 350.0 | 24 | 24 | ALL | ?100% OUTDOOR AIR in the epidemic-mode row (note 3); the normal-mode row takes 2185 of its 5465 CFM
+END
+
+# SINGLE DUCT AIR TERMINAL UNITS (page 88): 25 rows, VAV-1 to VAV-25. The title names single duct
+# terminals: terminal_type single_duct (as 071_ME's title). AIRFLOWS / MAX CFM keys cfm_max, MIN
+# CFM cfm_min, MAX HEATING CFM cfm_heat. INLET SIZE keys inlet_size_in (inches, general note 6);
+# BRANCH SIZE (NOTE 1) is the duct branch, which note 1 says is not necessarily the inlet size, and
+# keys nothing. The HOT WATER REHEAT COIL block gives heat_type hw: MBH keys hw_mbh, GPM hw_gpm,
+# BRANCH PIPE SIZE the coil's pipe size hw_conn_in (as federal-mech's reheat PIPE CONNECTION SIZE),
+# WPD hw_wpd_ft (feet of water, general note 7), EWT hw_ewt_f, LWT hw_lwt_f. CONTROL SEQUENCE (A, B
+# or C) and note 2 (basis of design Titus DESV) key nothing.
+TABLE
+sheet: 01_NY_VA_Northport_Dialysis_100CD.pdf#88
+title: SINGLE DUCT AIR TERMINAL UNITS
+family: VAV
+render: page 88 overview at 40 dpi; crop 2085,808,880,110 at 3x (headers) and crop 2065,1075,905,240 at 2.2x (VAV-12 to VAV-25), notes included; second read at 3x of VAV-1, VAV-13 and VAV-25, every cell
+rows: all 25 printed rows
+col: UNIT NO => tag
+col: APD => -
+col: AIRFLOWS / MAX CFM => cfm_max
+col: AIRFLOWS / MIN CFM => cfm_min
+col: AIRFLOWS / MAX HEATING CFM => cfm_heat
+col: INLET SIZE => inlet_size_in
+col: BRANCH SIZE (NOTE 1) => -
+col: HOT WATER REHEAT COIL / EAT => -
+col: HOT WATER REHEAT COIL / LAT => -
+col: HOT WATER REHEAT COIL / MBH => hw_mbh
+col: HOT WATER REHEAT COIL / GPM => hw_gpm
+col: HOT WATER REHEAT COIL / BRANCH PIPE SIZE => hw_conn_in
+col: HOT WATER REHEAT COIL / WPD => hw_wpd_ft
+col: HOT WATER REHEAT COIL / EWT => hw_ewt_f
+col: HOT WATER REHEAT COIL / LWT => hw_lwt_f
+col: CONTROL SEQUENCE => -
+col: NOTES => -
+derive: terminal_type = single_duct ; header=TABLE TITLE ; note=title printed 'SINGLE DUCT AIR TERMINAL UNITS'
+derive: heat_type = hw ; header=HOT WATER REHEAT COIL ; note=every row prints the hot water reheat coil block
+grid:
+VAV-1 | 0.3 | 650 | 350 | 350 | 9 | 10 | 55.0 | 95.2 | 13.4 | 1.1 | 3/4 | 5 | 160.0 | 130.7 | B | 2
+VAV-2 | 0.3 | 115 | 115 | 115 | 5 | 6 | 55.0 | 91.0 | 4.5 | 0.9 | 3/4 | 5 | 160.0 | 149.3 | A | 2
+VAV-3 | 0.3 | 130 | 75 | 75 | 5 | 6 | 55.0 | 94.3 | 3.2 | 0.4 | 3/4 | 5 | 160.0 | 144.5 | B | 2
+VAV-4 | 0.3 | 645 | 575 | 575 | 9 | 10 | 55.0 | 74.9 | 12.4 | 1.2 | 3/4 | 5 | 160.0 | 138.6 | B | 2
+VAV-5 | 0.3 | 80 | 70 | 70 | 5 | 6 | 55.0 | 93.9 | 1.8 | 0.4 | 3/4 | 5 | 160.0 | 143.0 | B | 2
+VAV-6 | 0.3 | 70 | 70 | 70 | 5 | 6 | 55.0 | 93.9 | 1.5 | 0.4 | 3/4 | 5 | 160.0 | 143.0 | A | 2
+VAV-7 | 0.3 | 170 | 170 | 170 | 5 | 7 | 55.0 | 78.3 | 3.7 | 0.4 | 3/4 | 5 | 160.0 | 135.3 | A | 2
+VAV-8 | 0.3 | 170 | 170 | 170 | 5 | 7 | 55.0 | 78.3 | 3.7 | 0.4 | 3/4 | 5 | 160.0 | 135.3 | A | 2
+VAV-9 | 0.3 | 250 | 250 | 250 | 5 | 7 | 55.0 | 74.9 | 5.4 | 0.4 | 3/4 | 5 | 160.0 | 135.3 | A | 2
+VAV-10 | 0.3 | 125 | 50 | 65 | 5 | 6 | 55.0 | 95.4 | 2.3 | 0.4 | 3/4 | 5 | 160.0 | 143.6 | C | 2
+VAV-11 | 0.3 | 185 | 75 | 80 | 5 | 7 | 55.0 | 94.1 | 3.4 | 0.5 | 3/4 | 5 | 160.0 | 145.4 | C | 2
+VAV-12 | 0.3 | 150 | 75 | 75 | 5 | 6 | 55.0 | 92.5 | 2.8 | 0.4 | 3/4 | 5 | 160.0 | 142.4 | B | 2
+VAV-13 | 0.3 | 325 | 125 | 150 | 7 | 8 | 55.0 | 91.5 | 5.9 | 1.0 | 3/4 | 5 | 160.0 | 147.9 | C | 2
+VAV-14 | 0.3 | 100 | 100 | 100 | 5 | 6 | 55.0 | 87.1 | 2.7 | 0.4 | 3/4 | 5 | 160.0 | 139.9 | A | 2
+VAV-15 | 0.3 | 340 | 155 | 155 | 6 | 8 | 55.0 | 85.9 | 5.2 | 0.8 | 3/4 | 5 | 160.0 | 147.4 | B | 2
+VAV-16 | 0.3 | 290 | 225 | 225 | 5 | 8 | 55.0 | 93.1 | 9.3 | 0.8 | 3/4 | 5 | 160.0 | 135.5 | B | 2
+VAV-17 | 0.3 | 175 | 175 | 175 | 5 | 7 | 55.0 | 77.9 | 3.8 | 0.4 | 3/4 | 5 | 160.0 | 135.0 | A | 2
+VAV-18 | 0.3 | 60 | 60 | 60 | 4 | 6 | 55.0 | 95.0 | 2.6 | 0.3 | 3/4 | 5 | 160.0 | 142.3 | A | 2
+VAV-19 | 0.3 | 100 | 100 | 100 | 5 | 6 | 55.0 | 87.1 | 2.2 | 0.4 | 3/4 | 5 | 160.0 | 139.9 | A | 2
+VAV-20 | 0.3 | 150 | 50 | 65 | 5 | 6 | 55.0 | 95.4 | 2.3 | 0.4 | 3/4 | 5 | 160.0 | 143.6 | C | 2
+VAV-21 | 0.3 | 410 | 360 | 360 | 8 | 9 | 55.0 | 76.8 | 8.5 | 0.8 | 3/4 | 5 | 160.0 | 138.3 | B | 2
+VAV-22 | 0.3 | 100 | 100 | 100 | 5 | 6 | 55.0 | 87.1 | 2.8 | 0.4 | 3/4 | 5 | 160.0 | 139.9 | A | 2
+VAV-23 | 0.3 | 280 | 215 | 215 | 5 | 8 | 55.0 | 81.5 | 6.2 | 1 | 3/4 | 5 | 160.0 | 147.4 | B | 2
+VAV-24 | 0.3 | 75 | 75 | 75 | 5 | 6 | 55.0 | 92.5 | 1.6 | 0.4 | 3/4 | 5 | 160.0 | 142.4 | A | 2
+VAV-25 | 0.3 | 320 | 100 | 100 | 6 | 8 | 55.0 | 90.4 | 3.8 | 0.5 | 3/4 | 5 | 160.0 | 144.3 | B | 2
+END
+
+# (untitled) (page 87, sheet M601 MECHANICAL CONTROLS): the census claims one HUMIDIFIER row on this
+# page under no title. The page prints the AHU-1 control diagram, its sequence of operation, two
+# INPUT/OUTPUT SUMMARY tables, an AIR FLOW SCHEDULE and an INTERLOCK SCHEDULE whose one row names
+# AHU-1's interlocked equipment (RA FAN RF-1, RF-2; HUMIDIFIER H-1; PUMP P-1). No table on the page
+# schedules a humidifier: H-1's schedule is page 88's STEAM HUMIDIFIERS, a table the seed did not
+# draw. Every value a pipeline reports from this page's claim scores invented.
+TABLE
+sheet: 01_NY_VA_Northport_Dialysis_100CD.pdf#87
+title: (untitled)
+family: HUMIDIFIER
+render: page 87 overview at 40 dpi; the page's text layer searched for HUMIDIFIER (pymupdf search_for): the interlock schedule's HUMIDIFIER column and the sequence's humidification clauses
+rows: none — a controls sheet (M601): its INTERLOCK SCHEDULE names H-1 as AHU-1's interlocked humidifier and its sequence and point summaries describe humidification; no table schedules a humidifier
+grid:
+END

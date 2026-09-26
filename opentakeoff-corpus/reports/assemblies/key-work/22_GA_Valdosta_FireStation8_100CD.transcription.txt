@@ -1,0 +1,141 @@
+# 22_GA_Valdosta_FireStation8_100CD — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheet M0.02 SCHEDULES - HVAC (PDF page 64) and sheet P0.01 LEGEND,
+# SCHEDULE, NOTES & DETAILS - PLUMBING (PDF page 57) of the Fire Station #8 Site Improvements &
+# Building Renovation for the City of Valdosta GA (Ellis, Ricket & Associates; NBP Engineers):
+# 270-degree-rotated sheets read in their displayed orientation, an overview of each page at 40
+# dpi, then each table at 3x (216 dpi), rendered with MuPDF (pymupdf get_pixmap(clip)) and read by
+# eye on 2026-09-26, with the PDF's own text layer (pymupdf words, row by row) as a reading aid;
+# second read of every drawn row at 4x. The sheets' font draws the digit 1 like a capital I (the
+# text layer reads 1). Each drawn title was found with the text layer (pymupdf search_for). The
+# pipeline's output for these tables was not consulted while keying (AS-28, before the draw, read
+# the column names the normalizer left unread across the unseen corpus, this document's among
+# them). The fourth tier keys the tables its seed drew (tier4/01-split.md): one per keyed family.
+SET 22_GA_Valdosta_FireStation8_100CD
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheets M0.02 SCHEDULES - HVAC (page 64) and P0.01 LEGEND, SCHEDULE, NOTES & DETAILS - PLUMBING (page 57) of the Fire Station #8 Site Improvements & Building Renovation, City of Valdosta GA (Ellis, Ricket & Associates; NBP Engineers), the tables the fourth tier's seed drew for its DOAS, ERV, CONDENSING_UNIT, PUMP and FAN strata.
+EXCLUDES Manufacturers and model numbers, external and fan static pressures of the DOAS, sensible capacities, entering and leaving air temperatures, the electric heat's EAT/LAT, the hot gas reheat's leaving air temperature, fan types, diameters, tip speeds and outlet velocities, the pump's location, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# DOAS UNIT SCHEDULE (page 64): one row, DOAS-1. TOTAL CFM keys supply_cfm (as 004_MO's DOAS).
+# MOTOR HP prints "2x2": two motors at 2 hp, supply_fan_hp 2 as each motor (as 033_MN's "(2) @
+# 10"); the cell does not say which fan each motor drives, so supply_fan_qty stays not printed.
+# COOLING COIL / MIN. TOTAL MBH keys cooling_mbh. ELECTRIC HEAT / Kw keys eh_kw, and the block is
+# the unit's heat: heating_type electric (the author's reading, as 094_FL's electric heating coil
+# section). The HGRH (hot gas reheat) block needs a refrigerant circuit, so the cooling coil is
+# DX: cooling_type dx (the author's reading). No row prints volts or phase. REMARKS is blank and
+# the table prints no notes.
+TABLE
+sheet: 22_GA_Valdosta_FireStation8_100CD.pdf#64
+title: DOAS UNIT SCHEDULE
+family: DOAS
+render: page 64 overview at 40 dpi; crop 1600,118,925,140 at 3x in 2 tiles (MARK column repeated); second read at 4x (crop 1600,236,925,22 in 2 tiles, MARK column repeated) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: TOTAL CFM => supply_cfm
+col: MOTOR HP => -
+col: [MOTOR HP: each motor ("2x2": two motors at 2 hp)] => supply_fan_hp
+col: EXT. SP (IN. H2O) => -
+col: COOLING COIL / MIN. SENSIBLE MBH => -
+col: COOLING COIL / MIN. TOTAL MBH => cooling_mbh
+col: COOLING COIL / ENTERING AIR / DB (°F) => -
+col: COOLING COIL / ENTERING AIR / WB (°F) => -
+col: COOLING COIL / LEAVING AIR / DB (°F) => -
+col: COOLING COIL / LEAVING AIR / WB (°F) => -
+col: ELECTRIC HEAT / EAT/LAT (°F) => -
+col: ELECTRIC HEAT / Kw => eh_kw
+col: HGRH / LAT (°F) => -
+col: REMARKS => -
+derive: cooling_type = dx ; header=HGRH ; note=the row prints a hot gas reheat (HGRH) block, which only a refrigerant (DX) circuit has (the author's reading)
+derive: heating_type = electric ; header=ELECTRIC HEAT ; note=the row's heat is its ELECTRIC HEAT block (EAT/LAT 20/85, 65 Kw) (the author's reading)
+grid:
+DOAS-1 | 3100 | 2x2 | 2 | 0.75 | 165 | 268 | 95 | 78 | 52 | 51.5 | 20/85 | 65 | 90 |
+END
+
+# ENERGY RECOVERY VENTILATOR SCHEDULE (page 64): one row, ERV-1, then one empty ruled row. SUPPLY
+# AIR FLOW CFM keys supply_cfm and EXHAUST AIR FLOW CFM exhaust_cfm. MANUFACTURERS / VALENT prints
+# the model (ERC-M1-F); nothing prints the recovery type, fan motors or power.
+TABLE
+sheet: 22_GA_Valdosta_FireStation8_100CD.pdf#64
+title: ENERGY RECOVERY VENTILATOR SCHEDULE
+family: ERV
+render: page 64 overview at 40 dpi; crop 2060,1852,462,132 at 3x; second read at 4x (crop 2060,1945,462,24) of the row, every cell
+rows: all 1 printed row (one empty ruled row below it)
+col: MARK => tag
+col: SUPPLY AIR FLOW CFM => supply_cfm
+col: EXHAUST AIR FLOW CFM => exhaust_cfm
+col: MANUFACTURERS / VALENT => -
+col: REMARKS => -
+grid:
+ERV-1 | 300 | 300 | ERC-M1-F |
+END
+
+# VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE (page 64): one row, VRHP-1, then one empty
+# ruled row; its REMARKS print HEAT PUMP (a heat pump outdoor unit, claimed and drawn as
+# CONDENSING_UNIT; both families share one key vocabulary). OUTDOOR UNIT / COOLING MIN. TMBH keys
+# cooling_mbh and HEATING MIN. TMBH heating_mbh (TMBH: total MBH). VOLTAGE/ PHASE "208/3" keys
+# its volts part and its phase part.
+TABLE
+sheet: 22_GA_Valdosta_FireStation8_100CD.pdf#64
+title: VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 64 overview at 40 dpi; crop 1862,1512,660,152 at 3x; second read at 4x (crop 1862,1622,660,24) of the row, every cell
+rows: all 1 printed row (one empty ruled row below it)
+col: MARK => tag
+col: OUTDOOR UNIT / COOLING MIN. TMBH => cooling_mbh
+col: OUTDOOR UNIT / HEATING MIN. TMBH => heating_mbh
+col: VOLTAGE/ PHASE => -
+col: [VOLTAGE/ PHASE: volts part] => volts
+col: [VOLTAGE/ PHASE: phase part] => phase
+col: TRANE MODEL# => -
+col: REMARKS => -
+grid:
+VRHP-1 | 120 | 135 | 208/3 | 208 | 3 | PUHY-EP120 | HEAT PUMP
+END
+
+# RECIRCULATOR PUMP SCHEDULE (page 57, the plumbing sheet): one row, RP-1, then two empty ruled
+# rows. H.P. keys motor_hp (1/40), GPM gpm (".5") and TDH (total dynamic head, feet) head_ft.
+# LOCATION prints a room (UTILITY), not a level; REMARKS is blank. No column prints the service
+# (the title names the pump's system; dev keys take service from a SERVICE column only).
+TABLE
+sheet: 22_GA_Valdosta_FireStation8_100CD.pdf#57
+title: RECIRCULATOR PUMP SCHEDULE
+family: PUMP
+render: page 57 overview at 40 dpi; crop 1185,540,725,185 at 3x; second read at 4x (crop 1185,626,725,24) of the row, every cell
+rows: all 1 printed row (two empty ruled rows below it)
+col: MARK => tag
+col: H.P. => motor_hp
+col: GPM => gpm
+col: TDH => head_ft
+col: REMARKS => -
+col: LOCATION => -
+grid:
+RP-1 | 1/40 | .5 | 3.00 |  | UTILITY
+END
+
+# FAN SCHEDULE (page 64): three rows, EF-1, EF-2 and TEF-1. CFM keys cfm, S.P. IN W.G. esp_in (as
+# 033_MN's SP), MAX. RPM the fan's rpm (the author's reading, as 031_MO's FAN MAX RPM), MOTOR HP
+# motor_hp and DRIVE drive. TYPE (ILC, PWF, CLG), MIN. FAN DIA. (IN), MAX. TS. and MAX. O.V. key
+# nothing; REMARKS is blank on every row. No column prints volts, phase or control.
+TABLE
+sheet: 22_GA_Valdosta_FireStation8_100CD.pdf#64
+title: FAN SCHEDULE
+family: FAN
+render: page 64 overview at 40 dpi; crop 1800,1330,720,155 at 3x; second read at 4x (crop 1800,1428,720,56) of all 3 rows, every cell
+rows: all 3 printed rows
+col: MARK => tag
+col: TYPE => -
+col: CFM => cfm
+col: S.P. IN W.G. => esp_in
+col: MIN. FAN DIA. (IN) => -
+col: MAX. RPM => -
+col: [MAX. RPM: the fan's speed] => rpm
+col: MAX. TS. => -
+col: MAX. O.V. => -
+col: MOTOR HP => motor_hp
+col: DRIVE => drive
+col: REMARKS => -
+grid:
+EF-1 | ILC | 745 | 0.4 | 11 | 1232 | 1232 | 3607 | 567 | 1/4 | direct (DIRECT) |
+EF-2 | PWF | 4250 | 0.25 | 24 | 824 | 824 | 5204 | 1312 | 1/2 | direct (DIRECT) |
+TEF-1 | CLG | 75 | 0.25 | 5 | 950 | 950 | 1370 | 240 | 1/20 | direct (DIRECT) |
+END
