@@ -269,6 +269,23 @@ export const TIER3_DEV_MIN_DOCS = 8;
  * seed, every printed row up to KEY_ROWS_PER_TABLE_MAX.
  */
 export function drawTier3(census, drafters, split, tier2, seed, { eligible }) {
+  return drawDevTier(census, drafters, split, tier2, [], seed, { eligible, minDocs: TIER3_DEV_MIN_DOCS });
+}
+
+export const TIER4_DEV_MIN_DOCS = 8;
+
+/**
+ * The fourth tier: a fourth dev tier drawn exactly as the third, from the
+ * second tier's census, less every drafter group WP0.2, the second tier or
+ * the third tier holds. Held-out and held-out 2 stay the gates.
+ */
+export function drawTier4(census, drafters, split, tier2, tier3, seed, { eligible }) {
+  return drawDevTier(census, drafters, split, tier2, [{ label: "tier 3", sets: tier3.dev.sets }], seed, { eligible, minDocs: TIER4_DEV_MIN_DOCS });
+}
+
+/** A dev-only tier after the second (drawTier3, drawTier4): `later` names the
+ * dev tiers drawn after the second one, whose drafters add nothing new. */
+function drawDevTier(census, drafters, split, tier2, later, seed, { eligible, minDocs }) {
   const rand = mulberry32(seed);
   const excluded = { ...(drafters.duplicates || {}), ...(drafters.derived || {}) };
   const eligibleSet = new Set(eligible);
@@ -280,6 +297,7 @@ export function drawTier3(census, drafters, split, tier2, seed, { eligible }) {
   const earlier = new Map([
     ...[...split.dev.sets, ...split.heldout.sets].map((id) => [id, "WP0.2"]),
     ...[...tier2.dev.sets, ...tier2.heldout.sets, ...(tier2.heldout.withheld ?? [])].map((id) => [id, "tier 2"]),
+    ...later.flatMap((t) => t.sets.map((id) => [id, t.label])),
   ]);
   const leftOut = [];
   const docs = new Map();
@@ -302,7 +320,7 @@ export function drawTier3(census, drafters, split, tier2, seed, { eligible }) {
   const dev = [];
   const covered = () => bucketsOf(docs, dev.map((g) => g.pick));
   for (const g of order) {
-    if (dev.length < TIER3_DEV_MIN_DOCS) { dev.push(g); continue; }
+    if (dev.length < minDocs) { dev.push(g); continue; }
     const have = covered();
     if ([...need].every((b) => have.has(b))) break;
     const adds = [...bucketsOf(docs, [g.pick])].filter((b) => !have.has(b));
@@ -312,7 +330,7 @@ export function drawTier3(census, drafters, split, tier2, seed, { eligible }) {
   const devTables = sampleTables(docs, devSets, rand);
   return {
     seed,
-    dev_min_docs: TIER3_DEV_MIN_DOCS,
+    dev_min_docs: minDocs,
     key_rows_per_table_max: KEY_ROWS_PER_TABLE_MAX,
     population_docs: docs.size,
     population_groups: groups.length,

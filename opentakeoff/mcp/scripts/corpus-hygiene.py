@@ -128,10 +128,11 @@ def main(argv: list[str]) -> int:
         tier2 = json.loads(tier2_path.read_text())
         role.update({s: "dev" for s in tier2["dev"]["sets"]})
         role.update({s: "heldout" for s in tier2["heldout"]["sets"]})
-    # The third tier (AS-17) is dev only.
-    tier3_path = corpus / "reports" / "assemblies" / "tier3" / "01-split.json"
-    if tier3_path.exists():
-        role.update({s: "dev" for s in json.loads(tier3_path.read_text())["dev"]["sets"]})
+    # The third and fourth tiers (AS-17) are dev only.
+    for tier in ("tier3", "tier4"):
+        tier_path = corpus / "reports" / "assemblies" / tier / "01-split.json"
+        if tier_path.exists():
+            role.update({s: "dev" for s in json.loads(tier_path.read_text())["dev"]["sets"]})
     held_groups = {g for g, v in drafters["groups"].items() if any(s in role and role[s] == "heldout" for s in v["sets"])}
     firms = {g: rx for g, rx in FIRM_TEXT.items() if g in held_groups}
     missing = sorted(held_groups - set(firms))

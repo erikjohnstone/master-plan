@@ -20,12 +20,6 @@
    "packets": 0
   },
   {
-   "id": "08_ME_BGS_Augusta_EastCampus_Renovation",
-   "status": "no_control_packets",
-   "units": 3,
-   "packets": 0
-  },
-  {
    "id": "15_IA_IowaState_Biorenewables_Lab",
    "status": "no_scheduled_units",
    "units": 0,
@@ -73,24 +67,10 @@
    "applied": 20
   },
   {
-   "id": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
-   "status": "read",
-   "units": 4,
-   "packets": 1,
-   "applied": 0
-  },
-  {
    "id": "tinker-afb-iwcs-controls",
    "status": "no_scheduled_units",
    "units": 0,
    "packets": 11
-  },
-  {
-   "id": "01_NY_VA_Northport_Dialysis_100CD",
-   "status": "read",
-   "units": 39,
-   "packets": 10,
-   "applied": 0
   },
   {
    "id": "02_UT_FAA_Ogden_AirTrafficControlTower",
@@ -146,24 +126,10 @@
    "packets": 10
   },
   {
-   "id": "22_GA_Valdosta_FireStation8_100CD",
-   "status": "read",
-   "units": 20,
-   "packets": 2,
-   "applied": 0
-  },
-  {
    "id": "23_GA_MaconBibb_RecreationCenter",
    "status": "read",
    "units": 16,
    "packets": 4,
-   "applied": 0
-  },
-  {
-   "id": "26_CA_TransbayTower_Mechanical_64Sheets",
-   "status": "read",
-   "units": 37,
-   "packets": 2,
    "applied": 0
   },
   {
@@ -183,13 +149,6 @@
    "status": "no_scheduled_units",
    "units": 0,
    "packets": 0
-  },
-  {
-   "id": "011_IL_VA_Hines_Finance_Center_Renovation",
-   "status": "read",
-   "units": 22,
-   "packets": 4,
-   "applied": 0
   },
   {
    "id": "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
@@ -212,24 +171,10 @@
    "packets": 0
   },
   {
-   "id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "status": "read",
-   "units": 43,
-   "packets": 9,
-   "applied": 25
-  },
-  {
    "id": "029_ME_BGS_Project_3548_MEANG_Building_493_Boiler",
    "status": "no_scheduled_units",
    "units": 0,
    "packets": 0
-  },
-  {
-   "id": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
-   "status": "read",
-   "units": 24,
-   "packets": 23,
-   "applied": 0
   },
   {
    "id": "032_PA_Construct_EHRM_Infrastructure_Upgrades",
@@ -239,24 +184,10 @@
    "applied": 0
   },
   {
-   "id": "033_MN_VA_Project_656_18_301_Construct_Replace",
-   "status": "read",
-   "units": 17,
-   "packets": 8,
-   "applied": 0
-  },
-  {
    "id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
    "status": "no_scheduled_units",
    "units": 0,
    "packets": 9
-  },
-  {
-   "id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
-   "status": "read",
-   "units": 2,
-   "packets": 7,
-   "applied": 2
   },
   {
    "id": "046_MI_Veterinary_Medical_Center_Replace_Elevators_3",
@@ -279,12 +210,6 @@
   },
   {
    "id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
-   "status": "no_scheduled_units",
-   "units": 0,
-   "packets": 4
-  },
-  {
-   "id": "054_NV_VA_Project_654_212_Design_Build_Central",
    "status": "no_scheduled_units",
    "units": 0,
    "packets": 4
@@ -334,13 +259,6 @@
    "packets": 1
   },
   {
-   "id": "089_FL_Airport_Terminal_and_Hangar_Development",
-   "status": "read",
-   "units": 34,
-   "packets": 2,
-   "applied": 0
-  },
-  {
    "id": "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
    "status": "no_scheduled_units",
    "units": 0,
@@ -364,13 +282,20 @@
    "status": "no_scheduled_units",
    "units": 0,
    "packets": 2
+  },
+  {
+   "id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "status": "read",
+   "units": 2,
+   "packets": 7,
+   "applied": 2
   }
  ],
  "totals": {
-  "eligible": 56,
-  "read": 29,
-  "applied": 93,
-  "right": 93,
+  "eligible": 45,
+  "read": 20,
+  "applied": 68,
+  "right": 68,
   "wrong": 0,
   "unaudited": 0,
   "gone": [],
@@ -408,7 +333,18 @@
    "071_ME_BGS_Project_3809_Health_Science_Center",
    "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
    "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
-   "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set"
+   "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "08_ME_BGS_Augusta_EastCampus_Renovation",
+   "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+   "01_NY_VA_Northport_Dialysis_100CD",
+   "22_GA_Valdosta_FireStation8_100CD",
+   "26_CA_TransbayTower_Mechanical_64Sheets",
+   "011_IL_VA_Hines_Finance_Center_Renovation",
+   "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+   "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+   "033_MN_VA_Project_656_18_301_Construct_Replace",
+   "054_NV_VA_Project_654_212_Design_Build_Central",
+   "089_FL_Airport_Terminal_and_Hangar_Development"
   ]
  },
  "decisions": [
@@ -1341,438 +1277,6 @@
    "checked": "2026-09-26"
   },
   {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "DOAS-1",
-   "family": "DOAS",
-   "question": "opt.duct_smoke_detectors",
-   "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#8#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#8",
-    "text": "SETPOINT FILTER DIFFERENTIAL PRESSURE SUPPLY FAN ON/OFF SUPPLY FAN STATUS SUPPLY FAN FAILURE CONDENSATE OVERFLOW SYSTEM ENABLE RELIEF DAMPER OPEN/CLOSE EMERGENCY SHUTDOWN (GLOBAL) EXHAUST FAN ON/OFF EXHAUST FAN STATUS EXHAUST FAN FAILURE RA DAMPER OPEN/CLOSE OA DAMPER OPEN/CLOSE DUCT SMOKE DETECTOR "
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "DOAS-2",
-   "family": "DOAS",
-   "question": "opt.duct_smoke_detectors",
-   "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#8#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#8",
-    "text": "SETPOINT FILTER DIFFERENTIAL PRESSURE SUPPLY FAN ON/OFF SUPPLY FAN STATUS SUPPLY FAN FAILURE CONDENSATE OVERFLOW SYSTEM ENABLE RELIEF DAMPER OPEN/CLOSE EMERGENCY SHUTDOWN (GLOBAL) EXHAUST FAN ON/OFF EXHAUST FAN STATUS EXHAUST FAN FAILURE RA DAMPER OPEN/CLOSE OA DAMPER OPEN/CLOSE DUCT SMOKE DETECTOR "
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "DOAS-3",
-   "family": "DOAS",
-   "question": "opt.duct_smoke_detectors",
-   "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#7#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#7",
-    "text": "SETPOINT FILTER DIFFERENTIAL PRESSURE SUPPLY FAN ON/OFF SUPPLY FAN STATUS SUPPLY FAN FAILURE CONDENSATE OVERFLOW SYSTEM ENABLE RELIEF DAMPER OPEN/CLOSE EMERGENCY SHUTDOWN (GLOBAL) EXHAUST FAN ON/OFF EXHAUST FAN STATUS EXHAUST FAN FAILURE DUCT STATIC PRESSURE DUCT STATIC PRESSURE SETPOINT DUCT SMOKE "
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-3",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-3",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-4",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-4",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-5",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-5",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-6",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-6",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-7",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-7",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-8",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-8",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-9",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 1-9",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-1",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-1",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-8",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-8",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-13",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-13",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-14",
-   "family": "FCU",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1,r2)",
-   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
-   "tag": "FCU 2-14",
-   "family": "FCU",
-   "question": "opt.variable_speed_fan",
-   "value": true,
-   "rule": "drawing_read:agree(r1,r2)",
-   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-   "cite": {
-    "packet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6#p1",
-    "sheet": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf#6",
-    "text": "A. THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER."
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
-   "tag": "CWP9-10",
-   "family": "PUMP",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r2)",
-   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-   "cite": {
-    "packet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22#p2",
-    "sheet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22",
-    "text": "BO - Chilled Water Pump 1 Start/Stop BO - Chilled Water Pump 2 Start/Stop"
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
-   "tag": "HWP1-2",
-   "family": "PUMP",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r2)",
-   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-   "cite": {
-    "packet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22#p1",
-    "sheet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22",
-    "text": "BO - Hot Water Pump 1 Start/Stop BO - Hot Water Pump 2 Start/Stop"
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
    "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
    "tag": "HP-1A",
    "family": "HEAT_PUMP",
@@ -1896,6 +1400,38 @@
     "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p6",
     "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
     "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "tag": "CWP9-10",
+   "family": "PUMP",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22#p2",
+    "sheet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22",
+    "text": "BO - Chilled Water Pump 1 Start/Stop BO - Chilled Water Pump 2 Start/Stop"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "tag": "HWP1-2",
+   "family": "PUMP",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22#p1",
+    "sheet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22",
+    "text": "BO - Hot Water Pump 1 Start/Stop BO - Hot Water Pump 2 Start/Stop"
    },
    "verdict": "right",
    "checked": "2026-09-26"

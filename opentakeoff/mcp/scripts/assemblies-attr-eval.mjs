@@ -7,7 +7,7 @@
 // scoring below is eval-only; no surface imports it.
 //
 //   node --import tsx scripts/assemblies-attr-eval.mjs <corpus-dir> [setId ...]
-//        [--heldout | --dev2 | --heldout2 | --dev3] [--null] [--report] [--detail]
+//        [--heldout | --dev2 | --heldout2 | --dev3 | --dev4] [--null] [--report] [--detail]
 //
 //   --heldout  score the frozen held-out documents (reports/assemblies/
 //              01-split.json) instead of dev. Gates only: never tune on them,
@@ -17,6 +17,8 @@
 //              gates only, aggregates only, as held-out is.
 //   --dev3     the third tier's dev side (reports/assemblies/tier3/
 //              01-split.json, AS-17); the third tier holds nothing out.
+//   --dev4     the fourth tier's dev side (reports/assemblies/tier4/
+//              01-split.json), drawn as the third; it holds nothing out.
 //   --null     score a normalizer that knows nothing: the floor.
 //   --report   write reports/assemblies/02-attr-eval-<side>.{json,md}.
 //   --detail   (dev only) list every wrong, invented, missed and
@@ -60,6 +62,7 @@ export const GATES = {
 GATES.dev2 = GATES.dev;
 GATES.heldout2 = GATES.heldout;
 GATES.dev3 = GATES.dev;
+GATES.dev4 = GATES.dev;
 
 function splitCsvLine(line) {
   const cells = [];
@@ -436,7 +439,7 @@ async function main() {
   const positional = argv.filter((a, i) => !a.startsWith("--") && !(singleIdx >= 0 && i === singleIdx + 1));
   const [corpusDir, ...only] = positional;
   if (!corpusDir) {
-    console.error("usage: node --import tsx scripts/assemblies-attr-eval.mjs <corpus-dir> [setId ...] [--heldout | --dev2 | --heldout2 | --dev3] [--null] [--report] [--detail]");
+    console.error("usage: node --import tsx scripts/assemblies-attr-eval.mjs <corpus-dir> [setId ...] [--heldout | --dev2 | --heldout2 | --dev3 | --dev4] [--null] [--report] [--detail]");
     process.exit(2);
   }
   const corpus = resolve(corpusDir);
@@ -456,13 +459,13 @@ async function main() {
     process.exit(0);
   }
 
-  const side = flag("--heldout") ? "heldout" : flag("--heldout2") ? "heldout2" : flag("--dev2") ? "dev2" : flag("--dev3") ? "dev3" : "dev";
+  const side = flag("--heldout") ? "heldout" : flag("--heldout2") ? "heldout2" : flag("--dev2") ? "dev2" : flag("--dev3") ? "dev3" : flag("--dev4") ? "dev4" : "dev";
   const detail = flag("--detail");
   if (detail && isHeldout(side)) {
     console.error("--detail is dev-only: held-out documents are scored at gates, never tuned on");
     process.exit(2);
   }
-  // A tier's sides end in its number (dev2, heldout2, dev3); WP0.2's have none.
+  // A tier's sides end in its number (dev2, heldout2, dev3, dev4); WP0.2's have none.
   const tier = side.match(/\d$/)?.[0];
   const split = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", ...(tier ? [`tier${tier}`] : []), "01-split.json"), "utf8"));
   const sideSets = split[tier ? side.slice(0, -1) : side].sets;
