@@ -123,6 +123,23 @@
   now read their own P&IDs: 25 more readings apply, all right (363 of 363
   across the 53 unseen sets). Nothing else changes.
 
+  **A hydronic plant's drawings bind its equipment.** A drawing about a
+  chilled water, heating water or condenser water plant ("CHILLED WATER
+  SYSTEM SEQUENCE OF OPERATION", "HEATING HOT WATER PLANT POINTS LIST",
+  "HOT WATER DDC CONTROL DIAGRAM") names no unit, so it bound nothing and
+  the plant's chillers, boilers and pumps went unread. It now binds the
+  plant's own equipment: its chillers, boilers or cooling towers, and the
+  pumps and exchangers whose row says they serve that plant ("SERVICE:
+  PRIMARY - CHILLED WATER", "FLUID: CHS"), where no drawing of that kind is
+  bound to the unit already. A domestic water pump, a unit's coil pump, a
+  steam boiler, a terminal unit and a schedule row with no tag never take
+  it. The drawing stays the plant's: only its clauses that name the unit
+  speak for it, and nothing is read as absent through it. 39 bindings are
+  added over 7 unseen sets and none changes; the dev bindings are
+  byte-identical. Read live, 7 more readings apply, all right (three
+  chillers' role and chilled water isolation valve, a chilled water pump's
+  role): 370 of 370 across the 53 unseen sets.
+
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
   a child process, decoded per read, so a "°" falling on a 64 KiB boundary

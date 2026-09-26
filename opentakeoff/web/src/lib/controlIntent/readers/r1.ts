@@ -149,6 +149,7 @@ export function appliesBecause(bp: BoundPacket, unit: ReadUnit): string {
     case "tag_body": return "this unit's tag is printed in it";
     case "sibling": return "it is about the same subject as a drawing titled for this unit, on the same sheet";
     case "component_of": return "it is the drawing of the unit this one serves or belongs to";
+    case "system": return "it is the control drawing of the hydronic plant (chilled, heating or condenser water) this unit is part of";
     default: return example ? "it is the typical control detail for this unit's kind of equipment; its title names another unit of this kind as the example" : "it is the typical control detail for this unit's kind of equipment";
   }
 }

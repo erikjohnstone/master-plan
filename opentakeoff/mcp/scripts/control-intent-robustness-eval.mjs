@@ -85,6 +85,7 @@ const rebindEvidence = (kind, title, u) => ({
   cross_reference: `its schedule refers to "${title}"`, label_list: `"${title}" is labelled for ${u.tag}`,
   tag_body: `${u.tag} is printed inside "${title}"`, sibling: `"${title}" is about the same subject as its packet`,
   family_detail: `"${title}" is a detail for its family (${u.family})`, component_of: `its row puts it in the unit "${title}" is for`,
+  system: `"${title}" is its plant's drawing`,
 }[kind] ?? `"${title}" is its`);
 
 /** The rebindings of one mode: item → the bindings that replace its own. */

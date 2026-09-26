@@ -682,3 +682,86 @@ qualifier, and DOAS-1's row confirmed it by its voltage, "460/3/60".
 DOAS-3's own drawings. Nothing it prints was applied to DOAS-3 alone (its smoke detector is read in "DOAS 3 P&ID"
 too). A title that names a unit but whose subject is another kind of equipment (the unit as the owner of what the
 drawing shows) is left to a later batch, with the census that would size it.
+
+## CI-27: a hydronic plant's drawings bound nothing, so its chillers, boilers and pumps went unread (FIXED, next commit)
+
+**Found:** 2026-09-26, a census of the control packets no unit is bound to over the non-held-out sets: 378 of 651
+bind nothing, and 1,123 of 2,296 units have no binding. Most are right: lighting, fire alarm, infection control
+and code-analysis "details"; grilles, louvers and tanks; and rows that are no units (21_VA's pump schedule is printed
+transposed, so its attribute rows, "PUMP FUNCTION" and "MOTOR VOLTAGE", are read as pumps; that is schedule
+extraction and is not touched here). A recurring kind is not right: a plant's system drawing ("CHILLED WATER SYSTEM
+SEQUENCE OF OPERATION", "HEATING HOT WATER PLANT POINTS LIST", "HOT WATER DDC CONTROL DIAGRAM", "CHILLER PLANT DDC
+POINTS LIST") names no unit family and no tag, so it bound nothing. The chillers, boilers and pumps it governs were
+left unbound in 012_MO, 014_MT, 021_XX, 028_TX, 03_FL, 061_IA and 009_FL. Held-out B1 counts 45 of its missed
+pairs as "no binding at all"; plant sequences are common in larger projects.
+
+**What:** the binder's family detail needs a title that names the unit's family, or a subject its schedule prints.
+It deliberately leaves media out of that ("a title about the hot water system names no unit a hot-water unit
+heater's row could print"). So a plant's drawing reached no unit at all, the plant's own equipment included.
+
+**Fix (`binding.ts`, a new kind `system`):**
+- A title whose subject is a plant and nothing else names its plant or plants: chilled water, heating water,
+  condenser water. Examples: "CHILLED WATER SYSTEM …", "HEATING HOT WATER PLANT …", "HOT WATER DDC CONTROL DIAGRAM",
+  "CHILLER AND HOT WATER PLANTS …". A title naming a unit ("CHILLED WATER PUMP SEQUENCE") stays a family detail.
+  "DOMESTIC HOT WATER …" and "… HOT WATER COIL CONNECTION DIAGRAM" are no plant's. A title that lists its units is
+  theirs alone.
+- The plant's equipment takes it:
+  - its chillers, boilers (a steam boiler is no heating water plant's) or cooling towers, by kind;
+  - its pumps and exchangers by the one plant their service, system, function or fluid column or their schedule
+    names ("PRIMARY - CHILLED WATER", "SYSTEM: HOT WATER", "FLUID: CHS", "HWS", "CHILLED WATER PUMP SCHEDULE").
+  Never a domestic, heat recovery or unit's coil pump ("HEATING HOT WATER - AHU COIL"), a component of another unit,
+  a terminal unit, or a row with no tag. A unit takes it only where no drawing of that packet kind is bound to it
+  already; two plant drawings of one kind are ambiguous.
+- The drawing stays the plant's, not the unit's own. The readers treat it as a shared system drawing, as they treat
+  a drawing the unit's tag is printed in: only its clauses that name the unit (its tag, its kind's noun, its tag's
+  words) speak for it, and nothing is read as absent through it. R1 is told it is "the control drawing of the
+  hydronic plant this unit is part of".
+
+**Checked:**
+- The new binder test fails without the fix.
+- Over the non-held-out sets (1,964 bindings before), 39 bindings are added over 7 sets and none changes. Each was
+  checked against its drawing: 009_FL's chiller and its two chilled water pumps take "CHILLER PLANT DDC POINTS
+  LIST"; 012_MO's chillers and five chilled water pumps take the chilled water sequence; 014_MT's two boilers and two
+  hot water pumps take "HOT WATER DDC CONTROL DIAGRAM"; 021_XX's four chillers and four chilled water pumps take its
+  two chilled water sequences as ambiguous; 028_TX's chiller and boiler take their plants' sequences; 03_FL's chilled
+  water pump takes the chilled water sequence and schematic; 061_IA's two heating hot water pumps take the plant's
+  points list (its AHU coil pump does not). The dev documents' bindings are byte-identical.
+- The seven sets read live: 7 more readings apply, all right against their cites:
+  - 012_MO CH-1, CH-2 and CH-3: role, "THE BAS SHALL CONTROL THE STARTING AND STOPPING OF THE CHILLERS…";
+  - their chilled water isolation valves, "THE CHILLED WATER ISOLATION VALVE FOR THE LEAD CHILLER SHALL OPEN…";
+  - 03_FL CHWP-1: role, "UPON A CALL FOR COOLING, THE DDC SHALL START THE CHILLED WATER PUMP".
+  None was lost.
+- The 53 unseen sets replayed: 370 applied, 370 right. Dev replay unchanged: 227/244, 291 applied, 0 wrong.
+
+**Watch:** the readers still leave most plant pumps unread (012_MO's eight): the vision model cites pump labels
+("PCHP 1") the drawing prints another way, and the text model does not settle them. That is reader recall, not the
+binding. Exchangers whose row names no service (061_IA's steam-to-water HX-A-1 and HX-A-2) stay unbound. A chilled
+water sequence often covers the condenser water side too; towers and condenser water pumps join only by a title
+that names condenser water.
+
+## CI-28: the text reader's role check took a passive clause's subject for its actor (FOUND; fix held for CI-26)
+
+**Found:** 2026-09-26, a census of the reading questions of the confirmed-bound units on the 53 unseen sets
+(replayed, 3,233 questions; 1,574 of the confirmed-bound units' questions settle nothing). Most unsettled questions
+are C9 working: an absence read through a family's typical detail is no vote. Of 532 model answers that did not
+verify, 170 are R1 role answers whose subject quote "does not make the BAS the one commanding". Most of those are
+right to fail (a quote with no actor, "THE EXHAUST FAN MUST BE ENERGIZED"; a point label; "AS SET BY THE DCC").
+34 are not: the quote is passive, and the check took its grammatical subject ("THE DOAS SHALL BE CONTROLLED BY THE
+BAS" read as THE DOAS acting).
+
+**Fix, drafted and held:** the actor of a clause whose own verb is passive ("SHALL/WILL/MUST BE <verb> BY X") is
+its agent X, up to where its phrase ends ("… BY THE DDC SYSTEM TO MAINTAIN …" is THE DDC SYSTEM). A negated
+passive has none. Over the 53 sets it verifies those 34 answers and moves 24 decisions from proposal to applied.
+23 are right (011_IL's 15 heat pumps, "shall be directly controlled by a … DDC controller"; 009_FL's EF-5 and EF-6;
+028_TX's DOAS-1 and DOAS-2; 096_IN's boilers; 044_NY's EF-1 and EF-2). One is not supported: 044_NY EF-5.
+
+**Why held:** 044_NY's finder does not find the title "MAKEUP AIR AND EXHAUST SYSTEM" (a keyword-less system title),
+so that detail's notes are part of the packet "EMERGENCY GENERATOR ROOM CONTROLS". EF-5 is bound to that packet by
+its tag in the generator room's notes, and its role would apply on the other detail's note, "MAKEUP AIR UNIT AND
+EXHAUST FAN SHALL BE CONTROLLED BY THE EXISTING ALC CONTROL SYSTEM". The generator room detail draws no BAS output
+for the room exhaust fan and says only "EXHAUST FAN STATUS SHALL BE VERIFIED ON BAS".
+
+A narrower attribution rule was tried and rejected: in a packet that prints other units of the unit's kind, only
+a clause printing its tag would speak for it. It blocks EF-5, but it also loses a right decision (03_FL HWP-1's
+role, read in its system sequence's "SECONDARY HOT WATER PUMP START/STOP: THE DDC CONTROLLER SHALL START THE HOT
+WATER PUMP"), and it would cost system sequences generally. The fix ships with CI-26's finder split.

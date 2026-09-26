@@ -38,6 +38,15 @@
 //   component_of     the weakest: a unit with no packet of its own whose row
 //                    names the one scheduled unit it serves or belongs to
 //                    ("SERVICE: AHU-1") takes that unit's packets
+//   system           a hydronic plant's drawing ("CHILLED WATER SYSTEM
+//                    SEQUENCE OF OPERATION", "HEATING HOT WATER PLANT POINTS
+//                    LIST") binds the plant's own equipment: its chillers,
+//                    boilers or cooling towers, and the pumps and exchangers
+//                    whose row says they serve that system ("SERVICE:
+//                    PRIMARY - CHILLED WATER"), where no packet of that kind
+//                    binds the unit already. The drawing is the plant's, not
+//                    the unit's own: only its clauses that name the unit
+//                    speak for it, and no absence is read through it
 // A sheet whose title block names control evidence (scope "sheet") binds a
 // unit by a tag in that title; as a sibling when the sheet is about the
 // unit's family and the only units its titles name are those of the title
@@ -47,7 +56,7 @@ import { pageLines, repairSpacing, SENTENCE, subjectFamily, subjectWords } from 
 import type { RowUnit } from "./rowReader";
 import { frameBox } from "../assemblies/scheduleNotes";
 
-export type BindingKind = "tag" | "list_range" | "cross_reference" | "label_list" | "tag_body" | "sibling" | "family_detail" | "component_of";
+export type BindingKind = "tag" | "list_range" | "cross_reference" | "label_list" | "tag_body" | "sibling" | "family_detail" | "component_of" | "system";
 
 export interface Binding {
   packet: string;
@@ -61,7 +70,7 @@ export interface Binding {
   ambiguous?: true;
 }
 
-const RANK: Record<BindingKind, number> = { tag: 1, list_range: 1, cross_reference: 2, label_list: 3, tag_body: 3, sibling: 4, family_detail: 5, component_of: 6 };
+const RANK: Record<BindingKind, number> = { tag: 1, list_range: 1, cross_reference: 2, label_list: 3, tag_body: 3, sibling: 4, family_detail: 5, system: 5, component_of: 6 };
 
 // ── Tags ────────────────────────────────────────────────────────────────────
 
@@ -875,11 +884,89 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     out.set(u.index, inherited.map((b) => ({ packet: b.packet, kind: "component_of" as BindingKind, evidence: `its row ${inside.size ? "puts it in" : indoor === owner ? "is the outdoor unit of" : "names as what it serves"} ${owner.tag}, whose packet it is (${b.kind}: ${b.evidence})`, ...(b.ambiguous ? { ambiguous: true as const } : {}) })));
   }
 
+  // A hydronic plant's drawings: its equipment, where no packet of the kind
+  // binds the unit already. A title that lists its units is theirs.
+  const plant = titled.filter((t) => t.p.scope !== "sheet" && t.tags.length === 0).map((t) => ({ t, systems: titleSystems(t.p.title) })).filter((x) => x.systems.size);
+  if (plant.length) {
+    for (const u of units) {
+      if (!tagKey(u.tag) || opts.standalone?.has(u.index)) continue;
+      const found = out.get(u.index) ?? [];
+      if (found.some((b) => b.kind === "component_of")) continue;
+      const member = plantMember(u);
+      if (!member) continue;
+      const bound = new Set(found.filter((b) => !b.proposal).map(kindOf));
+      const byKind = new Map<string, typeof plant>();
+      for (const x of plant) if (x.systems.has(member.system) && !bound.has(x.t.p.kind) && !found.some((b) => b.packet === x.t.p.id)) (byKind.get(x.t.p.kind) ?? byKind.set(x.t.p.kind, []).get(x.t.p.kind)!).push(x);
+      for (const list of byKind.values()) {
+        for (const { t } of list) found.push({ packet: t.p.id, kind: "system", evidence: `"${t.p.title}" is the ${SYSTEM_NAME[member.system]} plant's drawing, and ${member.why}`, ...(list.length > 1 ? { ambiguous: true as const } : {}) });
+      }
+      if (found.length) out.set(u.index, found);
+    }
+  }
+
   for (const [k, found] of out) {
     if (!found.length) { out.delete(k); continue; }
     found.sort((a, b) => RANK[a.kind] - RANK[b.kind]);
   }
   return out;
+}
+
+/** A hydronic plant, as a title or a row names it. */
+type PlantSystem = "chilled_water" | "heating_water" | "condenser_water";
+const SYSTEM_NAME: Record<PlantSystem, string> = { chilled_water: "chilled water", heating_water: "heating water", condenser_water: "condenser water" };
+
+/** Words a title about a hydronic plant, and nothing else, is made of. */
+const PLANT_WORDS = new Set(["CHILLED", "CHILLER", "CHW", "HOT", "HEATING", "HW", "HHW", "CONDENSER", "WATER", "PLANT", "PLANTS", "LOOP", "LOOPS", "PRIMARY", "SECONDARY", "AND", "&"]);
+
+/** The hydronic plants a title is about, when its subject is a plant and not
+ * a unit or a part: "CHILLED WATER SYSTEM SEQUENCE OF OPERATION", "HEATING
+ * HOT WATER PLANT POINTS LIST", "HOT WATER DDC CONTROL DIAGRAM", "CHILLER
+ * AND HOT WATER PLANTS CONTROLS SCHEMATIC". None for "CHILLED WATER PUMP
+ * SEQUENCE" (a pump's), "DOMESTIC HOT WATER …" or "… HOT WATER COIL
+ * CONNECTION DIAGRAM". */
+export function titleSystems(title: string): Set<PlantSystem> {
+  const out = new Set<PlantSystem>();
+  if (subjectFamily(title) !== null) return out;
+  const words = subjectWords(title).flatMap((w) => w.split("/")).filter((w) => w && !/\d/.test(w));
+  if (!words.length || words.some((w) => !PLANT_WORDS.has(w))) return out;
+  if (words.some((w) => w === "CHILLED" || w === "CHILLER" || w === "CHW")) out.add("chilled_water");
+  if (words.some((w) => w === "HOT" || w === "HEATING" || w === "HW" || w === "HHW")) out.add("heating_water");
+  if (words.includes("CONDENSER")) out.add("condenser_water");
+  return out;
+}
+
+/** Plant equipment by kind: a chiller is the chilled water plant's, a boiler
+ * the heating water plant's, a cooling tower the condenser water plant's. */
+const PLANT_FAMILY: Record<string, PlantSystem> = { AIR_COOLED_CHILLER: "chilled_water", HEAT_RECOVERY_CHILLER: "chilled_water", BOILER: "heating_water", COOLING_TOWER: "condenser_water" };
+/** Columns that say what a pump or an exchanger serves. */
+const SERVICE_HEADER = /\b(?:SERVICE|SEVICE|SYSTEM|FUNCTION|FLUID|APPLICATION)\b/i;
+/** What a service says, per plant (standard piping abbreviations: CHWS,
+ * CHS, HWS, HHWR, CWS). */
+const SERVES: Record<PlantSystem, RegExp> = {
+  chilled_water: /\bCHILLED\b|\b[PS]?CHW[SR]?\b|\b[PS]?CH[SR]\b/,
+  heating_water: /\bHEATING\b|\bHOT\s+WATER\b|\b[PS]?HH?W[SR]?\b|\bBOILERS?\b/,
+  condenser_water: /\bCONDENSER\b|\bCW[SR]\b/,
+};
+/** A service that is not a plant's: domestic water, a unit's own coil or
+ * equipment ("HEATING HOT WATER - AHU COIL"), heat recovery. */
+const NOT_PLANT_SERVICE = /\bDOMESTIC\b|\bDHW\b|\bPOTABLE\b|\bCOILS?\b|\bHEAT\s+RECOVERY\b|\b[A-Z]{1,6}\s?-\s?\d/;
+
+/** The hydronic plant a scheduled unit is part of, and why: its kind, or
+ * for a pump or an exchanger the one plant its service or schedule names. */
+function plantMember(u: RowUnit): { system: PlantSystem; why: string } | null {
+  const byFamily = PLANT_FAMILY[u.family];
+  if (byFamily) {
+    // A steam boiler is no heating water plant's.
+    if (byFamily === "heating_water" && /\bSTEAM\b/.test(clean(u.table_title)) && !/\bWATER\b/.test(clean(u.table_title))) return null;
+    return { system: byFamily, why: `it is ${u.family === "BOILER" ? "a boiler" : u.family === "COOLING_TOWER" ? "a cooling tower" : "a chiller"}` };
+  }
+  if (u.family !== "PUMP" && u.family !== "HEAT_EXCHANGER") return null;
+  const said = [...Object.entries(u.cells).filter(([h]) => SERVICE_HEADER.test(h)).map(([h, v]) => ({ where: `its ${clean(h)} is`, text: clean(v) })), { where: "its schedule is", text: clean(u.table_title) }].filter((x) => x.text);
+  const hits = said.flatMap((x) => (Object.keys(SERVES) as PlantSystem[]).filter((sys) => SERVES[sys].test(x.text)).map((sys) => ({ sys, x })));
+  const systems = new Set(hits.map((h) => h.sys));
+  if (systems.size !== 1 || said.some((x) => NOT_PLANT_SERVICE.test(x.text))) return null;
+  const [h] = hits;
+  return { system: h.sys, why: `${h.x.where} "${h.x.text}"` };
 }
 
 /** Whether a unit's schedule (its title and type columns) prints the whole

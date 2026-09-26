@@ -444,3 +444,44 @@ test("components: a unit in another scheduled unit takes its packets; one locate
   assert.deepEqual(b.get(1)?.map((x) => [x.packet, x.kind]), [["s", "component_of"]]);
   assert.deepEqual(b.get(2)?.map((x) => [x.packet, x.kind]), [["tu", "component_of"]]);
 });
+
+test("a hydronic plant's drawings bind its equipment: chillers, boilers and towers by kind, pumps and exchangers by the plant their service names; never a domestic or a unit's coil pump, a steam boiler, a terminal unit or a row with no tag", () => {
+  const chw = packet("chw", "CHILLED WATER SYSTEM SEQUENCE OF OPERATION", "sequence");
+  const hw = packet("hw", "HEATING HOT WATER PLANT POINTS LIST", "points");
+  const hwd = packet("hwd", "HOT WATER DDC CONTROL DIAGRAM", "diagram");
+  const dhw = packet("dhw", "DOMESTIC HOT WATER - SEQUENCE OF OPERATION", "sequence");
+  const units = [
+    unit(0, "CH-1", "AIR_COOLED_CHILLER", "AIR-COOLED CHILLER SCHEDULE"),
+    unit(1, "B-1", "BOILER", "BOILER SCHEDULE"),
+    unit(2, "PCHP-1", "PUMP", "PUMP SCHEDULE", { SERVICE: "PRIMARY - CHILLED WATER" }),
+    unit(3, "HWP-1", "PUMP", "PUMP SCHEDULE", { SYSTEM: "HOT WATER" }),
+    unit(4, "P-3A", "PUMP", "PUMP SCHEDULE", { FLUID: "HWS" }),
+    unit(5, "RP-1", "PUMP", "PUMP SCHEDULE", { SERVICE: "DOMESTIC HOT WATER RECIRCULATION" }),
+    unit(6, "CP-1", "PUMP", "PUMP SCHEDULE", { SERVICE: "HEATING HOT WATER - AHU COIL" }),
+    unit(7, "CWP-1", "PUMP", "PUMP SCHEDULE", { SERVICE: "CONDENSER WATER" }),
+    unit(8, "SB-1", "BOILER", "STEAM BOILER SCHEDULE"),
+    unit(9, "UH-1", "UNIT_HEATER", "HOT WATER UNIT HEATER SCHEDULE"),
+    // A transposed schedule's attribute row read as a unit.
+    unit(10, "PUMP FUNCTION", "PUMP", "PUMP SCHEDULE", { DESIGNATION: "PUMP FUNCTION", "CHWP-1 AND CHWP-2": "CHILLED WATER" }),
+  ];
+  const b = bindPackets([chw, hw, hwd, dhw], units);
+  const kinds = (i: number) => (b.get(i) ?? []).map((x) => [x.packet, x.kind, Boolean(x.ambiguous || x.proposal)]);
+  assert.deepEqual(kinds(0), [["chw", "system", false]]);
+  assert.deepEqual(kinds(1), [["hw", "system", false], ["hwd", "system", false]]);
+  assert.deepEqual(kinds(2), [["chw", "system", false]]);
+  assert.match(b.get(2)![0].evidence, /the chilled water plant's drawing, and its SERVICE is "PRIMARY - CHILLED WATER"/);
+  assert.deepEqual(kinds(3), [["hw", "system", false], ["hwd", "system", false]]);
+  assert.deepEqual(kinds(4), [["hw", "system", false], ["hwd", "system", false]], "HWS is heating water supply");
+  for (const i of [5, 6, 7, 8, 9, 10]) assert.equal(b.get(i), undefined, `${units[i].tag} is no drawn plant's`);
+  // A unit with a packet of that kind of its own takes no plant drawing of
+  // the kind; two plant drawings of one kind are ambiguous; a title that
+  // lists its units is theirs.
+  const chillers = [unit(0, "CH-1", "AIR_COOLED_CHILLER", "CHILLER SCHEDULE"), unit(1, "CH-2", "AIR_COOLED_CHILLER", "CHILLER SCHEDULE")];
+  const two = bindPackets([packet("s1", "CHILLED WATER SYSTEM CONTROL SEQUENCE:", "sequence"), packet("s2", "SEQUENCE OF OPERATION - CHILLED WATER SYSTEM", "sequence"), packet("t", "CH-1 SEQUENCE OF OPERATION", "sequence")], chillers);
+  assert.deepEqual(two.get(0)?.map((x) => x.packet), ["t"]);
+  assert.deepEqual(two.get(1)?.map((x) => [x.packet, x.kind, Boolean(x.ambiguous)]), [["s1", "system", true], ["s2", "system", true]]);
+  const listed = bindPackets([packet("l", "HEATING WATER SYSTEM CONTROL SEQUENCE (B-1, HWP-1)", "sequence")], [
+    unit(0, "B-1", "BOILER", "BOILER SCHEDULE"), unit(1, "B-2", "BOILER", "BOILER SCHEDULE"), unit(2, "HWP-1", "PUMP", "PUMP SCHEDULE", { SERVICE: "HOT WATER" }),
+  ]);
+  assert.deepEqual([0, 1, 2].map((i) => listed.get(i)?.map((x) => x.kind) ?? null), [["list_range"], null, ["list_range"]]);
+});
