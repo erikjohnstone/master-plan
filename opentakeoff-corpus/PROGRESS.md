@@ -124,15 +124,30 @@ Done so far (dev only; held-out keys not yet authored):
   - Unseen: 15 sets re-snapshotted, extraction byte-identical. The packet
     changes are the intended ones (008_MO, 27_WA, and 06_MO's five erosion
     details).
-- **Blind live audit, final code: 15 unseen sets, 157 applied, 157 right, 0
+- **Blind live audit, final code: 14 unseen sets, 127 applied, 127 right, 0
   wrong.**
-  - Applied: 16_NV 12, 27_WA 8, 21_VA 57, 001_NC 30, 009_FL 19, 06_MO 16,
-    061_IA 12, 05_MO 2, 03_FL 1. The other six sets apply nothing.
+  - Applied: 16_NV 12, 27_WA 8, 21_VA 57, 009_FL 19, 06_MO 16, 061_IA 12,
+    05_MO 2, 03_FL 1. The other six sets apply nothing.
+  - Corrected on 2026-09-26 (CI-16): the first tally, "15 sets, 157
+    applied", counted 001_NC. 001_NC is byte-identical to held-out
+    navfac-cherry-point-atc, so it is not unseen, and it is dropped here.
   - Before this round's fixes, these sets had 4 wrong: 16_NV 1, 27_WA 2,
     21_VA 1.
   - Recall cost, taken on purpose: 21_VA's CO2 on its 56 reheat boxes is a
     proposal until the binder can pair each box type with its own sequence
     (CI-15).
+- **Corpus hygiene (CI-16, `reports/control-intent/00-corpus-hygiene.md`):**
+  the sweep and the audit excluded held-out documents by corpus id only.
+  - 001_NC is byte-identical to held-out navfac-cherry-point-atc. The sweep
+    and the audit read it as unseen, and its 30 applied decisions were
+    inspected. No fix came from it.
+  - 27_WA, which CI-12 and CI-13 came from, is by held-out 30_WA's drafter
+    (Coffman Engineers).
+  - The held-out keys predate all of it (08ea06d).
+  - Held-out control-intent results will be reported over all six and over
+    the three unexposed (018_GA, 024_MO, bessemer).
+  - From now on the robustness work skips held-out twins and held-out
+    drafters' sets, and counts copies of dev documents as dev.
 - **Next:** CI-15 (recall); held-out aggregates; the rest of the sweep and
   its zone scan; corpus-eval unchanged.
 

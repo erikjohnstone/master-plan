@@ -59,7 +59,11 @@
     that prints the unit's tag speaks for it.
   - A reading found in only one of several packets bound equally is a
     proposal.
-  Across 15 unseen sets, 157 readings apply, and all 157 are right.
+  Across 14 unseen sets, 127 readings apply, and all 127 are right. (A first
+  count of 15 sets and 157 readings included a byte-identical copy of a
+  held-out document, filed under another corpus id. A hygiene scan of the
+  input PDFs, `mcp/scripts/corpus-hygiene.py`, now lists such copies, and
+  the robustness work skips them.)
 
 - **The platform vision model is `qwen-3.8-27b`.** The earlier default,
   `gemma-4-31b`, is no longer served: the endpoint's `/v1/models` lists only

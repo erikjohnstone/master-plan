@@ -330,3 +330,36 @@ tell them apart:
 - Nothing pairs each "VAV BOX SEQUENCE OF OPERATION" with the diagram above it in its column.
 
 With all three, the 56 reheat boxes would read CO2 from their own sequence, and apply it.
+
+## CI-16: the robustness work read a held-out document under another corpus id, and tuned on a held-out drafter's document (PROCESS NOTE, disclosed)
+
+**Found:** 2026-09-26, by a hygiene scan of all 121 staged corpus sets before the next audit batch
+(`mcp/scripts/corpus-hygiene.py`, `reports/control-intent/00-corpus-hygiene.md`). The scan reads input PDFs only.
+
+**What:**
+- `001_NC_FY20_P_228_ATC_Tower_and_Air_Operations` is byte-identical to held-out `navfac-cherry-point-atc`. The
+  robustness sweep and the blind audit excluded held-out documents by corpus id only, so they read it as an unseen set:
+  - The sweep's deterministic pass and the binder scans covered it.
+  - CI-11 names two of its tags ("AHU-A1" and "DOAH-A1") among the qualifier examples, and its points-list binding
+    among the changes checked.
+  - The live audit inspected its 30 applied decisions.
+  - No fix was made for it. None of its decisions was wrong, and CI-11's qualifier rule has examples from two other
+    sets. Its outputs were still seen.
+- `27_WA_ColvilleTribes_Hatchery_Lab` names Coffman Engineers on 38 pages. Coffman also drafted held-out
+  `30_WA_SpokaneTransit_CoolingTower`. The split keeps each drafter on one side, and CI-12 and CI-13 came from 27_WA.
+- `060_XX` shares navfac's drafter group (Burns & McDonnell), so navfac's exposure reaches it by drafter.
+- Not held-out, but not unseen either:
+  - byte-identical copies of dev documents: 019_FL is federal-mech; 062_ID is itd-d1-lab;
+  - near copies that share printed text with a dev document (the report lists them).
+  - No audit counted any of these as unseen.
+
+**Consequences:**
+- **The keys are unaffected.** The held-out project and binding keys were committed (08ea06d) before the sweep started.
+- **The unseen audit tally drops 001_NC:** 14 sets, 127 applied, 127 right.
+- **Held-out control-intent results are reported twice.** Once over all six documents. Once over the three with no
+  exposure: 018_GA, 024_MO and bessemer. The three exposed are:
+  - navfac: its outputs were seen, and CI-11 cites two of its tags;
+  - 060_XX: navfac, by the same drafter, was seen;
+  - 30_WA: 27_WA, by the same drafter, was tuned on.
+- **Robustness work now skips every set the report lists.** A held-out twin is never read. A held-out drafter's set
+  is never audited or tuned on. A copy of a dev document counts as dev.
