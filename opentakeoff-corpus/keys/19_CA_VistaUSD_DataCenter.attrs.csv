@@ -1,0 +1,19 @@
+# 19_CA_VistaUSD_DataCenter.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/19_CA_VistaUSD_DataCenter.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M001 (page 10) of the Vista Unified School District data center, Oceanside CA (AlphaStudio Design Group), the table the third tier's seed drew for its FAN stratum.
+#   19_CA_VistaUSD_DataCenter.pdf#10 | (untitled) | FAN | none — a general notes and legend sheet (M001): its MECHANICAL LEGEND lists abbreviations (EF EXHAUST FAN, FC FAN COIL, RF RETURN FAN, SF SUPPLY FAN among them); no row is a fan | render: page 10 overview at 40 dpi (a 270-degree-rotated sheet, read in its displayed orientation); the page's text layer searched for fan words and tags (pymupdf get_text blocks): the four hits are MECHANICAL LEGEND abbreviation rows, cropped at 3x (crop 2090,715,560,150)
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Every other sheet of the set.
+# 19_CA_VistaUSD_DataCenter: 1 table(s), 0 instance(s), 0 keyed attribute value(s) (0 printed, 0 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+19_CA_VistaUSD_DataCenter.pdf#10,,,FAN,,,,,"no FAN instance printed: none — a general notes and legend sheet (M001): its MECHANICAL LEGEND lists abbreviations (EF EXHAUST FAN, FC FAN COIL, RF RETURN FAN, SF SUPPLY FAN among them); no row is a fan"

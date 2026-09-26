@@ -1,0 +1,1262 @@
+# 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M600-M603 (pages 19-22) of the Vermillion County Jail addition and renovation, Hillsdale IN (RQAW), the tables the third tier's seed drew for its AHU, DUCT_MOUNTED_COIL, HEAT_EXCHANGER, AIR_COOLED_CHILLER, BOILER, PUMP, UNIT_HEATER, FCU, VAV and FAN strata.
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19 | AIR HANDLING UNIT SYSTEM INDEX SCHEDULE | AHU | 1 of the 4 printed rows: AHU-4 (DOAS-1 to DOAS-3 are dedicated outdoor air units, another family, not drawn here) | render: page 19 overview at 40 dpi; crop 105,195,2625,123 at 3x in 5 tiles (MARK column repeated), notes cropped at 3x (crop 105,110,900,70); second read at 4x (crops 105,299,655,15 and 760,299,655,15 and 1415,299,655,15 and 2070,299,660,15) of AHU-4, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19 | AHU CHILLED WATER COOLING COIL SCHEDULE | DUCT_MOUNTED_COIL | all 4 printed rows | render: page 19 overview at 40 dpi; crop 1253,1110,1447,135 at 3x in 3 tiles (MARK column repeated); second read at 4x (crops 1253,1190,477,14 and 1730,1190,480,14 and 2210,1190,490,14; the same at 1216 and 1229) of CC-1, CC-3 and CC-4, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19 | AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE | HEAT_EXCHANGER | all 2 printed rows | render: page 19 overview at 40 dpi; crop 570,1520,2130,100 at 3x in 4 tiles (MARK column repeated); second read at 4x (crops 570,1588,530,28 and 1100,1588,530,28 and 1630,1588,530,28 and 2160,1588,540,28) of HE-1 and HE-2, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20 | AIR COOLED CHILLER SCHEDULE | AIR_COOLED_CHILLER | 2 of the 4 printed rows: CH-1 and CH-2 (HRC-1 and HRC-2 are heat recovery chillers, another family, not drawn here) | render: page 20 overview at 40 dpi; crop 118,262,2600,216 at 3x in 6 tiles (MARK column repeated), the ACCESSORIES headers at 4x turned upright (crop 1960,262,380,190), remarks cropped at 3x (crop 118,112,1300,90); second read at 4x (crop 118,453,2600,26 in 5 parts) of CH-1 and CH-2, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20 | CONDENSING BOILER SCHEDULE | BOILER | all 2 printed rows | render: page 20 overview at 40 dpi; crop 262,700,2456,112 at 3x in 5 tiles (MARK column repeated), remarks cropped at 3x (crop 262,620,1200,45); second read at 4x (crop 262,785,2456,27 in 4 parts) of B-1 and B-2, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20 | PUMP SCHEDULE | PUMP | all 10 printed rows | render: page 20 overview at 40 dpi; crop 964,1015,1736,235 at 3x in 3 tiles (MARK column repeated), remarks cropped at 3x (crop 964,925,700,50); second read at 4x (crops 964,1066,1736,15 and 964,1118,1736,15 and 964,1224,1736,27, each in 3 parts) of HWP-1, HCP-3 and HRCP-2B, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21 | UNIT HEATER SCHEDULE | UNIT_HEATER | all 5 printed rows | render: page 21 overview at 40 dpi; crop 905,228,1760,142 at 3x in 3 tiles (MARK column repeated), remarks cropped at 3x (crop 905,158,700,45); second read at 4x (crops 905,304,1760,15 and 905,330,1760,15 and 905,356,1760,15, each in 3 parts) of CUH-1, CUH-3 and CUH-5, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21 | FAN COIL UNIT SCHEDULE | FCU | all 3 printed rows | render: page 21 overview at 40 dpi; crop 340,1480,2330,115 at 3x in 4 tiles (MARK column repeated), notes cropped at 3x (crop 340,1410,1100,60); second read at 4x (crop 340,1539,2330,55 in 4 parts) of FCU-1, FCU-2 and FCU-3, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22 | VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE | VAV | the first 30 of the 58 printed rows (the draw's cap): VAV-1-1 to VAV-2-23 | render: page 22 overview at 40 dpi; crops 1949,160,753,440 and 1949,590,753,410 at 3x in 2 tiles each (MARK column repeated), remarks cropped at 3x (crop 1949,108,760,60); second read at 4x (crops 1949,233,753,15 and 1949,429,753,15 and 1949,613,753,15, each in 2 parts) of VAV-1-1, VAV-2-9 and VAV-2-23, every cell
+#   096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22 | (untitled) | FAN | none — sheet M603 prints diffuser, grille, VAV terminal, slot diffuser and motorized damper schedules; no row is a fan (the dampers' remark 2 names the exhaust fans they serve, scheduled on M602) | render: page 22 overview at 40 dpi; the page's text layer searched for fan words and tags (pymupdf get_text words): the one hit is the motorized damper schedule's remark 2, cropped at 3x (crop 355,1745,760,70)
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# A line with an empty tag and attribute keys a claimed table that prints no instance of its family: every value reported from it is invented.
+# Not counted: Locations (room names and numbers), system types, component tags, weights and dimensions, manufacturers and models, efficiencies, minimum and maximum flows, pressure drops, air temperatures, fouling factors, refrigerants, electrical FLA, MCA, MOCP and emergency power, accessories other than BACnet, heat recovery performance, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set: 10 table(s), 59 instance(s), 1234 keyed attribute value(s) (596 printed, 638 empty), 1 table(s) keyed with no instance of their family
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,area_served,ADMIN,,AREA SERVED,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,supply_cfm,8000,cfm,TOTAL CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,oa_cfm_min,2000,cfm,OA CFM: design minimum outdoor air,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,supply_fan_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,supply_fan_qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,return_fan_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,exhaust_fan_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,vfd,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,economizer,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,outdoor_air_pct,25,%,OA %,printed '25.00%'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,cooling_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,cooling_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,cooling_tons,,tons,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,dx_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_rows,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,chw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,heating_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_rows,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,gas_input_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,humidifier,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,energy_recovery,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,filter_merv,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,bas_interface,BACKNET,,"NOTE 4, where the row's REMARKS cite it: the factory controls' BACnet interface",printed 'DOAS UNIT TO BE PROVIDED WITH FACTORY CONTROLS WITH BACKNET INTERFACE. SEE DOAS UNIT SPECIFICATIONS.'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,volts,460,V,VOLTAGE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,AHU-4,AHU,phase,3,,PHASE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,qty,1,,# OF COILS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,cfm,9000,cfm,CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,cooling_mbh,682,MBH,CAPACITY (MBH) / TOTAL,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,chw_gpm,96.4,gpm,CIRCULATING FLUID / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,chw_ewt_f,40,F,CIRCULATING FLUID / ENTERING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,chw_lwt_f,55,F,CIRCULATING FLUID / LEAVING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-1,DUCT_MOUNTED_COIL,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,qty,1,,# OF COILS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,cfm,12000,cfm,CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,cooling_mbh,923,MBH,CAPACITY (MBH) / TOTAL,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,chw_gpm,130.5,gpm,CIRCULATING FLUID / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,chw_ewt_f,40,F,CIRCULATING FLUID / ENTERING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,chw_lwt_f,55,F,CIRCULATING FLUID / LEAVING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-2,DUCT_MOUNTED_COIL,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,qty,1,,# OF COILS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,cfm,3000,cfm,CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,cooling_mbh,244,MBH,CAPACITY (MBH) / TOTAL,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,chw_gpm,48.3,gpm,CIRCULATING FLUID / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,chw_ewt_f,40,F,CIRCULATING FLUID / ENTERING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,chw_lwt_f,51,F,CIRCULATING FLUID / LEAVING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-3,DUCT_MOUNTED_COIL,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,qty,1,,# OF COILS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,cfm,8000,cfm,CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,cooling_mbh,275,MBH,CAPACITY (MBH) / TOTAL,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,cooling_tons,,tons,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,hw_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,hw_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,hw_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,chw_gpm,39.6,gpm,CIRCULATING FLUID / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,chw_ewt_f,40,F,CIRCULATING FLUID / ENTERING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,chw_lwt_f,55,F,CIRCULATING FLUID / LEAVING (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,bas_interface,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,CC-4,DUCT_MOUNTED_COIL,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,hx_type,plate,,TABLE TITLE,title printed 'AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,primary_medium,other,,TABLE TITLE,"the exchanger's sides are OUTSIDE AIR and EXHAUST AIR (the SUMMER and WINTER DESIGN ENERGY RECOVERY blocks): air, which the medium list does not name (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,secondary_medium,other,,TABLE TITLE,"the exchanger's sides are OUTSIDE AIR and EXHAUST AIR (the SUMMER and WINTER DESIGN ENERGY RECOVERY blocks): air, which the medium list does not name (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,secondary_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,secondary_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,secondary_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,capacity_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,primary_steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-1,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,hx_type,plate,,TABLE TITLE,title printed 'AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,primary_medium,other,,TABLE TITLE,"the exchanger's sides are OUTSIDE AIR and EXHAUST AIR (the SUMMER and WINTER DESIGN ENERGY RECOVERY blocks): air, which the medium list does not name (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,secondary_medium,other,,TABLE TITLE,"the exchanger's sides are OUTSIDE AIR and EXHAUST AIR (the SUMMER and WINTER DESIGN ENERGY RECOVERY blocks): air, which the medium list does not name (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,secondary_gpm,,gpm,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,secondary_ewt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,secondary_lwt_f,,F,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,capacity_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,primary_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,secondary_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,primary_steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,HE-2,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,condenser,air,,TABLE TITLE,title printed 'AIR COOLED CHILLER SCHEDULE'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,tons,85,tons,NOMINAL CAPACITY (TON),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_gpm,128.1,gpm,EVAPORATOR COOLING HEAT EXCHANGER / DESIGN FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,55,F,EVAPORATOR COOLING HEAT EXCHANGER / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,40,F,EVAPORATOR COOLING HEAT EXCHANGER / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,bas_interface,BACNET,,"ACCESSORIES / (BACNET) (YES/NO): Yes, a BACnet interface",printed 'Yes'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,volts,460,V,UNIT ELECTRICAL DATA / VOLTS PHASE HERTZ: volts part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,phase,3,,UNIT ELECTRICAL DATA / VOLTS PHASE HERTZ: phase part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,condenser,air,,TABLE TITLE,title printed 'AIR COOLED CHILLER SCHEDULE'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,tons,140,tons,NOMINAL CAPACITY (TON),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_gpm,222.3,gpm,EVAPORATOR COOLING HEAT EXCHANGER / DESIGN FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_ewt_f,55,F,EVAPORATOR COOLING HEAT EXCHANGER / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_lwt_f,40,F,EVAPORATOR COOLING HEAT EXCHANGER / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,bas_interface,BACNET,,"ACCESSORIES / (BACNET) (YES/NO): Yes, a BACnet interface",printed 'Yes'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,volts,460,V,UNIT ELECTRICAL DATA / VOLTS PHASE HERTZ: volts part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,AIR COOLED CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,phase,3,,UNIT ELECTRICAL DATA / VOLTS PHASE HERTZ: phase part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,fuel,gas,,GAS BURNER / FUEL / TYPE,printed 'NG'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,input_mbh,3500,MBH,GAS BURNER / FUEL / INPUT (MBH),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,output_mbh,3000,MBH,GAS BURNER / DESIGN CAPAPACITY (MBH): the boiler's design output,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,gpm,220,gpm,WATERSIDE / FLOW (GPM),printed '220.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,ewt_f,110,F,WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,lwt_f,140,F,WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,conn_in,5,in,WATERSIDE / HW CONNECTION,"printed '5""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,bas_interface,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,volts,460,V,VOLTS/PHASE/HERTZ: volts part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-1,BOILER,phase,3,,VOLTS/PHASE/HERTZ: phase part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,fuel,gas,,GAS BURNER / FUEL / TYPE,printed 'NG'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,input_mbh,3500,MBH,GAS BURNER / FUEL / INPUT (MBH),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,output_mbh,3000,MBH,GAS BURNER / DESIGN CAPAPACITY (MBH): the boiler's design output,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,gpm,220,gpm,WATERSIDE / FLOW (GPM),printed '220.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,ewt_f,110,F,WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,lwt_f,140,F,WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,conn_in,5,in,WATERSIDE / HW CONNECTION,"printed '5""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,bas_interface,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,volts,460,V,VOLTS/PHASE/HERTZ: volts part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CONDENSING BOILER SCHEDULE,B-2,BOILER,phase,3,,VOLTS/PHASE/HERTZ: phase part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,service,HOT WATER,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,gpm,220,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,head_ft,125,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,motor_hp,15,hp,MOTOR / HP,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,rpm,1800,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,vfd,yes,,MOTOR / VSC,printed 'YES'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,volts,460,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-1,PUMP,phase,3,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,service,HOT WATER,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,gpm,220,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,head_ft,125,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,motor_hp,15,hp,MOTOR / HP,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,rpm,1800,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,vfd,yes,,MOTOR / VSC,printed 'YES'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,volts,460,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HWP-2,PUMP,phase,3,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,service,DOAS-1,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,gpm,11,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,head_ft,30,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,motor_hp,0.16666666666666666,hp,MOTOR / HP,printed '1/6'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,rpm,3300,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-1,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,service,DOAS-2,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,gpm,14,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,head_ft,30,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,motor_hp,0.4,hp,MOTOR / HP,printed '2/5'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,rpm,3250,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-2,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,service,DOAS-3,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,gpm,11,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,head_ft,30,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,motor_hp,0.16666666666666666,hp,MOTOR / HP,printed '1/6'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,rpm,3300,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-3,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,service,AHU-4,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,gpm,11,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,head_ft,30,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,motor_hp,0.16666666666666666,hp,MOTOR / HP,printed '1/6'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,rpm,3300,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HCP-4,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,service,HEAT RECOVERY CHILLER CHILLED WATER SIDE,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,gpm,65,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,head_ft,10,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,motor_hp,0.4,hp,MOTOR / HP,printed '2/5'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,rpm,3200,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,glycol_pct,30,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1A,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,service,HEAT RECOVERY CHILLER HOT WATER SIDE,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,gpm,57,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,head_ft,14,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,motor_hp,0.4,hp,MOTOR / HP,printed '2/5'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,rpm,3250,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-1B,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,service,HEAT RECOVERY CHILLER CHILLED WATER SIDE,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,gpm,65,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,head_ft,10,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,motor_hp,0.4,hp,MOTOR / HP,printed '2/5'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,rpm,3200,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,glycol_pct,30,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2A,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,service,HEAT RECOVERY CHILLER HOT WATER SIDE,,SYSTEM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,gpm,57,gpm,FLOW (GPM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,head_ft,14,ft,DESIGN HEAD (FT./HD.),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,motor_hp,0.4,hp,MOTOR / HP,printed '2/5'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,rpm,3250,rpm,MOTOR / RPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,vfd,no,,MOTOR / VSC,printed 'NO'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,pump_arrangement,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,glycol_pct,0,%,"FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,volts,115,V,MOTOR / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,PUMP SCHEDULE,HRCP-2B,PUMP,phase,1,,MOTOR / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,heating_medium,hw,,CIRCULATING FLUID,"the CIRCULATING FLUID block prints FLOW, EWT 140 and LWT 110 (°F), and remark 3 a water pressure drop: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,cfm,560,cfm,AIRFLOW (CFM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,hw_gpm,1.9,gpm,CIRCULATING FLUID / FLOW,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,hw_ewt_f,140,F,CIRCULATING FLUID / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,hw_lwt_f,110,F,CIRCULATING FLUID / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,motor_hp,0.05,hp,ELECTRICAL DATA / HP,printed '1/20'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,conn_in,0.75,in,CIRCULATING FLUID / PIPE RUNOUT SIZE,printed '3/4'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,volts,115,V,ELECTRICAL DATA / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-1,UNIT_HEATER,phase,1,,ELECTRICAL DATA / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,heating_medium,hw,,CIRCULATING FLUID,"the CIRCULATING FLUID block prints FLOW, EWT 140 and LWT 110 (°F), and remark 3 a water pressure drop: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,cfm,560,cfm,AIRFLOW (CFM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,hw_gpm,1.9,gpm,CIRCULATING FLUID / FLOW,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,hw_ewt_f,140,F,CIRCULATING FLUID / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,hw_lwt_f,110,F,CIRCULATING FLUID / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,motor_hp,0.05,hp,ELECTRICAL DATA / HP,printed '1/20'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,conn_in,0.75,in,CIRCULATING FLUID / PIPE RUNOUT SIZE,printed '3/4'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,volts,115,V,ELECTRICAL DATA / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-2,UNIT_HEATER,phase,1,,ELECTRICAL DATA / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,heating_medium,hw,,CIRCULATING FLUID,"the CIRCULATING FLUID block prints FLOW, EWT 140 and LWT 110 (°F), and remark 3 a water pressure drop: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,cfm,560,cfm,AIRFLOW (CFM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,hw_gpm,1.9,gpm,CIRCULATING FLUID / FLOW,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,hw_ewt_f,140,F,CIRCULATING FLUID / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,hw_lwt_f,110,F,CIRCULATING FLUID / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,motor_hp,0.05,hp,ELECTRICAL DATA / HP,printed '1/20'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,conn_in,0.75,in,CIRCULATING FLUID / PIPE RUNOUT SIZE,printed '3/4'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,volts,115,V,ELECTRICAL DATA / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-3,UNIT_HEATER,phase,1,,ELECTRICAL DATA / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,heating_medium,hw,,CIRCULATING FLUID,"the CIRCULATING FLUID block prints FLOW, EWT 140 and LWT 110 (°F), and remark 3 a water pressure drop: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,cfm,560,cfm,AIRFLOW (CFM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,hw_gpm,1.9,gpm,CIRCULATING FLUID / FLOW,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,hw_ewt_f,140,F,CIRCULATING FLUID / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,hw_lwt_f,110,F,CIRCULATING FLUID / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,motor_hp,0.05,hp,ELECTRICAL DATA / HP,printed '1/20'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,conn_in,0.75,in,CIRCULATING FLUID / PIPE RUNOUT SIZE,printed '3/4'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,volts,115,V,ELECTRICAL DATA / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-4,UNIT_HEATER,phase,1,,ELECTRICAL DATA / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,heating_medium,hw,,CIRCULATING FLUID,"the CIRCULATING FLUID block prints FLOW, EWT 140 and LWT 110 (°F), and remark 3 a water pressure drop: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,cfm,560,cfm,AIRFLOW (CFM),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,heating_mbh,,MBH,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,hw_gpm,1.9,gpm,CIRCULATING FLUID / FLOW,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,hw_ewt_f,140,F,CIRCULATING FLUID / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,hw_lwt_f,110,F,CIRCULATING FLUID / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,steam_psig,,psig,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,motor_hp,0.05,hp,ELECTRICAL DATA / HP,printed '1/20'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,conn_in,0.75,in,CIRCULATING FLUID / PIPE RUNOUT SIZE,printed '3/4'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,volts,115,V,ELECTRICAL DATA / VOLT,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,UNIT HEATER SCHEDULE,CUH-5,UNIT_HEATER,phase,1,,ELECTRICAL DATA / PH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,pipes,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,cfm,1500,cfm,SUPPLY FAN DATA / SUPPLY CFM / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,motor_hp,0.25,hp,"HP: each motor (""(2) 1/4"": two motors at 1/4 hp)",printed '1/4'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,fan_speeds,3,,"NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, its speeds",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,ecm,yes,,"NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, an EC motor",printed 'EC MOTOR'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,cooling_type,chw,,COOLING COIL,"the COOLING COIL block prints GPM, EWT 40.0 and LWT 55.0: a chilled-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_gpm,4.3,gpm,COOLING COIL / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_ewt_f,40,F,COOLING COIL / EWT,printed '40.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_lwt_f,55,F,COOLING COIL / LWT,printed '55.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_wpd_ft,1.7,ft,COOLING COIL / WPD FT HD,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_mbh,29.9,MBH,COOLING COIL / TOTAL MBH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_rows,4,,COOLING COIL / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,heating_type,hw,,HEATING COIL,"the HEATING COIL block prints GPM, EWT 140.0 and LWT 110.0, and note 4 names HHW temperature reset: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_gpm,5.2,gpm,HEATING COIL / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_ewt_f,140,F,HEATING COIL / EWT,printed '140.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_lwt_f,110,F,HEATING COIL / LWT,printed '110.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_wpd_ft,2.8,ft,HEATING COIL / WPD FT HD,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_mbh,77.9,MBH,HEATING COIL / SENSIBLE MBH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_rows,2,,HEATING COIL / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,volts,120,V,UNIT ELECTRICAL DATA / VOLTS/ PHASE: volts part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-1,FCU,phase,1,,UNIT ELECTRICAL DATA / VOLTS/ PHASE: phase part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,pipes,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,cfm,1500,cfm,SUPPLY FAN DATA / SUPPLY CFM / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,motor_hp,0.25,hp,"HP: each motor (""(2) 1/4"": two motors at 1/4 hp)",printed '1/4'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,fan_speeds,3,,"NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, its speeds",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,ecm,yes,,"NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, an EC motor",printed 'EC MOTOR'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,cooling_type,chw,,COOLING COIL,"the COOLING COIL block prints GPM, EWT 40.0 and LWT 55.0: a chilled-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_gpm,4.3,gpm,COOLING COIL / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_ewt_f,40,F,COOLING COIL / EWT,printed '40.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_lwt_f,55,F,COOLING COIL / LWT,printed '55.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_wpd_ft,1.7,ft,COOLING COIL / WPD FT HD,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_mbh,29.9,MBH,COOLING COIL / TOTAL MBH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_rows,4,,COOLING COIL / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,heating_type,hw,,HEATING COIL,"the HEATING COIL block prints GPM, EWT 140.0 and LWT 110.0, and note 4 names HHW temperature reset: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_gpm,5.2,gpm,HEATING COIL / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_ewt_f,140,F,HEATING COIL / EWT,printed '140.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_lwt_f,110,F,HEATING COIL / LWT,printed '110.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_wpd_ft,2.8,ft,HEATING COIL / WPD FT HD,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_mbh,77.9,MBH,HEATING COIL / SENSIBLE MBH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_rows,2,,HEATING COIL / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,volts,120,V,UNIT ELECTRICAL DATA / VOLTS/ PHASE: volts part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-2,FCU,phase,1,,UNIT ELECTRICAL DATA / VOLTS/ PHASE: phase part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,qty,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,pipes,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,cfm,1500,cfm,SUPPLY FAN DATA / SUPPLY CFM / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,motor_hp,0.25,hp,"HP: each motor (""(2) 1/4"": two motors at 1/4 hp)",printed '1/4'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,fan_speeds,3,,"NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, its speeds",author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,ecm,yes,,"NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, an EC motor",printed 'EC MOTOR'; author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,cooling_type,chw,,COOLING COIL,"the COOLING COIL block prints GPM, EWT 40.0 and LWT 55.0: a chilled-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_gpm,4.3,gpm,COOLING COIL / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_ewt_f,40,F,COOLING COIL / EWT,printed '40.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_lwt_f,55,F,COOLING COIL / LWT,printed '55.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_wpd_ft,1.7,ft,COOLING COIL / WPD FT HD,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_mbh,29.9,MBH,COOLING COIL / TOTAL MBH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_rows,4,,COOLING COIL / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,heating_type,hw,,HEATING COIL,"the HEATING COIL block prints GPM, EWT 140.0 and LWT 110.0, and note 4 names HHW temperature reset: a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_gpm,5.2,gpm,HEATING COIL / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_ewt_f,140,F,HEATING COIL / EWT,printed '140.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_lwt_f,110,F,HEATING COIL / LWT,printed '110.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_wpd_ft,2.8,ft,HEATING COIL / WPD FT HD,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_mbh,77.9,MBH,HEATING COIL / SENSIBLE MBH,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_rows,2,,HEATING COIL / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_conn_in,,in,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,volts,120,V,UNIT ELECTRICAL DATA / VOLTS/ PHASE: volts part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FAN COIL UNIT SCHEDULE,FCU-3,FCU,phase,1,,UNIT ELECTRICAL DATA / VOLTS/ PHASE: phase part,author's reading of the printed row
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,inlet_size_in,14,in,DUCT SIZE / INLET,"printed '14""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,cfm_max,1350,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,cfm_min,1350,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,cfm_heat,1350,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_gpm,3,gpm,HEATING COIL / WATERSIDE / GPM,printed '3.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_mbh,43674,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-1,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,inlet_size_in,14,in,DUCT SIZE / INLET,"printed '14""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,cfm_max,1200,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,cfm_min,1200,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,cfm_heat,1200,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_gpm,2.6,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_mbh,38821,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-2,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,inlet_size_in,14,in,DUCT SIZE / INLET,"printed '14""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,cfm_max,1470,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,cfm_min,1470,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,cfm_heat,1470,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_gpm,3.2,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_mbh,47556,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-3,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,inlet_size_in,14,in,DUCT SIZE / INLET,"printed '14""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,cfm_max,1100,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,cfm_min,1100,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,cfm_heat,1100,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_gpm,2.4,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_mbh,35586,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-4,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,inlet_size_in,14,in,DUCT SIZE / INLET,"printed '14""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,cfm_max,1420,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,cfm_min,1420,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,cfm_heat,1420,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_gpm,3.1,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_mbh,45939,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-5,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,inlet_size_in,10,in,DUCT SIZE / INLET,"printed '10""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,cfm_max,1050,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,cfm_min,1050,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,cfm_heat,1050,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_gpm,2.3,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_mbh,33969,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-6,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,inlet_size_in,7,in,DUCT SIZE / INLET,"printed '7""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,cfm_max,485,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,cfm_min,485,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,cfm_heat,485,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_gpm,1.1,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_mbh,15690,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-7,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,inlet_size_in,7,in,DUCT SIZE / INLET,"printed '7""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,cfm_max,450,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,cfm_min,450,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,cfm_heat,450,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_gpm,1,gpm,HEATING COIL / WATERSIDE / GPM,printed '1.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_mbh,14558,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-1-8,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,inlet_size_in,8,in,DUCT SIZE / INLET,"printed '8""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,cfm_max,600,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,cfm_min,600,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,cfm_heat,600,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_gpm,1.3,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_mbh,19411,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-1,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,inlet_size_in,8,in,DUCT SIZE / INLET,"printed '8""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,cfm_max,605,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,cfm_min,605,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,cfm_heat,605,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_gpm,1.4,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_mbh,19572,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-2,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,inlet_size_in,8,in,DUCT SIZE / INLET,"printed '8""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,cfm_max,580,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,cfm_min,580,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,cfm_heat,580,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_gpm,1.3,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_mbh,18764,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-3,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,inlet_size_in,7,in,DUCT SIZE / INLET,"printed '7""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,cfm_max,490,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,cfm_min,490,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,cfm_heat,490,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_gpm,1.1,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_mbh,15852,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-4,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,inlet_size_in,6,in,DUCT SIZE / INLET,"printed '6""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,cfm_max,260,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,cfm_min,260,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,cfm_heat,260,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_gpm,0.6,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_mbh,8411,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-5,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,inlet_size_in,6,in,DUCT SIZE / INLET,"printed '6""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,cfm_max,320,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,cfm_min,320,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,cfm_heat,320,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_gpm,0.7,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_mbh,10352,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-6,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,inlet_size_in,6,in,DUCT SIZE / INLET,"printed '6""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,cfm_max,375,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,cfm_min,375,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,cfm_heat,375,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_gpm,0.9,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_mbh,12132,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-7,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,inlet_size_in,12,in,DUCT SIZE / INLET,"printed '12""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,cfm_max,1335,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,cfm_min,1335,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,cfm_heat,1335,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_gpm,2.9,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_mbh,43189,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-9,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,inlet_size_in,8,in,DUCT SIZE / INLET,"printed '8""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,cfm_max,640,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,cfm_min,640,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,cfm_heat,640,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_gpm,1.4,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_mbh,20705,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-10,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,inlet_size_in,6,in,DUCT SIZE / INLET,"printed '6""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,cfm_max,400,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,cfm_min,400,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,cfm_heat,400,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_gpm,0.9,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_mbh,12940,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-11,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,inlet_size_in,7,in,DUCT SIZE / INLET,"printed '7""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,cfm_max,475,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,cfm_min,475,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,cfm_heat,475,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_gpm,1.1,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_mbh,15367,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-12,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,inlet_size_in,10,in,DUCT SIZE / INLET,"printed '10""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,cfm_max,1000,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,cfm_min,1000,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,cfm_heat,1000,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_gpm,2.2,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_mbh,32351,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-13,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,inlet_size_in,6,in,DUCT SIZE / INLET,"printed '6""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,cfm_max,300,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,cfm_min,300,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,cfm_heat,300,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_gpm,0.7,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_mbh,9705,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-14,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,inlet_size_in,7,in,DUCT SIZE / INLET,"printed '7""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,cfm_max,445,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,cfm_min,445,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,cfm_heat,445,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_gpm,1,gpm,HEATING COIL / WATERSIDE / GPM,printed '1.0'
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_mbh,14396,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-15,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,inlet_size_in,5,in,DUCT SIZE / INLET,"printed '5""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,cfm_max,225,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,cfm_min,225,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,cfm_heat,225,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_gpm,0.5,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_mbh,7279,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-16,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,inlet_size_in,5,in,DUCT SIZE / INLET,"printed '5""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,cfm_max,250,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,cfm_min,250,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,cfm_heat,250,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_gpm,0.6,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_mbh,8088,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-17,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,inlet_size_in,5,in,DUCT SIZE / INLET,"printed '5""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,cfm_max,180,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,cfm_min,180,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,cfm_heat,180,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_gpm,0.5,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_mbh,5823,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-18,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,inlet_size_in,4,in,DUCT SIZE / INLET,"printed '4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,cfm_max,135,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,cfm_min,135,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,cfm_heat,135,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_gpm,0.5,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_mbh,4367,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-19,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,inlet_size_in,4,in,DUCT SIZE / INLET,"printed '4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,cfm_max,100,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,cfm_min,100,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,cfm_heat,100,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_gpm,0.5,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_mbh,3235,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-20,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,inlet_size_in,7,in,DUCT SIZE / INLET,"printed '7""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,cfm_max,530,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,cfm_min,530,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,cfm_heat,530,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_gpm,1.2,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_mbh,17146,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-21,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,inlet_size_in,4,in,DUCT SIZE / INLET,"printed '4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,cfm_max,120,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,cfm_min,120,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,cfm_heat,120,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_gpm,0.5,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_mbh,3882,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-22,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,building,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,floor,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,area_served,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,terminal_type,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,inlet_size_in,5,in,DUCT SIZE / INLET,"printed '5""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,cfm_max,195,cfm,PRIMARY AIRFLOW / MAX,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,cfm_min,195,cfm,PRIMARY AIRFLOW / MIN,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,cfm_heat,195,cfm,HEATING COIL / AIRSIDE / CFM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,heat_type,hw,,HEATING COIL,"the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_gpm,0.5,gpm,HEATING COIL / WATERSIDE / GPM,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_ewt_f,140,F,HEATING COIL / WATERSIDE / EWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_lwt_f,110,F,HEATING COIL / WATERSIDE / LWT (°F),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_wpd_ft,,ft,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_mbh,6308,BTU/H,HEATING COIL / CAP (BTU/H),
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_rows,2,,HEATING COIL / AIRSIDE / ROWS,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_conn_in,0.75,in,HEATING COIL / PIPE DIA,"printed '3/4""'"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,hw_glycol_pct,,%,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,eh_kw,,kW,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,eh_stages,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,motor_hp,,hp,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,ecm,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,volts,,V,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE,VAV-2-23,VAV,phase,,,,not printed
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,,,FAN,,,,,"no FAN instance printed: none — sheet M603 prints diffuser, grille, VAV terminal, slot diffuser and motorized damper schedules; no row is a fan (the dampers' remark 2 names the exhaust fans they serve, scheduled on M602)"

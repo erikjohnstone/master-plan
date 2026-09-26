@@ -1,0 +1,202 @@
+# 25_WA_DouglasCounty_Courthouse_HVAC_DDC — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheets M0.03 and M0.04 MECHANICAL SCHEDULES (PDF pages 4 and 5, both
+# 270-degree-rotated sheets read in their displayed orientation) of the Douglas County
+# Courthouse heating, ventilation and air conditioning improvements, Waterville WA (Hultz BHU
+# Engineers; The DOH Associates): an overview of each page at 40 dpi, then each table at 3x (216
+# dpi) in tiles with the SYMBOL column repeated, rendered with MuPDF (pymupdf get_pixmap(clip))
+# and read by eye on 2026-09-26; second read at 4x of the first, a middle and the last keyed row
+# of every table, every cell. Each drawn title was found with the PDF's own text layer (pymupdf
+# search_for). The pipeline's output for these sheets was not consulted while keying (AS-28,
+# before the draw, read the column names the normalizer left unread across the unseen corpus,
+# this document's among them). The third tier keys the tables its seed drew (tier3/01-split.md):
+# one per keyed family.
+SET 25_WA_DouglasCounty_Courthouse_HVAC_DDC
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheets M0.03 and M0.04 (pages 4 and 5) of the Douglas County Courthouse HVAC improvements, Waterville WA (Hultz BHU Engineers), the tables the third tier's seed drew for its DOAS, UNIT_HEATER, AIR_COOLED_CHILLER, FAN and HEAT_PUMP strata.
+EXCLUDES Manufacturers and series numbers, unit types, nominal sizes, efficiencies, water pressure drops, outdoor air temperatures, compressor and fan counts and currents, MCA and MOP, weights, sound ratings, brake horsepower, filters by note, the split-system heat pump and VRF outdoor unit schedules (not drawn), and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# MISCELLANEOUS SCHEDULE (page 4, sheet M0.03): three rows, the electric heaters EH-20 and EH-30
+# and the energy recovery ventilator DOAS-30. The census claims DOAS-30 as a DOAS and the two
+# heaters as UNIT_HEATER rows; each family is keyed in its own block of this table. For DOAS-30,
+# AREA / UNIT SERVED keys area_served, and CAPACITY prints "200 CFM @ 0.5" ESP", keyed as its
+# airflow part (supply_cfm: the unit's rated airflow). ELECTRICAL / WATTS (190) is the unit's
+# electrical input, not a fan's horsepower or an electric heater, so it keys nothing. VOLTS/PH
+# prints "115/1", keyed as its volts part and its phase part. REMARKS prints "ENERGY RECOVERY PER
+# WSEC, W/ MERV 8 FILTERS": the MERV is keyed from it (filter_merv 8); the recovery type is not
+# printed.
+TABLE
+sheet: 25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4
+title: MISCELLANEOUS SCHEDULE
+family: DOAS
+render: page 4 overview at 40 dpi; crop 1038,722,1104,223 at 3x in 3 tiles (SYMBOL column repeated); second read at 4x (crops 1038,807,1104,36 and 1038,843,1104,36 and 1038,879,1104,36, each in 3 parts) of all 3 printed rows, every cell
+rows: 1 of the 3 printed rows: DOAS-30 (EH-20 and EH-30 are electric heaters, keyed in this table's UNIT_HEATER block)
+col: SYMBOL => tag
+col: BASIS OF DESIGN MANUFACTURER AND SERIES NO. => -
+col: TYPE => -
+col: AREA / UNIT SERVED => area_served
+col: NOMINAL SIZE => -
+col: CAPACITY => -
+col: [CAPACITY: its airflow part ("200 CFM @ 0.5" ESP")] => supply_cfm
+col: ELECTRICAL / WATTS => -
+col: ELECTRICAL / VOLTS/PH => -
+col: [ELECTRICAL / VOLTS/PH: volts part] => volts
+col: [ELECTRICAL / VOLTS/PH: phase part] => phase
+col: REMARKS => -
+col: [REMARKS: W/ MERV 8 FILTERS, the filters' MERV] => filter_merv
+grid:
+DOAS-30 | RENEWAIRE EV PREMIUM M | ERV | COMMISSIONER'S AREA | - | 200 CFM @ 0.5" ESP | 200 | 190 | 115/1 | 115 | 1 | ENERGY RECOVERY PER WSEC, W/ MERV 8 FILTERS | 8
+END
+
+# MISCELLANEOUS SCHEDULE (page 4), the UNIT_HEATER block: EH-20, a ceiling electric heater in
+# the maintenance office, and EH-30, a duct electric heater in DOAS-3 (keyed as the UNIT_HEATER
+# instances the third tier drew them for, as 088_AZ's ELECTRIC DUCT HEATER). TYPE prints
+# CEILING ELECTRIC HEATER and DUCT ELECTRIC HEATER: heating_medium electric. AREA / UNIT SERVED
+# keys area_served as printed (EH-30 prints the unit it serves, DOAS-3, as 03_FL's SERVING
+# prints KH-1). CAPACITY prints "-" for both heaters; ELECTRICAL / WATTS is each heater's
+# electric heating capacity, keyed eh_kw in the watts it prints. VOLTS/PH prints "208/1".
+# NOMINAL SIZE (EH-30's 8x8 duct) and the remarks (thermostats, ceiling adapter, OA lockout,
+# SCR control) key nothing.
+TABLE
+sheet: 25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4
+title: MISCELLANEOUS SCHEDULE
+family: UNIT_HEATER
+render: page 4 overview at 40 dpi; crop 1038,722,1104,223 at 3x in 3 tiles (SYMBOL column repeated); second read at 4x (crops 1038,807,1104,36 and 1038,843,1104,36 and 1038,879,1104,36, each in 3 parts) of all 3 printed rows, every cell
+rows: 2 of the 3 printed rows: EH-20 and EH-30 (DOAS-30 is an energy recovery ventilator, keyed in this table's DOAS block)
+col: SYMBOL => tag
+col: BASIS OF DESIGN MANUFACTURER AND SERIES NO. => -
+col: TYPE => heating_medium
+col: AREA / UNIT SERVED => area_served
+col: NOMINAL SIZE => -
+col: CAPACITY => heating_mbh
+col: ELECTRICAL / WATTS => eh_kw [W]
+col: ELECTRICAL / VOLTS/PH => -
+col: [ELECTRICAL / VOLTS/PH: volts part] => volts
+col: [ELECTRICAL / VOLTS/PH: phase part] => phase
+col: REMARKS => -
+grid:
+EH-20 | KING LPWC | electric (CEILING ELECTRIC HEATER) | MAINT OFFICE | - | - | 2250 | 208/1 | 208 | 1 | W/ WALL MOUNT PROGRAMMABLE THERMOSTAT, T-BAR CEILING ADAPTER
+EH-30 | INDEECO QUA | electric (DUCT ELECTRIC HEATER) | DOAS-3 | 8x8 | - | 2500 | 208/1 | 208 | 1 | W/ SA THERMOSTAT, OA LOCKOUT, & SCR CONTROL
+END
+
+# CHILLER SCHEDULE (page 4): one chiller. TYPE prints PACKAGED AIR COOLED SCROLL: condenser air.
+# COOLING PERFORMANCE keys tons (CAP TONS), chw_ewt_f (EWT), chw_lwt_f (LWT) and chw_gpm (GPM).
+# VOLTS/PH prints "460/3", keyed as its volts part and its phase part. FANS / KW EA. is each
+# condenser fan's power, not the chiller's input, so kw_input is not printed. Note 2 ("UNIT
+# SHALL BE FOR USE WITH 35% PROPYLENE GLYCOL; SCHEDULED PERFORMANCE IS WITH 0% GLYCOL.") keys
+# nothing in the chiller's vocabulary; notes 1, 3 and 4 (sound power, control transformer,
+# minimum compressor and fan counts) and the remarks (refrigerant, acoustic wrap, circuits) key
+# nothing either.
+TABLE
+sheet: 25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4
+title: CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 4 overview at 40 dpi; crop 833,436,1309,257 at 3x in 3 tiles (SYMBOL column repeated), notes included; second read at 4x (crop 833,527,1309,36 in 3 parts) of CH-1, every cell
+rows: all 1 printed row
+col: SYMBOL => tag
+col: BASIS OF DESIGN MANUFACTURER AND SERIES NUMBER => -
+col: TYPE => condenser
+col: COOLING PERFORMANCE / CAP TONS => tons
+col: COOLING PERFORMANCE / EFF => -
+col: COOLING PERFORMANCE / EWT => chw_ewt_f
+col: COOLING PERFORMANCE / LWT => chw_lwt_f
+col: COOLING PERFORMANCE / GPM => chw_gpm
+col: COOLING PERFORMANCE / WATER PD, FT => -
+col: COOLING PERFORMANCE / OAT => -
+col: COMPRESSORS / QTY => -
+col: COMPRESSORS / RLA EA. => -
+col: FANS / QTY => -
+col: FANS / RLA EA. => -
+col: FANS / KW EA. => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOP => -
+col: ELECTRICAL / VOLTS/PH => -
+col: [ELECTRICAL / VOLTS/PH: volts part] => volts
+col: [ELECTRICAL / VOLTS/PH: phase part] => phase
+col: MAX WEIGHT LBS => -
+col: REMARKS => -
+grid:
+CH-1 | TRANE CGAM070F2 | air (PACKAGED AIR COOLED SCROLL) | 68.5 | 11 EER 16.27 IPLV | 54 | 44 | 164 | 20 | 95 | 4 | (2) 33 (2) 25 | 6 | 3.2 | 1.23 | 145 | 200 | 460/3 | 460 | 3 | 11,000 | R-454B REFRIGERANT, W/ ACOUSTIC WRAP, 2 REFRIG CIRCUIT
+END
+
+# FAN SCHEDULE (page 4): two relief fans. AREA SERVED prints RELIEF, keyed area_served as
+# printed (as 040_IL's AREA SERVED "GENERAL EXHAUST"). CFM keys cfm, ESP esp_in, MAX RPM rpm,
+# ELECTRICAL / HP motor_hp (BRAKE HP is the fan's shaft power, typed for audit), DRIVE drive and
+# CONTROL control ("DUCT SP", duct static pressure). VOLTS / PH prints "208/3" and "208/1", keyed
+# as volts and phase parts. Note 1 reads "PROVIDE FANS WITH EC MOTORS (MOTOR MOUNTED) OR
+# VARIABLE FREQUENCY DRIVES.": each fan has one or the other, and each row's REMARKS names which
+# ("... W/ VFD", "... W/ ECM"): vfd and ecm are keyed from it, yes for the one named and no for
+# the other (the author's reading, as 040_IL's CONTROLLER column printing VFD or ECM). Notes 2-4
+# (balancing, motorized dampers, curbs) key nothing.
+TABLE
+sheet: 25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4
+title: FAN SCHEDULE
+family: FAN
+render: page 4 overview at 40 dpi; crop 418,977,1126,233 at 3x in 3 tiles (SYMBOL column repeated), notes included; second read at 4x (crops 418,1062,1126,34 and 418,1096,1126,34, each in 3 parts) of REF-1 and REF-2, every cell
+rows: all 2 printed rows
+col: SYMBOL => tag
+col: BASIS OF DESIGN MANUFACTURER AND SERIES NO. => -
+col: TYPE => -
+col: AREA SERVED => area_served
+col: CFM => cfm
+col: ESP => esp_in
+col: MAX RPM => rpm
+col: BRAKE HP => -
+col: ELECTRICAL / HP => motor_hp
+col: ELECTRICAL / VOLTS / PH => -
+col: [ELECTRICAL / VOLTS / PH: volts part] => volts
+col: [ELECTRICAL / VOLTS / PH: phase part] => phase
+col: DRIVE => drive
+col: CONTROL => control
+col: MAX WEIGHT LBS => -
+col: REMARKS => -
+col: [REMARKS: the fan's speed control, W/ VFD or W/ ECM (note 1: EC motors or variable frequency drives): a VFD] => vfd
+col: [REMARKS: the fan's speed control, W/ VFD or W/ ECM (note 1: EC motors or variable frequency drives): an EC motor] => ecm
+grid:
+REF-1 | COOK 270-SQN | INLINE | RELIEF | 7300 | 0.75" | 1300 | 2.8 | 3 | 208/3 | 208 | 3 | direct (DIRECT) | DUCT SP | 260 | MAX INLET 17.4 SONES W/ VFD | yes (MAX INLET 17.4 SONES W/ VFD) | no (MAX INLET 17.4 SONES W/ VFD)
+REF-2 | COOK 180-TLCD | ROOFTOP LOW PROFILE | RELIEF | 2900 | 0.62" | 1200 | 0.63 | 0.75 | 208/1 | 208 | 1 | direct (DIRECT) | DUCT SP | 150 | MAX INLET 21.0 SONES W/ ECM | no (MAX INLET 21.0 SONES W/ ECM) | yes (MAX INLET 21.0 SONES W/ ECM)
+END
+
+# VRF INDOOR HEAT PUMP SCHEDULE (page 5, sheet M0.04): ten rows. BC-1 is the branch (BC)
+# controller, which prints "SEE HP-30 CAPACITY" and is not a heat pump; the census claims the
+# nine indoor units, CC-8-1 to CC-8-9 (eight ceiling cassettes and the air handler AH-30-8). AREA
+# SERVED keys area_served; CAPACITY (MBH) / COOLING and HEATING key cooling_mbh and heating_mbh;
+# CFM keys cfm. SERVED BY prints the outdoor unit HP-30. ESP (AH-30-8's 0.3) is not in the
+# family's vocabulary. VOLT/PH prints "208/1", keyed as its volts part and its phase part. The
+# FILTERS column cites the table's circled notes 1 (the manufacturer's integral filter) and 2
+# (filters in the ceiling return grilles); REMARKS cites note 3 (a 24x24 T-bar ceiling module) for
+# CC-8-1 and CC-8-4. None of these, nor notes 1 and 2 (piping drawings, condensate pumps), keys
+# anything.
+TABLE
+sheet: 25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5
+title: VRF INDOOR HEAT PUMP SCHEDULE
+family: HEAT_PUMP
+render: page 5 overview at 40 dpi; crop 815,329,1327,566 at 3x in 3 tiles (SYMBOL column repeated), notes included; second read at 4x (crops 815,451,1327,34 and 815,620,1327,34 and 815,722,1327,34, each in 3 parts) of CC-8-1, CC-15-6 and CC-8-9, every cell
+rows: 9 of the 10 printed rows: CC-8-1 to CC-8-9 (BC-1 is a branch controller, not a heat pump)
+col: SYMBOL => tag
+col: BASIS OF DESIGN MANUFACTURER AND SERIES NO. => -
+col: TYPE => -
+col: AREA SERVED => area_served
+col: SERVED BY => -
+col: CAPACITY (MBH) / COOLING => cooling_mbh
+col: CAPACITY (MBH) / HEATING => heating_mbh
+col: CFM => cfm
+col: ESP => -
+col: FILTERS => -
+col: UNIT ELECTRICAL / MCA => -
+col: UNIT ELECTRICAL / VOLT/PH => -
+col: [UNIT ELECTRICAL / VOLT/PH: volts part] => volts
+col: [UNIT ELECTRICAL / VOLT/PH: phase part] => phase
+col: MAX WEIGHT => -
+col: REMARKS => -
+grid:
+CC-8-1 | TRANE TPLFY-P08NFM4 | CEILING CASSETTE | COMM OFFICE INTERIOR | HP-30 | 8 | 9 | 315 | - | (1) | 2.8 | 208/1 | 208 | 1 | 40 | (3)
+CC-15-2 | TRANE TPLFY-EP15NEM4 | CEILING CASSETTE | COMM OFFICE ENTRY | HP-30 | 15 | 17 | 500 | - | (1) | 2.8 | 208/1 | 208 | 1 | 60 |
+CC-15-3 | TRANE TPLFY-EP15NEM4 | CEILING CASSETTE | COMM OFFICE MEETING | HP-30 | 15 | 17 | 500 | - | (1) | 2.8 | 208/1 | 208 | 1 | 60 |
+CC-8-4 | TRANE TPLFY-P08NFM4 | CEILING CASSETTE | COMM OFFICE NE OFFICE | HP-30 | 8 | 9 | 280 | - | (1) | 2.8 | 208/1 | 208 | 1 | 40 | (3)
+CC-15-5 | TRANE TPLFY-EP15NEM4 | CEILING CASSETTE | COMM OFFICE SE OFFICE | HP-30 | 15 | 17 | 500 | - | (1) | 2.8 | 208/1 | 208 | 1 | 60 |
+CC-15-6 | TRANE TPLFY-EP15NEM4 | CEILING CASSETTE | COMM OFFICE SOUTH OFFICE | HP-30 | 15 | 17 | 500 | - | (1) | 2.8 | 208/1 | 208 | 1 | 60 |
+CC-15-7 | TRANE TPLFY-EP15NEM4 | CEILING CASSETTE | COMM OFFICE SW OFFICE | HP-30 | 15 | 17 | 500 | - | (1) | 2.8 | 208/1 | 208 | 1 | 60 |
+AH-30-8 | TRANE TPEFYP030MA | AIR HANDLER | JURY ROOM | HP-30 | 30 | 34 | 860 | 0.3 | (2) | 4.2 | 208/1 | 208 | 1 | 150 |
+CC-8-9 | TRANE TPLFY-P08NFM4 | CEILING CASSETTE | JURY HALLWAY | HP-30 | 8 | 9 | 280 | - | (1) | 2.8 | 208/1 | 208 | 1 | 40 |
+END

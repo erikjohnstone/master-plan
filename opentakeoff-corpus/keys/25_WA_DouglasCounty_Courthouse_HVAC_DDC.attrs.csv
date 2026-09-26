@@ -1,0 +1,326 @@
+# 25_WA_DouglasCounty_Courthouse_HVAC_DDC.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/25_WA_DouglasCounty_Courthouse_HVAC_DDC.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M0.03 and M0.04 (pages 4 and 5) of the Douglas County Courthouse HVAC improvements, Waterville WA (Hultz BHU Engineers), the tables the third tier's seed drew for its DOAS, UNIT_HEATER, AIR_COOLED_CHILLER, FAN and HEAT_PUMP strata.
+#   25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 | MISCELLANEOUS SCHEDULE | DOAS | 1 of the 3 printed rows: DOAS-30 (EH-20 and EH-30 are electric heaters, keyed in this table's UNIT_HEATER block) | render: page 4 overview at 40 dpi; crop 1038,722,1104,223 at 3x in 3 tiles (SYMBOL column repeated); second read at 4x (crops 1038,807,1104,36 and 1038,843,1104,36 and 1038,879,1104,36, each in 3 parts) of all 3 printed rows, every cell
+#   25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 | MISCELLANEOUS SCHEDULE | UNIT_HEATER | 2 of the 3 printed rows: EH-20 and EH-30 (DOAS-30 is an energy recovery ventilator, keyed in this table's DOAS block) | render: page 4 overview at 40 dpi; crop 1038,722,1104,223 at 3x in 3 tiles (SYMBOL column repeated); second read at 4x (crops 1038,807,1104,36 and 1038,843,1104,36 and 1038,879,1104,36, each in 3 parts) of all 3 printed rows, every cell
+#   25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 | CHILLER SCHEDULE | AIR_COOLED_CHILLER | all 1 printed row | render: page 4 overview at 40 dpi; crop 833,436,1309,257 at 3x in 3 tiles (SYMBOL column repeated), notes included; second read at 4x (crop 833,527,1309,36 in 3 parts) of CH-1, every cell
+#   25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 | FAN SCHEDULE | FAN | all 2 printed rows | render: page 4 overview at 40 dpi; crop 418,977,1126,233 at 3x in 3 tiles (SYMBOL column repeated), notes included; second read at 4x (crops 418,1062,1126,34 and 418,1096,1126,34, each in 3 parts) of REF-1 and REF-2, every cell
+#   25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5 | VRF INDOOR HEAT PUMP SCHEDULE | HEAT_PUMP | 9 of the 10 printed rows: CC-8-1 to CC-8-9 (BC-1 is a branch controller, not a heat pump) | render: page 5 overview at 40 dpi; crop 815,329,1327,566 at 3x in 3 tiles (SYMBOL column repeated), notes included; second read at 4x (crops 815,451,1327,34 and 815,620,1327,34 and 815,722,1327,34, each in 3 parts) of CC-8-1, CC-15-6 and CC-8-9, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and series numbers, unit types, nominal sizes, efficiencies, water pressure drops, outdoor air temperatures, compressor and fan counts and currents, MCA and MOP, weights, sound ratings, brake horsepower, filters by note, the split-system heat pump and VRF outdoor unit schedules (not drawn), and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 25_WA_DouglasCounty_Courthouse_HVAC_DDC: 5 table(s), 15 instance(s), 305 keyed attribute value(s) (98 printed, 207 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,area_served,COMMISSIONER'S AREA,,AREA / UNIT SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,supply_cfm,200,cfm,"CAPACITY: its airflow part (""200 CFM @ 0.5"" ESP"")",author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,oa_cfm_min,,cfm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,supply_fan_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,supply_fan_qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,return_fan_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,exhaust_fan_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,vfd,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,economizer,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,outdoor_air_pct,,%,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,cooling_type,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,cooling_mbh,,MBH,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,dx_stages,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_wpd_ft,,ft,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_mbh,,MBH,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_rows,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,chw_glycol_pct,,%,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,heating_type,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,heating_mbh,,MBH,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_wpd_ft,,ft,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_mbh,,MBH,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_rows,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,hw_glycol_pct,,%,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,steam_psig,,psig,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,steam_lb_hr,,lb/hr,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,gas_input_mbh,,MBH,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,humidifier,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,energy_recovery,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,filter_merv,8,,"REMARKS: W/ MERV 8 FILTERS, the filters' MERV",author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,volts,115,V,ELECTRICAL / VOLTS/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,DOAS-30,DOAS,phase,1,,ELECTRICAL / VOLTS/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,area_served,MAINT OFFICE,,AREA / UNIT SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,heating_medium,electric,,TYPE,printed 'CEILING ELECTRIC HEATER'
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,cfm,,cfm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,heating_mbh,,MBH,CAPACITY,printed '-'
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,steam_psig,,psig,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,eh_kw,2250,W,ELECTRICAL / WATTS,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,volts,208,V,ELECTRICAL / VOLTS/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-20,UNIT_HEATER,phase,1,,ELECTRICAL / VOLTS/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,area_served,DOAS-3,,AREA / UNIT SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,heating_medium,electric,,TYPE,printed 'DUCT ELECTRIC HEATER'
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,cfm,,cfm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,heating_mbh,,MBH,CAPACITY,printed '-'
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,steam_psig,,psig,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,eh_kw,2500,W,ELECTRICAL / WATTS,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,volts,208,V,ELECTRICAL / VOLTS/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,MISCELLANEOUS SCHEDULE,EH-30,UNIT_HEATER,phase,1,,ELECTRICAL / VOLTS/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,condenser,air,,TYPE,printed 'PACKAGED AIR COOLED SCROLL'
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,tons,68.5,tons,COOLING PERFORMANCE / CAP TONS,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_gpm,164,gpm,COOLING PERFORMANCE / GPM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,54,F,COOLING PERFORMANCE / EWT,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,44,F,COOLING PERFORMANCE / LWT,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,volts,460,V,ELECTRICAL / VOLTS/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL / VOLTS/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,area_served,RELIEF,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,service,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,cfm,7300,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,esp_in,0.75,in. w.c.,ESP,"printed '0.75""'"
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,motor_hp,3,hp,ELECTRICAL / HP,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,motor_watts,,W,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,rpm,1300,rpm,MAX RPM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,vfd,yes,,"REMARKS: the fan's speed control, W/ VFD or W/ ECM (note 1: EC motors or variable frequency drives): a VFD",printed 'MAX INLET 17.4 SONES W/ VFD'; author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,ecm,no,,"REMARKS: the fan's speed control, W/ VFD or W/ ECM (note 1: EC motors or variable frequency drives): an EC motor",printed 'MAX INLET 17.4 SONES W/ VFD'; author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,control,DUCT SP,,CONTROL,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,volts,208,V,ELECTRICAL / VOLTS / PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-1,FAN,phase,3,,ELECTRICAL / VOLTS / PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,area_served,RELIEF,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,service,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,cfm,2900,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,esp_in,0.62,in. w.c.,ESP,"printed '0.62""'"
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,motor_hp,0.75,hp,ELECTRICAL / HP,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,motor_watts,,W,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,rpm,1200,rpm,MAX RPM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,vfd,no,,"REMARKS: the fan's speed control, W/ VFD or W/ ECM (note 1: EC motors or variable frequency drives): a VFD",printed 'MAX INLET 21.0 SONES W/ ECM'; author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,ecm,yes,,"REMARKS: the fan's speed control, W/ VFD or W/ ECM (note 1: EC motors or variable frequency drives): an EC motor",printed 'MAX INLET 21.0 SONES W/ ECM'; author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,control,DUCT SP,,CONTROL,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,volts,208,V,ELECTRICAL / VOLTS / PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4,FAN SCHEDULE,REF-2,FAN,phase,1,,ELECTRICAL / VOLTS / PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,area_served,COMM OFFICE INTERIOR,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,cfm,315,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,cooling_mbh,8,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,heating_mbh,9,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-1,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,area_served,COMM OFFICE ENTRY,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,cfm,500,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,cooling_mbh,15,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,heating_mbh,17,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-2,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,area_served,COMM OFFICE MEETING,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,cfm,500,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,cooling_mbh,15,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,heating_mbh,17,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-3,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,area_served,COMM OFFICE NE OFFICE,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,cfm,280,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,cooling_mbh,8,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,heating_mbh,9,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-4,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,area_served,COMM OFFICE SE OFFICE,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,cfm,500,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,cooling_mbh,15,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,heating_mbh,17,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-5,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,area_served,COMM OFFICE SOUTH OFFICE,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,cfm,500,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,cooling_mbh,15,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,heating_mbh,17,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-6,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,area_served,COMM OFFICE SW OFFICE,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,cfm,500,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,cooling_mbh,15,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,heating_mbh,17,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-15-7,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,area_served,JURY ROOM,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,cfm,860,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,cooling_mbh,30,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,heating_mbh,34,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,AH-30-8,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,building,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,floor,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,area_served,JURY HALLWAY,,AREA SERVED,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,qty,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,cfm,280,cfm,CFM,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,cooling_mbh,8,MBH,CAPACITY (MBH) / COOLING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,cooling_tons,,tons,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,heating_mbh,9,MBH,CAPACITY (MBH) / HEATING,
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,hw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,hw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,hw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,chw_gpm,,gpm,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,chw_ewt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,chw_lwt_f,,F,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,motor_hp,,hp,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,eh_kw,,kW,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,conn_in,,in,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,bas_interface,,,,not printed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,volts,208,V,UNIT ELECTRICAL / VOLT/PH: volts part,author's reading of the printed row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5,VRF INDOOR HEAT PUMP SCHEDULE,CC-8-9,HEAT_PUMP,phase,1,,UNIT ELECTRICAL / VOLT/PH: phase part,author's reading of the printed row
