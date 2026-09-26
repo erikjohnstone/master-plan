@@ -835,6 +835,13 @@ round of normalizer rules from it.**
 - **Next:** freeze, key held-out 2 from renders, and measure GATE 2 on
   held-out and held-out 2 (aggregates; held-out also without 024_MO,
   AS-26). AS-27's pairing question is the owner's.
+- **Frozen** at 6e1a626 (2026-09-26 18:11 UTC), before any held-out-2 key
+  was typed: `normalize.ts` sha256 6121595e9c10, `scheduleNotes.ts`
+  3be7dbc17281, `attributes.ts` ca338fe73841, the scorer
+  `assemblies-attr-eval.mjs` 4b6305384fde. GATE 2 on held-out and held-out 2
+  is measured with exactly these files, and each report's sha256 fields must
+  match them. If the owner accepts AS-27's pairing rule, its number is
+  reported beside the frozen scorer's, never instead of it.
 
 
 ---
