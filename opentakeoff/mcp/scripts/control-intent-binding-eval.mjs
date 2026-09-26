@@ -190,7 +190,7 @@ export function scoreBindingSet({ setId, bindKey, attrKey, snapshot, library }) 
   return { setId, packets: packets.length, pairs, bindings, units, not_found: [...notFound].map(([k, n]) => ({ packet: k, pairs: n })) };
 }
 
-function summarize(results) {
+export function summarize(results) {
   const pairs = results.flatMap((r) => r.pairs);
   const bindings = results.flatMap((r) => r.bindings);
   const units = results.flatMap((r) => r.units);

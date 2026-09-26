@@ -94,3 +94,172 @@ schedule title or cited notes. Otherwise readings through it are proposals only.
 **Numbers:** 4 missed pairs (`semantic`) and 1 false binding.
 
 **Next:** open. These need a reading of the packet's words (WP3), not a binding rule.
+
+## CI-4: a sequence's heading region stopped at its own title (FIXED, 2deed61)
+
+**Found:** 2026-09-25, WP3 dev replay (federal-mech AHU-1).
+
+**What:** the packet finder grew a heading's region down the page only while the gap to the next line stayed within
+2.5 body heights, measured from the first line. "AHU - 1 SEQUENCE OF OPERATIONS" is printed large, and its first
+body line sits 52 px below it (the limit was 47.75), so the packet was the bare title: 3 spans, no sequence text.
+
+**Fix:** the first gap is allowed the same window the title's reading direction was found in
+(`max(3 × body, 2.5 × title height)`, `evidence.ts` `textWindow`). That packet grew from 3 to 640 spans. It is the
+only dev packet that changed.
+
+## CI-5: a family sheet that a unit's own title is printed on did not bind (FIXED, 2deed61)
+
+**Found:** 2026-09-25, WP3 dev replay (federal-mech AHU-1 economizer).
+
+**What:** the LEED note title between AHU-1's sequence and its economizer section stopped the region's growth. The
+economizer section was on a sheet about air handlers, and it named no other unit, yet nothing bound it.
+
+**Fix:** a sheet binds as a sibling when three things hold: a title naming the unit is printed on it, the sheet
+is about the unit's family, and no title on the sheet names another unit (`binding.ts`, the evidence says so).
+
+## CI-6: zone plans: sensor symbols in the zone a unit's tag labels (NEW READER, 2deed61; hardened in the next commit)
+
+**Found:** 2026-09-25. The research's floor-plan class: federal-mech VAV CO2 sensors are drawn only on the HVAC zone
+legend (M2.1), never in a sequence.
+
+**What:** `zonePlan.ts` reads a sheet whose title names zones. Each closed region is a candidate zone, whether a
+fill or the clip its hatch is drawn through. A scheduled tag printed alone labels the smallest region that holds
+it and is many times its box. A symbol inside that region answers the unit's option ("CO2" → `co2_sensor`, reader
+`rp`, whitelisted, cited to the symbol and the label).
+
+**Numbers:** federal-mech M2.1 has 60 zones. All 15 CO2 zones the key names are read, with 0 false. No other dev
+document has a zone-titled sheet.
+
+**Hardening (robustness across documents, not a dev miss):**
+- A tag drawn in pieces ("VAV-" "12") labels as the text line its pieces join into, and its pieces are no symbols.
+- A zone must be several text heights across as well as many label boxes in area, so a legend table's cell (as
+  large as a zone, but thin) labels nothing.
+- A tag printed twice in its own zone labels it once.
+- A letter span with a smaller digit drawn against it reads as one symbol ("CO" "2" → "CO2").
+- Quarter-turned sheets read the same (regions come through the viewport, text turned with it).
+
+Each case has a synthetic test (`web/test/controlIntent/zonePlan.test.ts`). federal-mech is unchanged: 60 zones,
+the same 15 CO2 zones.
+
+## CI-7: list items under a lead-in had no subject, so R0 read no actor (FIXED, next commit)
+
+**Found:** 2026-09-25, WP3 dev replay.
+
+**What:** sequences write "WHEN THE ABOVE CONDITIONS ARE MET, THE DDC CONTROLLER SHALL SEQUENCE THE FOLLOWING:" and
+then numbered items such as "1. SEND AN ENABLE COMMAND TO THE PUMP." R0's control-act rule needs the clause's
+subject, and each item had none.
+
+**Fix:** `text.ts` v3 marks a sentence that ends in a colon as a lead-in. The list items after it that have no
+subject of their own carry its subject (`leadSubject`: from the last determiner or comma before SHALL/WILL). The
+lead lasts until a paragraph that is no item, a new lead-in or a section heading. R0 v3 matches that subject
+against the sourced actors (`role.bas_actor`, `role.local_actor`; term list v2). R1 v3 accepts the lead as the
+clause subject a role answer must quote.
+
+**Numbers (dev replay):** exact rose from 221 to 227/244, and class R (decided by the control drawings) reached
+55/71. That run had 2 applied-wrong readings: CI-8.
+
+## CI-8: a model's evidence from a packet shared by several units was applied to the wrong unit (FIXED, next commit)
+
+**Found:** 2026-09-25, the dev replay after CI-7: 069 BP-1 and BP-2 were applied-wrong.
+
+**What:** a boiler room sequence printed once for several units is bound to each of them. R1's answer for BP-1 quoted
+clauses about the heating water pumps (HWP-1/2): the quote was verified, but it was about another unit.
+
+**Fix:** a model answer whose cites all come from shared packets counts only when a cited clause, or its section's
+heading, names the unit (`record.ts` `attributed()`). Otherwise the answer is unverified and never applies. Packets
+bound to the unit alone are unaffected.
+
+**Numbers (dev replay, all recorded runs):**
+- exact 227/244 (93.0%), unchanged;
+- applied 291, applied-wrong 0 (was 2), INVENTED 0, uncited 0;
+- absence decisions: 43 applied, 0 wrong;
+- class R 55/71.
+
+## CI-9: the dev misses that remain (OPEN)
+
+After CI-4 to CI-8 (dev replay, 17 of 244):
+- **Boiler pumps keyed out of scope (4):** 069 BP-1/2 and itd BP-1/2 are keyed `none`. Each boiler's own controller
+  runs its pump, but the pipeline gives `pump-constant`. Taking them out of scope needs a role reading ("the boiler
+  controller runs its pump"). The readers leave that role unresolved, so it is not applied.
+- **Option defaults the drawings do not settle (8):**
+  - 094 AHU-04, AHU-05 and AHU-08 duct smoke detectors (key false; the starter default is true, and nothing reads
+    an absence);
+  - bldg5406 AC-1 setpoint adjustment;
+  - federal AHU-1 return fan and relief fan (the drawing shows both a return fan and relief dampers, so the
+    exclusive group stays unresolved by design);
+  - federal AHU-1 differential economizer;
+  - federal CH-1 chilled water isolation valve;
+  - federal EF-1 motorized damper (R1 reads "no", while R0 and both R2 runs read "yes": a disagreement, left
+    unresolved);
+  - itd HUM-1 space humidity.
+- **Waiting on an unprinted attribute (5):**
+  - 031 WHSE-AHU-1 (VFD) and 094 AHU-06 (economizer);
+  - bldg5406 AHU-1 (a key the ASSEMBLIES loop already found dishonest, AS-16);
+  - federal FCU-1 (ECM);
+  - itd AHU-1 (VFD).
+
+**Next:** open. None of these is a key edit. Reading absences of a drawn device (094 smoke detectors) needs a
+fourth, structurally different reader. It is not a weaker agreement rule.
+
+## CI-10: held-out project and binding keys were authored after WP2/WP3 code existed (PROCESS NOTE, not a bug)
+
+**What:** GATE 0 asks for the held-out `project.csv` and `binding.csv` before any Track A/B code runs on those
+documents. They were authored on 2026-09-25 (commit 08ea06d) after WP2/WP3 existed. However, no control-intent code
+had run on the six held-out documents: the corpus robustness sweep and the zone scan exclude them. Each key was
+written from its document's own PDF text and renders, with no pipeline output.
+
+**Next:** held-out control-intent results are measured against these keys and reported as aggregates only.
+
+## CI-11: a qualified tag, a mark several kinds of unit share, and point labels bound the wrong units (FIXED, next commit)
+
+**Found:** 2026-09-26, the blind live audit on an unseen set (16_NV, never keyed or tuned on), and a scan of every
+snapshot's tags.
+
+**What:**
+- 16_NV marks an outdoor air unit, a furnace and a condensing unit all "B1" (its schedules number by building). Its
+  "EF-B1 CONTROL DIAGRAM" is an exhaust fan's. The title tokenizer read "EF", "-", "B1", so the diagram bound all
+  three B1s by tag. That also kept furnace B1 from its own "FURNACE CONTROL DIAGRAM". The live readers then
+  **applied** furnace B1's fan status from "EXHAUST FAN STATUS SHALL BE MONITORED BY THE BUILDING AUTOMATION
+  SYSTEM": R0 and R1 agreed, on another unit's clause.
+- `tagKey` dropped the letters before a mark, so "AHU-A1" and "DOAH-A1" (001_NC), and "GWP-A-1" and "HWP-A-1"
+  (061_IA), were one tag to the binder.
+- Condensing units "BO1" and "BO2" were bound inside an RTU control diagram whose "BO-1" and "BO-2" are binary
+  outputs.
+
+**Fix (`binding.ts`, the shared binder):**
+- A tag keeps the letters printed before its mark (`qualifier`). Two different qualifiers are two tags.
+- A qualifier that is a standard designator (`PREFIX_WORDS`: "EF" is an exhaust fan) must name the unit's family, or
+  its schedule must print it. Other letters (a building, "WHSE-AHU-1") do not stop a match.
+- A mark several kinds of unit share binds by a title only when the title's subject names the unit's family.
+  Otherwise the binding is a proposal (C5), and readings through it are proposals only.
+- I/O point designators (AI, AO, BI, BO, DI, DO) printed in a packet are never a unit's tag.
+
+**Checked:**
+- Dev: the binding eval over the 11 dev snapshots gives the same 657 pair and binding rows before and after (recall
+  92.9%, precision 92.9%). Dev bindings are unchanged, so no dev reading can move.
+- Unseen sets (the 35 swept so far, before vs after) change on three sets, as intended:
+  - 16_NV: the B1s lose "EF-B1"; furnace B1 gets "FURNACE CONTROL DIAGRAM"; BO1 and BO2 lose the point labels.
+  - 001_NC: "POINTS LIST AHU-T1A/TIB" now binds AHU-T1A by tag, replacing three family proposals.
+  - 017_MD: "MOTOR CONTROL CENTER - MCC-A1" no longer binds S-A-1, CC-A-1 and HC-A-1. "ACU A-1 … SEQUENCE" binds
+    them as proposals: the parts of ACU A-1 share the mark A-1, and the title does not say which part. That is a
+    recall cost, taken on purpose.
+- 16_NV live, re-read: 12 applied, all right (RTUs B2–B5: duct smoke detector, CO2 sensor, economizer, from "ROOFTOP
+  UNIT WITH BAROMETRIC RELIEF SEQUENCE OF OPERATION (BID ALTERNATE 1)"). Before the fix, 13 applied, 1 wrong.
+
+**Not fixed here (recall, not a wrong binding):** "FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION" names two
+families, but the right-headed rule reads only the condensing unit. The furnaces do not get the sequence, and the
+condensing units get it as a proposal because their rows do not print "FURNACE".
+
+## CI-12: two sequences printed one under the other were found as one packet (OPEN, next finder batch)
+
+**Found:** 2026-09-26, the blind live audit on an unseen set (27_WA, sheet 18).
+
+**What:** the sheet prints "EXHAUST FAN (EF-1,2) SEQUENCE OF OPERATION" (the fans run from a manual switch) and, one
+line of spacing below its last line, "EXHAUST FAN (EF-3) SEQUENCE OF OPERATION" (the main PLC runs EF-3, whose fan
+"SHALL OPEN THE INTERLOCKED MOTORIZED DAMPER"). A body-size heading starts a packet only when nothing is printed right
+above it, so the second heading and its text joined the first packet. EF-1 and EF-2 are bound to that packet by
+title, so R0 and R1 **applied** their motorized damper from EF-3's clause. That is 2 wrong decisions among 64
+audited.
+
+**Next:** a body-size heading that names equipment by tag and a sequence, points list or diagram starts its own
+packet when the line above it ends a sentence. This is a finder change: re-snapshot dev and re-measure.

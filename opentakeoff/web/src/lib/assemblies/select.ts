@@ -53,6 +53,10 @@ export interface ProjectSettings {
   /** The project questions' answers (controlIntent/catalogue.ts), question id
    * → answer; the apply path turns them into each unit's intent. */
   answers?: Record<string, string>;
+  /** The journal event each answer comes from (controlIntent/journal.ts),
+   * question id → its id and origin: a record an answer decides names who
+   * recorded it (the estimator, or an agent for them). */
+  answer_events?: Record<string, { event_id: string; origin: string }>;
 }
 
 /** A user's choice for one unit, always with a reason; for one layer, or

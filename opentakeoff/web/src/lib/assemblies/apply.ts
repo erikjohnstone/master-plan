@@ -586,7 +586,7 @@ export function applyAssemblies(input: {
   const fromRows = rowIntents(units);
   const control = controlEvidenceMap(input.project, units, fromRows);
   const answers = sanitizeAnswers(input.settings?.answers);
-  const fromAnswers = Object.keys(answers).length ? answerIntents(units, answers, input.library) : new Map<number, UnitIntent>();
+  const fromAnswers = Object.keys(answers).length ? answerIntents(units, answers, input.library, input.settings?.answer_events) : new Map<number, UnitIntent>();
   const fromReadings = readingIntents(input.readings);
   if (fromRows.size || fromAnswers.size || input.intents?.size || fromReadings.size) {
     const merged = new Map<number, UnitIntent>();

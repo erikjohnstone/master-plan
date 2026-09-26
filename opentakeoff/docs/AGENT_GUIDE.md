@@ -215,6 +215,18 @@ partner library's own part numbers, costs and hours come back as `report.partner
 assembly register are not read yet. The records are proposals for the estimator, not
 approval.
 
+**Project questions** are the few facts only the estimator knows: whether the project has a BAS
+scope, the owner's criteria, what happens to existing units' controls, whether unscheduled fans and
+pumps are constant speed, whether packaged pumps are in scope. `project_questions` lists the ones
+whose answer changes something here, with the lines and records each choice changes. Ask the
+estimator every one it shows. A `prefill` is printed text proposing an answer, quoted: show it
+to them to confirm, never record it as their answer, and never answer from your own reading of the
+drawings or from what is typical. "Don't know" (`unknown`) is always a valid answer. Record what
+they say with `answer_project_question`, quoting them in `reason`, against the journal `head` the
+questions returned. Your record is an `agent_proposal`, not a human act: it applies, and every
+record it decides says an agent recorded it. Then apply again, and export the takeoff to keep the
+answers with the project.
+
 ## 4. Withheld is not a failure — it is the answer
 
 Four tools measure things they then decline to commit, and say why. The arrays they hand back are
@@ -276,7 +288,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 62 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 64 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Fifty-seven descriptions is real token weight for a session that may never touch half of them, so

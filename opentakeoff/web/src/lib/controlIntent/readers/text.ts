@@ -19,13 +19,19 @@
 //   · a CLAUSE is a paragraph cut at its sentence ends (". ", ":", ";");
 //   · a SECTION runs from a paragraph whose first line is a heading (a short
 //     line ending in a colon, no list marker, no sentence: "HUMIDIFICATION
-//     MODE OF OPERATION :") to the next one, in reading order.
+//     MODE OF OPERATION :") to the next one, in reading order;
+//   · a LEAD-IN is a sentence ending in a colon ("WHEN THE ABOVE CONDITIONS
+//     ARE MET, THE DDC CONTROLLER SHALL SEQUENCE THE FOLLOWING:"); the list
+//     items after it that have no subject of their own ("1. SEND AN ENABLE
+//     COMMAND TO THE PUMP.") carry its subject ("THE DDC CONTROLLER") as
+//     their LEAD, until a paragraph that is no item, another lead-in or a
+//     section heading.
 import type { Box, NoteSpan } from "../../assemblies/scheduleNotes";
 import type { Packet } from "../evidence";
 import { pageLines, repairSpacing, type Line } from "../evidence";
 import WORDS from "./words.json" with { type: "json" };
 
-export const TEXT_VERSION = "control_text_v2";
+export const TEXT_VERSION = "control_text_v3";
 
 export interface PacketLine {
   /** `L<n>` in reading order, unique in the packet. */
@@ -63,6 +69,8 @@ export interface Clause {
   paragraph: string;
   /** The lines it was read from. */
   lines: string[];
+  /** A list item's subject, from the lead-in it follows (matching form). */
+  lead?: string;
 }
 
 export interface PacketText {
@@ -127,6 +135,27 @@ export const squeeze = (s: unknown): string => normText(s).replace(/[^A-Z0-9]+/g
 const MARKER = /^\(?(?:\d{1,2}|[A-Z]|[IVX]{1,4})[.)]\)?$/i;
 /** A line that starts with one ("1. SEND AN ENABLE COMMAND …"). */
 const ITEM_START = /^\(?(?:\d{1,2}|[A-Z]|[IVX]{1,4})[.)]\)?\s+\S/i;
+/** A clause's own subject verb. */
+const SUBJECT_VERB = /\b(?:SHALL|WILL|MUST)\b/;
+/** A lead-in: a sentence that ends in a colon. */
+const LEAD_IN = /\b(?:SHALL|WILL)\b[^:]*:\s*$/;
+
+/** A lead-in's subject: the words before its SHALL or WILL, from the last
+ * determiner ("WHEN … EXISTS THE THERMOSTAT SHALL" → "THE THERMOSTAT";
+ * "FMCS SHALL" → "FMCS"). */
+export function leadSubject(norm: string): string | null {
+  const m = norm.match(/^(.*?)\b(?:SHALL|WILL)\b/);
+  if (!m) return null;
+  const words = m[1].replace(/[,;]/g, " , ").trim().split(/\s+/).filter(Boolean);
+  let from = Math.max(0, words.length - 4);
+  for (let k = words.length - 1; k >= 0; k--) {
+    if (words[k] === ",") { from = k + 1; break; }
+    if (/^(?:THE|EACH|ALL|ITS|THIS|THESE|ANY)$/.test(words[k])) { from = k; break; }
+  }
+  const subject = words.slice(from).join(" ").trim();
+  return subject || null;
+}
+
 /** Words that make a line ending in a colon a sentence, not a heading. */
 const SENTENCE_WORD = /\b(?:SHALL|WILL|MUST|SHOULD|IS|ARE|BE|WHEN|WHENEVER|IF)\b/;
 
@@ -303,8 +332,10 @@ export function packetText(p: Packet): PacketText {
     if (heading) pg.heading = heading;
   }
   // Clauses: paragraphs cut at sentence ends. A cut is kept on the lines it
-  // came from: each clause cites the lines its text overlaps.
+  // came from: each clause cites the lines its text overlaps. A list item
+  // with no subject of its own carries its lead-in's (see the header).
   const clauses: Clause[] = [];
+  let lead: string | null = null;
   for (const pg of paragraphs) {
     // Character offsets of each line inside the paragraph text.
     const offs: Array<{ id: string; a: number; b: number }> = [];
@@ -324,13 +355,22 @@ export function packetText(p: Packet): PacketText {
       cuts.push(m.index + 1);
     }
     cuts.push(pg.text.length);
+    const first = byId.get(pg.lines[0]);
+    const item = ITEM_START.test(clean(pg.text));
+    if (!item || (first && isHeading(first.text))) lead = null;
+    const own: Clause[] = [];
     for (let i = 0; i + 1 < cuts.length; i++) {
       const a = cuts[i], b = cuts[i + 1];
       const text = clean(pg.text.slice(a, b));
       if (!text) continue;
       const ids = offs.filter((o) => o.b > a && o.a < b).map((o) => o.id);
-      clauses.push({ text, norm: normText(text), paragraph: pg.id, lines: ids });
+      const norm = normText(text);
+      own.push({ text, norm, paragraph: pg.id, lines: ids, ...(item && lead && !SUBJECT_VERB.test(norm) ? { lead } : {}) });
     }
+    clauses.push(...own);
+    // The paragraph's last clause leads what follows, when it is a lead-in.
+    const last = own[own.length - 1];
+    if (last && LEAD_IN.test(last.norm)) lead = leadSubject(last.norm);
   }
   return { packet: p.id, lines, paragraphs, clauses };
 }

@@ -152,9 +152,17 @@ export function noSpeedColumn(u: Pick<AnswerUnit, "attributes" | "unknown" | "ta
   return !headers.some((h) => SPEED_HEADER_RE.test(h));
 }
 
-const fact = <V>(value: V, q: QuestionId, answer: string, basis: string): IntentFact<V> => ({
-  value, source: "project", rule: `project_answer:${q}=${answer}`, basis, cites: [],
-});
+/** The journal event an answer comes from (journal.ts), when the caller
+ * replayed one. */
+export type AnswerEventRefs = Readonly<Record<string, { event_id: string; origin: string }>>;
+
+/** Who recorded an answer, for the basis of what it decides: an agent's
+ * record is its relay of the estimator, never a human act (CI4). */
+export function answerRecordedBy(ref: { event_id: string; origin: string } | undefined): string {
+  if (!ref) return "";
+  const who = ref.origin === "operator_input" ? "recorded by the estimator" : "recorded by an agent for the estimator (agent_proposal, not a human act)";
+  return `; ${who}, event ${ref.event_id.slice(0, 12)}`;
+}
 
 /** The families the library has a controls typical for. */
 function familiesWithTypicals(library: readonly AssemblyDefinition[]): Set<string> {
@@ -173,8 +181,12 @@ function optionsForFamily(library: readonly AssemblyDefinition[], family: string
   return out;
 }
 
-/** Each unit's facts from the project's answers (index → intent). */
-export function answerIntents(units: readonly AnswerUnit[], answers: ProjectAnswers, library: readonly AssemblyDefinition[]): Map<number, UnitIntent> {
+/** Each unit's facts from the project's answers (index → intent). `events`
+ * names the journal event behind each answer, for the facts' basis. */
+export function answerIntents(units: readonly AnswerUnit[], answers: ProjectAnswers, library: readonly AssemblyDefinition[], events?: AnswerEventRefs): Map<number, UnitIntent> {
+  const fact = <V>(value: V, q: QuestionId, answer: string, basis: string): IntentFact<V> => ({
+    value, source: "project", rule: `project_answer:${q}=${answer}`, basis: basis + answerRecordedBy(events?.[q]), cites: [],
+  });
   const out = new Map<number, UnitIntent>();
   const withTypicals = familiesWithTypicals(library);
   const unitTags = new Set(units.map((u) => u.tag.toUpperCase().replace(/\s+/g, "")));

@@ -224,6 +224,46 @@ test("a row that puts its unit outside the BAS keeps only title bindings; a sche
   assert.equal(b.get(1), undefined);
 });
 
+test("marks several kinds of unit share: a qualified tag is only its kind's; a bare shared mark binds by the title's subject or as a proposal; point labels are no tags", () => {
+  // Robustness finds (unseen sets): one set marks an outdoor air unit, a
+  // furnace and a condensing unit all "B1" and draws "EF-B1 CONTROL DIAGRAM"
+  // for an exhaust fan; another schedules "AHU-A1" beside "DOAH-A1".
+  assert.deepEqual(titleTags("EF-B1 CONTROL DIAGRAM", []).map((x) => x.key), [{ prefix: "B", n: 1, suffix: "", qualifier: "EF" }]);
+  assert.deepEqual(titleTags("EF-B1 THRU EF-B3", ["B1", "B2", "B3"].map((t) => tagKey(t)!)).map((x) => `${x.key.qualifier}:${x.key.prefix}-${x.key.n}`), ["EF:B-1", "EF:B-2", "EF:B-3"]);
+  const packets = [
+    packet("ef", "EF-B1 CONTROL DIAGRAM", "diagram"),
+    packet("fu", "FURNACE CONTROL DIAGRAM", "diagram"),
+    packet("b1", "B1 CONTROL SEQUENCE", "sequence"),
+    packet("fb1", "FURNACE B1 SEQUENCE OF OPERATION", "sequence"),
+    packet("rtu", "ROOF TOP UNIT CONTROL DIAGRAM", "diagram", [sp("BO-1", 100, 100), sp("BO-2", 100, 140), sp("SUPPLY FAN START/STOP", 200, 100)]),
+    packet("ahu", "AHU-A1 CONTROL DIAGRAM", "diagram"),
+    packet("w", "AHU-1 SEQUENCE OF OPERATIONS", "sequence"),
+    packet("ef7", "EF-B7 CONTROL", "detail"),
+  ];
+  const b = bindPackets(packets, [
+    unit(0, "B1", "OUTDOOR_AIR_UNIT", "OUTDOOR AIR UNIT SCHEDULE"),
+    unit(1, "B1", "FURNACE", "FURNACE SCHEDULE"),
+    unit(2, "B1", "CONDENSING_UNIT", "CONDENSING UNIT SCHEDULE"),
+    unit(3, "B2", "FURNACE", "FURNACE SCHEDULE"),
+    unit(4, "BO1", "CONDENSING_UNIT", "CONDENSING UNIT SCHEDULE"),
+    unit(5, "AHU-A1", "AHU", "AIR HANDLING UNIT SCHEDULE"),
+    unit(6, "DOAH-A1", "DOAH_UNIT", "DEDICATED OUTDOOR AIR UNIT SCHEDULE"),
+    unit(7, "WHSE-AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE"),
+    unit(8, "B7", "FAN", "EXHAUST FAN SCHEDULE"),
+  ]);
+  const of = (i: number) => b.get(i)?.map((x) => `${x.packet}:${x.kind}${x.proposal ? ":proposal" : ""}`);
+  // "EF-B1" names an exhaust fan: none of the three B1s.
+  assert.deepEqual(of(1), ["b1:tag:proposal", "fb1:tag"], "the furnace: its own titled sequence, and the shared mark only as a proposal");
+  assert.deepEqual(of(0), ["b1:tag:proposal"]);
+  assert.deepEqual(of(2), ["b1:tag:proposal"]);
+  assert.deepEqual(of(3), ["fu:family_detail"]);
+  assert.equal(b.get(4), undefined, "BO-1 in a control diagram is a binary output, not the condensing unit BO1");
+  assert.deepEqual(of(5), ["ahu:tag"]);
+  assert.equal(b.get(6), undefined, "AHU-A1 is not DOAH-A1");
+  assert.deepEqual(of(7), ["w:tag"], "a building prefix does not stop a bare title tag");
+  assert.deepEqual(of(8), ["ef7:tag"], "EF names an exhaust fan: the fan schedule's B7");
+});
+
 test("components: a unit in another scheduled unit takes its packets; one located in an unscheduled terminal unit takes that kind's detail", () => {
   const ahuSoo = packet("s", "AHU-1 SEQUENCE OF OPERATIONS", "sequence");
   const tu = packet("tu", "VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM", "diagram");

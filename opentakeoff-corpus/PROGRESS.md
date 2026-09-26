@@ -29,8 +29,90 @@ Done so far (dev only; held-out keys not yet authored):
     key rows the printed drawings contradict (not edited; 21 of the 23 false
     bindings). CI-2 covers the proposals the C5 qualifier rule makes; CI-3 the
     bindings no structure reaches.
-- **Next:** WP3 readers (R0 term list, then R1 text and R2 vision under
-  record/replay), then apply integration and the reading eval.
+- **WP3 (54f1cda, 2deed61 and the next commit), readers + combiner on the
+  shared path:** R0 (sourced term list v2, actors, lead-in subjects), R1
+  (`gpt-oss-120b`, v3), R2 (`qwen-3.8-27b`, two runs), the zone-plan reader
+  (`rp`), combine v4. Dev replay of the recorded runs, key answers:
+  - typical eval **227/244 exact (93.0%)**, 0 undisclosed. Up from 171 before
+    WP3; GATE C's 204 is met. The one "dishonest" row is AS-16.
+  - readings: 291 applied, **0 applied-wrong**, 0 INVENTED, 0 uncited; 43
+    absence decisions applied, 0 wrong. Class R (decided by the control
+    drawings) is 55/71; B2 asks for 57.
+  - federal-mech's zone plan: all 15 CO2 zones, 0 false.
+  - CI-4 to CI-8 hold the fixes; CI-9 the 17 misses left.
+- **WP1 Track A (next commit), project questions on both surfaces:**
+  - selection by exact effect (every choice applied);
+  - pre-fills quoted from printed text outside the schedule tables;
+  - an append-only fingerprinted answer journal saved with the project
+    (`AssembliesState.answer_journal`).
+  - The Takeoff panel's Project questions card records `operator_input`.
+    MCP's `project_questions` and `answer_project_question` record
+    `agent_proposal`. That follows the BAS journals' rule that no MCP write is
+    a human act. The answer applies, and every record it decides says who
+    recorded it.
+  - `export_takeoff` and `import_takeoff` carry the journal. The same journal
+    gives byte-identical records and lines on both surfaces
+    (`mcp/test/controlIntentQuestions.test.mjs`).
+  - Question eval (`mcp/scripts/control-intent-questions-eval.mjs`, dev):
+    - 27 questions across 11 projects, at most 4 in any one; 0 shown that
+      change nothing;
+    - pre-fills 8 right, 0 wrong, 1 moot;
+    - the key's answers fix 41 instances and break 0.
+    - **GATE A (dev) PASS.**
+- **Held-out keys** (`project.csv`, `binding.csv`, 6 documents, 197 binding
+  rows) are committed in 08ea06d, before any held-out control-intent run
+  (CI-10).
+- **UI proof of the questions card** (`web/scripts/playwright-questions.mjs`,
+  the 069 PDF): the card is `project_questions` over MCP question for
+  question. PQ3 = keep appends one `operator_input` event and changes exactly
+  the 56 lines and 6 records the choice showed. MCP imported the page's
+  project file and applied it: byte-identical records (24) and lines (71).
+- **Readings are taken before settings** on every surface: the MCP apply had
+  read them after the project's settings, the panel before. The top-up
+  recorded the 11 runs this asked for; the dev numbers above are unchanged.
+- **Robustness sweep (running, one worker):** every non-held-out corpus set
+  is snapshotted. First pass of the deterministic readers and zone plans over
+  the 33 sets snapshotted so far:
+  - 1,240 units, 446 read, 0 errors;
+  - 23 applied, all on dev documents or their duplicates (federal-mech's 15
+    CO2 zones; itd-d1-lab's 4 standalone roles, also printed in
+    062_ID_ITD, the same drawings under another corpus id). No unseen
+    document gets a deterministic application: those need two readers to
+    agree.
+  - One finder miss: 008_MO's "LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM."
+    ends in a period, so `packetKind` reads it as a sentence. Queued for the
+    next finder batch, with a dev re-snapshot and re-measure.
+  - Four snapshot children died (memory). 061_IA and tinker succeeded on
+    retry; 01_NY is being retried, and 07_MO will be retried after the sweep.
+- **Blind live audit (all three readers, live model calls, recorded) on
+  unseen sets never keyed or tuned on.** Every applied decision was checked
+  by hand against its cites and the drawing.
+  - 16_NV: 13 applied, 1 wrong. Furnace B1 took an exhaust fan's clause
+    through "EF-B1 CONTROL DIAGRAM". The binder fix (CI-11) makes it 12
+    applied, 0 wrong.
+  - 27_WA, 03_FL, 061_IA, 05_MO, 009_FL, 06_MO, 017_MD: 64 applied, 62
+    right. The 2 wrong (27_WA EF-1 and EF-2 motorized damper) come from two
+    sequences found as one packet (CI-12, open, next finder batch).
+- **CI-11, the binder (fixed):** a qualified tag ("EF-B1") is only its
+  kind's; a mark several kinds of unit share binds by the title's subject or
+  as a proposal; I/O point labels are no tags. The 11 dev documents' 657
+  pair and binding rows are identical before and after; among 35 swept sets,
+  3 change, as intended.
+- **Guard (this commit):**
+  - web: typecheck; 3,732 tests with only the 3 AS-1 failures; build.
+  - MCP: typecheck; test:bas 133/133, the 3 that timed out under memory
+    pressure green on a rerun; the assemblies and control-intent tests after
+    the binder fix.
+  - The full MCP suite passes but for two items. One is the AS-1
+    conformance test. The other is crossCorpusWorkflow's WP1 compile
+    acceptance, which now covers 117 keyed sets because the whole corpus is
+    staged. The memory cgroup killed it after 9. Of those 9, 3 pass; 2 fail
+    as in AS-1; 16_NV, 04_NV, 26_CA and 21_VA fail as newly staged sets.
+    `main` (5ab7ca8) gives byte-identical compile triplets and the same
+    outcomes for all 9. Their sheet graphs differ only in timing fields.
+- **Next:** the CI-12 finder batch (with 008_MO's period-ended title); more
+  of the audit; the rest of the sweep and its zone scan; held-out
+  aggregates; corpus-eval unchanged.
 
 The research that proposed the goal (2026-09-24):
 - **Research:** `plans/05-research/01–03`, the design plan

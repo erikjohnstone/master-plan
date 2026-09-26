@@ -18,7 +18,11 @@
 //   · every quote must be printed in the paragraph it names (spacing aside);
 //   · an option's "yes" quote must name the device (the term list's mention
 //     words, traps removed); a "no" quote the device or its alternative;
-//   · a role answer needs its subject quote, printed;
+//   · a role answer needs its subject quote, printed; its actor is the
+//     quoted clause's subject, or its lead-in's for a list item. A quote
+//     whose actor is the other side (a local thermostat for "commands", the
+//     BAS for "monitors only") REFUTES the answer: dropped, it holds nothing
+//     open (combine.ts), unlike a quote that is not printed;
 //   · an option read as absent while the paragraphs mention the device (the
 //     term list's mention, traps aside) is not an absence: it reads as
 //     not_shown;
@@ -30,7 +34,7 @@ import type { BoundPacket, DrawingCite, ReaderAnswer } from "./r0";
 import { citeLines } from "./r0";
 import type { ReadingQuestion } from "./questions";
 import type { TermList } from "./terms";
-import { normText, printedIn, squeeze } from "./text";
+import { leadSubject, normText, printedIn, squeeze } from "./text";
 
 export const R1_PROMPT_VERSION = "control_r1_v3";
 export const R1_MODEL = "gpt-oss-120b";
@@ -244,14 +248,31 @@ export function r1Answers(content: string | null, prepared: R1Prepared, question
     } else {
       const subject = a.subject_quote ? verify(a.subject_quote as RawQuote) : null;
       if (!subject) { out.push(fail("the role's subject quote is missing or not printed")); continue; }
-      // "commands" is the BAS's own act: its subject clause names the BAS or
-      // its controller, never the unit's own thermostat or controls.
-      if (answer === "commands" && (!BAS_SUBJECT.test(normText(subject.text)) || LOCAL_SUBJECT.test(normText(subject.text)))) { out.push(fail("the subject quote does not make the BAS the one commanding")); continue; }
+      // Who acts in the subject clause: its own subject, or, for a list item
+      // with none ("1. SEND AN ENABLE COMMAND …"), its lead-in's.
+      const actor = actorOf(prepared.index.get(String((a.subject_quote as RawQuote).paragraph ?? "")), subject.text);
+      const local = LOCAL_SUBJECT.test(actor), bas = BAS_SUBJECT.test(actor) && !local;
+      // "commands" is the BAS's own act, never the unit's own thermostat or
+      // controls; "monitors only" or "not connected" is never the BAS's act.
+      // A quote that names the other actor refutes the answer.
+      if (answer === "commands" && local) { out.push({ ...fail(`its own subject clause names a local actor ("${actor}")`), note: "refuted" }); continue; }
+      if (answer === "commands" && !bas) { out.push(fail("the subject quote does not make the BAS the one commanding")); continue; }
+      if (answer !== "commands" && bas) { out.push({ ...fail(`its own subject clause makes the BAS act ("${actor}")`), note: "refuted" }); continue; }
       if (!cites.some((c) => c.packet === subject.packet && c.text === subject.text)) cites.push(subject);
     }
     out.push({ reader: "r1", question: q.id, answer: answer as ReaderAnswer["answer"], rule: `r1.${R1_PROMPT_VERSION}`, cites });
   }
   return out;
+}
+
+/** Who acts in a quoted clause: the subject of the clause that prints the
+ * quote, or its lead-in's for a list item with no subject of its own. */
+function actorOf(hit: { bp: BoundPacket; paragraph: { id: string } } | undefined, quote: string): string {
+  const q = squeeze(quote);
+  const clauses = hit ? hit.bp.text.clauses.filter((c) => c.paragraph === hit.paragraph.id) : [];
+  const c = clauses.find((x) => squeeze(x.text).includes(q)) ?? clauses.find((x) => q.includes(squeeze(x.text)));
+  const own = /\b(?:SHALL|WILL)\b/.test(normText(quote)) ? leadSubject(normText(quote)) : c && /\b(?:SHALL|WILL)\b/.test(c.norm) ? leadSubject(c.norm) : null;
+  return own ?? c?.lead ?? normText(quote);
 }
 
 /** The BAS or its controller as a clause's subject. */

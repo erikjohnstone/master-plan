@@ -1,5 +1,50 @@
 # Changelog
 
+- **Assemblies read the control drawings, the zone plans and the project's
+  answers (MCP 0.9.85).** Each scheduled unit's controls typical now takes
+  what its own control drawings say, not only what its schedule row prints.
+  `web/src/lib/controlIntent/` binds each unit to its sequence of operation,
+  control schematic and points list (by tag, tag list or range, schedule
+  cross-reference, or a family-level typical detail), and reads them three
+  ways. A deterministic reader matches sourced phrases and the drawn I/O. A
+  text model (`gpt-oss-120b`) quotes the clause it rests on. A vision model
+  (`qwen-3.8-27b`, two runs) must cite printed labels that resolve inside the
+  bound drawing. A reading applies only where two structurally different
+  readers agree, or on a whitelisted exact phrase (a unit printed
+  standalone). An option is read as not drawn only when the text reader and
+  both vision runs agree. One reader alone is a proposal, and readers that
+  disagree leave the option unresolved. Every applied reading carries its
+  rule and cites into the record. The drawings are read once per project,
+  before its settings and answers, the same way on both surfaces, so answering
+  a question never calls a model again. A zone plan (a sheet whose title names
+  zones) is read from its geometry. A unit's tag labels the smallest region
+  around it: a filled or clipping path many times the label's box and
+  several text heights across, so the box behind a label and a legend's cell
+  never count. A sensor symbol drawn inside that zone (a CO2 sensor) applies
+  its option alone, cited to the symbol and the label. Tags drawn in pieces,
+  turned sheets, nested zones and subscripts drawn apart ("CO" "2") read the
+  same way.
+
+  **Project questions.** A few facts only the estimator knows decide many
+  records at once. They are: whether the project has a BAS scope, the owner's
+  criteria (DoD, VA), what happens to existing units' controls, whether fans
+  and pumps with no speed column are constant speed, and whether packaged
+  pumps are in scope. **Takeoff → Assemblies → Project questions** shows only
+  the ones whose answer changes something on the set. Each choice is applied
+  and compared with no answer, so every choice shows the lines and records it
+  changes. At most six are shown, ranked by that. A pre-fill quotes printed
+  text outside the schedule tables that proposes an answer, and it applies
+  nothing until the estimator chooses. Answers are events in an append-only,
+  fingerprinted journal saved with the project
+  (`controlIntent/journal.ts`). MCP adds `project_questions` and
+  `answer_project_question`, which appends to the same journal as an
+  `agent_proposal`: an agent's record of the estimator's answer, never a human
+  act. Every record an answer decides says who recorded it. `export_takeoff`
+  and `import_takeoff` carry the journal, and `apply_assemblies` applies it.
+  The same journal gives byte-identical records and lines on both surfaces. A
+  journal whose chain does not check out is reported, and none of its answers
+  applies. 64 tools.
+
 - **The platform vision model is `qwen-3.8-27b`.** The earlier default,
   `gemma-4-31b`, is no longer served: the endpoint's `/v1/models` lists only
   `gpt-oss-120b` and `qwen-3.8-27b` (checked 2026-09-25). Every vision call

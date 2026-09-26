@@ -101,6 +101,16 @@ export async function replayAnswers(events: readonly unknown[]): Promise<{ answe
   return { answers: answersAfter(out), head, events: out };
 }
 
+/** The settings a replayed journal gives the apply path: its answers and,
+ * for each, the event it comes from (its id and origin, for the records'
+ * basis). */
+export function answerSettings(events: readonly AnswerEvent[]): { answers: ProjectAnswers; answer_events: Record<string, { event_id: string; origin: AnswerEvent["origin"] }> } {
+  const answers = answersAfter(events);
+  const answer_events: Record<string, { event_id: string; origin: AnswerEvent["origin"] }> = {};
+  for (const e of events) if (answers[e.question] !== undefined) answer_events[e.question] = { event_id: e.event_id, origin: e.origin };
+  return { answers, answer_events };
+}
+
 /** Record one answer: the new journal and its event. Refuses a request made
  * against a stale head or an operation the journal already holds. */
 export async function appendAnswer(events: readonly unknown[], request: unknown, opts: { origin: AnswerEvent["origin"]; now?: Date }): Promise<{ events: AnswerEvent[]; event: AnswerEvent; answers: ProjectAnswers }> {

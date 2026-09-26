@@ -1,5 +1,5 @@
 {
-  "version": "control_termlist_v1",
+  "version": "control_termlist_v2",
   "about": "CONTROL INTENT goal WP3.1 (goals/CONTROL_INTENT.md, reader R0): the printed words that say a typical's option is there, is its alternative, or is mentioned at all, and the phrases that put a unit outside the BAS's command. Patterns are JavaScript regular expressions over a clause's matching form (upper case, one kind of dash and quote, letter-spaced words closed up; readers/text.ts normText). Every pattern names its sources: the library option's own definition (us-typicals v1 label and note), UFGS/UFC vocabulary, or at least two dev documents from different drafters (reports/assemblies/drafters.json). No key text and no single document is ever a source (ANTI-GAMING).",
   "sources": {
     "lib": "the option's definition in web/src/lib/assemblies/starter/us-typicals-v1.json (its label and note), frozen at ASSEMBLIES GATE 4",
@@ -27,7 +27,9 @@
     "dev-thermostat": "dev documents of 2 drafters let a thermostat run the unit: 'THE LOCAL THERMOSTAT WILL MODULATE …' (smithgroup federal-mech), 'THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING' (musgrove-engineering itd-d1-lab); the pattern keeps only a thermostat the text calls local, integral or line-voltage (a BAS space sensor is often called a thermostat too)",
     "dev-manufacturer": "dev documents of 2 drafters give a unit's control to its manufacturer: 'CONTROL BY FCU MANUFACTURER' (smithgroup federal-mech), 'MANUFACTURER PROVIDED WIRED CONTROLLER' (musgrove-engineering itd-d1-lab)",
     "dev-interlock": "dev documents of 5 drafters interlock equipment with other equipment (ace-inc, casco-diversified, imeg, musgrove-engineering, smithgroup)",
-    "dev-wire-to": "dev documents of 2 drafters print a wiring callout beside a safety device: 'WIRE TO STARTER' (atkins 094), 'WIRED TO THE VFD' (smithgroup federal-mech)"
+    "dev-wire-to": "dev documents of 2 drafters print a wiring callout beside a safety device: 'WIRE TO STARTER' (atkins 094), 'WIRED TO THE VFD' (smithgroup federal-mech)",
+    "ufgs-230900-names": "UFGS 23 09 00 and 23 09 23.02 name the building control system and its parts: DDC, Building Control System (BCS), Utility Monitoring and Control System (UMCS)",
+    "dev-bas-commands": "dev documents of 3 drafters make the control system the subject of a control act: 'THE BMS SHALL …' (smithgroup federal-mech), 'THE DDC CONTROLLER SHALL …' (musgrove-engineering itd-d1-lab), 'FMCS SHALL …' (imeg 040)"
   },
   "role": {
     "not_connected": [
@@ -70,9 +72,36 @@
       },
       {
         "id": "equipment_enables_its_own",
-        "re": "\\b(?:EACH|THE)\\s+[A-Z][A-Z\\s-]{1,30}?\\s+SHALL\\s+(?:ENABLE|DISABLE|START|STOP|CYCLE|ENERGIZE|DE-?ENERGIZE)\\s+(?:ITS|THEIR)\\s+(?:OWN|ASSOCIATED|RESPECTIVE)\\b",
+        "re": "\\b(?:EACH|THE)\\s+[A-Z][A-Z\\s-]{1,30}?\\s+SHALL\\s+(?:ENABLE|DISABLE|START|STOP|CYCLE|ENERGIZE|DE-?ENERGIZE)\\s+(?:ITS|THEIR|THE)\\s+(?:OWN|ASSOCIATED|RESPECTIVE)\\b",
         "sources": [
           "dev-interlock"
+        ]
+      }
+    ],
+    "bas_actor": [
+      {
+        "id": "bas_names",
+        "re": "\\b(?:BAS|BMS|BCS|EMCS|EMS|FMCS|UMCS|DDC(?:\\s+(?:SYSTEM|CONTROLLER|CONTROL\\s+SYSTEM|PANEL))?|BUILDING\\s+(?:AUTOMATION|MANAGEMENT)(?:\\s+SYSTEM)?)\\b",
+        "sources": [
+          "ufgs-230900-names",
+          "dev-bas-commands"
+        ]
+      }
+    ],
+    "local_actor": [
+      {
+        "id": "thermostat",
+        "re": "\\b(?:THERMOSTAT|T-?STAT)S?\\b",
+        "sources": [
+          "dev-thermostat"
+        ]
+      },
+      {
+        "id": "own_controls",
+        "re": "\\bMANUFACTURER(?:'S)?\\b|\\bFACTORY\\b|\\b(?:UNIT|BOILER|CHILLER|EQUIPMENT)(?:'S)?\\s+(?:UNIT\\s+)?CONTROL(?:LER|S|\\s+PANEL)\\b|\\bUCP\\b|\\bOWN\\s+(?:INTERNAL\\s+)?CONTROLS\\b",
+        "sources": [
+          "dev-manufacturer",
+          "ufgs-230900-pkg"
         ]
       }
     ]

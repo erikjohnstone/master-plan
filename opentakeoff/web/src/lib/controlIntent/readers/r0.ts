@@ -29,11 +29,11 @@ import type { Box } from "../../assemblies/scheduleNotes";
 import type { Binding } from "../binding";
 import { PREFIX_WORDS, tagKey } from "../binding";
 import type { Packet } from "../evidence";
-import type { PacketText } from "./text";
+import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v2";
+export const R0_VERSION = "control_r0_v3";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
@@ -186,6 +186,22 @@ export function ioInventory(bp: BoundPacket): { outputs: string[]; inputs: strin
   return outputs.length || inputs.length ? { outputs, inputs } : null;
 }
 
+/** A control verb: what an act does to equipment. */
+const CONTROL_VERB = /\b(?:SEND\s+(?:AN?\s+)?(?:ENABLE|DISABLE|START|STOP|RUN|OPEN|CLOSE)\s+COMMAND|ENABLE|DISABLE|START|STOP|OPEN|CLOSE|MODULATE|STAGE|CYCLE|ENERGIZE|DE-?ENERGIZE|INDEX|CONTROL|OPERATE|SEQUENCE)\b/;
+
+/** A clause that is a control act, and its subject: the clause's own ("THE
+ * BMS SHALL ENERGIZE …"), or the lead-in's its list item carries ("1. SEND
+ * AN ENABLE COMMAND TO THE UNIT HEATER."). A passive clause ("… SHALL BE
+ * ENABLED") has no actor. */
+function controlAct(c: PacketText["clauses"][number]): { subject: string } | null {
+  if (/\b(?:SHALL|WILL)\s+(?:NOT\s+)?BE\b/.test(c.norm)) return null;
+  const own = /\b(?:SHALL|WILL)\b/.test(c.norm) ? leadSubject(c.norm) : null;
+  const subject = own ?? c.lead ?? null;
+  if (!subject) return null;
+  const verbs = own ? c.norm.slice(c.norm.search(/\b(?:SHALL|WILL)\b/)) : c.norm;
+  return CONTROL_VERB.test(verbs) ? { subject } : null;
+}
+
 /** R0's answers for one unit. */
 export function readR0(unit: { tag: string; family?: string }, bound: readonly BoundPacket[], questions: readonly ReadingQuestion[], terms: TermList): ReaderAnswer[] {
   const all = bound.map((b) => b.binding);
@@ -283,11 +299,22 @@ function readRole(unit: { tag: string; family?: string }, scoped: ReadonlyArray<
       }
     }
   }
-  // Something other than the BAS runs the unit.
+  // Something other than the BAS runs the unit: a phrase that says so, or a
+  // control act whose subject (its own, or its list's lead-in: "THE
+  // THERMOSTAT SHALL SEQUENCE THE FOLLOWING: 1. SEND AN ENABLE COMMAND …")
+  // is a local actor. The BAS commands it: a control act whose subject is
+  // the BAS by name ("THE BMS SHALL ENERGIZE THE EXHAUST FAN").
   const local: Array<{ bp: BoundPacket; ids: string[]; text: string; id: string }> = [];
+  const basActs: DrawingCite[] = [];
   for (const { bp, clauses } of scoped) {
     for (const c of clauses) {
       for (const p of terms.role.local_control) if (p.re.test(c.norm)) local.push({ bp, ids: c.lines, text: c.text, id: p.id });
+      const act = controlAct(c);
+      if (!act) continue;
+      const bas = terms.role.bas_actor.some((p) => p.re.test(act.subject));
+      const localActor = terms.role.local_actor.find((p) => p.re.test(act.subject));
+      if (localActor) local.push({ bp, ids: c.lines, text: c.lead ? `${c.lead} … ${c.text}` : c.text, id: `actor.${localActor.id}` });
+      else if (bas) basActs.push(citeLines(bp, c.lines, c.lead ? `${c.lead} … ${c.text}` : c.text));
     }
   }
   // What the unit's own diagrams draw.
@@ -300,13 +327,14 @@ function readRole(unit: { tag: string; family?: string }, scoped: ReadonlyArray<
     if (io.outputs.length) outputs.push(citeLines(bp, io.outputs));
     if (io.inputs.length) inputs.push(citeLines(bp, io.inputs));
   }
-  if (local.length && outputs.length) {
-    return { reader: "r0", question: "role", answer: "not_shown", rule: "r0.role.local_and_outputs", cites: [citeLines(local[0].bp, local[0].ids, local[0].text), ...outputs], note: "a local controller runs the unit, yet its diagram draws BAS outputs" };
+  if (local.length && (outputs.length || basActs.length)) {
+    return { reader: "r0", question: "role", answer: "not_shown", rule: "r0.role.local_and_bas", cites: [citeLines(local[0].bp, local[0].ids, local[0].text), ...outputs, ...basActs].slice(0, 4), note: "a local controller runs the unit, yet the BAS commands it too" };
   }
   if (local.length) return { reader: "r0", question: "role", answer: "local_control", rule: `r0.role.local_control.${local[0].id}`, cites: local.slice(0, 3).map((x) => citeLines(x.bp, x.ids, x.text)) };
   // Outputs say the BAS commands something the unit's own diagram draws. A
   // diagram of inputs alone is not read as "monitors only": it may draw a
   // part of the unit's points (its outputs elsewhere, or on a drive).
   if (outputs.length) return { reader: "r0", question: "role", answer: "commands", rule: "r0.role.io_outputs", cites: outputs };
+  if (basActs.length) return { reader: "r0", question: "role", answer: "commands", rule: "r0.role.bas_actor", cites: basActs.slice(0, 3) };
   return { reader: "r0", question: "role", answer: "not_shown", rule: inputs.length ? "r0.role.io_inputs_only" : "r0.role.none", cites: inputs };
 }

@@ -61,14 +61,22 @@ const RANK: Record<BindingKind, number> = { tag: 1, list_range: 1, cross_referen
 
 // ── Tags ────────────────────────────────────────────────────────────────────
 
-interface TagKey { prefix: string; n: number; suffix: string }
+/** A tag's mark (its letters, its number, what follows) and the letters
+ * printed before the mark, if any: a building or area ("WHSE-AHU-1") or a
+ * kind of unit ("EF-B1", "AHU-A1" beside "DOAH-A1"). */
+interface TagKey { prefix: string; n: number; suffix: string; qualifier?: string }
 
-/** A tag's parts: its letters, its number as an integer, what follows. */
+/** A tag's parts: its letters, its number as an integer, what follows, and
+ * the letters printed before them. */
 export function tagKey(tag: string): TagKey | null {
-  const m = String(tag ?? "").toUpperCase().replace(/[‐-―−﹘﹣－]/g, "-").match(/^\s*(?:[A-Z]{1,6}-)?([A-Z]{1,6})\s*-?\s*(\d{1,4})([A-Z]{0,2})\s*(?:\([A-Z]{1,10}\))?\s*$/);
-  return m ? { prefix: m[1], n: Number(m[2]), suffix: m[3] } : null;
+  const m = String(tag ?? "").toUpperCase().replace(/[‐-―−﹘﹣－]/g, "-").match(/^\s*(?:([A-Z]{1,6})-)?([A-Z]{1,6})\s*-?\s*(\d{1,4})([A-Z]{0,2})\s*(?:\([A-Z]{1,10}\))?\s*$/);
+  return m ? { prefix: m[2], n: Number(m[3]), suffix: m[4], ...(m[1] ? { qualifier: m[1] } : {}) } : null;
 }
-const sameTag = (a: TagKey, b: TagKey) => a.prefix === b.prefix && a.n === b.n && a.suffix === b.suffix;
+/** One mark, and no two different qualifiers ("AHU-A1" is not "DOAH-A1";
+ * "AHU-1" may be "WHSE-AHU-1"). */
+const sameTag = (a: TagKey, b: TagKey) => a.prefix === b.prefix && a.n === b.n && a.suffix === b.suffix
+  && (!a.qualifier || !b.qualifier || a.qualifier === b.qualifier);
+/** The mark alone: the units a printed tag could be are those of its mark. */
 const keyString = (k: TagKey) => `${k.prefix}-${k.n}${k.suffix}`;
 
 /** The tags a title names, lists and ranges expanded over the scheduled
@@ -78,7 +86,8 @@ const keyString = (k: TagKey) => `${k.prefix}-${k.n}${k.suffix}`;
  * "THRU" between; any other word ends it. */
 export function titleTags(title: string, scheduled: readonly TagKey[]): Array<{ key: TagKey; how: "tag" | "list_range" }> {
   const text = repairSpacing(title).replace(/[‐-―−﹘﹣－]/g, "-");
-  const toks = text.match(/[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|[A-Z][A-Z0-9%'\/]*|[,&()]|\S/g) ?? [];
+  // A qualified mark ("EF-B1", "WHSE-AHU-1") is one tag, never its mark alone.
+  const toks = text.match(/[A-Z]{1,6}-[A-Z]{1,6}-?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|[A-Z][A-Z0-9%'\/]*|[,&()]|\S/g) ?? [];
   const out: Array<{ key: TagKey; how: "tag" | "list_range" }> = [];
   const add = (k: TagKey, how: "tag" | "list_range") => {
     const had = out.find((o) => sameTag(o.key, k));
@@ -88,10 +97,15 @@ export function titleTags(title: string, scheduled: readonly TagKey[]): Array<{ 
   let pending: "list" | "range" | null = null;
   for (const tok of toks) {
     const t = tok.replace(/\s+/g, "");
-    const k: TagKey | null = /^[A-Z]{1,6}-?\d/.test(t) ? tagKey(t) : /^\d{1,4}[A-Z]{0,2}$/.test(t) && last && pending ? tagKey(`${(last as TagKey).prefix}-${t}`) : null;
+    const prev = last as TagKey | null;
+    const k: TagKey | null = /^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(t) ? tagKey(t)
+      : /^\d{1,4}[A-Z]{0,2}$/.test(t) && prev && pending ? tagKey(`${prev.qualifier ? `${prev.qualifier}-` : ""}${prev.prefix}-${t}`) : null;
     if (k) {
       if (pending === "range" && last && last.prefix === k.prefix) {
-        for (const s of scheduled) if (s.prefix === k.prefix && s.n >= last.n && s.n <= k.n) add(s, "list_range");
+        // The range's qualifier goes with every mark in it ("EF-B1 THRU EF-B3").
+        for (const s of scheduled) {
+          if (s.prefix === k.prefix && s.n >= last.n && s.n <= k.n && (!s.qualifier || !k.qualifier || s.qualifier === k.qualifier)) add({ ...s, ...(k.qualifier ? { qualifier: k.qualifier } : {}) }, "list_range");
+        }
         add(last, "list_range");
         add(k, "list_range");
       } else if (pending === "list" && last) {
@@ -111,6 +125,10 @@ export function titleTags(title: string, scheduled: readonly TagKey[]): Array<{ 
   return out;
 }
 
+/** A control drawing's point designators (the I/O types readers/r0.ts reads):
+ * "BO-1" printed in a diagram is a binary output, never a unit's tag. */
+const IO_POINT = new Set(["AI", "AO", "BI", "BO", "DI", "DO"]);
+
 /** The tags printed in a packet: whole tokens in its text, and tags drawn
  * in a tag symbol, the letters over the number as two spans (the letters'
  * span with a number span right under it, centred on it). */
@@ -121,14 +139,16 @@ function bodyTags(p: Packet, maxWords = Infinity): TagKey[] {
   // "HWP" "-" "2 (STBY)").
   for (const l of pageLines(p.spans)) {
     if (l.text.split(" ").length > maxWords) continue;
-    for (const m of repairSpacing(l.text).matchAll(/(?<![A-Z0-9-])([A-Z]{1,6})\s?-\s?(\d{1,4})([A-Z]{0,2})(?![A-Z0-9])/g)) add({ prefix: m[1], n: Number(m[2]), suffix: m[3] });
+    for (const m of repairSpacing(l.text).matchAll(/(?<![A-Z0-9-])([A-Z]{1,6})\s?-\s?(\d{1,4})([A-Z]{0,2})(?![A-Z0-9])/g)) {
+      if (!IO_POINT.has(m[1])) add({ prefix: m[1], n: Number(m[2]), suffix: m[3] });
+    }
   }
   const framed = p.spans.map((s) => {
     const rot = (((Math.round(Number(s.rot ?? 0) / 90) * 90) % 360) + 360) % 360;
     return { s, rot, b: frameBox([s.x0, s.y0, s.x1, s.y1], rot), t: String(s.str ?? "").trim().toUpperCase() };
   });
   for (const pre of framed) {
-    if (!/^[A-Z]{1,5}-?$/.test(pre.t)) continue;
+    if (!/^[A-Z]{1,5}-?$/.test(pre.t) || IO_POINT.has(pre.t.replace(/-$/, ""))) continue;
     const h = pre.b[3] - pre.b[1];
     const cx = (pre.b[0] + pre.b[2]) / 2;
     const num = framed.filter((n) => n.rot === pre.rot && /^-?\d{1,3}[A-Z]?$/.test(n.t)
@@ -241,7 +261,7 @@ const SPLIT = /\bSPLIT\b/;
  * name), nor a device noun, nor a tag. Multi-word synonyms ("HOT WATER")
  * are read as one qualifier. */
 function qualifiers(title: string, u: RowUnit): string[] {
-  const words = subjectWords(title).map((w) => w.replace(/^[(]+|[)]+$/g, "")).filter((w) => w && !/^[A-Z]{1,6}-?\d/.test(w) && !DEVICE_NOUNS.has(w));
+  const words = subjectWords(title).map((w) => w.replace(/^[(]+|[)]+$/g, "")).filter((w) => w && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !DEVICE_NOUNS.has(w));
   const own = new Set([...clean(u.table_title).split(/[^A-Z0-9]+/), ...u.family.split("_")]);
   const phrases: string[] = [];
   for (let i = 0; i < words.length; i++) {
@@ -255,6 +275,40 @@ function qualifiers(title: string, u: RowUnit): string[] {
     phrases.push(group);
   }
   return phrases;
+}
+
+/** Whether a standard designator printed before a mark ("EF" in "EF-B1")
+ * says the unit is what it is: the family its words name, or its schedule
+ * prints them. Null when the letters are no standard designator (a building
+ * or an area: "WHSE-AHU-1"). */
+function designatorFits(q: string, u: RowUnit): boolean | null {
+  const words = PREFIX_WORDS[q];
+  if (!words) return null;
+  return subjectFamily(words) === u.family || printed(words, typeText(u));
+}
+
+/** Whether a tag printed in a title is this unit's:
+ *  - "yes": its mark, with no qualifier that says the unit is something else
+ *    ("EF-B1" is not the furnace "B1"), and the only kind of unit the mark
+ *    could be, or the one the title's subject names;
+ *  - "proposal": a mark several kinds of unit share ("B1": an outdoor air
+ *    unit, a furnace and its condensing unit), and the title names none of
+ *    them (C5: readings through it are proposals only);
+ *  - "no". */
+function tagFit(k: TagKey, u: RowUnit, title: string, sharing: readonly RowUnit[]): "yes" | "proposal" | "no" {
+  const could = (o: RowUnit) => {
+    const ok = tagKey(o.tag);
+    return Boolean(ok && sameTag(k, ok) && !(k.qualifier && !ok.qualifier && designatorFits(k.qualifier, o) === false));
+  };
+  if (!could(u)) return "no";
+  const identity = (o: RowUnit) => `${tagKey(o.tag)?.qualifier ?? ""}|${o.family}`;
+  const cands = sharing.filter(could);
+  if (new Set(cands.map(identity)).size <= 1) return "yes";
+  const family = subjectFamily(title);
+  const named = cands.filter((o) => o.family === family || namesRow(title, o));
+  if (!named.length) return "proposal";
+  if (!named.includes(u)) return "no";
+  return new Set(named.map(identity)).size === 1 ? "yes" : "proposal";
 }
 
 // ── Binding ─────────────────────────────────────────────────────────────────
@@ -318,8 +372,6 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   const titled = packets.map((p) => ({ p, tags: titleTags(`${p.title} ${p.subtitle ?? ""}`, scheduled), family: subjectFamily(p.title), designators: designators(p.title) }));
   const bodies = new Map(packets.map((p) => [p.id, bodyTags(p)]));
   const labels = new Map(packets.map((p) => [p.id, labelTags(p)]));
-  // A tag a title names anywhere in the set.
-  const namedInTitle = new Set(titled.flatMap((t) => t.tags.map((x) => keyString(x.key))));
   const sheetByNumber = new Map<string, string[]>();
   for (const [sheet, no] of Object.entries(opts.sheetNumbers ?? {})) (sheetByNumber.get(compact(no)) ?? sheetByNumber.set(compact(no), []).get(compact(no))!).push(sheet);
   const byId = new Map(packets.map((p) => [p.id, p]));
@@ -330,7 +382,11 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   const byTag = new Map<string, RowUnit[]>();
   for (const u of units) { const k = tagKey(u.tag); if (k) (byTag.get(keyString(k)) ?? byTag.set(keyString(k), []).get(keyString(k))!).push(u); }
   const namedUnits = (v: string) => [...clean(v).matchAll(/(?<![A-Z0-9-])(?:[A-Z]{1,6}-)?[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])/g)]
-    .map((m) => tagKey(m[0].replace(/\s+/g, ""))).filter((k): k is TagKey => Boolean(k)).flatMap((k) => byTag.get(keyString(k)) ?? []);
+    .map((m) => tagKey(m[0].replace(/\s+/g, ""))).filter((k): k is TagKey => Boolean(k))
+    .flatMap((k) => (byTag.get(keyString(k)) ?? []).filter((o) => { const ok = tagKey(o.tag); return Boolean(ok && sameTag(k, ok)); }));
+  /** How a tag printed in a title fits a unit (tagFit), among the units of
+   * its mark. */
+  const fitOf = (k: TagKey, u: RowUnit, title: string) => tagFit(k, u, title, byTag.get(keyString(k)) ?? []);
   // Or both halves are printed in one row of one schedule ("AC-1 / ACCU-1").
   const rowKey = (u: RowUnit) => `${u.cite?.sheet}|${u.table_title}|${JSON.stringify(u.cells)}`;
   const outdoorOf = new Map<number, RowUnit>();
@@ -347,10 +403,21 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     const found: Binding[] = [];
     const add = (b: Binding) => { if (!found.some((f) => f.packet === b.packet)) found.push(b); };
     const text = rowText(u);
-    // Title tags, lists and ranges.
+    // Title tags, lists and ranges. A mark other kinds of unit share binds
+    // as a proposal unless the title's subject says which unit it is.
+    let namedByTitle = false;
     for (const t of titled) {
-      const hit = key && t.tags.find((x) => sameTag(x.key, key));
-      if (hit) add({ packet: t.p.id, kind: hit.how, evidence: `${t.p.scope === "sheet" ? "the sheet's title" : "its title"} "${t.p.title}${t.p.subtitle ? ` ${t.p.subtitle}` : ""}" names ${u.tag}${hit.how === "list_range" ? " in a list or range" : ""}` });
+      if (!key) break;
+      const fits = t.tags.map((x) => ({ x, fit: fitOf(x.key, u, t.p.title) })).filter((f) => f.fit !== "no");
+      const best = fits.find((f) => f.fit === "yes") ?? fits[0];
+      if (!best) continue;
+      const { x, fit } = best;
+      if (fit === "yes") namedByTitle = true;
+      add({
+        packet: t.p.id, kind: x.how,
+        evidence: `${t.p.scope === "sheet" ? "the sheet's title" : "its title"} "${t.p.title}${t.p.subtitle ? ` ${t.p.subtitle}` : ""}" names ${u.tag}${x.how === "list_range" ? " in a list or range" : ""}${fit === "proposal" ? `; other kinds of unit are marked ${keyString(x.key)} too, and the title names none of them` : ""}`,
+        ...(fit === "proposal" ? { proposal: true as const, ambiguous: true as const } : {}),
+      });
     }
     // Cross-references: a cell equal to a title's designator.
     for (const t of titled) {
@@ -376,7 +443,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     // Tags printed inside a packet, when no title names the unit: as a label
     // anywhere, or in the text of a packet about its family or about no one
     // family (a system).
-    if (key && !namedInTitle.has(keyString(key))) {
+    if (key && !namedByTitle) {
       for (const t of titled) {
         if (t.p.scope === "sheet") continue;
         const asLabel = (labels.get(t.p.id) ?? []).some((k) => sameTag(k, key));
@@ -400,9 +467,12 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       if (detail.length !== 1) continue;
       for (const { key } of titleTags(m[2], scheduled)) {
         for (const u of byTag.get(keyString(key)) ?? []) {
+          const fit = fitOf(key, u, `${pts.title} ${m[2]}`);
+          if (fit === "no") continue;
+          const doubt = fit === "proposal" ? { proposal: true as const, ambiguous: true as const } : {};
           const list = direct.get(u.index) ?? [];
-          if (!list.some((b) => b.packet === detail[0].id)) list.push({ packet: detail[0].id, kind: "cross_reference", evidence: `the points schedule "${pts.title}" lists ${u.tag} under "${clean(line)}", detail ${m[1]} on its sheet` });
-          if (!list.some((b) => b.packet === pts.id)) list.push({ packet: pts.id, kind: "cross_reference", evidence: `the points schedule "${pts.title}" lists ${u.tag} under "${clean(line)}"` });
+          if (!list.some((b) => b.packet === detail[0].id)) list.push({ packet: detail[0].id, kind: "cross_reference", evidence: `the points schedule "${pts.title}" lists ${u.tag} under "${clean(line)}", detail ${m[1]} on its sheet`, ...doubt });
+          if (!list.some((b) => b.packet === pts.id)) list.push({ packet: pts.id, kind: "cross_reference", evidence: `the points schedule "${pts.title}" lists ${u.tag} under "${clean(line)}"`, ...doubt });
           direct.set(u.index, list);
         }
       }
@@ -430,7 +500,8 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       if (bp.scope === "sheet") continue;
       for (const p of packets) {
         if (p === bp || p.sheet !== bp.sheet || p.scope === "sheet" || p.kind === bp.kind) continue;
-        if (equalSubject(p.title, bp.title)) add({ packet: p.id, kind: "sibling", evidence: `"${p.title}" is about the same subject as "${bp.title}" on the same sheet` });
+        // A sibling of a proposal is one too.
+        if (equalSubject(p.title, bp.title)) add({ packet: p.id, kind: "sibling", evidence: `"${p.title}" is about the same subject as "${bp.title}" on the same sheet`, ...(b.proposal ? { proposal: true as const } : {}) });
       }
     }
     // The sheet a title naming the unit is printed on, when the sheet's own
@@ -440,7 +511,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     // on "AIR HANDLING UNIT SEQUENCE OF OPERATIONS").
     for (const b of [...found]) {
       const bp = byId.get(b.packet)!;
-      if (RANK[b.kind] > 1 || bp.scope === "sheet") continue;
+      if (RANK[b.kind] > 1 || b.proposal || bp.scope === "sheet") continue;
       const sheet = titled.find((t) => t.p.sheet === bp.sheet && t.p.scope === "sheet");
       if (!sheet || sheet.tags.length || sheet.family !== u.family) continue;
       const own = new Set(titled.find((t) => t.p === bp)!.tags.map((x) => keyString(x.key)));
@@ -454,12 +525,14 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     // A title, a sibling, or the unit's tag inside a packet about its own
     // family binds more specifically than any family detail of that kind (a
     // tag in another system's diagram, an emergency shutdown say, does not).
-    const titleKinds = new Set(found.filter((b) => RANK[b.kind] <= 2 || b.kind === "sibling"
-      || (b.kind === "tag_body" && titled.find((t) => t.p.id === b.packet)?.family === u.family)).map(kindOf));
+    // A proposal (a mark other kinds of unit share) binds nothing more
+    // specifically.
+    const titleKinds = new Set(found.filter((b) => !b.proposal && (RANK[b.kind] <= 2 || b.kind === "sibling"
+      || (b.kind === "tag_body" && titled.find((t) => t.p.id === b.packet)?.family === u.family))).map(kindOf));
     // A unit a title names (its tag, its list, a cross-reference) has its own
     // packets: no family detail of any kind is added to them (their sequence
     // or schematic of the same subject comes in as a sibling).
-    const named = found.some((b) => RANK[b.kind] <= 2);
+    const named = found.some((b) => RANK[b.kind] <= 2 && !b.proposal);
     const chosen = chosenBy.get(`${u.cite?.sheet}|${u.table_title}`);
     const paired = outdoorOf.has(u.index);
     // A detail shown for one unit of the family ("… CONTROL SCHEMATIC (EH-5)")
@@ -467,7 +540,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     // control drawings ("SEE CONTROL DRAWINGS FOR SEQUENCE OF OPERATION").
     const sentToControls = [...(u.notes ?? []).map((n) => n.text), ...Object.values(u.cells)].some((x) => CONTROLS_REF.test(clean(x)));
     const typicalFor = (t: typeof titled[number]) => sentToControls && t.tags.length > 0
-      && t.tags.every((x) => (byTag.get(keyString(x.key)) ?? []).some((o) => o.family === u.family && o !== u));
+      && t.tags.every((x) => (byTag.get(keyString(x.key)) ?? []).some((o) => o.family === u.family && o !== u && fitOf(x.key, o, t.p.title) === "yes"));
     const familyCands = named ? [] : titled.filter((t) => t.p.scope !== "sheet" && !titleKinds.has(t.p.kind) && (t.tags.length === 0 || typicalFor(t))
       && !(chosen?.has(t.p.id) && !found.some((b) => b.packet === t.p.id))
       && (t.family === u.family || (t.family === null && namesRow(t.p.title, u, typeText(u), paired && SPLIT.test(repairSpacing(t.p.title))))));
@@ -595,7 +668,7 @@ const LOCATION_HEADER = /\b(?:LOCATION|MOUNTED|INSTALLED)\b/i;
 const MEDIA = new Set(["HYDRONIC", "CHILLED_WATER", "STEAM", "CONDENSER", "CONDENSER_WATER", "GLYCOL", "ELECTRIC", "GAS", "REFRIGERANT", "DOMESTIC", "HEATING", "COOLING", "EXISTING"]);
 
 function namesRow(title: string, u: RowUnit, text = typeText(u), paired = false): boolean {
-  const words = canonSubject(title).filter((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/^[A-Z]{1,6}-?\d/.test(w) && !(paired && w === "SPLIT"));
+  const words = canonSubject(title).filter((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !(paired && w === "SPLIT"));
   if (!words.length) return false;
   const row = ` ${canonSubject(text).join(" ")} `;
   return words.every((w) => row.includes(` ${w} `));

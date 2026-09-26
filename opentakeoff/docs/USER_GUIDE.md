@@ -600,6 +600,24 @@ responsibility preset, for example "the controls contractor furnishes the valve
 and ships it to the kit maker". It shows which presets the project holds and
 lists your edits, which **Clear responsibility edits** removes.
 
+**Project questions** (below the settings) ask the few facts only you know that
+decide many units at once:
+- whether the project has a BAS scope;
+- the owner's criteria (DoD, VA);
+- what happens to the controls of units the schedules mark existing;
+- whether fans and pumps with no speed column are constant speed;
+- whether condensate, sump and plumbing-service pumps are in scope.
+
+A question appears only when its answer changes something on this set. Each
+choice shows how many lines and records it changes, worked out by applying it.
+When printed text outside the schedules proposes an answer, the card quotes it
+("The drawings suggest …"); click a quote to see it on the sheet. The proposal
+changes nothing until you choose. Each answer asks why (kept with the answer),
+and **Don't know** takes an answer back. Answers are saved with the project as
+a journal that is only ever added to. An agent can answer over MCP
+(`answer_project_question`): its answers show as recorded by an agent for you,
+and so does every record they decide.
+
 **Exports.** **Download CSV set** saves a zip of eight CSV files for the whole
 project: equipment, lines and their roll-up, points, valves, damper actuators,
 sensors, and a Desigo Select hand-entry worksheet. The **Scope** menu beside it
@@ -1454,7 +1472,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->62<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->64<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

@@ -12,6 +12,7 @@ import {
 } from "../../src/lib/assemblies/projectState.ts";
 import { sanitizeAssemblyDefinitions, type AssemblyDefinition } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
+import { appendAnswer, replayAnswers } from "../../src/lib/controlIntent/journal.ts";
 
 const LIB = sanitizeAssemblyDefinitions([
   ...JSON.parse(readFileSync(join(STARTER_DIR, "us-typicals-v1.json"), "utf8")).assemblies,
@@ -100,4 +101,20 @@ test("update to latest: a per-option, per-line diff that applies nothing until a
   assert.equal(adopted.pinned.find((a) => a.id === "pump-vfd")!.version, "2");
   assert.deepEqual(libraryUpdates(adopted, edited), []);
   assert.equal(adoptUpdate(state, "boiler", edited), state, "an id not pinned is not adopted by this path");
+});
+
+test("the answer journal rides the project file whole, or is dropped whole and named (a hash chain has no partial read)", async () => {
+  const a = await appendAnswer([], {
+    operation_id: crypto.randomUUID(), expected_head: null, reviewer: "estimator", reason: "owner's letter",
+    question: "PQ2", answer: "dod", prefill: null,
+  }, { origin: "operator_input" });
+  const state = { ...emptyAssembliesState(), answer_journal: a.events };
+  const back = sanitizeAssembliesState(JSON.parse(JSON.stringify(state)));
+  assert.deepEqual(back.dropped, []);
+  assert.deepEqual(back.state, state);
+  assert.deepEqual((await replayAnswers(back.state!.answer_journal!)).answers, { PQ2: "dod" });
+  const broken = sanitizeAssembliesState({ ...JSON.parse(JSON.stringify(state)), answer_journal: [{ ...a.events[0], approved: true }] });
+  assert.equal(broken.state!.answer_journal, undefined);
+  assert.match(broken.dropped.join("\n"), /answer_journal: .*approved.*the project's answers were not read/);
+  assert.equal(sanitizeAssembliesState({ ...emptyAssembliesState(), answer_journal: [] }).state!.answer_journal, undefined, "an empty journal is no journal");
 });

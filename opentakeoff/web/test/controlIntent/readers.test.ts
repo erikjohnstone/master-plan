@@ -8,7 +8,7 @@ import { join } from "node:path";
 import type { NoteSpan } from "../../src/lib/assemblies/scheduleNotes.ts";
 import { findPackets, type Packet } from "../../src/lib/controlIntent/evidence.ts";
 import type { Binding } from "../../src/lib/controlIntent/binding.ts";
-import { closeLetterSpacing, normText, packetText, printedIn } from "../../src/lib/controlIntent/readers/text.ts";
+import { closeLetterSpacing, leadSubject, normText, packetText, printedIn } from "../../src/lib/controlIntent/readers/text.ts";
 import { compileTermList, TERM_LIST } from "../../src/lib/controlIntent/readers/terms.ts";
 import { readR0, namesUnit, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
 import type { ReadingQuestion } from "../../src/lib/controlIntent/readers/questions.ts";
@@ -142,6 +142,37 @@ test("text + R0: a section runs from a heading to the next; in a shared packet, 
   assert.equal(fan.answer, "not_shown", "no heading names the fan");
 });
 
+test("text: a list item with no subject of its own carries its lead-in's; the list ends at a paragraph that is no item", () => {
+  assert.equal(leadSubject("WHEN THE ABOVE CONDITIONS ARE MET, THE DDC CONTROLLER SHALL SEQUENCE THE FOLLOWING:"), "THE DDC CONTROLLER");
+  assert.equal(leadSubject("WHEN THE ABOVE CONDITION EXISTS THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING:"), "THE THERMOSTAT");
+  assert.equal(leadSubject("FMCS SHALL:"), "FMCS");
+  const seq = packet("p4", "EH-1 SEQUENCE OF OPERATION", [
+    sp("WHEN THE ABOVE CONDITION EXISTS THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING:", 100, 100),
+    sp("1.", 100, 146), sp("SEND AN ENABLE COMMAND TO THE UNIT HEATER.", 130, 146),
+    sp("a.", 130, 192), sp("VALIDATE THE STATUS THROUGH A CURRENT SENSING RELAY.", 160, 192),
+    sp("1)", 160, 238), sp("IF THE HEATER FAILS TO RUN, AN ALARM SHALL BE SENT TO THE OPERATOR'S WORKSTATION.", 190, 238),
+    sp("THE HEATER FAN SHALL HAVE A MINIMUM RUN TIME OF 5 MINUTES.", 100, 330),
+    sp("2.", 100, 376), sp("SEND A DISABLE COMMAND TO THE UNIT HEATER.", 130, 376),
+  ], "sequence");
+  const t = packetText(seq);
+  const leadOf = (s: string) => t.clauses.find((c) => c.text.includes(s))?.lead;
+  assert.equal(leadOf("SEND AN ENABLE COMMAND"), "THE THERMOSTAT");
+  assert.equal(leadOf("VALIDATE THE STATUS"), "THE THERMOSTAT", "a nested item too");
+  assert.equal(leadOf("AN ALARM SHALL BE SENT"), undefined, "an item with a subject of its own");
+  assert.equal(leadOf("SEND A DISABLE COMMAND"), undefined, "a paragraph that is no item ends the list");
+});
+
+test("R0: a control act's subject decides the role: the BAS by name commands, a local actor runs it, both leave it open", () => {
+  const act = (...lines: string[]) => packet("p5", "EF-1 SEQUENCE", lines.map((l, i) => sp(l, 100, 100 + 60 * i)), "sequence");
+  const role1 = (p: Packet) => readR0({ tag: "EF-1" }, [bound(p)], [role], TERM_LIST)[0];
+  assert.deepEqual([role1(act("THE BMS SHALL ENERGIZE THE EXHAUST FAN IN THE OCCUPIED MODE.")).answer, role1(act("THE BMS SHALL ENERGIZE THE EXHAUST FAN IN THE OCCUPIED MODE.")).rule], ["commands", "r0.role.bas_actor"]);
+  const led = role1(act("WHEN THE ABOVE CONDITION EXISTS THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING:", "1. SEND AN ENABLE COMMAND TO THE FAN."));
+  assert.deepEqual([led.answer, led.rule], ["local_control", "r0.role.local_control.actor.thermostat"]);
+  assert.equal(role1(act("SPACE THERMOSTAT SHALL CONTROL THE EXHAUST FAN.", "THE BMS SHALL ENERGIZE THE EXHAUST FAN UPON AN END SWITCH INPUT.")).answer, "not_shown", "both act on it");
+  assert.equal(role1(act("THE LAG FAN SHALL BE ENABLED BY THE BMS.")).answer, "not_shown", "a passive clause names no actor");
+  assert.equal(role1(act("THE CONTROLLER SHALL START THE FAN.")).answer, "not_shown", "a bare controller is no one by name");
+});
+
 test("R0: outputs in the unit's own diagram mean the BAS commands it; inputs alone decide nothing", () => {
   const cmd = packet("p1", "EF-1 CONTROLS", [sp("BO - FAN START/STOP", 100, 100), sp("BI - FAN STATUS", 100, 300)]);
   assert.equal(readR0({ tag: "EF-1" }, [bound(cmd)], [role], TERM_LIST)[0].answer, "commands");
@@ -204,6 +235,9 @@ test("combine: a false read explicitly is not an absence; another reader finding
   assert.equal(d([no("a"), absent("r2", "b")]).outcome, "proposal");
   // An absence alone still needs all of C9.
   assert.equal(d([absent("r1"), absent("r2", "a"), absent("r2", "b")]).outcome, "proposal");
+  // A refuted reading holds nothing open; an unverified one that says
+  // otherwise does.
+  assert.equal(d([no("a"), no("b"), absent("r1"), ans("r1", "opt.duct_smoke_detectors", "yes", { note: "refuted" })]).outcome, "applied");
   // A "yes" from any reader is a disagreement.
   assert.equal(d([no("a"), no("b"), ans("r1", "opt.duct_smoke_detectors", "yes")]).outcome, "unresolved");
 });
@@ -274,6 +308,19 @@ test("R1: a quote must be printed where it says, name the device, and a role nee
   const noSubject = r1Answers(reply([{ ...roleOk, subject_quote: null }]), prep, [role], TERM_LIST);
   assert.equal(noSubject[0].note, "unverified");
   assert.equal(r1Answers("not json", prep, [role], TERM_LIST).length, 0);
+  // A subject quote whose actor is the other side refutes the answer; one
+  // that is not printed leaves it unverified.
+  const thermostat = packet("p6", "EH-1 SEQUENCE", [
+    sp("WHEN THE ABOVE CONDITION EXISTS THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING:", 100, 100),
+    sp("1.", 100, 146), sp("SEND AN ENABLE COMMAND TO THE UNIT HEATER.", 130, 146),
+  ], "sequence");
+  const tp = r1Request({ tags: ["EH-1"], family: "UNIT_HEATER", schedule: "S" }, [bound(thermostat)], [role]);
+  const item = [...tp.index.entries()].find(([, v]) => v.paragraph.text.includes("SEND AN ENABLE"))![0];
+  const refuted = r1Answers(reply([{ question: "role", answer: "commands", quotes: [{ paragraph: item, text: "SEND AN ENABLE COMMAND TO THE UNIT HEATER" }], subject_quote: { paragraph: item, text: "SEND AN ENABLE COMMAND TO THE UNIT HEATER" } }]), tp, [role], TERM_LIST);
+  assert.deepEqual([refuted[0].note, refuted[0].answer], ["refuted", "commands"]);
+  assert.match(refuted[0].why ?? "", /THE THERMOSTAT/);
+  const monitors = r1Answers(reply([{ ...roleOk, answer: "monitors_only" }]), prep, [role], TERM_LIST);
+  assert.equal(monitors[0].note, "refuted", "the DDC controller is the one acting");
   // "Absent" is "not mentioned anywhere": the paragraphs mention a damper.
   const absent = r1Answers(reply([{ question: "opt.motorized_damper", answer: "absent", quotes: [], subject_quote: null }]), prep, [opt("motorized_damper")], TERM_LIST);
   assert.deepEqual([absent[0].answer, absent[0].note], ["not_shown", undefined]);

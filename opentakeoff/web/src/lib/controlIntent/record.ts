@@ -29,7 +29,7 @@ import { sha256Hex } from "../graphKeys.js";
 import { COMBINE_VERSION, combineUnit, type Decision } from "./combine";
 import { memoryRunStore, PENDING_IMAGE, recordedCall, RUNS_VERSION, type ModelRequest, type RunStore, type Transport } from "./runs";
 import { QUESTIONS_VERSION, unitQuestions, type ReadingQuestion } from "./readers/questions";
-import { R0_VERSION, readR0, type BoundPacket, type ReaderAnswer } from "./readers/r0";
+import { namesUnit, ownPacket, R0_VERSION, readR0, type BoundPacket, type ReaderAnswer } from "./readers/r0";
 import { R1_MODEL, R1_PROMPT_VERSION, r1Answers, r1Request, type ReadUnit } from "./readers/r1";
 import { cropSpec, joinRun, R2_MODEL, R2_PROMPT_VERSION, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
 import { TERM_LIST, type TermList } from "./readers/terms";
@@ -164,7 +164,7 @@ export async function readControlIntent(input: {
       if (res.run && res.status !== "failed") runs.add(res.run.hash);
       if (res.content === null) return;
       const answers = r1Answers(res.content, prep, questions, TERM_LIST);
-      for (const m of members) m.reading.answers.push(...answers.map((a) => ({ ...a, cites: a.cites.map((c) => ({ ...c })) })));
+      for (const m of members) m.reading.answers.push(...answers.map((a) => attributed({ ...a, cites: a.cites.map((c) => ({ ...c })) }, m)));
     });
   }
   for (const members of r2On ? groupsOf(false) : []) {
@@ -194,9 +194,30 @@ export async function readControlIntent(input: {
       for (const run of ["a", "b"]) {
         if (perRun[run].every((xs) => !xs.length)) continue;
         const joined = joinRun(perRun[run], questions, run);
-        for (const m of members) m.reading.answers.push(...joined.map((a) => ({ ...a })));
+        for (const m of members) m.reading.answers.push(...joined.map((a) => attributed({ ...a }, m)));
       }
     });
+  }
+  // A model's evidence from drawings the unit shares with other units (a
+  // system schematic its tag is printed in) speaks for it only where it
+  // names it: its tag, its family's noun or its tag's words, or the heading
+  // of the section it is in. Evidence that names no part of the unit is
+  // about another one ("… TO THE LEAD HEATING WATER PUMP" read for a boiler
+  // pump): UNVERIFIED for this unit.
+  function attributed(a: ReaderAnswer, m: Unit): ReaderAnswer {
+    if (a.note || !a.cites.length) return a;
+    const all = m.bound.map((b) => b.binding);
+    const bp = (id: string) => m.bound.find((b) => b.packet.id === id);
+    const own = a.cites.some((c) => { const b = bp(c.packet); return Boolean(b && ownPacket(b.binding, all)); });
+    if (own) return a;
+    const unit = { tag: m.reading.tag, family: m.reading.family };
+    const names = a.cites.some((c) => {
+      if (namesUnit(normText(c.text), unit)) return true;
+      const b = bp(c.packet);
+      const heading = b?.text.paragraphs.find((pg) => pg.lines.some((id) => c.lines.includes(id)))?.heading;
+      return Boolean(heading && namesUnit(heading, unit));
+    });
+    return names ? a : { ...a, note: "unverified", why: `its evidence is from drawings ${m.reading.tag} shares with other units, and names no part of it` };
   }
   let done = 0;
   await pool(jobs, opts.concurrency ?? 4, async (job) => { await job(); done += 1; opts.onProgress?.(`read ${done}/${jobs.length}`); });

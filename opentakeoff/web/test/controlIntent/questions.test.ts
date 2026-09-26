@@ -8,7 +8,7 @@ import type { NoteSpan } from "../../src/lib/assemblies/scheduleNotes.ts";
 import { applyAssemblies, type CompiledItem, type CompiledProject } from "../../src/lib/assemblies/apply.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { compileProjectTerms, linesChanged, projectQuestions, PROJECT_TERMS_V1, QUESTION_CAP, recordsChanged } from "../../src/lib/controlIntent/questions.ts";
-import { appendAnswer, replayAnswers } from "../../src/lib/controlIntent/journal.ts";
+import { answerSettings, appendAnswer, replayAnswers } from "../../src/lib/controlIntent/journal.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
 
 const LIB = sanitizeAssemblyDefinitions(JSON.parse(readFileSync(join(STARTER_DIR, "us-typicals-v1.json"), "utf8")).assemblies).assemblies;
@@ -111,4 +111,26 @@ test("journal: answers are an append-only chain; a stale head or a replayed oper
   tampered[1].answer = "va";
   await assert.rejects(replayAnswers(tampered), /does not match/);
   await assert.rejects(replayAnswers([c.events[1]]), /another history/);
+});
+
+test("journal: a replayed journal's answers apply, and each record they decide says who recorded the answer (the estimator, or an agent for them)", async () => {
+  const p = project([]);
+  const a = await appendAnswer([], request({ answer: "no", prefill: null }), { origin: "agent_proposal" });
+  const s = answerSettings((await replayAnswers(a.events)).events);
+  assert.deepEqual(s.answers, { PQ1: "no" });
+  assert.deepEqual(s.answer_events, { PQ1: { event_id: a.event.event_id, origin: "agent_proposal" } });
+  const byAgent = applyAssemblies({ project: p, library: LIB, settings: s });
+  const plain = applyAssemblies({ project: p, library: LIB, settings: { answers: s.answers } });
+  const basis = (r: { applications: Array<{ intent?: unknown }> }) => JSON.stringify(r.applications.map((x) => x.intent ?? null));
+  assert.match(basis(byAgent), /recorded by an agent for the estimator \(agent_proposal, not a human act\), event [0-9a-f]{12}/);
+  assert.doesNotMatch(basis(plain), /recorded by/, "answers passed without their journal name no one");
+  assert.equal(JSON.stringify(byAgent.lines.map((l) => [l.tag, l.status, l.qty_base])), JSON.stringify(plain.lines.map((l) => [l.tag, l.status, l.qty_base])), "who recorded it changes no line");
+  // The estimator's own answer, after the agent's: the latest event stands.
+  const b = await appendAnswer(a.events, request({ expected_head: a.event.event_id, answer: "no", prefill: null }), { origin: "operator_input" });
+  const t = answerSettings((await replayAnswers(b.events)).events);
+  assert.equal(t.answer_events.PQ1.origin, "operator_input");
+  assert.match(basis(applyAssemblies({ project: p, library: LIB, settings: t })), /recorded by the estimator, event/);
+  // "Don't know" leaves no answer and names no event.
+  const c = await appendAnswer(b.events, request({ expected_head: b.event.event_id, answer: "unknown", prefill: null }), { origin: "operator_input" });
+  assert.deepEqual(answerSettings(c.events), { answers: {}, answer_events: {} });
 });

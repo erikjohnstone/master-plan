@@ -356,7 +356,10 @@ export async function readingTools(corpus, mode) {
     async read(id, project, library, settings) {
       const path = join(dir, `${id}.jsonl`);
       const store = memoryRunStore(existsSync(path) ? readFileSync(path, "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l)) : []);
-      const readings = await readControlIntent({ project, library, settings }, {
+      // Read as every surface reads: before the project's settings and
+      // answers (mcp/src/assemblies.ts sessionControlReadings).
+      void settings;
+      const readings = await readControlIntent({ project, library }, {
         store, transport, render,
         readers: mode === "r0" ? { r1: false, r2: false } : undefined,
         concurrency: 6,

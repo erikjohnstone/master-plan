@@ -10,7 +10,9 @@
 //     (a run that disagrees with the other makes R2 a disagreement). Its
 //     false is an absence only when both runs read the device as not drawn.
 //   · A model answer whose quote or label did not verify is UNVERIFIED: it
-//     never counts, and it leaves the question unresolved (CI2).
+//     never counts, and when it says otherwise it leaves the question
+//     unresolved (CI2). One its own printed quote contradicts is REFUTED: it
+//     never counts and holds nothing open.
 //   · APPLIED (C8): two structurally different readers agree and none
 //     disagrees; or a deterministic reading alone on the whitelist: an R0
 //     phrase (termlist v1: a unit stated standalone / not controlled by the
@@ -39,7 +41,7 @@ import type { DrawingCite, ReaderAnswer } from "./readers/r0";
 import type { ReadingQuestion } from "./readers/questions";
 import type { TermList } from "./readers/terms";
 
-export const COMBINE_VERSION = "control_combine_v3";
+export const COMBINE_VERSION = "control_combine_v4";
 
 export type Outcome = "applied" | "proposal" | "unresolved" | "none";
 
@@ -74,7 +76,7 @@ export interface UnitAnswers {
 }
 
 const voteOf = (a: ReaderAnswer, q: ReadingQuestion, titled = true): Vote | null => {
-  if (a.note === "unverified") return null;
+  if (a.note === "unverified" || a.note === "refuted") return null;
   if (q.kind === "role") {
     if (a.answer === "not_connected" || a.answer === "monitors_only" || a.answer === "local_control") return { reader: a.reader, value: "out" };
     if (a.answer === "commands") return { reader: a.reader, value: "in" };
@@ -178,7 +180,7 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
     const group = out.filter((d) => g.options.some((o) => d.question === `opt.${o}`));
     const applied = group.filter((d) => d.outcome === "applied" && d.value === true);
     if (!applied.length) continue;
-    const others = group.filter((d) => !applied.includes(d) && d.answers.some((a) => a.note !== "unverified" && a.answer === "yes"));
+    const others = group.filter((d) => !applied.includes(d) && d.answers.some((a) => a.note !== "unverified" && a.note !== "refuted" && a.answer === "yes"));
     if (applied.length < 2 && !others.length) continue;
     for (const d of [...applied, ...others]) { d.outcome = "unresolved"; d.rule = "drawing_read:exclusive"; d.why = `${g.options.join(" and ")} are one choice (${g.why}), and the drawings read as both`; d.value = null; }
   }

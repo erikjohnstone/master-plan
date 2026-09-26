@@ -1876,4 +1876,45 @@ export const applyAssembliesOutput = {
   lines: z.array(z.record(z.string(), z.unknown())).optional(),
   path: z.string().optional(),
   export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
+  answers: z.object({
+    head: z.string().nullable(), events: z.number().int(),
+    applied: z.record(z.string(), z.string()).describe("The project questions' answers the records applied, question id → answer"),
+    error: z.string().optional().describe("The journal failed its check: none of its answers applied"),
+  }).optional().describe("The Session's answer journal (answer_project_question, or a project file's); absent when no question is answered"),
+};
+
+// CONTROL INTENT Track A — project_questions and answer_project_question
+// (web/src/lib/controlIntent/questions.ts and journal.ts).
+const questionEvidence = z.object({ sheet: z.string().nullable(), text: z.string(), bbox: z.array(z.number()).nullable(), finder: z.string() });
+const journalState = z.object({
+  head: z.string().nullable().describe("The journal's head: pass it as expected_head to answer_project_question"),
+  events: z.number().int(),
+  answers: z.record(z.string(), z.string()).describe("The answers the journal holds, question id → answer"),
+  recorded_by: z.record(z.string(), z.string()).describe("Who recorded each answer: operator_input (the estimator, in the Takeoff panel) or agent_proposal (an agent, for the estimator)"),
+  error: z.string().optional().describe("The journal failed its check: none of its answers applies, and no answer can be added to it"),
+});
+export const projectQuestionsOutput = {
+  version: z.string(), catalogue: z.string(), terms: z.string(),
+  journal: journalState,
+  questions: z.array(z.object({
+    id: z.string(), key: z.string(), text: z.string(),
+    choices: z.array(z.object({ value: z.string(), label: z.string(), lines_changed: z.number().int(), records_changed: z.number().int() })),
+    lines_changed: z.number().int(), records_changed: z.number().int(),
+    answer: z.string().nullable(),
+    prefill: z.object({ value: z.string(), evidence: z.array(questionEvidence) }).nullable().describe("A proposal from printed text, for the estimator to confirm; never an answer"),
+    evidence: z.array(questionEvidence).describe("What makes it a question here: the units it is about"),
+    partner_default_allowed: z.boolean(),
+  })).describe("At most six, ranked by what an answer changes; none that changes nothing"),
+  zero_effect: z.array(z.string()).describe("Catalogue questions no answer changes anything with here (not shown)"),
+  over_cap: z.array(z.string()).describe("Questions past the cap of six"),
+  next_move: z.string(),
+};
+export const answerProjectQuestionOutput = {
+  event: z.object({
+    event_id: z.string(), operation_id: z.string(), question: z.string(), answer: z.string(),
+    origin: z.literal("agent_proposal"), reviewer: z.string(), reviewer_identity: z.literal("self_declared"), approved: z.literal(false), created_at: z.string(),
+    prefill: z.object({ value: z.string() }).nullable(),
+  }),
+  journal: journalState,
+  note: z.string(),
 };

@@ -47,6 +47,11 @@ export interface TermList {
   role: {
     not_connected: readonly TermPattern[];
     local_control: readonly TermPattern[];
+    /** The subject of a control act that is the BAS, by name. */
+    bas_actor: readonly TermPattern[];
+    /** The subject of a control act that is not the BAS: a thermostat, the
+     * unit's own or its manufacturer's controls. */
+    local_actor: readonly TermPattern[];
   };
   options: Readonly<Record<string, OptionTerms>>;
   /** Options that are one choice: at most one of them is true (two read
@@ -102,6 +107,8 @@ export function compileTermList(raw: unknown): TermList {
     role: {
       not_connected: list("role.not_connected", r.role?.not_connected),
       local_control: list("role.local_control", r.role?.local_control),
+      bas_actor: list("role.bas_actor", r.role?.bas_actor),
+      local_actor: list("role.local_actor", r.role?.local_actor),
     },
     options,
   };

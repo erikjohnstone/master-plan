@@ -25,7 +25,7 @@ import {
   markVerdictOutput, deleteVerdictOutput,
   sheetGraphOutput, listTagsOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, controlSchematicOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
-  classifyStrokesOutput, traceRunOutput, applyAssembliesOutput,
+  classifyStrokesOutput, traceRunOutput, applyAssembliesOutput, projectQuestionsOutput, answerProjectQuestionOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
@@ -33,7 +33,8 @@ import { importTakeoff } from "./importing.ts";
 import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
 import { takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
 import { compileProductionTakeoff } from "./productionTakeoff.ts";
-import { applyAssembliesToSession } from "./assemblies.ts";
+import { answerProjectQuestionInSession, applyAssembliesToSession, projectQuestionsForSession } from "./assemblies.ts";
+import { CATALOGUE } from "../../web/src/lib/controlIntent/catalogue.ts";
 import { basReviewRequestSchema } from "../../web/src/lib/basReviewContract.ts";
 import { basEquipmentReviewRequestSchema } from "../../web/src/lib/basEquipmentRegister.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
@@ -48,6 +49,7 @@ import { inspectBasEngineering } from './basEngineeringReview.ts';
 import { writeEngineeringWorkbook } from './engineeringWorkbookFile.ts';
 import { exportBasEvidenceBundle, inspectBasEvidenceBundleFile } from './basEvidenceBundleFile.ts';
 import { basename, join } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { viewBasOriginalSource } from './basSourceView.ts';
 import { restoreBasEvidenceFile } from './basRestoreFile.ts';
 import { basDrawingCommandSchema, basDrawingCommandResultSchema } from '../../web/src/lib/basDrawingInspection.ts';
@@ -1048,34 +1050,38 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   }));
 
   const assemblyValue = z.union([z.number(), z.string(), z.boolean()]);
+  const assembliesSettings = z.object({
+    variables: z.record(z.string(), assemblyValue).optional().describe("Project variables (wiring method, valve body, spare %, …) by id"),
+    partnerDefaults: z.record(z.string(), assemblyValue).optional().describe("The partner's defaults for options and variables the drawing leaves unknown, keyed '<assembly id>.<id>' or '<id>'; each record names where it used one"),
+    profile: z.record(z.string(), z.boolean()).optional().describe("Hook-up profile switches by id; an unset switch leaves its lines unresolved"),
+    responsibility: z.record(z.string(), z.record(z.string(), z.string())).optional().describe("Per-project responsibility edits: role id → { activity: party }"),
+    hookup_defaults: z.boolean().optional().describe("Start from the starter hook-up profile's switches and variables (each cites the specifications that make it a choice); profile and variables given here win"),
+    responsibility_preset: z.enum(RESPONSIBILITY_PRESETS.map((p) => p.id) as [string, ...string[]]).optional().describe(`A responsibility preset under the project's own edits: ${RESPONSIBILITY_PRESETS.map((p) => `${p.id} (${p.label})`).join("; ")}`),
+  }).optional().describe("Project settings; none are assumed");
+  const assembliesOverrides = z.array(z.object({
+    tag: z.string(),
+    reason: z.string().min(1).describe("Why: kept on the record"),
+    layer: z.string().optional().describe("controls or hookup; omit to cover every layer (an exclusion) or the controls layer"),
+    exclude: z.boolean().optional(),
+    assembly: z.object({ id: z.string(), version: z.string().optional() }).optional(),
+    options: z.record(z.string(), z.boolean()).optional(),
+    variables: z.record(z.string(), assemblyValue).optional(),
+  })).optional().describe("Per-unit choices, each with a reason");
+  const libraryPathDesc = "An assemblies JSON file ({ assemblies: [...] } or an array), a library CSV (.csv: the Takeoff panel's Library → Export CSV, one row per item; docs/ASSEMBLIES_CSV.md) or an estimator profile (.otprofile JSON: its assembly_library's equipment records). The file is the library. Every record passes the library gate or the call fails with the rejections (a CSV's by row and column). Omit for the starter library";
+  const controlReadingsDesc = "How the control drawings are read: off, deterministic (printed phrases and I/O only) or models (plus the text and vision models; needs a model endpoint). Default: models when one is configured, else deterministic";
   server.registerTool("apply_assemblies", {
     description: `Controls assemblies (typicals) for the loaded set's scheduled HVAC equipment: the shared apply path the Takeoff panel's Assemblies view runs. It compiles hvac_equipment (the compile_corpus_takeoff path) and reads each row's canonical attributes, with the schedule notes printed with its table. Then it applies an assembly library to every unit: the starter library by default (US typicals v1 plus the mechanical hook-ups), or library_path for a partner library (JSON, or the library CSV the Takeoff panel's Library → Export CSV writes) or an estimator profile. Each unit gets a record per layer: its typical (id@version), the options and variables with their source (attr, drawing, project, partner_default, starter_default, user), and a status: ok, unresolved, no_assembly (v1 has no typical for the family), excluded or overridden. The report lists the exceptions FIRST. An unresolved unit names what it waits for (an attribute the schedule does not print, a project setting, two tied typicals). Never guess it: report it, or pass the partner's value in settings (partnerDefaults, variables) or an override with a reason. settings.hookup_defaults starts from the starter hook-up profile (strainers, P/T ports, kits at 1 in. and below, manual balancing…) and settings.responsibility_preset from a responsibility preset (who furnishes and installs the coil valves); the project's own profile, variables and responsibility win over both. Derived facts carry their rule and basis: a 100% outdoor-air air handler takes the DOAS typical, a gas-fired fan coil the furnace typical, and terminals_served comes from the terminal rows that name their air handler. Records are proposals for the estimator to review, not approval; a printed points list that names a unit replaces its typical's point lines (the drawing's list stands), and components declared in a reviewed BAS assembly register are not read yet. detail: summary (default: totals, exceptions, per-family table), units (plus one row per unit with cites), lines (plus every record and expanded line: quantities, parameters and their sources, responsibility, rule and cites). families narrows the reply, never the application. path writes the full result (records, lines, report) as JSON. export_dir writes the CSV set for the whole project (equipment, lines, lines_rollup, points, valves, damper_actuators, sensors, desigo_select_worksheet; docs/ASSEMBLIES_CSV.md): the same bytes as the Takeoff panel's Download CSV set, with units in the headers and a *_source column beside every engineering field; plus assemblies.pdf, the report's PDF section (summary, exceptions first, per-family table, units with their schedule rows). export_scope narrows lines.csv and lines_rollup.csv to one party's lines (its trade, or any activity it does); the other files stay whole. A partner library's own part numbers, unit costs, hours and labor categories reach lines.csv extended by quantity and the report (report.partner, the PDF) as totals, always labelled partner-entered; the starter ships none. control_readings reads the control drawings bound to each unit (its sequence of operation, control schematic, points list): deterministic reads their printed phrases and I/O (a unit printed standalone, a device and its negation); models adds the text model and the vision model on a crop of each drawing. A reading applies only where two readers agree (or on a whitelisted exact phrase); one reader alone is a proposal, readers that disagree leave the option unresolved, and an option is read as not drawn only when the text and two vision runs agree. A zone plan (a sheet whose title names zones) is read as well: a device symbol drawn inside the zone a unit's tag labels (a CO2 sensor) applies that option alone, the geometry being exact. Applied readings reach each record's intent with their rule and cites; control in the reply counts what was read and, with detail units or lines, lists every applied, unresolved and proposed reading. Default: models when a model endpoint is configured (CEREBRAS_API_KEY), else deterministic. Cites (bbox) are in the compile's space: ${COORDS}`,
     inputSchema: {
-      library_path: z.string().optional().describe("An assemblies JSON file ({ assemblies: [...] } or an array), a library CSV (.csv: the Takeoff panel's Library → Export CSV, one row per item; docs/ASSEMBLIES_CSV.md) or an estimator profile (.otprofile JSON: its assembly_library's equipment records). The file is the library. Every record passes the library gate or the call fails with the rejections (a CSV's by row and column). Omit for the starter library"),
-      settings: z.object({
-        variables: z.record(z.string(), assemblyValue).optional().describe("Project variables (wiring method, valve body, spare %, …) by id"),
-        partnerDefaults: z.record(z.string(), assemblyValue).optional().describe("The partner's defaults for options and variables the drawing leaves unknown, keyed '<assembly id>.<id>' or '<id>'; each record names where it used one"),
-        profile: z.record(z.string(), z.boolean()).optional().describe("Hook-up profile switches by id; an unset switch leaves its lines unresolved"),
-        responsibility: z.record(z.string(), z.record(z.string(), z.string())).optional().describe("Per-project responsibility edits: role id → { activity: party }"),
-        hookup_defaults: z.boolean().optional().describe("Start from the starter hook-up profile's switches and variables (each cites the specifications that make it a choice); profile and variables given here win"),
-        responsibility_preset: z.enum(RESPONSIBILITY_PRESETS.map((p) => p.id) as [string, ...string[]]).optional().describe(`A responsibility preset under the project's own edits: ${RESPONSIBILITY_PRESETS.map((p) => `${p.id} (${p.label})`).join("; ")}`),
-      }).optional().describe("Project settings; none are assumed"),
-      overrides: z.array(z.object({
-        tag: z.string(),
-        reason: z.string().min(1).describe("Why: kept on the record"),
-        layer: z.string().optional().describe("controls or hookup; omit to cover every layer (an exclusion) or the controls layer"),
-        exclude: z.boolean().optional(),
-        assembly: z.object({ id: z.string(), version: z.string().optional() }).optional(),
-        options: z.record(z.string(), z.boolean()).optional(),
-        variables: z.record(z.string(), assemblyValue).optional(),
-      })).optional().describe("Per-unit choices, each with a reason"),
+      library_path: z.string().optional().describe(libraryPathDesc),
+      settings: assembliesSettings,
+      overrides: assembliesOverrides,
       families: z.array(z.string()).optional().describe("Only these (applied) families in the reply, e.g. ['VAV','AHU']"),
       detail: z.enum(["summary", "units", "lines"]).optional().describe("summary (default), units, or lines"),
       path: z.string().optional().describe("Optional JSON file for the full result"),
       export_dir: z.string().optional().describe("Optional directory for the CSV set (eight CSV files and assemblies.pdf, the whole project's)"),
       export_scope: z.enum(PARTIES).optional().describe("With export_dir: only this party's lines in lines.csv and lines_rollup.csv (its trade, or any activity it furnishes, installs, wires, powers, programs or tests)"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
-      control_readings: z.enum(["off", "deterministic", "models"]).optional().describe("How the control drawings are read: off, deterministic (printed phrases and I/O only) or models (plus the text and vision models; needs a model endpoint). Default: models when one is configured, else deterministic"),
+      control_readings: z.enum(["off", "deterministic", "models"]).optional().describe(controlReadingsDesc),
     },
     outputSchema: applyAssembliesOutput,
   }, run("apply_assemblies", async ({ library_path, settings, overrides, families, detail, path: outPath, export_dir: exportDir, export_scope: exportScope, overwrite, control_readings: controlReadings }) => {
@@ -1106,8 +1112,41 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       exported = { dir: exportDir, files: [...names, "assemblies.pdf"], ...(exportScope ? { scope: exportScope } : {}) };
     }
     if (outPath) await writeFile(outPath, JSON.stringify(full, null, 2));
-    return { ...reply, ...(outPath ? { path: outPath } : {}), ...(exported ? { export_dir: exported } : {}) };
+    return { ...reply, ...(full.answers ? { answers: full.answers } : {}), ...(outPath ? { path: outPath } : {}), ...(exported ? { export_dir: exported } : {}) };
   }));
+
+  server.registerTool("project_questions", {
+    description: `The project questions an estimator answers once for the loaded set's assemblies (the Takeoff panel's Project questions card): whether the project has a BAS scope, the owner's criteria (DoD, VA), what happens to the controls of units the schedules mark existing, whether fans and pumps with no speed column are constant speed, and whether packaged or plumbing-service pumps are in the BAS scope. Each is shown only when an answer changes something here: every choice is applied and compared with leaving it unanswered, so each carries the lines and records it changes (lines_changed, records_changed); at most six, ranked by that. A prefill is a proposal read from printed text outside the schedule tables, with its quotes (sheet, text, bbox): show it to the estimator to confirm, never record it as their answer. evidence names the units that make it a question. journal gives the answers already recorded, who recorded each (operator_input: the estimator in the panel; agent_proposal: an agent), and the head to answer against. Takes the same library_path, settings, overrides and control_readings as apply_assemblies, so the effects are the ones that call applies. Read-only. Cites (bbox) are in the compile's space: ${COORDS}`,
+    inputSchema: {
+      library_path: z.string().optional().describe(libraryPathDesc),
+      settings: assembliesSettings,
+      overrides: assembliesOverrides,
+      control_readings: z.enum(["off", "deterministic", "models"]).optional().describe(controlReadingsDesc),
+    },
+    outputSchema: projectQuestionsOutput,
+  }, run("project_questions", ({ library_path, settings, overrides, control_readings: controlReadings }) =>
+    projectQuestionsForSession(session, { library_path, settings, overrides, control_readings: controlReadings })));
+
+  server.registerTool("answer_project_question", {
+    description: `Record the estimator's answer to one project question (project_questions) in the project's answer journal: append-only, each event made against the journal's head and fingerprinted, like the BAS review journals. Record ONLY an answer the estimator gave you, and quote them in reason. Never answer from a prefill, from your own reading of the drawings or from what is typical: a prefill is a proposal the estimator confirms, and "unknown" (don't know) is always a valid answer, which takes an earlier answer away. The event's origin is agent_proposal (an agent's record of the estimator's answer, never a human act; the reviewer is self-declared and nothing is approved), and each record the answer decides says so. apply_assemblies applies the journal's answers; export_takeoff saves the journal in the project file (the Takeoff panel reads it). A request made against a stale head, or an operation_id already recorded, is refused: call project_questions again. A prefill's bbox is in the compile's space: ${COORDS}`,
+    inputSchema: {
+      question: z.enum(CATALOGUE.map((q) => q.id) as [string, ...string[]]).describe("The question's id (PQ1…PQ5)"),
+      answer: z.string().min(1).describe("One of the question's choice values (project_questions lists them), or \"unknown\""),
+      expected_head: z.string().nullable().describe("The journal head project_questions returned (null for an empty journal)"),
+      reviewer: z.string().min(1).describe("Who gave the answer: the estimator's name or role (self-declared)"),
+      reason: z.string().min(1).describe("The estimator's words, or what they based the answer on"),
+      operation_id: z.string().uuid().optional().describe("A UUID for this answer; retrying with the same one is refused as already recorded. Omit to have one made"),
+      prefill: z.object({
+        value: z.string(),
+        evidence: z.array(z.object({ sheet: z.string().nullable(), text: z.string(), bbox: z.array(z.number()).length(4).nullable(), finder: z.string() })).max(12),
+      }).nullable().optional().describe("The prefill project_questions showed for this question, if any: kept with the event, apart from the answer"),
+    },
+    outputSchema: answerProjectQuestionOutput,
+  }, run("answer_project_question", async ({ question, answer, expected_head: expectedHead, reviewer, reason, operation_id: operationId, prefill }) =>
+    answerProjectQuestionInSession(session, {
+      operation_id: operationId ?? randomUUID(), expected_head: expectedHead, reviewer, reason, question, answer,
+      prefill: prefill ? { value: prefill.value, evidence: prefill.evidence.map((e: { sheet: string | null; text: string; bbox: number[] | null; finder: string }) => ({ sheet: e.sheet, text: e.text, box: e.bbox as [number, number, number, number] | null, finder: e.finder })) } : null,
+    })));
 
   server.registerTool("reconcile_schedule_plan", {
     description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade rows with separate Scheduled qty, verified Installed qty, tag-text observations, withheld geometric candidates, evidence grade, audit coverage, and source citations. MATCH requires recognized installed evidence: symbol geometry (or an explicit installation note), never tag text alone. exact_plan_tag is returned as tagged_plan_qty + plan_tag_cites with installed_qty:null and AMBIGUOUS until geometry or a human review verifies it. plan_cites are geometry-grounded; plan_candidate_cites remain review proposals and never count. A repeatable grille/register/diffuser row with no printed QTY is a type definition, not a fake scheduled quantity of 1. Independently reused marks are scoped by authored drawing-group titles (building/site/area), never tag-prefix guesses. Walks equipment rows through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,

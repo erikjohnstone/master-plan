@@ -22,6 +22,8 @@ import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
 import type { Override, ProjectSettings } from "../../web/src/lib/assemblies/select.ts";
 import { readControlIntent, type ControlReadings } from "../../web/src/lib/controlIntent/record.ts";
+import { answerSettings, appendAnswer, replayAnswers } from "../../web/src/lib/controlIntent/journal.ts";
+import { projectQuestions } from "../../web/src/lib/controlIntent/questions.ts";
 import { httpTransport, memoryRunStore, type RunStore } from "../../web/src/lib/controlIntent/runs.ts";
 import { pdfCropRenderer } from "./controlIntentCrops.ts";
 import { UserError } from "./format.ts";
@@ -136,8 +138,14 @@ export const sessionRunStore = (session: Session): RunStore => {
 };
 
 /** Read the Session's control drawings for its project (web/src/lib/
- * controlIntent/record.ts: the same readers every surface runs). */
-export async function sessionControlReadings(session: Session, input: { project: CompiledProject; library: AssemblyDefinition[]; settings?: ProjectSettings; overrides?: Override[] }, mode: ControlReadingMode, store: RunStore = sessionRunStore(session)): Promise<ControlReadings | null> {
+ * controlIntent/record.ts: the same readers every surface runs). They are
+ * read once for the project and library, before its settings, answers and
+ * overrides: the Takeoff panel's readings come from the same call
+ * (production-graph-cli --mode assemblies_project), so both surfaces apply
+ * the same readings, and answering a question never asks a model again. The
+ * readers ask each unit about every option its family's typicals offer, so a
+ * typical a setting or an answer selects is covered. */
+export async function sessionControlReadings(session: Session, input: { project: CompiledProject; library: AssemblyDefinition[] }, mode: ControlReadingMode, store: RunStore = sessionRunStore(session)): Promise<ControlReadings | null> {
   if (mode === "off") return null;
   const cfg = mode === "models" ? controlModelConfig() : null;
   if (mode === "models" && !cfg) throw new UserError("control_readings \"models\" needs a model endpoint: set CEREBRAS_API_KEY (or OPENTAKEOFF_AI_KEY and OPENTAKEOFF_AI_ENDPOINT)");
@@ -208,6 +216,95 @@ export interface ApplyAssembliesResult {
   csvReport?: AssembliesReport;
   /** What the control drawings read, and decided (controlSummary). */
   control: ReturnType<typeof controlSummary>;
+  /** The Session's answer journal, when a question is answered. */
+  answers?: { head: string | null; events: number; applied: Record<string, string>; error?: string };
+}
+
+// ── Project questions (Track A): the Session's answer journal ──────────────
+
+/** The Session's answer journal, its chain checked: the answers it holds,
+ * the event behind each, and its head. A journal that fails its check gives
+ * no answers and says why (the Takeoff panel does the same): answers are
+ * never read from a broken history, and the rest of the project still
+ * applies. */
+export async function sessionAnswers(session: Session) {
+  let replayed: Awaited<ReturnType<typeof replayAnswers>>;
+  try {
+    replayed = await replayAnswers(session.answerJournal);
+  } catch (e) {
+    const error = `the project's answer journal does not check out (${e instanceof Error ? e.message : String(e)}); none of its answers applies`;
+    return { answers: {}, answer_events: {}, head: null, events: 0, recorded_by: {}, error };
+  }
+  const { answers, answer_events } = answerSettings(replayed.events);
+  return {
+    answers, answer_events, head: replayed.head, events: replayed.events.length,
+    recorded_by: Object.fromEntries(Object.entries(answer_events).map(([q, e]) => [q, e.origin])),
+    error: null as string | null,
+  };
+}
+
+/** The project settings a call applies: its own, the starter's presets under
+ * them, and the Session's answers. */
+async function sessionSettings(session: Session, input?: AssembliesSettingsInput) {
+  const { hookup_defaults: hookupDefaults, responsibility_preset: responsibilityPreset, ...own } = input ?? {};
+  let settings: ProjectSettings;
+  try {
+    settings = settingsWithPresets(own, { hookupDefaults, responsibilityPreset });
+  } catch (e) {
+    throw new UserError(e instanceof Error ? e.message : String(e));
+  }
+  const journal = await sessionAnswers(session);
+  if (journal.events) settings = { ...settings, answers: journal.answers, answer_events: journal.answer_events };
+  return { settings, journal };
+}
+
+const journalReply = (j: Awaited<ReturnType<typeof sessionAnswers>>) => ({ head: j.head, events: j.events, answers: j.answers as Record<string, string>, recorded_by: j.recorded_by as Record<string, string>, ...(j.error ? { error: j.error } : {}) });
+
+/** The project questions for the Session's project (web/src/lib/controlIntent/
+ * questions.ts: the same selection, ranking and pre-fills the Takeoff panel
+ * shows), applied with the call's settings and the Session's answers. */
+export async function projectQuestionsForSession(session: Session, opts: Pick<ApplyAssembliesOptions, "library_path" | "settings" | "overrides" | "control_readings"> = {}) {
+  const project = await sessionAssembliesProject(session);
+  const { library } = await loadAssemblyLibrary(opts.library_path);
+  const { settings, journal } = await sessionSettings(session, opts.settings);
+  const mode = opts.control_readings ?? defaultControlReadingMode();
+  const readings = await sessionControlReadings(session, { project, library }, mode);
+  const q = projectQuestions({ project, library, settings, overrides: opts.overrides ?? [], readings });
+  const ev = (e: { sheet: string | null; text: string; box: readonly number[] | null; finder: string }) => ({ sheet: e.sheet, text: e.text, bbox: e.box ? [...e.box] : null, finder: e.finder });
+  const open = q.shown.filter((s) => !s.answer);
+  return {
+    version: q.version, catalogue: q.catalogue, terms: q.terms,
+    journal: journalReply(journal),
+    questions: q.shown.map((s) => ({ ...s, prefill: s.prefill ? { value: s.prefill.value, evidence: s.prefill.evidence.map(ev) } : null, evidence: s.evidence.map(ev) })),
+    zero_effect: q.zero_effect, over_cap: q.over_cap,
+    next_move: journal.error
+      ? `${journal.error[0].toUpperCase()}${journal.error.slice(1)}. Tell the estimator; answer_project_question cannot add to a broken journal.`
+      : open.length
+      ? `Ask the estimator ${open.map((s) => s.id).join(", ")} (a pre-fill is a proposal for them to confirm, never an answer), then record each answer they give with answer_project_question (expected_head ${journal.head ?? "null"}) and apply_assemblies again.`
+      : "Every question shown is answered: apply_assemblies applies the answers.",
+  };
+}
+
+/** Record one answer the estimator gave, in the Session's journal. Over MCP
+ * it is an agent's record, never a human act: origin agent_proposal, the
+ * reviewer self-declared, approved false. Its answer applies (the records it
+ * decides say who recorded it). */
+export async function answerProjectQuestionInSession(session: Session, request: unknown) {
+  let result: Awaited<ReturnType<typeof appendAnswer>>;
+  try {
+    result = await appendAnswer(session.answerJournal, request, { origin: "agent_proposal" });
+  } catch (e) {
+    const issues = (e as { issues?: Array<{ path: unknown[]; message: string }> }).issues;
+    throw new UserError(issues ? issues.map((i) => `${i.path.join(".") || "request"}: ${i.message}`).join("; ") : e instanceof Error ? e.message : String(e));
+  }
+  session.answerJournal = result.events;
+  const journal = await sessionAnswers(session);
+  const e = result.event;
+  return {
+    event: { event_id: e.event_id, operation_id: e.operation_id, question: e.question, answer: e.answer, origin: "agent_proposal" as const, reviewer: e.reviewer, reviewer_identity: e.reviewer_identity, approved: e.approved, created_at: e.created_at, prefill: e.prefill ? { value: e.prefill.value } : null },
+    journal: journalReply(journal),
+    note: `${e.question} = ${e.answer} recorded as an agent_proposal (the estimator's answer as relayed; not a human act). apply_assemblies applies it; export_takeoff saves the journal with the project.`,
+  };
 }
 
 /** Apply a library to the Session's project and report it. `families`
@@ -216,15 +313,9 @@ export interface ApplyAssembliesResult {
 export async function applyAssembliesToSession(session: Session, opts: ApplyAssembliesOptions = {}): Promise<ApplyAssembliesResult & { project: CompiledProject }> {
   const project = await sessionAssembliesProject(session);
   const { library, source } = await loadAssemblyLibrary(opts.library_path);
-  const { hookup_defaults: hookupDefaults, responsibility_preset: responsibilityPreset, ...own } = opts.settings ?? {};
-  let settings: ProjectSettings;
-  try {
-    settings = settingsWithPresets(own, { hookupDefaults, responsibilityPreset });
-  } catch (e) {
-    throw new UserError(e instanceof Error ? e.message : String(e));
-  }
+  const { settings, journal } = await sessionSettings(session, opts.settings);
   const mode = opts.control_readings ?? defaultControlReadingMode();
-  const readings = await sessionControlReadings(session, { project, library, settings, overrides: opts.overrides ?? [] }, mode);
+  const readings = await sessionControlReadings(session, { project, library }, mode);
   const { instances, applications, lines } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [], readings });
   const want = opts.families?.length ? new Set(opts.families) : null;
   const inst = want ? instances.filter((i) => want.has(i.family)) : instances;
@@ -248,5 +339,6 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
     report: detail === "summary" ? summary : report,
     ...(detail === "lines" ? { applications: apps, lines: lns } : {}),
     ...(csv ? { csv, csvReport: whole } : {}),
+    ...(journal.events || journal.error ? { answers: { head: journal.head, events: journal.events, applied: journal.answers as Record<string, string>, ...(journal.error ? { error: journal.error } : {}) } } : {}),
   };
 }

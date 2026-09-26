@@ -15,6 +15,7 @@
 // per option and per line, and only adoptUpdate(), the user's explicit act,
 // moves the pin.
 import { z } from "zod";
+import { answerEventSchema, ANSWER_JOURNAL_LIMIT, type AnswerEvent } from "../controlIntent/journal";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition } from "./schema";
 import { latest, type Override, type ProjectSettings } from "./select";
 
@@ -26,6 +27,10 @@ export interface AssembliesState {
   pinned: AssemblyDefinition[];
   settings: ProjectSettings;
   overrides: Override[];
+  /** The project questions' answers as their append-only journal
+   * (controlIntent/journal.ts): replayed, and its chain checked, whenever the
+   * project applies. Present only once a question is answered. */
+  answer_journal?: AnswerEvent[];
 }
 
 const value = z.union([z.number(), z.string(), z.boolean()]);
@@ -83,7 +88,15 @@ export function sanitizeAssembliesState(raw: unknown): { state: AssembliesState 
     if (p.success) overrides.push(p.data);
     else dropped.push(`override ${i + 1}: ${p.error.issues.map((x) => `${x.path.join(".")} ${x.message}`).join("; ")}`);
   });
-  return { state: { schema: ASSEMBLIES_STATE_SCHEMA, pinned, settings: s.success ? s.data : {}, overrides }, dropped };
+  // The answer journal is a hash chain: one event that does not parse breaks
+  // every event after it, so it is kept whole or dropped whole, named.
+  let journal: AnswerEvent[] | undefined;
+  if (r.answer_journal !== undefined) {
+    const j = z.array(answerEventSchema).max(ANSWER_JOURNAL_LIMIT).safeParse(r.answer_journal);
+    if (j.success) journal = j.data.length ? j.data : undefined;
+    else dropped.push(`answer_journal: ${j.error.issues.slice(0, 3).map((i) => `${i.path.join(".")} ${i.message}`).join("; ")} (the project's answers were not read)`);
+  }
+  return { state: { schema: ASSEMBLIES_STATE_SCHEMA, pinned, settings: s.success ? s.data : {}, overrides, ...(journal ? { answer_journal: journal } : {}) }, dropped };
 }
 
 /** The library a project applies: its pinned definitions, and the library's

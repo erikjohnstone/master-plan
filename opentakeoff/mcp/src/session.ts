@@ -15,6 +15,8 @@ import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../
 import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
 import { pageRegions, type PageRegion } from "../../web/src/lib/controlIntent/zonePlan.ts";
+import type { AnswerEvent } from "../../web/src/lib/controlIntent/journal.ts";
+import { ASSEMBLIES_STATE_SCHEMA, sanitizeAssembliesState } from "../../web/src/lib/assemblies/projectState.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
 import { extractControlSchematics, type ControlSchematicResult } from "../../web/src/lib/controlSchematic.ts";
@@ -927,6 +929,14 @@ const sheetSummary = (s: SheetState): SheetSummary => ({
   ...(s.detected ? { detected_scale: s.detected.label } : {}),
 });
 
+/** A project file's `assemblies` block: `block` as it arrived (or an empty
+ * one), with `journal` as its answer journal (none when empty). */
+function assembliesPayloadOf(block: Record<string, unknown> | null, journal: readonly AnswerEvent[]): Record<string, unknown> {
+  const base = block ?? { schema: ASSEMBLIES_STATE_SCHEMA, pinned: [], settings: {}, overrides: [] };
+  const { answer_journal: _old, ...rest } = base as Record<string, unknown> & { answer_journal?: unknown };
+  return { ...rest, ...(journal.length ? { answer_journal: journal } : {}) };
+}
+
 export class Session {
   file: string | null = null;
   /** Absolute path of the PRIMARY (first-loaded) plan — the marked set's
@@ -960,6 +970,15 @@ export class Session {
    * stays behind the canvas's human Preview→Apply gate). apply_rules re-runs
    * them; applied_to mirrors the canvas's audit-trail semantics. */
   rules: Rule[] = [];
+
+  /** CONTROL INTENT Track A: the project questions' answers as their
+   * append-only journal (web/src/lib/controlIntent/journal.ts), and the
+   * project file's `assemblies` block it arrived in (pins, settings,
+   * overrides: carried through unchanged; apply_assemblies takes its settings
+   * per call). answer_project_question appends; import_takeoff adopts a file's
+   * journal when this Session has none; export_takeoff writes it back. */
+  answerJournal: AnswerEvent[] = [];
+  assembliesBlock: Record<string, unknown> | null = null;
 
   /** Newest-last. Capped at UNDO_CAP; the oldest entry falls off the front. */
   private journal: JournalEntry[] = [];
@@ -1021,6 +1040,8 @@ export class Session {
       this.nextOrd = 1;
       this.scheduleWithheld = [];
       this.rules = [];
+      this.answerJournal = [];
+      this.assembliesBlock = null;
       // the journal's entries reference shapes that no longer exist — undoing
       // across a document swap would be a lie, so the history goes with them
       this.journal = [];
@@ -1171,6 +1192,13 @@ export class Session {
     native.conditions = payload.conditions ?? []; native.shapes = payload.shapes ?? []; native.markups = payload.markups ?? [];
     delete native.approvals; if (approvals.length) native.approvals = approvals;
     native.bas_workflow = payload.bas_workflow;
+    // The restored project's assemblies block (and its answer journal) is the
+    // Session's; export keeps it verbatim until an answer changes it.
+    const restored = payload.assemblies === undefined ? null : sanitizeAssembliesState(payload.assemblies).state;
+    const assembliesBlock = restored ? structuredClone(payload.assemblies) as Record<string, unknown> : null;
+    const answerJournal = restored?.answer_journal ?? [];
+    delete native.assemblies;
+    if (assembliesBlock || answerJournal.length) native.assemblies = assembliesPayloadOf(assembliesBlock, answerJournal);
     if (payload.rules !== undefined || this.rules.length) native.rules = structuredClone(this.rules);
     native.sheets = changes.filter(c => c.upp != null).map(c => ({ sheet_id: c.sheet.key, units_per_px: c.upp,
       ...(c.source ? { scale_source: c.source } : {}), ...(c.confirmed === false ? { scale_confirmed: false } : {}) }));
@@ -1182,6 +1210,7 @@ export class Session {
       publish();
       this.conditions = native.conditions; this.shapes = native.shapes; this.markups = native.markups;
       this.approvals = approvals; this.basWorkflow = payload.bas_workflow;
+      this.assembliesBlock = assembliesBlock; this.answerJournal = answerJournal;
       for (const c of changes) { c.sheet.upp = c.upp; c.sheet.scaleSource = c.source; c.sheet.scaleConfirmed = c.confirmed; }
       this.basRestoreCargo = cargo; this.basRetainedOriginals = retained;
       this.journal = []; this.pendingCommits = []; this.basRestoreVersion++; adopted = true;
@@ -6964,6 +6993,9 @@ export class Session {
       ...(this.approvals.length ? { approvals: this.approvals } : {}),
       ...(this.basWorkflow ? { bas_workflow: this.basWorkflow } : {}),
       ...(this.basRestoreCargo && ('rules' in this.basRestoreCargo.payload || this.rules.length) ? { rules: this.rules } : {}),
+      // the assemblies block rides additively: present only when a file
+      // brought one or a question was answered here
+      ...(this.assembliesBlock || this.answerJournal.length ? { assemblies: this.assembliesPayload() } : {}),
       sheet_group: [],
       last_group: [],
       sheet_tabs: [],
@@ -6975,6 +7007,27 @@ export class Session {
       // state of its own (a follow-up, not this commit's scope).
       linear_settings: {},
     };
+  }
+
+  /** The project file's `assemblies` block as this Session holds it: the
+   * block a file brought, verbatim (or an empty one), with the Session's
+   * answer journal in place of any it carried. */
+  assembliesPayload(): Record<string, unknown> {
+    return assembliesPayloadOf(this.assembliesBlock, this.answerJournal);
+  }
+
+  /** Adopt an imported project file's `assemblies` block. It must pass its
+   * gate (projectState.ts); it then rides through verbatim, so nothing the
+   * canvas saved is lost on export. Its answer journal becomes this
+   * Session's only when this Session has none (its own answers win, the
+   * calibration rule). Returns what was adopted and what the gate dropped. */
+  adoptAssembliesBlock(raw: unknown): { answers_adopted: number; dropped: string[] } {
+    const { state, dropped } = sanitizeAssembliesState(raw);
+    if (!state) return { answers_adopted: 0, dropped };
+    this.assembliesBlock ??= structuredClone(raw) as Record<string, unknown>;
+    if (this.answerJournal.length || !state.answer_journal?.length) return { answers_adopted: 0, dropped };
+    this.answerJournal = state.answer_journal;
+    return { answers_adopted: state.answer_journal.length, dropped };
   }
 
   exportPayload(): Record<string, any> {

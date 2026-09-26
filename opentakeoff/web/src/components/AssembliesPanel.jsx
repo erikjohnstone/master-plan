@@ -9,7 +9,10 @@
 // table per family, a row per unit with its cites, options and lines;
 // overrides carry a reason. Project settings: the hook-up profile's switches
 // and variables and the responsibility presets (presets.ts), saved with the
-// project. Library: the starter is read-only; clone a record to edit it, with
+// project. Project questions (controlIntent/questions.ts): the few project
+// facts whose answer changes this set, each answer an event in the project's
+// journal (journal.ts, saved with the project; MCP's answer_project_question
+// appends to the same journal). Library: the starter is read-only; clone a record to edit it, with
 // live validation against the whole library and an amber tint on what it
 // overrides.
 import { useEffect, useMemo, useState } from "react";
@@ -22,6 +25,8 @@ import { activeResponsibilityPresets, HOOKUP_SWITCHES, HOOKUP_VARIABLES, hookupP
 import { adoptUpdate, emptyAssembliesState, libraryUpdates, pinUsed, projectLibrary } from "../lib/assemblies/projectState";
 import { assembliesReport } from "../lib/assemblies/report";
 import { PARTIES } from "../lib/assemblies/schema";
+import { answerSettings, appendAnswer, replayAnswers } from "../lib/controlIntent/journal";
+import { projectQuestions } from "../lib/controlIntent/questions";
 import { downloadArchive } from "../lib/projectArchive";
 
 const btn = {
@@ -34,6 +39,8 @@ const amber = "color-mix(in srgb, var(--c-warn, #d98a00) 18%, transparent)";
 const mono = { fontFamily: "var(--f-mono)" };
 
 const statusColor = (s) => (s === "unresolved" ? "var(--c-danger)" : s === "ok" || s === "overridden" ? "var(--ink)" : "var(--ink-muted)");
+const NO_ANSWERS = Object.freeze({ events: [], head: null, answers: {}, answer_events: {}, recorded_by: {}, error: null });
+const NO_SETTINGS = Object.freeze({});
 const sum = (o) => Object.values(o || {}).reduce((a, b) => a + b, 0);
 
 function citeRow(cite, tag) {
@@ -264,6 +271,69 @@ function ProjectSettingsView({ settings, onChange }) {
   );
 }
 
+/** The project questions (controlIntent/questions.ts): only those whose
+ * answer changes something on this set, each with what every choice changes.
+ * A pre-fill is printed text proposing an answer, quoted: it applies nothing
+ * until the estimator chooses (CI4). Each answer is an event in the project's
+ * append-only journal (journal.ts), the same journal MCP's
+ * answer_project_question appends to. */
+function ProjectQuestionsView({ questions, journal, busy, error, onAnswer, onOpenCitation }) {
+  if (!questions && !busy) return null;
+  const open = questions ? questions.shown.filter((q) => !q.answer).length : 0;
+  const labelOf = (q, v) => q.choices.find((c) => c.value === v)?.label ?? v;
+  const cite = (e) => (e.sheet && e.box ? { sheet_id: e.sheet, bbox_px: e.box, tag: e.text.slice(0, 40), value: e.text } : null);
+  return (
+    <section data-assemblies-questions={questions?.shown.length ?? 0} data-assemblies-questions-open={open} style={{ marginBottom: 16 }} aria-label="Project questions">
+      <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>
+        Project questions{questions ? ` · ${open ? `${open} to answer` : "all answered"}` : ""}
+        <span style={{ fontWeight: 400, fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>
+          {busy ? " · working out which questions change this set…" : questions?.zero_effect.length ? ` · ${questions.zero_effect.length} more change nothing here` : ""}
+        </span>
+      </h3>
+      {error && <div role="alert" style={{ color: "var(--c-danger)", fontSize: "var(--fs-s)", marginBottom: 6 }}>The project's answers don't check out ({error}); none of them applies.</div>}
+      {(questions?.shown ?? []).map((q) => (
+        <fieldset key={q.id} style={{ ...fieldset, marginBottom: 8 }} data-assemblies-question={q.id} data-answer={q.answer ?? ""}>
+          <legend style={legend}>{q.text}</legend>
+          <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-muted)", marginBottom: 4 }}>
+            An answer changes up to {q.lines_changed} line{q.lines_changed === 1 ? "" : "s"} and {q.records_changed} record{q.records_changed === 1 ? "" : "s"}.
+            {q.answer ? ` Answered: ${labelOf(q, q.answer)} (${journal.recorded_by[q.id] === "operator_input" ? "by you" : "recorded by an agent for you"}).` : ""}
+          </div>
+          {q.prefill && !q.answer && (
+            <div style={{ fontSize: "var(--fs-s)", background: amber, padding: "4px 6px", marginBottom: 6 }} data-assemblies-prefill={q.prefill.value}>
+              The drawings suggest <strong>{labelOf(q, q.prefill.value)}</strong> — a proposal until you choose it:
+              <ul style={{ margin: "2px 0 0", paddingLeft: 18 }}>
+                {q.prefill.evidence.map((e, i) => (
+                  <li key={i}>
+                    {cite(e)
+                      ? <button type="button" style={{ ...btn, border: "none", padding: 0, background: "transparent", textDecoration: "underline", textAlign: "left" }} onClick={() => onOpenCitation?.(cite(e))}>“{e.text}”</button>
+                      : <span>{e.text}</span>}
+                    {e.sheet ? <span style={{ color: "var(--ink-muted)", ...mono }}> {e.sheet}</span> : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {q.evidence.length > 0 && (
+            <details style={{ fontSize: "var(--fs-s)", marginBottom: 6 }}>
+              <summary style={{ cursor: "pointer", color: "var(--ink-secondary)" }}>Why it's asked: {q.evidence.length} unit{q.evidence.length === 1 ? "" : "s"}</summary>
+              <ul style={{ margin: "2px 0 0", paddingLeft: 18 }}>{q.evidence.map((e, i) => <li key={i}>{e.text}</li>)}</ul>
+            </details>
+          )}
+          <div role="group" aria-label={`Answer: ${q.text}`} style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {q.choices.map((c) => (
+              <button key={c.value} type="button" aria-pressed={q.answer === c.value || (!q.answer && c.value === "unknown")} data-assemblies-choice={c.value}
+                style={{ ...btn, ...(q.answer === c.value ? { background: "var(--ink)", color: "var(--paper-bright)" } : {}) }}
+                onClick={() => onAnswer(q, c.value)}>
+                {c.label}{c.value !== "unknown" ? <span style={{ opacity: 0.7, ...mono }}> · {c.lines_changed} lines, {c.records_changed} records</span> : null}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+    </section>
+  );
+}
+
 function LibraryView({ starter, partner, onSavePartner, library, rejected, updates, onAdopt }) {
   const [selected, setSelected] = useState(null);
   const [filter, setFilter] = useState("");
@@ -413,9 +483,55 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   // --mode assemblies_project; controlIntent/record.ts): their applied
   // decisions become facts on the same shared path MCP applies.
   const readings = project?.control_readings ?? null;
+  // The project's answers: its journal replayed and its chain checked
+  // (journal.ts). Only a journal that checks out applies.
+  const journalEvents = state?.answer_journal ?? null;
+  const [journal, setJournal] = useState(NO_ANSWERS);
+  useEffect(() => {
+    if (!journalEvents?.length) { setJournal(NO_ANSWERS); return undefined; }
+    let live = true;
+    replayAnswers(journalEvents).then((r) => {
+      const s = answerSettings(r.events);
+      if (live) setJournal({ events: r.events, head: r.head, ...s, recorded_by: Object.fromEntries(Object.entries(s.answer_events).map(([q, e]) => [q, e.origin])), error: null });
+    }).catch((e) => { if (live) setJournal({ ...NO_ANSWERS, error: e?.message || String(e) }); });
+    return () => { live = false; };
+  }, [journalEvents]);
+  const ownSettings = state?.settings ?? NO_SETTINGS;
+  const settings = useMemo(() => (journal.events.length ? { ...ownSettings, answers: journal.answers, answer_events: journal.answer_events } : ownSettings), [ownSettings, journal]);
   const applied = useMemo(() => (project ? applyAssemblies({
-    project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings,
-  }) : null), [project, library, state, readings]);
+    project, library: projectLibrary(state, library), settings, overrides: state?.overrides ?? [], readings,
+  }) : null), [project, library, state, readings, settings]);
+  // Which questions change this set: every choice applied against none
+  // (questions.ts). It re-applies the library per choice, so it runs after
+  // the panel has painted.
+  const [questions, setQuestions] = useState({ value: null, busy: false });
+  useEffect(() => {
+    if (!project) { setQuestions({ value: null, busy: false }); return undefined; }
+    setQuestions((q) => ({ ...q, busy: true }));
+    const t = setTimeout(() => {
+      try {
+        setQuestions({ value: projectQuestions({ project, library: projectLibrary(state, library), settings, overrides: state?.overrides ?? [], readings }), busy: false });
+      } catch (e) {
+        setQuestions({ value: null, busy: false, error: e?.message || String(e) });
+      }
+    }, 0);
+    return () => clearTimeout(t);
+  }, [project, library, state, readings, settings]);
+  const answer = async (q, value) => {
+    const proposal = q.prefill && q.prefill.value === value ? ` (the drawings' proposal: ${q.prefill.evidence.map((e) => `"${e.text}"`).join("; ")})` : "";
+    const reason = window.prompt(`Why "${q.choices.find((c) => c.value === value)?.label ?? value}"? (kept with the answer)`, `Answered in the Takeoff panel${proposal}`);
+    if (!reason || !reason.trim()) return;
+    try {
+      const base = state ?? emptyAssembliesState();
+      const next = await appendAnswer(base.answer_journal ?? [], {
+        operation_id: crypto.randomUUID(), expected_head: journal.head, reviewer: "estimator (Takeoff panel)", reason: reason.trim(),
+        question: q.id, answer: value, prefill: q.prefill ? { value: q.prefill.value, evidence: q.prefill.evidence } : null,
+      }, { origin: "operator_input" });
+      onStateChange?.({ ...base, answer_journal: next.events });
+    } catch (e) {
+      window.alert(`That answer wasn't recorded: ${e?.message || e}`);
+    }
+  };
   const readingsOf = (u) => (readings?.units || []).filter((r) => r.tag === u.tag && r.family === u.family).flatMap((r) => r.decisions);
   const readingCounts = useMemo(() => {
     const ds = (readings?.units || []).flatMap((u) => u.decisions);
@@ -518,6 +634,8 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
           </div>
 
           <ProjectSettingsView settings={state?.settings ?? {}} onChange={setSettings} />
+
+          <ProjectQuestionsView questions={questions.value} busy={questions.busy} error={journal.error || questions.error} journal={journal} onAnswer={answer} onOpenCitation={onOpenCitation} />
 
           {report.exceptions.length > 0 && (
             <section data-assemblies-exceptions={report.exceptions.length} style={{ marginBottom: 16 }} aria-label="Exceptions">

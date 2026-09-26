@@ -72,6 +72,75 @@ test("zones: a page is a zone plan only when its title names zones and most prin
   assert.equal(readZonePlan("m.pdf#2", z.spans, z.regions, ["VAV-9"]), null, "no scheduled tag is printed");
 });
 
+/** Four side-by-side zones, VAV-1..4, each 1000 × 800, and a sheet title. */
+function row(title = "HVAC ZONE PLAN"): { spans: NoteSpan[]; rects: Array<[number, number, number, number, "fill" | "clip"]> } {
+  return {
+    rects: [[0, 0, 1000, 800, "fill"], [1000, 0, 1000, 800, "fill"], [2000, 0, 1000, 800, "fill"], [3000, 0, 1000, 800, "fill"]],
+    spans: [sp("SHEET TITLE", 3000, 2600), sp(title, 3000, 2625)],
+  };
+}
+const symbolsOf = (p: NonNullable<ReturnType<typeof readZonePlan>>) => Object.fromEntries(p.zones.map((z) => [z.tag, z.symbols.map((s) => s.text).sort()]));
+
+test("zones: a tag drawn in pieces labels its zone, and its pieces are no symbols", () => {
+  const { spans, rects } = row();
+  // "VAV-" and "3" drawn apart, a word space between them.
+  spans.push(sp("VAV-1", 400, 380), sp("VAV-2", 1400, 380), sp("VAV-", 2400, 380), sp("3", 2400 + 4 * 0.55 * 19 + 4, 380), sp("VAV-4", 3400, 380), sp("CO2", 2100, 700));
+  const p = readZonePlan("m.pdf#2", spans, pageRegions(ops(rects), IDENTITY, O), TAGS);
+  assert.ok(p);
+  assert.deepEqual(symbolsOf(p), { "VAV-1": [], "VAV-2": [], "VAV-3": ["CO2"], "VAV-4": [] });
+});
+
+test("zones: a quarter-turned sheet reads the same (regions through the viewport, text turned with it)", () => {
+  const { rects } = row();
+  // The viewport turns the page a quarter clockwise, (x, y) → (H − y, x):
+  // regions come through it, and the text is printed turned with it.
+  const H = 3000, turn = [0, 1, -1, 0, H, 0];
+  const regions = pageRegions(ops(rects), turn, O);
+  const tsp = (str: string, x: number, y: number, h = 19): NoteSpan => ({ str, x0: H - y - h, y0: x, x1: H - y, y1: x + str.length * 0.55 * h, rot: 90 });
+  const spans = [tsp("SHEET TITLE", 3000, 2600), tsp("HVAC ZONING PLAN", 3000, 2625), tsp("VAV-1", 400, 380), tsp("VAV-2", 1400, 380), tsp("VAV-3", 2400, 380), tsp("VAV-4", 3400, 380), tsp("CO2", 3100, 700)];
+  const p = readZonePlan("m.pdf#2", spans, regions, TAGS);
+  assert.ok(p, "a turned zone plan is still one");
+  assert.deepEqual(symbolsOf(p), { "VAV-1": [], "VAV-2": [], "VAV-3": [], "VAV-4": ["CO2"] });
+});
+
+test("zones: a zone inside another keeps its own symbols; a tag printed twice in its zone labels it once", () => {
+  const { spans, rects } = row();
+  rects.push([100, 450, 500, 300, "fill"]); // VAV-5's room inside VAV-1's zone
+  spans.push(sp("VAV-1", 400, 100), sp("VAV-1", 700, 300), sp("VAV-2", 1400, 380), sp("VAV-3", 2400, 380), sp("VAV-4", 3400, 380), sp("VAV-5", 300, 550), sp("CO2", 150, 700), sp("T", 800, 700));
+  const p = readZonePlan("m.pdf#2", spans, pageRegions(ops(rects), IDENTITY, O), TAGS);
+  assert.ok(p);
+  assert.equal(p.zones.filter((z) => z.tag === "VAV-1").length, 1);
+  assert.deepEqual(symbolsOf(p), { "VAV-1": ["T"], "VAV-2": [], "VAV-3": [], "VAV-4": [], "VAV-5": ["CO2"] });
+});
+
+test("zones: a legend listing the tags in cells labels no zone and does not stop the plan", () => {
+  const { spans, rects } = row();
+  // A legend table: its frame and one row per tag, each row a wide cell that
+  // hugs its text (as large as a zone would be, but thin).
+  rects.push([5000, 0, 900, 150, "fill"]);
+  for (let i = 0; i < 5; i++) rects.push([5000, i * 30, 900, 30, "clip"]);
+  spans.push(sp("VAV-1", 400, 380), sp("VAV-2", 1400, 380), sp("VAV-3", 2400, 380), sp("VAV-4", 3400, 380));
+  for (let i = 0; i < 5; i++) spans.push(sp(`VAV-${i + 1}`, 5020, i * 30 + 5), sp("CO2", 5300, i * 30 + 5));
+  const p = readZonePlan("m.pdf#2", spans, pageRegions(ops(rects), IDENTITY, O), TAGS);
+  assert.ok(p, "four of five printed tags label a zone of their own");
+  assert.deepEqual(symbolsOf(p), { "VAV-1": [], "VAV-2": [], "VAV-3": [], "VAV-4": [] }, "the legend's CO2 cells are in no zone");
+});
+
+test("zones: a subscript drawn apart reads with its letters; a distant digit does not", () => {
+  const { spans, rects } = row();
+  const co = sp("CO", 100, 700);
+  spans.push(sp("VAV-1", 400, 380), sp("VAV-2", 1400, 380), sp("VAV-3", 2400, 380), sp("VAV-4", 3400, 380),
+    co, { str: "2", x0: co.x1 + 1, y0: 712, x1: co.x1 + 8, y1: 724 },
+    sp("CO", 1100, 700), { str: "2", x0: 1300, y0: 712, x1: 1307, y1: 724 });
+  const p = readZonePlan("m.pdf#2", spans, pageRegions(ops(rects), IDENTITY, O), TAGS)!;
+  assert.deepEqual(symbolsOf(p)["VAV-1"], ["CO", "CO2"]);
+  assert.deepEqual(symbolsOf(p)["VAV-2"], ["CO"]);
+  const q: ReadingQuestion = { id: "opt.co2_sensor", kind: "option", option: "co2_sensor", label: "CO2", device: TERM_LIST.options.co2_sensor.device };
+  const zone = (tag: string) => p.zones.filter((z) => z.tag === tag).map((z) => ({ plan: p, zone: z }));
+  assert.equal(zoneAnswers(zone("VAV-1"), [q], TERM_LIST).length, 1);
+  assert.equal(zoneAnswers(zone("VAV-2"), [q], TERM_LIST).length, 0);
+});
+
 test("zones: a CO2 symbol in a unit's zone reads its CO2 sensor, and applies alone; a zone without one says nothing", () => {
   const { spans, regions } = plan("HVAC ZONE PLAN");
   const p = readZonePlan("m.pdf#2", spans, regions, TAGS)!;
