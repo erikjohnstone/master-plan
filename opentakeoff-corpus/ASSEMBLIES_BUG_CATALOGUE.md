@@ -1511,4 +1511,9 @@ The columns (normalize.ts):
 - 096_IN's key types note 4's "BACKNET" as printed; the normalizer reports
   the protocol as every other BACnet key does, "BACNET": 1 wrong.
 
-**Next:** freeze, then GATE 2 on held-out and held-out 2 (aggregates only).
+**GATE 2 at the freeze after dev 3 (f904c57; aggregates only, nothing tuned
+on them):** held-out 897 of 1,008 exact (89.0%, from 88.6% at the last
+freeze), 0 wrong, 2 invented; held-out 2 302 of 472 exact (64.0%, from
+56.4%), 1 wrong (0.2%), 2 invented. Both still fail on exact and invented.
+The gain is AS-28's and AS-29's rules together: held-out 2 was last measured
+before either, and neither was taken from its rows.

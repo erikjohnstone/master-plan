@@ -5,9 +5,9 @@ ATTRIBUTE EVAL (instrument 2) — heldout, normalizer: normalize.ts
 key instances matched to a compile item: 91/91; out-of-key-scope compile items in keyed tables: 0; unscored values (extensions): 33
 
                                     lines printed  exact  wrong missed    oos | empty c-unkn invent | exact%  wrong%
-ALL                                  2068    1008    893      0    115      0 |  1060   1058      2 |  88.6%   0.0%
+ALL                                  2068    1008    897      0    111      0 |  1060   1058      2 |  89.0%   0.0%
   slice: grid                        1787     728    664      0     64      0 |  1059   1057      2 |  91.2%   0.0%
-  slice: reading                      216     216    176      0     40      0 |     0      0      0 |  81.5%   0.0%
+  slice: reading                      216     216    180      0     36      0 |     0      0      0 |  83.3%   0.0%
   slice: notes                         65      64     53      0     11      0 |     1      1      0 |  82.8%   0.0%
 
 per family
@@ -15,9 +15,9 @@ per family
   FCU                                 300     148    138      0     10      0 |   152    150      2 |  93.2%   0.0%
   PUMP                                240     128    116      0     12      0 |   112    112      0 |  90.6%   0.0%
   RTU                                 180      68     56      0     12      0 |   112    112      0 |  82.4%   0.0%
-  DOAH_UNIT                            90      44     30      0     14      0 |    46     46      0 |  68.2%   0.0%
+  DOAH_UNIT                            90      44     32      0     12      0 |    46     46      0 |  72.7%   0.0%
   FAN                                  80      39     33      0      6      0 |    41     41      0 |  84.6%   0.0%
-  AHU                                  90      28     24      0      4      0 |    62     62      0 |  85.7%   0.0%
+  AHU                                  90      28     26      0      2      0 |    62     62      0 |  92.9%   0.0%
   BOILER                               45      24     23      0      1      0 |    21     21      0 |  95.8%   0.0%
   HEAT_RECOVERY_CHILLER                34      22     14      0      8      0 |    12     12      0 |  63.6%   0.0%
   CABINET_UNIT_HEATER                  34      20     18      0      2      0 |    14     14      0 |  90.0%   0.0%
@@ -32,7 +32,7 @@ per family
   HUMIDIFIER                            9       5      5      0      0      0 |     4      4      0 | 100.0%   0.0%
 
 per set
-  navfac-cherry-point-atc            1671     835    753      0     82      0 |   836    834      2 |  90.2%   0.0%
+  navfac-cherry-point-atc            1671     835    757      0     78      0 |   836    834      2 |  90.7%   0.0%
   024_MO_E2508_01_Replace_Steam_He    180      68     56      0     12      0 |   112    112      0 |  82.4%   0.0%
   30_WA_SpokaneTransit_CoolingTowe     75      47     39      0      8      0 |    28     28      0 |  83.0%   0.0%
   060_XX_ASC_Open_Mechanical_Compe     70      30     26      0      4      0 |    40     40      0 |  86.7%   0.0%
@@ -72,7 +72,7 @@ per attribute
   rpm                                  21      10     10      0      0      0 |    11     11      0 | 100.0%   0.0%
   filter_merv                           9       9      7      0      2      0 |     0      0      0 |  77.8%   0.0%
   oa_cfm_min                            9       9      3      0      6      0 |     0      0      0 |  33.3%   0.0%
-  supply_fan_hp                         9       9      4      0      5      0 |     0      0      0 |  44.4%   0.0%
+  supply_fan_hp                         9       9      8      0      1      0 |     0      0      0 |  88.9%   0.0%
   supply_fan_qty                        9       9      0      0      9      0 |     0      0      0 |   0.0%   0.0%
   conn_in                              39       8      5      0      3      0 |    31     31      0 |  62.5%   0.0%
   hw_lwt_f                             63       8      6      0      2      0 |    55     55      0 |  75.0%   0.0%
@@ -122,5 +122,5 @@ per attribute
   steam_lb_hr                          12       0      0      0      0      0 |    12     12      0 |    —      —  
   steam_psig                           12       0      0      0      0      0 |    12     12      0 |    —      —  
 
-GATE 2 (heldout): exact 88.6% (need >= 95.0%) FAIL · wrong 0.0% (need <= 1.0%) ok · invented 2 (need = 0) FAIL → FAIL
+GATE 2 (heldout): exact 89.0% (need >= 95.0%) FAIL · wrong 0.0% (need <= 1.0%) ok · invented 2 (need = 0) FAIL → FAIL
 ```
