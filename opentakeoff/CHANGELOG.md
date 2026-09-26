@@ -1,5 +1,30 @@
 # Changelog
 
+- **Assemblies read a third tier of drafters' schedules and notes.** Nine
+  more documents, drawn by seed and keyed from renders before the pipeline
+  ran, taught the shared normalizer and notes reader
+  (`web/src/lib/assemblies/normalize.ts`, `scheduleNotes.ts`) these readings,
+  each with a test on the document's own shape. A numbered notes list printed
+  with no NOTES label is read when it sits at the table's edge, and it stops
+  at the next table. A motor rated for a drive ("VFD RATED", "INVERTER DUTY")
+  is no VFD unless the fan is called variable speed. A note offering EC
+  motors or VFDs lets each row's own remark decide. A central controller the
+  units connect to is their interface. "3-SPEED" names the fan's speeds. A
+  chiller's or tower's unitless capacity is tons when its water flow and
+  range carry that many. A coil schedule counts coils. "HEATC FM" is HEAT
+  CFM. MOTOR TYPE "ECM" is an EC motor. A zone unit's SPACE / ROOM NAME is
+  the area it serves, and "OA %" is the outdoor air share. An exchanger's
+  title names its type, and air on both sides is "other". A boiler's
+  unlabeled capacity beside its INPUT is its output. "WATER 30%PG" is 30%
+  glycol. "(2) 1/4" HP is two 1/4 hp motors, and BRAKE HP ranks below the
+  motor's rating. An airflow printed under CAPACITY is the unit's. An
+  electric heater's TYPE and WATTS are its medium and heat. A bare CONTROL
+  column is read unless it cites notes. A DX fan coil that prints heating
+  and no other heat source heats as a heat pump. On the third tier, 92.2% of
+  printed values are now exact (from 83.5%) with 0.2% wrong; every remaining
+  miss is an extraction or keying issue the catalogue records. Dev and
+  dev 2 read exactly as before, and all 17 changes on the unseen corpus
+  were checked against the printed cell (ASSEMBLIES_BUG_CATALOGUE AS-29).
 - **Assemblies read more column names from drafters they were not built
   on.** A census of the columns left unread on 65 unseen corpus documents
   found printed attributes under spellings the rules did not know. The

@@ -1386,3 +1386,129 @@ the same author, so no rule here is for a shape only held-out 2 prints.
 
 **Next:** held-out and held-out 2 are measured again only at the next freeze,
 after the third dev tier (AS-17).
+
+## AS-29 — the third dev tier's misses: rules its drafters taught, and the ceilings they show (FIXED for the shapes below; OPEN for the ceilings — this goal)
+
+**Found:** 2026-09-26, measuring the frozen normalizer cold on dev 3
+(tier3/01-split.json, seed 20260927: 9 documents, 32 claimed tables, 165
+instances, 1,377 printed values), keyed from renders before the pipeline ran
+on any of its sheets. Cold (02-attr-eval-dev3-cold.md): 1,150 of 1,377 exact
+(83.5%), 5 wrong (0.4%), 222 missed, 24 invented.
+
+**Fixed (each from a dev-3 miss, with a unit test on its own shape):**
+
+The notes reader (scheduleNotes.ts):
+- A motor rated for a drive ("VFD RATED MOTOR", "VARIABLE FREQUENCY DRIVE
+  RATED MOTOR", "INVERTER DUTY MOTOR") is built to run on one; alone it does
+  not say a drive runs the unit (012_MO's pumps: 13 invented vfd gone).
+  Beside a note calling the fan variable speed it does: 004_MO's notes 1 and 2
+  are now read together, its value unchanged.
+- EC motors or VFDs offered as alternatives ("PROVIDE FANS WITH EC MOTORS
+  (MOTOR MOUNTED) OR VARIABLE FREQUENCY DRIVES") state neither; the row's own
+  REMARKS ("… W/ VFD", "… W/ ECM") decides, and rules out the other (25_WA's
+  relief fans: 2 wrong fixed).
+- A central controller the units connect to ("PROVIDE AND CONNECT ALL INDOOR
+  UNITS TO A CENTRAL AE - 200A CONTROLLER") is their interface, the model's
+  hyphen closed (093_ME: 23 values).
+- BACnet spelled BACKNET is BACnet (096_IN's AHU index, note 4).
+- A note's N-SPEED motor or fan names its speeds ("PROVIDE 3-SPEED EC MOTOR",
+  096_IN's fan coils); a speed controller and a compressor's are no count.
+- A control list's last two items joined by AND keep only the control device
+  ("INTEGRAL FAN SPEED CONTROLLER AND BIRD SCREEN", 008_MO: 1 wrong fixed); two
+  devices stay joined ("TWO SPEED FAN AND WALL MOUNTED THERMOSTAT").
+- An unlabeled numbered list at a table's left edge, inside its region or
+  just past its last row, is the table's notes (096_IN prints "1. …", "2. …"
+  with no NOTES label over its AHU index and fan coils). It is one column
+  counting up from 1, and it ends at a gap wider than a wrapped line's, at a
+  line that starts away from its edge or is set in cells (a table's title,
+  header or row beside or below it), and at a number out of turn.
+- A note's outdoor air share is never a mode's ("100% OUTDOOR AIR EMERGENCY
+  EPIDEMIC MODE", which the unseen A/B found on 01_NY).
+
+The columns (normalize.ts):
+- A chiller's or tower's capacity printed with no unit is tons where the
+  unit's own water flow and range carry that many: 012_MO's NET CAPACITY 300.0
+  beside 598.5 GPM x 12 F / 24, its tower's NOMINAL CAPACITY 300 beside 900
+  GPM x 10 F / 30 (nominal tons at 3 GPM a ton).
+- A coil schedule's count of coils is the coils under the mark (017_MD's COIL
+  DATA QUANTITY, 096_IN's # OF COILS); a coil's SERVICE naming only units is
+  the unit it sits in, no area served (017_MD: 6 invented gone).
+- A steam-to-steam or gas-fired humidifier's KW is its controls' (017_MD: 1
+  invented gone); a MAXIMUM steam capacity ranks below the design one.
+- CFM's letters set apart by the text layer ("HEATC FM") are one word (071_ME:
+  20 VAV heating airflows).
+- A MOTOR TYPE names an EC motor (or a PSC one, not EC); a controller printed
+  with who furnishes it ("ECM - FAN MFR") is that controller (071_ME).
+- A heat recovery section's SUMMER / WINTER PERFORMANCE airflows rank below
+  the fans' own (083_MA's ERV).
+- A zone unit's SPACE / ROOM NAME is the area it serves, below an AREA SERVED
+  column (093_ME: 20 indoor units).
+- An "OA %" column is the outdoor air's share (096_IN's AHU index).
+- A DX HEAT RECOVERY COIL printed "-" is neither a DX cooling coil nor "no
+  energy recovery" (096_IN: 2 invented gone).
+- A PLATE (AND FRAME) or SHELL AND TUBE title names the exchanger; outside air
+  against exhaust air, with no water or steam side, is air on both sides,
+  which the medium list does not name: "other" (096_IN).
+- A boiler's capacity naming neither end, beside its INPUT, is its output
+  where it does not exceed the input (096_IN's misspelt "DESIGN CAPAPACITY").
+- A fluid cell names its glycol share wherever it prints it ("WATER 30%PG").
+- "(2) 1/4" under HP is two motors of 1/4 hp, and the attribute is each
+  motor's (096_IN's fan coils; "(2)@1.5" as 071_ME prints it); a BRAKE HP
+  ranks below the motor's rating (25_WA).
+- An airflow printed under CAPACITY ("200 CFM @ 0.5" ESP") is the unit's
+  (25_WA's ERV); an electric heater's TYPE names its medium and its WATTS its
+  heat (25_WA's ceiling and duct heaters); a bare CONTROL column names the
+  control ("DUCT SP"), except a cell citing notes (014_MT's "1, 2, 5, 6").
+- A DX fan coil printing a heating capacity and no water, gas or electric
+  heat heats as a heat pump (083_MA).
+
+**Measured:**
+- Dev 3: 1,269 of 1,377 exact (92.2%), 3 wrong (0.2%), 105 missed, 2
+  invented (02-attr-eval-dev3.md).
+- Dev and dev 2: the frozen reports' lines (1,965 of 2,053; 1,259 of 1,451;
+  0 invented). 7 of their 833 compile items change their rule only: 004_MO's
+  rooftop units read vfd yes across notes 1 and 2, no longer from note 2 alone.
+- Unseen, outside dev 3 (56 documents): 17 changes, each read against its
+  printed cell: 11 areas served from 028_TX's ROOM column, 2 exchanger types
+  from 061_IA's SHELL AND TUBE title, 1 chilled-water cooling from 05_MO's coil
+  mark beside a DX coil printed "-", 1 BACnet MS/TP interface from 01_NY's
+  humidifier note 2 (its notes now read), and 2 of 014_MT's fan controls that
+  drop an item that is not a control ("… & SIDEWALL GRILLE BY FAN
+  MANUFACTURER", "… AND DRAIN PAN"). Two rules the A/B first showed wrong were
+  corrected before this measure: 014_MT's CONTROL column cites notes, and
+  01_NY's epidemic mode is no outdoor air share; the unlabeled list's bounds
+  were tightened on 01_NY's page, where it had run into the next table.
+- Dev 3's unkeyed tables and rows: 13 changes, read by hand (017_MD's cooling
+  coils: 6 host units gone from area served, 6 coil counts; 096_IN's KEF-1
+  control without "SAFETY CABLE").
+
+**The ceilings (OPEN; every remaining dev-3 miss is outside the normalizer):**
+- 071_ME's PACKAGED ROOF TOP UNIT SCHEDULE is compiled transposed (its items
+  are tagged "2.25", "COOLING COIL", …; RTU-G, RTU-1 (ALT#2) and RTU-2 have no
+  compile item): 38 values. The compile's loop owns it; transposing in the
+  normalizer would fork schedule truth.
+- 017_MD's SUPPLY FAN SCHEDULE reaches the compile with garbled headers ("OF
+  DESIGN") and each row's cells merged into one ("20 16.68 460 DIRECT II 1
+  FAN"): 42 values; the graph's loop.
+- 096_IN's UNIT HEATER SCHEDULE's electrical block reaches the compile as
+  seven columns under one garbled header ("ELECTRICAL DATA FUSED/ FACTORY
+  NON-FUSE EMER. DISCONNECT D POWER", then "… 2" to "… 7"): the HP, volts and
+  phase of five heaters, 15 values. Reading them by value alone would break
+  LAW L1.
+- 083_MA's ERV-2 reaches the compile with its exhaust fan, electrical and
+  recovery-type headers renamed ("EXHAUST FAN DATA TYPE 2", "HEAT PUMP DATA
+  ELECTRICAL DATA FILTER 7"): 4 values.
+- 096_IN's diffuser and grille rows EG2 and EG3 are compiled as FAN items:
+  their 2 airflows count invented against the page's rows-none FAN claim. The
+  family is the compile's.
+- Two keying conventions disagree. 094_FL (tier 1) keys a chiller's scheduled
+  "Capacity Tons" over its "Nominal Tons", and the normalizer ranks them so;
+  the dev-3 keys of 096_IN (NOMINAL CAPACITY 85 and 140 over DESIGN COOLING
+  CAPACITY 77 and 134: 2 wrong) and 093_ME (COOLING and HEATING CAPACITY over
+  CORRECTED: 6 missed) took the nominal. The keys are frozen (keyed before the
+  pipeline ran on their sheets); the normalizer keeps the tier-1 convention,
+  and no rule chooses between a rated and a corrected MBH.
+- 096_IN's key types note 4's "BACKNET" as printed; the normalizer reports
+  the protocol as every other BACnet key does, "BACNET": 1 wrong.
+
+**Next:** freeze, then GATE 2 on held-out and held-out 2 (aggregates only).

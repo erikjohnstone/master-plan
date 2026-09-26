@@ -2,7 +2,7 @@
 // how the normalizer applies them to the rows that cite them.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { citedCodeLegend, citedNoteIds, controlItems, noteValues, scheduleLegend, scheduleNotes, type NoteSpan } from "../../src/lib/assemblies/scheduleNotes.ts";
+import { citedCodeLegend, citedNoteIds, controlItems, ecmOrDrive, noteValues, scheduleLegend, scheduleNotes, type NoteSpan } from "../../src/lib/assemblies/scheduleNotes.ts";
 import { normalizeCompileItem, type CompileItem } from "../../src/lib/assemblies/normalize.ts";
 
 // bldg5406-hvac-demo-mechanical.pdf page 6 as mcp/src/pdf.ts textSpans reads
@@ -182,7 +182,89 @@ test("a VFD note is the fan's or motor's, never a compressor's own drive", () =>
   const v = (text: string) => noteValues({ id: "1", text }, attrs).map((x) => x.value);
   assert.deepEqual(v("VARIABLE SPEED COMPRESSOR WITH FACTORY VFD."), []);
   assert.deepEqual(v("DIRECT DRIVE, VARIABLE SPEED PLENUM BLOWER WITH FACTORY VFD."), ["yes"]);
-  assert.deepEqual(v("INVERTER DUTY MOTOR."), ["yes"]);
+  // A motor rated for a drive is built to run on one; alone it does not say
+  // one runs it (012_MO's pumps), beside a variable-speed fan it does (004_MO's
+  // notes 1 and 2, here in one note; across two notes, the normalizer).
+  assert.deepEqual(v("INVERTER DUTY MOTOR."), []);
+  assert.deepEqual(v("PROVIDE PUMP WITH VARIABLE FREQUENCY DRIVE RATED MOTOR AND SHAFT GROUNDING RING."), []);
+  assert.deepEqual(v("PROVIDE UNIT WITH VFD RATED MOTOR WITH SHAFT GROUNDING."), []);
+  assert.deepEqual(v("VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN. INVERTER DUTY MOTOR."), ["yes"]);
+  assert.deepEqual(v("EXISTING VFDs ARE TO BE REUSED FOR CONTROL OF NEW TOWERS."), ["yes"]);
+});
+
+test("dev 3: EC motors or VFDs offered as alternatives state neither; the row's own choice decides, and rules out the other", () => {
+  const attrs = new Set(["vfd", "ecm"]);
+  const v = (text: string) => noteValues({ id: "1", text }, attrs).map((x) => `${x.attr}=${x.value}`);
+  assert.deepEqual(v("PROVIDE FANS WITH EC MOTORS (MOTOR MOUNTED) OR VARIABLE FREQUENCY DRIVES."), []);
+  assert.deepEqual(v("PROVIDE VFD OR ECM FOR EACH FAN."), []);
+  assert.deepEqual(v("PROVIDE EC MOTOR. PROVIDE VFD FOR EXHAUST FAN."), ["vfd=yes", "ecm=yes"]);
+  assert.ok(ecmOrDrive("PROVIDE FANS WITH EC MOTORS (MOTOR MOUNTED) OR VARIABLE FREQUENCY DRIVES"));
+  assert.ok(!ecmOrDrive("PROVIDE EC MOTOR AND VFD"));
+  // 25_WA's relief fans: note 1 offers both, each row's REMARKS names one.
+  const notes = [{ id: "1", text: "PROVIDE FANS WITH EC MOTORS (MOTOR MOUNTED) OR VARIABLE FREQUENCY DRIVES." }];
+  // No row's REMARKS cites a note, so the table's note speaks for every row.
+  const rows = [
+    { key: "REF-1", cells: { CFM: "7300", REMARKS: "MAX INLET 17.4 SONES W/ VFD" } },
+    { key: "REF-2", cells: { CFM: "2900", REMARKS: "MAX INLET 21.0 SONES W/ ECM" } },
+  ];
+  const fan = (tag: string, remark: string) => {
+    const item: CompileItem = { tag, sheet_id: "set.pdf#4", table_title: "FAN SCHEDULE", cells: { CFM: { text: "7300", bbox: null }, REMARKS: { text: remark, bbox: null } } };
+    const n = normalizeCompileItem(item, "FAN", { headers: ["CFM", "REMARKS"], notes, rows });
+    return [n.attributes.vfd?.value, n.attributes.ecm?.value];
+  };
+  assert.deepEqual(fan("REF-1", "MAX INLET 17.4 SONES W/ VFD"), ["yes", "no"]);
+  assert.deepEqual(fan("REF-2", "MAX INLET 21.0 SONES W/ ECM"), ["no", "yes"]);
+  assert.deepEqual(fan("REF-3", "MAX INLET 9.0 SONES"), [undefined, undefined]);
+});
+
+test("dev 3: a drive-rated motor in one note and a variable-speed fan in another is a VFD; either alone is not", () => {
+  const item: CompileItem = { tag: "SF-1", sheet_id: "set.pdf#4", table_title: "SUPPLY FAN SCHEDULE", cells: { CFM: { text: "1200", bbox: null } } };
+  const vfd = (notes: Array<{ id: string; text: string }>) => normalizeCompileItem(item, "FAN", { headers: ["CFM"], notes }).attributes.vfd?.value;
+  assert.equal(vfd([{ id: "1", text: "VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN." }, { id: "2", text: "INVERTER DUTY MOTOR." }]), "yes");
+  assert.equal(vfd([{ id: "2", text: "INVERTER DUTY MOTOR." }]), undefined);
+  assert.equal(vfd([{ id: "1", text: "VARIABLE SPEED, DIRECT DRIVE SUPPLY FAN." }]), undefined);
+  assert.equal(vfd([{ id: "1", text: "PROVIDE PUMP WITH VARIABLE FREQUENCY DRIVE RATED MOTOR AND SHAFT GROUNDING RING." }]), undefined);
+});
+
+test("dev 3: a central controller the units connect to is their interface; BACnet spelled BACKNET is BACnet; an N-speed motor's speeds", () => {
+  const v = (text: string, attrs: string[]) => noteValues({ id: "5", text }, new Set(attrs)).map((x) => `${x.attr}=${x.value}`);
+  assert.deepEqual(v("PROVIDE AND CONNECT ALL INDOOR UNITS TO A CENTRAL AE - 200A CONTROLLER.", ["bas_interface"]), ["bas_interface=CENTRAL AE-200A CONTROLLER"]);
+  assert.deepEqual(v("PROVIDE AND CONNECT ALL OUTDOOR UNITS TO A SINGLE CENTRAL AE - 200A CONTROLLER.", ["bas_interface"]), ["bas_interface=CENTRAL AE-200A CONTROLLER"]);
+  assert.deepEqual(v("PROVIDE A CENTRAL CONTROLLER FOR THE SYSTEM.", ["bas_interface"]), []);
+  assert.deepEqual(v("DOAS UNIT TO BE PROVIDED WITH FACTORY CONTROLS WITH BACKNET INTERFACE. SEE DOAS UNIT SPECIFICATIONS.", ["bas_interface"]), ["bas_interface=BACNET"]);
+  assert.deepEqual(v("PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER.", ["fan_speeds", "ecm"]), ["ecm=yes", "fan_speeds=3"]);
+  assert.deepEqual(v("PROVIDE THREE SPEED FAN SWITCH.", ["fan_speeds"]), ["fan_speeds=3"]);
+  assert.deepEqual(v("PROVIDE 2 SPEED COMPRESSOR.", ["fan_speeds"]), []);
+  assert.deepEqual(v("PROVIDE FAN SPEED CONTROLLER.", ["fan_speeds"]), []);
+});
+
+test("dev 3: a control list's last two items joined by AND keep only the control device", () => {
+  assert.deepEqual(controlItems("PROVIDE FACTORY-INSTALLED DISCONNECT SWITCH, INTEGRAL FAN SPEED CONTROLLER AND BIRD SCREEN."), ["INTEGRAL FAN SPEED CONTROLLER"]);
+  assert.deepEqual(controlItems("PROVIDE TWO SPEED FAN AND WALL MOUNTED THERMOSTAT."), ["TWO SPEED FAN AND WALL MOUNTED THERMOSTAT"]);
+});
+
+test("dev 3: an unlabeled numbered list inside the table at its left edge is the table's notes; the header band past a gap is not", () => {
+  // 096_IN's AHU index (page 19): notes 1-4 between the title and the header
+  // band, with no NOTES / REMARKS label.
+  const spans: NoteSpan[] = [
+    { str: "AIR HANDLING UNIT SYSTEM INDEX SCHEDULE", x0: 2400, y0: 160, x1: 3300, y1: 190 },
+    { str: "1. AHU TO HAVE SINGLE POINT CONNECTION FOR 460/3 POWER AND A SEPARATE CONNECTION FOR 120/1.", x0: 232, y0: 271, x1: 1197, y1: 290 },
+    { str: "2. MOUNT AHU ON MINIMUM 6\" HIGH CONCRETE PAD WHICH EXTENDS 6\" BEYOND PERIMETER OF AHU.", x0: 232, y0: 292, x1: 1158, y1: 310 },
+    { str: "3. UNIT IS REQUIRED TO BE BUILT TO PRECISE OUTER DIMENSIONS AS NOTED ON SHEET M-507.", x0: 232, y0: 313, x1: 1747, y1: 331 },
+    { str: "4. DOAS UNIT TO BE PROVIDED WITH FACTORY CONTROLS WITH BACKNET INTERFACE. SEE DOAS UNIT SPECIFICATIONS.", x0: 232, y0: 333, x1: 1329, y1: 352 },
+    { str: "MARK", x0: 240, y0: 404, x1: 320, y1: 422 },
+    { str: "LOCATION", x0: 513, y0: 404, x1: 621, y1: 422 },
+    { str: "AHU-4", x0: 240, y0: 560, x1: 330, y1: 578 },
+    { str: "1,2,3,4", x0: 5321, y0: 560, x1: 5423, y1: 578 },
+  ];
+  const notes = scheduleNotes(spans, [227, 134, 5450, 627]);
+  assert.deepEqual(notes.map((n) => n.id), ["1", "2", "3", "4"]);
+  assert.equal(notes[3].text, "DOAS UNIT TO BE PROVIDED WITH FACTORY CONTROLS WITH BACKNET INTERFACE. SEE DOAS UNIT SPECIFICATIONS.");
+  // A table whose rows happen to hold one numbered line is not a notes list.
+  assert.deepEqual(scheduleNotes([
+    { str: "1. SEE PLANS FOR LOCATION OF ALL UNITS", x0: 232, y0: 271, x1: 900, y1: 290 },
+    { str: "MARK", x0: 240, y0: 404, x1: 320, y1: 422 },
+  ], [227, 134, 5450, 627]), []);
 });
 
 test("a block labelled REMARKS: is read like NOTES:; a REMARKS column header is not a label; a note naming makers is not a list", () => {
@@ -375,4 +457,37 @@ test("notes no row cites are the table's own; a cited note against the row's cel
   const starter = normalizeCompileItem(row("CHWP-1", "PUMP SCHEDULE", { SERVICE: "CHILLED", REMARKS: "PROVIDE WITH MOTOR STARTER" }), "PUMP", { headers: ["MARK", "SERVICE", "REMARKS"] });
   assert.equal(starter.attributes.vfd?.value, "no"); // 03_FL
   assert.equal(starter.attributes.vfd?.cite.header, "REMARKS");
+});
+
+test("dev 3 A/B: an unlabeled list ends at a table beside or below it, and at a number out of turn", () => {
+  // 01_NY page 88: the STEAM HUMIDIFIERS' notes 1-4 (no label), then the
+  // FANS table's title and header row, then that table's own notes 1-5.
+  const spans: NoteSpan[] = [
+    { str: "STEAM HUMIDIFIERS", x0: 4100, y0: 470, x1: 4600, y1: 495 },
+    { str: "MARK", x0: 2980, y0: 540, x1: 3060, y1: 565 },
+    { str: "H-1", x0: 2980, y0: 620, x1: 3030, y1: 645 },
+    { str: "1,2,3,4", x0: 5700, y0: 620, x1: 5800, y1: 645 },
+    { str: "1. PROVIDE INSULATED TUBES AND HEADERS, STAINLESS STEEL MOUNTING FRAME.", x0: 2978, y0: 725, x1: 4217, y1: 750 },
+    { str: "2. PROVIDE BACNET MSTP CONTROL INTERFACE, AIR PROVING SWITCH.", x0: 2978, y0: 754, x1: 4363, y1: 779 },
+    { str: "3. PROVIDE WITH STEAM SEPARATOR, Y-TYPE STRAINER, CONTROL VALVE AND STEAM TRAPS.", x0: 2978, y0: 783, x1: 5353, y1: 808 },
+    { str: "IRON IS PROHIBITED.", x0: 2995, y0: 812, x1: 3188, y1: 837 },
+    { str: "4. PROVIDE UNIT WITH SELF-ACTUATED CONDENSATE DRAIN COOLER. REFER TO PLANS FOR LOCATION.", x0: 2978, y0: 841, x1: 3947, y1: 866 },
+    { str: "FANS", x0: 4687, y0: 888, x1: 4754, y1: 914 },
+    { str: "UNIT NO", x0: 3603, y0: 936, x1: 3705, y1: 961 },
+    { str: "TYPE", x0: 3838, y0: 936, x1: 3903, y1: 961 },
+    { str: "CFM", x0: 4041, y0: 936, x1: 4096, y1: 961 },
+    { str: "1. PROVIDE FANS WITH VFD COMPATIBLE MOTOR AND COUNTER-WEIGHTED GRAVITY DAMPERS.", x0: 3584, y0: 1071, x1: 4589, y1: 1096 },
+    { str: "5. AIRFLOW SCHEDULED IS FINAL BALANCING VALUE AT END OF PHASE 2.", x0: 3584, y0: 1215, x1: 4892, y1: 1241 },
+  ];
+  const notes = scheduleNotes(spans, [2968, 467, 5877, 683]);
+  assert.deepEqual(notes.map((n) => n.id), ["1", "2", "3", "4"]);
+  assert.equal(notes[2].text, "PROVIDE WITH STEAM SEPARATOR, Y-TYPE STRAINER, CONTROL VALVE AND STEAM TRAPS. IRON IS PROHIBITED.");
+  assert.equal(notes[3].text, "PROVIDE UNIT WITH SELF-ACTUATED CONDENSATE DRAIN COOLER. REFER TO PLANS FOR LOCATION.");
+});
+
+test("dev 3 A/B: a note's outdoor air share is never a mode's", () => {
+  const v = (text: string) => noteValues({ id: "3", text }, new Set(["outdoor_air_pct"])).map((x) => x.value);
+  assert.deepEqual(v("100% OUTDOOR AIR EMERGENCY EPIDEMIC MODE DUTY."), []);
+  assert.deepEqual(v("UNIT SHALL PROVIDE 100% OUTSIDE AIR SMOKE PURGE."), []);
+  assert.deepEqual(v("100% OSA UNIT."), [100]);
 });

@@ -70,8 +70,27 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
     return NOTES_LABEL.test(first) && s.box[0] >= ru0 - 3 * lineH && s.box[0] <= ru1 - 0.1 * width
       && s.box[1] >= rv0 + Math.min(0.2 * height, 6 * lineH) && s.box[1] <= rv1 + 6 * lineH;
   }).sort((a, b) => a.box[1] - b.box[1]);
-  const label = labels.find((s) => s.box[0] <= ru0 + 0.2 * width)
+  let label = labels.find((s) => s.box[0] <= ru0 + 0.2 * width)
     ?? labels.find((s) => /:/.test(s.str.split(/\s+(?=\d{1,2}[.)]|\(\d{1,2}\))/)[0]));
+  // No label: a numbered list printed inside the table at its left edge ("1.
+  // AHU TO HAVE …", "2. MOUNT AHU …" between the title and the header band) is
+  // the table's notes. Its first two notes are prose on consecutive lines at
+  // one indent; the list reads as if a label sat just above note 1, and a
+  // wider gap than a wrapped line's ends it (the header band or the rows).
+  let unlabeled = false;
+  if (!label) {
+    const numbered = (s: Framed, id: string) => new RegExp(`^\\s*${id}\\s*[.)]\\s+\\S+(?:\\s+\\S+){2,}`).test(s.str);
+    const first = framed
+      .filter((one) => numbered(one, "1") && one.box[0] >= ru0 - 3 * lineH && one.box[0] <= ru0 + 0.2 * width
+        && one.box[1] >= rv0 && one.box[3] <= rv1 + 6 * lineH
+        && framed.some((two) => numbered(two, "2") && Math.abs(two.box[0] - one.box[0]) <= lineH
+          && two.box[1] > one.box[1] && two.box[1] - one.box[3] <= 1.6 * lineH))
+      .sort((a, b) => a.box[1] - b.box[1])[0];
+    if (first) {
+      label = { box: [first.box[0], first.box[1] - 1.2 * lineH, first.box[0] + lineH, first.box[1] - 0.2 * lineH], str: "NOTES:" };
+      unlabeled = true;
+    }
+  }
   if (!label) return [];
 
   // One list: the block under a label, its notes, and the label of a second
@@ -100,8 +119,9 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
     for (const s of candidates) {
       if (s.box[0] >= stopU) continue;
       // A gap ends the block; the label's own may sit a little apart from its
-      // list's first line.
-      if (s.box[1] - bottom > (block.length ? 2.5 : 4) * lineH) break;
+      // list's first line. An unlabeled list inside the table ends at any gap
+      // wider than a wrapped line's.
+      if (s.box[1] - bottom > (unlabeled ? 1.6 : block.length ? 2.5 : 4) * lineH) break;
       // Another notes label ends the block when it sits over the notes; one
       // beside them (the next table's REMARKS: to their right) only ends the
       // block's width where it starts.
@@ -142,6 +162,8 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
     for (const s of block.filter(isMarker).sort((a, b) => a.box[0] - b.box[0])) {
       if (!starts.length || s.box[0] - starts[starts.length - 1] > 3 * lineH) starts.push(s.box[0]);
     }
+    // An unlabeled list is one column: its first number's.
+    if (unlabeled && firstMarker) starts.splice(0, starts.length, ...starts.filter((u) => Math.abs(u - firstMarker.box[0]) <= 3 * lineH).slice(0, 1));
     if (!starts.length) return { notes: [], next };
     // A span left of the first column (a legend beside the notes) is in none.
     const columnOf = (s: Framed) => {
@@ -173,15 +195,30 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box): Schedule
       const read: Framed[] = [];
       for (const line of lines) {
         line.sort((a, b) => a.box[0] - b.box[0]);
+        // An unlabeled list is prose at its left edge: a line that starts
+        // away from it, or that is set in cells (a table's title, header or
+        // row beside or below the notes), ends it.
+        if (unlabeled) {
+          const startsAway = line[0].box[0] > starts[c] + 3 * lineH || line[0].box[0] < starts[c] - lineH;
+          const cells = line.some((s, i) => i > 0 && s.box[0] - line[i - 1].box[2] > 2.5 * lineH);
+          if (startsAway || cells) break;
+        }
         let edge = starts[c] + 12 * lineH;
         for (const s of line) {
           if (s.box[0] > edge) break;
           read.push(s);
-          edge = s.box[2] + 4 * lineH;
+          edge = s.box[2] + (unlabeled ? 2.5 : 4) * lineH;
         }
       }
+      let expected = 1;
       for (const s of read) {
         const m = isMarker(s) ? s.str.match(NOTE_NUMBER) : null;
+        // An unlabeled list counts up from 1: a number out of turn (another
+        // list's) ends it.
+        if (m && unlabeled) {
+          if ((m[1] ?? m[2]) !== String(expected)) break;
+          expected++;
+        }
         if (m) columns[c].push({ id: (m[1] ?? m[2]).toUpperCase(), text: s.str.slice(m[0].length).trim() });
         else if (columns[c].length) {
           const last = columns[c][columns[c].length - 1];
@@ -239,6 +276,39 @@ function sentenceSystem(sentence: string): RegExp | null {
   return /\bSNOW\s*-?\s*MELT/;
 }
 
+const DRIVE_WORDS = /\b(?:VFDS?|VSDS?|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVES?)\b/;
+const EC_MOTOR = /\bECMS?\b|\bEC\s+MOTORS?\b|\bELECTRONICALLY\s+COMMUTATED\b/;
+/** A motor rated for a drive: "VFD RATED MOTOR", "VARIABLE FREQUENCY DRIVE
+ * RATED", "INVERTER DUTY MOTOR", "VFD COMPATIBLE". */
+const DRIVE_RATED = /\b(?:(?:VFDS?|VSDS?|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVES?)\s*-?\s*(?:RATED|DUTY|COMPATIBLE|READY)|INVERTER\s*-?\s*(?:DUTY|RATED))\b/;
+const DRIVE_RATED_ALL = new RegExp(DRIVE_RATED.source, "g");
+
+/** Whether a note rates the unit's motor for a drive ("PROVIDE PUMP WITH
+ * VARIABLE FREQUENCY DRIVE RATED MOTOR", "INVERTER DUTY MOTOR"): built to run
+ * on a VFD, which alone does not say one runs it. */
+export function motorRatedForDrive(text: string): boolean {
+  return DRIVE_RATED.test(String(text ?? "").toUpperCase().replace(/\s+/g, " "));
+}
+
+/** Whether a note calls the unit's fan or pump variable speed ("VARIABLE
+ * SPEED, DIRECT DRIVE SUPPLY FAN"): not a compressor, and not a drive's own
+ * name. */
+export function variableSpeed(text: string): boolean {
+  return String(text ?? "").toUpperCase().replace(/\s+/g, " ").split(/[.;]/)
+    .some((s) => /\bVARIABLE\s*-?\s*SPEED\b(?!\s+(?:DRIVES?|COMPRESSORS?|SCROLL)\b)/.test(s) && !/\bCOMPRESSORS?\b/.test(s));
+}
+
+/** Whether a sentence offers an EC motor and a drive as alternatives ("PROVIDE
+ * FANS WITH EC MOTORS (MOTOR MOUNTED) OR VARIABLE FREQUENCY DRIVES"): each
+ * unit has one or the other, so it states neither for a unit. */
+export function ecmOrDrive(sentence: string): boolean {
+  const s = String(sentence ?? "").toUpperCase().replace(/\s+/g, " ");
+  const ec = s.search(EC_MOTOR);
+  const drive = s.search(DRIVE_WORDS);
+  if (ec < 0 || drive < 0) return false;
+  return /\bOR\b/.test(s.slice(Math.min(ec, drive), Math.max(ec, drive)));
+}
+
 /** What a note states, in the few forms that are unambiguous. `attrs` is
  * the family's attribute set; nothing is returned for an attribute outside it.
  * `service` is the row's SERVICE / SYSTEM text, when it prints one: a
@@ -250,13 +320,27 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>, servi
   const put = (attr: string, value: string | number, rule: string) => { if (attrs.has(attr)) out.push({ attr, value, noteId: note.id, rule }); };
   const negated = (word: string) => new RegExp(`\\b(?:NO|WITHOUT|NOT|NON)\\b[^.;]*${word}`).test(t);
   // A VFD the unit's fan or motor runs on: not a compressor's own drive
-  // ("VARIABLE SPEED COMPRESSOR WITH FACTORY VFD"). An inverter-duty motor is
-  // one built to run on a VFD.
-  const drives = t.split(/[.;]/).filter((sentence) => /\b(?:VFDS?|VSDS?|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVES?)\b/.test(sentence));
+  // ("VARIABLE SPEED COMPRESSOR WITH FACTORY VFD"), not a motor rated for one
+  // ("VFD RATED MOTOR", "INVERTER DUTY MOTOR": built to run on a drive, which
+  // says a drive runs it only beside a variable-speed statement), and not
+  // one offered as the alternative to an EC motor ("EC MOTORS OR VARIABLE
+  // FREQUENCY DRIVES": each unit has one or the other, which the row names).
+  const sentences = t.split(/[.;]/);
+  const plain = sentences.filter((sentence) => !ecmOrDrive(sentence));
+  const drives = plain.filter((sentence) => DRIVE_WORDS.test(sentence.replace(DRIVE_RATED_ALL, " ")));
   const fanDrive = drives.some((sentence) => !/\bCOMPRESSORS?\b/.test(sentence) || /\b(?:FANS?|BLOWERS?|MOTORS?)\b/.test(sentence));
   if (fanDrive && !negated("(?:VFD|VSD|VARIABLE)")) put("vfd", "yes", "note.vfd");
-  else if (/\bINVERTER\s*-?\s*DUTY\s+MOTORS?\b/.test(t)) put("vfd", "yes", "note.inverter_duty_motor");
-  if (/\bECMS?\b|\bEC\s+MOTORS?\b|\bELECTRONICALLY\s+COMMUTATED\b/.test(t) && !negated("(?:ECM|EC MOTOR)")) put("ecm", "yes", "note.ecm");
+  else if (motorRatedForDrive(t) && variableSpeed(t)) put("vfd", "yes", "note.drive_rated_variable_speed");
+  if (plain.some((sentence) => EC_MOTOR.test(sentence)) && !negated("(?:ECM|EC MOTOR)")) put("ecm", "yes", "note.ecm");
+  // "PROVIDE 3-SPEED EC MOTOR", "THREE SPEED FAN SWITCH": the speeds the
+  // unit's fan runs at (never a compressor's, and a speed controller is no
+  // count).
+  for (const sentence of sentences) {
+    const sp = sentence.match(/\b(\d|TWO|THREE|FOUR)\s*-?\s*SPEED\b(?!\s+(?:DRIVES?|CONTROLL?(?:ER)?S?)\b)/);
+    if (!sp || /\bCOMPRESSORS?\b/.test(sentence) || !/\b(?:MOTORS?|FANS?|BLOWERS?|SWITCH(?:ES)?)\b/.test(sentence)) continue;
+    const n = ({ TWO: 2, THREE: 3, FOUR: 4 } as Record<string, number>)[sp[1]] ?? Number(sp[1]);
+    if (n >= 2 && n <= 6) { put("fan_speeds", n, "note.fan_speeds"); break; }
+  }
   // An existing system counts only as what the unit is connected to
   // ("CONNECT TO EXISTING BMS"), not one that merely gains points.
   // Then, in order: BACnet with the variant it names (MS/TP, IP); LonWorks;
@@ -264,14 +348,18 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>, servi
   // INTERFACE", "PROVIDE WITH ABB INTERFACE"); an existing system the unit
   // connects to; the system its controller interfaces with ("INTERFACE WITH
   // BUILDING AUTOMATION SYSTEM"). A component connected to a BAS ("… AIR
-  // PURIFICATION SYSTEM. CONNECT TO BAS") is not the unit's interface.
-  const bacnet = t.match(/\bBACNET\b(?:\s*[-/]?\s*(MS\s*\/\s*TP|MSTP|IP)\b)?/);
+  // PURIFICATION SYSTEM. CONNECT TO BAS") is not the unit's interface. A
+  // central controller the units connect to ("CONNECT ALL INDOOR UNITS TO A
+  // CENTRAL AE-200A CONTROLLER") is last. BACnet spelled BACKNET is BACnet.
+  const bacnet = t.match(/\bBACK?NET\b(?:\s*[-/]?\s*(MS\s*\/\s*TP|MSTP|IP)\b)?/);
   const named = t.match(/\bPROVIDE\s+(?:WITH\s+)?(?:AN?\s+)?((?:[A-Z0-9&]+\s+){0,2}[A-Z0-9&]+)\s+INTERFACE\b/);
   const namedOk = named && !/^(?:(?:COMMUNICATIONS?|NETWORK|CONTROLS?|FACTORY|INSTALLED|MOUNTED|FIELD|UNIT|SYSTEM|THE|OPERATOR|USER)\s*)+$/.test(named[1]);
   const existing = t.match(/\b(?:CONNECT(?:ED|ION)?|INTERFACE[DS]?|INTEGRATE[DS]?|INTEGRATION|TIED?|COMMUNICATES?|COMMUNICATION)\b[^.;]*?\b(?:TO|INTO|WITH)\s+(?:THE\s+)?(EXISTING\s+(?:BMS|BAS|EMS|EMCS|DDC))\b/);
   const interfaced = t.match(/\bINTERFACE[DS]?\s+WITH\s+(?:THE\s+)?(BMS|BAS|EMS|EMCS|DDC(?:\s+SYSTEM)?|BUILDING\s+(?:AUTOMATION|MANAGEMENT)\s+SYSTEM)\b/);
+  const central = t.match(/\bCONNECT(?:ED)?\b[^.;]*?\bTO\s+(?:AN?\s+|THE\s+)?(?:(?:SINGLE|COMMON|ONE)\s+)?(CENTRAL\s+(?:[A-Z0-9]+(?:\s*-\s*[A-Z0-9]+)*\s+){0,3}CONTROLLER)\b/);
   const bas = bacnet ? (bacnet[1] ? `BACNET ${bacnet[1].replace(/\s+/g, "")}` : "BACNET") : /\bLONWORKS\b/.test(t) ? "LONWORKS" : /\bMODBUS\b/.test(t) ? "MODBUS"
-    : /\bHARD\s*-?\s*WIRED?\s+INTERFACE\b/.test(t) ? "HARDWIRE" : namedOk ? named![1] : existing?.[1] ?? interfaced?.[1] ?? null;
+    : /\bHARD\s*-?\s*WIRED?\s+INTERFACE\b/.test(t) ? "HARDWIRE" : namedOk ? named![1] : existing?.[1] ?? interfaced?.[1]
+    ?? (central ? central[1].replace(/\s*-\s*/g, "-").replace(/\s+/g, " ") : null);
   if (bas) put("bas_interface", bas, "note.bas_interface");
   // The loop's glycol, by sentence: one that opens with a water system
   // speaks for that system's rows only.
@@ -291,8 +379,11 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>, servi
   if (merv.length) put("filter_merv", Math.max(...merv), "note.final_filter");
   const controls = controlItems(note.text);
   if (controls.length) put("control", controls.join("; "), "note.control");
-  // "100% OSA UNIT": the outdoor air share of the supply.
-  const oa = t.match(/\b(\d{1,3})\s*%\s*(?:OSA|OA|O\.A\.|OUTSIDE\s+AIR|OUTDOOR\s+AIR)\b/);
+  // "100% OSA UNIT": the outdoor air share of the supply; never a mode's
+  // ("100% OUTDOOR AIR EMERGENCY EPIDEMIC MODE", a smoke purge), which is
+  // not the design minimum.
+  const oa = sentences.map((sentence) => ({ sentence, m: sentence.match(/\b(\d{1,3})\s*%\s*(?:OSA|OA|O\.A\.|OUTSIDE\s+AIR|OUTDOOR\s+AIR)\b/) }))
+    .find((x) => x.m && !/\b(?:MODE|EMERGENCY|EPIDEMIC|PANDEMIC|SMOKE|PURGE|FLUSH|ECONOMIZER|ECONOMIZING)\b/.test(x.sentence))?.m;
   if (oa && Number(oa[1]) <= 100) put("outdoor_air_pct", Number(oa[1]), "note.outdoor_air_pct");
   // "WITH STATIC PLATE ENERGY RECOVERY", "ENTHALPY WHEEL TYPE": the type of
   // energy recovery the unit has.
@@ -339,6 +430,12 @@ export function controlItems(text: string): string[] {
     items.push(cur);
     for (let item of items) {
       item = item.trim().replace(/^(?:AND|&)\s+/, "");
+      // "INTEGRAL FAN SPEED CONTROLLER AND BIRD SCREEN": the list's last two
+      // items, joined; the one naming no control device is another item.
+      const parts = item.split(/\s+(?:AND|&)\s+/);
+      if (parts.length > 1 && parts.some((p) => CONTROL_DEVICE.test(p)) && parts.some((p) => !CONTROL_DEVICE.test(p))) {
+        item = parts.filter((p) => CONTROL_DEVICE.test(p)).join(" AND ");
+      }
       if (!CONTROL_DEVICE.test(item) || /\bDISCONNECT\b/.test(item)) continue;
       // "UNIT SHALL TURN ON WITH LOCAL SWITCH": the device after its WITH.
       const withAt = item.lastIndexOf(" WITH ");
