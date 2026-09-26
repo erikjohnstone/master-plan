@@ -201,6 +201,20 @@ After CI-4 to CI-8 (dev replay, 17 of 244):
 **Next:** open. None of these is a key edit. Reading absences of a drawn device (094 smoke detectors) needs a
 fourth, structurally different reader. It is not a weaker agreement rule.
 
+**Re-checked 2026-09-26, at 96df544 (after CI-11 to CI-23):** the same 17, and each is a rule doing what it is
+for. GATE B2's class R stays 55/71 (it asks for 57):
+- the five absences (094's three smoke detectors and AHU-06's economizer, bldg5406 AC-1's setpoint adjustment): R0
+  and one vision run find no device, and the other run does not say so; C9 asks for both;
+- the boiler pumps: the readers' evidence is from the heating water system's drawings and names no pump
+  (CI2, attribution); R1 reads "commands" and R2 "monitors only" besides;
+- federal AHU-1: the return fan and relief fan are one choice and the drawing reads as both (C12); its differential
+  economizer and freezestat are R0's alone (C8); CH-1 has one R1 absence and nothing else;
+- federal EF-1: R1 reads the hardwired damper interlock as "no" against three readers' "yes" (a verified
+  disagreement, C12). In GATE D's live re-run R1 said "not shown" and the damper applied, right (CI-24): the
+  question sits on R1's sampling;
+- itd HUM-1: R0 alone (C8).
+Each would need a weaker CI2, C8, C9 or C12 to apply, which the goal forbids.
+
 ## CI-10: held-out project and binding keys were authored after WP2/WP3 code existed (PROCESS NOTE, not a bug)
 
 **What:** GATE 0 asks for the held-out `project.csv` and `binding.csv` before any Track A/B code runs on those
@@ -628,3 +642,43 @@ byte-identical (twice, all 11 documents): a saved project reads exactly as it wa
 
 **Not changed:** the gate's 2% holds. Pinning R1's temperature to 0 would not make the provider deterministic, and it
 would change every recorded request (a new prompt version) for no measured gain.
+
+## CI-25: a unit's mark printed with a space named no unit, so "DOAS 3 P&ID" was every DOAS's detail (FIXED, next commit)
+
+**Found:** 2026-09-26, a census of the units bound only by proposals over the non-held-out sets, grouped by why
+(223 units after CI-21; most are C5 working: electric cabinet unit heaters kept off a "HOT WATER UNIT HEATER"
+detail, condensate pumps off a domestic water booster sequence, supply fans off exhaust schematics). 028_TX's three
+DOAS units each took "DOAS 1&2 P&ID", "DOAS 3 P&ID" and "DOAS 3 VAV BOX P&ID" as family-detail proposals, and its
+11 fan coils took "FCU P&ID" as one. CI-21 had held "P&ID" back: read as the drawing's kind, it left "3" as a
+qualifier, and DOAS-1's row confirmed it by its voltage, "460/3/60".
+
+**What:**
+- `titleTags` read a tag only with its hyphen ("DOAS-3"), so a title printing the mark with a space named no unit.
+- A bare number left as a qualifier was confirmed by any digit its row printed.
+
+**Fix (`binding.ts`):**
+- A mark printed with a space ("DOAS 3", "DOAS 1&2") is a tag when its letters and number make a scheduled
+  unit's mark. A number after a word never is otherwise: "LEVEL 2", "VAV 100% OA" beside no VAV-100.
+- A number a title prints that no tag reading takes ("BOILER 3" beside boilers marked B-n) names a unit by its mark.
+  Only the unit's own mark confirms it, never a digit its row prints elsewhere.
+- "P&ID" (piping and instrumentation diagram, ANSI/ISA-5.1) is a drawing's kind, like DIAGRAM: no qualifier.
+
+**Checked:**
+- The new binder test fails without the fix.
+- Over the 86 non-held-out sets with packets (1,969 bindings), only 028_TX's bindings change:
+  - DOAS-1 and DOAS-2 take "DOAS 1&2 P&ID" by their list;
+  - DOAS-3 takes "DOAS 3 P&ID" and "DOAS 3 VAV BOX P&ID" by its tag;
+  - no DOAS takes another's drawing;
+  - the 11 fan coils take "FCU P&ID" as their family's detail.
+  1,964 bindings remain, the rest byte-identical. CI-23's check still flags none, and the dev documents' bindings are
+  byte-identical.
+- 028_TX read live with the fix: 0 → 25 applied, all right against their cites:
+  - the three DOAS units' duct smoke detectors (each P&ID's points list prints "DUCT SMOKE DETECTOR");
+  - the fan coils' variable speed fan ("INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN");
+  - the fan coils' role ("THE BAS SHALL ENERGIZE THE CHILLED WATER COIL").
+- The audit now stands at 53 unseen sets, 363 applied, 363 right.
+
+**Watch:** "DOAS 3 VAV BOX P&ID" is the drawing of the boxes DOAS-3 serves, and it names DOAS-3; it is now one of
+DOAS-3's own drawings. Nothing it prints was applied to DOAS-3 alone (its smoke detector is read in "DOAS 3 P&ID"
+too). A title that names a unit but whose subject is another kind of equipment (the unit as the owner of what the
+drawing shows) is left to a later batch, with the census that would size it.

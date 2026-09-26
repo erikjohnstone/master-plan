@@ -406,6 +406,33 @@ test("a title's qualifiers are the unit's: another subject joined by AND, the fa
   assert.deepEqual([0, 1, 2].map((i) => of(scoped, i)), [["ef:family_detail"], ["ef:family_detail"], ["ef:family_detail"]]);
 });
 
+test("a mark printed with a space is a tag when it is a scheduled unit's; a number in a title names a unit by its mark, never a digit its row prints elsewhere; P&ID is no qualifier", () => {
+  // Robustness find (an unseen set): "DOAS 3 P&ID" and "DOAS 1&2 P&ID" were
+  // family details of every DOAS, and reading P&ID as a drawing's kind let
+  // "3" be confirmed by DOAS-1's "460/3/60".
+  const sched = ["DOAS-1", "DOAS-2", "DOAS-3", "VAV-1"].map((t) => tagKey(t)!);
+  const tags = (t: string) => titleTags(t, sched).map((x) => `${x.key.prefix}-${x.key.n}:${x.how}`);
+  assert.deepEqual(tags("DOAS 3 P&ID"), ["DOAS-3:tag"]);
+  assert.deepEqual(tags("DOAS 1&2 P&ID"), ["DOAS-1:list_range", "DOAS-2:list_range"]);
+  assert.deepEqual(tags("DOAS 4 P&ID"), [], "no DOAS-4 is scheduled");
+  assert.deepEqual(tags("VAV 100% OUTSIDE AIR"), [], "a quantity after a unit's letters is no tag");
+  assert.deepEqual(tags("LEVEL 2 VAV BOX DIAGRAM"), []);
+  const volts = { "ELECTRICAL": "460/3/60" };
+  const units = [1, 2, 3].map((n) => unit(n - 1, `DOAS-${n}`, "DOAS", "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE", volts));
+  const b = bindPackets([packet("p12", "DOAS 1&2 P&ID", "diagram"), packet("p3", "DOAS 3 P&ID", "diagram")], units);
+  assert.deepEqual(b.get(0)?.map((x) => [x.packet, x.kind, Boolean(x.proposal)]), [["p12", "list_range", false]]);
+  assert.deepEqual(b.get(2)?.map((x) => [x.packet, x.kind, Boolean(x.proposal)]), [["p3", "tag", false]]);
+  // A number no tag reading takes ("BOILER 3" beside boilers marked B-n) is
+  // confirmed by the unit's own mark only.
+  const boilers = [1, 3].map((n, i) => unit(i, `B-${n}`, "BOILER", "BOILER SCHEDULE", volts));
+  const bb = bindPackets([packet("p1", "BOILER 3 CONTROL DIAGRAM", "diagram")], boilers);
+  assert.equal(bb.get(0)?.[0].proposal, true, "B-1's row prints a 3 in its voltage, which names nothing");
+  assert.equal(bb.get(1)?.[0].proposal, undefined, "B-3 is the boiler numbered 3");
+  // P&ID says what kind of drawing it is, not which unit.
+  const fcus = [unit(0, "FCU 1-3", "FCU", "CHILLED WATER FAN COIL UNIT SCHEDULE")];
+  assert.deepEqual(bindPackets([packet("p1", "FCU P&ID", "diagram")], fcus).get(0)?.map((x) => [x.kind, Boolean(x.proposal)]), [["family_detail", false]]);
+});
+
 test("components: a unit in another scheduled unit takes its packets; one located in an unscheduled terminal unit takes that kind's detail", () => {
   const ahuSoo = packet("s", "AHU-1 SEQUENCE OF OPERATIONS", "sequence");
   const tu = packet("tu", "VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM", "diagram");

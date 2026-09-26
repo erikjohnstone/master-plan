@@ -263,7 +263,11 @@ Done so far (dev only; held-out keys not yet authored):
   heap, and after 254 s with 12 GB, when the container's own limit (about 13 GB) kills the child. An extraction
   ceiling on this machine, not a reading one. The eleven unseen sets with schedules but no control packets have no
   zone-titled page either, so no reading can apply on them.
-- **GATE D, the robustness suite (dev; next commit): the adversarial swap found CI-23; every item now passes.**
+- **GATE D, the robustness suite (dev; 96df544 and the next commit): the adversarial swap found CI-23; every item
+  now passes.** The suite is an instrument, `mcp/scripts/control-intent-robustness-eval.mjs` (report
+  `reports/control-intent/05-robustness-dev.{json,md}`). Its model runs are recorded under
+  `reports/control-intent/robustness-runs/`: the swap's 242 and the last live re-run's 181. So the whole suite
+  replays without calling a model; `--live` calls the models for what is not recorded, and re-runs afresh.
   - **Negative controls** (004, baker-county-eoc). The gate's premise, no control packets, no longer holds: the
     finder reads 5 and 3 packets (the rooftop units' sequences). Their readings apply 12 and 2 option decisions,
     each what its sequence prints: 004's six RTUs' relief dampers ("THE BAROMETRIC RELIEF DAMPERS SHALL OPEN") and
@@ -285,11 +289,11 @@ Done so far (dev only; held-out keys not yet authored):
     store) changes **7 of 491 decisions (1.4%)**, all federal-mech, all R1 answering a fresh call differently
     (CI-24). Two new applied decisions are right by the key (AHU-1 freezestat to BAS false, EF-1 motorized damper
     true); four right ones drop to proposal or unresolved; no wrong one appears. PASS.
-  - **Raster:** no raster rendition of a dev document is staged, so one was built in the scratchpad for
-    baker-county-eoc (65 pages) and bldg5406-hvac-demo (22 pages): every page one 200 dpi image, no text layer.
-    The same pipeline compiles 0 items and 0 packets from them, so nothing applies: ⊆ the vector document's, 0
-    wrong. PASS, and a recall of zero: the vector pipeline has no OCR fallback for schedules (the gap queued since
-    20_TX_JudsonISD).
+  - **Raster:** the corpus stages one rendition of a dev document, `itd-d1-lab-raster` (its M1.0 plan sheet,
+    flattened to an image). It compiles 0 items and 0 packets, so nothing applies: ⊆ the vector document's 38, 0
+    wrong. Two whole documents rendered in the scratchpad (baker-county-eoc, 65 pages, and bldg5406-hvac-demo, 22:
+    every page one 200 dpi image, no text layer) give the same. PASS, with a recall of zero: the vector pipeline
+    has no OCR fallback for schedules (the gap queued since 20_TX_JudsonISD).
   - **Cost** (the live re-run, the platform endpoint): 181 model calls and 1.32 M tokens for the 11 documents;
     wall time per document at most 109 s (federal-mech), 386 s for all. PASS (≤ 5 minutes each).
 - **CI-23 (readers, combiner):** a binding that makes a packet the unit's own is checked against the print. The
@@ -303,6 +307,24 @@ Done so far (dev only; held-out keys not yet authored):
   unverified; no absence is read through it. Over the 86 non-held-out sets with packets (1,969 bindings) the
   check flags none. Dev replay unchanged (227/244; the report is identical); the 53 audited unseen sets replay to
   the same 338 applied decisions, byte for byte.
+- **CI-25 (binder, next commit):** a unit's mark printed with a space ("DOAS 3 P&ID", "DOAS 1&2 P&ID") is its tag
+  when the letters and number make a scheduled unit's mark. A bare number in a title is confirmed only by the unit's
+  own mark, never by a digit its row prints elsewhere ("460/3/60"). "P&ID" is a drawing's kind, no qualifier (held
+  back from CI-21 until now). Over the 86 non-held-out sets only 028_TX's bindings change: its DOAS units take their
+  own P&IDs by tag and list, and its 11 fan coils "FCU P&ID". Read live: 0 → 25 applied there, all right; the
+  audit stands at 53 unseen sets, 363 applied, 363 right. Dev bindings are byte-identical.
+- **corpus-eval unchanged (cold, at 96df544):** over the 28 sets whose PDFs the baseline had, one child per scorer,
+  under the AS-15 reaper. Takeoff + reference, table recall and the tag census print every line the baseline prints
+  for them. The sheet graph matches too; baker-county-eoc's child was killed by the memory cgroup among four scorers,
+  exactly as at the baseline, and alone it gives the baseline's 78 right, 0 wrong, 13 missed. This had to be
+  measured: the scorers' import graph now reaches this loop's modules (174 modules, 16 changed since the baseline),
+  so the old argument from the import graph no longer holds. The graph scorer outlives corpus-eval.mjs's exit (tag-eval
+  exits 1 by design); the run's reaper must outlive it too, or its orphans run on.
+- **The corpus releases are covered.** The two releases (`corpus`, `corpus_2`) hold 257 PDFs on disk: the 121
+  sets' documents, 28 byte-identical copies, and 102 parts or pages of registered documents (the per-part splits
+  of the rejoined sets). What no set covers is one synthetic raster fixture (`federal-mech-legend-raster`) and one
+  real document, the Weld County mechanical permit set (8 pages, two copies). Its schedule sheets carry no text
+  layer, so the vector pipeline reads nothing there: the same OCR gap.
 - **Process notes:**
   - A directory listing printed a scratch backup of one held-out key row (bessemer HP-1's attributes, from the
     ASSEMBLIES key work). Nothing was changed from it; the CONTROL INTENT work does not touch attribute keys.

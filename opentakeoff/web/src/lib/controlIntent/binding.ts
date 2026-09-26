@@ -87,22 +87,31 @@ const keyString = (k: TagKey) => `${k.prefix}-${k.n}${k.suffix}`;
  * tags: "RTU-1, 2, 3" carries the prefix; "VAV-1 THRU VAV-9" and "EF-1 THRU
  * 3" take every scheduled tag of that prefix in the range. A list runs
  * only while tags and numbers follow one another with "," "&" "AND" or
- * "THRU" between; any other word ends it. */
+ * "THRU" between; any other word ends it. A mark printed with a space
+ * ("DOAS 3 P&ID", "DOAS 1&2 P&ID") is a tag when its letters and number make
+ * a scheduled unit's mark: never a number or word that happens to follow
+ * ("LEVEL 2", "VAV 100% OA" beside no VAV-100). */
 export function titleTags(title: string, scheduled: readonly TagKey[]): Array<{ key: TagKey; how: "tag" | "list_range" }> {
   const text = repairSpacing(title).replace(/[‐-―−﹘﹣－]/g, "-");
   // A qualified mark ("EF-B1", "WHSE-AHU-1") is one tag, never its mark alone.
   const toks = text.match(/[A-Z]{1,6}-[A-Z]{1,6}-?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|\d{1,4}[A-Z]{0,2}(?![A-Z0-9])|[A-Z][A-Z0-9%'\/]*|[,&()]|\S/g) ?? [];
   const out: Array<{ key: TagKey; how: "tag" | "list_range" }> = [];
+  const marks = new Set(scheduled.map(keyString));
   const add = (k: TagKey, how: "tag" | "list_range") => {
     const had = out.find((o) => sameTag(o.key, k));
     if (had) { if (how === "list_range") had.how = how; } else out.push({ key: k, how });
   };
   let last: TagKey | null = null;
   let pending: "list" | "range" | null = null;
+  let word: string | null = null;
   for (const tok of toks) {
     const t = tok.replace(/\s+/g, "");
     const prev = last as TagKey | null;
+    const before = word;
+    word = /^[A-Z]{1,6}$/.test(t) ? t : null;
+    const spaced = before && !pending && /^\d{1,4}[A-Z]{0,2}$/.test(t) ? tagKey(`${before}-${t}`) : null;
     const k: TagKey | null = /^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(t) ? tagKey(t)
+      : spaced && marks.has(keyString(spaced)) ? spaced
       : /^\d{1,4}[A-Z]{0,2}$/.test(t) && prev && pending ? tagKey(`${prev.qualifier ? `${prev.qualifier}-` : ""}${prev.prefix}-${t}`) : null;
     if (k) {
       if (pending === "range" && last && last.prefix === k.prefix) {
@@ -269,7 +278,7 @@ const SPLIT = /\bSPLIT\b/;
  * switched, never what it is: a bid alternate ("BID ALTERNATE #2",
  * "ALTERNATE 3", "BASE BID"; CSI MasterFormat 01 23 00 Alternates) and
  * two-position control ("ON/OFF", "ON OFF"). */
-const NOT_SUBJECT = /\b(?:(?:BID|ADD|DEDUCT)\s+)?ALTERNATES?\s*(?:NO\.?\s*|#\s*)?\d{1,2}[A-Z]?\b|\b(?:BID|ADD|DEDUCT)\s+ALTERNATES?\b|\bBASE\s+BID\b|\bON\s?[-\/]?\s?OFF\b/g;
+const NOT_SUBJECT = /\b(?:(?:BID|ADD|DEDUCT)\s+)?ALTERNATES?\s*(?:NO\.?\s*|#\s*)?\d{1,2}[A-Z]?\b|\b(?:BID|ADD|DEDUCT)\s+ALTERNATES?\b|\bBASE\s+BID\b|\bON\s?[-\/]?\s?OFF\b|\bP\s?&\s?ID\b/g;
 
 /** An abbreviation a title defines for its own words ("HEAT PUMP TERMINAL
  * UNIT (HP)": the letters are the initials of two or more words right
@@ -328,8 +337,14 @@ function qualifiers(title: string, u: RowUnit): string[] {
   return phrases;
 }
 
-/** Whether a qualifier is printed: "VAV/CAV" when either is. */
-const printedQualifier = (q: string, text: string) => (/^[A-Z0-9]+(?:\/[A-Z0-9]+)+$/.test(q) ? q.split("/") : [q]).some((a) => printed(a, text));
+/** Whether a qualifier is printed: "VAV/CAV" when either is. A number
+ * ("BOILER 3 CONTROL") names a unit by its mark: only the unit's own mark
+ * confirms it, never a digit its row prints elsewhere ("460/3/60"). */
+const printedQualifier = (q: string, text: string, u?: Pick<RowUnit, "tag">) => {
+  const n = q.match(/^(\d{1,4})([A-Z]{0,2})$/);
+  if (n) { const k = u ? tagKey(u.tag) : null; return Boolean(k && k.n === Number(n[1]) && k.suffix === n[2]); }
+  return (/^[A-Z0-9]+(?:\/[A-Z0-9]+)+$/.test(q) ? q.split("/") : [q]).some((a) => printed(a, text));
+};
 
 /** What a schedule's title says its units are, one spelling per meaning: no
  * scope note in parentheses ("(AHU 2)"), device noun, tag or number. */
@@ -757,7 +772,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       // is the other variant.
       const variant = partVariant(t.p.title, u, peers);
       if (variant === "contradicted") continue;
-      const unconfirmed = quals.filter((q) => !printedQualifier(q, text) && !(split && q === "SPLIT") && !q.split(" ").every((w) => variant.has(w)));
+      const unconfirmed = quals.filter((q) => !printedQualifier(q, text, u) && !(split && q === "SPLIT") && !q.split(" ").every((w) => variant.has(w)));
       const named = canonSubject(t.p.title);
       const apart = (special?.words ?? []).filter((w) => !named.includes(w));
       (byKind.get(t.p.kind) ?? byKind.set(t.p.kind, []).get(t.p.kind)!).push({ t, unconfirmed: [...unconfirmed, ...apart], apart, subject: namesRow(t.p.title, u, typeText(u), split), qualified: quals.length - unconfirmed.length });

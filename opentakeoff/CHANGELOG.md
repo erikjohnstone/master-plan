@@ -115,6 +115,14 @@
   bindings over 86 corpus sets, and the dev and unseen readings are
   byte-identical.
 
+  **A unit's mark printed with a space is its tag** ("DOAS 3 P&ID", "DOAS
+  1&2 P&ID"), when the letters and number make a scheduled unit's mark. A
+  number left in a title is confirmed only by the unit's own mark, never by
+  a digit its row prints elsewhere (a voltage's "460/3/60"), and "P&ID" is a
+  kind of drawing, not a qualifier. One unseen set's DOAS units and fan coils
+  now read their own P&IDs: 25 more readings apply, all right (363 of 363
+  across the 53 unseen sets). Nothing else changes.
+
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
   a child process, decoded per read, so a "°" falling on a 64 KiB boundary
