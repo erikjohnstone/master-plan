@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-09-26T05:13:58.130Z",
+  "side": "heldout",
+  "documents": [
+    "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+    "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+    "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+    "30_WA_SpokaneTransit_CoolingTower",
+    "bessemer",
+    "navfac-cherry-point-atc"
+  ],
+  "errors": [],
+  "gate": {
+    "applied_wrong_max": 0.02,
+    "invented": 0,
+    "verdict": {
+      "applied_wrong": true,
+      "invented": true
+    }
+  },
+  "summary": {
+    "total": {
+      "applied-right": 5,
+      "applied-wrong": 0,
+      "INVENTED": 0,
+      "proposal-right": 13,
+      "proposal-wrong": 6,
+      "unresolved": 0,
+      "abstained": 226
+    },
+    "applied": 5,
+    "applied_wrong_rate": 0,
+    "absence": {
+      "applied-right": 0,
+      "applied-wrong": 0,
+      "INVENTED": 0,
+      "proposal-right": 0,
+      "proposal-wrong": 0,
+      "unresolved": 0,
+      "abstained": 0
+    },
+    "uncited_applied": 0,
+    "readers": {
+      "r0": {
+        "right": 10,
+        "wrong": 0,
+        "abstained": 240,
+        "unverified": 0,
+        "undecided-key": 0
+      },
+      "r1": {
+        "right": 155,
+        "wrong": 3,
+        "abstained": 13,
+        "unverified": 42,
+        "undecided-key": 37
+      },
+      "r2a": {
+        "right": 41,
+        "wrong": 9,
+        "abstained": 28,
+        "unverified": 1,
+        "undecided-key": 9
+      },
+      "r2b": {
+        "right": 37,
+        "wrong": 6,
+        "abstained": 39,
+        "unverified": 0,
+        "undecided-key": 6
+      }
+    }
+  }
+}

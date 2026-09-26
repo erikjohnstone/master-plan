@@ -229,7 +229,18 @@ Done so far (dev only; held-out keys not yet authored):
   - The three unexposed documents carry 2 of the 191 keyed pairs (both hit). The held-out binding measure is
     therefore essentially navfac-cherry-point-atc, 060_XX (navfac's drafter) and 30_WA (27_WA's drafter): all
     three exposed (CI-16).
-  - B2 and C held-out: pending (the live readings on the held-out documents, then the typical eval).
+  - GATE B2 (readings, the reading part), six documents, live and recorded: PASS. 5 applied, 5 right (0% wrong),
+    0 INVENTED, 0 uncited; 13 proposals right, 6 wrong; 226 abstained. Per reader on keyed questions: R0 10 right,
+    0 wrong; R1 155 right, 3 wrong, 42 unverified; the two R2 runs 41 and 37 right, 9 and 6 wrong. The runs are
+    recorded under `reports/control-intent/runs/<held-out id>.jsonl` so the measure replays; the loop never reads
+    them.
+  - GATE C (end-to-end typicals), six documents, the key's answers and the recorded readings: FAIL. 33/91 exact
+    (36.3%) against at least 55; 5 dishonest (the same 5 as at GATE 5), 0 undisclosed. With the key's answers and
+    no readings: 32/91. With neither (the GATE 5 record): 21/91.
+  - The typical eval now counts its misses by why (aggregates; held-out prints no row). Held-out: of the wrong
+    options, 41 were bound and asked but nothing was read, 14 belong to units bound to no control packet, 8 had
+    no reading question, and 5 were read as proposals only; 6 records are unresolved. On these documents the
+    readers seldom reach the packet that governs a unit, as B1 shows.
 - **Found, not changed:**
   - 096_IN: "SEQUENCE OF OPERATION - CAV BOXES:" is read as a caption with its text above it, by one pixel, and
     swallows "SEQUENCE OF OPERATION - VAV BOXES:" printed above it. A heading ending in a colon introduces what
@@ -247,8 +258,12 @@ Done so far (dev only; held-out keys not yet authored):
   - The navfac `sweep_schedule_row` conformance test (another loop's) runs one call near that 60 s default.
     Alone, this branch passed 3 of 4 runs (107–108 s) and failed 1 on the timeout; `main` (5ab7ca8) passed 2 of 2
     with the same warm ODL cache (110–111 s) and failed 2 of 2 with a cold one. It is timing, the same on both.
-- **Next:** held-out B2 and C (live readings on the six held-out documents, then the typical eval); the two sets
-  the sweep could not snapshot (01_NY, 058_CA); the zone scan; corpus-eval unchanged.
+- **Sweep, the last two sets:** 01_NY and 058_CA cannot be snapshotted. Their sheet graphs are not cached, and
+  the graph build (extraction, not this loop's code) runs out of the child's 8 GB heap: 058_CA after 219 s. A
+  retry with a 12 GB heap is recorded below when it ends. The eleven unseen sets with schedules but no control
+  packets have no zone-titled page either, so no reading can apply on them.
+- **Next:** corpus-eval unchanged (cold); the held-out shortfalls (B1, C) written up as ceilings with their
+  aggregate miss reasons.
 
 The research that proposed the goal (2026-09-24):
 - **Research:** `plans/05-research/01–03`, the design plan

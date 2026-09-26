@@ -27,6 +27,12 @@
 //              or live (calls the models for what is not recorded, and records
 //              it; needs CEREBRAS_API_KEY).
 //
+// Every miss is also counted by why (missReasons): the instance's wrong
+// typical, unresolved record or unmatched row, and each wrong option by what
+// decided it or, where the library default stood, why no reading did
+// (unbound, no question, abstained, disagreement, proposal only). Counts
+// only: held-out prints no row (goals/CONTROL_INTENT.md instrument 5).
+//
 // Snapshots come from the attribute eval's child (assemblies-attr-eval.mjs
 // --single-json: the cached sheet graph, then the compile), so both
 // instruments score the same compile.
@@ -171,6 +177,7 @@ export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, set
       if (!attrInst.has(k)) attrInst.set(k, { table: t, inst });
     }
   }
+  const readOf = new Map((readings?.units ?? []).map((u) => [u.item, u]));
   const used = new Map();
   const outcomes = [];
   for (const row of typKey) {
@@ -217,6 +224,7 @@ export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, set
       }
       for (const id of Object.keys(app.options)) if (!(id in row.options)) diffs.push({ id, key: "(not keyed)", got: app.options[id].value, source: app.options[id].source });
       o.outcome = diffs.length ? "option_wrong" : "exact";
+      for (const d of diffs) d.why = missReason(d, readings, readOf.get(o.item));
       o.option_diffs = diffs;
       o.open_options = open;
       o.decided_by_default = byDefault;
@@ -229,6 +237,41 @@ export function scoreTypicalSet({ setId, typKey, attrKey, snapshot, library, set
     outcomes.push(o);
   }
   return { outcomes };
+}
+
+/** Why an option of a unit's typical differs from the key (CONTROL_INTENT
+ * instrument 5's miss reasons): what decided it (the schedule, a derived
+ * value, a project answer, a drawing reading), or, where the library's
+ * default stood, why no reading decided it: the unit bound to no control
+ * packet, no reading question for the option, the readers found nothing,
+ * disagreed, or only proposed. Counted, never listed, on held-out. */
+function missReason(d, readings, unit) {
+  if (d.key === "(not keyed)") return "an option the key does not list";
+  const decided = { schedule: "the schedule", derived: "a derived value", project: "a project answer", user: "a user override", drawing: "a drawing reading (applied wrong)" }[d.source];
+  if (decided) return decided;
+  if (!readings) return "readings off";
+  if (!unit) return "unbound: no control packet";
+  const q = `opt.${d.id}`;
+  if (!unit.questions.some((x) => x.id === q)) return "no reading question";
+  const dec = unit.decisions.find((x) => x.question === q);
+  if (!dec || dec.outcome === "none") return "abstained: nothing read";
+  if (dec.outcome === "unresolved") return "readers disagree";
+  if (dec.outcome === "proposal") return "proposal only";
+  return "other";
+}
+
+/** Every miss, counted by why: an instance's wrong typical, unresolved record
+ * or unmatched row, and each wrong option of an otherwise right typical. */
+export function missReasons(outcomes) {
+  const m = {};
+  const add = (k) => { m[k] = (m[k] ?? 0) + 1; };
+  for (const o of outcomes) {
+    if (o.outcome === "wrong_typical") add("instance: wrong typical");
+    else if (o.outcome === "unresolved") add("instance: record unresolved");
+    else if (o.outcome === "unmatched") add("instance: row not matched");
+    else if (o.outcome === "option_wrong") for (const d of o.option_diffs) add(`option: ${d.why}`);
+  }
+  return Object.fromEntries(Object.entries(m).sort((a, b) => b[1] - a[1]));
 }
 
 const OUTCOMES = ["exact", "option_wrong", "wrong_typical", "unresolved", "unmatched"];
@@ -269,6 +312,7 @@ const group = (outcomes, keyOf) => {
 export function summarize(outcomes) {
   return {
     total: tally(outcomes),
+    miss_reasons: missReasons(outcomes),
     by_key: group(outcomes, (o) => (o.key_typical === "none" ? "key: none" : "key: a typical")),
     by_family: group(outcomes, (o) => o.family),
     by_typical: group(outcomes, (o) => o.key_typical),
@@ -288,6 +332,9 @@ export function renderText(summary, { side, detail, outcomes, settingsLabel }) {
   L.push(HEAD);
   L.push(row("ALL", summary.total));
   for (const [k, t] of summary.by_key) L.push(row(`  ${k}`, t));
+  L.push("");
+  L.push("misses by why (every non-exact instance; an option_wrong instance counts each wrong option)");
+  for (const [k, v] of Object.entries(summary.miss_reasons)) L.push(`  ${String(v).padStart(4)}  ${k}`);
   if (side === "dev") {
     L.push("");
     L.push("per set");
@@ -477,6 +524,7 @@ async function main() {
       errors,
       gate: { ...GATES[side], pass: verdict.pass && !errors.length },
       total: summary.total,
+      miss_reasons: summary.miss_reasons,
       by_key: Object.fromEntries(summary.by_key),
       ...(side === "dev" ? {
         by_set: Object.fromEntries(summary.by_set),
