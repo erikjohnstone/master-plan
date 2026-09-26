@@ -165,7 +165,7 @@ const ATTRIBUTE_TABLE = {
   qty: { kind: "number", unit: "", definition: "Units under one mark where the schedule prints a quantity (never the count of marks).", example: { source: "key", set: "bldg5406-hvac-demo", header: "QTY." } },
   recovery_type: { kind: "enum", unit: null, values: ["wheel", "plate", "heat_pipe", "runaround"], definition: "Energy recovery ventilator core: wheel, plate, heat pipe or runaround.", example: null, noExampleReason: NO_EXAMPLE },
   return_cfm: { kind: "number", unit: "cfm", definition: "Return (or relief) airflow of an air handler.", example: { source: "column", set: "federal-mech", header: "AIRFLOW / DESIGN RETURN AIRFLOW" } },
-  return_fan_hp: { kind: "number", unit: "hp", definition: "Horsepower of each return or relief fan motor.", example: null, noExampleReason: NO_EXAMPLE },
+  return_fan_hp: { kind: "number", unit: "hp", definition: "Horsepower of each return or relief fan motor.", example: { source: "key", set: "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX", header: "RETURN FAN / FAN HP" } },
   return_fan_qty: { kind: "number", unit: "", definition: "Return or relief fans in an air handler.", example: { source: "column", set: "federal-mech", header: "RELIEF FAN / RF QTY" } },
   rpm: { kind: "number", unit: "rpm", definition: "Rotational speed as printed (a fan's or motor's).", example: { source: "key", set: "federal-mech", header: "MOTOR DATA / RPM" } },
   secondary_conn_in: { kind: "number", unit: "in", definition: "Secondary-side connection size of a heat exchanger, inches.", example: { source: "key", set: "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers", header: "NOTE 5" } },
