@@ -249,3 +249,77 @@ export function drawTier2(census, drafters, split, seed, { eligible, examined = 
     dev_coverage_missing: [...need].filter((b) => !bucketsOf(docs, devSets).has(b)),
   };
 }
+
+export const TIER3_DEV_MIN_DOCS = 8;
+
+/**
+ * The third tier (AS-17): a third dev tier and no held-out side. It is drawn
+ * from the second tier's census, less every document the second tier's
+ * population rules leave out, and less every drafter group the second tier
+ * drew: a held-out-2 group's other documents stay withheld, and a dev-2
+ * group's add no new drafter. AS-28 read the column names of every document
+ * no tier held, so none left is unseen enough to hold out; held-out and
+ * held-out 2 stay the gates.
+ *
+ * The seed shuffles the remaining groups; every group draws ONE document by
+ * the same seed; dev 3 takes groups in that order until it holds
+ * TIER3_DEV_MIN_DOCS documents, then only groups whose drawn document covers a
+ * required family dev 3 lacks, until it covers every one the population holds.
+ * Keying scope: one claimed table per document × keyed family, drawn by the
+ * seed, every printed row up to KEY_ROWS_PER_TABLE_MAX.
+ */
+export function drawTier3(census, drafters, split, tier2, seed, { eligible }) {
+  const rand = mulberry32(seed);
+  const excluded = { ...(drafters.duplicates || {}), ...(drafters.derived || {}) };
+  const eligibleSet = new Set(eligible);
+  const all = keyedDocs(census.per_set, (id) => eligibleSet.has(id) && !excluded[id]);
+  const groupOf = new Map();
+  for (const [gid, g] of Object.entries(drafters.groups)) for (const id of g.sets) groupOf.set(id, gid);
+  const unplaced = [...all.keys()].filter((id) => !groupOf.has(id));
+  if (unplaced.length) throw new Error(`drafters.json does not place: ${unplaced.join(", ")}`);
+  const earlier = new Map([
+    ...[...split.dev.sets, ...split.heldout.sets].map((id) => [id, "WP0.2"]),
+    ...[...tier2.dev.sets, ...tier2.heldout.sets, ...(tier2.heldout.withheld ?? [])].map((id) => [id, "tier 2"]),
+  ]);
+  const leftOut = [];
+  const docs = new Map();
+  for (const [id, fams] of all) {
+    const mates = drafters.groups[groupOf.get(id)].sets.filter((s) => earlier.has(s));
+    // As the second tier: an eligible document by a held-out drafter is one the
+    // hygiene scan failed to withhold, and a held-out-2 drafter's other
+    // documents were withheld by the second tier's own draw.
+    const held = mates.filter((s) => s !== id && split.heldout.sets.includes(s));
+    if (held.length) throw new Error(`${id} shares drafter group ${groupOf.get(id)} with held-out ${held.join(", ")}, yet it is eligible: the hygiene scan must withhold it`);
+    const held2 = mates.filter((s) => s !== id && tier2.heldout.sets.includes(s));
+    if (held2.length && !(tier2.heldout.withheld ?? []).includes(id)) throw new Error(`${id} shares drafter group ${groupOf.get(id)} with held-out 2 ${held2.join(", ")}, yet the second tier did not withhold it`);
+    if (mates.length) leftOut.push({ set: id, group: groupOf.get(id), shares_drafter_with: mates.map((s) => `${s} (${earlier.get(s)})`) });
+    else docs.set(id, fams);
+  }
+  const groups = [...new Set([...docs.keys()].map((id) => groupOf.get(id)))].sort()
+    .map((gid) => ({ gid, sets: drafters.groups[gid].sets.filter((id) => docs.has(id)).sort() }));
+  const order = seededShuffle(groups, rand).map((g) => ({ ...g, pick: g.sets[Math.floor(rand() * g.sets.length)] }));
+  const need = bucketsOf(docs, [...docs.keys()]);
+  const dev = [];
+  const covered = () => bucketsOf(docs, dev.map((g) => g.pick));
+  for (const g of order) {
+    if (dev.length < TIER3_DEV_MIN_DOCS) { dev.push(g); continue; }
+    const have = covered();
+    if ([...need].every((b) => have.has(b))) break;
+    const adds = [...bucketsOf(docs, [g.pick])].filter((b) => !have.has(b));
+    if (adds.length) dev.push({ ...g, added_for_coverage: adds });
+  }
+  const devSets = dev.map((g) => g.pick).sort();
+  const devTables = sampleTables(docs, devSets, rand);
+  return {
+    seed,
+    dev_min_docs: TIER3_DEV_MIN_DOCS,
+    key_rows_per_table_max: KEY_ROWS_PER_TABLE_MAX,
+    population_docs: docs.size,
+    population_groups: groups.length,
+    left_out_earlier_drafters: leftOut,
+    shuffled_group_order: order.map((g) => ({ group: g.gid, docs: g.sets.length, pick: g.pick })),
+    dev: { groups: dev.map((g) => g.gid), sets: devSets, covers: [...bucketsOf(docs, devSets)], added_for_coverage: dev.filter((g) => g.added_for_coverage).map((g) => ({ group: g.gid, adds: g.added_for_coverage })), tables: devTables },
+    required_coverage_missing_from_population: REQUIRED_KEY_COVERAGE.map(([n]) => n).filter((n) => !need.has(n)),
+    dev_coverage_missing: [...need].filter((b) => !bucketsOf(docs, devSets).has(b)),
+  };
+}

@@ -11,7 +11,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { expandTranscription, parseNumber, parseTranscription, renderKeyCsv } from "../scripts/assemblies-key-transcribe.mjs";
-import { drawTier2, HELDOUT_MIN_DOCS, KEY_ROWS_PER_TABLE_MAX, TIER2_DEV_MIN_DOCS } from "../scripts/assembliesSplit.mjs";
+import { drawTier2, drawTier3, HELDOUT_MIN_DOCS, KEY_ROWS_PER_TABLE_MAX, TIER2_DEV_MIN_DOCS, TIER3_DEV_MIN_DOCS } from "../scripts/assembliesSplit.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP = resolve(HERE, "..");
@@ -258,6 +258,36 @@ test("AS-17: the committed second tier is reproduced exactly by its seed from it
   }
 });
 
+const TIER3 = join(REPORTS, "tier3");
+const hasTier3 = existsSync(join(TIER3, "01-split.json"));
+
+test("AS-17: the committed third tier is reproduced exactly by its seed from the second tier's census", { skip: !(hasSplitInputs && hasTier2 && hasTier3) && "third tier not drawn here" }, () => {
+  const committed = JSON.parse(readFileSync(join(TIER3, "01-split.json"), "utf8"));
+  const tmp = mkdtempSync(join(tmpdir(), "assemblies-tier3-"));
+  try {
+    mkdirSync(join(tmp, "reports", "assemblies", "tier2"), { recursive: true });
+    copyFileSync(join(CORPUS, "sets.json"), join(tmp, "sets.json"));
+    for (const f of ["drafters.json", "00-baseline.json", "01-split.json"]) copyFileSync(join(REPORTS, f), join(tmp, "reports", "assemblies", f));
+    for (const f of ["00-baseline.json", "01-split.json"]) copyFileSync(join(TIER2, f), join(tmp, "reports", "assemblies", "tier2", f));
+    const run = spawnSync(process.execPath, ["--import", "tsx", "scripts/assemblies-baseline.mjs", tmp, "--tier3", String(committed.seed)],
+      { cwd: MCP, encoding: "utf8", timeout: 120_000 });
+    assert.equal(run.status, 0, run.stderr);
+    const redrawn = JSON.parse(readFileSync(join(tmp, "reports", "assemblies", "tier3", "01-split.json"), "utf8"));
+    for (const k of ["generated_at"]) { delete redrawn[k]; delete committed[k]; }
+    assert.deepEqual(redrawn, committed);
+    // One document per drafter, and no drafter WP0.2's split or the second tier holds.
+    const split = JSON.parse(readFileSync(join(REPORTS, "01-split.json"), "utf8"));
+    const t2 = JSON.parse(readFileSync(join(TIER2, "01-split.json"), "utf8"));
+    const drafters = JSON.parse(readFileSync(join(REPORTS, "drafters.json"), "utf8"));
+    const groupOf = (id) => Object.entries(drafters.groups).find(([, g]) => g.sets.includes(id))?.[0];
+    const earlier = new Set([...split.dev.sets, ...split.heldout.sets, ...t2.dev.sets, ...t2.heldout.sets, ...t2.heldout.withheld].map(groupOf));
+    assert.deepEqual(committed.dev.sets.filter((id) => earlier.has(groupOf(id))), []);
+    assert.equal(new Set(committed.dev.sets.map(groupOf)).size, committed.dev.sets.length);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
 const keyFiles = existsSync(join(CORPUS, "keys"))
   ? readdirSync(join(CORPUS, "keys")).filter((f) => f.endsWith(".attrs.csv")) : [];
 
@@ -280,10 +310,15 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
     const setId = f.replace(/\.attrs\.csv$/, "");
     const doc = parseTranscription(readFileSync(join(REPORTS, "key-work", `${setId}.transcription.txt`), "utf8"));
     const heldout = split.heldout.sets.includes(setId);
-    // The second tier (AS-17) keys only its drawn tables, on both sides, as held-out does.
+    // The second and third tiers (AS-17) key only their drawn tables, on every side, as held-out does.
     const t2 = hasTier2 ? JSON.parse(readFileSync(join(TIER2, "01-split.json"), "utf8")) : null;
+    const t3 = hasTier3 ? JSON.parse(readFileSync(join(TIER3, "01-split.json"), "utf8")) : null;
     const tier2Side = t2 && (t2.dev.sets.includes(setId) ? t2.dev : t2.heldout.sets.includes(setId) ? t2.heldout : null);
-    assert.ok(heldout || tier2Side || split.dev.sets.includes(setId), `${setId} is in neither the dev nor the held-out split, nor the second tier`);
+    const tier3Side = t3 && t3.dev.sets.includes(setId) ? t3.dev : null;
+    const tierSide = tier2Side || tier3Side;
+    const tierName = tier2Side ? "second" : "third";
+    const tierCap = (tier2Side ? t2 : t3)?.key_rows_per_table_max;
+    assert.ok(heldout || tierSide || split.dev.sets.includes(setId), `${setId} is in neither the dev nor the held-out split, nor a later tier`);
     // One printed table can hold two claimed families (a split system's indoor
     // and outdoor unit on one row), so the scope is checked per table x family.
     const instances = new Map();
@@ -294,10 +329,10 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
       if (r.tag) instances.get(key).tags.add(r.tag); // an empty tag keys a table with no instance
     }
     for (const { table, family, tags } of instances.values()) {
-      if (tier2Side) {
-        const drawn = tier2Side.tables.find((t) => t.set === setId && t.table === table && t.family === family);
-        assert.ok(drawn, `${setId}: ${family} "${table}" was not drawn for the second tier's key`);
-        assert.ok(tags.size <= t2.key_rows_per_table_max, `${setId}: "${table}" keys ${tags.size} rows, the cap is ${t2.key_rows_per_table_max}`);
+      if (tierSide) {
+        const drawn = tierSide.tables.find((t) => t.set === setId && t.table === table && t.family === family);
+        assert.ok(drawn, `${setId}: ${family} "${table}" was not drawn for the ${tierName} tier's key`);
+        assert.ok(tags.size <= tierCap, `${setId}: "${table}" keys ${tags.size} rows, the cap is ${tierCap}`);
       } else if (heldout) {
         const drawn = split.heldout.tables.find((t) => t.set === setId && t.table === table && t.family === family);
         assert.ok(drawn, `${setId}: ${family} "${table}" was not drawn for the held-out key`);
@@ -412,4 +447,57 @@ test("tier 2: an unplaced document, or an eligible one by a held-out drafter, st
   leaked.groups["firm-held"].sets.push("s04");
   delete leaked.groups["firm-s04"];
   assert.throws(() => drawTier2(w.census, leaked, w.split, 1, { eligible: w.eligible }), /s04 shares drafter group firm-held with held-out held-b.*hygiene scan must withhold it/);
+});
+
+// AS-17 — the third tier's draw (scripts/assembliesSplit.mjs drawTier3): dev 3 only.
+const noTier2 = { dev: { sets: [] }, heldout: { sets: [], withheld: [] } };
+
+test("tier 3: a pure function of its inputs; one document per drafter; no drafter an earlier tier holds", () => {
+  const w = world();
+  const t2 = drawTier2(w.census, w.drafters, w.split, 20260926, { eligible: w.eligible });
+  const a = drawTier3(w.census, w.drafters, w.split, t2, 20260927, { eligible: w.eligible });
+  assert.deepEqual(a, drawTier3(structuredClone(w.census), structuredClone(w.drafters), w.split, structuredClone(t2), 20260927, { eligible: [...w.eligible] }));
+  const groupOf = (id) => Object.entries(w.drafters.groups).find(([, g]) => g.sets.includes(id))[0];
+  const earlier = new Set([...w.split.dev.sets, ...w.split.heldout.sets, ...t2.dev.sets, ...t2.heldout.sets, ...t2.heldout.withheld].map(groupOf));
+  const devGroups = a.dev.sets.map(groupOf);
+  assert.equal(new Set(devGroups).size, devGroups.length, "one dev-3 document per drafter");
+  assert.deepEqual(devGroups.filter((g) => earlier.has(g)), []);
+  // 17 drafter groups hold a keyed document WP0.2's drafters do not; the second tier drew some of them.
+  assert.equal(a.population_groups, 17 - t2.dev.groups.length - t2.heldout.groups.length);
+  assert.ok(a.left_out_earlier_drafters.some((x) => x.set === "d1" && x.shares_drafter_with.includes("dev-a (WP0.2)")));
+  // Fewer groups than TIER3_DEV_MIN_DOCS are left: dev 3 takes them all.
+  assert.ok(a.population_groups < TIER3_DEV_MIN_DOCS);
+  assert.equal(a.dev.sets.length, a.population_groups);
+});
+
+test("tier 3: dev 3 takes TIER3_DEV_MIN_DOCS groups in seed order, then only groups that add a required family", () => {
+  const w = world();
+  for (const seed of [1, 2, 3, 20260927, 99]) {
+    const t = drawTier3(w.census, w.drafters, w.split, noTier2, seed, { eligible: w.eligible });
+    assert.deepEqual(t.dev_coverage_missing, [], `seed ${seed}`);
+    assert.ok(t.dev.sets.includes("s05") && t.dev.sets.includes("s09"), `seed ${seed}`);
+    assert.deepEqual(t.required_coverage_missing_from_population, ["chiller", "ERV"]);
+    const order = t.shuffled_group_order.map((g) => g.group);
+    assert.deepEqual(t.dev.groups.slice(0, TIER3_DEV_MIN_DOCS), order.slice(0, TIER3_DEV_MIN_DOCS), `seed ${seed}`);
+    assert.deepEqual(t.dev.groups.slice(TIER3_DEV_MIN_DOCS), t.dev.added_for_coverage.map((g) => g.group), `seed ${seed}`);
+    const strata = t.dev.sets.flatMap((id) => Object.keys(w.census.per_set.find((r) => r.id === id).families));
+    assert.equal(t.dev.tables.length, strata.length);
+    for (const tb of t.dev.tables) assert.equal(tb.keyed_rows_max, Math.min(tb.claimed_rows, KEY_ROWS_PER_TABLE_MAX));
+  }
+});
+
+test("tier 3: an eligible document by a held-out or held-out-2 drafter that no draw withheld stops the draw", () => {
+  const w = world();
+  const leaked = structuredClone(w.drafters);
+  leaked.groups["firm-held"].sets.push("s04");
+  delete leaked.groups["firm-s04"];
+  assert.throws(() => drawTier3(w.census, leaked, w.split, noTier2, 1, { eligible: w.eligible }), /s04 shares drafter group firm-held with held-out held-b.*hygiene scan must withhold it/);
+  const shared = structuredClone(w.drafters);
+  shared.groups["firm-s03"].sets.push("s04");
+  delete shared.groups["firm-s04"];
+  const held2 = { dev: { sets: [] }, heldout: { sets: ["s03"], withheld: [] } };
+  assert.throws(() => drawTier3(w.census, shared, w.split, held2, 1, { eligible: w.eligible }), /s04 shares drafter group firm-s03 with held-out 2 s03, yet the second tier did not withhold it/);
+  // Withheld by the second tier, it is left out quietly.
+  const t = drawTier3(w.census, shared, w.split, { ...held2, heldout: { sets: ["s03"], withheld: ["s04"] } }, 1, { eligible: w.eligible });
+  assert.ok(!t.dev.sets.includes("s04") && t.left_out_earlier_drafters.some((x) => x.set === "s04"));
 });

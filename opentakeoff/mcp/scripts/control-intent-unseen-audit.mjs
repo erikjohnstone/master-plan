@@ -51,10 +51,11 @@ const readJsonl = (path) => (existsSync(path) ? readFileSync(path, "utf8").split
 
 /** The sets the audit may read: never dev, held-out, a held-out twin or
  * drafter's set, or a copy of a dev document. */
-export function eligibleSets(spec, split, hygiene, tier2 = null) {
-  // The assemblies second tier (reports/assemblies/tier2/01-split.json) is dev
-  // and held-out too: its documents are keyed and tuned on, or held out.
-  const out = new Set([...split.dev.sets, ...split.heldout.sets, ...(tier2 ? [...tier2.dev.sets, ...tier2.heldout.sets, ...(tier2.heldout.withheld ?? [])] : []), ...Object.values(hygiene.not_unseen ?? {}).flat()]);
+export function eligibleSets(spec, split, hygiene, tier2 = null, tier3 = null) {
+  // The assemblies second and third tiers (reports/assemblies/tier{2,3}/
+  // 01-split.json) are dev and held-out too: their documents are keyed and
+  // tuned on, or held out.
+  const out = new Set([...split.dev.sets, ...split.heldout.sets, ...(tier2 ? [...tier2.dev.sets, ...tier2.heldout.sets, ...(tier2.heldout.withheld ?? [])] : []), ...(tier3 ? tier3.dev.sets : []), ...Object.values(hygiene.not_unseen ?? {}).flat()]);
   return spec.sets.map((s) => s.id).filter((id) => !out.has(id));
 }
 
@@ -117,7 +118,9 @@ async function main() {
   const hygiene = JSON.parse(readFileSync(join(corpus, "reports", "control-intent", "00-corpus-hygiene.json"), "utf8"));
   const tier2Path = join(corpus, "reports", "assemblies", "tier2", "01-split.json");
   const tier2 = existsSync(tier2Path) ? JSON.parse(readFileSync(tier2Path, "utf8")) : null;
-  const eligible = eligibleSets(spec, split, hygiene, tier2);
+  const tier3Path = join(corpus, "reports", "assemblies", "tier3", "01-split.json");
+  const tier3 = existsSync(tier3Path) ? JSON.parse(readFileSync(tier3Path, "utf8")) : null;
+  const eligible = eligibleSets(spec, split, hygiene, tier2, tier3);
   const refused = only.filter((id) => !eligible.includes(id));
   if (refused.length) { console.error(`not unseen (dev, held-out, a twin, a drafter's or a dev copy) or not a corpus set: ${refused.join(", ")}`); process.exit(2); }
   const ids = only.length ? only : eligible;

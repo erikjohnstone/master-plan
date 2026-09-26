@@ -14,6 +14,8 @@ test("eligible sets: never dev, held-out, a held-out twin or drafter's set, or a
   const spec2 = { sets: [...spec.sets, ...["dev2-h", "held2-i", "withheld-j", "free-k"].map((id) => ({ id }))] };
   const tier2 = { dev: { sets: ["dev2-h"] }, heldout: { sets: ["held2-i"], withheld: ["withheld-j"] } };
   assert.deepEqual(eligibleSets(spec2, split, hygiene, tier2), ["free-f", "free-g", "free-k"]);
+  // Nor are the third tier's dev documents.
+  assert.deepEqual(eligibleSets(spec2, split, hygiene, tier2, { dev: { sets: ["free-g"] } }), ["free-f", "free-k"]);
 });
 
 test("a run's decisions against the record: audited ones keep their verdict, a decision that differs in value or rule is new, one no longer applied is gone", () => {

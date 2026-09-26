@@ -4,7 +4,7 @@
 // SHOULD THIS BE ON THE SHARED PATH? No. It reads the attribute eval's own snapshot, key and scoring
 // (assemblies-attr-eval.mjs) for a dev side, and prints one line; no surface imports it.
 //
-//   node --import tsx scripts/assemblies-status-mark-diagnostic.mjs <corpus-dir> [--dev2] [setId ...]
+//   node --import tsx scripts/assemblies-status-mark-diagnostic.mjs <corpus-dir> [--dev2 | --dev3] [setId ...]
 //
 // A key types a tag as printed, status mark and all ("(E)ATU A"); the compile's tag drops the mark
 // ("ATU A"), so the scorer pairs the instance with nothing and scores every value it keys missed. Here
@@ -44,12 +44,12 @@ async function main() {
   const argv = process.argv.slice(2);
   const [corpusDir, ...only] = argv.filter((a) => !a.startsWith("--"));
   if (!corpusDir) {
-    console.error("usage: node --import tsx scripts/assemblies-status-mark-diagnostic.mjs <corpus-dir> [--dev2] [setId ...]");
+    console.error("usage: node --import tsx scripts/assemblies-status-mark-diagnostic.mjs <corpus-dir> [--dev2 | --dev3] [setId ...]");
     process.exit(2);
   }
   const corpus = resolve(corpusDir);
-  const tier2 = argv.includes("--dev2");
-  const split = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", ...(tier2 ? ["tier2"] : []), "01-split.json"), "utf8"));
+  const tier = argv.includes("--dev3") ? "3" : argv.includes("--dev2") ? "2" : null;
+  const split = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", ...(tier ? [`tier${tier}`] : []), "01-split.json"), "utf8"));
   const refused = only.filter((id) => !split.dev.sets.includes(id));
   if (refused.length) { console.error(`not dev documents: ${refused.join(", ")}`); process.exit(2); }
   const { normalizeCompileItem } = await import("../../web/src/lib/assemblies/normalize.ts");
@@ -74,7 +74,7 @@ async function main() {
       else if (o.outcome === "missed") missed++;
     }
   }
-  console.log(`${tier2 ? "dev2" : "dev"}: status-marked key instances the scorer cannot pair ${unpaired}; paired by their base tag ${paired}; their printed values ${lines}: exact ${exact}, wrong ${wrong}, missed ${missed} (a diagnostic: no score changes)`);
+  console.log(`dev${tier ?? ""}: status-marked key instances the scorer cannot pair ${unpaired}; paired by their base tag ${paired}; their printed values ${lines}: exact ${exact}, wrong ${wrong}, missed ${missed} (a diagnostic: no score changes)`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main();

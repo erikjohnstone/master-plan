@@ -26,6 +26,7 @@
    "072_CA_CA07_2627_West_Valley_College_Science_Math",
    "082_OR_Klamath_Community_College_Career_Learning",
    "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+   "09_ME_BGS_KennebecValleyCC_Renovation",
    "18_OR_BakerMS_HVAC_Electrical_FullSet",
    "itd-d1-lab-raster"
   ],
@@ -116,6 +117,13 @@
    "set": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
    "relation": "near",
    "of": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+   "side": "dev",
+   "share": 0.37
+  },
+  {
+   "set": "09_ME_BGS_KennebecValleyCC_Renovation",
+   "relation": "near",
+   "of": "071_ME_BGS_Project_3809_Health_Science_Center",
    "side": "dev",
    "share": 0.37
   },
