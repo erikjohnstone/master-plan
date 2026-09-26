@@ -581,6 +581,22 @@ drain loop counted the script waiting on it, which sits in the same
 group, and never exited after the held-out run; it now leaves its caller
 out. No eval process was alive when it was stopped.)
 
+**AS-15 addendum (2026-09-26 10:05): a baker chain is alive again, and it
+costs other sets their snapshot.** A fall-through chain of baker-county-eoc
+graph-eval runs from an earlier baker rerun is still going. Each link has
+PPID 1 and runs `graph-eval.mjs … --single-json baker-county-eoc`. It
+re-scores baker for about 29 minutes at up to 6 GB, then starts the next
+link (09:29:36, 09:58:39). Stopping it by PID was refused in this session,
+so it stands. It shares the container's memory cgroup with every eval.
+During the unseen audit's replay, the cgroup OOM-killed two compile
+children while a link held about 6 GB:
+- 01_NY's, at 8.0 GB anon, 09:46;
+- 058_CA's, at 7.2 GB, 09:57.
+
+Their "no snapshot" (`reports/control-intent/06-unseen-audit.json`) is
+therefore not shown to be a ceiling of their own. They are to be
+re-snapshotted once no chain is alive.
+
 ---
 
 ## AS-17 — held-out GATE 2 fails: the normalizer's rules do not yet carry to drafting they were not grown on (OPEN — this goal; closing it needs dev documents the environment cannot stage, AS-2)
@@ -971,3 +987,33 @@ queue:
 - bldg5406 AHU-1 (AS-16).
 
 040 EF-1A also prints "BACKDRAFT DAMPER TYPE: MOTORIZED" on its own row.
+
+## AS-25 — starter defaults the dev keys contradict, most with no source (OPEN — for the library review, INPUT 4)
+
+**Found:** 2026-09-26. On held-out, the options no reader settles keep the library's default (GATE C: 41 options
+"nothing read"), so a default the documents usually contradict costs wherever the drawings are not read. The dev
+keys (11 documents) were compared with each starter default, instance by instance:
+
+| typical | option | default | dev keys agree / disagree | documents that disagree | the default's source |
+|---|---|---|---|---|---|
+| fan-constant | motorized_damper | false | 1 / 14 | 040, bldg5406, federal-mech, itd-d1-lab | none |
+| unit-heater | modulating_valve | false | 0 / 8 | 040, 12_MT | none |
+| vav-reheat-hw | co2_sensor | false | 43 / 15 | federal-mech | zone devices, per zone |
+| fan-variable | motorized_damper, pressure_control | false | 0 / 3 each | 040, itd-d1-lab | none |
+| ahu-single-zone | duct_smoke_detectors, freezestat_to_bas, setpoint_adjust | true | 0 / 3 each | 094_FL | UFGS 23 09 93 |
+| chiller | chw_isolation_valve | true | 0 / 2 | bldg5406, federal-mech | G36, UFGS 23 09 00 |
+
+**Reading:** two defaults have neither a source nor the documents behind them:
+- A constant-speed exhaust fan's motorized damper is keyed in 14 of 15 dev fans, in 4 of the 11 documents.
+  ASHRAE 90.1 §6.4.3.4 (ventilation system controls) requires motorized shutoff dampers on outdoor-air intakes
+  and exhausts, but allows gravity dampers in buildings under three stories, in the warmest climate zones (0 to
+  3), and on small systems. A document's building decides it, so a default needs the project question, not a
+  flip.
+- A unit heater's modulating valve is keyed in all 8 dev unit heaters with a valve, in 2 documents.
+
+The others rest on one document each, or on a cited standard that document departs from.
+
+**Status:** not changed here. The starter library's content is the reviewers' (INPUT 4: a controls integrator and a
+mechanical contractor), and a default changes every project's lines. Changing a default from dev evidence and then
+reading the held-out result would tune on held-out. This entry is the evidence for that review: the table above,
+reproducible from `keys/*.typicals.csv` and `web/src/lib/assemblies/starter/us-typicals-v1.json`.

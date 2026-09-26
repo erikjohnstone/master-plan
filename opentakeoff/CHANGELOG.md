@@ -162,6 +162,22 @@
   schematic that print its tag. Nothing applied changes (412 of 412), and
   the dev bindings are byte-identical.
 
+  **The unseen-document audit is a replayable instrument.**
+  `mcp/scripts/control-intent-unseen-audit.mjs` reads every corpus set that
+  was never keyed or tuned on: not dev, not held-out, not a held-out twin
+  or drafter's set, not a copy of a dev document. The model calls are
+  recorded under `reports/control-intent/unseen-runs/`, so the audit
+  replays with no model; `--live` calls the models for anything not
+  recorded. Its record, `06-unseen-audit.json`, holds every applied
+  decision with a person's verdict against its cites and the drawing. A run
+  lists every decision that is new since the record (to be checked before
+  it counts), every one that is gone, and any the record calls wrong. At
+  this commit it reads 90 sets, 53 with both scheduled units and control
+  drawings, and replays 520 calls: 412 decisions apply, the same 412 the
+  audit checked, all right. Two sets have no snapshot: the kernel's memory
+  limit killed their compile while an orphaned scorer (AS-15) held about
+  6 GB.
+
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
   a child process, decoded per read, so a "°" falling on a 64 KiB boundary
