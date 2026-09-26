@@ -557,3 +557,74 @@ packets, or the agreement is a proposal that names which reader read what.
 - Dev: the replay is unchanged: 227/244; 291 applied, 0 wrong; class R 55/71.
 - Unseen, all 53 audited sets replayed (no model call): 342 → 338 applied. The 4 are exactly CH-1's and CH-2's role
   and isolation valve. Nothing else changes.
+
+## CI-23: the readers trusted any binding as the unit's own; a packet about other units applied their readings (FIXED, next commit)
+
+**Found:** 2026-09-26, GATE D's adversarial swap (goals/CONTROL_INTENT.md WP4.2): every dev packet the binder binds
+to a unit was rebound, with the kind it has, to a unit of another family, as a binder mistake would bind it.
+
+**What:** 74 packets rebound to 71 units. Of the 217 decisions the readers made through them, **104 applied**
+(47.9%; the gate allows 1%): 84 absences, 17 agreements of two readers, 1 whitelisted R0 phrase, and 2 decisions of
+the zone plan that do not rest on the swap. Examples: VAV-4 bound to "EXHAUST FAN - ON/OFF (EF-1 THRU EF-3)" by a
+title range that does not print it read its CO2 sensor, occupancy sensor and reheat as absent, and the fans' "BO - FAN
+START/STOP" as its role; BP-2, a pump, bound to "GENERAL EXHAUST FAN SEQUENCE OF OPERATION", took "THIS SYSTEM IS
+STANDALONE" as whitelisted. R0 reads a packet bound by a title, a list, a reference or a family as wholly the unit's
+own; the combiner reads an absence through any title binding; R1 and R2 are told the packet applies and believe it.
+Nothing checked the binder's claim against the packet.
+
+**Fix (`readers/r0.ts` `aboutOthers`, `control_r0_v6`; `record.ts`; `combine.ts`, `control_combine_v7`):** the read
+side checks a binding that makes a packet the unit's own against the print. The packet is about other units when:
+- its title (with its subtitle) names scheduled units by tag and not the unit, unless it is a family's typical
+  detail titled for an example unit of the unit's family;
+- the subject its title's head names ("X WITH Y" is about X) is another family, neither one of the title's subjects
+  joined by AND nor a part the unit's row prints (a drive: `printsDrive`);
+- it is bound as a family detail the binder's own rule would not take: its title names another family, or names none
+  and the unit's schedule does not print its subject (`scheduleNamesSubject`).
+
+Such a packet is not the unit's own: only a clause printing the unit's tag speaks for it, R1's and R2's evidence
+from it must print the tag or it is unverified, and no absence is read through it. A packet that is not the unit's
+own anyway (a system drawing its tag is printed in, its host's packet) keeps the shared packets' rule.
+
+**Checked:**
+- Real bindings: over all 86 non-held-out sets with packets (1,969 bindings), the check flags **none**. A first
+  version flagged 42 siblings of system drawings (a room "D-1 LAB 123" read as a tag; "LAB VENTILATION WITH SNORKEL
+  HOODS" read as hoods); the check now asks only of own bindings and reads the title's head.
+- Adversarial swap, dev, replayed where recorded (the rest live, recorded to the scratchpad):
+  - another family: 74 packets rebound to 71 units asked 402 questions; **0 applied** through the swap, 0 decisions
+    at all; every one of the 55 reader answers citing a swapped packet is unverified. The drive's detail is not
+    rebound to a unit whose row prints a VFD: that is the binder's own rule, not a mistake (a first run did, and read
+    EF-1B's role right).
+  - another tag of the same family: 19 packets titled for units rebound to 18 units the title does not name, 72
+    questions; **0 applied**; 26 of 26 answers unverified.
+  - The zone plan's two decisions (a CO2 symbol in the zone VAV-1 and VAV-2 label) do not rest on the swap and
+    still apply.
+- The new R0 + combine test and record test (`readers.test.ts`) fail without the fix.
+- Dev: the replay is unchanged, 227/244 (the report is identical). Unseen: all 53 audited sets replayed (no model
+  call), 338 applied, byte-identical to CI-22's.
+
+## CI-24: a live re-run changes 7 of 491 dev decisions, each where the text model answers a fresh call differently (MEASURE NOTE, GATE D)
+
+**Found:** 2026-09-26, GATE D's replay item (goals/CONTROL_INTENT.md WP4.2: "a live re-run's decision diff ≤ 2%,
+every change explained in the catalogue").
+
+**What:** every dev document read again with fresh model calls (an empty run store; 181 calls, recorded to the
+scratchpad, never to the repo) against the recorded replay. 7 of the 491 decisions either run makes change (1.4%),
+all in federal-mech. In each, R1 (`gpt-oss-120b`) answered the same request differently. R0 is deterministic,
+and R2 cast the same votes (AHU-1's vision run b now says "not shown" where it said nothing: no vote either way).
+
+| Unit, question | Replay → live | R1, replay → live | Key |
+|---|---|---|---|
+| AHU-1 relief damper | proposal true → none | yes → not shown | false: a wrong proposal is gone |
+| AHU-1 enthalpy economizer | applied true → proposal | yes → not shown | true: a right decision drops to a proposal |
+| AHU-1 freezestat to BAS | proposal false → applied false | not shown → no (agrees with R0) | false: right, newly applied |
+| EF-1 motorized damper | unresolved → applied true | no → not shown (R0 and R2 read yes) | true: right, newly applied |
+| EF-4 motorized damper | applied true → unresolved | not shown → no | true: a right decision drops to unresolved |
+| UH-1, UH-2 setpoint adjust | applied true → proposal | yes → yes, its quote unverified | typical none: moot |
+
+**Why it is not a defect:** the provider serves R1 with sampling, so a fresh call may differ. The combiner is built
+for that: a model alone never applies (C8), and a disagreement leaves a question open (C12). So the variance moves
+decisions between applied and proposal or unresolved, and no wrong decision applied. Replaying the recorded runs is
+byte-identical (twice, all 11 documents): a saved project reads exactly as it was read.
+
+**Not changed:** the gate's 2% holds. Pinning R1's temperature to 0 would not make the provider deterministic, and it
+would change every recorded request (a new prompt version) for no measured gain.

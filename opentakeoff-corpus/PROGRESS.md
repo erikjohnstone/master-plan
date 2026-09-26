@@ -259,11 +259,58 @@ Done so far (dev only; held-out keys not yet authored):
     Alone, this branch passed 3 of 4 runs (107–108 s) and failed 1 on the timeout; `main` (5ab7ca8) passed 2 of 2
     with the same warm ODL cache (110–111 s) and failed 2 of 2 with a cold one. It is timing, the same on both.
 - **Sweep, the last two sets:** 01_NY and 058_CA cannot be snapshotted. Their sheet graphs are not cached, and
-  the graph build (extraction, not this loop's code) runs out of the child's 8 GB heap: 058_CA after 219 s. A
-  retry with a 12 GB heap is recorded below when it ends. The eleven unseen sets with schedules but no control
-  packets have no zone-titled page either, so no reading can apply on them.
-- **Next:** corpus-eval unchanged (cold); the held-out shortfalls (B1, C) written up as ceilings with their
-  aggregate miss reasons.
+  the graph build (extraction, not this loop's code) runs out of memory: 058_CA after 219 s with the child's 8 GB
+  heap, and after 254 s with 12 GB, when the container's own limit (about 13 GB) kills the child. An extraction
+  ceiling on this machine, not a reading one. The eleven unseen sets with schedules but no control packets have no
+  zone-titled page either, so no reading can apply on them.
+- **GATE D, the robustness suite (dev; next commit): the adversarial swap found CI-23; every item now passes.**
+  - **Negative controls** (004, baker-county-eoc). The gate's premise, no control packets, no longer holds: the
+    finder reads 5 and 3 packets (the rooftop units' sequences). Their readings apply 12 and 2 option decisions,
+    each what its sequence prints: 004's six RTUs' relief dampers ("THE BAROMETRIC RELIEF DAMPERS SHALL OPEN") and
+    economizer, baker's two RTUs' CO2 sensor ("THE RTU UNIT SHALL ADJUST ITS FRESH AIR FLOW BASED ON THE CO2
+    READING"). The keys give those RTUs no controls typical, so the options decide nothing in the takeoff (the
+    typical eval: 14/14 and 8/8). With PQ1 = no every unit's controls record is "none". What stays open is the
+    project's own records (building meters, the plants), which wait for other project questions. No reading puts
+    a unit back in scope.
+  - **Adversarial swap: FAIL, then PASS with CI-23.** Every dev packet the binder binds to a unit (confirmed) was
+    rebound, with the kind it has, to a unit of another family: 104 of the 217 decisions made through them applied
+    (84 absences). CI-23 makes the readers check a binding against the print. After it:
+    - another family: 74 packets on 71 units, 402 questions, **0 applied** through the swap; 55 of 55 reader
+      answers citing a swapped packet are unverified;
+    - another tag of the same family: 19 packets titled for units rebound to 18 units the title does not name, 72
+      questions, **0 applied**; 26 of 26 unverified.
+  - **Model-off** (R0 alone, `control-intent-reading-eval.mjs --r0`, new): 19 applied, **0 wrong**; 75 absences
+    left as proposals, 0 wrong. PASS.
+  - **Replay:** two replays byte-identical on all 11 documents. A live re-run (fresh model calls, an empty run
+    store) changes **7 of 491 decisions (1.4%)**, all federal-mech, all R1 answering a fresh call differently
+    (CI-24). Two new applied decisions are right by the key (AHU-1 freezestat to BAS false, EF-1 motorized damper
+    true); four right ones drop to proposal or unresolved; no wrong one appears. PASS.
+  - **Raster:** no raster rendition of a dev document is staged, so one was built in the scratchpad for
+    baker-county-eoc (65 pages) and bldg5406-hvac-demo (22 pages): every page one 200 dpi image, no text layer.
+    The same pipeline compiles 0 items and 0 packets from them, so nothing applies: ⊆ the vector document's, 0
+    wrong. PASS, and a recall of zero: the vector pipeline has no OCR fallback for schedules (the gap queued since
+    20_TX_JudsonISD).
+  - **Cost** (the live re-run, the platform endpoint): 181 model calls and 1.32 M tokens for the 11 documents;
+    wall time per document at most 109 s (federal-mech), 386 s for all. PASS (≤ 5 minutes each).
+- **CI-23 (readers, combiner):** a binding that makes a packet the unit's own is checked against the print. The
+  packet is about other units when:
+  - its title names scheduled units by tag and not the unit (a family's typical detail titled for an example unit
+    of the family aside);
+  - the subject its title's head names is another family, neither one of its subjects joined by AND nor a part the
+    row prints (a drive);
+  - it is a family detail the binder's own rule would not take.
+  Such a packet speaks for the unit only where it prints its tag; model evidence from it must print the tag or is
+  unverified; no absence is read through it. Over the 86 non-held-out sets with packets (1,969 bindings) the
+  check flags none. Dev replay unchanged (227/244; the report is identical); the 53 audited unseen sets replay to
+  the same 338 applied decisions, byte for byte.
+- **Process notes:**
+  - A directory listing printed a scratch backup of one held-out key row (bessemer HP-1's attributes, from the
+    ASSEMBLIES key work). Nothing was changed from it; the CONTROL INTENT work does not touch attribute keys.
+  - A snapshot taken without `/root/.ot-env.sh` compiles fewer items: without the vector-grid sidecar's Python,
+    baker-county-eoc gives 3 instead of 13. Two negative-control runs were taken that way by mistake, spotted,
+    and re-run. Every number above is from a run with the environment.
+- **Next:** the robustness suite as a committed instrument, with its report; corpus-eval unchanged (cold); the
+  held-out shortfalls (B1, C) written up as ceilings with their aggregate miss reasons.
 
 The research that proposed the goal (2026-09-24):
 - **Research:** `plans/05-research/01–03`, the design plan

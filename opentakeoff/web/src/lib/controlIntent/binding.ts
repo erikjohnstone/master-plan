@@ -169,6 +169,11 @@ function bodyTags(p: Packet, maxWords = Infinity): TagKey[] {
 // ── Row evidence ────────────────────────────────────────────────────────────
 
 const clean = (s: unknown) => String(s ?? "").replace(/\s+/g, " ").trim().toUpperCase();
+
+/** Whether a unit's row prints a drive (a VFD): the drives' detail is then
+ * about a part of the unit. */
+export const printsDrive = (cells: Readonly<Record<string, string>>): boolean =>
+  /(?:^|[^A-Z])(?:VFD|V\.F\.D\.?|VARIABLE FREQUENCY DRIVE)(?:$|[^A-Z])/.test(Object.values(cells).map(clean).join(" | "));
 const compact = (s: unknown) => String(s ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
 /** Words a title and a row may spell differently (standard HVAC
@@ -233,7 +238,7 @@ function rowText(u: RowUnit): string {
 /** What a unit is, as its schedule says it: the schedule's title and the
  * row's type or description cells (never a value such as a volume
  * control's "CV"). */
-function typeText(u: RowUnit): string {
+function typeText(u: Pick<RowUnit, "table_title" | "cells">): string {
   return clean([u.table_title, ...Object.entries(u.cells).filter(([h]) => /\b(?:TYPE|DESCRIPTION|UNIT\s+TYPE|EQUIPMENT)\b/i.test(h)).map(([, v]) => v)].join(" | "));
 }
 
@@ -280,7 +285,7 @@ function withoutOwnAbbreviations(title: string): string {
  * family; and, per family, the words of the other subjects. Empty when the
  * title names one subject ("FAN COIL UNIT (HEATING AND COOLING)": the part
  * after AND names no family). */
-function coSubjects(title: string): Map<string, string[]> {
+export function coSubjects(title: string): Map<string, string[]> {
   const out = new Map<string, string[]>();
   for (const segment of repairSpacing(title).split(/\s+[-–—]\s+/)) {
     const parts = segment.split(/\s+AND\s+|\s*&\s*/).map((x) => x.trim()).filter(Boolean);
@@ -801,7 +806,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
     }
     // A drive's detail ("VARIABLE FREQUENCY DRIVE CONTROL"): a unit whose
     // row prints a VFD and that no detail of its own names takes it.
-    if (!found.some((b) => RANK[b.kind] <= 2) && /(?:^|[^A-Z])(?:VFD|V\.F\.D\.?|VARIABLE FREQUENCY DRIVE)(?:$|[^A-Z])/.test(Object.values(u.cells).map(clean).join(" | "))) {
+    if (!found.some((b) => RANK[b.kind] <= 2) && printsDrive(u.cells)) {
       // A drive detail for other equipment ("SUPPLY FAN VFD CONTROL") is not
       // this unit's unless its row prints what the title names.
       const driveWords = new Set(["VARIABLE", "FREQUENCY", "DRIVE", "DRIVES", "VFD", "VFDS", "VSD", "SPEED"]);
@@ -862,6 +867,14 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   return out;
 }
 
+/** Whether a unit's schedule (its title and type columns) prints the whole
+ * subject of a title that names no family, a split system's SPLIT aside:
+ * what makes such a detail a family detail of the unit (readers/r0.ts
+ * aboutOthers checks the binder's claim with it). */
+export function scheduleNamesSubject(title: string, row: Pick<RowUnit, "table_title" | "cells">): boolean {
+  return namesRow(title, row, typeText(row), true);
+}
+
 /** A schedule note or remark that sends a unit to the control drawings. */
 const CONTROLS_REF = /\b(?:SEE|REFER\s+TO|PER)\s+(?:THE\s+)?(?:(?:TEMPERATURE\s+)?CONTROLS?|DDC|BAS|BMS|ATC)\s+(?:DRAWINGS?|SHEETS?|DIAGRAMS?|DETAILS?|SCHEMATICS?|SEQUENCES?)\b|\b(?:SEE|REFER\s+TO)\s+(?:THE\s+)?SEQUENCES?\s+OF\s+(?:OPERATIONS?|CONTROLS?)\b/;
 
@@ -893,7 +906,7 @@ const LOCATION_HEADER = /\b(?:LOCATION|MOUNTED|INSTALLED)\b/i;
  * system names no unit a hot-water unit heater's row could print. */
 const MEDIA = new Set(["HYDRONIC", "CHILLED_WATER", "STEAM", "CONDENSER", "CONDENSER_WATER", "GLYCOL", "ELECTRIC", "GAS", "REFRIGERANT", "DOMESTIC", "HEATING", "COOLING", "EXISTING"]);
 
-function namesRow(title: string, u: RowUnit, text = typeText(u), paired = false): boolean {
+function namesRow(title: string, u: Pick<RowUnit, "table_title" | "cells">, text = typeText(u), paired = false): boolean {
   const words = canonSubject(title).filter((w) => !DEVICE_NOUNS.has(w) && !MEDIA.has(w) && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !(paired && w === "SPLIT"));
   if (!words.length) return false;
   const row = ` ${canonSubject(text).join(" ")} `;

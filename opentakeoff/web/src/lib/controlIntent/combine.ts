@@ -19,8 +19,10 @@
 //     BAS in its own packet), or the zone plan's device symbol drawn inside
 //     the zone the unit's tag labels (zonePlan.ts, geometric and exact).
 //   · An absence read only through packets no title binds to the unit (a
-//     family's typical detail, a shared system drawing) is no vote: a
-//     typical detail need not draw a zone's own devices (R0 reads it so).
+//     family's typical detail, a shared system drawing), or through a packet
+//     the print says is about other units (readers/r0.ts aboutOthers, CI-23),
+//     is no vote: a typical detail need not draw a zone's own devices (R0
+//     reads it so).
 //   · ABSENT decides false only when all of C9 hold: R0 found no term for
 //     the device in any of the unit's packets and a title binds the unit to
 //     a packet of its own; both R2 runs say it is not drawn; R1 does not say
@@ -41,7 +43,7 @@ import type { DrawingCite, ReaderAnswer } from "./readers/r0";
 import type { ReadingQuestion } from "./readers/questions";
 import type { TermList } from "./readers/terms";
 
-export const COMBINE_VERSION = "control_combine_v6";
+export const COMBINE_VERSION = "control_combine_v7";
 
 export type Outcome = "applied" | "proposal" | "unresolved" | "none";
 
@@ -73,6 +75,9 @@ export interface UnitAnswers {
   questions: readonly ReadingQuestion[];
   answers: readonly ReaderAnswer[];
   bindings: readonly Binding[];
+  /** Packets bound to the unit that the print says are about other units
+   * (readers/r0.ts aboutOthers): no absence is read through them. */
+  others?: readonly string[];
 }
 
 const voteOf = (a: ReaderAnswer, q: ReadingQuestion, titled = true): Vote | null => {
@@ -101,8 +106,10 @@ export function combineUnit(u: UnitAnswers, terms?: TermList): Decision[] {
   const doubtful = new Set(u.bindings.filter((b) => b.proposal || b.ambiguous).map((b) => b.packet));
   const equallyBound = u.bindings.filter((b) => b.ambiguous && !b.proposal).map((b) => b.packet);
   const allProposal = u.bindings.length > 0 && u.bindings.every((b) => b.proposal);
-  // A title binds the unit to a packet, and nothing about it is doubtful.
-  const titled = u.bindings.some((b) => TITLE_KINDS.has(b.kind) && !b.proposal && !b.ambiguous);
+  // A title binds the unit to a packet about it, and nothing about it is
+  // doubtful.
+  const others = new Set(u.others ?? []);
+  const titled = u.bindings.some((b) => TITLE_KINDS.has(b.kind) && !b.proposal && !b.ambiguous && !others.has(b.packet));
   const vote = (a: ReaderAnswer, q: ReadingQuestion) => voteOf(a, q, titled);
   const out: Decision[] = [];
   for (const q of u.questions) {

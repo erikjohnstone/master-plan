@@ -29,13 +29,13 @@ import { sha256Hex } from "../graphKeys.js";
 import { COMBINE_VERSION, combineUnit, type Decision } from "./combine";
 import { memoryRunStore, PENDING_IMAGE, recordedCall, RUNS_VERSION, type ModelRequest, type RunStore, type Transport } from "./runs";
 import { QUESTIONS_VERSION, unitQuestions, type ReadingQuestion } from "./readers/questions";
-import { headsOthers, namesUnit, ownPacket, R0_VERSION, readR0, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
+import { aboutOthers, headsOthers, namesUnit, ownPacket, R0_VERSION, readR0, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
 import { R1_MODEL, R1_PROMPT_VERSION, r1Answers, r1Request, type ReadUnit } from "./readers/r1";
 import { cropSpec, joinRun, R2_MODEL, R2_PROMPT_VERSION, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
 import { TERM_LIST, type TermList } from "./readers/terms";
 import { normText, packetText, TEXT_VERSION, type PacketText } from "./readers/text";
 import type { Packet } from "./evidence";
-import { tagKey } from "./binding";
+import { printsDrive, tagKey, type Binding } from "./binding";
 import type { Box } from "../assemblies/scheduleNotes";
 import { ZONES_VERSION, type Zone, type ZonePlan } from "./zonePlan";
 
@@ -72,6 +72,10 @@ export interface ReadOptions {
   models?: { r1?: string; r2?: string };
   concurrency?: number;
   onProgress?: (msg: string) => void;
+  /** An eval's rebinding of a unit's packets (GATE D's adversarial swap:
+   * the exact readers and combiner, fed packets the binder did not bind).
+   * No surface passes it. */
+  rebind?: (item: number, bindings: readonly Binding[]) => readonly Binding[];
 }
 
 const counts = (): CallCounts => ({ replayed: 0, live: 0, not_recorded: 0, failed: 0, tokens: 0, ms: 0 });
@@ -104,14 +108,17 @@ export async function readControlIntent(input: {
   // 1. The first apply: records and bindings.
   const first = applyAssemblies({ project: input.project, library: input.library, settings: input.settings, overrides: input.overrides });
   const packets = new Map<string, Packet>(first.control.packets.map((p) => [p.id, p]));
+  const bindingsOf = (item: number): readonly Binding[] => (opts.rebind ? opts.rebind(item, first.control.bindings[item] ?? []) : first.control.bindings[item] ?? []);
   // The units a title binds each packet to ("EXHAUST FAN (EF-1,2) SEQUENCE"
   // is EF-1's and EF-2's).
   const titledTo = new Map<string, Array<{ item: number; family: string }>>();
   for (const inst of first.instances) {
-    for (const b of first.control.bindings[inst.item] ?? []) {
+    for (const b of bindingsOf(inst.item)) {
       if (TITLE_KINDS.has(b.kind) && !b.proposal) (titledTo.get(b.packet) ?? titledTo.set(b.packet, []).get(b.packet)!).push({ item: inst.item, family: inst.family });
     }
   }
+  // The scheduled units, whose tags a packet's title may name (CI-23).
+  const scheduled = first.instances.map((i) => ({ tag: i.tag, family: i.family }));
   const texts = new Map<string, PacketText>();
   const textOf = (p: Packet) => texts.get(p.id) ?? texts.set(p.id, packetText(p)).get(p.id)!;
   type Unit = { reading: UnitReading; bound: BoundPacket[]; read: ReadUnit };
@@ -125,7 +132,7 @@ export async function readControlIntent(input: {
     }
   }
   for (const inst of first.instances) {
-    const bindings = first.control.bindings[inst.item] ?? [];
+    const bindings = bindingsOf(inst.item);
     const zones = zonesByTag.get(tagString(inst.tag) ?? "") ?? [];
     if (!bindings.length && !zones.length) continue;
     const layer = layersFor(inst.family, input.library).includes("controls") ? "controls" : layersFor(inst.family, input.library)[0];
@@ -133,11 +140,20 @@ export async function readControlIntent(input: {
     const app = selectAssembly(inst, input.library, input.settings ?? {}, override, layer);
     const questions = unitQuestions(app, input.library, TERM_LIST);
     if (!questions.length) continue;
-    const bound = bindings.filter((b) => packets.has(b.packet)).map((b): BoundPacket => ({
-      packet: packets.get(b.packet)!, text: textOf(packets.get(b.packet)!), binding: b,
-      ...(!TITLE_KINDS.has(b.kind) && (titledTo.get(b.packet) ?? []).some((o) => o.item !== inst.item && o.family === inst.family) ? { othersTitled: true } : {}),
-    }));
     const item = input.project.items[inst.item];
+    const row = { table_title: item?.table_title ?? "", cells: Object.fromEntries(Object.entries(item?.cells ?? {}).map(([h, c]) => [h, String(c?.text ?? "")])) };
+    // A part the unit's row prints (a drive) whose detail is the unit's.
+    const parts = new Set(printsDrive(row.cells) ? ["VARIABLE_FREQUENCY_DRIVE"] : []);
+    const bound = bindings.filter((b) => packets.has(b.packet)).map((b): BoundPacket => {
+      // A packet bound as the unit's own that the print says is about other
+      // units is not its own (CI-23).
+      const others = ownPacket(b, bindings) ? aboutOthers({ packet: packets.get(b.packet)!, binding: b }, inst, scheduled, parts, row) : null;
+      return {
+        packet: packets.get(b.packet)!, text: textOf(packets.get(b.packet)!), binding: b,
+        ...(!TITLE_KINDS.has(b.kind) && (titledTo.get(b.packet) ?? []).some((o) => o.item !== inst.item && o.family === inst.family) ? { othersTitled: true } : {}),
+        ...(others ? { aboutOthers: others } : {}),
+      };
+    });
     const description = Object.entries(item?.cells ?? {}).filter(([h]) => TYPE_HEADER.test(h)).map(([h, c]) => [h, String(c?.text ?? "").trim()]).filter(([, v]) => v && v !== "-").map(([h, v]) => `${h}: ${v}`).join("; ");
     const answers = [...(bound.length ? readR0(inst, bound, questions, TERM_LIST) : []), ...zoneAnswers(zones, questions, TERM_LIST)];
     units.push({
@@ -217,30 +233,32 @@ export async function readControlIntent(input: {
   // pump): UNVERIFIED for this unit.
   function attributed(a: ReaderAnswer, m: Unit): ReaderAnswer {
     if (a.note || !a.cites.length) return a;
-    const all = m.bound.map((b) => b.binding);
+    const all = m.bound.filter((b) => !b.aboutOthers).map((b) => b.binding);
     const bp = (id: string) => m.bound.find((b) => b.packet.id === id);
     // Evidence only from sections headed for other units of its kind ("…
     // (VAV-1-26 AND VAV-1-29) …") is theirs, in any packet.
     const headingOf = (c: ReaderAnswer["cites"][number]) => bp(c.packet)?.text.paragraphs.find((pg) => pg.lines.some((id) => c.lines.includes(id)))?.heading;
     const theirs = a.cites.filter((c) => { const h = headingOf(c); return Boolean(h && headsOthers(h, { tag: m.reading.tag })); });
     if (theirs.length === a.cites.length) return { ...a, note: "unverified", why: `its evidence is from a section headed for other units ("${String(headingOf(theirs[0])).slice(0, 80)}")` };
-    const own = a.cites.some((c) => { const b = bp(c.packet); return Boolean(b && ownPacket(b.binding, all)); });
+    const own = a.cites.some((c) => { const b = bp(c.packet); return Boolean(b && !b.aboutOthers && ownPacket(b.binding, all)); });
     if (own) return a;
     const unit = { tag: m.reading.tag, family: m.reading.family };
     const names = a.cites.some((c) => {
       const b = bp(c.packet);
-      const tagOnly = Boolean(b?.othersTitled);
+      const tagOnly = Boolean(b?.othersTitled || b?.aboutOthers);
       if (namesUnit(normText(c.text), unit, tagOnly)) return true;
       const heading = b?.text.paragraphs.find((pg) => pg.lines.some((id) => c.lines.includes(id)))?.heading;
       return Boolean(heading && namesUnit(heading, unit, tagOnly));
     });
-    return names ? a : { ...a, note: "unverified", why: `its evidence is from drawings ${m.reading.tag} shares with other units, and names no part of it` };
+    if (names) return a;
+    const theirsBy = a.cites.map((c) => bp(c.packet)?.aboutOthers).find(Boolean);
+    return { ...a, note: "unverified", why: theirsBy ? `its evidence is from a drawing about other units (${theirsBy}), and does not print ${m.reading.tag}` : `its evidence is from drawings ${m.reading.tag} shares with other units, and names no part of it` };
   }
   let done = 0;
   await pool(jobs, opts.concurrency ?? 4, async (job) => { await job(); done += 1; opts.onProgress?.(`read ${done}/${jobs.length}`); });
   // 4. Combine.
   for (const u of units) {
-    u.reading.decisions = combineUnit({ questions: u.reading.questions, answers: u.reading.answers, bindings: u.bound.map((b) => b.binding) }, TERM_LIST);
+    u.reading.decisions = combineUnit({ questions: u.reading.questions, answers: u.reading.answers, bindings: u.bound.map((b) => b.binding), others: u.bound.filter((b) => b.aboutOthers).map((b) => b.packet.id) }, TERM_LIST);
     out.units.push(u.reading);
   }
   out.units.sort((a, b) => a.item - b.item);

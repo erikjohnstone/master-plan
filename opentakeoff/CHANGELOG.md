@@ -102,6 +102,19 @@
   binding eval now counts its missed pairs by why. Dev and extraction are
   unchanged.
 
+  **The readers check each binding against the drawing.** A robustness
+  test rebound every dev control drawing to a unit of another kind, as a
+  binder mistake would: 104 of the 217 readings made through them applied
+  (a VAV box took an exhaust fan diagram's "no CO2 sensor" as its own). Now
+  a drawing whose title names other units and not this one, or another kind
+  of equipment (other than a part the unit's row prints, such as its VFD),
+  is not the unit's own, however it was bound. It speaks for the unit only
+  where it prints the unit's tag, and nothing is read as absent through it.
+  The same test now applies 0 readings, for another kind of unit and for
+  another unit of the same kind. No real binding is affected: 1,969
+  bindings over 86 corpus sets, and the dev and unseen readings are
+  byte-identical.
+
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
   a child process, decoded per read, so a "°" falling on a 64 KiB boundary

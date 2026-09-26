@@ -13,7 +13,10 @@
 //     a title binds; any other packet (a tag printed in a system schematic,
 //     an owner's packet) is SHARED, and only its clauses that name the unit
 //     (its tag, its family's noun, its tag's words), or whose section's
-//     heading does, speak for the unit;
+//     heading does, speak for the unit. A packet the print says is about
+//     other units (its title names other scheduled units and not the unit,
+//     or its subject is another kind of equipment: aboutOthers) is never
+//     the unit's own, however it was bound (CI-23);
 //   · ROLE: a not-connected phrase ("THIS SYSTEM IS STANDALONE", "NOT
 //     CONTROLLED BY THE DDC SYSTEM"), whitelisted when an own packet a title
 //     binds prints it of its subject; a local-control phrase (a thermostat,
@@ -27,13 +30,14 @@
 // R0 reports what it read; combine.ts decides what applies.
 import type { Box } from "../../assemblies/scheduleNotes";
 import type { Binding } from "../binding";
-import { PREFIX_WORDS, tagKey } from "../binding";
+import { coSubjects, PREFIX_WORDS, scheduleNamesSubject, tagKey, titleTags } from "../binding";
 import type { Packet } from "../evidence";
+import { subjectFamily } from "../evidence";
 import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v5";
+export const R0_VERSION = "control_r0_v6";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
@@ -45,6 +49,8 @@ export interface BoundPacket {
    * noun there means those units, so only a clause printing the unit's tag
    * speaks for it. */
   othersTitled?: boolean;
+  /** The print says the packet is about other units (aboutOthers): why. */
+  aboutOthers?: string;
 }
 
 /** The printed text a reading rests on. */
@@ -88,6 +94,44 @@ export function ownPacket(b: Binding, all: readonly Binding[]): boolean {
   if (OWN_KINDS.has(b.kind)) return true;
   if (b.kind === "sibling") return all.some((o) => o !== b && TITLE_KINDS.has(o.kind));
   return false;
+}
+
+/** Why the print says a packet bound to a unit as its own is about other
+ * units, or null (CI-23). The binder's claim is checked against the packet:
+ * its title (with its subtitle) names scheduled units by tag and not the
+ * unit ("… EXHAUST FAN (EF-1 THRU EF-3)" bound to VAV-4), or the subject its
+ * title's head names ("X WITH Y" is about X) is another kind of equipment
+ * than the unit's ("UNIT HEATER - CONTROL DIAGRAM" bound to a VAV box),
+ * neither one of the title's subjects joined by AND nor a part the unit's
+ * row prints (a drive: `parts`). A family detail is checked as the binder
+ * takes one: its title names the unit's family (or a part its row prints),
+ * or one of its subjects joined by AND does, or it names none and the unit's
+ * schedule (`row`) prints its subject. A family's typical detail titled for
+ * another unit of the family, its example, stays the unit's. Such a packet
+ * is not the unit's own: only a clause printing the unit's tag speaks for
+ * it, and no absence is read through it. A packet that is not the unit's
+ * own anyway (a system drawing its tag is printed in, its host's packet)
+ * keeps the shared packets' rule: the caller asks only of own bindings. */
+export function aboutOthers(bp: { packet: Pick<Packet, "title" | "subtitle">; binding: Binding }, unit: { tag: string; family?: string }, scheduled: ReadonlyArray<{ tag: string; family: string }>, parts: ReadonlySet<string> = new Set(), row?: { table_title: string; cells: Readonly<Record<string, string>> }): string | null {
+  if (bp.binding.kind === "tag_body" || bp.binding.kind === "component_of") return null;
+  const mark = (k: { prefix: string; n: number; suffix: string }) => `${k.prefix}-${k.n}${k.suffix}`;
+  const own = tagKey(unit.tag);
+  const byMark = new Map<string, string[]>();
+  for (const s of scheduled) { const k = tagKey(s.tag); if (k) (byMark.get(mark(k)) ?? byMark.set(mark(k), []).get(mark(k))!).push(s.family); }
+  const keys = scheduled.map((s) => tagKey(s.tag)).filter((k): k is NonNullable<typeof k> => Boolean(k));
+  const named = titleTags(`${bp.packet.title} ${bp.packet.subtitle ?? ""}`, keys).map((x) => mark(x.key)).filter((m) => byMark.has(m));
+  if (own && named.includes(mark(own))) return null;
+  const typical = bp.binding.kind === "family_detail" && Boolean(unit.family) && named.every((m) => byMark.get(m)!.includes(unit.family!));
+  if (named.length && !typical) return `its title names ${[...new Set(named)].slice(0, 3).join(", ")}, not ${unit.tag}`;
+  const co = coSubjects(bp.packet.title);
+  const subject = subjectFamily(bp.packet.title.split(/\s+(?:WITH|W\/)\s+/)[0]);
+  if (subject && unit.family && subject !== unit.family && !parts.has(subject) && !co.has(unit.family)) return `its title is about ${subject}, not ${unit.family}`;
+  if (bp.binding.kind === "family_detail" && unit.family && row) {
+    const family = subjectFamily(bp.packet.title);
+    const fits = family === unit.family || co.has(unit.family) || (family !== null && parts.has(family)) || (family === null && scheduleNamesSubject(bp.packet.title, row));
+    if (!fits) return family ? `its title is about ${family}, not ${unit.family}` : `its title names no kind of equipment, and ${unit.tag}'s schedule does not print its subject`;
+  }
+  return null;
 }
 
 /** A binding a whitelisted phrase may apply through: a title names the
@@ -232,14 +276,15 @@ function controlAct(c: PacketText["clauses"][number]): { subject: string } | nul
 
 /** R0's answers for one unit. */
 export function readR0(unit: { tag: string; family?: string }, bound: readonly BoundPacket[], questions: readonly ReadingQuestion[], terms: TermList): ReaderAnswer[] {
-  const all = bound.map((b) => b.binding);
+  // A packet the print says is about other units binds nothing of its own.
+  const all = bound.filter((b) => !b.aboutOthers).map((b) => b.binding);
   // The clauses that speak for the unit, per packet.
   const scoped = bound.map((bp) => {
-    const own = ownPacket(bp.binding, all);
+    const own = !bp.aboutOthers && ownPacket(bp.binding, all);
     // In a packet other units share, a clause speaks for the unit when it
     // names the unit, or the heading of its section does.
     const heading = new Map(bp.text.paragraphs.map((pg) => [pg.id, pg.heading]));
-    const tagOnly = Boolean(bp.othersTitled);
+    const tagOnly = Boolean(bp.othersTitled || bp.aboutOthers);
     // A section headed for other units of its kind is theirs, in any packet.
     const clauses = bp.text.clauses.filter((c) => {
       const h = heading.get(c.paragraph);
@@ -251,7 +296,7 @@ export function readR0(unit: { tag: string; family?: string }, bound: readonly B
   // "Absent" is read only where a title binds the unit to a packet of its
   // own: a family's typical detail need not draw a zone's own devices, and a
   // shared packet speaks for other units too.
-  const titled = bound.some((bp) => ownPacket(bp.binding, all) && strongBinding(bp.binding));
+  const titled = bound.some((bp) => !bp.aboutOthers && ownPacket(bp.binding, all) && strongBinding(bp.binding));
   const out: ReaderAnswer[] = [];
   for (const q of questions) {
     if (q.kind === "role") {

@@ -10,7 +10,7 @@ import { findPackets, type Packet } from "../../src/lib/controlIntent/evidence.t
 import type { Binding } from "../../src/lib/controlIntent/binding.ts";
 import { closeLetterSpacing, leadSubject, normText, packetText, printedIn } from "../../src/lib/controlIntent/readers/text.ts";
 import { compileTermList, TERM_LIST } from "../../src/lib/controlIntent/readers/terms.ts";
-import { headsOthers, readR0, namesUnit, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
+import { aboutOthers, headsOthers, readR0, namesUnit, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
 import type { ReadingQuestion } from "../../src/lib/controlIntent/readers/questions.ts";
 import { r1Answers, r1Request } from "../../src/lib/controlIntent/readers/r1.ts";
 import { cropSpec, joinRun, r2PacketAnswers, SPAN_PX_PER_PT } from "../../src/lib/controlIntent/readers/r2.ts";
@@ -136,6 +136,48 @@ test("R0: in a packet titled for other units of its family, the family's noun is
   assert.equal(system.answer, "yes");
   assert.ok(!namesUnit("EXHAUST FAN SHALL OPEN THE DAMPER", { tag: "EF-3", family: "FAN" }, true));
   assert.ok(namesUnit("EF-3 SHALL RUN WHENEVER EF-1 RUNS", { tag: "EF-3", family: "FAN" }, true));
+});
+
+test("R0 + combine: a packet the print says is about other units is not the unit's own, however it is bound (CI-23)", () => {
+  // GATE D's adversarial swap: "EXHAUST FAN - ON/OFF (EF-1 THRU EF-3)" bound
+  // to VAV-4 by a title range it does not print applied VAV-4's options as
+  // absent, and the fans' outputs as its role.
+  const scheduled = ["EF-1", "EF-2", "EF-3", "EF-5"].map((tag) => ({ tag, family: "FAN" })).concat([{ tag: "VAV-4", family: "VAV" }, { tag: "CWP-1", family: "PUMP" }, { tag: "CU-1", family: "CONDENSING_UNIT" }]);
+  const ef = packet("p5", "EXHAUST FAN - ON/OFF (EF-1 THRU EF-3)", [sp("BO - FAN START/STOP", 100, 100), sp("BI - FAN STATUS", 100, 200)]);
+  const vav = { tag: "VAV-4", family: "VAV" };
+  const why = aboutOthers(bound(ef, "list_range"), vav, scheduled)!;
+  assert.match(why, /its title names EF-1, EF-2, EF-3, not VAV-4/);
+  const [co2, r] = readR0(vav, [{ ...bound(ef, "list_range"), aboutOthers: why }], [opt("co2_sensor"), role], TERM_LIST);
+  assert.equal(co2.answer, "not_shown", "no absence through another unit's packet");
+  assert.equal(r.answer, "not_shown", "its outputs are the fans'");
+  assert.equal(readR0(vav, [bound(ef, "list_range")], [opt("co2_sensor")], TERM_LIST)[0].answer, "absent", "unflagged, the binding would be trusted");
+  // Another tag of the family: EF-5 is outside the range; EF-2 is inside it.
+  assert.match(aboutOthers(bound(ef, "tag"), { tag: "EF-5", family: "FAN" }, scheduled)!, /not EF-5/);
+  assert.equal(aboutOthers(bound(ef, "list_range"), { tag: "EF-2", family: "FAN" }, scheduled), null);
+  // Another kind of equipment, named by the title's head ("X WITH Y" is about X).
+  assert.match(aboutOthers(bound(packet("p6", "UNIT HEATER - CONTROL DIAGRAM", []), "family_detail"), vav, scheduled)!, /about UNIT_HEATER, not VAV/);
+  assert.equal(aboutOthers(bound(packet("p7", "LAB VENTILATION WITH SNORKEL HOODS SYSTEM CONTROL SCHEMATIC", []), "cross_reference"), vav, scheduled), null);
+  // A drive's detail is a part of a unit whose row prints a VFD.
+  const vfd = bound(packet("p8", "VARIABLE FREQUENCY DRIVE CONTROL", []), "family_detail");
+  const pump = { tag: "CWP-1", family: "PUMP" };
+  assert.match(aboutOthers(vfd, pump, scheduled)!, /VARIABLE_FREQUENCY_DRIVE/);
+  assert.equal(aboutOthers(vfd, pump, scheduled, new Set(["VARIABLE_FREQUENCY_DRIVE"])), null);
+  // A family's typical detail titled for its example unit; two subjects joined by AND.
+  assert.equal(aboutOthers(bound(packet("p9", "EXHAUST FAN EF-1 CONTROL DIAGRAM", []), "family_detail"), { tag: "EF-5", family: "FAN" }, scheduled), null);
+  assert.equal(aboutOthers(bound(packet("p10", "FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION", [], "sequence"), "family_detail"), { tag: "CU-1", family: "CONDENSING_UNIT" }, scheduled), null);
+  // A family detail whose title names no kind of equipment is the unit's
+  // when its schedule prints the title's subject, as the binder takes one.
+  const dx = bound(packet("p11", "DX SPLIT SYSTEM - CONTROL DIAGRAM", []), "family_detail");
+  const ahu = { table_title: "AIR HANDLING UNIT SCHEDULE", cells: { MARK: "AHU-1", "SUPPLY FAN TAG": "SF-1" } };
+  const fcu = { table_title: "DX SPLIT SYSTEM FAN COIL UNIT SCHEDULE", cells: { MARK: "FCU-1" } };
+  assert.match(aboutOthers(dx, { tag: "AHU-1", family: "AHU" }, scheduled, new Set(), ahu)!, /names no kind of equipment, and AHU-1's schedule does not print its subject/);
+  assert.equal(aboutOthers(dx, { tag: "FCU-1", family: "FCU" }, scheduled, new Set(), fcu), null);
+  // combine: an absence through it is no vote.
+  const q = [opt("co2_sensor")];
+  const absent = [ans("r0", "opt.co2_sensor", "absent"), ans("r2", "opt.co2_sensor", "absent", { run: "a" }), ans("r2", "opt.co2_sensor", "absent", { run: "b" })];
+  const bindings: Binding[] = [{ packet: "p5", kind: "list_range", evidence: "t" }];
+  assert.equal(combineUnit({ questions: q, answers: absent, bindings }, TERM_LIST)[0].outcome, "applied");
+  assert.equal(combineUnit({ questions: q, answers: absent, bindings, others: ["p5"] }, TERM_LIST)[0].outcome, "none");
 });
 
 test("R0: a section headed for other units of the unit's kind is theirs, even in the unit's own family detail", () => {
@@ -513,4 +555,25 @@ test("record: R0, R1 and R2 read a unit, agree and apply; replay reads the same 
   // No readings, or readings that decide nothing: apply is unchanged.
   assert.deepEqual(applyAssemblies({ project, library: LIB, readings: null }), before);
   assert.deepEqual(applyAssemblies({ project, library: LIB, readings: { units: [] } }), before);
+});
+
+test("record: a unit bound to another unit's titled packet reads nothing from it; that unit still reads it (CI-23, GATE D's adversarial swap)", async () => {
+  const items = [row("FAN", "EF-1", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "CONSTANT" }), row("FAN", "EF-2", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "CONSTANT" })];
+  const spans = [
+    sp("MOTORIZED DAMPER", 700, 300), sp("BO - FAN START/STOP", 700, 400), sp("BI - FAN STATUS", 700, 500),
+    sp("1", 651, 1020, 50), sp("EXHAUST FAN EF-1 CONTROL DIAGRAM", 734, 1000, 50), sp("SCALE: NONE", 734, 1060, 25),
+    ...Array.from({ length: 12 }, (_, i) => sp("THE CONTROLLER SHALL MODULATE THE VALVE TO MAINTAIN SETPOINT", 3000, 300 + i * 23)),
+  ];
+  const project: CompiledProject = { items, control: { version: "control_evidence_v1", packets: findPackets("set.pdf#5", spans), sheet_numbers: {} } };
+  const pid = project.control!.packets[0].id;
+  // EF-2 bound by a title that does not print it, as a binder mistake would.
+  const rebind = (item: number, bindings: readonly Binding[]): readonly Binding[] => (item === 1 ? [{ packet: pid, kind: "tag", evidence: "its title names EF-2" }] : bindings);
+  const readings = await readControlIntent({ project, library: LIB }, { store: memoryRunStore(), transport: cannedModel, render: async () => "data:image/png;base64,AAAA", rebind });
+  const ef1 = readings.units.find((x) => x.tag === "EF-1")!;
+  const ef2 = readings.units.find((x) => x.tag === "EF-2")!;
+  assert.equal(ef1.decisions.find((d) => d.question === "opt.motorized_damper")!.outcome, "applied");
+  assert.deepEqual(ef2.decisions.filter((d) => d.outcome !== "none").map((d) => d.question), [], JSON.stringify(ef2.decisions.map((d) => [d.question, d.outcome, d.rule])));
+  const models = ef2.answers.filter((a) => a.reader !== "r0" && a.cites.length);
+  assert.ok(models.length > 0 && models.every((a) => a.note === "unverified"));
+  assert.match(models[0].why!, /about other units \(its title names EF-1, not EF-2\), and does not print EF-2/);
 });

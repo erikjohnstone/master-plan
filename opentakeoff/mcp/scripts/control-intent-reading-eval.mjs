@@ -6,11 +6,12 @@
 // apply path reads. The scoring below is eval-only; no surface imports it.
 //
 //   node --import tsx scripts/control-intent-reading-eval.mjs <corpus-dir> [setId ...]
-//        [--heldout] [--report] [--detail] [--live]
+//        [--heldout] [--report] [--detail] [--live] [--r0]
 //
 //   REPLAY by default: R1 and R2 read only the runs recorded in
 //   reports/control-intent/runs/<set>.jsonl (a request with no run reads
 //   nothing). --live calls the models for what is not recorded, and records.
+//   --r0 reads with R0 alone (model-off, GATE D): no model is read or called.
 //   --heldout scores the frozen held-out documents, aggregates only.
 //   --report writes reports/control-intent/04-reading-eval-<side>.{json,md}.
 //   --detail (dev only) lists every decision that is not right.
@@ -116,7 +117,7 @@ export function summarize(decisions, readerStats) {
 
 function renderText(s, { side, detail, decisions, exactR }) {
   const L = [];
-  L.push(`READING EVAL (instrument 4) — ${side}, replayed runs${detail?.live ? " (live top-up)" : ""}`);
+  L.push(`READING EVAL (instrument 4) — ${side}, ${detail?.r0 ? "R0 alone (model-off)" : `replayed runs${detail?.live ? " (live top-up)" : ""}`}`);
   L.push("");
   const row = (name, c) => `  ${name.padEnd(40)} ${OUTCOMES.map((o) => String(c[o]).padStart(o.length + 1)).join(" ")}`;
   L.push(`  ${"".padEnd(40)} ${OUTCOMES.join(" ")}`);
@@ -150,7 +151,7 @@ async function main() {
   const flag = (f) => argv.includes(f);
   const [corpusDir, ...only] = argv.filter((a) => !a.startsWith("--"));
   if (!corpusDir) {
-    console.error("usage: node --import tsx scripts/control-intent-reading-eval.mjs <corpus-dir> [setId ...] [--heldout] [--report] [--detail] [--live]");
+    console.error("usage: node --import tsx scripts/control-intent-reading-eval.mjs <corpus-dir> [setId ...] [--heldout] [--report] [--detail] [--live] [--r0]");
     process.exit(2);
   }
   const corpus = resolve(corpusDir);
@@ -160,7 +161,8 @@ async function main() {
   const setIds = only.length ? only : split[side].sets;
   const lib = resolve(fileURLToPath(new URL("../../web/src/lib/assemblies/", import.meta.url)));
   const { assemblies: library } = sanitizeAssemblyDefinitions(JSON.parse(readFileSync(join(lib, "starter", "us-typicals-v1.json"), "utf8")).assemblies);
-  const reading = await readingTools(corpus, flag("--live") ? "live" : "replay");
+  if (flag("--r0") && flag("--live")) { console.error("--r0 reads no model: drop --live"); process.exit(2); }
+  const reading = await readingTools(corpus, flag("--r0") ? "r0" : flag("--live") ? "live" : "replay");
   const classes = side === "dev" ? (await import("../../../plans/05-research/pilot/r2-classes.mjs").catch(() => null)) : null;
   const decisions = [];
   const readerStats = [];
@@ -193,7 +195,7 @@ async function main() {
   await reading.close();
   const s = summarize(decisions, readerStats);
   const exactR = classes ? { exact: rExact, total: rTotal } : null;
-  const text = renderText(s, { side, detail: { on: flag("--detail"), live: flag("--live") }, decisions, exactR });
+  const text = renderText(s, { side, detail: { on: flag("--detail"), live: flag("--live"), r0: flag("--r0") }, decisions, exactR });
   console.log(text);
   const g = GATES[side];
   const verdict = side === "dev"
