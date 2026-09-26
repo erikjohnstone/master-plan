@@ -1,0 +1,331 @@
+# 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets MI-501 and MI-502 (pages 21 and 22) of the Albany VAMC main boiler replacement (Alares Architects & Engineers, with NV5 / Mabbett), the tables the second tier's seed drew for its CONDENSING_UNIT, BOILER, PUMP, FAN, UNIT_HEATER and HEAT_EXCHANGER strata.
+#   044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22 | AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU) | CONDENSING_UNIT | all 1 printed row | render: page 22 crop 210,178,1330,226 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 210,232,1330,96) of the row, every cell
+#   044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 | BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE | BOILER | all 4 printed rows | render: page 21 crop 243,142,2617,253 at 3x in 9 tiles (MARK column repeated), notes read at 2.1x (crop 243,390,1457,180); second read at 4x (crop 440,215,2420,173) of all 4 rows, every cell
+#   044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 | GENERATOR FUEL OIL PUMP SCHEDULE | PUMP | all 1 printed row (its mark "FOP-1, 2" names two pumps, keyed as FOP-1 and FOP-2) | render: page 21 crop 1560,624,1296,206 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 1560,680,1296,76) of the row, every cell
+#   044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 | FAN SCHEDULE | FAN | all 7 printed rows | render: page 21 crop 241,624,1241,512 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 241,700,1241,268) of all 7 rows, every cell
+#   044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21 | STEAM UNIT HEATER SCHEDULE | UNIT_HEATER | all 3 printed rows | render: page 21 crop 1560,1380,1296,325 at 3x in 5 tiles (MARK column repeated), notes included; second read at 4x (crop 1560,1500,1296,136) of all 3 rows, every cell
+#   044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22 | BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS | HEAT_EXCHANGER | all 2 printed rows | render: page 22 crop 214,1308,1331,307 at 3x in 5 tiles (MARK column repeated) and notes at 2.5x (crop 214,1585,1331,95); second read at 4x (crop 214,1345,1331,163) of both rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Refrigerant data, staging, efficiencies, MCA/MOCP, boiler horsepower, steam capacity and pressures, relief and cutout settings, heating surface, the #2 oil ratings, auxiliary boiler motors, fan type/wheel/class/arrangement/diameter/efficiency, brake horsepower, motor RPM, control sequences, pressure drops, relief valve settings, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers: 6 table(s), 19 instance(s), 309 keyed attribute value(s) (163 printed, 146 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,area_served,CHIEF OPERATOR OFFICE,,SERVICE: the room the unit serves,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,cfm,,cfm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,cooling_mbh,12000,MBH,RATED COOLING CAPACITY (MBH),
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,bas_interface,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,volts,208,V,"ELECTRICAL DATA, first cell: volts",author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU),ACCU-1,CONDENSING_UNIT,phase,1,,"ELECTRICAL DATA, second cell: phase",author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,area_served,HOSPITAL,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,fuel,dual_fuel,,NATURAL GAS / # 2 OIL,every row prints both a NATURAL GAS and a # 2 OIL input/output block
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,input_mbh,24494,MBH,NATURAL GAS / INPUT / MBH: the first-listed fuel's rating,"printed '24,494'; author's reading of the printed row"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,output_mbh,20085,MBH,NATURAL GAS / OUTPUT / MBH: the first-listed fuel's rating,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,bas_interface,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,volts,460,V,FAN MOTOR / VOLT: the boiler's single-point power (note 11); every motor prints 460 V,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-1,BOILER,phase,3,,FAN MOTOR / PHASE: the boiler's single-point power (note 11); every motor prints 3 phase,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,area_served,HOSPITAL,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,fuel,dual_fuel,,NATURAL GAS / # 2 OIL,every row prints both a NATURAL GAS and a # 2 OIL input/output block
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,input_mbh,24494,MBH,NATURAL GAS / INPUT / MBH: the first-listed fuel's rating,"printed '24,494'; author's reading of the printed row"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,output_mbh,20085,MBH,NATURAL GAS / OUTPUT / MBH: the first-listed fuel's rating,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,bas_interface,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,volts,460,V,FAN MOTOR / VOLT: the boiler's single-point power (note 11); every motor prints 460 V,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-2,BOILER,phase,3,,FAN MOTOR / PHASE: the boiler's single-point power (note 11); every motor prints 3 phase,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,area_served,HOSPITAL,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,fuel,dual_fuel,,NATURAL GAS / # 2 OIL,every row prints both a NATURAL GAS and a # 2 OIL input/output block
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,input_mbh,12247,MBH,NATURAL GAS / INPUT / MBH: the first-listed fuel's rating,"printed '12,247'; author's reading of the printed row"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,output_mbh,10042,MBH,NATURAL GAS / OUTPUT / MBH: the first-listed fuel's rating,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,bas_interface,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,volts,460,V,FAN MOTOR / VOLT: the boiler's single-point power (note 11); every motor prints 460 V,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-3,BOILER,phase,3,,FAN MOTOR / PHASE: the boiler's single-point power (note 11); every motor prints 3 phase,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,area_served,HOSPITAL,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,fuel,dual_fuel,,NATURAL GAS / # 2 OIL,every row prints both a NATURAL GAS and a # 2 OIL input/output block
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,input_mbh,12247,MBH,NATURAL GAS / INPUT / MBH: the first-listed fuel's rating,"printed '12,247'; author's reading of the printed row"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,output_mbh,10042,MBH,NATURAL GAS / OUTPUT / MBH: the first-listed fuel's rating,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,bas_interface,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,volts,460,V,FAN MOTOR / VOLT: the boiler's single-point power (note 11); every motor prints 460 V,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,"BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE",B-4,BOILER,phase,3,,FAN MOTOR / PHASE: the boiler's single-point power (note 11); every motor prints 3 phase,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,area_served,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,service,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,gpm,757,GPH,GPH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,head_ft,,ft,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,motor_hp,0.75,hp,MOTOR / HP,printed '3/4'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,rpm,1140,rpm,MOTOR / RPM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,vfd,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,pump_arrangement,lead_lag,,STARTER: lead/lag operation of the duplex,printed 'AUTOMATIC W/LEAD LAG'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,glycol_pct,,%,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,volts,208,V,MOTOR / V,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-1,PUMP,phase,3,,MOTOR / PH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,area_served,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,service,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,gpm,757,GPH,GPH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,head_ft,,ft,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,motor_hp,0.75,hp,MOTOR / HP,printed '3/4'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,rpm,1140,rpm,MOTOR / RPM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,vfd,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,pump_arrangement,lead_lag,,STARTER: lead/lag operation of the duplex,printed 'AUTOMATIC W/LEAD LAG'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,glycol_pct,,%,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,volts,208,V,MOTOR / V,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,GENERATOR FUEL OIL PUMP SCHEDULE,FOP-2,PUMP,phase,3,,MOTOR / PH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,floor,ROOF,,LOCATION names a level,printed 'BOILER PLANT ROOF'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,area_served,BOILER PLANT,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,service,EXHAUST,,SYSTEM AND/OR SERVICE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,cfm,5000,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,esp_in,1,in. w.c.,TSP / IN: the fan's scheduled static pressure,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,motor_hp,2,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,rpm,1092,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,drive,belt,,FAN / DRIVE,printed 'BELT'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,vfd,yes,,"NOTE 4, where the row's REMARKS cite it: PROVIDE VFD (BY DIV 26)",printed 'PROVIDE VFD (BY DIV 26)'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,control,VARIABLE,,MOTOR ELECTRICAL / SPEED CONTROL,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-1,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,floor,ROOF,,LOCATION names a level,printed 'BOILER PLANT ROOF'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,area_served,BOILER PLANT,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,service,EXHAUST,,SYSTEM AND/OR SERVICE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,cfm,5000,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,esp_in,1,in. w.c.,TSP / IN: the fan's scheduled static pressure,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,motor_hp,2,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,rpm,1092,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,drive,belt,,FAN / DRIVE,printed 'BELT'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,vfd,yes,,"NOTE 4, where the row's REMARKS cite it: PROVIDE VFD (BY DIV 26)",printed 'PROVIDE VFD (BY DIV 26)'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,ecm,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,control,VARIABLE,,MOTOR ELECTRICAL / SPEED CONTROL,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-2,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,floor,ROOF,,LOCATION names a level,printed 'BOILER PLANT ROOF'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,area_served,BOILER PLANT,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,service,EXHAUST,,SYSTEM AND/OR SERVICE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,cfm,5000,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,esp_in,1,in. w.c.,TSP / IN: the fan's scheduled static pressure,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,motor_hp,2,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,motor_watts,,W,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,rpm,1092,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,drive,belt,,FAN / DRIVE,printed 'BELT'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,vfd,yes,,"NOTE 4, where the row's REMARKS cite it: PROVIDE VFD (BY DIV 26)",printed 'PROVIDE VFD (BY DIV 26)'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,ecm,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,control,VARIABLE,,MOTOR ELECTRICAL / SPEED CONTROL,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-3,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,floor,ROOF,,LOCATION names a level,printed 'BOILER PLANT ROOF'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,area_served,BOILER PLANT,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,service,EXHAUST,,SYSTEM AND/OR SERVICE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,cfm,5000,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,esp_in,1,in. w.c.,TSP / IN: the fan's scheduled static pressure,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,motor_hp,2,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,motor_watts,,W,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,rpm,1092,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,drive,belt,,FAN / DRIVE,printed 'BELT'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,vfd,yes,,"NOTE 4, where the row's REMARKS cite it: PROVIDE VFD (BY DIV 26)",printed 'PROVIDE VFD (BY DIV 26)'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,ecm,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,control,VARIABLE,,MOTOR ELECTRICAL / SPEED CONTROL,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-4,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,floor,ROOF,,LOCATION names a level,printed 'GENERATOR ROOM ROOF'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,area_served,GENERATOR ROOM,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,service,EXHAUST,,SYSTEM AND/OR SERVICE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,cfm,1700,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,esp_in,1,in. w.c.,TSP / IN: the fan's scheduled static pressure,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,motor_hp,0.75,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,motor_watts,,W,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,rpm,1273,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,drive,belt,,FAN / DRIVE,printed 'BELT'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,vfd,,,"NOTE 4, where the row's REMARKS cite it: PROVIDE VFD (BY DIV 26)",blank cell
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,ecm,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,control,CONSTANT,,MOTOR ELECTRICAL / SPEED CONTROL,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-5,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,floor,,,LOCATION names a level,blank cell
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,area_served,TEMPORARY ENCLOSURE,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,service,EXHAUST,,SYSTEM AND/OR SERVICE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,cfm,3500,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,esp_in,0.5,in. w.c.,TSP / IN: the fan's scheduled static pressure,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,motor_hp,3,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,motor_watts,,W,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,rpm,2594,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,drive,belt,,FAN / DRIVE,printed 'BELT'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,vfd,,,"NOTE 4, where the row's REMARKS cite it: PROVIDE VFD (BY DIV 26)",blank cell
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,ecm,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,control,CONSTANT,,MOTOR ELECTRICAL / SPEED CONTROL,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,EF-6,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,floor,,,LOCATION names a level,blank cell
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,area_served,TEMPORARY ENCLOSURE,,AREA AND/OR BLDG SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,service,SUPPLY,,SYSTEM AND/OR SERVICE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,cfm,3500,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,esp_in,0.35,in. w.c.,TSP / IN: the fan's scheduled static pressure,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,motor_hp,0.75,hp,MOTOR ELECTRICAL / NOMINAL POWER / HP,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,motor_watts,,W,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,rpm,882,rpm,FAN / FAN MAX RPM: the fan's speed,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,drive,belt,,FAN / DRIVE,printed 'BELT'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,vfd,,,"NOTE 4, where the row's REMARKS cite it: PROVIDE VFD (BY DIV 26)",blank cell
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,ecm,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,control,CONSTANT,,MOTOR ELECTRICAL / SPEED CONTROL,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,volts,460,V,MOTOR ELECTRICAL / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,FAN SCHEDULE,SF-1,FAN,phase,3,,MOTOR ELECTRICAL / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,floor,,,LOCATION names a level,blank cell
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,area_served,GENERATOR ROOM,,AREA SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,heating_medium,steam,,TABLE TITLE,title printed 'STEAM UNIT HEATER SCHEDULE'; every row prints an entering steam pressure and a trap load
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,cfm,750,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,heating_mbh,48000,BTU/H,MIN CAPACITY / BTUH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,hw_gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,hw_ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,hw_lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,steam_psig,5,psig,PRESS ENT HEATER / PSIG,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,steam_lb_hr,52.5,lb/hr,TRAP / LBS/HR: the heater's condensate load,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,motor_hp,0.05,hp,MOTOR / NOMINAL POWER / HP,printed '1/20'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,volts,120,V,MOTOR / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-3,UNIT_HEATER,phase,1,,MOTOR / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,floor,,,LOCATION names a level,blank cell
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,area_served,SUMMER BOILER ROOM,,AREA SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,heating_medium,steam,,TABLE TITLE,title printed 'STEAM UNIT HEATER SCHEDULE'; every row prints an entering steam pressure and a trap load
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,cfm,1100,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,heating_mbh,72000,BTU/H,MIN CAPACITY / BTUH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,hw_gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,hw_ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,hw_lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,steam_psig,5,psig,PRESS ENT HEATER / PSIG,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,steam_lb_hr,78.6,lb/hr,TRAP / LBS/HR: the heater's condensate load,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,motor_hp,0.05,hp,MOTOR / NOMINAL POWER / HP,printed '1/20'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,volts,120,V,MOTOR / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-4,UNIT_HEATER,phase,1,,MOTOR / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,floor,MEZZANINE,,LOCATION names a level,printed 'MEZZANINE - ROOM 7'; author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,area_served,REST ROOM,,AREA SERVED,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,heating_medium,steam,,TABLE TITLE,title printed 'STEAM UNIT HEATER SCHEDULE'; every row prints an entering steam pressure and a trap load
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,cfm,395,cfm,AIR FLOW / CFM,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,heating_mbh,18000,BTU/H,MIN CAPACITY / BTUH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,hw_gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,hw_ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,hw_lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,steam_psig,5,psig,PRESS ENT HEATER / PSIG,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,steam_lb_hr,18.2,lb/hr,TRAP / LBS/HR: the heater's condensate load,author's reading of the printed row
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,eh_kw,,kW,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,motor_hp,16,W,MOTOR / NOMINAL POWER / HP,printed '16W'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,conn_in,,in,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,volts,120,V,MOTOR / VOLT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21,STEAM UNIT HEATER SCHEDULE,UH-5,UNIT_HEATER,phase,1,,MOTOR / PHASE,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,area_served,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,hx_type,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,primary_medium,other,,TABLE TITLE,"title printed 'FLUE GAS/FEEDWATER HEAT EXCHANGERS': flue gas, the heating side"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,secondary_medium,other,,TABLE TITLE,"title printed 'FLUE GAS/FEEDWATER HEAT EXCHANGERS': boiler feedwater, the heated side"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,secondary_gpm,41,gpm,WATER FLOW / GPM,printed '41.0'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,secondary_ewt_f,210,F,DESIGN WATER TEMPERATURES DEG F / IN,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,secondary_lwt_f,242.5,F,DESIGN WATER TEMPERATURES DEG F / OUT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,capacity_mbh,672.94,MBH,MIN HEAT EXCHANGED / MBH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,primary_conn_in,24,in,NOTE 5,"note 5, cited by every row: 'FLUE GAS CONNECTION 24 IN, LIQUID CONNECTION 2 INCHES, OVERALL CONFIGURATION 27X34'"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,secondary_conn_in,2,in,NOTE 5,"note 5, cited by every row: 'FLUE GAS CONNECTION 24 IN, LIQUID CONNECTION 2 INCHES, OVERALL CONFIGURATION 27X34'"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,primary_steam_psig,,psig,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-1,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,building,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,floor,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,area_served,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,qty,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,hx_type,,,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,primary_medium,other,,TABLE TITLE,"title printed 'FLUE GAS/FEEDWATER HEAT EXCHANGERS': flue gas, the heating side"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,secondary_medium,other,,TABLE TITLE,"title printed 'FLUE GAS/FEEDWATER HEAT EXCHANGERS': boiler feedwater, the heated side"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,primary_gpm,,gpm,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,primary_ewt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,primary_lwt_f,,F,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,secondary_gpm,41,gpm,WATER FLOW / GPM,printed '41.0'
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,secondary_ewt_f,210,F,DESIGN WATER TEMPERATURES DEG F / IN,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,secondary_lwt_f,242.5,F,DESIGN WATER TEMPERATURES DEG F / OUT,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,capacity_mbh,672.94,MBH,MIN HEAT EXCHANGED / MBH,
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,primary_conn_in,24,in,NOTE 5,"note 5, cited by every row: 'FLUE GAS CONNECTION 24 IN, LIQUID CONNECTION 2 INCHES, OVERALL CONFIGURATION 27X34'"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,secondary_conn_in,2,in,NOTE 5,"note 5, cited by every row: 'FLUE GAS CONNECTION 24 IN, LIQUID CONNECTION 2 INCHES, OVERALL CONFIGURATION 27X34'"
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,primary_steam_psig,,psig,,not printed
+044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#22,"BOILER PLANT · ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS",FHX-2,HEAT_EXCHANGER,primary_steam_lb_hr,,lb/hr,,not printed

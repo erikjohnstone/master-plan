@@ -1,0 +1,895 @@
+[
+ {
+  "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "tag": "WHSE-AHU-1",
+  "family": "AHU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-1",
+  "family": "UNIT_HEATER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-2",
+  "family": "UNIT_HEATER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-3",
+  "family": "UNIT_HEATER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-4",
+  "family": "UNIT_HEATER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-5",
+  "family": "UNIT_HEATER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "UH-6",
+  "family": "UNIT_HEATER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-1A",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-1B",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-2A",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-2B",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-3A",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "tag": "EF-3B",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "BP-1",
+  "family": "PUMP",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "BP-2",
+  "family": "PUMP",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "EXISTING HEATING WATER SYSTEM CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "CWP-1",
+  "family": "PUMP",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "EXISTING CHILLED WATER SYSTEM CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "tag": "CWP-2",
+  "family": "PUMP",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "EXISTING CHILLED WATER SYSTEM CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-04",
+  "family": "AHU",
+  "class": "R:absence",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-05",
+  "family": "AHU",
+  "class": "R:absence",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-08",
+  "family": "AHU",
+  "class": "R:absence",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-06",
+  "family": "AHU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "tag": "AHU-07",
+  "family": "AHU→DOAS",
+  "class": "R:absence",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "bldg5406-hvac-demo",
+  "tag": "CH-1",
+  "family": "AIR_COOLED_CHILLER",
+  "class": "R+Q",
+  "cat": "option_wrong",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-1",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-2",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-3",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-4",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "bldg5406-hvac-demo",
+  "tag": "EF-5",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "bldg5406-hvac-demo",
+  "tag": "AC-1",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "UH-1",
+  "family": "UNIT_HEATER",
+  "class": "R:absence",
+  "cat": "wrong_typical",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "UNIT HEATER - CONTROL DIAGRAM",
+   "UNIT HEATER - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "UH-2",
+  "family": "UNIT_HEATER",
+  "class": "R:absence",
+  "cat": "wrong_typical",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "UNIT HEATER - CONTROL DIAGRAM",
+   "UNIT HEATER - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "AHU-1",
+  "family": "AHU",
+  "class": "R+Q",
+  "cat": "option_wrong",
+  "state": "a:bound_on_schematic",
+  "schematic": "CHILLED WATER SYSTEM - CONTROL DIAGRAM",
+  "sequence": "AHU - 1 SEQUENCE OF OPERATIONS",
+  "family_titles": [
+   "AHU - 1 SEQUENCE OF OPERATIONS"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "B-1",
+  "family": "BOILER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "a:bound_on_schematic",
+  "schematic": "BOILER SYSTEM - CONTROL DIAGRAM",
+  "sequence": "HEATING HOT WATER SYSTEM - SEQUENCE OF OPERATION",
+  "family_titles": [
+   "BOILER SYSTEM - CONTROL DIAGRAM"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "B-2",
+  "family": "BOILER",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "a:bound_on_schematic",
+  "schematic": "BOILER SYSTEM - CONTROL DIAGRAM",
+  "sequence": null,
+  "family_titles": [
+   "BOILER SYSTEM - CONTROL DIAGRAM"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "CH-1",
+  "family": "AIR_COOLED_CHILLER",
+  "class": "R+Q",
+  "cat": "option_wrong",
+  "state": "a:bound_on_schematic",
+  "schematic": "CHILLED WATER SYSTEM - CONTROL DIAGRAM",
+  "sequence": null,
+  "family_titles": [
+   "CHILLED WATER SYSTEM - CONTROL DIAGRAM",
+   "CHILLED WATER SYSTEM - SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "CP-1",
+  "family": "PUMP",
+  "class": "R:absence",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "CP-2",
+  "family": "PUMP",
+  "class": "R:absence",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "CP-3",
+  "family": "PUMP",
+  "class": "R:absence",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "CP-4",
+  "family": "PUMP",
+  "class": "R:absence",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "CP-5",
+  "family": "PUMP",
+  "class": "R:absence",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "CP-6",
+  "family": "PUMP",
+  "class": "R:absence",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EF-1",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "MECHANICAL ROOM EXHAUST FAN - CONTROL DIAGRAM",
+   "TOILET EXHAUST FANS - CONTROL DIAGRAM"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EF-2",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "MECHANICAL ROOM EXHAUST FAN - CONTROL DIAGRAM",
+   "TOILET EXHAUST FANS - CONTROL DIAGRAM"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EF-3",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "MECHANICAL ROOM EXHAUST FAN - CONTROL DIAGRAM",
+   "TOILET EXHAUST FANS - CONTROL DIAGRAM"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EF-4",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "MECHANICAL ROOM EXHAUST FAN - CONTROL DIAGRAM",
+   "TOILET EXHAUST FANS - CONTROL DIAGRAM"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "HWRP-1",
+  "family": "PUMP",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EV-1",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+   "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EV-2",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+   "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EV-3",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+   "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EV-4",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+   "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EV-5",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+   "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "EV-6",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+   "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "federal-mech",
+  "tag": "FCU-1",
+  "family": "FCU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "FAN COIL UNIT - CONTROL DIAGRAM",
+   "DX SPLIT SYSTEM - CONTROL DIAGRAM",
+   "FAN COIL UNIT - SEQUENCE OF OPERATION:"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EH-1",
+  "family": "UNIT_HEATER",
+  "class": "R:text",
+  "cat": "wrong_typical",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "ELECTRIC UNIT HEATER CONTROL SCHEMATIC",
+   "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EH-2",
+  "family": "UNIT_HEATER",
+  "class": "R:text",
+  "cat": "wrong_typical",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "ELECTRIC UNIT HEATER CONTROL SCHEMATIC",
+   "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EH-3",
+  "family": "UNIT_HEATER",
+  "class": "R:text",
+  "cat": "wrong_typical",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "ELECTRIC UNIT HEATER CONTROL SCHEMATIC",
+   "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EH-4",
+  "family": "UNIT_HEATER",
+  "class": "R:text",
+  "cat": "wrong_typical",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "ELECTRIC UNIT HEATER CONTROL SCHEMATIC",
+   "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EH-5",
+  "family": "UNIT_HEATER",
+  "class": "R:text",
+  "cat": "wrong_typical",
+  "state": "a:bound_on_schematic",
+  "schematic": "ELECTRIC UNIT HEATER CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "ELECTRIC UNIT HEATER CONTROL SCHEMATIC",
+   "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EH-6",
+  "family": "UNIT_HEATER",
+  "class": "R:text",
+  "cat": "wrong_typical",
+  "state": "d:family_title_only",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": [
+   "ELECTRIC UNIT HEATER CONTROL SCHEMATIC",
+   "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "HUM-1",
+  "family": "HUMIDIFIER",
+  "class": "R:text",
+  "cat": "option_wrong",
+  "state": "a:bound_on_schematic",
+  "schematic": "VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC",
+  "sequence": "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION",
+  "family_titles": []
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "LEF-1",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "a:bound_on_schematic",
+  "schematic": "LAB EXHAUST SYSTEM CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "HEAT RELIEF FAN CONTROL SCHEMATIC",
+   "HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC",
+   "GENERAL EXHAUST FAN CONTROL SCHEMATIC"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "F-1",
+  "family": "FCU→FURNACE",
+  "class": "R:diagram",
+  "cat": "option_wrong",
+  "state": "b:printed_unbound",
+  "schematic": "SPLIT SYSTEM CONTROL SCHEMATIC",
+  "sequence": "HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+  "family_titles": [
+   "DUCTLESS SPLIT SYSTEM CONTROL SCHEMATIC",
+   "SPLIT SYSTEM CONTROL SCHEMATIC",
+   "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "BP-1",
+  "family": "PUMP",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "HEATING WATER SYSTEM CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "BP-2",
+  "family": "PUMP",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "e:nothing",
+  "schematic": null,
+  "sequence": null,
+  "family_titles": []
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EF-1",
+  "family": "FAN",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "GENERAL EXHAUST FAN CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "HEAT RELIEF FAN CONTROL SCHEMATIC",
+   "HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC",
+   "GENERAL EXHAUST FAN CONTROL SCHEMATIC"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EF-2",
+  "family": "FAN",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "GENERAL EXHAUST FAN CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "HEAT RELIEF FAN CONTROL SCHEMATIC",
+   "HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC",
+   "GENERAL EXHAUST FAN CONTROL SCHEMATIC"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EF-3",
+  "family": "FAN",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "GENERAL EXHAUST FAN CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "HEAT RELIEF FAN CONTROL SCHEMATIC",
+   "HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC",
+   "GENERAL EXHAUST FAN CONTROL SCHEMATIC"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EF-5",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "HEAT RELIEF FAN CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "HEAT RELIEF FAN CONTROL SCHEMATIC",
+   "HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC",
+   "GENERAL EXHAUST FAN CONTROL SCHEMATIC"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "EF-6",
+  "family": "FAN",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "HEAT RELIEF FAN CONTROL SCHEMATIC",
+   "HEAT RELIEF FAN W/ LOUVER CONTROL SCHEMATIC",
+   "GENERAL EXHAUST FAN CONTROL SCHEMATIC"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "DFC-1",
+  "family": "FCU",
+  "class": "R:text",
+  "cat": "unresolved",
+  "state": "b:printed_unbound",
+  "schematic": "DUCTLESS SPLIT SYSTEM CONTROL SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "DUCTLESS SPLIT SYSTEM CONTROL SCHEMATIC",
+   "SPLIT SYSTEM CONTROL SCHEMATIC",
+   "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION"
+  ]
+ },
+ {
+  "set": "itd-d1-lab",
+  "tag": "AHU-1",
+  "family": "AHU",
+  "class": "R:diagram",
+  "cat": "unresolved",
+  "state": "a:bound_on_schematic",
+  "schematic": "VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC",
+  "sequence": null,
+  "family_titles": [
+   "VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC",
+   "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION"
+  ]
+ }
+]

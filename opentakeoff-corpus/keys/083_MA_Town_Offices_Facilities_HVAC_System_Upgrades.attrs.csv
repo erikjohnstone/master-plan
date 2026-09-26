@@ -1,0 +1,222 @@
+# 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260927 (reports/assemblies/tier3/01-split.json); transcription: reports/assemblies/key-work/083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet H0.2 (page 4) of the Doherty Middle School HVAC bid set, Andover MA (BLW Engineers), the tables the third tier's seed drew for its FCU, ERV and HEAT_PUMP strata.
+#   083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4 | COMMON AREA DX FAN COIL UNIT SCHEDULE | FCU | all 4 printed rows | render: page 4 overview at 40 dpi; crop 43,97,967,243 at 3x in 2 tiles (TAG No. column repeated), notes in the same tiles; second read at 4x (crops 43,166,487,30 and 530,166,652,30; 43,227,487,30 and 530,227,652,30; 43,257,487,30 and 530,257,652,30) of FCU-1, FCU-3 and FCU-4, every cell
+#   083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4 | ENERGY RECOVERY VENTILATOR SCHEDULE | ERV | all 1 printed row of the first part | render: page 4 overview at 40 dpi; the first table (y 588) crop 43,583,1139,127 at 3x in 2 tiles (TAG No. column repeated), notes in the same tiles; second read at 4x (crops 43,649,487,22 and 530,649,652,22) of ERV-1, every cell
+#   083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4 | ENERGY RECOVERY VENTILATOR SCHEDULE | ERV | all 1 printed row of the second part | render: page 4 overview at 40 dpi; the second table (y 1093) crop 43,1087,1917,193 at 3x in 4 tiles (TAG No. column repeated), notes in the same tiles; second read at 4x (crops 43,1178,497,23 and 540,1178,500,23 and 1040,1178,500,23 and 1540,1178,420,23) of ERV-2, every cell
+#   083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4 | COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE | HEAT_PUMP | all 3 printed rows | render: page 4 overview at 40 dpi; crop 43,420,967,155 at 3x in 2 tiles (TAG No. column repeated); second read at 4x (crops 43,468,487,33 and 530,468,652,33; 43,501,487,33 and 530,501,652,33; 43,534,487,33 and 530,534,652,33) of HP-1, HP-2 and HP-3, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and models, unit types, DX fan coils' cooling and heating capacities (the fan coil family keys chilled- and hot-water coils only), outside and minimum airflows, static pressures, fan speeds, electrical watts, amps, frequency, MCA, FLA and MOCP, refrigerants, module counts, heat recovery and heat pump performance, filters and efficiencies, weights, remarks, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades: 4 table(s), 9 instance(s), 202 keyed attribute value(s) (47 printed, 155 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,area_served,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,pipes,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,cfm,300,cfm,FAN DATA / MAX (CFM),
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,motor_hp,,hp,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,fan_speeds,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,ecm,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,cooling_type,dx,,TABLE TITLE,title printed 'COMMON AREA DX FAN COIL UNIT SCHEDULE'
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,heating_type,heat_pump,,TABLE TITLE,"title 'COMMON AREA DX FAN COIL UNIT SCHEDULE'; every row prints HEATING MBH: a DX coil that heats, a heat pump (the author's reading)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,eh_kw,,kW,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,volts,208,V,ELECTRICAL DATA / VOLT,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-1,FCU,phase,1,,ELECTRICAL DATA / PH,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,area_served,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,pipes,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,cfm,307,cfm,FAN DATA / MAX (CFM),
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,motor_hp,,hp,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,fan_speeds,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,ecm,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,cooling_type,dx,,TABLE TITLE,title printed 'COMMON AREA DX FAN COIL UNIT SCHEDULE'
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,heating_type,heat_pump,,TABLE TITLE,"title 'COMMON AREA DX FAN COIL UNIT SCHEDULE'; every row prints HEATING MBH: a DX coil that heats, a heat pump (the author's reading)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,eh_kw,,kW,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,volts,208,V,ELECTRICAL DATA / VOLT,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-2,FCU,phase,1,,ELECTRICAL DATA / PH,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,area_served,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,pipes,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,cfm,317,cfm,FAN DATA / MAX (CFM),
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,motor_hp,,hp,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,fan_speeds,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,ecm,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,cooling_type,dx,,TABLE TITLE,title printed 'COMMON AREA DX FAN COIL UNIT SCHEDULE'
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,chw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,heating_type,heat_pump,,TABLE TITLE,"title 'COMMON AREA DX FAN COIL UNIT SCHEDULE'; every row prints HEATING MBH: a DX coil that heats, a heat pump (the author's reading)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,hw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,eh_kw,,kW,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,volts,208,V,ELECTRICAL DATA / VOLT,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-3,FCU,phase,1,,ELECTRICAL DATA / PH,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,area_served,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,pipes,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,cfm,405,cfm,FAN DATA / MAX (CFM),
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,motor_hp,,hp,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,fan_speeds,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,ecm,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,cooling_type,dx,,TABLE TITLE,title printed 'COMMON AREA DX FAN COIL UNIT SCHEDULE'
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,chw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,heating_type,heat_pump,,TABLE TITLE,"title 'COMMON AREA DX FAN COIL UNIT SCHEDULE'; every row prints HEATING MBH: a DX coil that heats, a heat pump (the author's reading)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_wpd_ft,,ft,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_mbh,,MBH,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_rows,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,hw_glycol_pct,,%,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,eh_kw,,kW,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,volts,208,V,ELECTRICAL DATA / VOLT,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,FCU-4,FCU,phase,1,,ELECTRICAL DATA / PH,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,area_served,NURSE,,LOCATION SERVED,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,recovery_type,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,supply_cfm,170,cfm,SUPPLY FAN DATA / CFM,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,exhaust_cfm,170,cfm,EXHAUST FAN DATA / CFM,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,supply_fan_hp,0.03,hp,SUPPLY FAN DATA / HP,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,exhaust_fan_hp,0.04,hp,EXHAUST FAN DATA / HP,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,volts,120,V,ELECTRICAL DATA / VOLTS,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,phase,1,,ELECTRICAL DATA / PHASE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,area_served,,,LOCATION SERVED,printed 'REFER TO PLANS' — not a single value for this attribute
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,recovery_type,wheel,,TYPE,printed 'WHEEL'
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,supply_cfm,1230,cfm,SUPPLY FAN DATA / CFM,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,exhaust_cfm,1230,cfm,EXHAUST FAN DATA / CFM,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,supply_fan_hp,,hp,SUPPLY FAN DATA / HP,printed '-'
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,exhaust_fan_hp,,hp,EXHAUST FAN DATA / HP,printed '-'
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,volts,220,V,ELECTRICAL DATA / VOLTS,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-2,ERV,phase,1,,ELECTRICAL DATA / PHASE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,area_served,LIBRARY,,FAN COIL(S) SERVED,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,cfm,,cfm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,cooling_mbh,144,MBH,MBH / COOL,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,cooling_tons,,tons,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,heating_mbh,162,MBH,MBH / HEAT,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,hw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,hw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,hw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,chw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,chw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,chw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,motor_hp,,hp,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,eh_kw,,kW,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,bas_interface,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,volts,208,V,ELECTRICAL DATA / VOLTS,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,phase,3,,ELECTRICAL DATA / PHASE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,area_served,NURSE,,FAN COIL(S) SERVED,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cfm,,cfm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cooling_mbh,36,MBH,MBH / COOL,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cooling_tons,,tons,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,heating_mbh,40,MBH,MBH / HEAT,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,motor_hp,,hp,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,eh_kw,,kW,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,bas_interface,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,volts,208,V,ELECTRICAL DATA / VOLTS,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,phase,1,,ELECTRICAL DATA / PHASE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,building,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,floor,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,area_served,SWEGON,,FAN COIL(S) SERVED,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,qty,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,cfm,,cfm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,cooling_mbh,57.5,MBH,MBH / COOL,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,cooling_tons,,tons,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,heating_mbh,57,MBH,MBH / HEAT,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,hw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,hw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,hw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,chw_gpm,,gpm,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,chw_ewt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,chw_lwt_f,,F,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,motor_hp,,hp,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,eh_kw,,kW,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,conn_in,,in,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,bas_interface,,,,not printed
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,volts,208,V,ELECTRICAL DATA / VOLTS,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,HP-3,HEAT_PUMP,phase,1,,ELECTRICAL DATA / PHASE,

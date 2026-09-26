@@ -106,3 +106,26 @@ test("VALVE_SIZE_DOMAIN_VALUES strings are literally present in the template's o
     for (const value of list) assert.match(domainXml, new RegExp(`<x:v>${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}<\\/x:v>`), `"${value}" must appear verbatim in DomainValues`);
   }
 });
+
+test("split: a valve list longer than the dropdown range becomes several workbooks, each inside rows 6–200, every row once", async () => {
+  const { valveSizeTemplateFiles, VALVE_SIZE_TEMPLATE_ROWS_PER_FILE, VALVE_SIZE_TEMPLATE_DROPDOWN_LAST_ROW, VALVE_SIZE_TEMPLATE_FILENAME } = await import("../src/lib/valveSizeTemplate.ts");
+  assert.equal(VALVE_SIZE_TEMPLATE_ROWS_PER_FILE, VALVE_SIZE_TEMPLATE_DROPDOWN_LAST_ROW - 6 + 1);
+  const bytes = await loadTemplateBytes();
+  const row = (i: number): ValveSizeRow => ({ unitNo: `CV-${i}`, location: null, system: "SHHW", ports: null, pnClass: null,
+    lineSizeIn: null, designFlowRateGpm: i, consumerDpPsi: null, branchDpPsi: null, tolerancePct: null, positioningSignal: null, operatingVoltage: null });
+  const one = await valveSizeTemplateFiles(bytes, [row(1)]);
+  assert.deepEqual(one.map((f) => [f.filename, f.rows]), [[VALVE_SIZE_TEMPLATE_FILENAME, 1]], "a list that fits keeps the template's own file name");
+  const n = VALVE_SIZE_TEMPLATE_ROWS_PER_FILE * 2 + 3;
+  const files = await valveSizeTemplateFiles(bytes, Array.from({ length: n }, (_, i) => row(i + 1)));
+  assert.deepEqual(files.map((f) => f.filename), ["Valve_Size_Template_US_Global_part1of3.xlsx", "Valve_Size_Template_US_Global_part2of3.xlsx", "Valve_Size_Template_US_Global_part3of3.xlsx"]);
+  assert.deepEqual(files.map((f) => f.rows), [VALVE_SIZE_TEMPLATE_ROWS_PER_FILE, VALVE_SIZE_TEMPLATE_ROWS_PER_FILE, 3]);
+  const seen: string[] = [];
+  for (const f of files) {
+    const xml = strFromU8(unzipSync(f.bytes)["xl/worksheets/sheet1.xml"]);
+    const rowNums = [...xml.matchAll(/<x:row r="(\d+)"/g)].map((m) => Number(m[1])).filter((r) => r >= 6);
+    assert.ok(Math.max(...rowNums) <= VALVE_SIZE_TEMPLATE_DROPDOWN_LAST_ROW, `${f.filename} stays inside the dropdown range`);
+    seen.push(...[...xml.matchAll(/<x:t xml:space="preserve">(CV-\d+)<\/x:t>/g)].map((m) => m[1]));
+  }
+  assert.equal(seen.length, n);
+  assert.equal(new Set(seen).size, n, "every row exactly once");
+});

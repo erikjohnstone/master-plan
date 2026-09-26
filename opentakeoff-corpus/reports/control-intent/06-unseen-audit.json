@@ -1,0 +1,1440 @@
+{
+ "about": "Every decision the readers apply on the unseen corpus sets, with a person's verdict against its cites and the drawing (right, wrong, or unaudited until checked). mcp/scripts/control-intent-unseen-audit.mjs replays the recorded runs (unseen-runs/) and compares.",
+ "sets": [
+  {
+   "id": "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+   "status": "no_snapshot",
+   "error": "child exited null with no result"
+  },
+  {
+   "id": "24_IA_JohnsonCounty_Courthouse",
+   "status": "read",
+   "units": 8,
+   "packets": 3,
+   "applied": 0
+  },
+  {
+   "id": "13_MI_MSU_LifeSciences_LabRenovation",
+   "status": "no_control_packets",
+   "units": 5,
+   "packets": 0
+  },
+  {
+   "id": "15_IA_IowaState_Biorenewables_Lab",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 0
+  },
+  {
+   "id": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 0
+  },
+  {
+   "id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "status": "read",
+   "units": 39,
+   "packets": 9,
+   "applied": 4
+  },
+  {
+   "id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+   "status": "read",
+   "units": 15,
+   "packets": 1,
+   "applied": 0
+  },
+  {
+   "id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "status": "read",
+   "units": 7,
+   "packets": 9,
+   "applied": 0
+  },
+  {
+   "id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+   "status": "read",
+   "units": 2,
+   "packets": 7,
+   "applied": 0
+  },
+  {
+   "id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "status": "read",
+   "units": 21,
+   "packets": 13,
+   "applied": 20
+  },
+  {
+   "id": "tinker-afb-iwcs-controls",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 11
+  },
+  {
+   "id": "02_UT_FAA_Ogden_AirTrafficControlTower",
+   "status": "read",
+   "units": 1,
+   "packets": 2,
+   "applied": 0
+  },
+  {
+   "id": "04_NV_VA_LasVegas_CentralUtilityPlant",
+   "status": "read",
+   "units": 15,
+   "packets": 15,
+   "applied": 0
+  },
+  {
+   "id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "status": "read",
+   "units": 37,
+   "packets": 12,
+   "applied": 2
+  },
+  {
+   "id": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "status": "read",
+   "units": 34,
+   "packets": 11,
+   "applied": 16
+  },
+  {
+   "id": "07_MO_MSHP_TroopB_HVAC_Boilers_Controls",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 9
+  },
+  {
+   "id": "10_MO_Hawthorn_PsychHospital_HVAC",
+   "status": "read",
+   "units": 5,
+   "packets": 1,
+   "applied": 0
+  },
+  {
+   "id": "17_FL_SuwanneeHS_Courtyard_100CD",
+   "status": "no_control_packets",
+   "units": 1,
+   "packets": 0
+  },
+  {
+   "id": "20_TX_JudsonISD_MEP_Upgrades_Pkg6",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 10
+  },
+  {
+   "id": "23_GA_MaconBibb_RecreationCenter",
+   "status": "read",
+   "units": 16,
+   "packets": 4,
+   "applied": 0
+  },
+  {
+   "id": "28_WA_KCHA_PublicHousing_HVAC",
+   "status": "no_control_packets",
+   "units": 4,
+   "packets": 0
+  },
+  {
+   "id": "29_TX_JPS_Hospital_CentralPlant_Chiller",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 5
+  },
+  {
+   "id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 0
+  },
+  {
+   "id": "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
+   "status": "read",
+   "units": 7,
+   "packets": 14,
+   "applied": 0
+  },
+  {
+   "id": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "status": "read",
+   "units": 42,
+   "packets": 10,
+   "applied": 16
+  },
+  {
+   "id": "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 0
+  },
+  {
+   "id": "029_ME_BGS_Project_3548_MEANG_Building_493_Boiler",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 0
+  },
+  {
+   "id": "032_PA_Construct_EHRM_Infrastructure_Upgrades",
+   "status": "read",
+   "units": 2,
+   "packets": 4,
+   "applied": 0
+  },
+  {
+   "id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 9
+  },
+  {
+   "id": "046_MI_Veterinary_Medical_Center_Replace_Elevators_3",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 2
+  },
+  {
+   "id": "048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 1
+  },
+  {
+   "id": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+   "status": "read",
+   "units": 2,
+   "packets": 4,
+   "applied": 0
+  },
+  {
+   "id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 4
+  },
+  {
+   "id": "057_US_VA_Project_626_15_106_Upgrade_Energy",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 0
+  },
+  {
+   "id": "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit",
+   "status": "read",
+   "units": 2,
+   "packets": 6,
+   "applied": 0
+  },
+  {
+   "id": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "status": "read",
+   "units": 14,
+   "packets": 7,
+   "applied": 8
+  },
+  {
+   "id": "080_CA_Contra_Costa_College_Science_Center_Conference",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 0
+  },
+  {
+   "id": "084_SC_H59_N054_FW_Building_112_Chiller_Addition",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 3
+  },
+  {
+   "id": "086_CA_Contra_Costa_College_Early_Learning_Center",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 5
+  },
+  {
+   "id": "087_US_Contra_Costa_College_Chiller_Replacement",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 1
+  },
+  {
+   "id": "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 2
+  },
+  {
+   "id": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
+   "status": "read",
+   "units": 3,
+   "packets": 2,
+   "applied": 0
+  },
+  {
+   "id": "100_OH_Butler_Tech_RTU_Welding_Source_Capture",
+   "status": "no_control_packets",
+   "units": 4,
+   "packets": 0
+  },
+  {
+   "id": "tarrant-county-mechanical",
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 2
+  },
+  {
+   "id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "status": "read",
+   "units": 2,
+   "packets": 7,
+   "applied": 2
+  }
+ ],
+ "totals": {
+  "eligible": 45,
+  "read": 20,
+  "applied": 68,
+  "right": 68,
+  "wrong": 0,
+  "unaudited": 0,
+  "gone": [],
+  "withdrawn": [
+   "16_NV_CarsonValleyMS_HVAC_Replacement",
+   "03_FL_HurlburtField_ChildDevCenter",
+   "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+   "11_CA_SDSU_EngSciences_Complex_100SD",
+   "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "21_VA_OrangeCounty_PublicSafetyBldg",
+   "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+   "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+   "021_XX_Laboratory_building_mechanical_drawings_lab",
+   "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+   "035_AR_564_19_101_Construct_New_Water_Storage",
+   "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+   "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+   "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+   "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
+   "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+   "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+   "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+   "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+   "082_OR_Klamath_Community_College_Career_Learning",
+   "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+   "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+   "09_ME_BGS_KennebecValleyCC_Renovation",
+   "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+   "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+   "19_CA_VistaUSD_DataCenter",
+   "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+   "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+   "071_ME_BGS_Project_3809_Health_Science_Center",
+   "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+   "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+   "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "08_ME_BGS_Augusta_EastCampus_Renovation",
+   "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+   "01_NY_VA_Northport_Dialysis_100CD",
+   "22_GA_Valdosta_FireStation8_100CD",
+   "26_CA_TransbayTower_Mechanical_64Sheets",
+   "011_IL_VA_Hines_Finance_Center_Renovation",
+   "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+   "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+   "033_MN_VA_Project_656_18_301_Construct_Replace",
+   "054_NV_VA_Project_654_212_Design_Build_Central",
+   "089_FL_Airport_Terminal_and_Hangar_Development"
+  ]
+ },
+ "decisions": [
+  {
+   "set": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "tag": "AHU-A",
+   "family": "AHU",
+   "question": "opt.relief_damper",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56#p2",
+    "sheet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56",
+    "text": "1. RELIEF DAMPER (AE - 1) SHALL MODULATE TO MAINTAIN PRESSURE SETPOINT IN THE RETURN FAN PLENUM (PTE - 2) AT OR BELOW 0.1\" W.C. (adj.)."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "tag": "AHU-A",
+   "family": "AHU",
+   "question": "opt.return_fan",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56#p2",
+    "sheet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56",
+    "text": "RF-1"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "tag": "AHU-A",
+   "family": "AHU",
+   "question": "opt.duct_smoke_detectors",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56#p2",
+    "sheet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56",
+    "text": "2. DUCT SMOKE DETECTOR PROVIDED BY DIVISION 28 SUB - CONTRACTOR."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "tag": "AHU-A",
+   "family": "AHU",
+   "question": "opt.economizer",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56#p2",
+    "sheet": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56",
+    "text": "2. RETURN, RELIEF, VENTILATION, AND ECONOMIZER DAMPERS"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "AHU-1",
+   "family": "AHU",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:commands(unverified) r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20",
+    "text": "THE DDC SYSTEM SHALL MODULATE THE SUPPLY FAN VFD OUTPUT TO MAINTAIN THE SUPPLY DUCT STATIC PRESSURE AT SETPOINT (SENSED BY THE EXISTING DOWNSTREAM PRESSURE SENSOR)."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "AHU-2",
+   "family": "DOAS",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands(unverified)",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p4",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "THE DDC/EMS SYSTEM SHALL INDEX THE UNIT TO RUN AC • EXHAUST/SUPPLY INTERLOCK:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "AHU-2",
+   "family": "DOAS",
+   "question": "opt.duct_smoke_detectors",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p4",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "THE SMOKE DETECTOR SHALL BE HARDWIRED INTO T SIGNALS TO THE DDC AND BUILDING FIRE ALARM SYSTEMS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "CH-1",
+   "family": "AIR_COOLED_CHILLER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20#p3",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#20",
+    "text": "3. CHILLER OPERATION & CONTROL THE EMS AND THE CHILLER'S INTERNAL FACTORY CONTROLS SHALL WORK T OGETHER TO ACCOMPLISH THE FOLLOWING:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EF-1",
+   "family": "FAN",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "THE DDC SYSTEM SHALL MODULATE THE EXHAUST FAN MOTOR SPEED ACCORDING TO THE ACTIVE OCCUPANCY MODE (AS COMMANDED BY THE SYSTEM SCHEDUL E AND TIED TO AHU - 2). • OCCUPIED MODE:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EF-1",
+   "family": "FAN",
+   "question": "opt.pressure_control",
+   "value": false,
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:absent r1:absent r2a:absent r2b:no",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "OCCUPIED MODE: THE FAN SHALL OPERATE AT THE OCCUPIED DESIGN SPEED, DETERMINED AND SET DURING THE TEST AND BALANCE (TAB) PHASE."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EF-2",
+   "family": "FAN",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "THE DDC SYSTEM SHALL MODULATE THE EXHAUST FAN MOTOR SPEED ACCORDING TO THE ACTIVE OCCUPANCY MODE (AS COMMANDED BY THE SYSTEM SCHEDUL E AND TIED TO AHU - 2). • OCCUPIED MODE:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EF-2",
+   "family": "FAN",
+   "question": "opt.pressure_control",
+   "value": false,
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:absent r1:absent r2a:absent r2b:no",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "OCCUPIED MODE: THE FAN SHALL OPERATE AT THE OCCUPIED DESIGN SPEED, DETERMINED AND SET DURING THE TEST AND BALANCE (TAB) PHASE."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EF-3",
+   "family": "FAN",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "THE DDC SYSTEM SHALL MODULATE THE EXHAUST FAN MOTOR SPEED ACCORDING TO THE ACTIVE OCCUPANCY MODE (AS COMMANDED BY THE SYSTEM SCHEDUL E AND TIED TO AHU - 2). • OCCUPIED MODE:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EF-3",
+   "family": "FAN",
+   "question": "opt.pressure_control",
+   "value": false,
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:absent r1:absent r2a:absent r2b:no",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#21",
+    "text": "OCCUPIED MODE: THE FAN SHALL OPERATE AT THE OCCUPIED DESIGN SPEED, DETERMINED AND SET DURING THE TEST AND BALANCE (TAB) PHASE."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-1",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:commands(unverified) r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "IF THE HEATER IS STAGED RATHER THAN SCR MODULATING, THE DD C SYSTEM SHALL SEQUENTIALLY ENERGIZE THE HEATING STAGES BASED ON THE CALCULATED PID LOOP HEATING DEMAND, WITH A MINIMUM TIME DELAY BETWEEN STAGE S TO PREVENT SHORT - CYCLING."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-1",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:yes(unverified) r2b:yes(unverified)",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "DESCRIPTION ELECTRIC HEAT DISCHARGE AIR TEMPERATURE SPACE TEMPERATURE (°F) ZONE LOCAL SETPOINT ADJUST (°F)"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-2",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:commands(unverified) r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "IF THE HEATER IS STAGED RATHER THAN SCR MODULATING, THE DD C SYSTEM SHALL SEQUENTIALLY ENERGIZE THE HEATING STAGES BASED ON THE CALCULATED PID LOOP HEATING DEMAND, WITH A MINIMUM TIME DELAY BETWEEN STAGE S TO PREVENT SHORT - CYCLING."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-2",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:yes(unverified) r2b:yes(unverified)",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "DESCRIPTION ELECTRIC HEAT DISCHARGE AIR TEMPERATURE SPACE TEMPERATURE (°F) ZONE LOCAL SETPOINT ADJUST (°F)"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-3",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:commands(unverified) r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "IF THE HEATER IS STAGED RATHER THAN SCR MODULATING, THE DD C SYSTEM SHALL SEQUENTIALLY ENERGIZE THE HEATING STAGES BASED ON THE CALCULATED PID LOOP HEATING DEMAND, WITH A MINIMUM TIME DELAY BETWEEN STAGE S TO PREVENT SHORT - CYCLING."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-3",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:yes(unverified) r2b:yes(unverified)",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "DESCRIPTION ELECTRIC HEAT DISCHARGE AIR TEMPERATURE SPACE TEMPERATURE (°F) ZONE LOCAL SETPOINT ADJUST (°F)"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-4",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:commands(unverified) r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "IF THE HEATER IS STAGED RATHER THAN SCR MODULATING, THE DD C SYSTEM SHALL SEQUENTIALLY ENERGIZE THE HEATING STAGES BASED ON THE CALCULATED PID LOOP HEATING DEMAND, WITH A MINIMUM TIME DELAY BETWEEN STAGE S TO PREVENT SHORT - CYCLING."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-4",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:yes(unverified) r2b:yes(unverified)",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "DESCRIPTION ELECTRIC HEAT DISCHARGE AIR TEMPERATURE SPACE TEMPERATURE (°F) ZONE LOCAL SETPOINT ADJUST (°F)"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-5",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:commands(unverified) r2a:commands r2b:commands",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "IF THE HEATER IS STAGED RATHER THAN SCR MODULATING, THE DD C SYSTEM SHALL SEQUENTIALLY ENERGIZE THE HEATING STAGES BASED ON THE CALCULATED PID LOOP HEATING DEMAND, WITH A MINIMUM TIME DELAY BETWEEN STAGE S TO PREVENT SHORT - CYCLING."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tag": "EDH-5",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:yes(unverified) r2b:yes(unverified)",
+   "cite": {
+    "packet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22#p1",
+    "sheet": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#22",
+    "text": "DESCRIPTION ELECTRIC HEAT DISCHARGE AIR TEMPERATURE SPACE TEMPERATURE (°F) ZONE LOCAL SETPOINT ADJUST (°F)"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.return_fan",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#54#p1",
+    "sheet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#54",
+    "text": "IF THIS TEMPERATURE FALLS BELOW 40°F [4.4°C], AS SENSED BY THE TSL, THE SUPPLY AND RETURN FANS SHALL SHUT DOWN AND A CRITICAL ALARM SHALL INDICATE AT THE DIGITAL CONTROL PANEL AND ECC."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "tag": "AC-57",
+   "family": "AHU",
+   "question": "opt.duct_smoke_detectors",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#54#p1",
+    "sheet": "05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#54",
+    "text": "A. WHEN SMOKE IS DETECTED BY DUCT SMOKE DETECTOR, SD, THE SUPPLY AND RETURN FANS SHALL SHUT \"OFF\" AND AN ALARM SIGNAL SHALL BE TRANSMITTED TO THE FIRE ALARM SYSTEM."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-1",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-1",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "USERS SHALL BE ABLE TO OVERRIDE INDIVIDUAL ZONE SETPOINTS AT THE LOCAL THERMOSTATS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-2",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-2",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "USERS SHALL BE ABLE TO OVERRIDE INDIVIDUAL ZONE SETPOINTS AT THE LOCAL THERMOSTATS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-3",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-3",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "USERS SHALL BE ABLE TO OVERRIDE INDIVIDUAL ZONE SETPOINTS AT THE LOCAL THERMOSTATS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-4",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-4",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "USERS SHALL BE ABLE TO OVERRIDE INDIVIDUAL ZONE SETPOINTS AT THE LOCAL THERMOSTATS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-5",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-6",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-7",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-7",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "USERS SHALL BE ABLE TO OVERRIDE INDIVIDUAL ZONE SETPOINTS AT THE LOCAL THERMOSTATS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-8",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-8",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "USERS SHALL BE ABLE TO OVERRIDE INDIVIDUAL ZONE SETPOINTS AT THE LOCAL THERMOSTATS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-9",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "1. THE BAS SHALL ENABLE THE VAV BOXES AT ALL TIMES."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tag": "VAV-9",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76#p1",
+    "sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
+    "text": "USERS SHALL BE ABLE TO OVERRIDE INDIVIDUAL ZONE SETPOINTS AT THE LOCAL THERMOSTATS."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "EF-A1",
+   "family": "FAN",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26",
+    "text": "LOW VOLTAGE BO"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "EF-A1",
+   "family": "FAN",
+   "question": "opt.motorized_damper",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26",
+    "text": "INTEGRAL 2-POSITION, LINE- VOLTAGE MOTORIZED DAMPER WHERE SCHEDULED"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "EF-A3",
+   "family": "FAN",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26",
+    "text": "LOW VOLTAGE BO"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "EF-A3",
+   "family": "FAN",
+   "question": "opt.motorized_damper",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26",
+    "text": "INTEGRAL 2-POSITION, LINE- VOLTAGE MOTORIZED DAMPER WHERE SCHEDULED"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "SEF-A3",
+   "family": "FAN",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26",
+    "text": "LOW VOLTAGE BO"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "SEF-A3",
+   "family": "FAN",
+   "question": "opt.motorized_damper",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#26",
+    "text": "INTEGRAL 2-POSITION, LINE- VOLTAGE MOTORIZED DAMPER WHERE SCHEDULED"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWCH-A1",
+   "family": "CABINET_UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p2",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "DO NOT"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWCH-A2",
+   "family": "CABINET_UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p2",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "DO NOT"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWCH-A3",
+   "family": "CABINET_UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p2",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "DO NOT"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWCH-B1",
+   "family": "CABINET_UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p2",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "DO NOT"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWCH-B2",
+   "family": "CABINET_UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p2",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "DO NOT"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A1",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "LOW VOLTAGE BO ENABLE"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A2",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "LOW VOLTAGE BO ENABLE"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A3",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "LOW VOLTAGE BO ENABLE"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A4",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "LOW VOLTAGE BO ENABLE"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "tag": "HWUH-A5",
+   "family": "UNIT_HEATER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "cite": {
+    "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
+    "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
+    "text": "LOW VOLTAGE BO ENABLE"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-1A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p2",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-2A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p2",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-3A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p2",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-4A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p2",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-5A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p5",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-6A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p5",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-7A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p6",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "tag": "HP-8A",
+   "family": "HEAT_PUMP",
+   "question": "opt.fan_status",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes",
+   "cite": {
+    "packet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5#p6",
+    "sheet": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf#5",
+    "text": "FAN STATUS TO BE MONITORED BY CURRENT TRANSDUCER."
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "tag": "CWP9-10",
+   "family": "PUMP",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22#p2",
+    "sheet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22",
+    "text": "BO - Chilled Water Pump 1 Start/Stop BO - Chilled Water Pump 2 Start/Stop"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  },
+  {
+   "set": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "tag": "HWP1-2",
+   "family": "PUMP",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22#p1",
+    "sheet": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22",
+    "text": "BO - Hot Water Pump 1 Start/Stop BO - Hot Water Pump 2 Start/Stop"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26"
+  }
+ ]
+}

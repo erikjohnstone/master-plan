@@ -1,0 +1,28 @@
+# 074_CA_West_Valley_College_STEM_Classroom_HVAC.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/074_CA_West_Valley_College_STEM_Classroom_HVAC.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M002 (page 25) of the West Valley College science and math HVAC renovations (P2S), every claimed keyed-family table of this dev document.
+#   074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25 | ENERGY RECOVERY VENTILATOR | ERV | all 1 printed row | render: page 25 crop 1615,365,1105,140 at 3x in 3 tiles (MARK column repeated) and remark crop 1615,512,500,35 at 3x; second read at 4x (crop 2155,400,210,105) of QTY, airflow and V/PH
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, type, ESP, MCA/MOP, weight, detail references and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 074_CA_West_Valley_College_STEM_Classroom_HVAC: 1 table(s), 1 instance(s), 11 keyed attribute value(s) (5 printed, 6 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,building,,,,not printed
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,floor,,,,not printed
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,area_served,"A 157 CHEM.PREP AREA, A 158 SHARED OFFICE, A 159 INSTRUMENT STORAGE, A 160 CHEMISTRY LAB",,SERVICE: the rooms the unit serves,author's reading of the printed row
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,qty,1,,QTY,
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,recovery_type,,,,not printed
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,supply_cfm,450,cfm,"FAN / AIRFLOW CFM: the unit's airflow, read as supply",author's reading of the printed row
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,exhaust_cfm,,cfm,,not printed
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,supply_fan_hp,,hp,,not printed
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,exhaust_fan_hp,,hp,,not printed
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,volts,115,V,ELECTRICAL / V/PH: volts part,author's reading of the printed row
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ENERGY RECOVERY VENTILATOR,ERV-A-15,ERV,phase,1,,ELECTRICAL / V/PH: phase part,author's reading of the printed row

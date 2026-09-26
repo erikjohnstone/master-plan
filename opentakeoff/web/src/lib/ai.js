@@ -2,7 +2,10 @@
 //
 // Product default: Agent talks to same-origin `/cerebras-api` (Vite proxies to
 // Cerebras and injects CEREBRAS_API_KEY server-side). Models are fixed:
-// gpt-oss-120b (agent) + gemma-4-31b (vision). Users do NOT paste keys.
+// gpt-oss-120b (agent) + qwen-3.8-27b (vision). Users do NOT paste keys.
+// (gemma-4-31b, the earlier vision default, is no longer served by the
+// endpoint: GET /v1/models listed only gpt-oss-120b and qwen-3.8-27b on
+// 2026-09-25; goals/CONTROL_INTENT.md C11.)
 //
 // Optional override: localStorage / VITE_AI_* still work for forks that want
 // BYOK. Never set VITE_AI_KEY on a public deploy — Vite would inline it.
@@ -21,7 +24,7 @@ export const PLATFORM_AI = {
   apiKey: "",
   model: "gpt-oss-120b",
   provider: "openai",
-  visionModel: "gemma-4-31b",
+  visionModel: "qwen-3.8-27b",
 };
 
 const env = (name) => (import.meta.env && import.meta.env[name]) || "";

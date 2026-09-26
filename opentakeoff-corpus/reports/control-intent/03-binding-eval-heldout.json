@@ -1,0 +1,76 @@
+{
+ "side": "heldout",
+ "total": {
+  "packets": 52,
+  "pairs": 191,
+  "pair_hits": 21,
+  "recall": 0.1099476439790576,
+  "recall_without_semantic": 0.11229946524064172,
+  "recall_with_proposals": 0.42408376963350786,
+  "bindings": 76,
+  "confirmed_bindings": 18,
+  "precision": 1,
+  "precision_with_proposals": 0.6710526315789473,
+  "proposals": 58,
+  "ambiguous": 12,
+  "hits_inside": 0,
+  "hits_containing": 0,
+  "key_packets_not_found": 15,
+  "units_with_packets": 85,
+  "unit_recall": 0.2,
+  "unmatched_instances": 0,
+  "none_units_bound": 0,
+  "by_key_kind": {
+   "tag": {
+    "pairs": 59,
+    "hit": 6
+   },
+   "family_detail": {
+    "pairs": 112,
+    "hit": 8
+   },
+   "semantic": {
+    "pairs": 4,
+    "hit": 0
+   },
+   "list_range": {
+    "pairs": 16,
+    "hit": 7
+   }
+  },
+  "by_binding_kind": {
+   "tag_body": {
+    "bindings": 3,
+    "correct": 3,
+    "proposal": 0
+   },
+   "family_detail": {
+    "bindings": 68,
+    "correct": 43,
+    "proposal": 58
+   },
+   "system": {
+    "bindings": 1,
+    "correct": 1,
+    "proposal": 0
+   },
+   "list_range": {
+    "bindings": 1,
+    "correct": 1,
+    "proposal": 0
+   },
+   "label_list": {
+    "bindings": 3,
+    "correct": 3,
+    "proposal": 0
+   }
+  },
+  "miss_reasons": {
+   "key packet not found by the finder": 45,
+   "bound to packets of other kinds only": 21,
+   "no binding at all (tag read)": 43,
+   "bound as a proposal only": 60,
+   "no binding at all (tag not read)": 1
+  }
+ }
+}

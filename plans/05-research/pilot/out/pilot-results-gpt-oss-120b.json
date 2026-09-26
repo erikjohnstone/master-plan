@@ -1,0 +1,560 @@
+[
+ {
+  "run": 1,
+  "tag": "UH-1",
+  "set": "040_IL_VA_So",
+  "ms": 1806,
+  "usage": {
+   "total_tokens": 12158,
+   "completion_tokens": 1071,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 956
+   },
+   "prompt_tokens": 11087,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  },
+  "governing": "UNIT HEATER CONTROL - HYDRONIC",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 3,
+  "quotes_verified": 3,
+  "unverified": [],
+  "scored": [
+   {
+    "o": "modulating_valve",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   },
+   {
+    "o": "fan_status",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "setpoint_adjust",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   }
+  ]
+ },
+ {
+  "run": 1,
+  "tag": "EF-1A",
+  "set": "040_IL_VA_So",
+  "ms": 1143,
+  "usage": {
+   "total_tokens": 12469,
+   "completion_tokens": 1352,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 1166
+   },
+   "prompt_tokens": 11117,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  },
+  "governing": "INTERLOCK - FAN-A",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 6,
+  "quotes_verified": 5,
+  "unverified": [
+   "THE EVENT THE FMCS COMMANDS THE EXHAUST FAN TO OPERATE AND THE CURRENT SENSING RELAY DETECTS INSUFFICIENT CURRENT DRAW."
+  ],
+  "scored": [
+   {
+    "o": "motorized_damper",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   },
+   {
+    "o": "pressure_control",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   }
+  ]
+ },
+ {
+  "run": 1,
+  "tag": "EF-2A",
+  "set": "040_IL_VA_So",
+  "ms": 798,
+  "usage": {
+   "total_tokens": 11948,
+   "completion_tokens": 916,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 766
+   },
+   "prompt_tokens": 11032,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  },
+  "governing": "EXHAUST FAN CONTROL - AHU",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 4,
+  "quotes_verified": 4,
+  "unverified": [],
+  "scored": [
+   {
+    "o": "motorized_damper",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   }
+  ]
+ },
+ {
+  "run": 1,
+  "tag": "AHU-04",
+  "set": "094_FL_Orang",
+  "ms": 979,
+  "usage": {
+   "total_tokens": 8082,
+   "completion_tokens": 1531,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 1229
+   },
+   "prompt_tokens": 6551,
+   "prompt_tokens_details": {
+    "cached_tokens": 384
+   }
+  },
+  "governing": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 3,
+  "quotes_verified": 3,
+  "unverified": [],
+  "scored": [
+   {
+    "o": "co2_sensor",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "occupancy_sensor",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "window_switch",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "setpoint_adjust",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "relief_damper",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "relief_fan",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "return_fan",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "enthalpy_economizer",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "differential_economizer",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "dx_staged",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "freezestat_to_bas",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "duct_smoke_detectors",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "ufc_minimum_points",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   }
+  ]
+ },
+ {
+  "run": 1,
+  "tag": "EH-1",
+  "set": "itd-d1-lab",
+  "ms": 814,
+  "usage": {
+   "total_tokens": 9661,
+   "completion_tokens": 916,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 836
+   },
+   "prompt_tokens": 8745,
+   "prompt_tokens_details": {
+    "cached_tokens": 384
+   }
+  },
+  "governing": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION",
+  "bas_role": "controls",
+  "bas_role_ok": false,
+  "quotes_total": 2,
+  "quotes_verified": 0,
+  "unverified": [
+   "1.          SEND ENABLE COMMAND TO THE UNIT HEATER TO RUN CONTINUOUSLY.",
+   "1.          SEND DISABLE COMMAND TO THE UNIT HEATER."
+  ],
+  "scored": []
+ },
+ {
+  "run": 1,
+  "tag": "EF-1",
+  "set": "itd-d1-lab",
+  "ms": 693,
+  "usage": {
+   "total_tokens": 9381,
+   "completion_tokens": 633,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 567
+   },
+   "prompt_tokens": 8748,
+   "prompt_tokens_details": {
+    "cached_tokens": 512
+   }
+  },
+  "governing": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
+  "bas_role": "not_connected",
+  "bas_role_ok": true,
+  "quotes_total": 1,
+  "quotes_verified": 1,
+  "unverified": [],
+  "scored": []
+ },
+ {
+  "run": 2,
+  "tag": "UH-1",
+  "set": "040_IL_VA_So",
+  "ms": 929,
+  "usage": {
+   "total_tokens": 12158,
+   "completion_tokens": 1071,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 956
+   },
+   "prompt_tokens": 11087,
+   "prompt_tokens_details": {
+    "cached_tokens": 11008
+   }
+  },
+  "governing": "UNIT HEATER CONTROL - HYDRONIC",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 3,
+  "quotes_verified": 3,
+  "unverified": [],
+  "scored": [
+   {
+    "o": "modulating_valve",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   },
+   {
+    "o": "fan_status",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "setpoint_adjust",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   }
+  ]
+ },
+ {
+  "run": 2,
+  "tag": "EF-1A",
+  "set": "040_IL_VA_So",
+  "ms": 1109,
+  "usage": {
+   "total_tokens": 12469,
+   "completion_tokens": 1352,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 1166
+   },
+   "prompt_tokens": 11117,
+   "prompt_tokens_details": {
+    "cached_tokens": 11008
+   }
+  },
+  "governing": "INTERLOCK - FAN-A",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 6,
+  "quotes_verified": 5,
+  "unverified": [
+   "THE EVENT THE FMCS COMMANDS THE EXHAUST FAN TO OPERATE AND THE CURRENT SENSING RELAY DETECTS INSUFFICIENT CURRENT DRAW."
+  ],
+  "scored": [
+   {
+    "o": "motorized_damper",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   },
+   {
+    "o": "pressure_control",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   }
+  ]
+ },
+ {
+  "run": 2,
+  "tag": "EF-2A",
+  "set": "040_IL_VA_So",
+  "ms": 742,
+  "usage": {
+   "total_tokens": 11948,
+   "completion_tokens": 916,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 766
+   },
+   "prompt_tokens": 11032,
+   "prompt_tokens_details": {
+    "cached_tokens": 11008
+   }
+  },
+  "governing": "EXHAUST FAN CONTROL - AHU",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 4,
+  "quotes_verified": 4,
+  "unverified": [],
+  "scored": [
+   {
+    "o": "motorized_damper",
+    "want": "true",
+    "got": "true",
+    "verdict": "right+cited"
+   }
+  ]
+ },
+ {
+  "run": 2,
+  "tag": "AHU-04",
+  "set": "094_FL_Orang",
+  "ms": 990,
+  "usage": {
+   "total_tokens": 8082,
+   "completion_tokens": 1531,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 1229
+   },
+   "prompt_tokens": 6551,
+   "prompt_tokens_details": {
+    "cached_tokens": 384
+   }
+  },
+  "governing": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS",
+  "bas_role": "controls",
+  "bas_role_ok": true,
+  "quotes_total": 3,
+  "quotes_verified": 3,
+  "unverified": [],
+  "scored": [
+   {
+    "o": "co2_sensor",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "occupancy_sensor",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "window_switch",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "setpoint_adjust",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "relief_damper",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "relief_fan",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "return_fan",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "enthalpy_economizer",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "differential_economizer",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "dx_staged",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "freezestat_to_bas",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "duct_smoke_detectors",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   },
+   {
+    "o": "ufc_minimum_points",
+    "want": "false",
+    "got": "not_shown",
+    "verdict": "abstain"
+   }
+  ]
+ },
+ {
+  "run": 2,
+  "tag": "EH-1",
+  "set": "itd-d1-lab",
+  "ms": 809,
+  "usage": {
+   "total_tokens": 9661,
+   "completion_tokens": 916,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 836
+   },
+   "prompt_tokens": 8745,
+   "prompt_tokens_details": {
+    "cached_tokens": 8704
+   }
+  },
+  "governing": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION",
+  "bas_role": "controls",
+  "bas_role_ok": false,
+  "quotes_total": 2,
+  "quotes_verified": 0,
+  "unverified": [
+   "1.          SEND ENABLE COMMAND TO THE UNIT HEATER TO RUN CONTINUOUSLY.",
+   "1.          SEND DISABLE COMMAND TO THE UNIT HEATER."
+  ],
+  "scored": []
+ },
+ {
+  "run": 2,
+  "tag": "EF-1",
+  "set": "itd-d1-lab",
+  "ms": 1077,
+  "usage": {
+   "total_tokens": 9381,
+   "completion_tokens": 633,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0,
+    "reasoning_tokens": 567
+   },
+   "prompt_tokens": 8748,
+   "prompt_tokens_details": {
+    "cached_tokens": 384
+   }
+  },
+  "governing": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
+  "bas_role": "not_connected",
+  "bas_role_ok": true,
+  "quotes_total": 1,
+  "quotes_verified": 1,
+  "unverified": [],
+  "scored": []
+ }
+]

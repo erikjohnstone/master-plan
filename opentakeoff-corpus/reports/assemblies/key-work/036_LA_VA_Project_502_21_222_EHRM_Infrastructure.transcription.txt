@@ -1,0 +1,53 @@
+# 036_LA_VA_Project_502_21_222_EHRM_Infrastructure — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheet MP601 (PDF page 63): an overview at 40 dpi, then the table at
+# 3x (216 dpi) in two tiles with the TAG column repeated, rendered with MuPDF
+# (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26. The pipeline's output for this
+# sheet was not consulted. The second tier keys the tables its seed drew
+# (tier2/01-split.md): here the one CONDENSING_UNIT table.
+SET 036_LA_VA_Project_502_21_222_EHRM_Infrastructure
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheet MP601 (page 63) of the Alexandria VA EHRM infrastructure mechanical schedules (Apogee Consulting Group), the table the second tier's seed drew for this document's one keyed family.
+EXCLUDES Basis of design, ambient design temperatures, connection ratio, MCA/MOP/RLA per module and in total, efficiencies (EER, IEER, COP), and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# VRV- AIR-COOLED CONDENSING UNIT SCHEDULE: two rows. Capacities print in BTU/h and are
+# keyed in that unit. VOLTAGE-PHASE prints "208V 3ph" in one cell, keyed as its volts part
+# and its phase part. DESCRIPTION "Air cooled heat pump (2)" / "(1)" counts the unit's
+# modules (the ELECTRICAL columns print mod #1 and mod #2), not units, so qty stays not
+# printed. NOMINAL TONNAGE keys cooling_tons.
+TABLE
+sheet: 036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf#63
+title: VRV- AIR-COOLED CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 63 crop 1605,148,1350,182 at 3x in 2 tiles (TAG column repeated); second read at 4x (crop 1605,300,1350,42) of both rows, every cell
+rows: all 2 printed rows
+col: TAG => tag
+col: BASIS OF DESIGN (DAIKIN) => -
+col: NOMINAL TONNAGE => cooling_tons
+col: DESCRIPTION => -
+col: COOLING CAPACITY / BTU/h => cooling_mbh [BTU/H]
+col: COOLING CAPACITY / AMBIENT DESIGN (°F DB) => -
+col: HEATING CAPACITY / BTU/h => heating_mbh [BTU/H]
+col: HEATING CAPACITY / AMBIENT DESIGN (°F DB / WB) => -
+col: CONNECTION RATIO (%) => -
+col: ELECTRICAL / VOLTAGE-PHASE => -
+col: [ELECTRICAL / VOLTAGE-PHASE: volts part] => volts
+col: [ELECTRICAL / VOLTAGE-PHASE: phase part] => phase
+col: ELECTRICAL / MIN CIRCUIT AMPS (MCA) / mod #1 => -
+col: ELECTRICAL / MIN CIRCUIT AMPS (MCA) / mod #2 => -
+col: ELECTRICAL / MIN CIRCUIT AMPS (MCA) / total => -
+col: ELECTRICAL / MAX OVERCURRENT PROTECTION (MOP) / mod #1 => -
+col: ELECTRICAL / MAX OVERCURRENT PROTECTION (MOP) / mod #2 => -
+col: ELECTRICAL / MAX OVERCURRENT PROTECTION (MOP) / total => -
+col: ELECTRICAL / RUNNING CURRENT(RLA) / mod #1 => -
+col: ELECTRICAL / RUNNING CURRENT(RLA) / mod #2 => -
+col: ELECTRICAL / RUNNING CURRENT(RLA) / total => -
+col: EFFICIENCY (NonDucted/Ducted) / EER => -
+col: EFFICIENCY (NonDucted/Ducted) / IEER => -
+col: EFFICIENCY (NonDucted/Ducted) / COP47 => -
+col: EFFICIENCY (NonDucted/Ducted) / COP17 => -
+col: NOTES => -
+grid:
+07-A-CU-1 | RXYQ360TAYDA | 30 | Air cooled heat pump (2) | 264,045 | 91.2 | 295000 | 16.2 / 11.8 | 97 | 208V 3ph | 208 | 3 | 59.8 | 54.9 | 114.7 | 60.0 | 60.0 | 120.0 | 33.2 | 32.5 | 65.7 | 11 / 10.1 | 20.4 / 18.5 | 3.5 / 3.2 | 2.1 / 2.1 |
+09-A-CU-1 | RXYQ96TAYDA | 8 | Air cooled heat pump (1) | 82000 | 91.2 | 79,516 | 16.2 / 11.8 | 75.0 | 208V 3ph | 208 | 3 | 34.1 |  | 34.1 | 35.0 |  | 35.0 | 15.2 |  | 15.2 | 14.3 / 12.6 | 27.3 / 22.5 | 4.21 / 3.49 | 2.71 / 2.48 |
+END

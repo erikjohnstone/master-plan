@@ -1,0 +1,116 @@
+# 12_MT_MSU_ReidHall_Renovation — attribute-key transcription (ASSEMBLIES WP0.3)
+# Typed from renders of sheet M0.1 (PDF page 28) at 2.5-3x, read by eye on 2026-09-23.
+# The pipeline's output for this sheet was not consulted. This dev document's key
+# covers every claimed keyed-family table (01-split.md, key-authoring scope).
+SET 12_MT_MSU_ReidHall_Renovation
+SEED 20260923
+SCOPE Sheet M0.1 (page 28) of the MSU Reid Hall renovation for the Center for Research on Rural Education (ACE Inc), every claimed keyed-family table of this dev document.
+EXCLUDES Manufacturer/model, sizes, enclosure, liner, sound power, inlet static pressure, style, rows and pressure drop, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE: each box prints a cold and a hot deck.
+# The single-duct vocabulary is read as: cold design = cfm_max (cooling maximum), hot
+# design = cfm_heat (heating maximum), cold primary minimum = cfm_min; the hot-deck
+# minimum has no attribute. Both inlets print one size per box, keyed from the cold
+# inlet. All four are the author's reading. Every row's REMARKS says SEE NOTES; notes 1
+# "SITE ELEVATION IS APPROXIMATELY 5,000 FEET A.S.L. VAV MINIMUM INLET PRESSURE SHALL
+# BE 0.5" W.C. PROVIDE VAV BOX WITH ACCESS DOOR.", 2 (3/8" closed-cell insulation) and
+# 3 "VAV BOX SUPPLIER TO PROVIDE FACTORY INSTALLED MULTI-POINT AVERAGING SENSORS. ..."
+# print nothing in the VAV vocabulary. No reheat prints, so heat_type stays not
+# printed.
+TABLE
+sheet: 12_MT_MSU_ReidHall_Renovation.pdf#28
+title: DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE
+family: VAV
+render: page 28 crop 480,358,1250,195 at 3x in 4 tiles plus the PLAN CODE column crop 130,358,360,195 and the right end crop 1700,358,700,195 at 2.5x, notes crop 130,555,640,52 at 3x; second read at 4x (crops 700,400,100,155 and 1050,400,160,155) of VAV-1 cold design, VAV-3 cold inlet and VAV-4 hot design
+rows: all 4 printed rows
+col: PLAN CODE => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: [INLET AIR SIZE / COLD INLET: the box's inlet size; the hot inlet prints the same] => inlet_size_in
+col: INLET AIR SIZE / HOT INLET => -
+col: [PRIMARY AIR MINIMUM / COLD: cooling minimum] => cfm_min
+col: PRIMARY AIR MINIMUM / HOT => -
+col: [DESIGN QUANTITIES / COLD: cooling maximum] => cfm_max
+col: [DESIGN QUANTITIES / HOT: heating maximum] => cfm_heat
+col: MIN OUTLET P.D. AT DESGIN Ps / COLD MIN INLET SP => -
+col: MIN OUTLET P.D. AT DESGIN Ps / HOT MIN INLET SP => -
+col: LINER => -
+col: SOUND POWER LEVEL RAD NC-dB => -
+col: SOUND POWER LEVEL DIS NC-dB => -
+col: REMARKS => -
+derive: terminal_type = dual_duct ; header=TABLE TITLE ; note=title printed 'DUAL DUCT VARIABLE AIR VOLUME UNIT SCHEDULE'
+grid:
+VAV-1 | PRICE | DDS | 6" | 6" | 70 | 30 | 200 | 130 | 0.5" | 0.5" | FIBER FREE | <35 N.C. | <35 N.C. | SEE NOTES
+VAV-2 | PRICE | DDS | 6" | 6" | 190 | 80 | 540 | 315 | 0.5" | 0.5" | FIBER FREE | <35 N.C. | <35 N.C. | SEE NOTES
+VAV-3 | PRICE | DDS | 12" | 12" | 600 | 260 | 1720 | 1120 | 0.5" | 0.5" | FIBER FREE | <35 N.C. | <35 N.C. | SEE NOTES
+VAV-4 | PRICE | DDS | 10" | 10" | 105 | 45 | 300 | 195 | 0.5" | 0.5" | FIBER FREE | <35 N.C. | <35 N.C. | SEE NOTES
+END
+
+# FINNED PIPE RADIATION SCHEDULE: notes 1 "FLOOR-MOUNTED, FREE-STANDING FINNED PIPE
+# RADIATION WITH ENCLOSURE." and 2 "PROVIDE EACH UNIT WITH 0-24VDC MODULATING, TWO WAY
+# CONTROL VALVE FURNISHED BY CONTROLS CONTRACTOR. SEE MECHANICAL DETAILS FOR ADDITIONAL
+# PIPING REQUIREMENTS." (a valve, outside this family's vocabulary).
+TABLE
+sheet: 12_MT_MSU_ReidHall_Renovation.pdf#28
+title: FINNED PIPE RADIATION SCHEDULE
+family: FIN_TUBE_RADIATION
+render: page 28 crop 129,848,1442,235 at 3x in 4 tiles (PLAN CODE column repeated), notes in the same tiles; second read at 4x (crop 1005,880,170,170) of FT-1 MBH, FT-2 GPM and FT-4 GPM
+rows: all 4 printed rows
+col: PLAN CODE => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: SIZE / DEPTH => -
+col: SIZE / HEIGHT => -
+col: SIZE / LENGTH => -
+col: ENCLOSURE / TYPE => -
+col: ENCLOSURE / MOUNT HEIGHT => -
+col: PERFORMANCE / MBH => heating_mbh
+col: PERFORMANCE / GPM => hw_gpm
+col: PERFORMANCE / EWT => hw_ewt_f
+col: PERFORMANCE / LWT => hw_lwt_f
+col: REMARKS => -
+grid:
+FT-1 | JAGA | MINI FREESTANDING | 3.1" | 9" | 118" | FREESTANDING | 4" | 6.7 | 0.75 | 180 | 160 | SEE NOTES
+FT-2 | JAGA | MINI FREESTANDING | 3.1" | 9" | 118" | FREESTANDING | 4" | 6.7 | 0.75 | 180 | 160 | SEE NOTES
+FT-3 | JAGA | MINI FREESTANDING | 3.1" | 9" | 118" | FREESTANDING | 4" | 6.7 | 0.75 | 180 | 160 | SEE NOTES
+FT-4 | JAGA | MINI FREESTANDING | 3.1" | 9" | 118" | FREESTANDING | 4" | 6.7 | 0.75 | 180 | 160 | SEE NOTES
+END
+
+# CABINET UNIT HEATER SCHEDULE: the temperature headers are swapped between the AIR
+# SIDE and LIQUID SIDE (FRESH WATER) groups. AIR SIDE prints EAT 180 / LAT 160 and
+# LIQUID SIDE prints "EAT °F" 55 / "LWT °F" 130, but 15.7 MBH at 1.5 GPM is a 21 °F
+# water drop (180 to 160) and 207 CFM rises about 70 °F (55 to 125-130), and the
+# finned-pipe radiation on this sheet runs on the same 180/160 water. The coil's water
+# temperatures are keyed from the AIR SIDE cells as the author's reading (catalogue
+# entry). LOCATION prints a room (VESTIBULE), not a level. WATT is the unit's fan power
+# at 24 VDC and keys motor_hp in the unit the header prints (the author's reading).
+# Notes 1 "24V CEILING MOUNTED CABINET UNIT HEATER. ...", 2 "PROVIDE EACH UNIT WITH
+# 0-24VDC MODULATING, TWO WAY CONTROL VALVE FURNISHED BY CONTROLS CONTRACTOR. ..." and
+# 3 "PROVIDE UNIT WITH 24V POWER SUPPLY. ..." print nothing else in the vocabulary.
+TABLE
+sheet: 12_MT_MSU_ReidHall_Renovation.pdf#28
+title: CABINET UNIT HEATER SCHEDULE
+family: CABINET_UNIT_HEATER
+render: page 28 crop 129,1108,1436,168 at 3x in 4 tiles (PLAN CODE column repeated) and notes crop 129,1274,700,42 at 3x; second read at 4x (crop 975,1130,185,145) of CUH-1 MBH, CUH-1 GPM and CUH-2 MBH
+rows: all 2 printed rows
+col: PLAN CODE => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: STYLE => -
+col: LOCATION => -
+col: PERFORMANCE / AIR SIDE / CFM/HIGH SPEED => cfm
+col: [PERFORMANCE / AIR SIDE / EAT °F: the coil's entering water, printed under AIR SIDE] => hw_ewt_f
+col: [PERFORMANCE / AIR SIDE / LAT °F: the coil's leaving water, printed under AIR SIDE] => hw_lwt_f
+col: PERFORMANCE / LIQUID SIDE (FRESH WATER) / ROWS => -
+col: PERFORMANCE / LIQUID SIDE (FRESH WATER) / MBH => heating_mbh
+col: PERFORMANCE / LIQUID SIDE (FRESH WATER) / GPM => hw_gpm
+col: PERFORMANCE / LIQUID SIDE (FRESH WATER) / EAT °F => -
+col: PERFORMANCE / LIQUID SIDE (FRESH WATER) / LWT °F => -
+col: PERFORMANCE / LIQUID SIDE (FRESH WATER) / P.D. => -
+col: ELECTRICAL DATA / VOLT => volts
+col: [ELECTRICAL DATA / WATT: the unit's fan power] => motor_hp [W]
+derive: heating_medium = hw ; header=LIQUID SIDE (FRESH WATER) ; note=the performance block prints a fresh-water liquid side (MBH, GPM)
+grid:
+CUH-1 | JAGA | ASTRA BEAM | CEILING CONCEALED | VESTIBULE | 207 | 180 | 160 | -- | 15.7 | 1.5 | 55 | 130 | <5' W.C. | 24 VDC | 15
+CUH-2 | JAGA | ASTRA BEAM | CEILING CONCEALED | VESTIBULE | 207 | 180 | 160 | -- | 15.7 | 1.5 | 55 | 130 | <5' W.C. | 24 VDC | 15
+END

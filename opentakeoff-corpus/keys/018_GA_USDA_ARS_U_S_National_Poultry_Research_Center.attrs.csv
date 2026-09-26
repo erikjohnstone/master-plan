@@ -1,0 +1,55 @@
+# 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M-601 (page 13) of the U.S. National Poultry Research Center room P111 renovation (USDA ARS Southeast Area), the tables drawn for this document.
+#   018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13 | EXHAUST FAN SCHEDULE | FAN | all 1 printed row | render: page 13 crop 135,408,1508,215 at 3x in 4 tiles (MARK column repeated), notes in the same tiles; second read at 4x (crops 455,455,75,120 and 725,455,75,120 and 795,455,140,120) of EF-1 airflow, RPM and power HP
+#   018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13 | WATER SOURCE HEAT PUMP (PART 1 OF 2) | HEAT_PUMP | all 1 printed row | render: part 1, page 13 crop 135,992,1505,150 at 3x in 4 tiles (MARK column repeated); second read at 4x (crops 490,1035,80,110 and 805,1035,65,110) of total airflow and cooling total MBH
+#   018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13 | WATER SOURCE HEAT PUMP (PART 1 OF 2) | HEAT_PUMP | all 1 printed row (no MARK column; the row is WSHP-1) | render: part 2, printed as "WATER SOURCE HEAT PUMP (PART 2 OF 2)", page 13 crop 135,1206,1105,255 at 3x in 3 tiles, notes in the same tiles; second read at 4x (crops 140,1250,120,110 and 890,1250,90,110) of heating total MBH and volts/phase
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Basis of design, type, sones, FLA/MCA/MOP, weight, filters, air-side temperatures, the heat pump's source-water side, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center: 3 table(s), 2 instance(s), 36 keyed attribute value(s) (15 printed, 21 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,area_served,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,cfm,70,cfm,FAN DATA / AIRFLOW CFM,
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,esp_in,0.2,in. w.c.,FAN DATA / S.P. IN.WC.,
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_hp,0.06666666666666667,hp,ELEC. DATA / POWER HP,printed '1/15'
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,rpm,1164,rpm,FAN DATA / RPM,
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,drive,direct,,FAN DATA / DRIVE,printed 'DIRECT'
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,control,VARIABLE,,CONTROL INTERLOCKS / OTHER AS NOTED,
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,volts,115,V,ELEC. DATA / VOLTS/ PHASE: volts part,author's reading of the printed row
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,EXHAUST FAN SCHEDULE,EF-1,FAN,phase,1,,ELEC. DATA / VOLTS/ PHASE: phase part,author's reading of the printed row
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,building,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,floor,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,area_served,P121 & P121A,,SERVES,
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,qty,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,cfm,3200,cfm,SUPPLY FAN / TOTAL AIRFLOW (CFM),
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,cooling_mbh,127.2,MBH,COOLING / CAPACITY / TOTAL MBH,
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,cooling_tons,,tons,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,heating_mbh,126.1,MBH,HEATING / CAPACITY / TOTAL MBH,
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,hw_gpm,,gpm,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,hw_ewt_f,,F,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,hw_lwt_f,,F,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,chw_gpm,,gpm,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,chw_ewt_f,,F,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,chw_lwt_f,,F,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,motor_hp,2,hp,SUPPLY FAN / HP (EACH),printed '2.0'
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,eh_kw,,kW,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,conn_in,,in,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,bas_interface,,,,not printed
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,volts,460,V,ELECTRICAL / VOLTS/ PHASE: volts part,author's reading of the printed row
+018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#13,WATER SOURCE HEAT PUMP (PART 1 OF 2),WSHP-1,HEAT_PUMP,phase,3,,ELECTRICAL / VOLTS/ PHASE: phase part,author's reading of the printed row

@@ -1,0 +1,163 @@
+# 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheet M601 (PDF page 19, a 270-degree-rotated sheet read in its
+# displayed orientation) of the Missouri Department of Mental Health Center for Behavioral
+# Medicine chiller system upgrade (InSite Group): an overview of the page at 40 dpi, then each
+# table at 3x (216 dpi) in tiles with the TAG NO. column repeated, rendered with MuPDF (pymupdf
+# get_pixmap(clip)) and read by eye on 2026-09-26; second read at 4x of the first, a middle
+# and the last row. Each drawn title was found with the PDF's own text layer (pymupdf
+# search_for). The pipeline's output for this sheet was not consulted while keying (AS-28,
+# before the draw, read the column names the normalizer left unread across the unseen corpus,
+# this document's among them). The third tier keys the tables its seed drew
+# (tier3/01-split.md): one per keyed family.
+SET 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheet M601 (page 19) of the Center for Behavioral Medicine chiller system upgrade, Kansas City MO (InSite Group), the tables the third tier's seed drew for its AIR_COOLED_CHILLER, PUMP and COOLING_TOWER strata.
+EXCLUDES Manufacturers and models, compressor type, minimum flows, pressure drops, fouling factors, the condenser water side of the chillers, refrigerant, efficiencies, dimensions and weights, SCCR, MCA and overcurrent protection, fan and motor counts, basin heaters, air wet-bulb, pump type, discharge sizes and FLA, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# WATER-COOLED CHILLER SCHEDULE: (page 19): three rows (the compile family is
+# AIR_COOLED_CHILLER, the chiller family; the key follows the print). The title names a
+# water-cooled condenser, and the CONDENSER DATA block prints FLUID TYPE WATER: condenser
+# water. NET CAPACITY prints 300.0 with no unit: tons, the unit the evaporator's design flow
+# carries (598.5 GPM across 56 to 44 F is 598.5 x 12 / 24 = 299 tons), keyed as the author's
+# reading. The EVAPORATOR DATA block keys the chilled-water side: DESIGN GPM, ENTERING TEMP,
+# LEAVING TEMP. VOLT / PH prints "480 / 3", keyed as its volts part and its phase part. Every
+# row's NOTES cites notes 1-9; note 6 "PROVIDE UNIT WITH BACnet MS/TP COMMUNICATION
+# INTERFACE." keys bas_interface as the interface it names. The other notes (disconnect,
+# control transformer, outlet, safeties, marine water box, insulation, warranty, startup) key
+# nothing. No column prints a location or a quantity.
+TABLE
+sheet: 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19
+title: WATER-COOLED CHILLER SCHEDULE:
+family: AIR_COOLED_CHILLER
+render: page 19 overview at 40 dpi; crop 555,150,1720,112 at 3x in 3 tiles (TAG NO. column repeated), notes cropped at 3x (crops 555,255,800,120 and 1340,255,935,120); second read at 4x (crops 555,200,650,52 and 2020,200,255,52) of CH-1, CH-2 and CH-3, capacity through the evaporator block and the electrical block
+rows: all 3 printed rows
+col: TAG NO. => tag
+col: MANUF. * => -
+col: MODEL NO. => -
+col: CHILLER TYPE => -
+col: [NET CAPACITY: tons, the unit the evaporator's design flow carries (598.5 GPM x (56 - 44) F / 24 = 299)] => tons
+col: EVAPORATOR DATA / FLUID TYPE => -
+col: EVAPORATOR DATA / MIN. GPM => -
+col: EVAPORATOR DATA / DESIGN GPM => chw_gpm
+col: EVAPORATOR DATA / PRESS. DROP (FT) => -
+col: EVAPORATOR DATA / ENTERING TEMP (°F) => chw_ewt_f
+col: EVAPORATOR DATA / LEAVING TEMP (°F) => chw_lwt_f
+col: EVAPORATOR DATA / FOULING FACTOR => -
+col: CONDENSER DATA / FLUID TYPE => -
+col: CONDENSER DATA / DESIGN GPM => -
+col: CONDENSER DATA / PRESS. DROP (FT) => -
+col: CONDENSER DATA / ENTERING TEMP (°F) => -
+col: CONDENSER DATA / LEAVING TEMP (°F) => -
+col: CONDENSER DATA / FOULING FACTOR => -
+col: REFRIGERANT / TYPE => -
+col: REFRIGERANT / REFRIG. TYPE (ASHRAE) => -
+col: REFRIGERANT / REFRIG. WEIGHT (LBS.) => -
+col: EFFICIENCY / FULL LOAD (kW/ton) => -
+col: EFFICIENCY / NPLV (kW/ton) => -
+col: PHYSICAL DATA / DIMENSIONS / LENGTH (IN.) => -
+col: PHYSICAL DATA / DIMENSIONS / WIDTH (IN.) => -
+col: PHYSICAL DATA / DIMENSIONS / HEIGHT (IN.) => -
+col: PHYSICAL DATA / OPER. WEIGHT (LBS.) => -
+col: ELECTRICAL / VOLT / PH => -
+col: [ELECTRICAL / VOLT / PH: volts part] => volts
+col: [ELECTRICAL / VOLT / PH: phase part] => phase
+col: ELECTRICAL / MIN. SCCR => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / OCP => -
+col: NOTES => -
+derive: condenser = water ; header=TABLE TITLE ; note=title printed 'WATER-COOLED CHILLER SCHEDULE:'; the CONDENSER DATA block's FLUID TYPE prints WATER
+derive: bas_interface = BACNET MS/TP ; header=NOTE 6 ; note=note 6, cited by every row ('1-9'): 'PROVIDE UNIT WITH BACnet MS/TP COMMUNICATION INTERFACE.'
+grid:
+CH-1 | DAIKIN | WMC060DDSNA | MAG. BEARING | 300.0 | WATER | 162.8 | 598.5 | 6.93 | 56 | 44.0 | 0.0001 | WATER | 912.3 | 14.6 | 85 | 94.3 | 0.00025 | R-513A | A1 | 1,093 | 0.5851 | 0.3407 | 188.6 | 55.2 | 94.5 | 15531 | 480 / 3 | 480 | 3 | 65,000 | 286 | 350 | 1-9
+CH-2 | DAIKIN | WMC060DDSNA | MAG. BEARING | 300.0 | WATER | 162.8 | 598.5 | 6.93 | 56 | 44.0 | 0.0001 | WATER | 912.3 | 14.6 | 85 | 94.3 | 0.00025 | R-513A | A1 | 1,093 | 0.5851 | 0.3407 | 188.6 | 55.2 | 94.5 | 15531 | 480 / 3 | 480 | 3 | 65,000 | 286 | 350 | 1-9
+CH-3 | DAIKIN | WMC060DDSNA | MAG. BEARING | 300.0 | WATER | 162.8 | 598.5 | 6.93 | 56 | 44.0 | 0.0001 | WATER | 912.3 | 14.6 | 85 | 94.3 | 0.00025 | R-513A | A1 | 1,093 | 0.5851 | 0.3407 | 188.6 | 55.2 | 94.5 | 15531 | 480 / 3 | 480 | 3 | 65,000 | 286 | 350 | 1-9
+END
+
+# PUMP SCHEDULE: (page 19): thirteen rows. SERVICE keys service as printed. SUCTION SIZE keys
+# conn_in (as federal-mech's PIPE CONNECTIONS / SUCTION); DISCHARGE SIZE is typed for audit.
+# HEAD LOSS (ft.) keys head_ft, WATER FLOW (gpm) gpm, PUMP SPEED (rpm) rpm, and the MOTOR DATA
+# block motor_hp, volts and phase. Every row's NOTES cites notes 1-2. Note 1 "PROVIDE PUMP
+# WITH VARIABLE FREQUENCY DRIVE RATED MOTOR AND SHAFT GROUNDING RING." rates the motor for a
+# drive; it does not say a drive runs the pump, so vfd stays not printed. Note 2 (suction
+# diffuser) keys nothing. No column prints a location or a quantity.
+TABLE
+sheet: 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19
+title: PUMP SCHEDULE:
+family: PUMP
+render: page 19 overview at 40 dpi; crop 1438,1060,837,480 at 3x in 2 tiles (TAG NO. column repeated), notes cropped at 3x (crop 1438,1535,837,70); second read at 4x (crops 1438,1142,837,30 and 1438,1322,837,30 and 1438,1502,837,30) of CWP-1, SCHP-1 and SHWP-2, every cell
+rows: all 13 printed rows
+col: TAG NO. => tag
+col: MANUFACTURER * => -
+col: MODEL => -
+col: SERVICE => service
+col: PUMP DATA / TYPE => -
+col: PUMP DATA / SUCTION SIZE (in.) => conn_in
+col: PUMP DATA / DISCHARGE SIZE (in.) => -
+col: PUMP DATA / HEAD LOSS (ft.) => head_ft
+col: PUMP DATA / WATER FLOW (gpm) => gpm
+col: PUMP DATA / PUMP SPEED (rpm) => rpm
+col: MOTOR DATA / H.P. => motor_hp
+col: MOTOR DATA / VOLTS => volts
+col: MOTOR DATA / FLA => -
+col: MOTOR DATA / PH => phase
+col: NOTES => -
+grid:
+CWP-1 | BELL & GOSSETT | e-1510 | CONDENSER WATER | END SUCTION | 6" | 5" | 80 | 900 | 1698 | 30 | 480 | 40 | 3 | 1-2
+CWP-2 | BELL & GOSSETT | e-1510 | CONDENSER WATER | END SUCTION | 6" | 5" | 80 | 900 | 1698 | 30 | 480 | 40 | 3 | 1-2
+CWP-3 | BELL & GOSSETT | e-1510 | CONDENSER WATER | END SUCTION | 6" | 5" | 80 | 900 | 1698 | 30 | 480 | 40 | 3 | 1-2
+PCHP-1 | BELL & GOSSETT | e-1510 | PRIMARY - CHILLED WATER | END SUCTION | 5" | 4" | 45 | 600 | 1650 | 10 | 480 | 14 | 3 | 1-2
+PCHP-2 | BELL & GOSSETT | e-1510 | PRIMARY - CHILLED WATER | END SUCTION | 5" | 4" | 45 | 600 | 1650 | 10 | 480 | 14 | 3 | 1-2
+PCHP-3 | BELL & GOSSETT | e-1510 | PRIMARY - CHILLED WATER | END SUCTION | 5" | 4" | 45 | 600 | 1650 | 10 | 480 | 14 | 3 | 1-2
+SCHP-1 | BELL & GOSSETT | e-1510 | SECONDARY - CHILLED WATER | END SUCTION | 6" | 5" | 100 | 1200 | 1645 | 50 | 480 | 65 | 3 | 1-2
+SCHP-2 | BELL & GOSSETT | e-1510 | SECONDARY - CHILLED WATER | END SUCTION | 6" | 5" | 100 | 1200 | 1645 | 50 | 480 | 65 | 3 | 1-2
+PHWP-1 | BELL & GOSSETT | e-1510 | PRIMARY - HEATING HW | END SUCTION | 4" | 3" | 45 | 340 | 1615 | 7.5 | 480 | 11 | 3 | 1-2
+PHWP-2 | BELL & GOSSETT | e-1510 | PRIMARY - HEATING HW | END SUCTION | 4" | 3" | 45 | 340 | 1615 | 7.5 | 480 | 11 | 3 | 1-2
+PHWP-3 | BELL & GOSSETT | e-1510 | PRIMARY - HEATING HW | END SUCTION | 4" | 3" | 45 | 340 | 1615 | 7.5 | 480 | 11 | 3 | 1-2
+SHWP-1 | BELL & GOSSETT | e-1510 | SECONDARY - HEATING HW | END SUCTION | 6" | 5" | 100 | 1000 | 1680 | 40 | 480 | 52 | 3 | 1-2
+SHWP-2 | BELL & GOSSETT | e-1510 | SECONDARY - HEATING HW | END SUCTION | 6" | 5" | 100 | 1000 | 1680 | 40 | 480 | 52 | 3 | 1-2
+END
+
+# COOLING TOWER SCHEDULE: (page 19): three rows. CELLS keys cells. NOMINAL CAPACITY prints 300
+# with no unit: nominal tons, the unit the tower's 900 GPM gives at the 3 GPM per nominal
+# ton towers are rated by (900 / 3 = 300), keyed as the author's reading. The PERFORMANCE
+# block keys gpm (FLOW), ewt_f (EWT) and lwt_f (LWT); EAT (°F WB) is the air's wet bulb.
+# VOLTS / PH / HZ prints "480V / 3PH / 60 HZ", keyed as its volts part and its phase part.
+# The FANS block's TOTAL H.P. keys fan_hp. Every row's NOTES cites notes 1-14. Note 14
+# "EXISTING VFDs ARE TO BE REUSED FOR CONTROL OF NEW TOWERS." says drives run the towers:
+# vfd yes (note 2 rates the motor for one). The other notes (basin heater, fill, screens,
+# equalizers, vibration switch, platforms, basins, float, flow control valve, wiring) key
+# nothing in the family's vocabulary. No column prints a location or a quantity.
+TABLE
+sheet: 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19
+title: COOLING TOWER SCHEDULE:
+family: COOLING_TOWER
+render: page 19 overview at 40 dpi; crop 1178,412,1097,188 at 3x in 2 tiles (TAG NO. column repeated), notes cropped at 2.5x (crop 1178,598,1097,242); second read at 4x (crops 1178,505,562,95 and 1780,505,240,95) of CT-1, CT-2 and CT-3, cells through LWT and the electrical and fan cells
+rows: all 3 printed rows
+col: TAG NO. => tag
+col: MANUFACTURER * => -
+col: MODEL => -
+col: TYPE => -
+col: CELLS => cells
+col: [NOMINAL CAPACITY: nominal tons, the unit the tower's 900 GPM gives at 3 GPM per nominal ton (900 / 3 = 300)] => tons
+col: PERFORMANCE / FLOW (GPM) => gpm
+col: PERFORMANCE / EWT (°F) => ewt_f
+col: PERFORMANCE / LWT (°F) => lwt_f
+col: PERFORMANCE / EAT (°F WB) => -
+col: ELECTRICAL / VOLTS / PH / HZ => -
+col: [ELECTRICAL / VOLTS / PH / HZ: volts part] => volts
+col: [ELECTRICAL / VOLTS / PH / HZ: phase part] => phase
+col: ELECTRICAL / FANS / FANS (QTY.) => -
+col: ELECTRICAL / FANS / MOTORS (QTY.) => -
+col: ELECTRICAL / FANS / TOTAL H.P. => fan_hp
+col: ELECTRICAL / FANS / OCP => -
+col: ELECTRICAL / BASIN HEATER / CAPACITY => -
+col: ELECTRICAL / BASIN HEATER / OCP => -
+col: OPERATING WEIGHT (LBS) => -
+col: NOTES => -
+derive: vfd = yes ; header=NOTE 14 ; note=note 14, cited by every row ('1-14'): 'EXISTING VFDs ARE TO BE REUSED FOR CONTROL OF NEW TOWERS.' (note 2: 'PROVIDE UNIT WITH VFD RATED MOTOR WITH SHAFT GROUNDING.')
+grid:
+CT-1 | MARLEY | AV6807RAN | INDUCED DRAFT CROSSFLOW | 1 | 300 | 900 | 95 | 85 | 78.7 | 480V / 3PH / 60 HZ | 480 | 3 | 2 | 1 | 25 | 70 | 9 kW | 20 | 12,810 | 1-14
+CT-2 | MARLEY | AV6807RAN | INDUCED DRAFT CROSSFLOW | 1 | 300 | 900 | 95 | 85 | 78.7 | 480V / 3PH / 60 HZ | 480 | 3 | 2 | 1 | 25 | 70 | 9 kW | 20 | 12,810 | 1-14
+CT-3 | MARLEY | AV6807RAN | INDUCED DRAFT CROSSFLOW | 1 | 300 | 900 | 95 | 85 | 78.7 | 480V / 3PH / 60 HZ | 480 | 3 | 2 | 1 | 25 | 70 | 9 kW | 20 | 12,810 | 1-14
+END

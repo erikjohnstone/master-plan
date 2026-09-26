@@ -171,10 +171,16 @@ export const compileCorpusTakeoffOutput = {
    * less than source_item_count when a family was out of this template's
    * hydronic/actuated scope (see excluded_families); per-column coverage
    * and notes disclose exactly what filled from the schedule vs. was left
-   * blank (PN class / Branch Δp have no source anywhere in this pipeline). */
+   * blank (PN class / Branch Δp have no source anywhere in this pipeline;
+   * Consumer Δp, the template's CoilDP, stays blank until the HIT owners
+   * confirm what it expects). */
   valve_size_template: z.object({
     path: z.string(),
+    /** Every workbook written: one per 195 rows, so each row keeps its dropdowns. */
+    files: z.array(z.object({ path: z.string(), rows: z.number().int() })).optional(),
     rows_written: z.number().int(),
+    /** Rows for hydronic coils no scheduled valve serves (embedded-coil compile). */
+    coil_derived_rows: z.number().int().optional(),
     source_item_count: z.number().int(),
     excluded_families: z.array(z.object({ family: z.string(), count: z.number().int(), reason: z.string() })),
     coverage: z.record(z.string(), z.object({ filled: z.number().int(), total: z.number().int() })),
@@ -1837,4 +1843,78 @@ export const countMarksOutput = {
   excluded_in_tables: z.number().int().optional().describe("Tag occurrences inside a schedule table's own region — row labels, never instances"),
   skipped: z.array(z.object({ sheet: z.string(), role: z.string(), reason: z.string() })),
   complete: z.boolean(),
+};
+
+// ASSEMBLIES WP5.3 — apply_assemblies (mcp/src/assemblies.ts; the report is
+// web/src/lib/assemblies/report.ts, the records and lines schema.ts).
+export const applyAssembliesOutput = {
+  library: z.object({ source: z.string(), assemblies: z.number().int() }),
+  control: z.object({
+    mode: z.enum(["off", "deterministic", "models"]),
+    units_read: z.number().int(),
+    decisions: z.object({ applied: z.number().int(), proposal: z.number().int(), unresolved: z.number().int() }),
+    models: z.object({ r1: z.string().nullable(), r2: z.string().nullable() }).optional(),
+    versions: z.record(z.string(), z.string()).optional(),
+    calls: z.record(z.string(), z.record(z.string(), z.number())).optional(),
+    readings: z.array(z.record(z.string(), z.unknown())).optional(),
+  }).describe("What the control drawings read (control_readings): counts of applied, proposed and unresolved readings; with detail units or lines, each reading with its rule, readers and cites"),
+  report: z.object({
+    schema: z.literal("opentakeoff.assemblies_report.v1"),
+    totals: z.object({
+      units: z.number().int(), records: z.number().int(), by_status: z.record(z.string(), z.number().int()),
+      lines: z.number().int(), lines_by_status: z.record(z.string(), z.number().int()),
+    }),
+    partner: z.object({
+      label: z.literal("partner-entered"), lines: z.number().int(), extended_cost: z.number().nullable(), costed_lines: z.number().int(),
+      hours: z.array(z.object({ labor_category: z.string(), extended_hours: z.number(), lines: z.number().int() })), not_extended: z.number().int(),
+    }).nullable().describe("The partner's own cost and labor fields, extended; null when the library carries none"),
+    exceptions: z.array(z.record(z.string(), z.unknown())),
+    families: z.array(z.record(z.string(), z.unknown())),
+    units: z.array(z.record(z.string(), z.unknown())).optional(),
+  }),
+  applications: z.array(z.record(z.string(), z.unknown())).optional(),
+  lines: z.array(z.record(z.string(), z.unknown())).optional(),
+  path: z.string().optional(),
+  export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
+  answers: z.object({
+    head: z.string().nullable(), events: z.number().int(),
+    applied: z.record(z.string(), z.string()).describe("The project questions' answers the records applied, question id → answer"),
+    error: z.string().optional().describe("The journal failed its check: none of its answers applied"),
+  }).optional().describe("The Session's answer journal (answer_project_question, or a project file's); absent when no question is answered"),
+};
+
+// CONTROL INTENT Track A — project_questions and answer_project_question
+// (web/src/lib/controlIntent/questions.ts and journal.ts).
+const questionEvidence = z.object({ sheet: z.string().nullable(), text: z.string(), bbox: z.array(z.number()).nullable(), finder: z.string() });
+const journalState = z.object({
+  head: z.string().nullable().describe("The journal's head: pass it as expected_head to answer_project_question"),
+  events: z.number().int(),
+  answers: z.record(z.string(), z.string()).describe("The answers the journal holds, question id → answer"),
+  recorded_by: z.record(z.string(), z.string()).describe("Who recorded each answer: operator_input (the estimator, in the Takeoff panel) or agent_proposal (an agent, for the estimator)"),
+  error: z.string().optional().describe("The journal failed its check: none of its answers applies, and no answer can be added to it"),
+});
+export const projectQuestionsOutput = {
+  version: z.string(), catalogue: z.string(), terms: z.string(),
+  journal: journalState,
+  questions: z.array(z.object({
+    id: z.string(), key: z.string(), text: z.string(),
+    choices: z.array(z.object({ value: z.string(), label: z.string(), lines_changed: z.number().int(), records_changed: z.number().int() })),
+    lines_changed: z.number().int(), records_changed: z.number().int(),
+    answer: z.string().nullable(),
+    prefill: z.object({ value: z.string(), evidence: z.array(questionEvidence) }).nullable().describe("A proposal from printed text, for the estimator to confirm; never an answer"),
+    evidence: z.array(questionEvidence).describe("What makes it a question here: the units it is about"),
+    partner_default_allowed: z.boolean(),
+  })).describe("At most six, ranked by what an answer changes; none that changes nothing"),
+  zero_effect: z.array(z.string()).describe("Catalogue questions no answer changes anything with here (not shown)"),
+  over_cap: z.array(z.string()).describe("Questions past the cap of six"),
+  next_move: z.string(),
+};
+export const answerProjectQuestionOutput = {
+  event: z.object({
+    event_id: z.string(), operation_id: z.string(), question: z.string(), answer: z.string(),
+    origin: z.literal("agent_proposal"), reviewer: z.string(), reviewer_identity: z.literal("self_declared"), approved: z.literal(false), created_at: z.string(),
+    prefill: z.object({ value: z.string() }).nullable(),
+  }),
+  journal: journalState,
+  note: z.string(),
 };

@@ -1,0 +1,144 @@
+# 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheets 101-1273 (PDF page 12) and 101-1274 (page 13), SCHEDULES -
+# MECHANICAL, of the NIST Building 101 HVAC equipment refresh, mezzanine A (CFR Engineering),
+# both 270-degree-rotated sheets read in their displayed orientation: an overview of each page
+# at 40 dpi, then each table at 3x (216 dpi) in tiles with the MARK / TAG column repeated,
+# rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second read at
+# 4x of the first, a middle and the last row. Each drawn title was found with the PDF's own
+# text layer (pymupdf search_for). The pipeline's output for these sheets was not consulted
+# while keying (AS-28, before the draw, read the column names the normalizer left unread
+# across the unseen corpus, this document's among them). The third tier keys the tables its
+# seed drew (tier3/01-split.md): one per keyed family.
+SET 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheets 101-1273 and 101-1274 (pages 12 and 13) of the NIST Building 101 HVAC equipment refresh, Gaithersburg MD (CFR Engineering), the tables the third tier's seed drew for its FAN, DUCT_MOUNTED_COIL and HUMIDIFIER strata.
+EXCLUDES Outside air flows, total static, wheel diameters, fan arrangement and class, brake horsepower, frequency, FLA, octave-band sound power, face velocities, air temperatures and pressure drops, steam pressures and loads (no steam attribute in the coil's vocabulary), coil dimensions, fins and rows, duct sizes, humidifier maximum capacity, absorption distance and control power, MCA, MOCP, weights, basis of design, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# SUPPLY FAN SCHEDULE (page 12): six rows, one per air conditioning unit. SERVICE prints the
+# unit the fan serves ("ACU-A-1"), keyed as printed. The SUPPLY FAN block keys cfm (AIR
+# FLOW), esp_in (ESP), drive and qty (QUANTITY); the MOTOR block keys motor_hp (NAMEPLATE),
+# volts, phase and rpm. The octave-band sound power prints an INLET and a DISCHARGE line in
+# each row, typed for audit as one cell. Every row's NOTES prints "ALL". Note 1 lists what
+# each fan is provided with; its item b "INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING
+# RING" names a VFD: vfd yes. Note 2 (a pre-demolition balance) keys nothing.
+TABLE
+sheet: 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12
+title: SUPPLY FAN SCHEDULE
+family: FAN
+render: page 12 overview at 40 dpi; crop 776,778,2022,312 at 3x in 4 tiles (MARK column repeated), notes cropped at 3x (crop 776,1125,1300,130); second read at 4x (crops 776,861,784,38 and 1560,861,784,38; 776,973,784,38 and 1560,973,784,38; 776,1047,784,38 and 1560,1047,784,38) of S-A-1, S-A-4 and S-A-6 through RPM and the first sound bands
+rows: all 6 printed rows
+col: MARK => tag
+col: SERVICE => service
+col: SUPPLY FAN / AIR FLOW (CFM) => cfm
+col: SUPPLY FAN / MINIMUM OUTSIDE AIR FLOW (CFM) => -
+col: SUPPLY FAN / MAXIMUM OUTSIDE AIR FLOW (CFM) => -
+col: SUPPLY FAN / TSP (IN.W.G.) => -
+col: SUPPLY FAN / ESP (IN.W.G.) => esp_in
+col: SUPPLY FAN / WHEEL DIAMETER (IN) => -
+col: SUPPLY FAN / ROTATION & DISCHARGE => -
+col: SUPPLY FAN / DRIVE => drive
+col: SUPPLY FAN / CLASS => -
+col: SUPPLY FAN / QUANTITY => qty
+col: MOTOR / MOTOR NAMEPLATE HORSE POWER (MHP) => motor_hp
+col: MOTOR / MOTOR BRAKE HORSE POWER (BHP) => -
+col: MOTOR / VOLTAGE (V) => volts
+col: MOTOR / PHASE (Ø) => phase
+col: MOTOR / FREQUENCY (HZ) => -
+col: MOTOR / FLA => -
+col: MOTOR / RPM => rpm
+col: SOUND POWER BY OCTAVE BAND (Lw) / INLET and DISCHARGE at 63, 125, 250, 500, 1000, 2000, 4000, 8000 HZ => -
+col: WEIGHT (LB) => -
+col: BASIS OF DESIGN => -
+col: NOTES => -
+derive: vfd = yes ; header=NOTE 1 ; note=note 1, every row's NOTES printing ALL: 'PROVIDE THE SUPPLY FAN WITH THE FOLLOWING: ... b. INVERTER RATED DUTY MOTOR, VFD, AND SHAFT GROUNDING RING'
+grid:
+S-A-1 | ACU-A-1 | 15,795 | 4,830 | 15,795 | 4.86 | 2.24 | 33 | PLENUM FAN | direct (DIRECT) | II | 1 | 20 | 16.68 | 460 | 3 | 60 | 24 | 1170 | INLET 85 91 94 89 84 80 77 74 / DISCHARGE 91 94 97 96 91 86 81 78 | 950 | GREENHECK 33-APH-4-85-II-150 | ALL
+S-A-2 | ACU-A-2 | 19,490 | 2,600 | 19,490 | 4.0 | 1.53 | 33 | PLENUM FAN | direct (DIRECT) | II | 1 | 20 | 17.34 | 460 | 3 | 60 | 24 | 1170 | INLET 84 90 94 88 83 79 75 72 / DISCHARGE 89 94 98 95 90 85 80 76 | 975 | GREENHECK 33-APH-4-100-II-200 | ALL
+S-A-3 | ACU-A-3 | 28,030 | 6,970 | 28,030 | 5.09 | 2.48 | 40 | PLENUM FAN | direct (DIRECT) | II | 1 | 40 | 31.52 | 460 | 3 | 60 | 48 | 1170 | INLET 88 92 97 87 84 78 75 73 / DISCHARGE 92 95 100 96 91 86 82 78 | 1,750 | GREENHECK 40-APH-4-95-II-400 | ALL
+S-A-4 | ACU-A-4 | 25,600 | 6,400 | 25,600 | 5.18 | 2.54 | 36 | PLENUM FAN | direct (DIRECT) | II | 1 | 30 | 29.22 | 460 | 3 | 60 | 36 | 1170 | INLET 86 90 97 87 84 78 74 73 / DISCHARGE 91 94 100 95 91 85 82 78 | 1,250 | GREENHECK 36-APH-4-100-II-300 | ALL
+S-A-5 | ACU-A-5 | 29,880 | 7,450 | 29,880 | 5.65 | 3.03 | 40 | PLENUM FAN | direct (DIRECT) | II | 1 | 40 | 37.08 | 460 | 3 | 60 | 48 | 1170 | INLET 88 92 98 88 85 79 76 74 / DISCHARGE 93 96 101 96 92 86 83 79 | 1,750 | GREENHECK 40-APH-4-90-II-500 | ALL
+S-A-6 | ACU-A-6 | 22,770 | 5,770 | 22,770 | 4.54 | 1.94 | 36 | PLENUM FAN | direct (DIRECT) | II | 1 | 25 | 23.03 | 460 | 3 | 60 | 30 | 1170 | INLET 86 91 98 86 83 77 74 72 / DISCHARGE 90 93 99 95 91 85 82 77 | 1,075 | GREENHECK 36-APH-4-85-II-250 | ALL
+END
+
+# HEATING COIL SCHEDULE (page 12): six rows, steam coils (the STEAM SIDE DATA block), one bank
+# per air conditioning unit. The coil family's vocabulary keys cfm (AIR FLOW), heating_mbh
+# (HEATING CAPACITY (MBH)) and qty: COIL DATA / QUANTITY prints 2, the coils in each bank
+# ("1 x 2" or "2 x 1" COILS HIGH BY COILS WIDE). It has no steam attribute, so the steam
+# pressure and load are typed for audit only. SERVICE prints the unit the coil sits in: not a
+# location. Every row's NOTES prints "ALL"; notes 1 (float and thermostatic traps) and 2
+# (coil sizes) key nothing.
+TABLE
+sheet: 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12
+title: HEATING COIL SCHEDULE
+family: DUCT_MOUNTED_COIL
+render: page 12 overview at 40 dpi; crop 776,1305,2022,313 at 3x in 4 tiles (MARK column repeated), notes cropped at 3x (crop 776,1650,1300,100); second read at 4x (crops 776,1388,784,38 and 1560,1388,784,38; 776,1500,784,38 and 1560,1500,784,38; 776,1574,784,38 and 1560,1574,784,38) of HC-A-1, HC-A-4 and HC-A-6, every cell
+rows: all 6 printed rows
+col: MARK => tag
+col: SERVICE => -
+col: AIR SIDE DATA / AIR FLOW (CFM) => cfm
+col: AIR SIDE DATA / MAXIMUM FACE VELOCITY (FPM) => -
+col: AIR SIDE DATA / HEATING CAPACITY (MBH) => heating_mbh
+col: AIR SIDE DATA / EAT (°F) => -
+col: AIR SIDE DATA / LAT (°F) => -
+col: AIR SIDE DATA / APD (IN.W.G) => -
+col: STEAM SIDE DATA / INLET STEAM PRESSURE (PSI) => -
+col: STEAM SIDE DATA / STEAM LOAD (LB/HR) => -
+col: COIL DATA / NOMINAL COIL HEIGHT (IN.) => -
+col: COIL DATA / NOMINAL COIL LENGTH (IN.) => -
+col: COIL DATA / FACE AREA PER COIL (SQ.FT.) => -
+col: COIL DATA / COILS HIGH BY COILS WIDE => -
+col: COIL DATA / QUANTITY => qty
+col: COIL DATA / FPI => -
+col: COIL DATA / ROWS => -
+col: OPERATING WEIGHT, EACH (LB) => -
+col: BASIS OF DESIGN => -
+col: NOTES => -
+grid:
+HC-A-1 | ACU-A-1 | 15,795 | 602 | 912 | 0 | 46.0 | 0.20 | 15 | 962.0 | 42 | 45 | 13.13 | 1 x 2 | 2 | 7 | 1 | 100 | HEATCRAFT 8RA0701B | ALL
+HC-A-2 | ACU-A-2 | 19,490 | 608 | 1,119 | 0 | 45.0 | 0.20 | 15 | 1,180.0 | 42 | 55 | 8.0 | 1 x 2 | 2 | 7 | 1 | 115 | HEATCRAFT 8RA0701B | ALL
+HC-A-3 | ACU-A-3 | 28,030 | 584 | 1,649 | 0 | 46.9 | 0.19 | 15 | 1,739.0 | 36 | 96 | 24.0 | 2 x 1 | 2 | 7 | 1 | 150 | HEATCRAFT 8JA0701B | ALL
+HC-A-4 | ACU-A-4 | 25,600 | 582 | 1,509 | 0 | 47.0 | 0.19 | 15 | 1,592.0 | 33 | 96 | 22.0 | 2 x 1 | 2 | 7 | 1 | 135 | HEATCRAFT 8JA0701B | ALL
+HC-A-5 | ACU-A-5 | 29,880 | 623 | 1,690 | 0 | 45.0 | 0.21 | 15 | 1,782.1 | 36 | 96 | 24.0 | 2 x 1 | 2 | 7 | 1 | 150 | HEATCRAFT 8JA0701B | ALL
+HC-A-6 | ACU-A-6 | 22,770 | 569 | 1,361 | 0 | 47.6 | 0.18 | 15 | 1,435.0 | 30 | 96 | 20.0 | 2 x 1 | 2 | 7 | 1 | 125 | HEATCRAFT 8JA0701B | ALL
+END
+
+# HUMIDIFIER SCHEDULE (page 13): one row, H-A-3. TYPE prints STEAM-TO-STEAM:
+# humidifier_type steam_to_steam. CAPACITY (LB/HR) keys capacity_lb_hr (262, the design
+# load); MAXIMUM CAPACITY (375) is typed for audit, so one printed number is one key line.
+# VOLT / PHASE / HZ prints "115 / 1 / 60", keyed as its volts part and its phase part. POWER
+# (kW) is a steam-to-steam unit's control power, not electric heat: eh_kw stays unkeyed.
+# LOCATION prints "BUILDING 101 ACU-A-3"; the protocol keys only a named level from a
+# LOCATION column, and it names none. NOTES prints "ALL"; notes 1 (a-l, what the unit is
+# provided with) and 2 (the EAT basis) key nothing.
+TABLE
+sheet: 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13
+title: HUMIDIFIER SCHEDULE
+family: HUMIDIFIER
+render: page 13 overview at 40 dpi; crop 979,1685,1819,105 at 3x in 4 tiles (TAG column repeated), notes cropped at 3x (crop 979,1810,1200,210); second read at 4x (crops 979,1734,784,38 and 1760,1734,784,38) of H-A-3, every cell
+rows: all 1 printed row
+col: TAG => tag
+col: LOCATION => -
+col: TYPE => humidifier_type
+col: AIR FLOW (CFM) => -
+col: OA AIR FLOW (CFM) => -
+col: DUCT SIZE (W x L) => -
+col: STEAM INLET (PSI) => -
+col: EAT (°F) => -
+col: LAT (°F) => -
+col: FILL RATE (GPM) => -
+col: CAPACITY (LB/HR) => capacity_lb_hr
+col: MAXIMUM CAPACITY (LB/HR) => -
+col: ABSORPTION (FT) => -
+col: VOLT / PHASE / HZ => -
+col: [VOLT / PHASE / HZ: volts part] => volts
+col: [VOLT / PHASE / HZ: phase part] => phase
+col: POWER (kW) => -
+col: MCA => -
+col: MOCP => -
+col: WEIGHT (LB) => -
+col: BASIS OF DESIGN => -
+col: NOTES => -
+grid:
+H-A-3 | BUILDING 101 ACU-A-3 | steam_to_steam (STEAM-TO-STEAM) | 28,030 | 6,970 | 100" x 72" | 15 | 65°F 50% RH | 65°F 66% RH | 2.64 | 262 | 375 | 0.80 | 115 / 1 / 60 | 115 | 1 | 0.65 | 5.4 | 15 | 600 | CONDAIR SETC (B+ STYLE) | ALL
+END

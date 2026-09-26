@@ -1,0 +1,859 @@
+{
+ "version": "1",
+ "default": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+ "parties": {
+  "16": "electrical",
+  "23": "mechanical",
+  "26": "electrical",
+  "28": "fire_alarm",
+  "23 09 23": "controls",
+  "28 31 00": "fire_alarm"
+ },
+ "matrix": {
+  "va.terminal_units": {
+   "item": "Terminal units",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "power": "electrical",
+   "va": [
+    "23",
+    "23",
+    "N/A",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.terminal_unit_controllers": {
+   "item": "Controllers for terminal units",
+   "furnish": "controls",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23",
+    "23 09 23",
+    "16"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   },
+   "note": "\"16\" is an old division number for electrical work."
+  },
+  "va.automatic_dampers": {
+   "item": "Automatic dampers (not furnished with equipment)",
+   "furnish": "controls",
+   "install": "mechanical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23",
+    "N/A",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.damper_actuators": {
+   "item": "Automatic damper actuators",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "power": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "23 09 23"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.manual_valves": {
+   "item": "Manual valves",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "va": [
+    "23",
+    "23",
+    "N/A",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.automatic_valves": {
+   "item": "Automatic valves",
+   "furnish": "controls",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "power": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23",
+    "23 09 23",
+    "23 09 23"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   },
+   "note": "The four coil-kit patterns (research 04 §4) are presets over this row, not separate assemblies."
+  },
+  "va.pipe_insertion": {
+   "item": "Pipe insertion devices and taps, flow and pressure stations.",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "va": [
+    "23",
+    "23",
+    "N/A",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.thermowells": {
+   "item": "Thermowells",
+   "furnish": "controls",
+   "install": "mechanical",
+   "va": [
+    "23 09 23",
+    "23",
+    "N/A",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.current_switches": {
+   "item": "Current Switches",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.control_relays": {
+   "item": "Control Relays",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.control_nodes": {
+   "item": "All control system nodes, equipment, housings, enclosures and panels.",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.chiller_boiler_interface": {
+   "item": "Interface with chiller/boiler controls",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.chiller_boiler_controls": {
+   "item": "Chiller/boiler controls interface with control system",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23",
+    "23",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.smoke_detectors": {
+   "item": "Smoke detectors",
+   "furnish": "fire_alarm",
+   "install": "fire_alarm",
+   "wire_lv": "fire_alarm",
+   "power": "fire_alarm",
+   "va": [
+    "28 31 00",
+    "28 31 00",
+    "28 31 00",
+    "28 31 00"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   },
+   "note": "Research 02 found university specifications [S] where the mechanical trade installs duct detectors; VA's table is the default."
+  },
+  "va.fire_smoke_dampers": {
+   "item": "Fire/Smoke Dampers",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "fire_alarm",
+   "power": "fire_alarm",
+   "va": [
+    "23",
+    "23",
+    "28 31 00",
+    "28 31 00"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.smoke_dampers": {
+   "item": "Smoke Dampers",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "fire_alarm",
+   "power": "fire_alarm",
+   "va": [
+    "23",
+    "23",
+    "28 31 00",
+    "28 31 00"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.fire_dampers": {
+   "item": "Fire Dampers",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "va": [
+    "23",
+    "23",
+    "N/A",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.flow_switches": {
+   "item": "Chiller Flow Switches (and Boiler Flow Switches, the same cells)",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "mechanical",
+   "va": [
+    "23",
+    "23",
+    "23",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   },
+   "note": "VA §1.1 also lists flow switches among the items the controls contractor furnishes but does not install; the table row is the default and the conflict is a partner-review item."
+  },
+  "va.vfds": {
+   "item": "VFDs",
+   "furnish": "mechanical",
+   "install": "electrical",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23",
+    "26",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.starters_hoa": {
+   "item": "Starters, HOA switches",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "power": "electrical",
+   "va": [
+    "23",
+    "23",
+    "N/A",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.lab_air_valves": {
+   "item": "Laboratory Air Valves",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23",
+    "23",
+    "23 09 23",
+    "N/A"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.fume_hood_controls": {
+   "item": "Fume hood controls",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.fcu_controls": {
+   "item": "Fan Coil Unit controls (not furnished with equipment)",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.uh_controls": {
+   "item": "Unit Heater controls (not furnished with equipment)",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.rtu_unit_controls": {
+   "item": "Packaged RTU unit-mounted controls (not furnished with equipment)",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23 09 23",
+    "23 09 23",
+    "23 09 23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.tower_vibration": {
+   "item": "Cooling Tower Vibration Switches",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "power": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23",
+    "23",
+    "23 09 23",
+    "23 09 23"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.tower_level": {
+   "item": "Cooling Tower Level Control Devices",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "power": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23",
+    "23",
+    "23 09 23",
+    "23 09 23"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.tower_makeup": {
+   "item": "Cooling Tower makeup water control devices",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "power": "controls",
+   "program": "controls",
+   "test": "controls",
+   "va": [
+    "23",
+    "23",
+    "23 09 23",
+    "23 09 23"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "va.water_treatment": {
+   "item": "Water treatment system",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "mechanical",
+   "power": "electrical",
+   "va": [
+    "23",
+    "23",
+    "23",
+    "26"
+   ],
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "inf.bas_devices": {
+   "item": "Sensors, switches and transmitters of the BAS not in the VA table",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] research 02 'Default responsibility': the controls contractor furnishes, installs, wires, programs and tests BAS devices",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.flow_meters": {
+   "item": "Hydronic flow meters",
+   "furnish": "controls",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1: flow meters are furnished but not installed by the controls contractor",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   },
+   "note": "VA's table row \"Pipe insertion devices and taps, flow and pressure stations\" gives both to 23; the §1.1 list is the more specific. A partner-review item."
+  },
+  "inf.vav_flow_sensor": {
+   "item": "Terminal unit airflow sensor (the factory flow cross)",
+   "furnish": "factory",
+   "install": "factory",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] research 02 'Default responsibility': VAV flow sensors are factory",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.airflow_station": {
+   "item": "Airflow measuring stations",
+   "furnish": "controls",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] research 04 §4: UFGS 23 09 13 §2.7.7 specifies them in the controls section; no source says who installs them, probably the sheet-metal trade",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.packaged_controls": {
+   "item": "Controls furnished with packaged equipment (factory controllers, their sensors and staging)",
+   "furnish": "factory",
+   "install": "factory",
+   "wire_lv": "factory",
+   "power": "electrical",
+   "program": "factory",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] research 02 'Default responsibility': packaged-unit controls are factory furnished",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.factory_interface": {
+   "item": "A factory device the BAS commands or monitors (a heater's SCR or contactors, a unit's DX staging, a boiler's alarm contact)",
+   "furnish": "factory",
+   "install": "factory",
+   "wire_lv": "controls",
+   "power": "electrical",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] VA 23 09 23 row 'Chiller/boiler controls interface with control system', extended to other packaged equipment",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.meters_electric": {
+   "item": "Building electrical meter",
+   "furnish": "electrical",
+   "install": "electrical",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] UFGS 23 09 13 §2.7.8.4 specifies the meter; the electrical trade installs it",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.meters_utility": {
+   "item": "Building water, gas and steam meters",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] the piping trades install in-line meters; the controls contractor wires the pulse or network output",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.shutdown_switch": {
+   "item": "HVAC equipment shutdown switch",
+   "furnish": "controls",
+   "install": "controls",
+   "wire_lv": "controls",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] UFC 3-410-01 Table 3-1 names its status; which trade furnishes the switch is a partner-review item",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.gauges": {
+   "item": "Thermometers and pressure gauges",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "source": {
+    "ref": "UFGS 23 09 13 §2.8 note: thermometers and gauges are typically provided by the mechanical contractor",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  "inf.mechanical_specialty": {
+   "item": "Piping and duct specialties (air separator, expansion tank, fill, feeder, traps, connectors, access doors)",
+   "furnish": "mechanical",
+   "install": "mechanical",
+   "source": {
+    "ref": "[inferred] research 04 §1.5-1.6: each is specified in a Division 23 piping or duct section",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  "inf.points": {
+   "item": "A point: programmed and tested by the controls contractor",
+   "program": "controls",
+   "test": "controls",
+   "source": {
+    "ref": "[inferred] research 02 'Default responsibility': the controls contractor programs and tests",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  }
+ },
+ "roles": {
+  "terminal-unit-controller": "va.terminal_unit_controllers",
+  "unit-controller": "va.fcu_controls",
+  "unit-heater-controller": "va.uh_controls",
+  "system-controller": "va.control_nodes",
+  "packaged-controller": "inf.packaged_controls",
+  "network-interface": "va.chiller_boiler_controls",
+  "transformer": "va.control_nodes",
+  "space-sensor": "inf.bas_devices",
+  "temperature-sensor": "inf.bas_devices",
+  "humidity-sensor": "inf.bas_devices",
+  "co2-sensor": "inf.bas_devices",
+  "occupancy-sensor": "inf.bas_devices",
+  "window-switch": "inf.bas_devices",
+  "pressure-sensor": "inf.bas_devices",
+  "pressure-switch": "inf.bas_devices",
+  "freezestat": "inf.bas_devices",
+  "end-switch": "inf.bas_devices",
+  "level-sensor": "va.tower_level",
+  "vibration-switch": "va.tower_vibration",
+  "makeup-valve": "va.tower_makeup",
+  "current-switch": "va.current_switches",
+  "relay": "va.control_relays",
+  "damper-actuator": "va.damper_actuators",
+  "automatic-damper": "va.automatic_dampers",
+  "control-valve": "va.automatic_valves",
+  "airflow-sensor": "inf.vav_flow_sensor",
+  "airflow-station": "inf.airflow_station",
+  "flow-switch": "va.flow_switches",
+  "flow-meter": "inf.flow_meters",
+  "thermowell": "va.thermowells",
+  "pressure-tap": "va.pipe_insertion",
+  "vfd": "va.vfds",
+  "starter": "va.starters_hoa",
+  "hoa-switch": "va.starters_hoa",
+  "packaged-unit-controls": "va.rtu_unit_controls",
+  "smoke-detector": "va.smoke_detectors",
+  "factory-interface": "inf.factory_interface",
+  "lab-air-valve": "va.lab_air_valves",
+  "fume-hood-monitor": "va.fume_hood_controls",
+  "electric-meter": "inf.meters_electric",
+  "utility-meter": "inf.meters_utility",
+  "shutdown-switch": "inf.shutdown_switch",
+  "isolation-valve": "va.manual_valves",
+  "balancing-valve": "va.manual_valves",
+  "flow-limiter": "va.manual_valves",
+  "strainer": "va.manual_valves",
+  "blowdown-valve": "va.manual_valves",
+  "drain-valve": "va.manual_valves",
+  "check-valve": "va.manual_valves",
+  "triple-duty-valve": "va.manual_valves",
+  "suction-diffuser": "va.manual_valves",
+  "relief-valve": "va.manual_valves",
+  "vacuum-breaker": "va.manual_valves",
+  "test-valve": "va.manual_valves",
+  "gas-cock": "va.manual_valves",
+  "manual-flow-valve": "va.manual_valves",
+  "coil-kit": "va.manual_valves",
+  "union": "inf.mechanical_specialty",
+  "flange-set": "inf.mechanical_specialty",
+  "reducer": "inf.mechanical_specialty",
+  "hose": "inf.mechanical_specialty",
+  "air-vent": "inf.mechanical_specialty",
+  "pt-port": "va.pipe_insertion",
+  "thermometer": "inf.gauges",
+  "pressure-gauge": "inf.gauges",
+  "flexible-connector": "inf.mechanical_specialty",
+  "steam-trap": "inf.mechanical_specialty",
+  "dirt-pocket": "inf.mechanical_specialty",
+  "bypass-set": "inf.mechanical_specialty",
+  "gas-regulator": "inf.mechanical_specialty",
+  "sediment-trap": "inf.mechanical_specialty",
+  "fill-valve": "inf.mechanical_specialty",
+  "backflow-preventer": "inf.mechanical_specialty",
+  "air-separator": "inf.mechanical_specialty",
+  "expansion-tank": "inf.mechanical_specialty",
+  "pot-feeder": "va.water_treatment",
+  "coupon-rack": "va.water_treatment",
+  "water-meter": "inf.meters_utility",
+  "condensate-trap": "inf.mechanical_specialty",
+  "access-door": "inf.mechanical_specialty",
+  "flexible-duct-connector": "inf.mechanical_specialty",
+  "overflow-drain": "inf.mechanical_specialty",
+  "equalizer-valve": "va.manual_valves",
+  "flushing-bypass": "inf.mechanical_specialty",
+  "low-water-cutoff": "inf.factory_interface"
+ },
+ "presets": [
+  {
+   "id": "valve-by-controls-installed-by-mechanical",
+   "label": "The controls contractor furnishes the valve; the mechanical contractor installs it (VA 23 09 23 table)",
+   "roles": {
+    "control-valve": {
+     "furnish": "controls",
+     "install": "mechanical"
+    }
+   },
+   "source": {
+    "ref": "VA 23 09 23 (03-01-23) §1.1 Responsibility Table",
+    "license": "LicenseRef-US-Government-Work",
+    "derivation": "paraphrase"
+   }
+  },
+  {
+   "id": "valve-shipped-to-kit-maker",
+   "label": "The controls contractor furnishes the valve and ships it to the kit or unit maker for factory mounting",
+   "roles": {
+    "control-valve": {
+     "furnish": "controls",
+     "install": "factory"
+    }
+   },
+   "source": {
+    "ref": "[inferred] research 04 §4 pattern 2: IMEG 23 09 00 §1.4 B; VA 23 36 00 §2.2 H",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  },
+  {
+   "id": "kit-picv-body-controls-actuator",
+   "label": "The kit includes the PICV body; the controls contractor furnishes the actuator",
+   "roles": {
+    "control-valve": {
+     "furnish": "factory",
+     "install": "factory"
+    }
+   },
+   "source": {
+    "ref": "[inferred] research 04 §4 pattern 3 (vendor literature, search summaries only)",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   },
+   "note": "The actuator is the controls contractor's: set it on the valve line's actuator parameter or a partner line."
+  },
+  {
+   "id": "kit-maker-valve-and-actuator",
+   "label": "The kit or unit maker supplies both valve and actuator",
+   "roles": {
+    "control-valve": {
+     "furnish": "factory",
+     "install": "factory"
+    }
+   },
+   "source": {
+    "ref": "[inferred] research 04 §4 pattern 4: VA 23 82 00 §2.2 H option; vendor literature",
+    "license": "Apache-2.0",
+    "derivation": "inferred"
+   }
+  }
+ ]
+}

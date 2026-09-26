@@ -29,6 +29,7 @@ import BasTakeoffJourney from "./BasTakeoffJourney.jsx";
 import { store } from '../lib/store.js';
 import { basReviewNavigation } from './basReviewNavigation.ts';
 import { completeBasHeaderCoverage } from '../lib/completeBasPresentation.js';
+import AssembliesPanel from './AssembliesPanel.jsx';
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -176,6 +177,9 @@ function SourceComparisonActions({ line, onOpenCitation, onCompareCitations, com
 
 
 export default function TakeoffDataPanel({
+  // ASSEMBLIES (WP5.4): { project, status, onLoad, starter, partner,
+  // onSavePartner, state, onStateChange } — the Assemblies tab's inputs.
+  assemblies = null,
   rows = [],
   projectName = "",
   corpusMeta = null,
@@ -274,7 +278,7 @@ export default function TakeoffDataPanel({
     setLocalTab(value);
     onBasViewStateChange?.(previous => ({ ...previous, takeoffTab: value }));
   };
-  const evidenceTab = tab === 'overview' || tab === 'points' || tab === 'equipment' || tab === 'review';
+  const evidenceTab = tab === 'overview' || tab === 'points' || tab === 'equipment' || tab === 'review' || tab === 'assemblies';
   const snapshotView = basViewState?.projectReview?.snapshotView;
   const scopedTakeoffVerified = snapshotView?.approvedWorkflow === basWorkflow
     || snapshotView?.verifiedCurrentWorkflow === basWorkflow;
@@ -330,6 +334,8 @@ export default function TakeoffDataPanel({
   const [err, setErr] = useState("");
   const [jumpFamily, setJumpFamily] = useState("");
   const [hitBusy, setHitBusy] = useState(false);
+  // The Assemblies tab's report, once applied: the PDF carries its section.
+  const [assembliesReport, setAssembliesReport] = useState(null);
   const [hitErr, setHitErr] = useState("");
 
   const runExportToHit = async () => {
@@ -421,6 +427,7 @@ export default function TakeoffDataPanel({
           title: mode === "workflow" ? "Workflow data" : "Takeoff",
           projectName,
           mode,
+          assembliesReport,
         });
       }
     } catch (e) {
@@ -542,7 +549,8 @@ export default function TakeoffDataPanel({
               <span>{rows.length} cited source fields</span>
             </div>
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
-              {tab === "overview" ? "A guided estimator review of scope, grounding, BAS requirements, and open decisions. Raw extraction fields remain available in Audit data."
+              {tab === "assemblies" ? "Each scheduled unit's controls typical and hook-up, from your assembly library. Exceptions come first: an unresolved unit names what it waits for. Every line cites its schedule row and its rule. A printed points list that names a unit stands instead of its typical's point lines."
+                : tab === "overview" ? "A guided estimator review of scope, grounding, BAS requirements, and open decisions. Raw extraction fields remain available in Audit data."
                 : tab === "review" ? basViewState?.projectReview?.snapshots
                 ? "Review a scoped snapshot with its exact original PDFs. Historical approval does not certify the current project."
                 : "Source-linked findings across the saved BAS workflow. Resolve inputs in their original workspace; this view does not grant approval."
@@ -606,6 +614,7 @@ export default function TakeoffDataPanel({
           <button type="button" aria-pressed={tab === 'overview'} onClick={() => { setTab('overview'); onBasViewStateChange?.(previous => ({ ...previous, journeyStage: 'scope' })); }}>Summary</button>
           <button type="button" aria-pressed={tab === 'equipment'} onClick={() => { setTab('equipment'); onBasViewStateChange?.(previous => ({ ...previous, journeyStage: 'equipment' })); }}>Equipment setup</button>
           <button type="button" aria-pressed={tab === 'workflow'} onClick={() => { setTab('workflow'); onBasViewStateChange?.(previous => ({ ...previous, journeyStage: 'exceptions' })); }}>Audit data</button>
+          {assemblies && <button type="button" aria-pressed={tab === 'assemblies'} onClick={() => setTab('assemblies')} data-takeoff-tab="assemblies">Assemblies</button>}
         </div>}
         {!completeBasRun && <div style={{ display: "flex", gap: 2, padding: "0 20px", borderBottom: "1px solid var(--ink-faint)" }}>
           {completeBasRun && <button type="button" style={tabBtn(tab === "overview")} onClick={() => setTab("overview")}>
@@ -619,6 +628,7 @@ export default function TakeoffDataPanel({
           </button>
           {basWorkflow && <button type="button" style={tabBtn(tab === "points")} onClick={() => setTab("points")}>{completeBasRun ? "BAS points & sequences" : "Point lists"}</button>}
           {basWorkflow && <button type="button" style={tabBtn(tab === "equipment")} onClick={() => setTab("equipment")}>{completeBasRun ? "Scope setup" : "Equipment"}</button>}
+          {assemblies && <button type="button" style={tabBtn(tab === "assemblies")} onClick={() => setTab("assemblies")} data-takeoff-tab="assemblies">Assemblies</button>}
           <button type="button" style={{ ...tabBtn(tab === 'review'), marginLeft: 'auto' }} onClick={() => setTab('review')}>Review &amp; changes</button>
         </div>}
 
@@ -678,7 +688,10 @@ export default function TakeoffDataPanel({
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
           {tab !== 'review' && basViewState?.projectReview?.returnFromDomain && <button type="button" onClick={() => setTab('review')}>← Return to issue review</button>}
-          {tab === 'overview' && completeBasRun ? <BasTakeoffOverview corpusMeta={corpusMeta} citedFieldCount={rows.length} onNavigate={navigateOverview} />
+          {tab === 'assemblies' && assemblies ? <AssembliesPanel project={assemblies.project} projectStatus={assemblies.status} onLoadProject={assemblies.onLoad}
+              starter={assemblies.starter} partner={assemblies.partner} onSavePartner={assemblies.onSavePartner}
+              state={assemblies.state} onStateChange={assemblies.onStateChange} onOpenCitation={onOpenCitation} projectName={projectName} onReport={setAssembliesReport} />
+            : tab === 'overview' && completeBasRun ? <BasTakeoffOverview corpusMeta={corpusMeta} citedFieldCount={rows.length} onNavigate={navigateOverview} />
             : tab === 'review' ? <BasProjectReviewWorkspace workflow={basWorkflow} state={basViewState?.projectReview}
             onStateChange={updater => onBasViewStateChange?.(previous => ({ ...previous, projectReview: updater(previous?.projectReview || {}) }))}
             onOpenCitation={onOpenCitation} onOpenDomain={openReviewDomain} onDrawingReview={onBasDrawingReview} onRevisionOperation={onBasRevisionOperation} onIssueReview={onBasIssueReview} onScopeReview={onBasScopeReview} restoreContext={restoreContext} />

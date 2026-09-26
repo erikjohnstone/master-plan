@@ -27,6 +27,7 @@ import { loadTemplates as loadReportTemplates, overwriteTemplates as overwriteRe
 import { activeThemeFileRaw, saveActiveThemeFile, clearActiveTheme } from "./reportTheme.js";
 import { loadColPrefs, saveColPrefs, loadGroupBy, saveGroupBy } from "./reportColumns.js";
 import { sanitizeAssemblyLibrary, SEED_ASSEMBLIES } from "./linear/assemblyLibrary.ts";
+import { equipmentAssembliesOf } from "./assemblies/library.ts";
 
 export const PROFILE_SCHEMA = "opentakeoff.profile.v1";
 
@@ -36,11 +37,12 @@ export function isProfileFile(name) {
 
 /** Gather the whole working environment into one plain object. */
 export async function buildProfile(name) {
-  const [templates, materials, stamps, assemblies] = await Promise.all([
+  const [templates, materials, stamps, assemblies, equipment] = await Promise.all([
     store.loadTemplates().catch(() => []),
     store.loadMaterialLibrary().catch(() => []),
     store.loadStampLibrary().catch(() => ({ stamps: [], sets: [] })),
     store.loadAssemblyLibrary().catch(() => []),
+    store.loadEquipmentAssemblies().catch(() => []),
   ]);
   let theme = null;
   try { const raw = activeThemeFileRaw(); theme = raw ? JSON.parse(raw) : null; } catch { theme = null; }
@@ -56,7 +58,9 @@ export async function buildProfile(name) {
     // section as the three above — store.loadAssemblyLibrary() already
     // seeds plan §5.5's defaults on first touch, so this is never empty
     // for an estimator who has opened the app at all.
-    assembly_library: assemblies,
+    // ASSEMBLIES (D7): equipment assemblies ride the same array, after the
+    // linear records; with none, the section is exactly what it was.
+    assembly_library: [...assemblies, ...equipment],
     report_templates: loadReportTemplates(),
     ...(theme ? { report_theme: theme } : {}),
     report_cols: loadColPrefs(),
@@ -83,7 +87,7 @@ export function parseProfile(text) {
  * REPLACE the working environment with a parsed profile. Each section rides
  * its own sanitize gate; absent sections clear to their defaults, so applying
  * a profile always lands the full, self-consistent environment it describes.
- * @returns {{ templates: number, materials: number, stamps: number, assemblies: number, reportTemplates: number }} counts for the receipt line
+ * @returns {{ templates: number, materials: number, stamps: number, assemblies: number, equipmentAssemblies: number, reportTemplates: number }} counts for the receipt line
  */
 export async function applyProfile(p) {
   const templates = sanitizeTemplates(p.condition_templates);
@@ -97,11 +101,13 @@ export async function applyProfile(p) {
   // machine. Seeding only ever happens once, on a truly first-ever local
   // load (store.loadAssemblyLibrary's own job), never here.
   const assemblies = sanitizeAssemblyLibrary(p.assembly_library);
+  const equipment = equipmentAssembliesOf(p.assembly_library);
   const reportTemplates = sanitizeReportTemplates(p.report_templates);
   await store.saveTemplates(templates);
   await store.saveMaterialLibrary(materials);
   await store.saveStampLibrary(stamps);
   await store.saveAssemblyLibrary(assemblies);
+  await store.saveEquipmentAssemblies(equipment);
   overwriteReportTemplates(reportTemplates);
   if (p.report_theme) saveActiveThemeFile(p.report_theme); else clearActiveTheme();
   saveColPrefs(p.report_cols && typeof p.report_cols === "object" ? p.report_cols : {});
@@ -111,6 +117,7 @@ export async function applyProfile(p) {
     materials: materials.length,
     stamps: (stamps.stamps || []).length,
     assemblies: assemblies.length,
+    equipmentAssemblies: equipment.length,
     reportTemplates: reportTemplates.length,
   };
 }
@@ -126,6 +133,7 @@ export async function resetProfileDefaults() {
   await store.saveMaterialLibrary([]);
   await store.saveStampLibrary(seedStampLibrary({ stamps: [], sets: [] }));
   await store.saveAssemblyLibrary(SEED_ASSEMBLIES);
+  await store.saveEquipmentAssemblies([]);
   overwriteReportTemplates([]);
   clearActiveTheme();
   saveColPrefs({});

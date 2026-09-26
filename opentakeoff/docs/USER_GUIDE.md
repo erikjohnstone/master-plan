@@ -542,6 +542,123 @@ condition properties still closes them. Drawing shortcuts and actions are unchan
 Takeoff retains its existing exports. The separate legacy per-condition report is
 available from **⋯ → Measurement report**, not a primary navigation tab.
 
+### Controls assemblies (Takeoff → Assemblies)
+
+**Takeoff → Assemblies** turns the set's scheduled HVAC equipment into a controls
+estimate. Press **Apply assemblies**. The same Session+ODL path MCP uses reads the
+equipment schedules and the notes printed with them, and your assembly library
+then gives each unit its controls typical and its mechanical hook-up:
+- its options and variables, each with its source (the schedule, a project
+  setting, a partner default, the library default, or you);
+- its lines (points, devices, labor hooks) with quantities, each citing the
+  schedule row and the library rule.
+
+**Exceptions come first.** A unit the drawings do not decide is *unresolved*, and it
+says what it waits for: an attribute the schedule does not print, a project
+setting, or two typicals that tie. Nothing is guessed. Resolve one with **Use …**,
+which picks a candidate typical, or open **Details** to set an option or exclude
+the unit. Every override asks for a reason and is kept on the record under
+**Your overrides**. Below the exceptions sit a table per family (units, typicals,
+unresolved, without a typical, lines) and one row per unit. Click a unit, or its
+**Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
+typical, or the terminal count behind an air handler's typical), and lines.
+Clicking a tag paints its schedule row on the drawing. **Printed points** shows the
+rows of any printed points list that names the unit. That list stands instead of
+the typical's point lines, which show as *replaced*: the drawing's own list wins.
+The typical never adds to it.
+
+**Control drawings.** The set's sequences of operation, control schematics and
+points lists are read for each unit they name (by tag, a tag list or range, a
+schedule cross-reference, or the family's typical detail). The reading answers
+closed questions only: whether the building automation system commands the unit,
+only monitors it, or leaves it standalone, and whether each option of its typical
+is drawn (a motorized damper, a modulating valve, smoke detectors, and so on).
+With the platform AI configured, a text model and a vision model read beside the
+deterministic reader. A reading changes a unit only where two readers agree (or
+the drawing states it in so many words, such as "THIS SYSTEM IS STANDALONE AND NOT
+CONTROLLED BY THE DDC SYSTEM"). One reader alone is a proposal, readers that
+disagree leave the option unresolved, and an option is read as not drawn only
+when the text and two looks at the drawing agree. An HVAC zone plan (a sheet
+whose title names zones, such as "HVAC ZONE LEGEND") is read too: a sensor
+symbol drawn inside the zone a unit's tag labels, such as a CO2 sensor, gives
+the unit that option. A unit's **Details** lists
+its readings under **Control drawings**, applied ones first, each with why, the
+readers behind it and the printed text it rests on (click it to see it on the
+sheet). **Reject** turns an applied reading back, and **Accept** applies a
+proposal; both are overrides with a reason. The header counts what was applied,
+proposed and left unresolved.
+
+**Project settings** (above the exceptions) hold what the library asks of the
+project, saved with it. The hook-up profile has switches, for example strainers
+and P/T ports at coils, hoses at terminal coils, and a condensate trap at fan
+coils. It also has variables, for example balancing, the coil valve body, the
+largest coil kit and the flange size. Hover over any of them for the
+specifications that make it a choice.
+**Fill unset from the starter's defaults** sets every one you have not set; a
+switch or count left unset keeps its lines waiting. **Who does what** applies a
+responsibility preset, for example "the controls contractor furnishes the valve
+and ships it to the kit maker". It shows which presets the project holds and
+lists your edits, which **Clear responsibility edits** removes.
+
+**Project questions** (below the settings) ask the few facts only you know that
+decide many units at once:
+- whether the project has a BAS scope;
+- the owner's criteria (DoD, VA);
+- what happens to the controls of units the schedules mark existing;
+- whether fans and pumps with no speed column are constant speed;
+- whether condensate, sump and plumbing-service pumps are in scope.
+
+A question appears only when its answer changes something on this set. Each
+choice shows how many lines and records it changes, worked out by applying it.
+When printed text outside the schedules proposes an answer, the card quotes it
+("The drawings suggest …"); click a quote to see it on the sheet. The proposal
+changes nothing until you choose. Each answer asks why (kept with the answer),
+and **Don't know** takes an answer back. Answers are saved with the project as
+a journal that is only ever added to. An agent can answer over MCP
+(`answer_project_question`): its answers show as recorded by an agent for you,
+and so does every record they decide.
+
+**Exports.** **Download CSV set** saves a zip of eight CSV files for the whole
+project: equipment, lines and their roll-up, points, valves, damper actuators,
+sensors, and a Desigo Select hand-entry worksheet. The **Scope** menu beside it
+narrows the lines and the roll-up to one party's lines (for example, only the
+mechanical contractor's: its trade, or whatever it furnishes or installs); the
+unit list, points and device schedules stay whole. The zip also holds
+`assemblies.pdf`, the same report as a PDF (exceptions first, then the family
+table and the units). Once you apply assemblies, the Takeoff panel's **PDF**
+carries that section after its own tables. Units are in the column names,
+and every engineering field has a `*_source` column that says whether the
+schedule, the drawing, a setting, the typical or nobody gave it; a field left for
+the selection tool is blank and says so. The columns are listed in
+[ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md), and MCP's `apply_assemblies` writes the
+same files with `export_dir`. The Takeoff panel's **Export to HIT** (after a
+control-valve takeoff) now adds one row for each hydronic coil printed inside an
+equipment schedule that no scheduled valve serves, with the coil's printed flow.
+Past 195 valves it saves several workbooks in a zip, so every row keeps the
+template's dropdowns.
+
+**The project keeps its versions.** Applying pins every definition the records
+used into the saved project. A later edit to your library never changes a saved
+project silently. **Library** lists any updates under **Update to latest**, with
+each option and line that would change, and nothing moves until you press
+**Adopt**.
+
+**The library.** The starter library (US typicals v1 and the mechanical hook-ups)
+is read-only. **Clone to edit** makes your own version with the same id and the
+next version number, saved in your profile beside the starter. The editor
+validates live against the whole library: its shape, every expression against
+the families' attributes, device references, and sub-assembly references. What
+your version changes from the starter is tinted amber. **Export CSV** saves the
+whole library as one spreadsheet, a row per option, variable, line and record, and
+**Import CSV…** reads your edited copy back through the same checks, listing any
+problem by row and column. The columns are in [ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md#the-library-as-csv-assemblies-librarycsv).
+Your own part numbers, unit costs, hours and labor categories go on your
+version's lines (the starter ships none). They come back labelled
+*partner-entered*: in `lines.csv`, with the cost and hours extended by each
+line's quantity; in the totals above the report; and in the PDF, which sums the
+extended cost and the hours by labor category. The currency and the categories
+are yours.
+
 ### Manual sections
 
 1. [Five minutes to a takeoff](#1-five-minutes-to-a-takeoff)
@@ -1355,7 +1472,7 @@ What's sent, and only when you run an AI feature: the sheet region in question a
 
 The same engine speaks [MCP](https://modelcontextprotocol.io), one command away:
 `npx -y opentakeoff-mcp` (or the one-click `opentakeoff-mcp.mcpb` bundle for Claude Desktop). An
-MCP client gets **<!--tool-count-->60<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
+MCP client gets **<!--tool-count-->64<!--/tool-count--> tools** plus browsable sheet resources, over the very same measuring engine,
 with the same scale gate and the same provenance receipts:
 
 | Group | Tools |

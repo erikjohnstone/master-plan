@@ -1,0 +1,19 @@
+# baker-county-eoc.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's controls sheets (PDF text layer and renders), never pipeline output.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/baker-county-eoc.typicals.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+baker-county-eoc-bidset.pdf#41,RTU-1,RTU,baker-county-eoc-bidset.pdf#40,RTU - SEQUENCE OF OPERATIONS,family_detail,
+baker-county-eoc-bidset.pdf#41,RTU-2,RTU,baker-county-eoc-bidset.pdf#40,RTU - SEQUENCE OF OPERATIONS,family_detail,
+baker-county-eoc-bidset.pdf#41,ERV-01,ERV,,none,,
+baker-county-eoc-bidset.pdf#41,EF-1,FAN,,none,,
+baker-county-eoc-bidset.pdf#41,CU-1,CONDENSING_UNIT,,none,,
+baker-county-eoc-bidset.pdf#41,CU-2,CONDENSING_UNIT,,none,,
+baker-county-eoc-bidset.pdf#41,FCU-1,FCU,,none,,
+baker-county-eoc-bidset.pdf#41,FCU-2,FCU,,none,,

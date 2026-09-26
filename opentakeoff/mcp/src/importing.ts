@@ -94,6 +94,10 @@ export async function importTakeoff(session: Session, filePath: string) {
     rulesImported++;
   }
 
+  // the project's assemblies block (CONTROL INTENT Track A): it rides through,
+  // and its answer journal becomes this Session's when this Session has none
+  const assemblies = imported.assemblies === undefined ? null : session.adoptAssembliesBlock(imported.assemblies);
+
   // the imported SHAPES journal as one reversible gesture; adopted conditions,
   // scales, annotations, and approval marks stay on undo (documented on the
   // tool) — an import is a document merge, not a trace, and shapes are the
@@ -109,6 +113,8 @@ export async function importTakeoff(session: Session, filePath: string) {
     note: (note.replaced
       ? "Empty session — the import IS the takeoff now. Unreviewed machine shapes stay pencil; verify with view_sheet overlay:true."
       : "Merged: same finish tags joined your conditions, new ids appended, duplicates skipped (re-import is idempotent), this session's calibration won per sheet.")
-      + (rulesImported ? ` ${rulesImported} correction rule(s) arrived — apply_rules re-runs them.` : ""),
+      + (rulesImported ? ` ${rulesImported} correction rule(s) arrived — apply_rules re-runs them.` : "")
+      + (assemblies?.answers_adopted ? ` ${assemblies.answers_adopted} project-question answer event(s) arrived — project_questions shows them; apply_assemblies applies them.` : "")
+      + (assemblies?.dropped.length ? ` The assemblies block's gate dropped: ${assemblies.dropped.slice(0, 3).join("; ")}.` : ""),
   };
 }

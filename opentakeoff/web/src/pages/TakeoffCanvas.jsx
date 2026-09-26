@@ -39,6 +39,8 @@ import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import { sanitizeAssembliesState } from "../lib/assemblies/projectState";
+import { loadStarterLibrary } from "../lib/assemblies/starterLibrary";
 import { takeoffNavigationBadge } from "../lib/completeBasPresentation.js";
 import { renderPdfCitationPreview } from "../lib/citationComparison.js";
 import { assertBasAssignmentUpdate } from "../lib/basAssignmentDemandContract.ts";
@@ -155,7 +157,7 @@ import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, 
 import { buildXlsx } from "../lib/xlsx.js";
 import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
 import { buildValveSizeExport } from "../lib/valveSizeExport.ts";
-import { fillValveSizeTemplate, VALVE_SIZE_TEMPLATE_PUBLIC_PATH, VALVE_SIZE_TEMPLATE_FILENAME } from "../lib/valveSizeTemplate.ts";
+import { valveSizeTemplateFiles, VALVE_SIZE_TEMPLATE_PUBLIC_PATH } from "../lib/valveSizeTemplate.ts";
 import {
   reconcileScheduleFamilyWithSweeps,
   reconcileRowsToCsv,
@@ -450,6 +452,16 @@ export default function TakeoffCanvas() {
   // Stitches (#161): persisted match-line composites (lib/stitches.ts) — a
   // stitch opens as ONE panel; its members are a render-time concern only.
   const [stitches, setStitches] = useState([]);
+  // ASSEMBLIES (WP5.2/5.4): the project's assemblies block (pins, settings,
+  // overrides; lib/assemblies/projectState.ts) rides the project file. The
+  // compiled project the apply path reads is re-read from the plans through
+  // /__ot/assemblies-project and never saved. The partner's library is the
+  // profile's (store), beside the read-only starter.
+  const [assembliesState, setAssembliesState] = useState(null);
+  const [assembliesProject, setAssembliesProject] = useState(null);
+  const [assembliesStatus, setAssembliesStatus] = useState({});
+  const [starterAssemblies, setStarterAssemblies] = useState([]);
+  const [partnerAssemblies, setPartnerAssemblies] = useState([]);
   const [alignPt, setAlignPt] = useState(null);       // stitch-align first click (stage px) — ephemeral, never persisted
   const [zoneCheck, setZoneCheck] = useState(null);   // ephemeral zone-check region {key, pts (norm)} — never persisted (buildPayload doesn't read it)
   const [zoneExpand, setZoneExpand] = useState(null); // zone panel: condition id with materials expanded
@@ -695,6 +707,16 @@ export default function TakeoffCanvas() {
   // Takeoff tab = finished compiled takeoff; Workflow data = raw aggregate.
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
+  // ASSEMBLIES (WP5.4): the libraries load when the Takeoff panel opens — the
+  // read-only starter once (on demand; it stays out of the main bundle), the
+  // partner's own records from the profile store each time.
+  useEffect(() => {
+    if (!showTakeoffData) return undefined;
+    let live = true;
+    if (!starterAssemblies.length) loadStarterLibrary().then((defs) => { if (live) setStarterAssemblies(defs); }).catch((e) => setAssembliesStatus({ error: String(e?.message || e) }));
+    store.loadEquipmentAssemblies().then((defs) => { if (live) setPartnerAssemblies(defs); }).catch(() => {});
+    return () => { live = false; };
+  }, [showTakeoffData]); // eslint-disable-line react-hooks/exhaustive-deps
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
   // The full compile_corpus_takeoff result (kind control_valves) behind the
   // "Export to HIT" button — lastCorpusTakeoffMeta above is trimmed for the
@@ -1997,6 +2019,13 @@ export default function TakeoffCanvas() {
     // legitimate group of one while its stitch actually exists.
     const loadedStitches = sanitizeStitches(a.stitches, MAX_GROUP);
     setStitches(loadedStitches);
+    // additive `assemblies` (WP5.2) — sanitize-gated; else-clear. Anything the
+    // gate drops is named, never lost silently.
+    const loadedAssemblies = sanitizeAssembliesState(a.assemblies);
+    setAssembliesState(loadedAssemblies.state);
+    setAssembliesProject(null);
+    setAssembliesStatus({});
+    if (loadedAssemblies.dropped.length) setCommitMsg(`Assemblies: ${loadedAssemblies.dropped.length} saved item(s) could not be read — ${loadedAssemblies.dropped[0]}`);
     setAlignPt(null);
     // else-clear matters at runtime (snapshot load): a payload without groups/
     // tabs must not inherit the pre-load ones — autosave would persist a hybrid.
@@ -2848,7 +2877,7 @@ export default function TakeoffCanvas() {
     // units is additive and diff-only (the sheet_levels convention): imperial —
     // the default — omits the key, so an old imperial project's payload is
     // byte-identical on round-trip; only a metric project carries the field.
-    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(linearSettings).length ? { linear_settings: linearSettings } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
+    return { ...(basWorkflow ? { bas_workflow: basWorkflow } : {}), project_name: projectName, ...(units === "metric" ? { units } : {}), ...(Object.values(clientInfo).some((v) => v && String(v).trim()) ? { client_info: clientInfo } : {}), sheets: Object.entries(scales).map(([sheet_id, units_per_px]) => ({ sheet_id, units_per_px, ...(scaleSources[sheet_id] ? { scale_source: scaleSources[sheet_id] } : {}), ...(scaleUnconfirmed[sheet_id] === false ? { scale_confirmed: false } : {}) })), conditions, ...(conditionColumns.length ? { condition_columns: conditionColumns } : {}), ...(shapeLabels.length ? { shape_labels: shapeLabels } : {}), ...(pinned.length ? { palette: pinned } : {}), shapes, markups, rfis, ...(approvals.length ? { approvals } : {}), ...(rules.length ? { rules } : {}), sheet_group: sheetGroup, last_group: lastGroup, sheet_tabs: openTabs, ...(stitches.length ? { stitches } : {}), ...(assembliesState ? { assemblies: assembliesState } : {}), ...(Object.keys(sheetLevels).length ? { sheet_levels: sheetLevels } : {}), ...(Object.keys(linearSettings).length ? { linear_settings: linearSettings } : {}), ...(Object.keys(layerOverrides).length ? { layer_overrides: layerOverrides } : {}), ...(Object.keys(provCounters.shapes_deleted).length ? { provenance_counters: provCounters } : {}) };
   };
   // Runtime restore of a saved payload — the Revisions panel's Restore lands
   // here. A runtime load (unlike mount) can interrupt work in
@@ -3091,7 +3120,7 @@ export default function TakeoffCanvas() {
     // state it serializes, so listing buildPayload (a new identity each render)
     // would fire a save on every render instead of only on a real change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, linearSettings, layerOverrides, lastGroup, openTabs, stitches, projectName, clientInfo, units, basWorkflow]);
+  }, [shapes, conditions, conditionColumns, shapeLabels, palette, scales, scaleSources, markups, approvals, rfis, rules, provCounters, sheetGroup, sheetLevels, linearSettings, layerOverrides, lastGroup, openTabs, stitches, assembliesState, projectName, clientInfo, units, basWorkflow]);
   useEffect(() => { saveStateRef.current = saveState; }, [saveState]);
 
   // Flush a pending debounced save on navigate-away (unmount), and warn before a
@@ -7895,6 +7924,41 @@ export default function TakeoffCanvas() {
     }
   }
 
+  /** ASSEMBLIES (WP5.4): the project the apply path reads, from the same
+   * Session+ODL path MCP's apply_assemblies uses (production-graph-cli
+   * --mode assemblies_project); applied in the browser by the same
+   * applyAssemblies. Sheet keys come back as the canvas's real names. */
+  async function fetchProductionAssembliesProject() {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) throw new Error("No PDF loaded");
+    const fd = new FormData();
+    const shaToName = new Map();
+    for (const name of names) {
+      const bytes = await loadPdfDataOrExplain(name);
+      try { shaToName.set(await sha256Hex(bytes), name); } catch { /* keep the upload's own name */ }
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    const res = await fetch("/__ot/assemblies-project", { method: "POST", body: fd });
+    const result = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(result.error || `assemblies-project HTTP ${res.status}`);
+    return remapGraphSheetKeys(result, shaToName);
+  }
+
+  async function loadAssembliesProject() {
+    setAssembliesStatus({ loading: true });
+    try {
+      setAssembliesProject(await fetchProductionAssembliesProject());
+      setAssembliesStatus({});
+    } catch (e) {
+      setAssembliesStatus({ error: `Couldn't read the schedules for assemblies: ${e?.message || e}` });
+    }
+  }
+
+  async function savePartnerAssemblies(defs) {
+    await store.saveEquipmentAssemblies(defs);
+    setPartnerAssemblies(await store.loadEquipmentAssemblies());
+  }
+
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
     const requestEpoch = ++basCompileEpochRef.current;
     const loadEpoch = basLoadEpochRef.current;
@@ -8666,12 +8730,27 @@ export default function TakeoffCanvas() {
   // Siemens HIT sizing tool.
   async function exportControlValveTakeoffToHit() {
     if (!lastControlValveTakeoff) return;
-    const valveExport = buildValveSizeExport(lastControlValveTakeoff);
+    // Coil-derived valves (ASSEMBLIES WP7.3): the embedded-coil compile on the
+    // same production path, read-only. A failure stops the export rather than
+    // leave those valves out silently.
+    let coilGaps;
+    try {
+      coilGaps = await fetchProductionCorpusTakeoff("embedded_coil_gaps");
+    } catch (e) {
+      throw new Error(`Couldn't read the coils embedded in the equipment schedules, so the coil-derived valves can't be included: ${e?.message || e}`);
+    }
+    const valveExport = buildValveSizeExport(lastControlValveTakeoff, { coilGaps });
     const templateRes = await fetch(VALVE_SIZE_TEMPLATE_PUBLIC_PATH);
     if (!templateRes.ok) throw new Error(`template fetch ${templateRes.status}`);
     const templateBytes = new Uint8Array(await templateRes.arrayBuffer());
-    const filled = await fillValveSizeTemplate(templateBytes, valveExport.rows);
-    downloadBytes(VALVE_SIZE_TEMPLATE_FILENAME, filled, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    // One workbook per 195 valves, so every row keeps its dropdowns.
+    const files = await valveSizeTemplateFiles(templateBytes, valveExport.rows);
+    if (files.length === 1) {
+      downloadBytes(files[0].filename, files[0].bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    } else {
+      const { zipSync } = await import("fflate");
+      downloadBytes("Valve_Size_Template_US_Global.zip", zipSync(Object.fromEntries(files.map((f) => [f.filename, f.bytes])), { level: 0 }), "application/zip");
+    }
   }
 
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
@@ -9064,6 +9143,12 @@ export default function TakeoffCanvas() {
         shapes: () => shapes,
         markups: () => markups,
         graphTables: () => graphTables,
+        // The Assemblies view's inputs as the canvas holds them (the project
+        // read through /__ot/assemblies-project and the project file's
+        // assemblies block): playwright-assemblies applies them in-page with
+        // the shared modules and compares the bytes with apply_assemblies.
+        assembliesProject: () => assembliesProject,
+        assembliesState: () => assembliesState,
         scheduleTables: () => currentGraphTables,
         openSchedules: () => setSchedulesOpen(true),
         // Put an answer in the thread without a model call, so the answer's
@@ -14217,6 +14302,11 @@ export default function TakeoffCanvas() {
 
       {showTakeoffData && (
         <TakeoffDataPanel
+          assemblies={{
+            project: assembliesProject, status: assembliesStatus, onLoad: loadAssembliesProject,
+            starter: starterAssemblies, partner: partnerAssemblies, onSavePartner: savePartnerAssemblies,
+            state: assembliesState, onStateChange: setAssembliesState,
+          }}
           rows={agentTakeoffRows}
           projectName={projectName}
           corpusMeta={lastCorpusTakeoffMeta}

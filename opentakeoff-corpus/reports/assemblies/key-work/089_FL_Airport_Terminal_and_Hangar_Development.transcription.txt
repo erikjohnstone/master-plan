@@ -1,0 +1,279 @@
+# 089_FL_Airport_Terminal_and_Hangar_Development — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Typed from renders of sheet M-601 MECHANICAL SCHEDULES (PDF page 136) and sheet P-001 SYMBOLS
+# LEGEND AND SCHEDULES - PLUMBING (PDF page 163) of the Airport Terminal and Hangar Development,
+# DeFuniak Springs Municipal Airport FL (AVCON; both sheets unrotated): an overview of each page
+# at 40 dpi, then each table at 2.4x-3x (173-216 dpi) in tiles with the tag column repeated,
+# rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26, with the PDF's own
+# text layer (pymupdf words, row by row) as a reading aid; every keyed cell was checked on the
+# render. Each drawn title was found with the text layer (pymupdf search_for). The pipeline's
+# output for these tables was not consulted while keying (AS-28, before the draw, read the column
+# names the normalizer left unread across the unseen corpus, this document's among them). The
+# fourth tier keys the tables its seed drew (tier4/01-split.md): one per keyed family.
+SET 089_FL_Airport_Terminal_and_Hangar_Development
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Sheets M-601 MECHANICAL SCHEDULES (page 136) and P-001 SYMBOLS LEGEND AND SCHEDULES - PLUMBING (page 163) of the Airport Terminal and Hangar Development, DeFuniak Springs Municipal Airport FL (AVCON), the tables the fourth tier's seed drew for its DOAS, CONDENSING_UNIT, HEAT_PUMP, VRF_INDOOR, PUMP, FAN and UNIT_HEATER strata.
+EXCLUDES Manufacturers and model numbers, the DOAS's condensing unit mark, external static pressures of the DOAS and the VRF indoor units, sensible capacities, entering and leaving air temperatures, the auxiliary heater's steps, entering air and temperature rise, the hot gas reheat coil, FLA, RLA, MCA and MOCP, weights, the heat pump's ambient temperatures, refrigerant type, charge, circuits and line sizes, EER, SEER and COP, compressor and fan counts, the VRF indoor units' mounting (LOCATION), unit type and pre-treated outside air, the VRF outdoor units' own columns (HEAT PUMP UNIT) printed on two indoor units' rows, fan types, sones, locations and accessory lists, the unit heaters' temperature rise, hertz, amps, motor speed and throw, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# INDOOR DX DOAS FAN COIL UNIT SCHEDULE (page 136): one row, DOAS-1, then one empty ruled row (no
+# instance). COND. UNIT PLAN MARK prints HP-2, the outdoor unit keyed below. TOTAL OUTSIDE AIR
+# (CFM) is the only airflow the row prints: a dedicated outdoor air unit supplies outside air
+# only, so it keys supply_cfm (the author's reading); no column prints a minimum, so oa_cfm_min
+# stays not printed. COOLING CAPACITY / TOT. MBH keys cooling_mbh. The cooling block prints
+# "ENT DB (°F)" twice (82, then 78.6 where a wet bulb would sit), typed as printed. HEATING
+# CAPACITY / MAX MBH AT 47°F keys heating_mbh: 47 °F outdoor is the heat pump's rating point,
+# and HP-2's own row prints the same 78.6 MBH with a heating COP, so heating_type is heat_pump
+# (the author's reading). AUX ELEC. HTNG COIL / KW / STEPS prints "13 / 1": its kW part keys
+# eh_kw. ELECTRICAL DATA / FAN HP is the unit's one fan, keyed supply_fan_hp, and VOLT/ PHASE
+# "208/1" keys its volts part and its phase part. The title prints DX: cooling_type dx. The table
+# has no NOTES column, so its notes are the one row's: note 3 ("PROVIDE WITH 2" PLEATED THROWAWAY
+# MERV 13 85% EFFICIENCY FILTER ...") keys filter_merv 13. Notes 1 (basis of design, dual
+# compressor dual circuit), 2 (thermostat, exhaust fan interlock), 4 (modulating hot gas reheat),
+# 5 (single point connection) and 6 (condensate overflow switch) key nothing.
+TABLE
+sheet: 089_FL_Airport_Terminal_and_Hangar_Development.pdf#136
+title: INDOOR DX DOAS FAN COIL UNIT SCHEDULE
+family: DOAS
+render: page 136 overview at 40 dpi; header and row crops at 3x in 2 tiles (PLAN MARK column repeated), notes read in the text layer and on the render; second read at 3x (crop 115,760,1085,210 in 2 tiles, PLAN MARK column repeated) of the row and notes 1-3, every keyed cell
+rows: all 1 printed row (one empty ruled row below it)
+col: PLAN MARK => tag
+col: MODEL NUMBER => -
+col: COND. UNIT PLAN MARK => -
+col: TOTAL OUTSIDE AIR (CFM) => -
+col: [TOTAL OUTSIDE AIR (CFM): a dedicated outdoor air unit's supply airflow, all outside air] => supply_cfm
+col: EXT. S.P. (IN. WC) => -
+col: COOLING CAPACITY / TOT. MBH => cooling_mbh
+col: COOLING CAPACITY / SENS. MBH => -
+col: COOLING CAPACITY / ENT DB (°F) => -
+col: COOLING CAPACITY / ENT DB (°F) => -
+col: COOLING CAPACITY / LVG DB (°F) => -
+col: COOLING CAPACITY / LVG WB (°F) => -
+col: HEATING CAPACITY / MAX MBH AT 47°F => heating_mbh
+col: HEATING CAPACITY / AUX ELEC. HTNG COIL / KW / STEPS => -
+col: [HEATING CAPACITY / AUX ELEC. HTNG COIL / KW / STEPS: kW part] => eh_kw
+col: HEATING CAPACITY / AUX ELEC. HTNG COIL / EAT (°F) => -
+col: HEATING CAPACITY / AUX ELEC. HTNG COIL / TEMP. RISE (°F) => -
+col: HEATING CAPACITY / HOT GAS REHEAT COIL / TYPE => -
+col: ELECTRICAL DATA / FAN HP => supply_fan_hp
+col: ELECTRICAL DATA / FAN FLA => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: ELECTRICAL DATA / VOLT/ PHASE => -
+col: [ELECTRICAL DATA / VOLT/ PHASE: volts part] => volts
+col: [ELECTRICAL DATA / VOLT/ PHASE: phase part] => phase
+col: UNIT WEIGHT => -
+derive: cooling_type = dx ; header=TABLE TITLE ; note=title printed 'INDOOR DX DOAS FAN COIL UNIT SCHEDULE'
+derive: heating_type = heat_pump ; header=HEATING CAPACITY / MAX MBH AT 47°F ; note=the DX coil heats, rated at 47 °F outdoor; COND. UNIT PLAN MARK prints HP-2, whose heat pump row prints the same 78.6 MBH HTNG CAP. and a HTNG COP (the author's reading)
+derive: filter_merv = 13 ; header=NOTE 3 ; note=note 3: 'PROVIDE WITH 2" PLEATED THROWAWAY MERV 13 85% EFFICIENCY FILTER IN COMPLIANCE WITH ASHRAE STANDARD 52.2 - 2012.' (the table prints no NOTES column; its notes are the one row's)
+grid:
+DOAS-1 | TWE090E3 | HP-2 | 1,010 | 1,010 | 1.0 | 92.3 | 33.7 | 82 | 78.6 | 52.7 | 52.7 | 78.6 | 13 / 1 | 13 | 29.0 | 41.0 | YES / MOD. | 1.5 | 5.3 | 86 | 90 | 208/1 | 208 | 1 | 360
+END
+
+# OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE (page 136): one row, HP-2, then one
+# empty ruled row. The census claims this table's one row twice, once under CONDENSING_UNIT and
+# once under HEAT_PUMP, so the seed drew it in both strata. The row prints a heating capacity and
+# a heating COP: HP-2 is a heat pump, keyed once, under HEAT_PUMP (the scorer keys a table by
+# sheet and title and pairs a key instance with a reported item by tag within it, preferring the
+# same family, so a second block would key the one printed unit twice). CLNG CAP. MBH keys
+# cooling_mbh and HTNG CAP. MBH heating_mbh. The ambient column after HTNG CAP. prints "CLNG
+# AMB. TEMP. (°F)" again over 47 (the heating rating point), typed as printed. The refrigerant
+# line sizes (SUC. LINE OD 1-1/8, LIQ. LINE OD 1/2) are a line set, not a water hook-up, and key
+# nothing. ELECTRICAL DATA / VOLT/ PHASE "208/3" keys its volts part and its phase part. Notes 1
+# (basis of design) and 2 (hail guard) key nothing.
+TABLE
+sheet: 089_FL_Airport_Terminal_and_Hangar_Development.pdf#136
+title: OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE
+family: HEAT_PUMP
+render: page 136 overview at 40 dpi; header and row crops at 3x in 2 tiles (PLAN MARK column repeated), notes read in the text layer; second read at 3x (crop 115,1030,1085,150 in 2 tiles, PLAN MARK column repeated) of the row, every keyed cell
+rows: all 1 printed row (one empty ruled row below it)
+col: PLAN MARK => tag
+col: MODEL NUMBER => -
+col: CLNG CAP. MBH => cooling_mbh
+col: CLNG AMB. TEMP. (°F) => -
+col: HTNG CAP. MBH => heating_mbh
+col: CLNG AMB. TEMP. (°F) => -
+col: REFR. TYPE => -
+col: REFR. / CIRCUIT (LBS) => -
+col: No. OF REFRIG. CIRCUITS => -
+col: SUC. LINE OD (IN.) => -
+col: LIQ. LINE OD (IN.) => -
+col: CLNG EER => -
+col: HTNG COP => -
+col: ELECTRICAL DATA / NO. COMP. => -
+col: ELECTRICAL DATA / COMP. RLA (EA.) => -
+col: ELECTRICAL DATA / NO. FANS => -
+col: ELECTRICAL DATA / FAN FLA (EA.) => -
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+col: ELECTRICAL DATA / VOLT/ PHASE => -
+col: [ELECTRICAL DATA / VOLT/ PHASE: volts part] => volts
+col: [ELECTRICAL DATA / VOLT/ PHASE: phase part] => phase
+col: WEIGHT (LBS) => -
+grid:
+HP-2 | TWA09043D | 90 | 105 | 78.6 | 47 | R410A | 11.8 | 2 | 1-1/8 | 1/2 | 12.8 | 3.3 | 2 | 13.1 | 1 | 3.1 | 33 | 45 | 208/3 | 208 | 3 | 413
+END
+
+# VRF SYSTEM SCHEDULE (page 136): twelve indoor units, AC-1 to AC-12, under the group AIR HANDLER;
+# a second group, HEAT PUMP UNIT, prints the outdoor units on two of their rows (HP-1 on AC-1's
+# row, 460 V / 3 PH; CU-1 on AC-12's row). Those columns describe the outdoor units, not the row's
+# indoor unit, and key nothing. SERVES keys area_served as printed; LOCATION prints the mounting
+# (CEILING, WALL, MECH. RM.), not a level. TOTAL (CFM) keys cfm (AC-12, a wall-mounted unit,
+# prints it blank). COOLING COIL SECTION / TOTAL CAP. (MBH) keys cooling_mbh and HEATING COIL
+# SECTION / HEATING CAP. (MBH) heating_mbh. The indoor unit's own VOLTS and PH key volts and phase.
+# Notes 1 (basis of design), 2 ("PROVIDE 30% FILTER."), 3 (twinning kits, condensate pumps,
+# filter dryers) and 4 ("REFER TO SHEET M-701 FOR CONTROLS DETAILS.") key nothing in this
+# vocabulary.
+TABLE
+sheet: 089_FL_Airport_Terminal_and_Hangar_Development.pdf#136
+title: VRF SYSTEM SCHEDULE
+family: VRF_INDOOR
+render: page 136 overview at 40 dpi; crops at 3x in 3 tiles (PLAN MARK column repeated); notes crop 112,95,900,85 at 2.4x; second read at 2.6x (crop 112,180,1935,225 in 3 tiles, PLAN MARK column repeated) of all 12 rows, every keyed cell
+rows: all 12 printed rows
+col: AIR HANDLER / PLAN MARK => tag
+col: AIR HANDLER / LOCATION => -
+col: AIR HANDLER / SERVES => area_served
+col: AIR HANDLER / UNIT TYPE => -
+col: AIR HANDLER / TOTAL (CFM) => cfm
+col: AIR HANDLER / OSA (CFM) PRE-TREATED => -
+col: AIR HANDLER / MAX E.S.P. IN. WG. => -
+col: AIR HANDLER / COOLING COIL SECTION / TOTAL CAP. (MBH) => cooling_mbh
+col: AIR HANDLER / COOLING COIL SECTION / SENS. CAP. (MBH) => -
+col: AIR HANDLER / COOLING COIL SECTION / E.A.T. (°F) / D.B. => -
+col: AIR HANDLER / COOLING COIL SECTION / E.A.T. (°F) / W.B. => -
+col: AIR HANDLER / COOLING COIL SECTION / L.A.T. (°F) / D.B. => -
+col: AIR HANDLER / HEATING COIL SECTION / HEATING CAP. (MBH) => heating_mbh
+col: AIR HANDLER / HEATING COIL SECTION / E.A.T (°F) DB => -
+col: AIR HANDLER / HEATING COIL SECTION / L.A.T. (°F) DB => -
+col: AIR HANDLER / MODEL NO. (TRANE) => -
+col: AIR HANDLER / WEIGHT (LBS) => -
+col: AIR HANDLER / VOLTS => volts
+col: AIR HANDLER / PH => phase
+col: HEAT PUMP UNIT / PLAN MARK => -
+col: HEAT PUMP UNIT / SEER => -
+col: HEAT PUMP UNIT / COOLING CAP. (MBH) => -
+col: HEAT PUMP UNIT / HEATING CAP. (MBH) => -
+col: HEAT PUMP UNIT / NO. COMP. => -
+col: HEAT PUMP UNIT / CAPACITY STEPS => -
+col: HEAT PUMP UNIT / REFRIG. => -
+col: HEAT PUMP UNIT / WEIGHT (LBS) => -
+col: HEAT PUMP UNIT / MODEL NO. (TRANE) => -
+col: HEAT PUMP UNIT / VOLTS => -
+col: HEAT PUMP UNIT / PH => -
+grid:
+AC-1 | CEILING | FLIGHT CREW | HORIZONTAL | 300 | 0 | 0.6 | 7.2 | 5.8 | 75 °F | 64 °F | 57 °F | 6.4 | 70 °F | 90 °F | TPEFYP008MA143A | 49 | 208 | 1 | HP-1 | 26.7 | 192.6 | 171.9 | 2 | VRF | R410A | 560 | TUHYP2164BN40AN | 460 | 3
+AC-2 | CEILING | RESTROOMS, UTILITY | HORIZONTAL | 685 | 0 | 1.0 | 21.6 | 17.3 | 75 °F | 64 °F | 57 °F | 19.3 | 70 °F | 90 °F | TPEFYP024MA143A | 67 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-3 | CEILING | OFFICE 119 | CASETTE | 307 | 0 |  | 5.4 | 4.6 | 75 °F | 64 °F | 61 °F | 4.8 | 70 °F | 85 °F | TPMFYP006BM140F | 31 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-4 | CEILING | FLIGHT INSTRUCTOR | CASETTE | 307 | 0 |  | 5.4 | 4.6 | 75 °F | 64 °F | 61 °F | 4.8 | 70 °F | 85 °F | TPMFYP006BM140F | 31 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-5 | CEILING | STUDENT FLIGHT | CASETTE | 307 | 0 |  | 5.4 | 4.6 | 75 °F | 64 °F | 61 °F | 4.8 | 70 °F | 85 °F | TPMFYP006BM140F | 31 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-6 | MECH. RM. | MEETING ROOM | VERTICAL | 875 | 200 | 0.8 | 27.0 | 19.8 | 75 °F | 64 °F | 54 °F | 24.3 | 70 °F | 96 °F | TPVFYP030AM141A | 115 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-7 | CEILING | LOBBY | HORIZONTAL | 2966 | 290 | 1.0 | 86.5 | 64.5 | 75 °F | 64 °F | 55 °F | 77.2 | 70 °F | 94 °F | TPEFYP096MH140A | 221 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-8 | CEILING | OFFICE 110A, STORAGE | HORIZONTAL | 300 | 0 | 0.6 | 7.2 | 5.8 | 75 °F | 64 °F | 57 °F | 6.4 | 70 °F | 90 °F | TPEFYP008MA143A | 49 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-9 | CEILING | FBO LINE CREW | HORIZONTAL | 883 | 0 | 0.6 | 21.6 | 17.3 | 75 °F | 64 °F | 57 °F | 19.3 | 70 °F | 90 °F | TPEFYP024MA143A | 67 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-10 | CEILING | OFFICE 104 | CASETTE | 307 | 0 |  | 5.4 | 4.6 | 75 °F | 64 °F | 61 °F | 4.8 | 70 °F | 85 °F | TPMFYP006BM140F | 31 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-11 | CEILING | OFFICE 105 | CASETTE | 307 | 0 |  | 5.4 | 4.6 | 75 °F | 64 °F | 61 °F | 4.8 | 70 °F | 85 °F | TPMFYP006BM140F | 31 | 208 | 1 |  |  |  |  |  |  |  |  |  |  |
+AC-12 | WALL | SERVER ROOM | WALL-MOUNTED |  | 0 |  | 30.0 | 30.0 | 72 °F | 60 °F | 51 °F | 22.8 | 70 °F | 97 °F | PKA-A30KA7.TH | 46 | 208 | 1 | CU-1 | 19.8 | 26.6 | 22.8 |  | VRF | R410A | 153 | PUZ-A30NHA7 | 208 | 1
+END
+
+# HOT WATER CIRCULATING PUMP SCHEDULE (page 163, the plumbing sheet): one row, RCP-1. FLUID DATA /
+# FLOW (GPM) prints "1 GPM", keyed gpm 1; HEAD (FT) keys head_ft; ELECTRICAL DATA / MOTOR HP keys
+# motor_hp (1/25); VOLT/PHASE prints "120 V / 1", keyed as its volts part and its phase part. No
+# column prints the service (the title names the pump's system; dev keys take service from a
+# SERVICE column only). Note 1 ("SEE PLANS FOR LOCATIONS") keys nothing.
+TABLE
+sheet: 089_FL_Airport_Terminal_and_Hangar_Development.pdf#163
+title: HOT WATER CIRCULATING PUMP SCHEDULE
+family: PUMP
+render: page 163 overview at 40 dpi; crop 1640,1395,570,90 at 3x, the note included; the text layer read row by row (words 1640,1365,570,125); every keyed cell checked on the render
+rows: all 1 printed row
+col: MARK => tag
+col: FLUID DATA / FLOW (GPM) => gpm
+col: FLUID DATA / HEAD (FT) => head_ft
+col: ELECTRICAL DATA / MOTOR HP => motor_hp
+col: ELECTRICAL DATA / VOLT/PHASE => -
+col: [ELECTRICAL DATA / VOLT/PHASE: volts part] => volts
+col: [ELECTRICAL DATA / VOLT/PHASE: phase part] => phase
+col: MANUFACTURER => -
+col: MODEL NO. => -
+grid:
+RCP-1 | 1 GPM | 5 | 1/25 | 120 V / 1 | 120 | 1 | GRUNDFOS | UP 15-10B5
+END
+
+# FAN SCHEDULE (page 136): three rows, EF-1, EF-2 and IF-1 (a high-volume low-speed fan), then one
+# empty ruled row; all three are fans (the census claimed two). CFM keys cfm, ESP (IN.WG) esp_in
+# (IF-1 prints "-"), FAN RPM rpm, MOTOR / HP motor_hp, VOLT/ PHASE its volts and phase parts.
+# DRIVE TYPE prints DIRECT on every row, but EF-2's TYPE prints "PROPELLER BELT DRIVEN": its row
+# gives two drives, so EF-2's drive is not one value ("?"); EF-1 (TYPE "CABINET DIRECT DRIVE")
+# and IF-1 key direct. CONTROLS keys control as printed; IF-1's "MFR VFD CONTROLLER" also keys vfd
+# yes (the author's reading; its ACCESSORIES cite 26, "VARIABLE FREQUENCY DRIVE"). EF-1 and EF-2
+# print no VFD (their accessory 10 is a SPEED CONTROLLER). LOCATION prints rooms, not levels.
+# Note 1 (model numbers based on Greenheck) and the accessory legend key nothing else.
+TABLE
+sheet: 089_FL_Airport_Terminal_and_Hangar_Development.pdf#136
+title: FAN SCHEDULE
+family: FAN
+render: page 136 overview at 40 dpi; crops at 3x in 2 tiles (PLAN MARK column repeated); second read at 3x (crop 115,430,940,250 in 2 tiles, PLAN MARK column repeated) of all 3 rows, the note and the accessory legend, every keyed cell
+rows: all 3 printed rows (one empty ruled row below them)
+col: PLAN MARK => tag
+col: MODEL N0. => -
+col: TYPE => -
+col: CFM => cfm
+col: ESP (IN.WG) => esp_in
+col: FAN RPM => rpm
+col: MOTOR / FLA => -
+col: MOTOR / HP => motor_hp
+col: VOLT/ PHASE => -
+col: [VOLT/ PHASE: volts part] => volts
+col: [VOLT/ PHASE: phase part] => phase
+col: DRIVE TYPE => drive
+col: SONES => -
+col: LOCATION => -
+col: CONTROLS => control
+col: [CONTROLS: a VFD controller] => vfd
+col: WEIGHT (LBS) => -
+col: ACCESSORIES => -
+grid:
+EF-1 | CSP-A1050 | CABINET DIRECT DRIVE | 740 | 0.75 | 1035 | 5.0 | 3/4 | 115/1 | 115 | 1 | direct (DIRECT) | 2.5 | FLIGHT CREW RESTROOM 121B | INTERLOCK WITH DOAS-1 |  | 59 | 1,5,7,10,12,21
+EF-2 | AER-E42C-415-B-VGD | PROPELLER BELT DRIVEN | 20,000 | 0.4 | 1056 | 16.7 | 5.0 | 208/3 | 208 | 3 | ?DIRECT, while the row's TYPE prints PROPELLER BELT DRIVEN | 52 | HANGAR | THERMOSTAT |  | 246 | 1,2,5,7,10,12,18,19
+IF-1 | DS-6-24-170HV | 24" DIA. HIGH-VOL LOW-SPEED | 197,667 | - | 51 | 12.0 | 2.0 | 208/3 | 208 | 3 | direct (DIRECT) | - | HANGAR | MFR VFD CONTROLLER | yes (MFR VFD CONTROLLER) | 258 | 7,25,26
+END
+
+# ELECTRIC UNIT HEATER SCHEDULE (page 136): eight rows, EUH-1 to EUH-8. CAP. KW keys eh_kw (as
+# itd-d1-lab's ELECTRICAL / KW); no column prints a heating MBH. ELECTRICAL DATA / VOLTS keys volts
+# and the phase column, headed by the phase glyph (the text layer reads "∅"; the render shows the
+# font's missing-glyph box), keys phase: 3 on EUH-1 to EUH-6, 1 on EUH-7 and EUH-8. MOTOR / HP
+# prints a stacked 1/10, keyed motor_hp; AIRFLOW / CFM keys cfm. The title prints the medium:
+# heating_medium electric. Remarks 1 (wall mounting kit, 10'-0" above the design aircraft's
+# wings), 2 (line voltage thermostat, summer/winter fan switch, step-down transformer) and 3
+# (30 degree down nozzle) key nothing.
+TABLE
+sheet: 089_FL_Airport_Terminal_and_Hangar_Development.pdf#136
+title: ELECTRIC UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 136 overview at 40 dpi; crops at 3x in 2 tiles (TAG column repeated); remarks crop 1150,660,660,60 at 2.5x; second read at 3x (crop 1135,430,640,300 in 2 tiles, TAG column repeated) of all 8 rows and the remarks, every keyed cell
+rows: all 8 printed rows
+col: TAG => tag
+col: MFR. => -
+col: MODEL => -
+col: CAP. KW => eh_kw
+col: TEMP RISE (°F) => -
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / ∅ => phase
+col: ELECTRICAL DATA / Hz => -
+col: ELECTRICAL DATA / AMPS => -
+col: MOTOR / HP => motor_hp
+col: MOTOR / RPM => -
+col: AIRFLOW / CFM => cfm
+col: AIRFLOW / THROW => -
+col: WEIGHT LBS => -
+col: REMARKS => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+grid:
+EUH-1 | QMARK | IUH1024 | 10 | 63 | 208 | 3 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+EUH-2 | QMARK | IUH1024 | 10 | 63 | 208 | 3 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+EUH-3 | QMARK | IUH1024 | 10 | 63 | 208 | 3 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+EUH-4 | QMARK | IUH1024 | 10 | 63 | 208 | 3 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+EUH-5 | QMARK | IUH1024 | 10 | 63 | 208 | 3 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+EUH-6 | QMARK | IUH1024 | 10 | 63 | 208 | 3 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+EUH-7 | QMARK | IUH1024 | 10 | 63 | 208 | 1 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+EUH-8 | QMARK | IUH1024 | 10 | 63 | 208 | 1 | 60 | 25.7 | 1/10 | 1550 | 500 | 20' | 60 | 1,2,3
+END

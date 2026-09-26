@@ -1,0 +1,164 @@
+# 21_VA_OrangeCounty_PublicSafetyBldg — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheets M-601 (PDF page 50), M-602 (page 51), P-601 (page 30) and
+# TA001 (page 117): an overview of each page at 60 dpi, then each table at 3x (216 dpi) in
+# tiles with the designation column repeated, rendered with MuPDF (pymupdf
+# get_pixmap(clip)) and read by eye on 2026-09-26; second read at 4x of every keyed row,
+# every cell. Each drawn title was found with the PDF's own text layer (pymupdf
+# search_for). The pipeline's output for these sheets was not consulted. The second tier
+# keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+SET 21_VA_OrangeCounty_PublicSafetyBldg
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheets M-601, M-602 and P-601 (pages 50, 51 and 30) and the AV sheet TA001 (page 117) of the Orange County, Virginia public safety building (Wiley|Wilson; Polysonics for the AV sheets), the tables the second tier's seed drew for its VAV, CONDENSING_UNIT, PUMP and FAN strata.
+EXCLUDES Manufacturer/model, air pressure drops, coil air temperatures and the coil's water temperature drop, fan motor counts and FLA, refrigerant, the booster pump's per-pump flow, suction and discharge pressures and expansion tank, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# VAV TERMINAL BOX SCHEDULE (page 50): 57 boxes in two groups, labelled down the left edge
+# "AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR)" and "AHU-2" (the air handler serving them; this
+# family keys no served-by attribute). The key covers the draw's cap, the first 30 printed
+# rows: VAV-1-01 through VAV-1-29 with VAV-1-21A and VAV-1-21B. CFM / DESIGN keys cfm_max.
+# CFM / COOL MIN / HEATING prints two airflows in one cell ("80 / 125"), keyed as its
+# cooling-minimum part (cfm_min) and its heating part (cfm_heat). INLET DIA. INCHES keys
+# inlet_size_in. The REHEAT COIL DATA block is a hot-water coil (E.W.T. 140): E.W.T. keys
+# hw_ewt_f, the triangle-P column (FT. H20) hw_wpd_ft, GPM hw_gpm, MBH hw_mbh and ROWS
+# hw_rows; HEATING (triangle) T is the water's temperature drop (hw_lwt_f stays not printed:
+# the key never computes 140 minus it). VAV-1-16 (model VCCF08) prints "200 / -" and a dash
+# in every reheat cell after E.A.T.: a cooling-only box, heat_type none (the author's
+# reading). The title prints no terminal type. VAV-1-27's pressure drop prints 0.78 where
+# its neighbors print 0.0xx (typed as printed; not keyed). The triangles are drawn, not
+# text; the headers type them as delta.
+TABLE
+sheet: 21_VA_OrangeCounty_PublicSafetyBldg.pdf#50
+title: VAV TERMINAL BOX SCHEDULE
+family: VAV
+render: page 50 crop 785,108,1221,734 at 3x in 5 tiles (DESIGNATION column repeated); second read at 4x (crops 900,166,1106,342 and 900,505,1106,337) of all 30 keyed rows, every cell
+rows: the first 30 printed rows (VAV-1-01 through VAV-1-29, with VAV-1-21A and VAV-1-21B), the draw's cap; VAV-1-30 on and the 25 AHU-2 boxes are not keyed
+col: [the label printed down the left edge of these rows: the air handler serving them] => -
+col: DESIGNATION => tag
+col: MANUFACTURER => -
+col: MODEL NO. => -
+col: CFM / DESIGN => cfm_max
+col: CFM / COOL MIN / HEATING => -
+col: [CFM / COOL MIN / HEATING: cooling minimum part] => cfm_min
+col: [CFM / COOL MIN / HEATING: heating part] => cfm_heat
+col: INLET DIA. INCHES => inlet_size_in
+col: AIR PRESSURE DROP AT COOLING FLOW => -
+col: REHEAT COIL DATA / E.A.T DEG. F => -
+col: REHEAT COIL DATA / L.A.T DEG. F => -
+col: REHEAT COIL DATA / E.W.T. DEG. F => hw_ewt_f
+col: REHEAT COIL DATA / HEATING Δ T, F => -
+col: REHEAT COIL DATA / Δ P FT. H20 => hw_wpd_ft
+col: REHEAT COIL DATA / GPM => hw_gpm
+col: REHEAT COIL DATA / MBH => hw_mbh
+col: REHEAT COIL DATA / ROWS => hw_rows
+col: [REHEAT COIL DATA: a hot-water coil (E.W.T. 140), or a dash in every cell] => heat_type
+grid:
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-01 | TRANE | VCWF06 | 220 | 80 / 125 | 80 | 125 | 6 | 0.093 | 55.0 | 100.0 | 140 | 25.5 | 0.16 | 0.50 | 6.10 | 2 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-02 | TRANE | VCWF10 | 655 | 195 / 325 | 195 | 325 | 10 | 0.105 | 55.0 | 85.0 | 140 | 22.2 | 2.89 | 0.96 | 10.57 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-03 | TRANE | VCWF06 | 230 | 75 / 115 | 75 | 115 | 6 | 0.051 | 55.0 | 95.0 | 140 | 6.12 | 3.98 | 1.63 | 4.99 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-04 | TRANE | VCWF08 | 360 | 205 / 215 | 205 | 215 | 8 | 0.069 | 55.0 | 87.0 | 140 | 13.73 | 5.62 | 1.09 | 7.46 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-05 | TRANE | VCWF06 | 220 | 75 / 110 | 75 | 110 | 6 | 0.047 | 55.0 | 86.0 | 140 | 22.83 | 0.24 | 0.50 | 3.70 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-06 | TRANE | VCWF14 | 1365 | 625 / 680 | 625 | 680 | 14 | 0.081 | 55.0 | 82.0 | 140 | 25.55 | 0.75 | 1.56 | 19.91 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-07 | TRANE | VCWF08 | 305 | 120 / 150 | 120 | 150 | 8 | 0.052 | 55.0 | 85.0 | 140 | 28.54 | 0.36 | 0.50 | 4.88 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-08 | TRANE | VCWF06 | 180 | 75 / 125 | 75 | 125 | 6 | 0.065 | 55.0 | 99.0 | 140 | 26.54 | 0.15 | 0.50 | 5.96 | 2 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-09 | TRANE | VCWF10 | 490 | 170 / 245 | 170 | 245 | 10 | 0.062 | 55.0 | 89.0 | 140 | 22.56 | 2.13 | 0.80 | 9.03 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-10 | TRANE | VCWF05 | 165 | 60 / 100 | 60 | 100 | 5 | 0.056 | 55.0 | 102.9 | 140 | 25.0 | 0.13 | 0.50 | 5.19 | 2 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-11 | TRANE | VCWF08 | 360 | 215 / 250 | 215 | 250 | 8 | 0.069 | 55.0 | 85.0 | 140 | 13.49 | 3.14 | 1.21 | 8.13 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-12 | TRANE | VCWF14 | 1455 | 730 / 730 | 730 | 730 | 14 | 0.090 | 55.0 | 83.0 | 140 | 21.13 | 1.28 | 2.10 | 22.17 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-13 | TRANE | VCWF14 | 1850 | 695 / 970 | 695 | 970 | 14 | 0.132 | 55.0 | 84.0 | 140 | 9.39 | 9.91 | 6.51 | 30.51 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-14 | TRANE | VCWF08 | 300 | 150 / 175 | 150 | 175 | 8 | 0.051 | 55.0 | 90.0 | 140 | 14.06 | 2.05 | 0.95 | 6.64 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-15 | TRANE | VCWF05 | 150 | 50 / 100 | 50 | 100 | 5 | 0.025 | 55.0 | 85.0 | 140 | 26.24 | 0.15 | 0.50 | 3.25 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-16 | TRANE | VCCF08 | 525 | 200 / - | 200 | - | 8 | 0.028 | 55.0 | - | - | - | - | - | - | - | none (-)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-17 | TRANE | VCWF08 | 400 | 150 / 200 | 150 | 200 | 8 | 0.082 | 55.0 | 85.0 | 140 | 20.60 | 1.02 | 0.63 | 6.51 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-18 | TRANE | VCWF05 | 150 | 50 / 100 | 50 | 100 | 5 | 0.025 | 55.0 | 82.0 | 140 | 30.37 | 0.10 | 0.50 | 2.93 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-19 | TRANE | VCWF08 | 560 | 275 / 290 | 275 | 290 | 8 | 0.145 | 55.0 | 82.0 | 140 | 16.33 | 2.43 | 1.01 | 8.49 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-20 | TRANE | VCWF10 | 500 | 170 / 255 | 170 | 255 | 10 | 0.065 | 55.0 | 85.0 | 140 | 30.51 | 1.10 | 0.54 | 8.30 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-21A | TRANE | VCWF14 | 1175 | 400 / 625 | 400 | 625 | 14 | 0.144 | 55.0 | 97.0 | 140 | 25.43 | 0.23 | 2.24 | 28.47 | 2 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-21B | TRANE | VCWF14 | 1175 | 400 / 625 | 400 | 625 | 14 | 0.144 | 55.0 | 97.0 | 140 | 25.43 | 0.23 | 2.24 | 28.47 | 2 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-22 | TRANE | VCWF08 | 375 | 150 / 200 | 150 | 200 | 8 | 0.074 | 55.0 | 85.0 | 140 | 20.60 | 1.02 | 0.63 | 6.51 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-23 | TRANE | VCWF08 | 315 | 160 / 160 | 160 | 160 | 8 | 0.055 | 55.0 | 85.0 | 140 | 26.94 | 0.44 | 0.50 | 5.21 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-24 | TRANE | VCWF05 | 100 | 75 / 100 | 75 | 100 | 5 | 0.013 | 55.0 | 95.0 | 140 | 10.54 | 1.21 | 0.82 | 4.34 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-25 | TRANE | VCWF05 | 150 | 50 / 100 | 50 | 100 | 5 | 0.025 | 55.0 | 82.0 | 140 | 30.37 | 0.10 | 0.50 | 2.93 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-26 | TRANE | VCWF14 | 1145 | 400 / 575 | 400 | 575 | 14 | 0.061 | 55.0 | 80.0 | 140 | 33.85 | 0.30 | 0.92 | 15.59 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-27 | TRANE | VCWF10 | 610 | 225 / 300 | 225 | 300 | 10 | 0.78 | 55.0 | 95.0 | 140 | 25.01 | 2.05 | 0.78 | 4.88 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-28 | TRANE | VCWF08 | 390 | 175 / 250 | 175 | 250 | 8 | 0.079 | 55.0 | 85.0 | 140 | 13.49 | 3.14 | 1.21 | 8.13 | 1 | hw (E.W.T. 140)
+AHU-1 - 24 / 7 (ON EMERGENCY GENERATOR) | VAV-1-29 | TRANE | VCWF14 | 1145 | 400 / 575 | 400 | 575 | 14 | 0.061 | 55.0 | 80.0 | 140 | 33.85 | 0.30 | 0.92 | 15.59 | 1 | hw (E.W.T. 140)
+END
+
+# AIR COOLED CONDENSING UNIT SCHEDULE (page 51): a transposed schedule, one value column
+# whose DESIGNATION reads "ACCU-1 AND ACCU-2": two units, keyed as ACCU-1 and ACCU-2 with the
+# column's values (as 044_NY keys "FOP-1, 2"). Its row labels are the headers.
+# COOLING CAPACITY BTUH @ 95 DEG F OUTDOOR prints BTU/H, keyed cooling_mbh in that unit.
+# OPERATING VOLTAGE/PHASE ("460/3") keys volts and phase. MATCHING INDOOR UNIT prints
+# "CRAC-1 AND CRAC-2" for the pair: each unit serves one of them, and the print does not say
+# which, so area_served is not one value for either ("?").
+TABLE
+sheet: 21_VA_OrangeCounty_PublicSafetyBldg.pdf#51
+title: AIR COOLED CONDENSING UNIT SCHEDULE
+family: CONDENSING_UNIT
+render: page 51 crop 1668,88,478,284 at 3x; second read at 4x (crop 1668,118,478,254) of the column, every cell
+rows: the 1 printed column (its DESIGNATION "ACCU-1 AND ACCU-2" names two units, keyed as ACCU-1 and ACCU-2)
+col: DESIGNATION => tag
+col: MANUFACTURER => -
+col: MODEL NUMBER => -
+col: COOLING CAPACITY BTUH @ 95 DEG F OUTDOOR => cooling_mbh [BTU/H]
+col: NUMBER OF FAN MOTORS => -
+col: FAN MOTOR FLA - EACH => -
+col: OPERATING VOLTAGE/PHASE => -
+col: [OPERATING VOLTAGE/PHASE: volts part] => volts
+col: [OPERATING VOLTAGE/PHASE: phase part] => phase
+col: REFRIGERANT => -
+col: [MATCHING INDOOR UNIT: the unit each serves] => area_served
+col: REMARKS => -
+grid:
+ACCU-1 | LIEBERT | MCL055 | 105,900 | 1 | 2.8 | 460/3 | 460 | 3 | R410A | ?CRAC-1 AND CRAC-2 (the pair's matching indoor units; the print does not pair them) | 
+ACCU-2 | LIEBERT | MCL055 | 105,900 | 1 | 2.8 | 460/3 | 460 | 3 | R410A | ?CRAC-1 AND CRAC-2 (the pair's matching indoor units; the print does not pair them) | 
+END
+
+# DOMESTIC WATER BOOSTER PUMP SCHEDULE (page 30): one row, BP-1, a packaged two-pump booster
+# system. TOTAL FLOW GPM is the package's flow, keyed gpm; PUMP FLOW RATE GPM (50) is each
+# pump's share. PUMP SPEED RPM keys rpm and PUMP HORSEPOWER motor_hp (each pump). SUCTION
+# AND DISCHARGE HEADER SIZE - INCH is the package's hook-up connection, keyed conn_in.
+# ELECTRICAL VOLTS / PHASE / HERTZ ("460 / 3 / 60") keys volts and phase. TYPE prints
+# "PACKAGED, VARIABLE SPEED 2-PUMP DOMESTIC WATER BOOSTER SYSTEM": variable speed names no
+# VFD, and two pumps name no arrangement (vfd and pump_arrangement stay not printed); as for
+# every pump schedule without a SERVICE column, service stays not printed. The suction and
+# discharge pressures are printed, not a head (the key does not convert them). The remark
+# (overall unit size) keys nothing.
+TABLE
+sheet: 21_VA_OrangeCounty_PublicSafetyBldg.pdf#30
+title: DOMESTIC WATER BOOSTER PUMP SCHEDULE
+family: PUMP
+render: page 30 crop 186,1146,1250,126 at 3x in 5 tiles (DESIGNATION column repeated); second read at 4x (crop 186,1200,1250,72) of the row, every cell
+rows: all 1 printed row
+col: DESIGNATION => tag
+col: MAKE AND MODEL NUMBER => -
+col: TYPE => -
+col: SUCTION AND DISCHARGE HEADER SIZE - INCH => conn_in
+col: TOTAL FLOW GPM => gpm
+col: PUMP FLOW RATE GPM => -
+col: SUCTION PRESSURE PSIG => -
+col: DISCHARGE PRESSURE PSIG => -
+col: PUMP SPEED RPM => rpm
+col: PUMP HORSEPOWER => motor_hp
+col: ELECTRICAL VOLTS / PHASE / HERTZ => -
+col: [ELECTRICAL VOLTS / PHASE / HERTZ: volts part] => volts
+col: [ELECTRICAL VOLTS / PHASE / HERTZ: phase part] => phase
+col: EXPANSION TANK SIZE => -
+grid:
+BP-1 | GRUNDFOS HYDRO MULTI-E CRE 10-3 | PACKAGED, VARIABLE SPEED 2-PUMP DOMESTIC WATER BOOSTER SYSTEM | 3 | 100 | 50 | 25 | 60 | 3550 | 3 | 460 / 3 / 60 | 460 | 3 | 14 GALLON TANK 8.96 GALLON ACCEPTANCE
+END
+
+# (untitled) (page 117, sheet TA001, the AV technology NOTES sheet by Polysonics): the census
+# claims an untitled FAN table on this page. The page prints a SHEET INDEX, an AV DEVICE
+# SCHEDULE (CA1 camera plate, FB1/FB2 AV floor boxes, FP1/FP2 flat panel displays, JB1/JB2
+# junction boxes, RF1/RF2 antenna plates, S ceiling speaker, TP1 touch panel, WP1 wall
+# plate), wire-labeling and audio-pin details, ABBREVIATIONS and an AV infrastructure legend.
+# Nothing on the page is a fan.
+TABLE
+sheet: 21_VA_OrangeCounty_PublicSafetyBldg.pdf#117
+title: (untitled)
+family: FAN
+render: page 117 overview at 60 dpi (a 90-degree-rotated sheet, read in its displayed orientation); the DEVICE SCHEDULE cropped at 150 dpi (crop 850,70,1290,305), every row read
+rows: none — an AV notes sheet (TA001): its DEVICE SCHEDULE lists AV floor boxes, flat panel displays, junction boxes, antenna plates, a speaker and a touch panel; no row is a fan
+grid:
+END

@@ -1,0 +1,35 @@
+# 08_ME_BGS_Augusta_EastCampus_Renovation — attribute-key transcription (ASSEMBLIES AS-17, dev 4)
+# Read from renders of PDF page 1, the unnumbered cover sheet of the Center Building Improvements,
+# East Campus, Augusta ME (State of Maine Bureau of General Services; Winton Scott Architects):
+# an overview at 40 dpi, then the drawn table's rows at 2.5x (180 dpi), rendered with MuPDF
+# (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26, with the PDF's own text layer (pymupdf
+# words, row by row) as a reading aid. The claimed table was found from its census headers (SHEET
+# NUMBER, SHEET NAME, SCALE and the rotated FOR CONSTRUCTION - 5/30/25 column) with the text layer
+# (pymupdf search_for); a sheet id with no page suffix is page 1 (session.ts: "page 1 = bare file
+# name"). The pipeline's output for this table was not consulted while keying. The fourth tier
+# keys the tables its seed drew (tier4/01-split.md): one per keyed family.
+SET 08_ME_BGS_Augusta_EastCampus_Renovation
+SEED 20260928
+DRAW reports/assemblies/tier4/01-split.json
+SCOPE Page 1 (the cover sheet) of the Center Building Improvements, East Campus, Augusta ME (State of Maine Bureau of General Services; Winton Scott Architects), the table the fourth tier's seed drew for its PUMP stratum.
+EXCLUDES Nothing: the drawn table prints no instance of its claimed family.
+
+# (untitled) (page 1, the cover sheet): the census claims three PUMP rows in a table it names no
+# title. The table is the cover sheet's DRAWING LIST (SHEET NUMBER / SHEET NAME / SCALE / FOR
+# CONSTRUCTION - 5/30/25), 34 drawings from G 000 to E 103; its three plumbing rows, P 101
+# PLUMBING BASEMENT PLAN, P 102 PLUMBING FIRST FLOOR PLAN and P 103 PLUMBING DETAILS AND
+# SCHEDULES, are drawing numbers, not pumps. No page of the document schedules a pump: the text
+# layers of the 30 pages that carry one hold no PUMP, and the 5 that carry none (pages 28-32,
+# sheets P 101, P 102, P 103, M 101 and M 102, their text drawn as outlines) were read by eye at
+# 40 dpi: plans, and schedules of plumbing fixtures, water specialties, an electric water heater,
+# heat trace, plumbing materials, fans, electric cove heaters and louvers. Every value a pipeline
+# reports from this claim scores invented (catalogue: family mismatch, the P prefix of a sheet
+# number).
+TABLE
+sheet: 08_ME_BGS_Augusta_EastCampus_Renovation.pdf
+title: (untitled)
+family: PUMP
+render: page 1 overview at 40 dpi; the drawing list read in the text layer (words 1660,560,780,1060); crop 1660,1380,790,170 at 2.5x of the P 101 to M 102 rows; overviews at 40 dpi of pages 28-32 (no text layer)
+rows: none — the cover sheet's DRAWING LIST; its P 101, P 102 and P 103 rows are plumbing drawing numbers, and no page of the document schedules a pump
+grid:
+END

@@ -1,0 +1,13 @@
+# federal-mech.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-25 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output. What an estimator would answer for this project.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,,,"M8.x controls sheets: BMS point function schedules, control diagrams and sequences"
+PQ2,dod,federal-attachment4-mechanical.pdf#1,EGLIN AIR FORCE BASE,Eglin AFB: UFC 3-410-01 applies
+PQ3,n/a,,,no keyed unit is flagged existing
+PQ4,constant,,,"exhaust fan and pump schedules print no speed column for EF-1..4, HWRP-1 and the condensate pumps"
+PQ5,not_in_scope,,,the condensate pumps are packaged (float control) with no BMS point on any controls sheet

@@ -5,7 +5,7 @@
 **The measurement engine for building plans—built so an AI agent can drive it, and so an estimator wants to.**
 
 A takeoff is the act of measuring quantities off a construction drawing. OpenTakeoff does it
-two ways over one engine: **<!--tool-count-->60<!--/tool-count--> MCP tools** for an agent, and a browser canvas for a person.
+two ways over one engine: **<!--tool-count-->64<!--/tool-count--> MCP tools** for an agent, and a browser canvas for a person.
 Same flood fill, same scale gate, same math, same record. Every measurement stores its
 **scale**, its **method**, and **who made it**—which is what makes the output auditable, and
 what makes it training data.
@@ -253,7 +253,7 @@ otherwise, and nothing an autonomous agent could call.
 
 OpenTakeoff is that engine, with two front ends over identical geometry:
 
-- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->60<!--/tool-count--> tools, on the
+- **A stdio MCP server**—`npx -y opentakeoff-mcp`, <!--tool-count-->64<!--/tool-count--> tools, on the
   [official MCP registry](https://registry.modelcontextprotocol.io). An agent opens a plan,
   reads the title block, sets the scale, floods the rooms, checks its own work on a rendered
   overlay, and hands back a marked-up planset PDF.
@@ -275,6 +275,26 @@ second use is not a side effect; see [the data layer](#the-data-layer--why-this-
 
 ## Recently shipped
 
+- **Assemblies that read the drawings**—each unit's typical also takes what its own sequence,
+  control schematic and points list say, applied only where two independent readers agree (a
+  deterministic reader, a text model, two vision runs) and cited to the printed text; a sensor
+  symbol drawn in the zone a unit's tag labels on a zone plan counts too. **Project questions**
+  ask the few facts only the estimator knows (BAS scope, owner criteria, existing units), each
+  shown only when its answer changes lines, with the printed text that proposes an answer and an
+  append-only answer journal saved with the project; `project_questions` and
+  `answer_project_question` over MCP
+- **Controls assemblies**—each scheduled HVAC unit gets its controls typical and mechanical
+  hook-up from an assembly library: the read-only starter (US typicals v1 and hook-ups) or your
+  own clone of it. Options, variables and lines each carry their source, and every line cites its
+  schedule row and library rule. An unresolved unit names what it waits for instead of guessing,
+  and a saved project keeps the library versions it used. **Takeoff → Assemblies** in the
+  browser, `apply_assemblies` over MCP, one shared path
+- **Assemblies exports**—eight CSV files (equipment, lines and roll-up, points, valves, damper
+  actuators, sensors, a Desigo Select worksheet), each engineering field with its source column,
+  plus the report as a PDF section; the HIT valve export adds the coils no scheduled valve
+  serves. Your library travels as a spreadsheet, the starter's hook-up profile and responsibility
+  presets are project settings, and your own part numbers, costs and hours come back labelled
+  partner-entered ([columns](docs/ASSEMBLIES_CSV.md))
 - **Stitched sheets**—a floor split across a match line becomes one working surface; a room
   that crosses the seam traces as one shape, One-Click included
   ([#161](https://github.com/Kentucky-ai/opentakeoff/issues/161))
@@ -658,6 +678,7 @@ plus a vision-capable model id.
 | **Supporting Materials** | Labor + subfloor type, coverage rate × basis (incl. figured seam LF) → rounded order quantities, trowel/roller presets, grout calculator |
 | **Roll goods** | Per-condition roll setup → lanes, seams, multi-roll splits, to-scale cuts with drag-to-reorder nesting, Roll Order LF + Rolls + figured Seam LF on every export |
 | **Multi-sheet** | Sheet gallery, tabs and side-by-side groups, Regroup, levels, **stitching across a match line**, PDF layer roles |
+| **Controls assemblies** | Scheduled HVAC equipment → controls typicals and hook-ups with cited lines, exceptions first; starter library read-only, clone and edit yours; saved projects pin their versions |
 | **Report** | Per-condition Floor/Wall/Border SF, LF, EA, SY with and without waste, plus the combined buy list; columns, grouping, saved templates |
 | **Export** | CSV, JSON, **Excel (.xlsx)**, print, **Marked Set PDF**, RFI CSV/JSON |
 | **Revisions** | Save at each bid revision, compare quantity deltas per condition/sheet/buy list, guarded restore |
@@ -665,7 +686,7 @@ plus a vision-capable model id.
 | **Voice** | Push-to-talk takeoff commands, recognized on-device in WebAssembly; audio never leaves the browser |
 | **View** | Light or **dark (negative print)**—sheet pixels inverted at draw time, exports follow |
 | **Storage** | IndexedDB + localStorage—client-only, nothing uploaded |
-| **MCP server** | <!--tool-count-->60<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
+| **MCP server** | <!--tool-count-->64<!--/tool-count--> tools + browsable sheet resources on stdio, multi-document sessions ([`mcp/`](mcp/README.md)) |
 | **Provenance** | Every shape records its scale, its method, its confidence, and whether a person or an agent made it |
 | **Capture (opt-in)** | Bundled [capture server](capture/README.md) banks each contributed takeoff as (geometry → label) training rows |
 | **Deploy** | One static build—Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3, any static host |

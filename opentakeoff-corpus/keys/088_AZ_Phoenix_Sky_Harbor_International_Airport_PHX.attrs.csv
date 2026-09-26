@@ -1,0 +1,427 @@
+# 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets B04-RBME0801 and B04-RBME0802 (pages 30 and 31, the RCC station) and B04-ACME0801 (page 246, the central plant building) of the City of Phoenix PHX Sky Train stage 2 design, the tables the second tier's seed drew for its AHU, FCU, FAN, UNIT_HEATER, CONDENSING_UNIT, PUMP, AIR_COOLED_CHILLER and COOLING_TOWER strata.
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 | AIR HANDLING UNIT SCHEDULE | AHU | all 1 printed row | render: page 30 crop 127,43,873,57 at 4x in 5 tiles (MARK column repeated) and notes crop 127,98,573,82 at 250 dpi; second read at 6x (crop 127,72,873,28) of the row, every cell
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 | CHILLED WATER FAN COIL UNIT SCHEDULE | FCU | all 2 printed rows | render: page 30 crop 287,557,713,91 at 4x in 4 tiles (MARK column repeated), notes included; second read at 6x (crop 287,588,713,30) of both rows, every cell
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 | SMOKE EXHAUST FAN SCHEDULE | FAN | all 4 printed rows | render: page 30 crop 400,187,600,115 at 4x in 3 tiles (MARK column repeated), notes included; second read at 6x (crop 400,232,600,30) of all 4 rows, every cell
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30 | ELECTRIC DUCT HEATER SCHEDULE | UNIT_HEATER | all 1 printed row | render: page 30 crop 655,444,345,101 at 4x, notes included; second read at 6x (crop 655,486,345,12) of the row, every cell
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31 | AIR COOLED CONDENSING UNIT SCHEDULE | CONDENSING_UNIT | all 5 printed rows | render: page 31 crop 542,400,446,130 at 4x in 3 tiles (MARK column repeated), notes included; second read at 6x (crop 542,444,446,37) of all 5 rows, every cell
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31 | PUMP SCHEDULE | PUMP | all 2 printed rows | render: page 31 crop 447,138,541,98 at 4x in 3 tiles (Mark column repeated), notes included; second read at 6x (crop 447,182,541,26) of both rows, every cell
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246 | WATER COOLED CENTRIFUGAL CHILLER SCHEDULE | AIR_COOLED_CHILLER | all 3 printed rows | render: page 246 crop 98,181,939,102 at 4x in 5 tiles (MARK column repeated), notes included; second read at 6x (crop 98,214,939,36) of all 3 rows, every cell
+#   088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246 | COOLING TOWER SCHEDULE | COOLING_TOWER | all 3 printed rows | render: page 246 crop 381,38,656,119 at 4x in 4 tiles (MARK column repeated), notes included; second read at 6x (crop 381,68,656,38) of all 3 rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, weight, maximum/demand-controlled outdoor air, static pressures, sensible capacity and coil air temperatures, fan type, NPSH, pump type, MOP/MCA/MOCP, refrigerant type and charge, efficiencies (kW/ton, IPLV), condenser-water data, evaporator pressure drop and passes, ambient wet bulb, lift, tower airflow and fan count, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX: 8 table(s), 21 instance(s), 403 keyed attribute value(s) (147 printed, 256 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_cfm,26250,cfm,AIRFLOW (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,oa_cfm_min,2000,cfm,MIN. OA (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_hp,10,hp,SUPPLY FAN / FAN HP,printed '10.0'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,supply_fan_qty,6,,SUPPLY FAN / FAN QTY.,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,return_fan_hp,5,hp,RETURN FAN / FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,exhaust_fan_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,vfd,yes,,NOTE 6,note 6: 'PROVIDE FACTORY INSTALLED ABB VFD ON THE UNIT. PROVIDE ONE VFD FOR EACH FAN MOTOR.'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,economizer,airside,,NOTE 5,note 5 (REMARKS cite no note; the table's notes apply to its one unit): 'AIRSIDE ECONOMIZER. FACTORY INSTALLED EBTRON AIR FLOW MEASUREMENT STATIONS FOR OUTSIDE AIR & EXHAUST AIR; AND SUPPLY & RETURN FANS AIR FLOW MONITORS.'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,outdoor_air_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_type,chw,,CHILLED WATER COIL,"the row prints the CHILLED WATER COIL block (water side EWT 42 / LWT 56, 147.0 GPM)"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_mbh,1027.3,MBH,CHILLED WATER COIL / TOTAL MBH,printed '1027.30'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,cooling_tons,,tons,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,dx_stages,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_gpm,147,gpm,CHILLED WATER COIL / GPM,printed '147.0'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_ewt_f,42,F,CHILLED WATER COIL / EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_lwt_f,56,F,CHILLED WATER COIL / LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_wpd_ft,12.1,ft,CHILLED WATER COIL / MAX WPD (FT H20),printed '12.10'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_rows,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,chw_glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_type,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,heating_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_wpd_ft,,ft,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_rows,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,hw_glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_psig,,psig,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,steam_lb_hr,,lb/hr,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,gas_input_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,humidifier,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,energy_recovery,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,filter_merv,13,,NOTE 9,"note 9: 'STANDARD SIZE FILTERS, 2"" THICK CLASS 2 MERV 8 PRIMARY FILTERS, 12"" THICK CLASS 2 MERV 13 SECONDARY FILTERS.' (the final, secondary filter keys; the MERV 8 primary filter does not)"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AIR HANDLING UNIT SCHEDULE,AHU-1,AHU,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,area_served,MECHANICAL ROOM RBST 142,,AREA SERVED,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,pipes,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,cfm,800,cfm,AIRFLOW (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,fan_speeds,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,ecm,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,cooling_type,chw,,CHILLED WATER COIL,title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the CHILLED WATER COIL block (water side EWT 42 / LWT 56)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_gpm,3.4,gpm,CHILLED WATER COIL / GPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_ewt_f,42,F,CHILLED WATER COIL / EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_lwt_f,56,F,CHILLED WATER COIL / LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_wpd_ft,1.8,ft,CHILLED WATER COIL / WPD (FT H2O),printed '1.80'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_mbh,24197,BTU/H,CHILLED WATER COIL / TOTAL BTU/H,printed '24197.00'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_rows,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,chw_glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,heating_type,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_wpd_ft,,ft,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_rows,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,hw_glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,volts,230,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-1,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,area_served,PUMP RM RBST 147,,AREA SERVED,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,pipes,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,cfm,300,cfm,AIRFLOW (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,fan_speeds,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,ecm,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,cooling_type,chw,,CHILLED WATER COIL,title 'CHILLED WATER FAN COIL UNIT SCHEDULE'; every row prints the CHILLED WATER COIL block (water side EWT 42 / LWT 56)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_gpm,1.7,gpm,CHILLED WATER COIL / GPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_ewt_f,42,F,CHILLED WATER COIL / EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_lwt_f,56,F,CHILLED WATER COIL / LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_wpd_ft,2.4,ft,CHILLED WATER COIL / WPD (FT H2O),printed '2.40'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_mbh,11816,BTU/H,CHILLED WATER COIL / TOTAL BTU/H,printed '11816.00'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_rows,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,chw_glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,heating_type,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_wpd_ft,,ft,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_rows,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,hw_glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,volts,230,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,CHILLED WATER FAN COIL UNIT SCHEDULE,FCU-2,FCU,phase,1,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,service,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,cfm,13750,cfm,AIRFLOW (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,esp_in,1.2,in. w.c.,ESP (IN WC),printed '1.20'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,motor_hp,7.5,hp,FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,motor_watts,,W,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,rpm,556,rpm,FAN RPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,drive,belt,,DRIVE TYPE,printed 'Belt'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,vfd,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,ecm,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,control,INTERLOCK WITH SMOKE CONTROL PANEL,,NOTE 5,"note 5, a table note no row's REMARKS cite (they cite note 1 only), so it applies to every fan: 'INTERLOCK FAN WITH SMOKE CONTROL PANEL LOCATED IN XXX ROOM.'"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-1,FAN,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,service,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,cfm,13750,cfm,AIRFLOW (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,esp_in,1.2,in. w.c.,ESP (IN WC),printed '1.20'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,motor_hp,7.5,hp,FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,motor_watts,,W,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,rpm,556,rpm,FAN RPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,drive,belt,,DRIVE TYPE,printed 'Belt'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,vfd,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,ecm,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,control,INTERLOCK WITH SMOKE CONTROL PANEL,,NOTE 5,"note 5, a table note no row's REMARKS cite (they cite note 1 only), so it applies to every fan: 'INTERLOCK FAN WITH SMOKE CONTROL PANEL LOCATED IN XXX ROOM.'"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-2,FAN,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,service,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,cfm,13750,cfm,AIRFLOW (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,esp_in,1.2,in. w.c.,ESP (IN WC),printed '1.20'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,motor_hp,7.5,hp,FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,motor_watts,,W,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,rpm,556,rpm,FAN RPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,drive,belt,,DRIVE TYPE,printed 'Belt'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,vfd,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,ecm,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,control,INTERLOCK WITH SMOKE CONTROL PANEL,,NOTE 5,"note 5, a table note no row's REMARKS cite (they cite note 1 only), so it applies to every fan: 'INTERLOCK FAN WITH SMOKE CONTROL PANEL LOCATED IN XXX ROOM.'"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-3,FAN,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,service,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,cfm,13750,cfm,AIRFLOW (CFM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,esp_in,1.2,in. w.c.,ESP (IN WC),printed '1.20'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,motor_hp,7.5,hp,FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,motor_watts,,W,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,rpm,556,rpm,FAN RPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,drive,belt,,DRIVE TYPE,printed 'Belt'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,vfd,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,ecm,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,control,INTERLOCK WITH SMOKE CONTROL PANEL,,NOTE 5,"note 5, a table note no row's REMARKS cite (they cite note 1 only), so it applies to every fan: 'INTERLOCK FAN WITH SMOKE CONTROL PANEL LOCATED IN XXX ROOM.'"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SMOKE EXHAUST FAN SCHEDULE,SEF-4,FAN,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC DUCT HEATER SCHEDULE'; note 1: 'FINNED TUBULAR ELECTRIC DUCT HEATER.'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,cfm,,cfm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,eh_kw,200,kW,KW,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,volts,480,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,cfm,,cfm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,cooling_mbh,60000,BTU/H,RATED COOLING CAPACITY BTU/H,printed '60000.00'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,volts,208,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-1,CONDENSING_UNIT,phase,1,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,cfm,,cfm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,cooling_mbh,48000,BTU/H,RATED COOLING CAPACITY BTU/H,printed '48000.00'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,volts,208,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-2,CONDENSING_UNIT,phase,1,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,cfm,,cfm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,cooling_mbh,18200,BTU/H,RATED COOLING CAPACITY BTU/H,printed '18200.00'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,volts,208,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-3,CONDENSING_UNIT,phase,1,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,cfm,,cfm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,cooling_mbh,24000,BTU/H,RATED COOLING CAPACITY BTU/H,printed '24000.00'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,volts,208,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-4,CONDENSING_UNIT,phase,1,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,cfm,,cfm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,cooling_mbh,22000,BTU/H,RATED COOLING CAPACITY BTU/H,printed '22000.00'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,heating_mbh,,MBH,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,motor_hp,,hp,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,eh_kw,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,volts,208,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,AIR COOLED CONDENSING UNIT SCHEDULE,CU-5,CONDENSING_UNIT,phase,1,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,service,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,gpm,155,gpm,GPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,head_ft,46,ft,FT HEAD,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,motor_hp,5,hp,PUMP HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,rpm,1200,rpm,RPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,vfd,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,pump_arrangement,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-1,PUMP,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,service,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,gpm,155,gpm,GPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,head_ft,46,ft,FT HEAD,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,motor_hp,5,hp,PUMP HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,rpm,1200,rpm,RPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,vfd,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,pump_arrangement,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,glycol_pct,,%,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,PUMP SCHEDULE,CHWP-2,PUMP,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,condenser,water,,TABLE TITLE,title printed 'WATER COOLED CENTRIFUGAL CHILLER SCHEDULE'; every row prints a CONDENSER water block (EWT 85)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,tons,300,tons,TONS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_gpm,513,gpm,EVAPORATOR / GPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_ewt_f,58,F,EVAPORATOR / EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,chw_lwt_f,44,F,EVAPORATOR / LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,bas_interface,ABB,,NOTE 3,note 3 (REMARKS cite no note; the table's notes apply to every chiller): 'PROVIDE WITH ABB INTERFACE FOR INTEGRATION.' (the interface's printed name; the author's reading)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-1,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,condenser,water,,TABLE TITLE,title printed 'WATER COOLED CENTRIFUGAL CHILLER SCHEDULE'; every row prints a CONDENSER water block (EWT 85)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,tons,300,tons,TONS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_gpm,513,gpm,EVAPORATOR / GPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_ewt_f,58,F,EVAPORATOR / EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,chw_lwt_f,44,F,EVAPORATOR / LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,bas_interface,ABB,,NOTE 3,note 3 (REMARKS cite no note; the table's notes apply to every chiller): 'PROVIDE WITH ABB INTERFACE FOR INTEGRATION.' (the interface's printed name; the author's reading)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,CH-2,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,condenser,water,,TABLE TITLE,title printed 'WATER COOLED CENTRIFUGAL CHILLER SCHEDULE'; every row prints a CONDENSER water block (EWT 85)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,tons,200,tons,TONS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,chw_gpm,345,gpm,EVAPORATOR / GPM,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,chw_ewt_f,58,F,EVAPORATOR / EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,chw_lwt_f,44,F,EVAPORATOR / LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,kw_input,,kW,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,bas_interface,ABB,,NOTE 3,note 3 (REMARKS cite no note; the table's notes apply to every chiller): 'PROVIDE WITH ABB INTERFACE FOR INTEGRATION.' (the interface's printed name; the author's reading)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,WATER COOLED CENTRIFUGAL CHILLER SCHEDULE,(E) CH-3,AIR_COOLED_CHILLER,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,cells,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,tons,260,tons,HEAT REJECTION TONNAGE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,gpm,790,gpm,FLOW RATE (GPM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,ewt_f,95,F,EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,lwt_f,85,F,LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,fan_hp,10,hp,FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,vfd,yes,,NOTE 3,note 3 (REMARKS cite no note; the table's notes apply to every tower): 'PROVIDE WITH ABB VFD.'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,(E) CT-1,COOLING_TOWER,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,cells,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,tons,300,tons,HEAT REJECTION TONNAGE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,gpm,900,gpm,FLOW RATE (GPM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,ewt_f,95,F,EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,lwt_f,85,F,LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,fan_hp,20,hp,FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,vfd,yes,,NOTE 3,note 3 (REMARKS cite no note; the table's notes apply to every tower): 'PROVIDE WITH ABB VFD.'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-2,COOLING_TOWER,phase,3,,ELECTRICAL DATA / PHASE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,building,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,floor,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,area_served,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,qty,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,cells,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,tons,300,tons,HEAT REJECTION TONNAGE,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,gpm,900,gpm,FLOW RATE (GPM),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,ewt_f,95,F,EWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,lwt_f,85,F,LWT (F),
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,fan_hp,20,hp,FAN HP,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,vfd,yes,,NOTE 3,note 3 (REMARKS cite no note; the table's notes apply to every tower): 'PROVIDE WITH ABB VFD.'
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,conn_in,,in,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,bas_interface,,,,not printed
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,volts,460,V,ELECTRICAL DATA / VOLTS,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,COOLING TOWER SCHEDULE,CT-3,COOLING_TOWER,phase,3,,ELECTRICAL DATA / PHASE,

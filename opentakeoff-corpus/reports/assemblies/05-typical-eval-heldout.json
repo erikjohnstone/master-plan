@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-09-24T05:12:43.918Z",
+  "side": "heldout",
+  "settings": {},
+  "library_sha256": "543e6fff10d9",
+  "apply_ts_sha256": "7bf4510c7840",
+  "select_ts_sha256": "d6cbc47e7731",
+  "normalize_ts_sha256": "bb3ffecf804c",
+  "documents": [
+    "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+    "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+    "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+    "30_WA_SpokaneTransit_CoolingTower",
+    "bessemer",
+    "navfac-cherry-point-atc"
+  ],
+  "errors": [],
+  "gate": {
+    "exact": 0.95,
+    "pass": false
+  },
+  "total": {
+    "instances": 91,
+    "exact": 21,
+    "option_wrong": 58,
+    "wrong_typical": 1,
+    "unresolved": 11,
+    "unmatched": 0,
+    "exact_pct": 0.23076923076923078,
+    "key_typical": 79,
+    "key_none": 12,
+    "unresolved_dishonest": 5,
+    "rests_on_unprinted": 0,
+    "exact_with_default": 11
+  },
+  "by_key": {
+    "key: a typical": {
+      "instances": 79,
+      "exact": 11,
+      "option_wrong": 58,
+      "wrong_typical": 0,
+      "unresolved": 10,
+      "unmatched": 0,
+      "exact_pct": 0.13924050632911392,
+      "key_typical": 79,
+      "key_none": 0,
+      "unresolved_dishonest": 5,
+      "rests_on_unprinted": 0,
+      "exact_with_default": 11
+    },
+    "key: none": {
+      "instances": 12,
+      "exact": 10,
+      "option_wrong": 0,
+      "wrong_typical": 1,
+      "unresolved": 1,
+      "unmatched": 0,
+      "exact_pct": 0.8333333333333334,
+      "key_typical": 0,
+      "key_none": 12,
+      "unresolved_dishonest": 0,
+      "rests_on_unprinted": 0,
+      "exact_with_default": 0
+    }
+  }
+}

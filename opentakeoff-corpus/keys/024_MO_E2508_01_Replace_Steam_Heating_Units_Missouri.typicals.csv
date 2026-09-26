@@ -1,0 +1,18 @@
+# 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.attrs.csv, one row each.
+# Sources read: M101/M102 (pages 5-8) plans and keynotes; M601 (page 11) packaged equipment schedule and notes. HELD-OUT set: scored at gates only.
+#
+sheet,tag,family,typical_id,options,basis_note
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-101,RTU,rtu-networked,duct_smoke_detectors=true;gateway=false,"M601 RTU notes 1-5: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'; thermostat (wall plate sensor) by the BAS contractor, M101 keynote 'ALL CONTROLS SHALL BE ON THE BAS SYSTEM'; single dry-bulb economizer with barometric relief (packaged); return duct smoke detector wired to the fan starter with an alarm to the fire alarm and the BAS. Networked packaged unit, no gateway (BACnet IP on the unit)."
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-102,RTU,rtu-networked,duct_smoke_detectors=true;gateway=false,"M601 RTU notes 1-5: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'; thermostat (wall plate sensor) by the BAS contractor, M101 keynote 'ALL CONTROLS SHALL BE ON THE BAS SYSTEM'; single dry-bulb economizer with barometric relief (packaged); return duct smoke detector wired to the fan starter with an alarm to the fire alarm and the BAS. Networked packaged unit, no gateway (BACnet IP on the unit)."
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-103,RTU,rtu-networked,duct_smoke_detectors=true;gateway=false,"M601 RTU notes 1-5: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'; thermostat (wall plate sensor) by the BAS contractor, M101 keynote 'ALL CONTROLS SHALL BE ON THE BAS SYSTEM'; single dry-bulb economizer with barometric relief (packaged); return duct smoke detector wired to the fan starter with an alarm to the fire alarm and the BAS. Networked packaged unit, no gateway (BACnet IP on the unit)."
+024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf#11,RTU-104,RTU,rtu-networked,duct_smoke_detectors=true;gateway=false,"M601 RTU notes 1-5: 'PROVIDE WITH BACNET IP CARD AND CAPABILITIES'; thermostat (wall plate sensor) by the BAS contractor, M101 keynote 'ALL CONTROLS SHALL BE ON THE BAS SYSTEM'; single dry-bulb economizer with barometric relief (packaged); return duct smoke detector wired to the fan starter with an alarm to the fire alarm and the BAS. Networked packaged unit, no gateway (BACnet IP on the unit)."

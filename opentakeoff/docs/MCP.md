@@ -233,7 +233,7 @@ client that honors `tools/list_changed`; leave it unset otherwise.
 
 ## What the agent gets
 
-Fifty-eight tools, in the order an agent tends to reach for them:
+Sixty-four tools, in the order an agent tends to reach for them:
 
 - **Open and orient**—`load_plan`, `sheet_info` (including the sheet's PDF
   layer table—Optional Content Groups with a classified role, confidence,
@@ -291,6 +291,27 @@ Fifty-eight tools, in the order an agent tends to reach for them:
   schedule row and the plan ink. Report both quantities and the status per
   line, never the schedule count alone—the same discipline as `export_report`
   below.
+  For a controls estimate, `apply_assemblies` then proposes each scheduled
+  unit's controls typical and mechanical hook-up (options, variables, lines,
+  each citing its schedule row and library rule) on the same shared path as
+  the Takeoff panel; its `report.exceptions` come first, and an unresolved
+  unit names what it waits for rather than guessing. It also reads the control
+  drawings bound to each unit (`control_readings`): a reading applies only
+  where two readers agree, and `control` lists the rest as proposals or
+  unresolved. `export_dir` writes the
+  project's CSV set ([ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md)), and
+  `export_scope` narrows its lines to one party. `settings.hookup_defaults`
+  and `settings.responsibility_preset` start from the starter's hook-up
+  profile and responsibility presets. `library_path` takes a partner library
+  as JSON or as the panel's library CSV, and its own prices and hours come
+  back labelled partner-entered. `project_questions` lists the few project
+  questions whose answer changes something here (BAS scope, owner criteria,
+  existing units' controls, unscheduled speed, packaged pumps), each with
+  the lines and records it changes and, where printed text proposes one, a
+  pre-fill with its quotes. Ask the estimator, then record the answer they
+  give with `answer_project_question`: an append-only journal event, origin
+  `agent_proposal`, which `apply_assemblies` applies and `export_takeoff`
+  saves. Never answer from the pre-fill yourself.
 - **Measure**—`one_click`, `detect_rooms` (both take `layers {include,
   exclude}` to override the sheet's stated layer roles for a call),
   `measure_polygon`, `measure_line`, `measure_surface` (wall SF: an open run

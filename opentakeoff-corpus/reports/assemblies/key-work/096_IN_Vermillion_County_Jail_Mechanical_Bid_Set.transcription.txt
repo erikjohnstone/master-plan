@@ -1,0 +1,512 @@
+# 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheets M600, M601, M602 and M603 SCHEDULES - MECHANICAL (PDF pages 19-22)
+# of the Vermillion County Jail addition and renovation, Hillsdale IN (RQAW): an overview of each
+# page at 40 dpi, then each table at 3x (216 dpi) in tiles with the MARK column repeated (the
+# chiller's sideways accessory headers rendered at 4x and turned upright), rendered with MuPDF
+# (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second read at 4x of the first, a
+# middle and the last keyed row of every table, every cell. Each drawn title was found with the
+# PDF's own text layer (pymupdf search_for). The pipeline's output for these sheets was not
+# consulted while keying (AS-28, before the draw, read the column names the normalizer left
+# unread across the unseen corpus, this document's among them). The third tier keys the tables
+# its seed drew (tier3/01-split.md): one per keyed family.
+SET 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheets M600-M603 (pages 19-22) of the Vermillion County Jail addition and renovation, Hillsdale IN (RQAW), the tables the third tier's seed drew for its AHU, DUCT_MOUNTED_COIL, HEAT_EXCHANGER, AIR_COOLED_CHILLER, BOILER, PUMP, UNIT_HEATER, FCU, VAV and FAN strata.
+EXCLUDES Locations (room names and numbers), system types, component tags, weights and dimensions, manufacturers and models, efficiencies, minimum and maximum flows, pressure drops, air temperatures, fouling factors, refrigerants, electrical FLA, MCA, MOCP and emergency power, accessories other than BACnet, heat recovery performance, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# AIR HANDLING UNIT SYSTEM INDEX SCHEDULE (page 19, sheet M600): four rows, DOAS-1 to DOAS-3
+# (dedicated outdoor air units) and AHU-4. The census claims one AHU row here; the DOAS rows are
+# another family, not drawn, so the key covers AHU-4. AREA SERVED keys area_served, TOTAL CFM
+# supply_cfm, OA CFM oa_cfm_min (the design minimum outdoor air, as 004_MO's OA CFM), OA %
+# outdoor_air_pct, VOLTAGE and PHASE volts and phase. The index names AHU-4's components by tag
+# (SF-4A/B, RF-4A/B, PHC-3, CC-4, PF-4, SA-4A/B), each scheduled in its own table on the sheet:
+# the index itself prints no coil medium, fan power or filter rating, so none is keyed from it.
+# Notes 1-4 print above the table; AHU-4's REMARKS cites all four. Note 4 "DOAS UNIT TO BE
+# PROVIDED WITH FACTORY CONTROLS WITH BACKNET INTERFACE. SEE DOAS UNIT SPECIFICATIONS." is
+# cited by AHU-4 as by every DOAS row (as note 1's "AHU" is cited by the DOAS rows): the drafter
+# applies it to AHU-4, so it keys bas_interface as printed ("BACKNET").
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19
+title: AIR HANDLING UNIT SYSTEM INDEX SCHEDULE
+family: AHU
+render: page 19 overview at 40 dpi; crop 105,195,2625,123 at 3x in 5 tiles (MARK column repeated), notes cropped at 3x (crop 105,110,900,70); second read at 4x (crops 105,299,655,15 and 760,299,655,15 and 1415,299,655,15 and 2070,299,660,15) of AHU-4, every cell
+rows: 1 of the 4 printed rows: AHU-4 (DOAS-1 to DOAS-3 are dedicated outdoor air units, another family, not drawn here)
+col: MARK => tag
+col: LOCATION / NAME => -
+col: LOCATION / NO. => -
+col: SYSTEM TYPE => -
+col: AREA SERVED => area_served
+col: FAN / SUPPLY FAN => -
+col: FAN / RETURN FAN => -
+col: TOTAL CFM => supply_cfm
+col: [OA CFM: design minimum outdoor air] => oa_cfm_min
+col: OA % => outdoor_air_pct
+col: PREHEAT COIL => -
+col: REHEAT COIL => -
+col: COOLING COIL => -
+col: DX HEAT RECOVERY COIL => -
+col: FILTER(S) => -
+col: SOUND ATTENUATOR => -
+col: PLATE & FRAME HEAT EXCHANGER => -
+col: OPERATING WEIGHT (LBS) => -
+col: DIMENSIONS (IN.) / L => -
+col: DIMENSIONS (IN.) / W => -
+col: DIMENSIONS (IN.) / H => -
+col: VOLTAGE => volts
+col: PHASE => phase
+col: Hz => -
+col: FLA => -
+col: MCA => -
+col: MOCP => -
+col: EMER. POWER => -
+col: DESIGN REFERENCE / MANUFACTURER => -
+col: DESIGN REFERENCE / MODEL => -
+col: REMARKS => -
+col: [NOTE 4, where the row's REMARKS cite it: the factory controls' BACnet interface] => bas_interface
+grid:
+AHU-4 | MECHANICAL | B107 | VAV | ADMIN | SF-4A/B | RF-4A/B | 8000 | 2000 | 25.00% | PHC-3 | - | CC-4 | - | PF-4 | SA-4A/B | - | 2,500 | 148" | 45" | 36" | 460 | 3 | 60 | 25.2 | 31.6 | 40 | YES | PACE | PAI-42X84 | 1,2,3,4 | =BACKNET (DOAS UNIT TO BE PROVIDED WITH FACTORY CONTROLS WITH BACKNET INTERFACE. SEE DOAS UNIT SPECIFICATIONS.)
+END
+
+# AHU CHILLED WATER COOLING COIL SCHEDULE (page 19): four coils, one per unit. The coil family
+# keys cfm (CFM), cooling_mbh (CAPACITY (MBH) / TOTAL), qty (# OF COILS, as 017_MD's coil
+# QUANTITY) and the chilled-water side's chw_gpm, chw_ewt_f and chw_lwt_f (CIRCULATING FLUID
+# GPM, ENTERING, LEAVING); it keys no rows, pressure drop or glycol. LOCATION prints the unit
+# the coil sits in, not a place. CC-3's LEAVING AIR DB prints "525.0" (for 52.5), typed as
+# printed. The REMARKS cells are blank.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19
+title: AHU CHILLED WATER COOLING COIL SCHEDULE
+family: DUCT_MOUNTED_COIL
+render: page 19 overview at 40 dpi; crop 1253,1110,1447,135 at 3x in 3 tiles (MARK column repeated); second read at 4x (crops 1253,1190,477,14 and 1730,1190,480,14 and 2210,1190,490,14; the same at 1216 and 1229) of CC-1, CC-3 and CC-4, every cell
+rows: all 4 printed rows
+col: MARK => tag
+col: LOCATION => -
+col: CFM => cfm
+col: CAPACITY (MBH) / TOTAL => cooling_mbh
+col: CAPACITY (MBH) / SENSIBLE => -
+col: MAX. FACE VELOCITY (FPM) => -
+col: MAX. APD (IN. W.G.) => -
+col: # OF ROWS => -
+col: # OF COILS => qty
+col: MAX. FINS PER INCH => -
+col: ENTERING AIR TEMPERATURE / DB (°F) => -
+col: ENTERING AIR TEMPERATURE / WB (°F) => -
+col: LEAVING AIR TEMPERATURE / DB (°F) => -
+col: LEAVING AIR TEMPERATURE / WB (°F) => -
+col: CIRCULATING FLUID / FLUID => -
+col: CIRCULATING FLUID / GPM => chw_gpm
+col: CIRCULATING FLUID / ENTERING (°F) => chw_ewt_f
+col: CIRCULATING FLUID / LEAVING (°F) => chw_lwt_f
+col: CIRCULATING FLUID / MAX WPD (FT. HD.) => -
+col: REMARKS => -
+grid:
+CC-1 | DOAS-1 | 9000 | 682 | 302 | 486 | 1.49 | 10 | 1 | 9 | 82.4 | 74.6 | 52.0 | 52.0 | 30% PG | 96.4 | 40 | 55 | 23.5 |
+CC-2 | DOAS-2 | 12000 | 923 | 409 | 500 | 1.66 | 10 | 1 | 10 | 82.6 | 74.7 | 51.8 | 51.8 | 30% PG | 130.5 | 40 | 55 | 21.7 |
+CC-3 | DOAS-3 | 3000 | 244 | 129 | 476 | 1.07 | 10 | 1 | 11 | 95.0 | 78.0 | 525.0 | 52.1 | 30% PG | 48.3 | 40 | 51 | 18.6 |
+CC-4 | AHU-4 | 8000 | 275 | 203 | 491 | 0.82 | 10 | 1 | 10 | 76.6 | 64.2 | 52.1 | 51.8 | 30% PG | 39.6 | 40 | 55 | 16.5 |
+END
+
+# AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE (page 19): two air-to-air energy recovery
+# exchangers in DOAS-1 and DOAS-2, outside air against exhaust air. The title names a plate
+# and frame exchanger: hx_type plate. Both sides are air, which the medium list has no word
+# for: primary_medium and secondary_medium other, the author's reading (the two sides are the
+# same medium, so which is the source does not matter). No water flow, temperature, capacity or
+# connection prints for the hydronic attributes. The EFFECTIVNESS and REMARKS cells are blank.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19
+title: AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE
+family: HEAT_EXCHANGER
+render: page 19 overview at 40 dpi; crop 570,1520,2130,100 at 3x in 4 tiles (MARK column repeated); second read at 4x (crops 570,1588,530,28 and 1100,1588,530,28 and 1630,1588,530,28 and 2160,1588,540,28) of HE-1 and HE-2, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: LOCATION => -
+col: OA MIN FLOW => -
+col: EXHAUST AIRFLOW => -
+col: SUMMER DESIGN ENERGY RECOVERY / OUTSIDE AIR / EAT / DB (°F) => -
+col: SUMMER DESIGN ENERGY RECOVERY / OUTSIDE AIR / EAT / WB (°F) => -
+col: SUMMER DESIGN ENERGY RECOVERY / OUTSIDE AIR / LAT / DB (°F) => -
+col: SUMMER DESIGN ENERGY RECOVERY / OUTSIDE AIR / LAT / WB (°F) => -
+col: SUMMER DESIGN ENERGY RECOVERY / OUTSIDE AIR / APD => -
+col: SUMMER DESIGN ENERGY RECOVERY / EXHAUST AIR / EAT / DB (°F) => -
+col: SUMMER DESIGN ENERGY RECOVERY / EXHAUST AIR / EAT / RH % => -
+col: SUMMER DESIGN ENERGY RECOVERY / EXHAUST AIR / LAT / DB (°F) => -
+col: SUMMER DESIGN ENERGY RECOVERY / EXHAUST AIR / LAT / RH % => -
+col: SUMMER DESIGN ENERGY RECOVERY / EXHAUST AIR / APD => -
+col: WINTER DESIGN ENERGY RECOVERY / OUTSIDE AIR / EAT / DB (°F) => -
+col: WINTER DESIGN ENERGY RECOVERY / OUTSIDE AIR / EAT / WB (°F) => -
+col: WINTER DESIGN ENERGY RECOVERY / OUTSIDE AIR / LAT / DB (°F) => -
+col: WINTER DESIGN ENERGY RECOVERY / OUTSIDE AIR / LAT / WB (°F) => -
+col: WINTER DESIGN ENERGY RECOVERY / OUTSIDE AIR / APD => -
+col: WINTER DESIGN ENERGY RECOVERY / EXHAUST AIR / EAT / DB (°F) => -
+col: WINTER DESIGN ENERGY RECOVERY / EXHAUST AIR / EAT / RH % => -
+col: WINTER DESIGN ENERGY RECOVERY / EXHAUST AIR / LAT / DB (°F) => -
+col: WINTER DESIGN ENERGY RECOVERY / EXHAUST AIR / LAT / RH % => -
+col: WINTER DESIGN ENERGY RECOVERY / EXHAUST AIR / APD => -
+col: FROST CONTROL => -
+col: EFFECTIVNESS / SUMMER => -
+col: EFFECTIVNESS / WINTER => -
+col: DESIGN REFERENCE / MANUFACTURER => -
+col: DESIGN REFERENCE / MODEL => -
+col: REMARKS => -
+derive: hx_type = plate ; header=TABLE TITLE ; note=title printed 'AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE'
+derive: primary_medium = other ; header=TABLE TITLE ; note=the exchanger's sides are OUTSIDE AIR and EXHAUST AIR (the SUMMER and WINTER DESIGN ENERGY RECOVERY blocks): air, which the medium list does not name (the author's reading)
+derive: secondary_medium = other ; header=TABLE TITLE ; note=the exchanger's sides are OUTSIDE AIR and EXHAUST AIR (the SUMMER and WINTER DESIGN ENERGY RECOVERY blocks): air, which the medium list does not name (the author's reading)
+grid:
+HE-1 | DOAS-1 | 9000 | 9000 | 95.0 | 78.0 | 82.4 | 74.6 | 0.87 | 75.0 | 50.0 | 87.5 | 33.4 | 0.85 | -10.0 | -10.0 | 33.8 | 23.5 | 0.71 | 60.0 | 30.0 | 21.1 | 100.0 | 0.71 | BYPASS @ 16.1 °F |  |  | INNOVENT | H-1-50B-1500 |
+HE-2 | DOAS-2 | 12000 | 12000 | 95.0 | 78.0 | 82.6 | 74.7 | 1.09 | 75.0 | 50.0 | 87.3 | 33.6 | 1.07 | -10.0 | -10.9 | 33.2 | 23.1 | 0.91 | 60.0 | 30.0 | 21.4 | 100.0 | 0.98 | BYPASS @ 16.1 °F |  |  | INNOVENT | H-1-50B-1650 |
+END
+
+# AIR COOLED CHILLER SCHEDULE (page 20, sheet M601): four rows, the air-cooled chillers CH-1 and
+# CH-2 and the water-to-water heat recovery chillers HRC-1 and HRC-2. The census claims two rows
+# of this family; the heat recovery chillers are another family, not drawn, so the key covers
+# CH-1 and CH-2. The title names an air-cooled condenser: condenser air. NOMINAL CAPACITY (TON)
+# keys tons (as 047_NC's NOMINAL CAPACITY (TONS)); DESIGN COOLING CAPACITY (TON) is typed for
+# audit, so one printed number is one key line. The EVAPORATOR COOLING HEAT EXCHANGER block keys
+# chw_gpm (DESIGN FLOW), chw_ewt_f and chw_lwt_f. VOLTS PHASE HERTZ prints "460/3/60", keyed as
+# its volts part and its phase part. The ACCESSORIES column (BACNET) (YES/NO) prints Yes: a
+# BACnet interface, bas_interface BACNET (remark 5, cited by both rows, asks for a BACnet card).
+# The other remarks (disconnect, sensors, safeties, integral pumps and their drives) key nothing
+# in the family's vocabulary. CH-2's FLA cell is blank.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20
+title: AIR COOLED CHILLER SCHEDULE
+family: AIR_COOLED_CHILLER
+render: page 20 overview at 40 dpi; crop 118,262,2600,216 at 3x in 6 tiles (MARK column repeated), the ACCESSORIES headers at 4x turned upright (crop 1960,262,380,190), remarks cropped at 3x (crop 118,112,1300,90); second read at 4x (crop 118,453,2600,26 in 5 parts) of CH-1 and CH-2, every cell
+rows: 2 of the 4 printed rows: CH-1 and CH-2 (HRC-1 and HRC-2 are heat recovery chillers, another family, not drawn here)
+col: MARK => tag
+col: LOCATION / NAME => -
+col: LOCATION / NO. => -
+col: COOLING COP => -
+col: HEATING COP => -
+col: NPLV => -
+col: NOMINAL CAPACITY (TON) => tons
+col: DESIGN COOLING CAPACITY (TON) => -
+col: EVAPORATOR COOLING HEAT EXCHANGER / MAX FLOW (GPM) => -
+col: EVAPORATOR COOLING HEAT EXCHANGER / DESIGN FLOW (GPM) => chw_gpm
+col: EVAPORATOR COOLING HEAT EXCHANGER / MIN FLOW (GPM) => -
+col: EVAPORATOR COOLING HEAT EXCHANGER / FLUID => -
+col: EVAPORATOR COOLING HEAT EXCHANGER / FOULING FACTOR => -
+col: EVAPORATOR COOLING HEAT EXCHANGER / EWT (°F) => chw_ewt_f
+col: EVAPORATOR COOLING HEAT EXCHANGER / LWT (°F) => chw_lwt_f
+col: EVAPORATOR COOLING HEAT EXCHANGER / VOL (GAL) => -
+col: EVAPORATOR COOLING HEAT EXCHANGER / WPD (FT. OF HEAD) => -
+col: TOTAL WPD (FT. OF HEAD) => -
+col: CONDENSER DATA / DESIGN FLOW (GPM) => -
+col: CONDENSER DATA / FLUID => -
+col: CONDENSER DATA / EWT (°F) => -
+col: CONDENSER DATA / LWT (°F) => -
+col: CONDENSER DATA / PD (FTH20) => -
+col: CONDENSER DATA / Vol (GAL) => -
+col: COMPRESSOR / TYPE => -
+col: COMPRESSOR / REFRIGERANT / TYPE => -
+col: SUMMER AMBIENT DBT (°F) => -
+col: UNIT ELECTRICAL DATA / FLA (A) => -
+col: UNIT ELECTRICAL DATA / MCA (A) => -
+col: UNIT ELECTRICAL DATA / MOCP (A) => -
+col: UNIT ELECTRICAL DATA / VOLTS PHASE HERTZ => -
+col: [UNIT ELECTRICAL DATA / VOLTS PHASE HERTZ: volts part] => volts
+col: [UNIT ELECTRICAL DATA / VOLTS PHASE HERTZ: phase part] => phase
+col: UNIT ELECTRICAL DATA / EMER. POWER => -
+col: ACCESSORIES / UL LISTED (YES/NO) => -
+col: ACCESSORIES / SINGLE POINT ELEC. CONN. (YES/NO) => -
+col: ACCESSORIES / VIBRATION ISOLATORS (YES/NO) => -
+col: ACCESSORIES / WATER FLOW SWITCH (YES/NO) => -
+col: ACCESSORIES / UNIT MOUNTED VFD (YES/NO) => -
+col: ACCESSORIES / FACTORY AUTHORIZED STARTUP (YES/NO) => -
+col: ACCESSORIES / (BACNET) (YES/NO) => -
+col: [ACCESSORIES / (BACNET) (YES/NO): Yes, a BACnet interface] => bas_interface
+col: OPERATING WEIGHT (LBS) => -
+col: DESIGN REFERENCE / MANUFACTURER => -
+col: DESIGN REFERENCE / MODEL NO. => -
+col: REMARKS => -
+derive: condenser = air ; header=TABLE TITLE ; note=title printed 'AIR COOLED CHILLER SCHEDULE'
+grid:
+CH-1 | MECHANICAL C166 | OUTSIDE | - | - | 15.29 | 85 | 77.0 | 400.1 | 128.1 | 99.9 | 30% PG | 0.0001 | 55 | 40 | 8.8 | 4.2 | 6.8 | - | - | - | - | - | - | SCROLL | R-410A | 95.0 | - | 202.0 | 225.0 | 460/3/60 | 460 | 3 | NO | Yes | Yes | Yes | Yes | Yes | Yes | Yes | =BACNET (Yes) | 5331 | QUANTECH | QTC3085TSE46XFBSXXX | 1,2,3,4,5,6
+CH-2 | MECHANICAL C166 | OUTSIDE | - | - | 15.15 | 140 | 134.0 | 624.5 | 222.3 | 149.9 | 30% PG | 0.0001 | 55 | 40 | 13.2 | 6.5 | 10.8 | - | - | - | - | - | - | SCROLL | R-410A | 95.0 |  | 333.0 | 350.0 | 460/3/60 | 460 | 3 | NO | Yes | Yes | Yes | Yes | Yes | Yes | Yes | =BACNET (Yes) | 7699 | QUANTECH | QTC3140TSE46XFBSXXX | 1,2,3,4,5,6
+END
+
+# CONDENSING BOILER SCHEDULE (page 20): two boilers. GAS BURNER / DESIGN CAPAPACITY (MBH)
+# (spelled as printed) is the boiler's design output, keyed output_mbh as the author's reading
+# beside FUEL / INPUT (MBH) (input_mbh). FUEL / TYPE prints NG: fuel gas. The WATERSIDE block
+# keys gpm (FLOW), ewt_f, lwt_f and conn_in (HW CONNECTION 5"). VOLTS/PHASE/HERTZ prints
+# "460/3/60", keyed as its volts part and its phase part. Remarks 1-3 (condensate kit, vent
+# kit, emergency stop) key nothing.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20
+title: CONDENSING BOILER SCHEDULE
+family: BOILER
+render: page 20 overview at 40 dpi; crop 262,700,2456,112 at 3x in 5 tiles (MARK column repeated), remarks cropped at 3x (crop 262,620,1200,45); second read at 4x (crop 262,785,2456,27 in 4 parts) of B-1 and B-2, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: LOCATION / NAME => -
+col: LOCATION / NO. => -
+col: TYPE => -
+col: [GAS BURNER / DESIGN CAPAPACITY (MBH): the boiler's design output] => output_mbh
+col: GAS BURNER / FUEL / TYPE => fuel
+col: GAS BURNER / FUEL / PRESS AVAIL (PSI) => -
+col: GAS BURNER / FUEL / INPUT (MBH) => input_mbh
+col: WATERSIDE / FLUID => -
+col: WATERSIDE / FLOW (GPM) => gpm
+col: WATERSIDE / EWT (°F) => ewt_f
+col: WATERSIDE / LWT (°F) => lwt_f
+col: WATERSIDE / TURNDOWN RATIO => -
+col: WATERSIDE / MAX WPD (FT. OF HD.) => -
+col: WATERSIDE / VOL (GAL) => -
+col: WATERSIDE / HW CONNECTION => conn_in
+col: THERMAL EFFICIENCY => -
+col: DIMENSIONS (IN.) / L => -
+col: DIMENSIONS (IN.) / W => -
+col: DIMENSIONS (IN.) / H => -
+col: Equipment Weight (LB) => -
+col: FLA (A) => -
+col: MCA (A) => -
+col: MOCP (A) => -
+col: VOLTS/PHASE/HERTZ => -
+col: [VOLTS/PHASE/HERTZ: volts part] => volts
+col: [VOLTS/PHASE/HERTZ: phase part] => phase
+col: EMERGENCY POWER => -
+col: DESIGN REFERENCE / MANUFACTURER => -
+col: DESIGN REFERENCE / MODEL NO. => -
+col: REMARKS => -
+grid:
+B-1 | MECHANICAL | C166 | CONDENSING | 3000 | gas (NG) | 2.0 | 3500 | WATER | 220.0 | 110 | 140 | 10:1 | 0.5 | 198.0 | 5" | 95.2% | 68.4 | 48.4 | 91.2 | 5230 | 4.0 | - | 20.0 | 460/3/60 | 460 | 3 | YES | CLEAVER BROOKS | CFC-E 3500 | 1,2
+B-2 | MECHANICAL | C166 | CONDENSING | 3000 | gas (NG) | 2.0 | 3500 | WATER | 220.0 | 110 | 140 | 10:1 | 0.5 | 198.0 | 5" | 95.2% | 68.4 | 48.4 | 91.2 | 5230 | 4.0 | - | 20.0 | 460/3/60 | 460 | 3 | YES | CLEAVER BROOKS | CFC-E 3500 | 1,2
+END
+
+# PUMP SCHEDULE (page 20): ten pumps. SYSTEM keys service as printed. FLOW (GPM) keys gpm and
+# DESIGN HEAD head_ft. FLUID TYPE keys glycol_pct (WATER 0, WATER 30%PG 30), as 031_MO's
+# FLUID. The MOTOR block keys motor_hp, rpm, volts and phase; its VSC (variable speed control)
+# keys vfd, YES for HWP-1 and HWP-2 (whose remark 2 reads "PROVIDE VFD BY PUMP TCC.") and NO for
+# the rest (remark 3: "STARTER PROVIDED BY EC."). Remark 1 (impeller, suppressor, strainer)
+# keys nothing. No column prints a connection size.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20
+title: PUMP SCHEDULE
+family: PUMP
+render: page 20 overview at 40 dpi; crop 964,1015,1736,235 at 3x in 3 tiles (MARK column repeated), remarks cropped at 3x (crop 964,925,700,50); second read at 4x (crops 964,1066,1736,15 and 964,1118,1736,15 and 964,1224,1736,27, each in 3 parts) of HWP-1, HCP-3 and HRCP-2B, every cell
+rows: all 10 printed rows
+col: MARK => tag
+col: LOCATION / NAME => -
+col: LOCATION / NO. => -
+col: SYSTEM => service
+col: FLOW (GPM) => gpm
+col: MIN FLOW (GPM) => -
+col: DESIGN HEAD (FT./HD.) => head_ft
+col: MAX SHUT OFF HEAD (FT./HD.) => -
+col: EFFICIENCY (%) => -
+col: PUMP TYPE => -
+col: FLUID TYPE => -
+col: [FLUID TYPE: its glycol share (WATER 0, WATER 30%PG 30)] => glycol_pct
+col: TEMP (°F) => -
+col: MOTOR / HP => motor_hp
+col: MOTOR / RPM => rpm
+col: MOTOR / VOLT => volts
+col: MOTOR / PH => phase
+col: MOTOR / FLA => -
+col: MOTOR / EMER. POWER => -
+col: MOTOR / VSC => vfd
+col: DESIGN REFERENCE / MANUFACTURER => -
+col: DESIGN REFERENCE / MODEL NO. => -
+col: REMARKS => -
+grid:
+HWP-1 | MECHANICAL | C166 | HOT WATER | 220 | 52 | 125 | 138 | 67.6 | BASE MOUNTED END SUCTION | WATER | 0 | 140 | 15 | 1800 | 460 | 3 | - | YES | yes (YES) | B&G | E-1510 | 1,2
+HWP-2 | MECHANICAL | C166 | HOT WATER | 220 | 52 | 125 | 138 | 67.6 | BASE MOUNTED END SUCTION | WATER | 0 | 140 | 15 | 1800 | 460 | 3 | - | YES | yes (YES) | B&G | E-1510 | 1,2
+HCP-1 | MECHANICAL | D109 | DOAS-1 | 11 | - | 30 | 32 | - | INLINE | WATER | 0 | 140 | 1/6 | 3300 | 115 | 1 | 2.1 | YES | no (NO) | B&G | PL-36 | 3
+HCP-2 | MECHANICAL | C166 | DOAS-2 | 14 | - | 30 | 32 | - | INLINE | WATER | 0 | 140 | 2/5 | 3250 | 115 | 1 | 4.7 | YES | no (NO) | B&G | PL-55 | 3
+HCP-3 | KITCHEN | B134 | DOAS-3 | 11 | - | 30 | 32 | - | INLINE | WATER | 0 | 140 | 1/6 | 3300 | 115 | 1 | 2.1 | YES | no (NO) | B&G | PL-36 | 3
+HCP-4 | MECHANICAL | B107 | AHU-4 | 11 | - | 30 | 32 | - | INLINE | WATER | 0 | 140 | 1/6 | 3300 | 115 | 1 | 2.1 | YES | no (NO) | B&G | PL-36 | 3
+HRCP-1A | MECHANICAL | C166 | HEAT RECOVERY CHILLER CHILLED WATER SIDE | 65 | - | 10 | 20 | - | INLINE | WATER 30%PG | 30 | 55 | 2/5 | 3200 | 115 | 1 | 4.8 | NO | no (NO) | B&G | PL-130B/2" | 3
+HRCP-1B | MECHANICAL | C166 | HEAT RECOVERY CHILLER HOT WATER SIDE | 57 | - | 14 | 20 | - | INLINE | WATER | 0 | 140 | 2/5 | 3250 | 115 | 1 | 4.8 | NO | no (NO) | B&G | PL-100B | 3
+HRCP-2A | MECHANICAL | C166 | HEAT RECOVERY CHILLER CHILLED WATER SIDE | 65 | - | 10 | 20 | - | INLINE | WATER 30%PG | 30 | 55 | 2/5 | 3200 | 115 | 1 | 4.8 | NO | no (NO) | B&G | PL-130B/2" | 3
+HRCP-2B | MECHANICAL | C166 | HEAT RECOVERY CHILLER HOT WATER SIDE | 57 | - | 14 | 20 | - | INLINE | WATER | 0 | 140 | 2/5 | 3250 | 115 | 1 | 4.8 | NO | no (NO) | B&G | PL-100B | 3
+END
+
+# UNIT HEATER SCHEDULE (page 21, sheet M602): five cabinet unit heaters (DESCRIPTION CABINET
+# UNIT HEATER; the census claims them as UNIT_HEATER). The CIRCULATING FLUID block prints FLOW,
+# EWT 140 and LWT 110 (°F), and remark 3 a water pressure drop: a hot-water coil,
+# heating_medium hw (the author's reading), its hw_gpm, hw_ewt_f and hw_lwt_f; PIPE RUNOUT SIZE
+# keys conn_in. AIRFLOW (CFM) keys cfm and the ELECTRICAL DATA block motor_hp (HP), volts and
+# phase. LOCATION prints the room each heater is in; it names no level. No heating capacity
+# prints. Remarks 1-3 (thermostat, key locks, a two-row coil) key nothing.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21
+title: UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 21 overview at 40 dpi; crop 905,228,1760,142 at 3x in 3 tiles (MARK column repeated), remarks cropped at 3x (crop 905,158,700,45); second read at 4x (crops 905,304,1760,15 and 905,330,1760,15 and 905,356,1760,15, each in 3 parts) of CUH-1, CUH-3 and CUH-5, every cell
+rows: all 5 printed rows
+col: MARK => tag
+col: DESCRIPTION => -
+col: LOCATION / NAME => -
+col: LOCATION / NO. => -
+col: ARRANGEMENT => -
+col: ENTERING AIR TEMPERATURE (°F) => -
+col: LEAVING AIR TEMPERATURE (°F) => -
+col: AIRFLOW (CFM) => cfm
+col: CIRCULATING FLUID / PIPE RUNOUT SIZE => conn_in
+col: CIRCULATING FLUID / FLOW => hw_gpm
+col: CIRCULATING FLUID / EWT (°F) => hw_ewt_f
+col: CIRCULATING FLUID / LWT (°F) => hw_lwt_f
+col: CIRCULATING FLUID / MAX W.P.D (FT HD) => -
+col: ELECTRICAL DATA / HP => motor_hp
+col: ELECTRICAL DATA / VOLT => volts
+col: ELECTRICAL DATA / PH => phase
+col: ELECTRICAL DATA / FLA => -
+col: ELECTRICAL DATA / FACTORY DISCONNECT => -
+col: ELECTRICAL DATA / FUSED/NON-FUSED => -
+col: ELECTRICAL DATA / EMER. POWER => -
+col: MANUFACTURER => -
+col: MODEL NO. => -
+col: REMARKS => -
+derive: heating_medium = hw ; header=CIRCULATING FLUID ; note=the CIRCULATING FLUID block prints FLOW, EWT 140 and LWT 110 (°F), and remark 3 a water pressure drop: a hot-water coil (the author's reading)
+grid:
+CUH-1 | CABINET UNIT HEATER | SALLYPORT | C170 | VERTICAL SLOPE TOP | 62 | 107 | 560 | 3/4 | 1.9 | 140 | 110 | 2.05 | 1/20 | 115 | 1 | 0.75 | YES | FUSED | NO | KRUEGER | KVFS06 | 1 THRU 3
+CUH-2 | CABINET UNIT HEATER | SALLYPORT | C100 | VERTICAL SLOPE TOP | 62 | 107 | 560 | 3/4 | 1.9 | 140 | 110 | 2.05 | 1/20 | 115 | 1 | 0.75 | YES | FUSED | NO | KRUEGER | KVFS06 | 1 THRU 3
+CUH-3 | CABINET UNIT HEATER | SALLYPORT | C164 | VERTICAL SLOPE TOP | 62 | 107 | 560 | 3/4 | 1.9 | 140 | 110 | 2.05 | 1/20 | 115 | 1 | 0.75 | YES | FUSED | NO | KRUEGER | KVFS06 | 1 THRU 3
+CUH-4 | CABINET UNIT HEATER | VESTIBULE | A100 | VERTICAL RECESSED | 62 | 107 | 560 | 3/4 | 1.9 | 140 | 110 | 2.05 | 1/20 | 115 | 1 | 0.75 | YES | FUSED | NO | KRUEGER | KVFH06 | 1 THRU 3
+CUH-5 | CABINET UNIT HEATER | SALLYPORT | B129 | VERTICAL SLOPE TOP | 62 | 107 | 560 | 3/4 | 1.9 | 140 | 110 | 2.05 | 1/20 | 115 | 1 | 0.75 | YES | FUSED | NO | KRUEGER | KVFS06 | 1 THRU 3
+END
+
+# FAN COIL UNIT SCHEDULE (page 21): three fan coils with a chilled-water COOLING COIL block
+# (GPM, EWT 40.0, LWT 55.0: cooling_type chw, the author's reading) and a hot-water HEATING
+# COIL block (EWT 140.0, LWT 110.0, and note 4 names HHW temperature reset: heating_type hw, the
+# author's reading). SUPPLY CFM / MAX keys cfm (as 047_NC's CFM (MAX.)). The COOLING COIL
+# keys chw_mbh (TOTAL MBH), chw_gpm, chw_ewt_f, chw_lwt_f, chw_rows and chw_wpd_ft; the HEATING
+# COIL keys hw_mbh (SENSIBLE MBH, a heating coil's capacity), hw_gpm, hw_ewt_f, hw_lwt_f,
+# hw_rows and hw_wpd_ft. HP prints "(2) 1/4", two motors at 1/4 hp, keyed motor_hp as each
+# motor's. VOLTS/ PHASE prints "120/1/60", keyed as its volts part and its phase part. Every
+# row's REMARKS cites notes 1-5; note 3 "PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER." keys
+# fan_speeds 3 and ecm yes. The other notes (disconnect, a MERV 8 filter, coil review, drain
+# pan) key nothing in the family's vocabulary.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21
+title: FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 21 overview at 40 dpi; crop 340,1480,2330,115 at 3x in 4 tiles (MARK column repeated), notes cropped at 3x (crop 340,1410,1100,60); second read at 4x (crop 340,1539,2330,55 in 4 parts) of FCU-1, FCU-2 and FCU-3, every cell
+rows: all 3 printed rows
+col: MARK => tag
+col: LOCATION / NAME => -
+col: LOCATION / NO. => -
+col: SUPPLY FAN DATA / SUPPLY CFM / MAX => cfm
+col: SUPPLY FAN DATA / SUPPLY CFM / MIN => -
+col: SUPPLY FAN DATA / OA CFM => -
+col: SUPPLY FAN DATA / ESP => -
+col: COOLING COIL / TOTAL MBH => chw_mbh
+col: COOLING COIL / SENSIBLE MBH => -
+col: COOLING COIL / GPM => chw_gpm
+col: COOLING COIL / EWT => chw_ewt_f
+col: COOLING COIL / LWT => chw_lwt_f
+col: COOLING COIL / ENTERING AIR / DB (°F) => -
+col: COOLING COIL / ENTERING AIR / WB (°F) => -
+col: COOLING COIL / LEAVING AIR / DB (°F) => -
+col: COOLING COIL / LEAVING AIR / WB (°F) => -
+col: COOLING COIL / ROWS => chw_rows
+col: COOLING COIL / WPD FT HD => chw_wpd_ft
+col: HEATING COIL / SENSIBLE MBH => hw_mbh
+col: HEATING COIL / GPM => hw_gpm
+col: HEATING COIL / EWT => hw_ewt_f
+col: HEATING COIL / LWT => hw_lwt_f
+col: HEATING COIL / EAT => -
+col: HEATING COIL / LAT => -
+col: HEATING COIL / ROWS => hw_rows
+col: HEATING COIL / WPD FT HD => hw_wpd_ft
+col: HP => -
+col: [HP: each motor ("(2) 1/4": two motors at 1/4 hp)] => motor_hp
+col: UNIT ELECTRICAL DATA / MCA => -
+col: UNIT ELECTRICAL DATA / VOLTS/ PHASE => -
+col: [UNIT ELECTRICAL DATA / VOLTS/ PHASE: volts part] => volts
+col: [UNIT ELECTRICAL DATA / VOLTS/ PHASE: phase part] => phase
+col: UNIT ELECTRICAL DATA / EMER. POWER => -
+col: UNIT ELECTRICAL DATA / DISCONNECT => -
+col: DESIGN REFERENCE / MANUFACTURER => -
+col: DESIGN REFERENCE / MODEL => -
+col: REMARKS => -
+col: [NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, its speeds] => fan_speeds
+col: [NOTE 3, where the row's REMARKS cite it: PROVIDE 3-SPEED EC MOTOR W/ POTENTIOMETER, an EC motor] => ecm
+derive: cooling_type = chw ; header=COOLING COIL ; note=the COOLING COIL block prints GPM, EWT 40.0 and LWT 55.0: a chilled-water coil (the author's reading)
+derive: heating_type = hw ; header=HEATING COIL ; note=the HEATING COIL block prints GPM, EWT 140.0 and LWT 110.0, and note 4 names HHW temperature reset: a hot-water coil (the author's reading)
+grid:
+FCU-1 | MECHANICAL | D109 | 1500 | 400 | - | 0.20 | 29.9 | 27.4 | 4.3 | 40.0 | 55.0 | 75.0 | 63.0 | 58.3 | 56.1 | 4 | 1.7 | 77.9 | 5.2 | 140.0 | 110.0 | 50.0 | 98.1 | 2 | 2.8 | (2) 1/4 | 1/4 | 12.00 | 120/1/60 | 120 | 1 | YES | FACTORY FUSED | KRUEGER | KHGP-16 | 1,2,3,4,5 | 3 | yes (EC MOTOR)
+FCU-2 | MECHANICAL | C166 | 1500 | 400 | - | 0.20 | 29.9 | 27.4 | 4.3 | 40.0 | 55.0 | 75.0 | 63.0 | 58.3 | 56.1 | 4 | 1.7 | 77.9 | 5.2 | 140.0 | 110.0 | 50.0 | 98.1 | 2 | 2.8 | (2) 1/4 | 1/4 | 12.00 | 120/1/60 | 120 | 1 | YES | FACTORY FUSED | KRUEGER | KHGP-16 | 1,2,3,4,5 | 3 | yes (EC MOTOR)
+FCU-3 | MECHANICAL | B107 | 1500 | 400 | - | 0.20 | 29.9 | 27.4 | 4.3 | 40.0 | 55.0 | 75.0 | 63.0 | 58.3 | 56.1 | 4 | 1.7 | 77.9 | 5.2 | 140.0 | 110.0 | 50.0 | 98.1 | 2 | 2.8 | (2) 1/4 | 1/4 | 12.00 | 120/1/60 | 120 | 1 | YES | FACTORY FUSED | KRUEGER | KHGP-16 | 1,2,3,4,5 | 3 | yes (EC MOTOR)
+END
+
+# VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE (page 22, sheet M603): 58 printed rows; the draw's
+# cap keys the first 30 in printed order, VAV-1-1 to VAV-2-23 (the print skips VAV-2-8 and
+# VAV-2-24). DUCT SIZE / INLET keys inlet_size_in and PRIMARY AIRFLOW / MAX and MIN cfm_max
+# and cfm_min. The HEATING COIL block keys hw_mbh (CAP (BTU/H), in the BTU/H it prints),
+# hw_rows (ROWS), cfm_heat (CFM), hw_gpm, hw_ewt_f and hw_lwt_f (WATERSIDE) and hw_conn_in (PIPE
+# DIA); its WATERSIDE at 140 F entering is hot water: heat_type hw, the author's reading. The
+# remarks print above the table and no row cites them (the REMARKS cells are blank); remark 2
+# ("TERMINAL BOX SET AT CONSTANT VOLUME.") and the others key nothing. The terminal type is not
+# printed (the model DESV is a code).
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22
+title: VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE
+family: VAV
+render: page 22 overview at 40 dpi; crops 1949,160,753,440 and 1949,590,753,410 at 3x in 2 tiles each (MARK column repeated), remarks cropped at 3x (crop 1949,108,760,60); second read at 4x (crops 1949,233,753,15 and 1949,429,753,15 and 1949,613,753,15, each in 2 parts) of VAV-1-1, VAV-2-9 and VAV-2-23, every cell
+rows: the first 30 of the 58 printed rows (the draw's cap): VAV-1-1 to VAV-2-23
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: DUCT SIZE / INLET => inlet_size_in
+col: PRIMARY AIRFLOW / MAX => cfm_max
+col: PRIMARY AIRFLOW / MIN => cfm_min
+col: HEATING COIL / CAP (BTU/H) => hw_mbh [BTU/H]
+col: HEATING COIL / AIRSIDE / ROWS => hw_rows
+col: HEATING COIL / AIRSIDE / CFM => cfm_heat
+col: HEATING COIL / AIRSIDE / EAT(DB) (°F) => -
+col: HEATING COIL / AIRSIDE / LAT(DB) (°F) => -
+col: HEATING COIL / WATERSIDE / GPM => hw_gpm
+col: HEATING COIL / WATERSIDE / EWT (°F) => hw_ewt_f
+col: HEATING COIL / WATERSIDE / LWT (°F) => hw_lwt_f
+col: HEATING COIL / PIPE DIA => hw_conn_in
+col: REMARKS => -
+derive: heat_type = hw ; header=HEATING COIL ; note=the HEATING COIL block's WATERSIDE prints GPM, EWT 140 and LWT 110 (°F): a hot-water coil (the author's reading)
+grid:
+VAV-1-1 | TITUS | DESV | 14" | 1350 | 1350 | 43674 | 2 | 1350 | 55.0 | 85.0 | 3.0 | 140 | 110 | 3/4" |
+VAV-1-2 | TITUS | DESV | 14" | 1200 | 1200 | 38821 | 2 | 1200 | 55.0 | 85.0 | 2.6 | 140 | 110 | 3/4" |
+VAV-1-3 | TITUS | DESV | 14" | 1470 | 1470 | 47556 | 2 | 1470 | 55.0 | 85.0 | 3.2 | 140 | 110 | 3/4" |
+VAV-1-4 | TITUS | DESV | 14" | 1100 | 1100 | 35586 | 2 | 1100 | 55.0 | 85.0 | 2.4 | 140 | 110 | 3/4" |
+VAV-1-5 | TITUS | DESV | 14" | 1420 | 1420 | 45939 | 2 | 1420 | 55.0 | 85.0 | 3.1 | 140 | 110 | 3/4" |
+VAV-1-6 | TITUS | DESV | 10" | 1050 | 1050 | 33969 | 2 | 1050 | 55.0 | 85.0 | 2.3 | 140 | 110 | 3/4" |
+VAV-1-7 | TITUS | DESV | 7" | 485 | 485 | 15690 | 2 | 485 | 55.0 | 85.0 | 1.1 | 140 | 110 | 3/4" |
+VAV-1-8 | TITUS | DESV | 7" | 450 | 450 | 14558 | 2 | 450 | 55.0 | 85.0 | 1.0 | 140 | 110 | 3/4" |
+VAV-2-1 | TITUS | DESV | 8" | 600 | 600 | 19411 | 2 | 600 | 55.0 | 85.0 | 1.3 | 140 | 110 | 3/4" |
+VAV-2-2 | TITUS | DESV | 8" | 605 | 605 | 19572 | 2 | 605 | 55.0 | 85.0 | 1.4 | 140 | 110 | 3/4" |
+VAV-2-3 | TITUS | DESV | 8" | 580 | 580 | 18764 | 2 | 580 | 55.0 | 85.0 | 1.3 | 140 | 110 | 3/4" |
+VAV-2-4 | TITUS | DESV | 7" | 490 | 490 | 15852 | 2 | 490 | 55.0 | 85.0 | 1.1 | 140 | 110 | 3/4" |
+VAV-2-5 | TITUS | DESV | 6" | 260 | 260 | 8411 | 2 | 260 | 55.0 | 85.0 | 0.6 | 140 | 110 | 3/4" |
+VAV-2-6 | TITUS | DESV | 6" | 320 | 320 | 10352 | 2 | 320 | 55.0 | 85.0 | 0.7 | 140 | 110 | 3/4" |
+VAV-2-7 | TITUS | DESV | 6" | 375 | 375 | 12132 | 2 | 375 | 55.0 | 85.0 | 0.9 | 140 | 110 | 3/4" |
+VAV-2-9 | TITUS | DESV | 12" | 1335 | 1335 | 43189 | 2 | 1335 | 55.0 | 85.0 | 2.9 | 140 | 110 | 3/4" |
+VAV-2-10 | TITUS | DESV | 8" | 640 | 640 | 20705 | 2 | 640 | 55.0 | 85.0 | 1.4 | 140 | 110 | 3/4" |
+VAV-2-11 | TITUS | DESV | 6" | 400 | 400 | 12940 | 2 | 400 | 55.0 | 85.0 | 0.9 | 140 | 110 | 3/4" |
+VAV-2-12 | TITUS | DESV | 7" | 475 | 475 | 15367 | 2 | 475 | 55.0 | 85.0 | 1.1 | 140 | 110 | 3/4" |
+VAV-2-13 | TITUS | DESV | 10" | 1000 | 1000 | 32351 | 2 | 1000 | 55.0 | 85.0 | 2.2 | 140 | 110 | 3/4" |
+VAV-2-14 | TITUS | DESV | 6" | 300 | 300 | 9705 | 2 | 300 | 55.0 | 85.0 | 0.7 | 140 | 110 | 3/4" |
+VAV-2-15 | TITUS | DESV | 7" | 445 | 445 | 14396 | 2 | 445 | 55.0 | 85.0 | 1.0 | 140 | 110 | 3/4" |
+VAV-2-16 | TITUS | DESV | 5" | 225 | 225 | 7279 | 2 | 225 | 55.0 | 85.0 | 0.5 | 140 | 110 | 3/4" |
+VAV-2-17 | TITUS | DESV | 5" | 250 | 250 | 8088 | 2 | 250 | 55.0 | 85.0 | 0.6 | 140 | 110 | 3/4" |
+VAV-2-18 | TITUS | DESV | 5" | 180 | 180 | 5823 | 2 | 180 | 55.0 | 85.0 | 0.5 | 140 | 110 | 3/4" |
+VAV-2-19 | TITUS | DESV | 4" | 135 | 135 | 4367 | 2 | 135 | 55.0 | 85.0 | 0.5 | 140 | 110 | 3/4" |
+VAV-2-20 | TITUS | DESV | 4" | 100 | 100 | 3235 | 2 | 100 | 55.0 | 85.0 | 0.5 | 140 | 110 | 3/4" |
+VAV-2-21 | TITUS | DESV | 7" | 530 | 530 | 17146 | 2 | 530 | 55.0 | 85.0 | 1.2 | 140 | 110 | 3/4" |
+VAV-2-22 | TITUS | DESV | 4" | 120 | 120 | 3882 | 2 | 120 | 55.0 | 85.0 | 0.5 | 140 | 110 | 3/4" |
+VAV-2-23 | TITUS | DESV | 5" | 195 | 195 | 6308 | 2 | 195 | 55.0 | 85.0 | 0.5 | 140 | 110 | 3/4" |
+END
+
+# (untitled) (page 22, sheet M603): the census claims an untitled FAN table on this page. The
+# sheet prints the DIFFUSER / GRILLE, VARIABLE AIR VOLUME TERMINAL UNIT, SLOT DIFFUSER,
+# MOTORIZED DAMPER and SIDEWALL GRILLE schedules. The page's text layer has one fan word: the
+# motorized dampers' remark 2 "MOTORIZED DAMPER FOR POD/JAIL EXHAUST FANS.", naming the fans
+# the dampers serve (the fans print on sheet M602's EXHAUST FAN SCHEDULE). No row on the page
+# is a fan.
+TABLE
+sheet: 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22
+title: (untitled)
+family: FAN
+render: page 22 overview at 40 dpi; the page's text layer searched for fan words and tags (pymupdf get_text words): the one hit is the motorized damper schedule's remark 2, cropped at 3x (crop 355,1745,760,70)
+rows: none — sheet M603 prints diffuser, grille, VAV terminal, slot diffuser and motorized damper schedules; no row is a fan (the dampers' remark 2 names the exhaust fans they serve, scheduled on M602)
+grid:
+END

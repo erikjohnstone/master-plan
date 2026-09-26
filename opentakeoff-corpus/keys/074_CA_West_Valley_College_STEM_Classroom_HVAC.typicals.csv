@@ -1,0 +1,15 @@
+# 074_CA_West_Valley_College_STEM_Classroom_HVAC.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/074_CA_West_Valley_College_STEM_Classroom_HVAC.attrs.csv, one row each.
+# Sources read: M002 (page 25) equipment schedules and remarks; M501 (page 29) control diagrams.
+#
+sheet,tag,family,typical_id,options,basis_note
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25,ERV-A-15,ERV,erv,packaged_controls=false;variable_speed_wheel=false;frost_control=false,"Remark 1: 'INTEGRATE CONTROLS INTO BAS. PROVIDE CONTROLLER AT NEAREST CONTROL PANEL, IF REQUIRED.' M501 detail 3 (ENERGY RECOVERY VENTILATOR) prints the BAS points: fan status (current switch) DI, supply fan speed control AO, exhaust fan speed control AO. Hardwired DDC points, so not packaged network controls; no wheel speed or defrost point."

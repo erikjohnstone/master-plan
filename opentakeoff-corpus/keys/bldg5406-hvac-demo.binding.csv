@@ -1,0 +1,30 @@
+# bldg5406-hvac-demo.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's controls sheets (PDF text layer and renders), never pipeline output.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/bldg5406-hvac-demo.typicals.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+bldg5406-hvac-demo-mechanical.pdf#6,AHU-1,AHU,bldg5406-hvac-demo-mechanical.pdf#9,VARIABLE AIR VOLUME - AHU (AHU-1),tag,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-1,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-2,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-3,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-4,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-5,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-6,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-7,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-8,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,VAV-9,VAV,bldg5406-hvac-demo-mechanical.pdf#10,VARIABLE AIR VOLUME TERMINAL UNIT (VAV-1 THRU VAV-9),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,EF-1,FAN,bldg5406-hvac-demo-mechanical.pdf#10,EXHAUST FAN - ON/OFF (EF-1 THRU EF-3),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,EF-2,FAN,bldg5406-hvac-demo-mechanical.pdf#10,EXHAUST FAN - ON/OFF (EF-1 THRU EF-3),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,EF-3,FAN,bldg5406-hvac-demo-mechanical.pdf#10,EXHAUST FAN - ON/OFF (EF-1 THRU EF-3),list_range,
+bldg5406-hvac-demo-mechanical.pdf#6,EF-4,FAN,bldg5406-hvac-demo-mechanical.pdf#11,EXHAUST FAN - COOLING (EF-4),tag,
+bldg5406-hvac-demo-mechanical.pdf#6,EF-5,FAN,bldg5406-hvac-demo-mechanical.pdf#11,EXHAUST FAN - ON/OFF SWITCH (EF-5),tag,
+bldg5406-hvac-demo-mechanical.pdf#6,CH-1,AIR_COOLED_CHILLER,bldg5406-hvac-demo-mechanical.pdf#8,SINGLE AIR COOLED CHILLER (CH-1),tag,
+bldg5406-hvac-demo-mechanical.pdf#6,AC-1,FCU,bldg5406-hvac-demo-mechanical.pdf#11,MINI SPLIT AIR CONDITIONER (AC-1),tag,
+bldg5406-hvac-demo-mechanical.pdf#6,ACCU-1,CONDENSING_UNIT,bldg5406-hvac-demo-mechanical.pdf#11,MINI SPLIT AIR CONDITIONER (AC-1),semantic,the outdoor unit of AC-1
+bldg5406-hvac-demo-mechanical.pdf#18,CP-1,PUMP,,none,,

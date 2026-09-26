@@ -1,0 +1,231 @@
+[
+ {
+  "run": 1,
+  "ms": 7157,
+  "out": {
+   "devices": [
+    {
+     "label": "TS-1",
+     "kind": "temperature_sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "HS-1",
+     "kind": "humidity_sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "DM-1",
+     "kind": "damper",
+     "io": [
+      "DO"
+     ]
+    },
+    {
+     "label": "DM-2",
+     "kind": "damper",
+     "io": [
+      "AO"
+     ]
+    },
+    {
+     "label": "TS-3",
+     "kind": "temperature_sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "DPS-1",
+     "kind": "pressure_switch",
+     "io": [
+      "DI"
+     ]
+    },
+    {
+     "label": "FZ-1",
+     "kind": "freezestat",
+     "io": []
+    },
+    {
+     "label": "DPS-2",
+     "kind": "pressure_switch",
+     "io": [
+      "DI"
+     ]
+    },
+    {
+     "label": "TS-4",
+     "kind": "temperature_sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "VFD",
+     "kind": "vfd",
+     "io": [
+      "DO",
+      "DI",
+      "AO",
+      "AI"
+     ]
+    }
+   ],
+   "duct_smoke_detector": {
+    "answer": "absent",
+    "labels": []
+   },
+   "freezestat_wiring": {
+    "answer": "to_starter_or_vfd",
+    "labels": [
+     "FZ-1",
+     "FREEZESTAT",
+     "WIRE TO STARTER"
+    ]
+   },
+   "zone_sensor_with_setpoint_adjust": {
+    "answer": "absent",
+    "labels": []
+   },
+   "return_or_relief_fan": {
+    "answer": "absent",
+    "labels": []
+   },
+   "modulating_outdoor_air_economizer_damper": {
+    "answer": "present",
+    "labels": [
+     "DM-2",
+     "AO",
+     "PRECONDITIONED OUTSIDE AIR FROM AHU-7"
+    ]
+   },
+   "fan_speed_control": {
+    "answer": "vfd",
+    "labels": [
+     "VFD"
+    ]
+   }
+  }
+ },
+ {
+  "run": 2,
+  "ms": 7058,
+  "out": {
+   "devices": [
+    {
+     "label": "TS-1",
+     "kind": "temperature sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "HS-1",
+     "kind": "humidity sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "DM-1",
+     "kind": "damper",
+     "io": [
+      "DO"
+     ]
+    },
+    {
+     "label": "FZ-1",
+     "kind": "freezestat",
+     "io": []
+    },
+    {
+     "label": "DM-2",
+     "kind": "damper",
+     "io": [
+      "AO"
+     ]
+    },
+    {
+     "label": "DPS-1",
+     "kind": "pressure sensor",
+     "io": [
+      "DI"
+     ]
+    },
+    {
+     "label": "TS-3",
+     "kind": "temperature sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "DPS-2",
+     "kind": "pressure sensor",
+     "io": [
+      "DI"
+     ]
+    },
+    {
+     "label": "HS-1",
+     "kind": "humidity sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "TS-4",
+     "kind": "temperature sensor",
+     "io": [
+      "AI"
+     ]
+    },
+    {
+     "label": "VFD",
+     "kind": "variable frequency drive",
+     "io": [
+      "DO",
+      "DI",
+      "AO",
+      "AI"
+     ]
+    }
+   ],
+   "duct_smoke_detector": {
+    "answer": "absent",
+    "labels": []
+   },
+   "freezestat_wiring": {
+    "answer": "to_starter_or_vfd",
+    "labels": [
+     "FZ-1",
+     "FREEZESTAT",
+     "WIRE TO STARTER"
+    ]
+   },
+   "zone_sensor_with_setpoint_adjust": {
+    "answer": "absent",
+    "labels": []
+   },
+   "return_or_relief_fan": {
+    "answer": "absent",
+    "labels": []
+   },
+   "modulating_outdoor_air_economizer_damper": {
+    "answer": "absent",
+    "labels": []
+   },
+   "fan_speed_control": {
+    "answer": "vfd",
+    "labels": [
+     "VFD"
+    ]
+   }
+  }
+ }
+]

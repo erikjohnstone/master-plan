@@ -194,6 +194,39 @@ and a `status` (matched / schedule-only / plan-only / …) with citations both w
 quantities and the status per line — never just the schedule count — the same "never a numbers
 report alone" discipline as the standard finish above.
 
+**A controls (BAS) estimate of that equipment** continues with `apply_assemblies`. It applies an
+assembly library to every scheduled unit: its controls typical and its mechanical hook-up, with
+the options, variables and expanded lines, each citing the schedule row and the library rule.
+Read `report.exceptions` first. An unresolved unit names what it waits for: an attribute the
+schedule does not print, a project setting, or two typicals that tie. That is the answer, not a
+failure. Report it, or pass the partner's value in `settings` or an override with a reason. Never
+pick a typical or an option the drawing does not decide. `control_readings` reads the control
+drawings bound to each unit (sequences, schematics, points lists): a reading applies only where two
+readers agree or on a phrase that states it outright (a unit printed standalone); one reader alone
+is a proposal, and readers that disagree leave the option unresolved. A zone plan (a sheet whose
+title names zones) is read the same way: a sensor symbol inside the zone a unit's tag labels (a CO2
+sensor) applies that option, cited to the symbol and the label. With `detail: "units"`,
+`control.readings` lists each reading with its rule, readers and cites. Report an applied reading as
+a drawing fact with its cite and a proposal as a question for the estimator, never as a decision.
+A printed points list that names a
+unit stands instead of its typical's point lines. Prices and hours are never OpenTakeoff's: a
+partner library's own part numbers, costs and hours come back as `report.partner` and in
+`lines.csv` labelled partner-entered, and you report them that way. Components declared in a reviewed BAS
+assembly register are not read yet. The records are proposals for the estimator, not
+approval.
+
+**Project questions** are the few facts only the estimator knows: whether the project has a BAS
+scope, the owner's criteria, what happens to existing units' controls, whether unscheduled fans and
+pumps are constant speed, whether packaged pumps are in scope. `project_questions` lists the ones
+whose answer changes something here, with the lines and records each choice changes. Ask the
+estimator every one it shows. A `prefill` is printed text proposing an answer, quoted: show it
+to them to confirm, never record it as their answer, and never answer from your own reading of the
+drawings or from what is typical. "Don't know" (`unknown`) is always a valid answer. Record what
+they say with `answer_project_question`, quoting them in `reason`, against the journal `head` the
+questions returned. Your record is an `agent_proposal`, not a human act: it applies, and every
+record it decides says an agent recorded it. Then apply again, and export the takeoff to keep the
+answers with the project.
+
 ## 4. Withheld is not a failure — it is the answer
 
 Four tools measure things they then decline to commit, and say why. The arrays they hand back are
@@ -255,7 +288,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 58 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 64 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Fifty-seven descriptions is real token weight for a session that may never touch half of them, so

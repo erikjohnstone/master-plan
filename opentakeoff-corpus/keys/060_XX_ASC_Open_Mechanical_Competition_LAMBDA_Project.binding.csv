@@ -1,0 +1,13 @@
+# 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's control sheets (PDF text layer), never pipeline output: no
+# control-intent code had run on this held-out document. One row per (keyed instance, governing control packet):
+# the control detail, schematic, sequence section or points schedule that decides the unit's BAS scope and
+# options. packet_title is the title as printed (a line break joined by a space). binding: tag · list_range ·
+# cross_reference · family_detail · semantic (as in the dev keys). packet "none": no control packet governs the
+# instance. Population: every instance of keys/060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.typicals.csv. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,432PCHW01-1,PUMP,060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#30,CHILLED WATER FLOW DIAGRAM,tag,"M-801: the flow diagram labels 432PCHW01-1; its sequence (CHILLED WATER PUMP CONTROL) names the pumps 432PCHW01-A1 and 432PCHW02-A1"
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#23,432PCHW02-1,PUMP,060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#30,CHILLED WATER FLOW DIAGRAM,tag,"M-801: the flow diagram labels 432PCHW02-1; its sequence (CHILLED WATER PUMP CONTROL) names the pumps 432PCHW01-A1 and 432PCHW02-A1"
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,432RCUA01-2H,CONDENSING_UNIT,060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#28,HEAT PUMP SPLIT SYSTEMS 432ACU08-2H / 432RCUA01-2H & 432ACU09-3H / 432RCUA02-3H,tag,M-704 MECHANICAL CONTROL POINTS AND SEQUENCES
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24,432RCUA02-3H,CONDENSING_UNIT,060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#28,HEAT PUMP SPLIT SYSTEMS 432ACU08-2H / 432RCUA01-2H & 432ACU09-3H / 432RCUA02-3H,tag,M-704 MECHANICAL CONTROL POINTS AND SEQUENCES

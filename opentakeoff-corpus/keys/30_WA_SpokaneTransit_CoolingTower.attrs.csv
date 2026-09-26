@@ -1,0 +1,94 @@
+# 30_WA_SpokaneTransit_CoolingTower.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260923 (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/30_WA_SpokaneTransit_CoolingTower.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M-002 (page 2) of the Spokane Transit Plaza cooling tower and boiler replacement (Coffman Engineers), the tables drawn for this document.
+#   30_WA_SpokaneTransit_CoolingTower.pdf#2 | CLOSED COOLING TOWER SCHEDULE | COOLING_TOWER | all 1 printed row | render: page 2 crop 1050,118,1568,262 at 3x in 3 tiles (tag column repeated); second read of CT-1 flow, fan HP and volts on each tile
+#   30_WA_SpokaneTransit_CoolingTower.pdf#2 | GAS-FIRED HYDRONIC BOILER SCHEDULE | BOILER | all 1 printed row | render: page 2 crop 1360,398,1225,180 at 3x in 2 tiles (tag column repeated); second read of input, flow and HWS/HWR connection
+#   30_WA_SpokaneTransit_CoolingTower.pdf#2 | HVAC PUMP SCHEDULE | PUMP | all 3 printed rows (a fourth ruled row is empty) | render: page 2 crop 1435,615,1150,225 at 3x in 2 tiles (tag column repeated) and notes crop 1435,828,760,95 at 3x; second read of P-1 GPM, P-2 HP and P-6 RPM
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer, model, weight and dimension columns, electrical FLA/MCA/MOCP, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 30_WA_SpokaneTransit_CoolingTower: 3 table(s), 5 instance(s), 75 keyed attribute value(s) (47 printed, 28 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,building,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,floor,ROOF,,LOCATION names a level,printed 'NW ROOF'; author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,area_served,CONDENSER WATER,,SERVES,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,qty,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,cells,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,tons,,tons,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,gpm,110,gpm,COIL / FLOW RATE (GPM),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,ewt_f,90,F,COIL / EWT (°F),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,lwt_f,80,F,COIL / LWT (°F),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,fan_hp,7.5,hp,FAN(S) / MOTOR (HP),printed '7.50'
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,vfd,yes,,NOTE 2,"note 2, cited by CT-1: 'PROVIDE WITH BALTIGUARD PLUS INTEGRAL VFD FAN SPEED CONTROL OR EQUIVALENT'"
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,conn_in,4,in,"COIL / CONNECTION INLET/OUTLET: size, inlet = outlet",author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,bas_interface,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,volts,460,V,UNIT ELECTRICAL REQUIREMENTS / VOLTS,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,CLOSED COOLING TOWER SCHEDULE,CT-1,COOLING_TOWER,phase,3,,UNIT ELECTRICAL REQUIREMENTS / Ø,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,building,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,floor,BASEMENT,,LOCATION names a level,printed 'BASEMENT'; author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,area_served,BUILDING,,SERVES,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,qty,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,fuel,gas,,TABLE TITLE,title printed 'GAS-FIRED HYDRONIC BOILER SCHEDULE'
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,input_mbh,3773,MBH,BOILER PERFORMANCE / INPUT (MBh),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,output_mbh,3162,MBH,BOILER PERFORMANCE / OUTPUT (MBh),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,gpm,250,gpm,BOILER PERFORMANCE / FLOW (GPM),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,ewt_f,160,F,BOILER PERFORMANCE / EWT (F),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,lwt_f,180,F,BOILER PERFORMANCE / LWT (F),
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,eh_kw,,kW,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,conn_in,,in,CONNECTIONS (IN) / HWS HWR,"printed '(1) 6"" (3) 5""' — not a single value for this attribute"
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,bas_interface,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,volts,,V,UNIT POWER REQUIREMENTS / V/PH: volts part,printed 'NA'
+30_WA_SpokaneTransit_CoolingTower.pdf#2,GAS-FIRED HYDRONIC BOILER SCHEDULE,BOILER 1,BOILER,phase,,,UNIT POWER REQUIREMENTS / V/PH: phase part,printed 'NA'
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,building,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,floor,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,area_served,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,qty,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,service,HEATING WATER,,SERVICE,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,gpm,502,gpm,GPM,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,head_ft,120,ft,HEAD FT H20,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,motor_hp,25,hp,ELECTRICAL / HP,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,rpm,1770,rpm,MOTOR RPM,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,vfd,yes,,NOTE 2: VARIABLE FREQUENCY DRIVE PROVIDED BY CONTROLS,author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,pump_arrangement,duty_standby,,NOTE 1: P-1 AND P-2 ARE REDUNDANT AND SHALL ALTERNATE OPERATION,author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,glycol_pct,30,%,FLUID: glycol percent,printed '30% P.G.'; author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,conn_in,,in,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,volts,460,V,ELECTRICAL / VOLTS,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-1,PUMP,phase,3,,ELECTRICAL / PHASE,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,building,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,floor,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,area_served,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,qty,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,service,HEATING WATER,,SERVICE,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,gpm,502,gpm,GPM,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,head_ft,120,ft,HEAD FT H20,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,motor_hp,25,hp,ELECTRICAL / HP,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,rpm,1770,rpm,MOTOR RPM,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,vfd,yes,,NOTE 2: VARIABLE FREQUENCY DRIVE PROVIDED BY CONTROLS,author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,pump_arrangement,duty_standby,,NOTE 1: P-1 AND P-2 ARE REDUNDANT AND SHALL ALTERNATE OPERATION,author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,glycol_pct,30,%,FLUID: glycol percent,printed '30% P.G.'; author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,conn_in,,in,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,volts,460,V,ELECTRICAL / VOLTS,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-2,PUMP,phase,3,,ELECTRICAL / PHASE,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,building,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,floor,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,area_served,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,qty,,,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,service,CONDENSER WATER,,SERVICE,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,gpm,110,gpm,GPM,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,head_ft,120,ft,HEAD FT H20,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,motor_hp,10,hp,ELECTRICAL / HP,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,rpm,3600,rpm,MOTOR RPM,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,vfd,yes,,NOTE 2: VARIABLE FREQUENCY DRIVE PROVIDED BY CONTROLS,author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,pump_arrangement,,,NOTE 1: P-1 AND P-2 ARE REDUNDANT AND SHALL ALTERNATE OPERATION,blank cell
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,glycol_pct,30,%,FLUID: glycol percent,printed '30% E.G.'; author's reading of the printed row
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,conn_in,,in,,not printed
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,volts,460,V,ELECTRICAL / VOLTS,
+30_WA_SpokaneTransit_CoolingTower.pdf#2,HVAC PUMP SCHEDULE,P-6,PUMP,phase,3,,ELECTRICAL / PHASE,

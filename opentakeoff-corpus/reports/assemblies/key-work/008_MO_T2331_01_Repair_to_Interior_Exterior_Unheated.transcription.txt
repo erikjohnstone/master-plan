@@ -1,0 +1,79 @@
+# 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated — attribute-key transcription (ASSEMBLIES AS-17, dev 3)
+# Typed from renders of sheet M-601 (PDF page 23, a 270-degree-rotated sheet read in its
+# displayed orientation) of the Missouri National Guard Bellefontaine Readiness Center unheated
+# storage building repairs (G&W Engineering): an overview of the page at 40 dpi, then each
+# table at 3x (216 dpi), rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on
+# 2026-09-26; second read at 4x of every keyed row, every cell. Each drawn title was found
+# with the PDF's own text layer (pymupdf search_for). The pipeline's output for this sheet
+# was not consulted while keying (AS-28, before the draw, read the column names the
+# normalizer left unread across the unseen corpus, this document's among them). The third
+# tier keys the tables its seed drew (tier3/01-split.md): one per keyed family.
+SET 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated
+SEED 20260927
+DRAW reports/assemblies/tier3/01-split.json
+SCOPE Sheet M-601 (page 23) of the Missouri National Guard Bellefontaine Readiness Center unheated storage building repairs, St. Louis MO (G&W Engineering), the tables the third tier's seed drew for its FAN and UNIT_HEATER strata.
+EXCLUDES Model numbers, dampers, MOCP, heater input rating and flue diameter, weights, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# FAN SCHEDULE (page 23): one row, EF-1, with "* EQUAL TO GREENHECK" printed in the title band
+# (the census names the table with it). V/PH/HZ prints "115 / 1 / 60" in one cell, keyed as
+# its volts part and its phase part. LOAD / HP (W) prints 0.10: horsepower (the header's HP;
+# "(W)" is the watts alternative, and 0.10 W is no fan motor), keyed motor_hp. Notes 1 and 2
+# print below; the row's NOTES cell cites both. Note 1 "PROVIDE FACTORY-INSTALLED DISCONNECT
+# SWITCH, INTEGRAL FAN SPEED CONTROLLER AND BIRD SCREEN." keys control as the controller it
+# names, as itd-d1-lab's and baker-county-eoc's speed-controller notes do. Note 2 (color) keys
+# nothing. No column prints a location, service or VFD.
+TABLE
+sheet: 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23
+title: FAN SCHEDULE * EQUAL TO GREENHECK
+family: FAN
+render: page 23 overview at 40 dpi; crop 1720,140,560,165 at 3x (the whole table and its notes); second read at 4x (crop 1720,218,560,22) of EF-1, every cell
+rows: all 1 printed row
+col: PLAN MARK => tag
+col: MODEL NUMBER* => -
+col: CFM => cfm
+col: ESP "W.C. HEIGHT => esp_in
+col: DRIVE => drive
+col: DAMPER => -
+col: FAN RPM => rpm
+col: V/PH/HZ => -
+col: [V/PH/HZ: volts part] => volts
+col: [V/PH/HZ: phase part] => phase
+col: LOAD / HP (W) => motor_hp
+col: MOCP => -
+col: NOTES => -
+col: [NOTE 1, where the row's NOTES cite it: the fan's speed controller] => control
+grid:
+EF-1 | CUE-090-VG | 280 | 0.25 | direct (DIRECT) | GRAVITY | 1056 | 115 / 1 / 60 | 115 | 1 | 0.10 | 15 | 1, 2 | =INTEGRAL FAN SPEED CONTROLLER (PROVIDE FACTORY-INSTALLED DISCONNECT SWITCH, INTEGRAL FAN SPEED CONTROLLER AND BIRD SCREEN.)
+END
+
+# GAS UNIT HEATER SCHEDULE (page 23): two rows, with "* EQUAL TO MODINE" printed in the title
+# band (the census names the table with it). The title names gas: heating_medium gas. HEATING
+# CAP. (MBH) / OUTPUT keys heating_mbh; INPUT has no UNIT_HEATER attribute (as 004_MO's gas
+# unit heater's input). VOLTS/PH prints "115 / 1", keyed as its volts part and its phase part.
+# FLUE DIA. (IN.) is the vent, not a pipe connection (as 14_OR's FLUE DIAM): not keyed.
+# Notes 1-3 (separated combustion, horizontal vent kit, a 24V heat-only thermostat by the
+# contractor) key nothing in the family's vocabulary.
+TABLE
+sheet: 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23
+title: GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE
+family: UNIT_HEATER
+render: page 23 overview at 40 dpi; crop 1575,455,700,160 at 3x (the whole table and its notes); second read at 4x (crop 1575,520,700,36) of UH-1 and UH-2, every cell
+rows: all 2 printed rows
+col: PLAN MARK => tag
+col: MODEL NUMBER* => -
+col: CFM => cfm
+col: HEATING CAP. (MBH) / INPUT => -
+col: HEATING CAP. (MBH) / OUTPUT => heating_mbh
+col: HP => motor_hp
+col: VOLTS/PH => -
+col: [VOLTS/PH: volts part] => volts
+col: [VOLTS/PH: phase part] => phase
+col: MOCP => -
+col: FLUE DIA. (IN.) => -
+col: WEIGHT (LB) => -
+col: NOTES => -
+derive: heating_medium = gas ; header=TABLE TITLE ; note=title printed 'GAS UNIT HEATER SCHEDULE'
+grid:
+UH-1 | HDS100 | 1490 | 100 | 82 | 1/6 | 115 / 1 | 115 | 1 | 15 | 4 | 125 | 1, 2, 3
+UH-2 | HDS100 | 1490 | 100 | 82 | 1/6 | 115 / 1 | 115 | 1 | 15 | 4 | 125 | 1, 2, 3
+END

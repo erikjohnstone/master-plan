@@ -39,6 +39,7 @@ import { sanitizeTemplates } from "./templates.js";
 import { sanitizeMaterialLibrary } from "./materials.js";
 import { sanitizeStampLibrary } from "./stamps.js";
 import { sanitizeAssemblyLibrary, SEED_ASSEMBLIES } from "./linear/assemblyLibrary.ts";
+import { equipmentAssembliesOf, withEquipmentAssemblies, withLinearRecords } from "./assemblies/library.ts";
 import { attachAnnotationGeneration, annotationConflict } from "./annotationGeneration.js";
 import { withAnnotationCoordinator } from './annotationCoordinator.js';
 import { BAS_SOURCE_CHUNK_BYTES, basSourceChunkKey, basSourceChunkCount, basSourceChunkLength, basSourceChunkRecord, isBasSourceChunkRecord } from './basSourceStorage.js';
@@ -630,8 +631,24 @@ export const localStore = {
     return sanitizeAssemblyLibrary(a);
   },
 
+  // The linear records; equipment assemblies stored beside them (ASSEMBLIES
+  // D7, a `kind`) stay. With none stored this writes exactly what it always
+  // wrote.
   async saveAssemblyLibrary(list) {
-    await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put(sanitizeAssemblyLibrary(list), ASMLIB_KEY)));
+    const stored = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(ASMLIB_KEY)));
+    await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put(withLinearRecords(stored, list), ASMLIB_KEY)));
+  },
+
+  // ASSEMBLIES (D7): the equipment/project/part assemblies in the same
+  // record, each through schema.ts's load gate.
+  async loadEquipmentAssemblies() {
+    const stored = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(ASMLIB_KEY)));
+    return equipmentAssembliesOf(stored);
+  },
+
+  async saveEquipmentAssemblies(defs) {
+    const stored = await withDb((db) => tx(db, META_STORE, "readonly", (os) => os.get(ASMLIB_KEY)));
+    await withDb((db) => tx(db, META_STORE, "readwrite", (os) => os.put(withEquipmentAssemblies(stored === undefined ? SEED_ASSEMBLIES : stored, defs), ASMLIB_KEY)));
   },
 
   // `project` scopes a snapshot to a cloud project folder (cloudStore passes the

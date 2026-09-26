@@ -1,0 +1,609 @@
+{
+  "_about": "ASSEMBLIES goal WP0.2 input: which engineering firm drafted each locally present corpus document, so the dev / held-out split can keep one drafter's documents on one side. Evidence is the PDF's own text layer (title blocks) or sets.json provenance, gathered 2026-09-23 with pymupdf page.get_text(); a firm is named only where that text names it. A document with no identifiable firm is its own group. Two documents are grouped when the text shows a shared firm or a shared design team; that is deliberately conservative (it can only make the held-out side harder, never leak a drafter into it). Byte-identical documents are marked duplicate_of and never counted twice. Firms were re-checked against a render of each document's title block on 2026-09-23 (before the split was drawn); two text-layer attributions were corrected that way (federal-mech, 031/040).",
+  "groups": {
+    "72abw-civil-engineer": {
+      "firm": "72 ABW Civil Engineer Directorate (Tinker AFB)",
+      "sets": [
+        "tinker-afb-iwcs-controls"
+      ],
+      "evidence": "'72 ABW CIVIL ENGINEER DIRECTORATE' on 31/31 pages"
+    },
+    "ace-inc": {
+      "firm": "ACE Inc. (Associated Construction Engineering), with Slate Architecture",
+      "sets": [
+        "12_MT_MSU_ReidHall_Renovation"
+      ],
+      "evidence": "M0.1 title block (render): Slate Architecture and 'ACE INC … ACE JOB 25B26166'; text layer 'ASSOCIATED CONSTRUCTION ENGINEERING'"
+    },
+    "apogee-consulting": {
+      "firm": "Apogee Consulting Group, P.A.",
+      "sets": [
+        "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+        "041_IL_VA_Project_537_17_115_Sterile_Processing",
+        "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+        "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
+        "050_IL_VA_Project_537_17_115_Sterile_Processing",
+        "052_IL_VA_Project_537_17_115_Sterile_Processing"
+      ],
+      "evidence": "'APOGEE CONSULTING GROUP, P.A.' under 'CONSULTANTS:' on 12/12 pages",
+      "evidence_second_tier": "'APOGEE CONSULTING GROUP, P.A.' under 'CONSULTANTS:' / 'PROJECT MANAGER' on every sampled page of each; confirmed on a title block render of each (M-602-3, MP001, M-601, M-001-4, E-001-2)"
+    },
+    "atkins": {
+      "firm": "Atkins (Orlando FL)",
+      "sets": [
+        "094_FL_Orange_County_Regional_History_Center_HVAC"
+      ],
+      "evidence": "M-401 title block (render): 'ATKINS, 482 SOUTH KELLER ROAD, ORLANDO, FL 32810'"
+    },
+    "burns-mcdonnell": {
+      "firm": "Burns & McDonnell (navfac: A/E of record, Chesapeake VA office, for NAVFAC Mid-Atlantic; 060: construction manager / prime on a design-build job)",
+      "sets": [
+        "navfac-cherry-point-atc",
+        "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+        "015_VA_P_095_Replace_Submarine_Pier_3_Utility"
+      ],
+      "evidence": "navfac M-601 title block (render): 'BURNS McDONNELL, 1305 EXECUTIVE BLVD. SUITE 160, CHESAPEAKE, VA 23320' under the NAVFAC block. 060 text: 'SUBMITTED TO FIRE PROTECTION ENGINEERING AND BURNS & MCDONNELL CONSTRUCTION MANAGER' (p1) and 'AT NO ADDITIONAL COST TO BURNS AND MCDONNELL' (p39); its title block is blank. Grouped conservatively: the same firm may have designed both",
+      "evidence_second_tier": "015_VA: title block render of AM704 (p25) prints the 'MN+ BMcD Joint Venture' logo (Moffatt & Nichol with Burns & McDonnell) as an image under NAVFAC Mid-Atlantic, the client and region of navfac-cherry-point-atc; its text layer holds no form of either name"
+    },
+    "casco-diversified": {
+      "firm": "CASCO Diversified Corporation, Engineering (St. Louis)",
+      "sets": [
+        "004_MO_T2504_03_Interior_and_Exterior_Renovation"
+      ],
+      "evidence": "M-601 title block (render): 'CASCO DIVERSIFIED CORPORATION ENGINEERING', CASCO logo, 12 Sunnen Drive St. Louis; 'CASCO' on 51/51 pages"
+    },
+    "coffman-engineers": {
+      "firm": "Coffman Engineers",
+      "sets": [
+        "30_WA_SpokaneTransit_CoolingTower",
+        "038_NC_VA_Project_637_22_700_EHRM_Infrastructure"
+      ],
+      "evidence": "'COFFMAN ENGINEERS' on 14/14 pages",
+      "evidence_second_tier": "038_NC: 'www.coffman.com' on 54/54 pages; the title block render (p1) shows the Coffman Engineers logo as an image beside A/E Awen Solutions Group (CONTROL_INTENT_BUG_CATALOGUE CI-32)"
+    },
+    "crockett-engineering": {
+      "firm": "Timberlake Engineering, a Crockett Engineering company",
+      "sets": [
+        "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri"
+      ],
+      "evidence": "M600 title block (render): 'Timberlake ENGINEERING — A Crockett Engineering Company'; text layer 'CROCKETT ENGINEERING CONSULANTS' (sic, p1) and 'Crockett Engineering Consultants, LLC' (p3). (031 mentions Crockett only as the author of a geotechnical report, so it is not grouped here.)"
+    },
+    "davis-monthan-afb-ce": {
+      "firm": "Davis-Monthan AFB Civil Engineer Office (Air Combat Command, in-house)",
+      "sets": [
+        "bldg5406-hvac-demo"
+      ],
+      "evidence": "M-601 title block (render at 5x): 'DEPARTMENT OF THE AIR FORCE, AIR COMBAT COMMAND, DAVIS-MONTHAN AFB, ARIZONA, CIVIL ENGINEER OFFICE'. A different base and command from tinker-afb-iwcs-controls (72 ABW, Tinker AFB)"
+    },
+    "imeg": {
+      "firm": "IMEG Corp. (engineer of record on both VA sets: St. Louis office on 031, Naperville office on 040; Incandescence Life Safety on both)",
+      "sets": [
+        "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+        "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile"
+      ],
+      "evidence": "'ARCHITECT/ENGINEER OF RECORD' blocks list 'IMEG Corp. | 15 Sunnen Drive … St. Louis, MO' (031, 90/90 pages) and 'IMEG Corp. | 263 Shuman Boulevard … Naperville, IL' with 'IMEG CORP. RESERVES PROPRIETARY RIGHTS … TO THIS DRAWING' (040, 48/48 pages). Replaces the earlier weaker grouping by the shared life-safety consultant"
+    },
+    "matrix-consulting": {
+      "firm": "Matrix Consulting Engineers, Inc. (with Hobbs + Black Associates)",
+      "sets": [
+        "078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
+        "046_MI_Veterinary_Medical_Center_Replace_Elevators_3"
+      ],
+      "evidence": "'MECHANICAL/ ELECTRICAL ENGINEER' + 'MATRIX CONSULTING' + 'CONSULTING ENGINEERS, INC' in the title block (a render of A-610 shows only the architect, Hobbs + Black; the M/E firm is named in the text layer of the M/E sheets)",
+      "evidence_second_tier": "046_MI: title block render (M-2, p21) 'MATRIX CONSULTING ENGINEERS, INC, 544 CHERBOURG DRIVE, LANSING' in the Michigan State University IPF title block, as on 078_US"
+    },
+    "musgrove-engineering": {
+      "firm": "Musgrove Engineering, P.A. (with Miller Stauffer Architects on D-1)",
+      "sets": [
+        "itd-d1-lab",
+        "itd-d1-lab-raster",
+        "069_ID_ITD_District_2_Laboratory_Heating_Upgrades"
+      ],
+      "evidence": "sets.json gc for itd-d1-lab is 'Miller Stauffer Architects / Musgrove Engineering'; 'MUSGROVE' and 'ENGINEERING, P.A.' in the title block on 9/9 pages of 069; itd-d1-lab-raster is a synthetic raster of itd-d1-lab's own sheet (sets.json)"
+    },
+    "sazan-engineers": {
+      "firm": "Sazan Engineers (with Cole Architects)",
+      "sets": [
+        "baker-county-eoc"
+      ],
+      "evidence": "M6.01 title block (render): consultant 'SĀZĀN GROUP, 1030 NW Bond St., Bend, Oregon' under Cole Architects; 'SAZAN' on 31/65 pages"
+    },
+    "smithgroup": {
+      "firm": "SmithGroup (MEP-FP engineering; Baskerville-Donovan is civil, IMEG electronic security, on the same title block)",
+      "sets": [
+        "federal-mech",
+        "080_CA_Contra_Costa_College_Science_Center_Conference"
+      ],
+      "evidence": "title block of M7.1 (p14, render at 0.55x) lists 'SmithGroup — MEP-FP ENGINEERING', 'Baskerville-Donovan, Inc. — CIVIL ENGINEERING', 'IMEG Corporation — ELECTRONIC SECURITY / TELECOMMUNICATIONS'; 'SMITHGROUP' on 24/24 pages. CORRECTED 2026-09-23 before any draw: the first text-layer pass paired 'BASKERVILLE-DONOVAN, INC.' with the 'MEP-FP ENGINEERING' line; the render shows the pairing was wrong",
+      "evidence_second_tier": "080_CA: title block render (M7.5.1, p17) 'SMITHGROUP, 301 BATTERY STREET … SAN FRANCISCO' with 'Integral Group — MEP, LIGHTING, FIRE ALARM'; 'www.smithgroup.com' on 23/23 pages"
+    },
+    "summit-consultants": {
+      "firm": "Summit Consultants, Inc. (Fort Worth TX)",
+      "sets": [
+        "tarrant-county-mechanical"
+      ],
+      "evidence": "1M108A title block (render): 'SUMMIT CONSULTANTS, INC., 1300 SUMMIT AVENUE, SUITE 500, FORT WORTH, TEXAS'"
+    },
+    "unidentified:074_CA_West_Valley_College_STEM_Classroom_HVAC": {
+      "firm": null,
+      "sets": [
+        "074_CA_West_Valley_College_STEM_Classroom_HVAC"
+      ],
+      "evidence": "title block (render): TD ARC (architect) and a California PE stamp whose name is not legible; no engineering firm named"
+    },
+    "up-engineers-architects": {
+      "firm": "U.P. Engineers & Architects",
+      "sets": [
+        "bessemer"
+      ],
+      "evidence": "'U.P. ENGINEERS' in the title block on 8/8 pages; sets.json provenance names the firm"
+    },
+    "usda-ars-southeast-area": {
+      "firm": "USDA Agricultural Research Service, Southeast Area (in-house, Stoneville MS)",
+      "sets": [
+        "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+        "021_XX_Laboratory_building_mechanical_drawings_lab",
+        "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory"
+      ],
+      "evidence": "M-601 title block (render): 'USDA AGRICULTURAL RESEARCH SERVICE … SOUTHEAST AREA … STONEVILLE, MS'; no outside A/E named",
+      "evidence_second_tier": "USDA ARS in-house designs, grouped with 018_GA conservatively as one design organization (the split rule: grouping can only make the held-out side harder): 021_XX title block render (M-601, p13) prints the USDA ARS title block ('AGRICULTURAL RESEARCH TECHNOLOGY CENTER', ARS project staff) with no outside firm, and its text layer is nearly empty; 023_US title block render (E001, p14) prints 'USDA AGRICULTURAL RESEARCH SERVICE, USDA/ARS, PA, 800 BUCHANAN STREET, ALBANY, CA' (Pacific West Area) with no outside firm"
+    },
+    "modus-engineering": {
+      "firm": "MODUS Engineering (MEPT), with Neumann Monson Architects",
+      "sets": [
+        "24_IA_JohnsonCounty_Courthouse"
+      ],
+      "evidence": "title block render (M-601.4, p23) and cover text: 'ARCHITECT OF RECORD Neumann Monson Architects … CONSULTANTS MODUS Engineering MEPT'"
+    },
+    "cr-engineering": {
+      "firm": "CR Engineering (mechanical engineering consultant, Reno NV)",
+      "sets": [
+        "16_NV_CarsonValleyMS_HVAC_Replacement"
+      ],
+      "evidence": "title block render (M0.03, p4): 'CR ENGINEERING, MECHANICAL ENGINEERING CONSULTANT, 5434 LONGLEY LANE, RENO'; text 'AUTHORIZATION FROM CR ENGINEERING' on 91% of pages"
+    },
+    "fishbeck": {
+      "firm": "Fishbeck (engineer), in Michigan State University IPF's title block",
+      "sets": [
+        "13_MI_MSU_LifeSciences_LabRenovation"
+      ],
+      "evidence": "title block render (M-006, p26): the Fishbeck block beside MSU Infrastructure Planning and Facilities; 'fishbeck.com' on the cover"
+    },
+    "schmidt-consulting-group": {
+      "firm": "Schmidt Consulting Group (mechanical, plumbing, fire protection), with Caldwell Associates Architects, for the 1st Special Operations Engineer Squadron",
+      "sets": [
+        "03_FL_HurlburtField_ChildDevCenter"
+      ],
+      "evidence": "cover (p1) text: 'MECHANICAL/PLUMBING/FIRE PROTECTION SCHMIDT CONSULTING GROUP'; the title block render (A16) prints the AFSOC block with no outside firm"
+    },
+    "mechanical-systems-engineers": {
+      "firm": "Mechanical Systems Engineers (Bremen ME), with Winton Scott Architects",
+      "sets": [
+        "08_ME_BGS_Augusta_EastCampus_Renovation"
+      ],
+      "evidence": "title block render (P 102, p29): 'MECHANICAL SYSTEMS ENGINEERS, 41 FISH LANE, BREMEN, MAINE' under 'Winton Scott Architects'"
+    },
+    "iowa-state-fpm": {
+      "firm": "Iowa State University Facilities Planning & Management (in-house)",
+      "sets": [
+        "15_IA_IowaState_Biorenewables_Lab"
+      ],
+      "evidence": "title block render (M1, p8): 'IOWA STATE UNIVERSITY FACILITIES PLANNING & MANAGEMENT … Facilities Design & Construction'; no outside firm"
+    },
+    "lavallee-brensinger": {
+      "firm": "Lavallee Brensinger Architects with Foley Buhl Roberts & Associates (structural); MEP Bennett Engineering (09_ME) and Allied Engineering, a Salas O'Brien company (071_ME)",
+      "sets": [
+        "09_ME_BGS_KennebecValleyCC_Renovation",
+        "071_ME_BGS_Project_3809_Health_Science_Center"
+      ],
+      "evidence": "cover text of both lists Lavallee Brensinger Architects and FBRA; title block render of each ('LAVALLEE BRENSINGER ARCHITECTS'; 071_ME E0.0 also 'Allied Engineering, A Salas O'Brien Company'). Grouped by the shared architect and structural engineer (conservative)"
+    },
+    "bbs-architects-engineers": {
+      "firm": "BBS Architects Engineers (Des Moines), with Raker Rhodes Engineering",
+      "sets": [
+        "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building"
+      ],
+      "evidence": "title block render (M-601, p58): 'bbs ARCHITECTS ENGINEERS … WWW.BBSAE.COM', consultant 'RAKER RHODES Engineering'"
+    },
+    "nk-bhandari": {
+      "firm": "N.K. Bhandari, Architecture & Engineering, P.C., for the Air Force Research Laboratory, Rome NY",
+      "sets": [
+        "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test"
+      ],
+      "evidence": "'N.K. BHANDARI, ARCHITECTURE & ENGINEERING, P.C.' on 27/27 pages; title block render (M-601, p18)"
+    },
+    "mes-group": {
+      "firm": "MES Group (A/E of record, Tampa FL), with The Lunz Group (consultant)",
+      "sets": [
+        "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17"
+      ],
+      "evidence": "title block render (VA title block, p5): 'ARCHITECT/ENGINEER OF RECORD MES GROUP, 550 North Reo Street … Tampa', 'CONSULTANT THE LUNZ GROUP'"
+    },
+    "jackola": {
+      "firm": "Jackola Engineering & Architecture, P.C.",
+      "sets": [
+        "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+        "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit"
+      ],
+      "evidence": "'JACKOLA ENGR. & ARCH., P.C.' on every page of both; title block render (M-001) of each"
+    },
+    "g-and-w-engineering": {
+      "firm": "G&W Engineering Corporation (MEP), with Kromm, Rikimaru and Johansen (architect)",
+      "sets": [
+        "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated"
+      ],
+      "evidence": "title block render (M-001, p20): 'G&W ENGINEERING … 138 WELDON PARKWAY, ST. LOUIS'; cover lists KRJ and SSE"
+    },
+    "cfr-engineering": {
+      "firm": "CFR Engineering (MEP consultants), for NIST OFPM",
+      "sets": [
+        "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling"
+      ],
+      "evidence": "title block render (M-702, p16): 'CFR ENGINEERING, MEP CONSULTANTS … GERMANTOWN, MD'; text on 92% of pages"
+    },
+    "clark-nexsen": {
+      "firm": "Clark Nexsen (architect and MEP), for USDA APHIS",
+      "sets": [
+        "009_FL_USDA_APHIS_Plant_Inspection_Station_Building"
+      ],
+      "evidence": "cover text 'MECHANICAL, PLUMBING, & ELECTRICAL CLARK NEXSEN'; title block render (M-802, p20) 'DESIGNER CLARKNEXSEN'"
+    },
+    "gordon-prill": {
+      "firm": "Gordon Prill (architecture, engineering, construction), for SLAC",
+      "sets": [
+        "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid"
+      ],
+      "evidence": "title block render (M7.0, p8) and 'www.gordonprill.com' on 13/13 pages"
+    },
+    "tlc-engineering": {
+      "firm": "TLC Engineering (TLC Engineering for Architecture, MEP on 17_FL; a consultant on 01_NY, whose A/E of record is The Pettit Group with Henry Adams as MEP)",
+      "sets": [
+        "17_FL_SuwanneeHS_Courtyard_100CD",
+        "01_NY_VA_Northport_Dialysis_100CD"
+      ],
+      "evidence": "title block render of 17_FL (M-2.0) 'TLC ENGINEERING FOR ARCHITECTURE, 874 Dixon Boulevard, Cocoa' and of 01_NY (M701) with 'TLC ENGINEERING' among its consultants; 'www.tlc-engineers.com' in the text of both. Grouped by the shared firm (conservative)"
+    },
+    "faa-atct-standard": {
+      "firm": "FAA air traffic control tower standard design (Department of Transportation, Washington DC)",
+      "sets": [
+        "02_UT_FAA_Ogden_AirTrafficControlTower"
+      ],
+      "evidence": "title block render (M103, p81): 'DEPARTMENT OF TRANSPORTATION, FEDERAL AVIATION ADMINISTRATION … ATCT (FINAL STANDARD V1.1 - 06/26/24)'; no outside firm"
+    },
+    "fourfront-design": {
+      "firm": "FourFront Design Inc. (A/E of record), with Citrine and Olsson",
+      "sets": [
+        "04_NV_VA_LasVegas_CentralUtilityPlant"
+      ],
+      "evidence": "title block render (M-102, p37): 'ARCHITECT/ENGINEER OF RECORD FOURFRONT DESIGN INC'; cover 'MECHANICAL ENGINEER FOURFRONT DESIGN INC.'"
+    },
+    "introba": {
+      "firm": "Introba (A/E on 05_MO and consultant on 032_PA, with HFS Company; MEP/FP designer on 006_US, with Oculus Inc.)",
+      "sets": [
+        "05_MO_VA_StLouis_AHU_VAV_Replacement",
+        "032_PA_Construct_EHRM_Infrastructure_Upgrades",
+        "006_US_U2607_01_Interior_Renovations_C_Wing_Updates"
+      ],
+      "evidence": "title block render of each (MH601; M0.00; M000) shows the Introba block; 'www.introba.com' on 97-100% of the pages of each"
+    },
+    "klingner": {
+      "firm": "Klingner & Associates, P.C.",
+      "sets": [
+        "06_MO_NatlGuard_JeffCity_CST_Addition"
+      ],
+      "evidence": "title block render (M611, p75) and 'KLINGNER & ASSOCIATES, P.C.' on 99% of pages"
+    },
+    "midwest-engineering-design": {
+      "firm": "Midwest Engineering & Design (Columbia MO)",
+      "sets": [
+        "07_MO_MSHP_TroopB_HVAC_Boilers_Controls"
+      ],
+      "evidence": "title block render (M-601, p21) and 'WWW.MOENGINEERING.COM' on every page"
+    },
+    "solutions-aec": {
+      "firm": "Solutions AEC, LLC (MEP engineer), with Hurst-Rosche, Inc. (architect)",
+      "sets": [
+        "10_MO_Hawthorn_PsychHospital_HVAC"
+      ],
+      "evidence": "cover text 'MEP ENGINEER: SOLUTIONS AEC, LLC'; title block render (MEP-601, p9)"
+    },
+    "glumac": {
+      "firm": "Glumac (mechanical, electrical, plumbing), with AC Martin (architect)",
+      "sets": [
+        "11_CA_SDSU_EngSciences_Complex_100SD"
+      ],
+      "evidence": "cover text 'Mechanical / Electrical / Plumbing GLUMAC'; title block render (M-000) prints AC Martin and Clark Construction"
+    },
+    "pivot-colebreit": {
+      "firm": "Pivot Architecture with ColeBreit Engineering (MEP)",
+      "sets": [
+        "14_OR_KlamathCC_LearningCtr_Mechanical",
+        "082_OR_Klamath_Community_College_Career_Learning"
+      ],
+      "evidence": "title block render of both (M302; M601): 'PIVOT ARCHITECTURE' and 'COLEBREIT ENGINEERING'"
+    },
+    "dec-engineers": {
+      "firm": "DEC Engineers, Inc. (mechanical/plumbing), with AlphaStudio Design Group (architect)",
+      "sets": [
+        "19_CA_VistaUSD_DataCenter"
+      ],
+      "evidence": "cover (T-001) text: 'MECHANICAL/PLUMBING: DEC ENGINEERS, INC., 7360 CARROLL RD, SAN DIEGO'"
+    },
+    "wallis-engineering": {
+      "firm": "Wallis Engineering Group, Inc. (MEP)",
+      "sets": [
+        "20_TX_JudsonISD_MEP_Upgrades_Pkg6"
+      ],
+      "evidence": "title block render (ME-1.2, p3) and 'WALLIS ENGINEERING GROUP, INC.' on every page"
+    },
+    "wiley-wilson": {
+      "firm": "Wiley|Wilson",
+      "sets": [
+        "21_VA_OrangeCounty_PublicSafetyBldg"
+      ],
+      "evidence": "title block render (M-602, p51) and 'wileywilson.com' on every page"
+    },
+    "nbp-engineers": {
+      "firm": "NBP Engineers, Inc. (consultants), with Ellis, Ricket & Associates (architects)",
+      "sets": [
+        "22_GA_Valdosta_FireStation8_100CD"
+      ],
+      "evidence": "title block render (M0.02, p64): 'NBP Engineers, Inc. CONSULTANTS, 316 CORPORATE PARKWAY, MACON'"
+    },
+    "ahp-engineers": {
+      "firm": "Andrews, Hammock & Powell (AH&P Consulting Engineers), with WM2A Architects",
+      "sets": [
+        "23_GA_MaconBibb_RecreationCenter"
+      ],
+      "evidence": "title block render (M601, p35) and cover text 'MECHANICAL AH&P ENGINEERING'"
+    },
+    "hultz-bhu": {
+      "firm": "Hultz BHU Engineers, with The DOH Associates",
+      "sets": [
+        "25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+      ],
+      "evidence": "title block render (M0.03, p4) and 'HULTZBHU.COM' on 96% of pages"
+    },
+    "wsp": {
+      "firm": "WSP (MEPFP engineer), with HMA Consulting (building management and controls engineer), for Transbay Tower",
+      "sets": [
+        "26_CA_TransbayTower_Mechanical_64Sheets"
+      ],
+      "evidence": "title block render (M0.10, p10): the design team list 'WSP MEPFP Engineer … HMA CONSULTING Building Management and Controls Engineer'"
+    },
+    "tres-west": {
+      "firm": "Tres West Engineers",
+      "sets": [
+        "28_WA_KCHA_PublicHousing_HVAC"
+      ],
+      "evidence": "title block render (M101, p2) and 'www.treswest.com' on every page"
+    },
+    "cfi-companies": {
+      "firm": "CFI Companies (consulting engineers, Dallas)",
+      "sets": [
+        "29_TX_JPS_Hospital_CentralPlant_Chiller"
+      ],
+      "evidence": "title block render (M0.00, p2): 'CFI Companies, Consulting Engineers'"
+    },
+    "spur-design": {
+      "firm": "Spur Design (MEP engineer on 011_IL, architect with MEP on 054_NV)",
+      "sets": [
+        "011_IL_VA_Hines_Finance_Center_Renovation",
+        "054_NV_VA_Project_654_212_Design_Build_Central"
+      ],
+      "evidence": "title block render of both (MH-300; M-503): 'SPUR DESIGN'"
+    },
+    "insite-group": {
+      "firm": "InSite Group (MEP engineer, Lee's Summit MO)",
+      "sets": [
+        "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral"
+      ],
+      "evidence": "title block render (M601, p19): 'MEP ENGINEER: InSite Group'; cover 'INSITE GROUP, INC.'"
+    },
+    "wellner": {
+      "firm": "Wellner Architects + Engineers",
+      "sets": [
+        "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29"
+      ],
+      "evidence": "title block render (M-500, p23) and 'WELLNER ARCHITECTS + ENGINEERS' on every page"
+    },
+    "morrison-maierle": {
+      "firm": "Morrison-Maierle (engineers)",
+      "sets": [
+        "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+        "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+        "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC"
+      ],
+      "evidence": "title block render of each (p4; M001; M0.1) shows the Morrison-Maierle logo; cover text of 063_MT and 077_MT names it as mechanical engineer"
+    },
+    "bra-consulting-engineers": {
+      "firm": "BR+A Consulting Engineers (MEP), with The Lawrence Group (architect)",
+      "sets": [
+        "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C"
+      ],
+      "evidence": "cover text 'MEP Engineer: BR+A Consulting Engineers, P.C.'; title block render (p3)"
+    },
+    "kendall-fmi": {
+      "firm": "Kendall + FMI (Houston), for the US Army Corps of Engineers",
+      "sets": [
+        "028_TX_Renovation_of_Building_615_Final_Design_Plans"
+      ],
+      "evidence": "title block render (M-601, p9): 'KENDALL + FMI, 6200 SAVOY DRIVE, SUITE 600, HOUSTON' in the USACE title block"
+    },
+    "wbrc": {
+      "firm": "WBRC Inc.",
+      "sets": [
+        "029_ME_BGS_Project_3548_MEANG_Building_493_Boiler"
+      ],
+      "evidence": "title block render (ME501, p6) and 'WBRCINC.COM' on every page"
+    },
+    "spees-design-build": {
+      "firm": "Spees Design Build (A/E, Kent WA)",
+      "sets": [
+        "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction"
+      ],
+      "evidence": "title block render (M-001, p26): 'ARCHITECT/ENGINEER OF RECORD A/E: SPEES DESIGN BUILD, 23830 PACIFIC HIGHWAY S. … KENT, WA'"
+    },
+    "bancroft": {
+      "firm": "Bancroft Architects + Engineers",
+      "sets": [
+        "033_MN_VA_Project_656_18_301_Construct_Replace"
+      ],
+      "evidence": "cover text 'BANCROFT ARCHITECTS + ENGINEERS'; title block render (A501)"
+    },
+    "johnsondanforth": {
+      "firm": "JohnsonDanforth & Associates (A/E of record); MEP Insight Engineering (037_AR); FP&C Consultants and Bernhard on both",
+      "sets": [
+        "035_AR_564_19_101_Construct_New_Water_Storage",
+        "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling"
+      ],
+      "evidence": "title block render of both (S001; MH001): 'ARCHITECT/ENGINEER OF RECORD … JohnsonDanforth & Associates'"
+    },
+    "aesus": {
+      "firm": "AESUS Design Group (architecture, engineering)",
+      "sets": [
+        "043_FL_VA_Project_673_21_151_Replace_Air_Handling"
+      ],
+      "evidence": "title block render (G001, p1): 'ARCHITECT/ENGINEER OF RECORD AESUS design group'"
+    },
+    "alares": {
+      "firm": "Alares Architects & Engineers (A/E of record), with NV5 and Mabbett (consultants)",
+      "sets": [
+        "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+        "048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers"
+      ],
+      "evidence": "title block render of both (MI-403; MS-201): 'ALARES ARCHITECTS & ENGINEERS, 248 Copeland Street, Quincy MA'; the same VA project 528A8-17-805"
+    },
+    "toland-mizell-molnar": {
+      "firm": "Toland Mizell Molnar (A/E of record, Atlanta)",
+      "sets": [
+        "045_FL_VA_Project_516_21_107_EHRM_Infrastructure"
+      ],
+      "evidence": "title block render (M001, p4): 'ARCHITECT/ENGINEER OF RECORD TOLAND MIZELL MOLNAR, 590 MEANS ST NW … ATLANTA'"
+    },
+    "above-group": {
+      "firm": "Above Group, Inc. (MEP and structural)",
+      "sets": [
+        "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU"
+      ],
+      "evidence": "title block render (M-801, p21) and 'www.abovegroupinc.com' on every page"
+    },
+    "va-tvhs": {
+      "firm": "VA Tennessee Valley Healthcare System (in-house; no outside firm printed)",
+      "sets": [
+        "057_US_VA_Project_626_15_106_Upgrade_Energy"
+      ],
+      "evidence": "title block render (A-001, p4): 'Tennessee Valley Healthcare System … Department of Veterans Affairs'; no firm on any sheet"
+    },
+    "enercon": {
+      "firm": "Enercon (data centers), with Gensler and IDA Structural",
+      "sets": [
+        "058_CA_Lawrence_Berkeley_National_Laboratory_Building"
+      ],
+      "evidence": "title block render (ST504, p138) and 'www.enercon.com' on every page"
+    },
+    "cushing-terrell": {
+      "firm": "Cushing Terrell (A/E), for Montana State University CPDC",
+      "sets": [
+        "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation"
+      ],
+      "evidence": "title block render (M001, p8): 'Cushing Terrell … cushingterrell.com'; cover 'ARCHITECT/ENGINEER Cushing Terrell'"
+    },
+    "blw-engineers": {
+      "firm": "BLW Engineers, Inc.",
+      "sets": [
+        "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades"
+      ],
+      "evidence": "title block render (H0.2, p4) and 'COPYRIGHT BLW ENGINEERS INC.' on every page"
+    },
+    "caviness-lambert": {
+      "firm": "Caviness Lambert Engineering (MEP), with Craig Gaulden Davis (architect)",
+      "sets": [
+        "084_SC_H59_N054_FW_Building_112_Chiller_Addition"
+      ],
+      "evidence": "title block render (MP003, p8): 'CAVINESS LAMBERT ENGINEERING, MECHANICAL/ELECTRICAL/PLUMBING … www.cl-e.com'"
+    },
+    "gayner-engineers": {
+      "firm": "Gayner Engineers (MEP)",
+      "sets": [
+        "086_CA_Contra_Costa_College_Early_Learning_Center"
+      ],
+      "evidence": "title block render (G0.02, p2) and cover text 'MECHANICAL, ELECTRICAL & PLUMBING GAYNER ENGINEERS'"
+    },
+    "mechanical-design-studio": {
+      "firm": "Mechanical Design Studio (Walnut Creek CA)",
+      "sets": [
+        "087_US_Contra_Costa_College_Chiller_Replacement"
+      ],
+      "evidence": "title block render (M0.1, p1): 'MECHANICAL DESIGN STUDIO … www.mds-sf.com'"
+    },
+    "gannett-fleming": {
+      "firm": "Gannett Fleming, for the City of Phoenix Aviation Department (PHX Sky Train)",
+      "sets": [
+        "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX"
+      ],
+      "evidence": "title block render (B04-RBME0802, p31): the Gannett Fleming block in the PHX Sky Train title block; the text layer carries no firm"
+    },
+    "avcon": {
+      "firm": "AVCON, Inc. (engineers and planners), with Michael Baker International (architect)",
+      "sets": [
+        "089_FL_Airport_Terminal_and_Hangar_Development"
+      ],
+      "evidence": "title block render (M-601, p136) and cover text 'ENGINEERS & PLANNERS AVCON, INC.'"
+    },
+    "elara-engineering": {
+      "firm": "Elara Engineering (Hillside IL)",
+      "sets": [
+        "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+        "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation"
+      ],
+      "evidence": "title block render of both (E1.06; M0.01): 'ELARA, 30 N. Wolf Rd., Hillside, IL'; the same stadium's HVAC phases"
+    },
+    "haley-ward": {
+      "firm": "Haley Ward",
+      "sets": [
+        "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades"
+      ],
+      "evidence": "title block render (M-001, p2) and 'WWW.HALEYWARD.COM' on 91% of pages"
+    },
+    "heath-engineering": {
+      "firm": "Heath Engineering Company, for Jordan Valley Water Conservancy District",
+      "sets": [
+        "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+        "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project"
+      ],
+      "evidence": "title block render of both (HD101; E-001): 'HEATH Engineering Company'"
+    },
+    "rqaw": {
+      "firm": "RQAW (architecture; the mechanical sheets carry its title block)",
+      "sets": [
+        "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set"
+      ],
+      "evidence": "title block render (M906, p36): 'RQAW ARCHITECTURE' with 'Designed By: A.M.M'; no separate engineering firm printed"
+    },
+    "engineered-building-systems": {
+      "firm": "Engineered Building Systems, Inc. / MEP Consulting Services, with MSP Design (McGill Smith Punshon)",
+      "sets": [
+        "100_OH_Butler_Tech_RTU_Welding_Source_Capture"
+      ],
+      "evidence": "title block render (M2.0, p6): 'ENGINEERED BUILDING SYSTEMS INC … MEP Consulting Services, Inc. in OH' and 'MSP DESIGN McGill Smith Punshon'"
+    }
+  },
+  "duplicates": {
+    "062_ID_ITD_District_1_Laboratory_Building_Mechanical": {
+      "duplicate_of": "itd-d1-lab",
+      "evidence": "byte-identical PDF (sha256 prefix 9dafcead2eb5 for both)"
+    },
+    "010_US_WWYK240146_Design_Implement_Monitoring_Control": {
+      "duplicate_of": "tinker-afb-iwcs-controls",
+      "evidence": "byte-identical PDF (sha256 prefix ffbae6e626ba for both)"
+    }
+  },
+  "derived": {
+    "itd-d1-lab-raster": {
+      "derived_from": "itd-d1-lab",
+      "evidence": "sets.json: 'The SAME real D-1 Testing Laboratory HVAC plan sheet (M1.0) as itd-d1-lab … SYNTHETICALLY flattened to an image-only page' — same printed content, so it is never keyed separately"
+    }
+  },
+  "_about_second_tier": "Extended 2026-09-26 (AS-17) to every eligible unseen corpus document: the firm comes from the cover sheet's design-team listing and the title block's text, and every document's title block was also checked by eye on a low-resolution render of one sheet (46 dpi strips, which can clip schedule fragments; every eligible document was viewed alike, before the second tier was drawn). A firm printed only as an image has no text form (015_VA's 'MN+BMcD Joint Venture', 038_NC's Coffman Engineers logo); those two were found this way and join their held-out drafter's group. The grouping rule is unchanged: a shared design firm of record (architect, engineer or consultant) groups documents; a shared owner, owner's template or owner's reviewers does not, with one conservative exception: USDA ARS in-house designs are grouped as one design organization with held-out 018_GA."
+}

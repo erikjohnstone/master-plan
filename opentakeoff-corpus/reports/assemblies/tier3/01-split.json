@@ -1,0 +1,628 @@
+{
+ "seed": 20260927,
+ "dev_min_docs": 8,
+ "key_rows_per_table_max": 30,
+ "population_docs": 35,
+ "population_groups": 32,
+ "left_out_earlier_drafters": [
+  {
+   "set": "16_NV_CarsonValleyMS_HVAC_Replacement",
+   "group": "cr-engineering",
+   "shares_drafter_with": [
+    "16_NV_CarsonValleyMS_HVAC_Replacement (tier 2)"
+   ]
+  },
+  {
+   "set": "03_FL_HurlburtField_ChildDevCenter",
+   "group": "schmidt-consulting-group",
+   "shares_drafter_with": [
+    "03_FL_HurlburtField_ChildDevCenter (tier 2)"
+   ]
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "group": "apogee-consulting",
+   "shares_drafter_with": [
+    "036_LA_VA_Project_502_21_222_EHRM_Infrastructure (tier 2)"
+   ]
+  },
+  {
+   "set": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+   "group": "mes-group",
+   "shares_drafter_with": [
+    "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 (tier 2)"
+   ]
+  },
+  {
+   "set": "11_CA_SDSU_EngSciences_Complex_100SD",
+   "group": "glumac",
+   "shares_drafter_with": [
+    "11_CA_SDSU_EngSciences_Complex_100SD (tier 2)"
+   ]
+  },
+  {
+   "set": "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "group": "pivot-colebreit",
+   "shares_drafter_with": [
+    "14_OR_KlamathCC_LearningCtr_Mechanical (tier 2)"
+   ]
+  },
+  {
+   "set": "21_VA_OrangeCounty_PublicSafetyBldg",
+   "group": "wiley-wilson",
+   "shares_drafter_with": [
+    "21_VA_OrangeCounty_PublicSafetyBldg (tier 2)"
+   ]
+  },
+  {
+   "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "group": "morrison-maierle",
+   "shares_drafter_with": [
+    "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation (tier 2)"
+   ]
+  },
+  {
+   "set": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+   "group": "apogee-consulting",
+   "shares_drafter_with": [
+    "036_LA_VA_Project_502_21_222_EHRM_Infrastructure (tier 2)"
+   ]
+  },
+  {
+   "set": "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+   "group": "johnsondanforth",
+   "shares_drafter_with": [
+    "035_AR_564_19_101_Construct_New_Water_Storage (tier 2)",
+    "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling (tier 2)"
+   ]
+  },
+  {
+   "set": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "group": "alares",
+   "shares_drafter_with": [
+    "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers (tier 2)"
+   ]
+  },
+  {
+   "set": "045_FL_VA_Project_516_21_107_EHRM_Infrastructure",
+   "group": "toland-mizell-molnar",
+   "shares_drafter_with": [
+    "045_FL_VA_Project_516_21_107_EHRM_Infrastructure (tier 2)"
+   ]
+  },
+  {
+   "set": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+   "group": "above-group",
+   "shares_drafter_with": [
+    "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU (tier 2)"
+   ]
+  },
+  {
+   "set": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+   "group": "morrison-maierle",
+   "shares_drafter_with": [
+    "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation (tier 2)"
+   ]
+  },
+  {
+   "set": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+   "group": "cushing-terrell",
+   "shares_drafter_with": [
+    "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation (tier 2)"
+   ]
+  },
+  {
+   "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "group": "morrison-maierle",
+   "shares_drafter_with": [
+    "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation (tier 2)"
+   ]
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "group": "gannett-fleming",
+   "shares_drafter_with": [
+    "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX (tier 2)"
+   ]
+  },
+  {
+   "set": "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+   "group": "elara-engineering",
+   "shares_drafter_with": [
+    "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation (tier 2)",
+    "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation (tier 2)"
+   ]
+  }
+ ],
+ "shuffled_group_order": [
+  {
+   "group": "cfr-engineering",
+   "docs": 1,
+   "pick": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling"
+  },
+  {
+   "group": "hultz-bhu",
+   "docs": 1,
+   "pick": "25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+  },
+  {
+   "group": "haley-ward",
+   "docs": 1,
+   "pick": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades"
+  },
+  {
+   "group": "lavallee-brensinger",
+   "docs": 2,
+   "pick": "071_ME_BGS_Project_3809_Health_Science_Center"
+  },
+  {
+   "group": "rqaw",
+   "docs": 1,
+   "pick": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set"
+  },
+  {
+   "group": "g-and-w-engineering",
+   "docs": 1,
+   "pick": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated"
+  },
+  {
+   "group": "blw-engineers",
+   "docs": 1,
+   "pick": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades"
+  },
+  {
+   "group": "dec-engineers",
+   "docs": 1,
+   "pick": "19_CA_VistaUSD_DataCenter"
+  },
+  {
+   "group": "spees-design-build",
+   "docs": 1,
+   "pick": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction"
+  },
+  {
+   "group": "aesus",
+   "docs": 1,
+   "pick": "043_FL_VA_Project_673_21_151_Replace_Air_Handling"
+  },
+  {
+   "group": "solutions-aec",
+   "docs": 1,
+   "pick": "10_MO_Hawthorn_PsychHospital_HVAC"
+  },
+  {
+   "group": "introba",
+   "docs": 2,
+   "pick": "032_PA_Construct_EHRM_Infrastructure_Upgrades"
+  },
+  {
+   "group": "tlc-engineering",
+   "docs": 2,
+   "pick": "01_NY_VA_Northport_Dialysis_100CD"
+  },
+  {
+   "group": "mechanical-systems-engineers",
+   "docs": 1,
+   "pick": "08_ME_BGS_Augusta_EastCampus_Renovation"
+  },
+  {
+   "group": "fourfront-design",
+   "docs": 1,
+   "pick": "04_NV_VA_LasVegas_CentralUtilityPlant"
+  },
+  {
+   "group": "insite-group",
+   "docs": 1,
+   "pick": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral"
+  },
+  {
+   "group": "modus-engineering",
+   "docs": 1,
+   "pick": "24_IA_JohnsonCounty_Courthouse"
+  },
+  {
+   "group": "bbs-architects-engineers",
+   "docs": 1,
+   "pick": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building"
+  },
+  {
+   "group": "heath-engineering",
+   "docs": 1,
+   "pick": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project"
+  },
+  {
+   "group": "ahp-engineers",
+   "docs": 1,
+   "pick": "23_GA_MaconBibb_RecreationCenter"
+  },
+  {
+   "group": "nk-bhandari",
+   "docs": 1,
+   "pick": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test"
+  },
+  {
+   "group": "spur-design",
+   "docs": 1,
+   "pick": "011_IL_VA_Hines_Finance_Center_Renovation"
+  },
+  {
+   "group": "bancroft",
+   "docs": 1,
+   "pick": "033_MN_VA_Project_656_18_301_Construct_Replace"
+  },
+  {
+   "group": "clark-nexsen",
+   "docs": 1,
+   "pick": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building"
+  },
+  {
+   "group": "nbp-engineers",
+   "docs": 1,
+   "pick": "22_GA_Valdosta_FireStation8_100CD"
+  },
+  {
+   "group": "wsp",
+   "docs": 1,
+   "pick": "26_CA_TransbayTower_Mechanical_64Sheets"
+  },
+  {
+   "group": "klingner",
+   "docs": 1,
+   "pick": "06_MO_NatlGuard_JeffCity_CST_Addition"
+  },
+  {
+   "group": "gordon-prill",
+   "docs": 1,
+   "pick": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid"
+  },
+  {
+   "group": "avcon",
+   "docs": 1,
+   "pick": "089_FL_Airport_Terminal_and_Hangar_Development"
+  },
+  {
+   "group": "tres-west",
+   "docs": 1,
+   "pick": "28_WA_KCHA_PublicHousing_HVAC"
+  },
+  {
+   "group": "faa-atct-standard",
+   "docs": 1,
+   "pick": "02_UT_FAA_Ogden_AirTrafficControlTower"
+  },
+  {
+   "group": "kendall-fmi",
+   "docs": 1,
+   "pick": "028_TX_Renovation_of_Building_615_Final_Design_Plans"
+  }
+ ],
+ "dev": {
+  "groups": [
+   "cfr-engineering",
+   "hultz-bhu",
+   "haley-ward",
+   "lavallee-brensinger",
+   "rqaw",
+   "g-and-w-engineering",
+   "blw-engineers",
+   "dec-engineers",
+   "insite-group"
+  ],
+  "sets": [
+   "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+   "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+   "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+   "071_ME_BGS_Project_3809_Health_Science_Center",
+   "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+   "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+   "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "19_CA_VistaUSD_DataCenter",
+   "25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+  ],
+  "covers": [
+   "VAV",
+   "AHU/DOAS/RTU",
+   "FCU",
+   "pump",
+   "fan",
+   "UH/CUH",
+   "boiler",
+   "chiller",
+   "cooling tower",
+   "HX",
+   "ERV",
+   "humidifier"
+  ],
+  "added_for_coverage": [
+   {
+    "group": "insite-group",
+    "adds": [
+     "cooling tower"
+    ]
+   }
+  ],
+  "tables": [
+   {
+    "set": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+    "family": "FAN",
+    "table": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23 :: FAN SCHEDULE * EQUAL TO GREENHECK",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+    "family": "UNIT_HEATER",
+    "table": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf#23 :: GAS UNIT HEATER SCHEDULE * EQUAL TO MODINE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19 :: WATER-COOLED CHILLER SCHEDULE:",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+    "family": "PUMP",
+    "table": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19 :: PUMP SCHEDULE:",
+    "claimed_rows": 13,
+    "keyed_rows_max": 13,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+    "family": "COOLING_TOWER",
+    "table": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19 :: COOLING TOWER SCHEDULE:",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+    "family": "FAN",
+    "table": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12 :: SUPPLY FAN SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+    "family": "HUMIDIFIER",
+    "table": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#13 :: HUMIDIFIER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+    "family": "DUCT_MOUNTED_COIL",
+    "table": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#12 :: HEATING COIL SCHEDULE",
+    "claimed_rows": 6,
+    "keyed_rows_max": 6,
+    "tables_in_stratum": 2
+   },
+   {
+    "set": "071_ME_BGS_Project_3809_Health_Science_Center",
+    "family": "VAV",
+    "table": "071_ME_BGS_Project_3809_Health_Science_Center.pdf#44 :: SINGLE DUCT AIR TERMINAL SCHEDULE",
+    "claimed_rows": 20,
+    "keyed_rows_max": 20,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "071_ME_BGS_Project_3809_Health_Science_Center",
+    "family": "RTU",
+    "table": "071_ME_BGS_Project_3809_Health_Science_Center.pdf#44 :: PACKAGED ROOF TOP UNIT SCHEDULE",
+    "claimed_rows": 42,
+    "keyed_rows_max": 30,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "071_ME_BGS_Project_3809_Health_Science_Center",
+    "family": "FAN",
+    "table": "071_ME_BGS_Project_3809_Health_Science_Center.pdf#44 :: FAN SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+    "family": "FCU",
+    "table": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4 :: COMMON AREA DX FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+    "family": "ERV",
+    "table": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4 :: ENERGY RECOVERY VENTILATOR SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+    "family": "HEAT_PUMP",
+    "table": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4 :: COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+    "family": "VRF_INDOOR",
+    "table": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#8 :: HEAT PUMP/VRF INDOOR UNIT SCHEDULE",
+    "claimed_rows": 20,
+    "keyed_rows_max": 20,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+    "family": "VRF_OUTDOOR",
+    "table": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf#8 :: HEAT PUMP/VRF OUTDOOR UNIT SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "AHU",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19 :: AIR HANDLING UNIT SYSTEM INDEX SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "FCU",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21 :: FAN COIL UNIT SCHEDULE",
+    "claimed_rows": 3,
+    "keyed_rows_max": 3,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "VAV",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22 :: VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE",
+    "claimed_rows": 58,
+    "keyed_rows_max": 30,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20 :: AIR COOLED CHILLER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "BOILER",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20 :: CONDENSING BOILER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "PUMP",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20 :: PUMP SCHEDULE",
+    "claimed_rows": 10,
+    "keyed_rows_max": 10,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "FAN",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22 :: ",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 4
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "UNIT_HEATER",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21 :: UNIT HEATER SCHEDULE",
+    "claimed_rows": 5,
+    "keyed_rows_max": 5,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "HEAT_EXCHANGER",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19 :: AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "family": "DUCT_MOUNTED_COIL",
+    "table": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19 :: AHU CHILLED WATER COOLING COIL SCHEDULE",
+    "claimed_rows": 4,
+    "keyed_rows_max": 4,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "19_CA_VistaUSD_DataCenter",
+    "family": "FAN",
+    "table": "19_CA_VistaUSD_DataCenter.pdf#10 :: ",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+    "family": "DOAS",
+    "table": "25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 :: MISCELLANEOUS SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+    "family": "HEAT_PUMP",
+    "table": "25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5 :: VRF INDOOR HEAT PUMP SCHEDULE",
+    "claimed_rows": 9,
+    "keyed_rows_max": 9,
+    "tables_in_stratum": 3
+   },
+   {
+    "set": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+    "family": "AIR_COOLED_CHILLER",
+    "table": "25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 :: CHILLER SCHEDULE",
+    "claimed_rows": 1,
+    "keyed_rows_max": 1,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+    "family": "FAN",
+    "table": "25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 :: FAN SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   },
+   {
+    "set": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+    "family": "UNIT_HEATER",
+    "table": "25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4 :: MISCELLANEOUS SCHEDULE",
+    "claimed_rows": 2,
+    "keyed_rows_max": 2,
+    "tables_in_stratum": 1
+   }
+  ]
+ },
+ "required_coverage_missing_from_population": [],
+ "dev_coverage_missing": [],
+ "generated_at": "2026-09-26T19:17:09.661Z",
+ "census_generated_at": "2026-09-26T14:54:23.159Z",
+ "census_errors": [],
+ "not_in_census": [
+  "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+  "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+  "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+  "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+  "021_XX_Laboratory_building_mechanical_drawings_lab",
+  "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+  "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+  "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+  "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "055_US_VA_Project_673_20_107_EHRM_Infrastructure",
+  "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
+  "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+  "068_US_Antelope_Valley_College_Applied_Arts_Math",
+  "072_CA_CA07_2627_West_Valley_College_Science_Math",
+  "075_MT_Renne_Library_Innovation_Learning_Studio",
+  "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+  "18_OR_BakerMS_HVAC_Electrical_FullSet",
+  "27_WA_ColvilleTribes_Hatchery_Lab"
+ ]
+}

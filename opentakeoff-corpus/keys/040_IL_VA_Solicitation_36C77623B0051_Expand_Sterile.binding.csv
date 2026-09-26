@@ -1,0 +1,27 @@
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, TRUTH).
+# Authored 2026-09-25 by reading the set's controls sheets (PDF text layer and renders), never pipeline output.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.typicals.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UH-1,UNIT_HEATER,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,UNIT HEATER CONTROL - HYDRONIC,family_detail,the schedule is UNIT HEATER SCHEDULE - HOT WATER
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UH-2,UNIT_HEATER,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,UNIT HEATER CONTROL - HYDRONIC,family_detail,the schedule is UNIT HEATER SCHEDULE - HOT WATER
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UH-3,UNIT_HEATER,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,UNIT HEATER CONTROL - HYDRONIC,family_detail,the schedule is UNIT HEATER SCHEDULE - HOT WATER
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UH-4,UNIT_HEATER,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,UNIT HEATER CONTROL - HYDRONIC,family_detail,the schedule is UNIT HEATER SCHEDULE - HOT WATER
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UH-5,UNIT_HEATER,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,UNIT HEATER CONTROL - HYDRONIC,family_detail,the schedule is UNIT HEATER SCHEDULE - HOT WATER
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UH-6,UNIT_HEATER,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,UNIT HEATER CONTROL - HYDRONIC,family_detail,the schedule is UNIT HEATER SCHEDULE - HOT WATER
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,EF-1A,FAN,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,EXHAUST FAN CONTROL - AHU INTERLOCK - FAN-A,cross_reference,schedule CONTROL column 'FAN-A'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,EF-1B,FAN,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,EXHAUST FAN CONTROL - AHU INTERLOCK - FAN-A,cross_reference,schedule CONTROL column 'FAN-A'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,EF-2A,FAN,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,CARTWASHER AND WASHER DISINFECTOR FAN CONTROL - FAN-B,cross_reference,schedule CONTROL column 'FAN-B'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,EF-2B,FAN,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,CARTWASHER AND WASHER DISINFECTOR FAN CONTROL - FAN-B,cross_reference,schedule CONTROL column 'FAN-B'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,EF-3A,FAN,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,CARTWASHER AND WASHER DISINFECTOR FAN CONTROL - FAN-B,cross_reference,schedule CONTROL column 'FAN-B'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,EF-3B,FAN,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,CARTWASHER AND WASHER DISINFECTOR FAN CONTROL - FAN-B,cross_reference,schedule CONTROL column 'FAN-B'
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,CWP-1,PUMP,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,CHILLED WATER PUMP CONTROL,family_detail,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,CWP-1,PUMP,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,VARIABLE FREQUENCY DRIVE CONTROL,family_detail,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,CWP-2,PUMP,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,CHILLED WATER PUMP CONTROL,family_detail,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,CWP-2,PUMP,040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#45,VARIABLE FREQUENCY DRIVE CONTROL,family_detail,

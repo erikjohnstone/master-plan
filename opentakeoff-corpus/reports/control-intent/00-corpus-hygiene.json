@@ -1,0 +1,237 @@
+{
+ "scanned": 121,
+ "not_unseen": {
+  "heldout_twin": [
+   "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations"
+  ],
+  "heldout_drafter": [
+   "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+   "021_XX_Laboratory_building_mechanical_drawings_lab",
+   "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+   "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+   "035_AR_564_19_101_Construct_New_Water_Storage",
+   "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+   "075_MT_Renne_Library_Innovation_Learning_Studio",
+   "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+   "27_WA_ColvilleTribes_Hatchery_Lab"
+  ],
+  "dev_twin_or_near": [
+   "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+   "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+   "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+   "054_NV_VA_Project_654_212_Design_Build_Central",
+   "055_US_VA_Project_673_20_107_EHRM_Infrastructure",
+   "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
+   "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+   "068_US_Antelope_Valley_College_Applied_Arts_Math",
+   "072_CA_CA07_2627_West_Valley_College_Science_Math",
+   "082_OR_Klamath_Community_College_Career_Learning",
+   "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+   "09_ME_BGS_KennebecValleyCC_Renovation",
+   "18_OR_BakerMS_HVAC_Electrical_FullSet",
+   "itd-d1-lab-raster"
+  ],
+  "unseen_copy": [
+   "010_US_WWYK240146_Design_Implement_Monitoring_Control"
+  ]
+ },
+ "split_dev_heldout_overlaps": [],
+ "rows": [
+  {
+   "set": "itd-d1-lab-raster",
+   "relation": "derived",
+   "of": "itd-d1-lab",
+   "side": "dev",
+   "share": "drafters.json"
+  },
+  {
+   "set": "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+   "relation": "near",
+   "of": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+   "side": "dev",
+   "share": 0.24
+  },
+  {
+   "set": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+   "relation": "near",
+   "of": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+   "side": "dev",
+   "share": 0.21
+  },
+  {
+   "set": "054_NV_VA_Project_654_212_Design_Build_Central",
+   "relation": "near",
+   "of": "011_IL_VA_Hines_Finance_Center_Renovation",
+   "side": "dev",
+   "share": 0.38
+  },
+  {
+   "set": "055_US_VA_Project_673_20_107_EHRM_Infrastructure",
+   "relation": "near",
+   "of": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+   "side": "dev",
+   "share": 0.19
+  },
+  {
+   "set": "055_US_VA_Project_673_20_107_EHRM_Infrastructure",
+   "relation": "near",
+   "of": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+   "side": "dev",
+   "share": 0.17
+  },
+  {
+   "set": "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
+   "relation": "near",
+   "of": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+   "side": "dev",
+   "share": 0.31
+  },
+  {
+   "set": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+   "relation": "near",
+   "of": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+   "side": "dev",
+   "share": 0.26
+  },
+  {
+   "set": "068_US_Antelope_Valley_College_Applied_Arts_Math",
+   "relation": "near",
+   "of": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+   "side": "dev",
+   "share": 0.17
+  },
+  {
+   "set": "072_CA_CA07_2627_West_Valley_College_Science_Math",
+   "relation": "near",
+   "of": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+   "side": "dev",
+   "share": 0.7
+  },
+  {
+   "set": "082_OR_Klamath_Community_College_Career_Learning",
+   "relation": "near",
+   "of": "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "side": "dev",
+   "share": 0.68
+  },
+  {
+   "set": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+   "relation": "near",
+   "of": "itd-d1-lab",
+   "side": "dev",
+   "share": 0.22
+  },
+  {
+   "set": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+   "relation": "near",
+   "of": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+   "side": "dev",
+   "share": 0.37
+  },
+  {
+   "set": "09_ME_BGS_KennebecValleyCC_Renovation",
+   "relation": "near",
+   "of": "071_ME_BGS_Project_3809_Health_Science_Center",
+   "side": "dev",
+   "share": 0.37
+  },
+  {
+   "set": "18_OR_BakerMS_HVAC_Electrical_FullSet",
+   "relation": "near",
+   "of": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+   "side": "dev",
+   "share": 0.4
+  },
+  {
+   "set": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+   "relation": "twin",
+   "of": "federal-mech",
+   "side": "dev",
+   "share": 1.0
+  },
+  {
+   "set": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+   "relation": "twin",
+   "of": "itd-d1-lab",
+   "side": "dev",
+   "share": 1.0
+  },
+  {
+   "set": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+   "relation": "drafter",
+   "of": "burns-mcdonnell",
+   "side": "heldout",
+   "pages": "drafters.json"
+  },
+  {
+   "set": "021_XX_Laboratory_building_mechanical_drawings_lab",
+   "relation": "drafter",
+   "of": "usda-ars-southeast-area",
+   "side": "heldout",
+   "pages": "drafters.json"
+  },
+  {
+   "set": "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+   "relation": "drafter",
+   "of": "usda-ars-southeast-area",
+   "side": "heldout",
+   "pages": "drafters.json"
+  },
+  {
+   "set": "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+   "relation": "drafter",
+   "of": "coffman-engineers",
+   "side": "heldout",
+   "pages": 36
+  },
+  {
+   "set": "035_AR_564_19_101_Construct_New_Water_Storage",
+   "relation": "drafter",
+   "of": "johnsondanforth",
+   "side": "heldout",
+   "pages": 65
+  },
+  {
+   "set": "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+   "relation": "drafter",
+   "of": "coffman-engineers",
+   "side": "heldout",
+   "pages": 54
+  },
+  {
+   "set": "075_MT_Renne_Library_Innovation_Learning_Studio",
+   "relation": "drafter",
+   "of": "coffman-engineers",
+   "side": "heldout",
+   "pages": 3
+  },
+  {
+   "set": "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+   "relation": "drafter",
+   "of": "elara-engineering",
+   "side": "heldout",
+   "pages": "drafters.json"
+  },
+  {
+   "set": "27_WA_ColvilleTribes_Hatchery_Lab",
+   "relation": "drafter",
+   "of": "coffman-engineers",
+   "side": "heldout",
+   "pages": 38
+  },
+  {
+   "set": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+   "relation": "twin",
+   "of": "navfac-cherry-point-atc",
+   "side": "heldout",
+   "share": 1.0
+  },
+  {
+   "set": "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+   "relation": "duplicate",
+   "of": "tinker-afb-iwcs-controls",
+   "side": "unseen",
+   "share": "drafters.json"
+  }
+ ]
+}

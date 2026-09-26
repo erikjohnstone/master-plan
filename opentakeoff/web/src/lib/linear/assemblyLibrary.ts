@@ -16,6 +16,10 @@ export function sanitizeAssemblyLibrary(raw: unknown): AssemblyRecord[] {
   const out: AssemblyRecord[] = [];
   for (const a of raw) {
     if (!(isPlainObject(a) && typeof a.id === "string" && a.id)) continue;
+    // A record with a `kind` is an equipment or project assembly (ASSEMBLIES
+    // goal D7), loaded by assemblies/schema.ts sanitizeAssemblyDefinitions;
+    // a linear record has none and resolves exactly as before.
+    if (a.kind !== undefined) continue;
     if (seenIds.has(a.id)) continue;
     seenIds.add(a.id);
     out.push({

@@ -1,0 +1,160 @@
+# 22_GA_Valdosta_FireStation8_100CD.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/22_GA_Valdosta_FireStation8_100CD.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets M0.02 SCHEDULES - HVAC (page 64) and P0.01 LEGEND, SCHEDULE, NOTES & DETAILS - PLUMBING (page 57) of the Fire Station #8 Site Improvements & Building Renovation, City of Valdosta GA (Ellis, Ricket & Associates; NBP Engineers), the tables the fourth tier's seed drew for its DOAS, ERV, CONDENSING_UNIT, PUMP and FAN strata.
+#   22_GA_Valdosta_FireStation8_100CD.pdf#64 | DOAS UNIT SCHEDULE | DOAS | all 1 printed row | render: page 64 overview at 40 dpi; crop 1600,118,925,140 at 3x in 2 tiles (MARK column repeated); second read at 4x (crop 1600,236,925,22 in 2 tiles, MARK column repeated) of the row, every cell
+#   22_GA_Valdosta_FireStation8_100CD.pdf#64 | ENERGY RECOVERY VENTILATOR SCHEDULE | ERV | all 1 printed row (one empty ruled row below it) | render: page 64 overview at 40 dpi; crop 2060,1852,462,132 at 3x; second read at 4x (crop 2060,1945,462,24) of the row, every cell
+#   22_GA_Valdosta_FireStation8_100CD.pdf#64 | VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE | CONDENSING_UNIT | all 1 printed row (one empty ruled row below it) | render: page 64 overview at 40 dpi; crop 1862,1512,660,152 at 3x; second read at 4x (crop 1862,1622,660,24) of the row, every cell
+#   22_GA_Valdosta_FireStation8_100CD.pdf#57 | RECIRCULATOR PUMP SCHEDULE | PUMP | all 1 printed row (two empty ruled rows below it) | render: page 57 overview at 40 dpi; crop 1185,540,725,185 at 3x; second read at 4x (crop 1185,626,725,24) of the row, every cell
+#   22_GA_Valdosta_FireStation8_100CD.pdf#64 | FAN SCHEDULE | FAN | all 3 printed rows | render: page 64 overview at 40 dpi; crop 1800,1330,720,155 at 3x; second read at 4x (crop 1800,1428,720,56) of all 3 rows, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers and model numbers, external and fan static pressures of the DOAS, sensible capacities, entering and leaving air temperatures, the electric heat's EAT/LAT, the hot gas reheat's leaving air temperature, fan types, diameters, tip speeds and outlet velocities, the pump's location, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 22_GA_Valdosta_FireStation8_100CD: 5 table(s), 7 instance(s), 139 keyed attribute value(s) (30 printed, 109 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,building,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,floor,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,area_served,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,supply_cfm,3100,cfm,TOTAL CFM,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,oa_cfm_min,,cfm,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,supply_fan_hp,2,hp,"MOTOR HP: each motor (""2x2"": two motors at 2 hp)",author's reading of the printed row
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,supply_fan_qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,return_fan_hp,,hp,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,exhaust_fan_hp,,hp,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,vfd,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,economizer,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,outdoor_air_pct,,%,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,cooling_type,dx,,HGRH,"the row prints a hot gas reheat (HGRH) block, which only a refrigerant (DX) circuit has (the author's reading)"
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,cooling_mbh,268,MBH,COOLING COIL / MIN. TOTAL MBH,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,cooling_tons,,tons,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,dx_stages,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_gpm,,gpm,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_ewt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_lwt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_wpd_ft,,ft,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_mbh,,MBH,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_rows,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_conn_in,,in,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,chw_glycol_pct,,%,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,heating_type,electric,,ELECTRIC HEAT,"the row's heat is its ELECTRIC HEAT block (EAT/LAT 20/85, 65 Kw) (the author's reading)"
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,heating_mbh,,MBH,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_gpm,,gpm,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_ewt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_lwt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_wpd_ft,,ft,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_mbh,,MBH,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_rows,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_conn_in,,in,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,hw_glycol_pct,,%,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,steam_psig,,psig,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,steam_lb_hr,,lb/hr,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,gas_input_mbh,,MBH,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,eh_kw,65,kW,ELECTRIC HEAT / Kw,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,humidifier,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,energy_recovery,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,filter_merv,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,bas_interface,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,volts,,V,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,DOAS UNIT SCHEDULE,DOAS-1,DOAS,phase,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,building,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,floor,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,area_served,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,recovery_type,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,supply_cfm,300,cfm,SUPPLY AIR FLOW CFM,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,exhaust_cfm,300,cfm,EXHAUST AIR FLOW CFM,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,supply_fan_hp,,hp,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,exhaust_fan_hp,,hp,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,volts,,V,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,ENERGY RECOVERY VENTILATOR SCHEDULE,ERV-1,ERV,phase,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,building,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,floor,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,area_served,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,cfm,,cfm,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,cooling_mbh,120,MBH,OUTDOOR UNIT / COOLING MIN. TMBH,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,cooling_tons,,tons,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,heating_mbh,135,MBH,OUTDOOR UNIT / HEATING MIN. TMBH,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,hw_gpm,,gpm,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,hw_ewt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,hw_lwt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,chw_gpm,,gpm,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,chw_ewt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,chw_lwt_f,,F,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,motor_hp,,hp,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,eh_kw,,kW,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,conn_in,,in,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,bas_interface,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,volts,208,V,VOLTAGE/ PHASE: volts part,author's reading of the printed row
+22_GA_Valdosta_FireStation8_100CD.pdf#64,VARIABLE REFRIGERANT FLOW CONDENSING UNIT SCHEDULE,VRHP-1,CONDENSING_UNIT,phase,3,,VOLTAGE/ PHASE: phase part,author's reading of the printed row
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,building,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,floor,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,area_served,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,service,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,gpm,0.5,gpm,GPM,printed '.5'
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,head_ft,3,ft,TDH,printed '3.00'
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,motor_hp,0.025,hp,H.P.,printed '1/40'
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,rpm,,rpm,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,vfd,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,pump_arrangement,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,glycol_pct,,%,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,conn_in,,in,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,volts,,V,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#57,RECIRCULATOR PUMP SCHEDULE,RP-1,PUMP,phase,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,area_served,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,cfm,745,cfm,CFM,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,esp_in,0.4,in. w.c.,S.P. IN W.G.,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,motor_hp,0.25,hp,MOTOR HP,printed '1/4'
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,rpm,1232,rpm,MAX. RPM: the fan's speed,author's reading of the printed row
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,control,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,volts,,V,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-1,FAN,phase,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,building,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,floor,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,area_served,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,service,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,cfm,4250,cfm,CFM,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,esp_in,0.25,in. w.c.,S.P. IN W.G.,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,motor_hp,0.5,hp,MOTOR HP,printed '1/2'
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,motor_watts,,W,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,rpm,824,rpm,MAX. RPM: the fan's speed,author's reading of the printed row
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,vfd,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,ecm,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,control,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,volts,,V,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,EF-2,FAN,phase,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,building,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,floor,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,area_served,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,qty,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,service,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,cfm,75,cfm,CFM,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,esp_in,0.25,in. w.c.,S.P. IN W.G.,
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,motor_hp,0.05,hp,MOTOR HP,printed '1/20'
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,motor_watts,,W,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,rpm,950,rpm,MAX. RPM: the fan's speed,author's reading of the printed row
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,vfd,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,ecm,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,control,,,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,volts,,V,,not printed
+22_GA_Valdosta_FireStation8_100CD.pdf#64,FAN SCHEDULE,TEF-1,FAN,phase,,,,not printed

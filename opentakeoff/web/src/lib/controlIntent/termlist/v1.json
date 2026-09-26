@@ -1,0 +1,1045 @@
+{
+  "version": "control_termlist_v2",
+  "about": "CONTROL INTENT goal WP3.1 (goals/CONTROL_INTENT.md, reader R0): the printed words that say a typical's option is there, is its alternative, or is mentioned at all, and the phrases that put a unit outside the BAS's command. Patterns are JavaScript regular expressions over a clause's matching form (upper case, one kind of dash and quote, letter-spaced words closed up; readers/text.ts normText). Every pattern names its sources: the library option's own definition (us-typicals v1 label and note), UFGS/UFC vocabulary, or at least two dev documents from different drafters (reports/assemblies/drafters.json). No key text and no single document is ever a source (ANTI-GAMING).",
+  "sources": {
+    "lib": "the option's definition in web/src/lib/assemblies/starter/us-typicals-v1.json (its label and note), frozen at ASSEMBLIES GATE 4",
+    "ufgs-230900-sa": "UFGS 23 09 00 §1 (system requirements): 'stand-alone system and does not require connection to any other system'",
+    "ufgs-230900-pkg": "UFGS 23 09 00 §3.7.3: 'equipment provided with on-board factory packaged controls such as boiler controllers, dedicated outside air systems (DOAS s), and packaged pumping systems'",
+    "ufgs-230900-iso": "UFGS 23 09 00 §3.7.8.5 (trends): each boiler's and chiller's isolation valve command and status",
+    "ufgs-230913-safety": "UFGS 23 09 13 §3.1.6: 'temperature limit switch (freezestat)'; §3.1.6.2: 'Wire safety controls such as smoke detectors and freeze protection thermostats to protect the equipment during both hand and auto operation'",
+    "ufgs-230993-smk": "UFGS 23 09 93 §3.2 (AHU safeties): 'Supply air smoke (SA-SMK)', 'Return air smoke (RA-SMK)'",
+    "ufgs-230993-ll": "UFGS 23 09 93 §3.2: 'discharge air temperature low limit (freezestat)', 'freeze stat trip'",
+    "ufgs-230993-pts": "UFGS 23 09 93 point names: SF-SS (supply fan start/stop), SF-S and RF-S (fan status), ZN-T-SP (zone temperature setpoint), ZN-OCC (zone occupancy), ZN-RH (zone relative humidity), ECO-HL-SP (economizer high limit), OA-D-MIN and MINOA-F (minimum outdoor air damper and flow)",
+    "goal-wp31": "goals/CONTROL_INTENT.md WP3.1: exclusion phrases (STANDALONE, NOT CONTROLLED BY, BY OTHERS, TO REMAIN, WIRE TO STARTER) and C6's role answers (controls / monitors only / not connected)",
+    "dev-end-switch": "dev documents of 4 drafters print a damper proven by an END SWITCH (atkins 094, casco-diversified 004, musgrove-engineering itd-d1-lab, smithgroup federal-mech)",
+    "dev-damper-actuator": "dev documents of 2 drafters print DAMPER ACTUATOR (casco-diversified 004, musgrove-engineering itd-d1-lab)",
+    "dev-damper-state": "dev documents of 4 drafters print a damper's OPEN/CLOSE, STATUS or POSITION (casco-diversified 004, davis-monthan-afb-ce bldg5406, musgrove-engineering itd-d1-lab, smithgroup federal-mech)",
+    "dev-modulate-valve": "dev documents of 5 drafters print MODULATE … VALVE / MODULATING … VALVE (casco-diversified, davis-monthan-afb-ce, imeg, musgrove-engineering, smithgroup)",
+    "dev-current-relay": "dev documents of 5 drafters prove a fan by CURRENT SENSING RELAY, CSR, CT or CURRENT SWITCH (davis-monthan-afb-ce, imeg, musgrove-engineering, smithgroup, 074 unidentified)",
+    "dev-fan-status": "dev documents of 5 drafters print FAN STATUS (davis-monthan-afb-ce, imeg, musgrove-engineering, smithgroup, 074 unidentified)",
+    "dev-static-pressure": "dev documents of 4 drafters print fan speed held on STATIC PRESSURE (davis-monthan-afb-ce, imeg, musgrove-engineering, smithgroup)",
+    "dev-space-humidity": "dev documents of 2 drafters print SPACE / ROOM (RELATIVE) HUMIDITY (casco-diversified 004, musgrove-engineering itd-d1-lab)",
+    "dev-return-humidity": "dev documents of 2 drafters print RETURN AIR (RELATIVE) HUMIDITY (imeg 031, smithgroup federal-mech)",
+    "dev-setpoint-adjust": "dev documents of 3 drafters print SETPOINT ADJUSTMENT / OCCUPANT ADJUSTABILITY (davis-monthan-afb-ce, musgrove-engineering, smithgroup)",
+    "dev-return-fan": "dev documents of 2 drafters print RETURN FAN (imeg 031/040, smithgroup federal-mech)",
+    "dev-isolation-valve": "dev documents of 2 drafters print ISOLATION VALVE with its command or status (imeg 031, smithgroup federal-mech)",
+    "dev-hardwire": "dev documents of 3 drafters print a safety or fan HARDWIRED / WIRE(D) TO the starter, VFD or fan (atkins 094, imeg 031, smithgroup federal-mech)",
+    "dev-thermostat": "dev documents of 2 drafters let a thermostat run the unit: 'THE LOCAL THERMOSTAT WILL MODULATE …' (smithgroup federal-mech), 'THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING' (musgrove-engineering itd-d1-lab); the pattern keeps only a thermostat the text calls local, integral or line-voltage (a BAS space sensor is often called a thermostat too)",
+    "dev-manufacturer": "dev documents of 2 drafters give a unit's control to its manufacturer: 'CONTROL BY FCU MANUFACTURER' (smithgroup federal-mech), 'MANUFACTURER PROVIDED WIRED CONTROLLER' (musgrove-engineering itd-d1-lab)",
+    "dev-interlock": "dev documents of 5 drafters interlock equipment with other equipment (ace-inc, casco-diversified, imeg, musgrove-engineering, smithgroup)",
+    "dev-wire-to": "dev documents of 2 drafters print a wiring callout beside a safety device: 'WIRE TO STARTER' (atkins 094), 'WIRED TO THE VFD' (smithgroup federal-mech)",
+    "ufgs-230900-names": "UFGS 23 09 00 and 23 09 23.02 name the building control system and its parts: DDC, Building Control System (BCS), Utility Monitoring and Control System (UMCS)",
+    "dev-bas-commands": "dev documents of 3 drafters make the control system the subject of a control act: 'THE BMS SHALL …' (smithgroup federal-mech), 'THE DDC CONTROLLER SHALL …' (musgrove-engineering itd-d1-lab), 'FMCS SHALL …' (imeg 040)"
+  },
+  "role": {
+    "not_connected": [
+      {
+        "id": "standalone",
+        "re": "\\b(?:SYSTEMS?|UNITS?|EQUIPMENT|HEATERS?|FANS?|PUMPS?|CONTROLS?)\\s+(?:IS|ARE|SHALL\\s+BE|TO\\s+BE|WILL\\s+BE)\\s+(?:A\\s+)?STAND[-\\s]?ALONE\\b|\\bSTAND[-\\s]?ALONE\\s+(?:UNITS?|SYSTEMS?|CONTROLS?|OPERATION)\\b",
+        "subject": "\\b(?:THIS|THESE|THE|EACH|ALL|UNIT|SYSTEM)\\b",
+        "whitelist": true,
+        "sources": [
+          "ufgs-230900-sa",
+          "goal-wp31"
+        ]
+      },
+      {
+        "id": "not_controlled_by_bas",
+        "re": "\\bNOT\\s+(?:BE\\s+)?(?:CONTROLLED|MONITORED)\\s+BY\\s+(?:THE\\s+)?(?:DDC|BAS|BMS|EMS|EMCS|FMCS|UMCS|BUILDING\\s+(?:AUTOMATION|MANAGEMENT))\\b|\\bNOT\\s+(?:BE\\s+)?CONNECTED\\s+TO\\s+(?:THE\\s+)?(?:DDC|BAS|BMS|EMS|EMCS|FMCS|UMCS|BUILDING\\s+(?:AUTOMATION|MANAGEMENT))\\b",
+        "whitelist": true,
+        "sources": [
+          "goal-wp31",
+          "ufgs-230900-sa"
+        ]
+      }
+    ],
+    "local_control": [
+      {
+        "id": "thermostat_runs_unit",
+        "re": "\\b(?:LOCAL|UNIT[-\\s]MOUNTED|INTEGRAL|LINE[-\\s]VOLTAGE|STAND[-\\s]?ALONE|SELF[-\\s]CONTAINED)\\s+(?:THERMOSTAT|T-?STAT)S?\\b[^.;]{0,24}\\b(?:SHALL|WILL)\\b[^.;]{0,16}\\b(?:CYCLE|MODULATE|SEQUENCE|CONTROL|ENABLE|START|STAGE|OPERATE|ENERGIZE)",
+        "sources": [
+          "dev-thermostat",
+          "goal-wp31"
+        ]
+      },
+      {
+        "id": "manufacturer_controls",
+        "re": "\\bCONTROL(?:S|LED)?\\b[^.;]{0,30}\\bBY\\s+(?:THE\\s+)?(?:[A-Z]+\\s+){0,2}MANUFACTURER\\b|\\bMANUFACTURER(?:'S)?\\s+(?:PROVIDED\\s+|FURNISHED\\s+|SUPPLIED\\s+)?(?:WIRED\\s+)?(?:CONTROLLER|CONTROLS|CONTROL\\s+PANEL)\\b|\\bFACTORY\\s+(?:PACKAGED\\s+)?CONTROLS\\b|\\bPACKAGED\\s+CONTROLS\\b",
+        "sources": [
+          "dev-manufacturer",
+          "ufgs-230900-pkg"
+        ]
+      },
+      {
+        "id": "equipment_enables_its_own",
+        "re": "\\b(?:EACH|THE)\\s+[A-Z][A-Z\\s-]{1,30}?\\s+SHALL\\s+(?:ENABLE|DISABLE|START|STOP|CYCLE|ENERGIZE|DE-?ENERGIZE)\\s+(?:ITS|THEIR|THE)\\s+(?:OWN|ASSOCIATED|RESPECTIVE)\\b",
+        "sources": [
+          "dev-interlock"
+        ]
+      }
+    ],
+    "bas_actor": [
+      {
+        "id": "bas_names",
+        "re": "\\b(?:BAS|BMS|BCS|EMCS|EMS|FMCS|UMCS|DDC(?:\\s+(?:SYSTEM|CONTROLLER|CONTROL\\s+SYSTEM|PANEL))?|BUILDING\\s+(?:AUTOMATION|MANAGEMENT)(?:\\s+SYSTEM)?)\\b",
+        "sources": [
+          "ufgs-230900-names",
+          "dev-bas-commands"
+        ]
+      }
+    ],
+    "local_actor": [
+      {
+        "id": "thermostat",
+        "re": "\\b(?:THERMOSTAT|T-?STAT)S?\\b",
+        "sources": [
+          "dev-thermostat"
+        ]
+      },
+      {
+        "id": "own_controls",
+        "re": "\\bMANUFACTURER(?:'S)?\\b|\\bFACTORY\\b|\\b(?:UNIT|BOILER|CHILLER|EQUIPMENT)(?:'S)?\\s+(?:UNIT\\s+)?CONTROL(?:LER|S|\\s+PANEL)\\b|\\bUCP\\b|\\bOWN\\s+(?:INTERNAL\\s+)?CONTROLS\\b",
+        "sources": [
+          "dev-manufacturer",
+          "ufgs-230900-pkg"
+        ]
+      }
+    ]
+  },
+  "options": {
+    "motorized_damper": {
+      "device": "a motorized (actuated) damper or louver that opens and closes with the fan: commanded with it, interlocked with it, or proven by an end switch (a backdraft, gravity, fire, smoke, manual or balancing damper is not one)",
+      "mention": [
+        {
+          "id": "damper",
+          "re": "\\bDAMPERS?\\b|\\bDMPR\\b|\\bLOUVERS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "not_motorized",
+          "re": "\\b(?:BACK\\s?DRAFT|GRAVITY|BAROMETRIC|FIRE|FIRE\\s?/\\s?SMOKE|SMOKE|COMBINATION\\s+FIRE/SMOKE|BALANCING|MANUAL|VOLUME|ZONE|VAV|TERMINAL)\\s+DAMPERS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "motorized",
+          "re": "\\bMOTORI[SZ]ED\\b[^.;]{0,40}\\b(?:DAMPERS?|LOUVERS?)\\b|\\bMOTOR[-\\s]OPERATED\\s+(?:DAMPERS?|LOUVERS?)\\b",
+          "sources": [
+            "lib"
+          ]
+        },
+        {
+          "id": "actuator",
+          "re": "\\bDAMPERS?\\b[^.;]{0,30}\\bACTUATORS?\\b",
+          "sources": [
+            "dev-damper-actuator"
+          ]
+        },
+        {
+          "id": "end_switch",
+          "re": "\\bDAMPERS?\\b[^.;]{0,50}\\bEND\\s+SWITCH(?:ES)?\\b|\\bEND\\s+SWITCH(?:ES)?\\b[^.;]{0,50}\\bDAMPERS?\\b",
+          "sources": [
+            "dev-end-switch"
+          ]
+        },
+        {
+          "id": "commanded",
+          "re": "\\b(?:OPEN|CLOSE)\\s+COMMAND\\s+TO\\s+THE\\s+[A-Z\\s]{0,30}\\bDAMPERS?\\b|\\bDAMPERS?\\b[^.;]{0,20}\\b(?:OPEN\\s*/\\s*CLOSE|STATUS)\\b|\\b(?:AO|DO|BO)\\s*[-:]\\s*[A-Z\\s]{0,30}\\bDAMPER\\b",
+          "sources": [
+            "dev-damper-state"
+          ]
+        },
+        {
+          "id": "interlocked",
+          "re": "\\bDAMPERS?\\b[^.;]{0,40}\\bINTERLOCK(?:ED)?\\b|\\bINTERLOCK(?:ED)?\\b[^.;]{0,40}\\bDAMPERS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "pressure_control": {
+      "device": "the fan's speed (VFD) modulated to hold a pressure: duct, plenum, space or building static or differential pressure, or a CO level",
+      "mention": [
+        {
+          "id": "pressure",
+          "re": "\\bSTATIC\\s+PRESSURE\\b|\\bDIFFERENTIAL\\s+PRESSURE\\b|\\bPRESSURE\\s+(?:SENSOR|TRANSMITTER|SET\\s?POINT)\\b|\\bCO\\s+(?:SENSOR|LEVEL|DETECT\\w*)\\b|\\bCARBON\\s+MONOXIDE\\b",
+          "sources": [
+            "lib",
+            "dev-static-pressure"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "speed_on_pressure",
+          "re": "\\b(?:VFDS?|VFD'S|SPEED|FREQUENCY)\\b[^.;]{0,90}\\b(?:STATIC\\s+PRESSURE|DIFFERENTIAL\\s+PRESSURE|PRESSURE\\s+SET\\s?POINT)\\b|\\b(?:STATIC\\s+PRESSURE|DIFFERENTIAL\\s+PRESSURE)\\b[^.;]{0,90}\\b(?:VFDS?|VFD'S|SPEED)\\b",
+          "sources": [
+            "lib",
+            "dev-static-pressure"
+          ]
+        },
+        {
+          "id": "speed_on_co",
+          "re": "\\b(?:VFDS?|SPEED)\\b[^.;]{0,90}\\b(?:CO|CARBON\\s+MONOXIDE)\\s+(?:LEVEL|SENSOR|CONCENTRATION)S?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "modulating_valve": {
+      "device": "a modulating heating valve (proportional, analog output) on the unit, rather than a 2-position (open/closed) valve",
+      "mention": [
+        {
+          "id": "valve",
+          "re": "\\bVALVES?\\b|\\bVLV\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "modulate_valve",
+          "re": "\\bMODULAT\\w*\\b[^.;]{0,50}\\b(?:VALVES?|VLV)\\b|\\b(?:VALVES?|VLV)\\b[^.;]{0,30}\\bMODULAT\\w*",
+          "sources": [
+            "lib",
+            "dev-modulate-valve"
+          ]
+        }
+      ],
+      "no": [
+        {
+          "id": "two_position",
+          "re": "\\b(?:2|TWO)[-\\s]POSITION\\b[^.;]{0,30}\\b(?:VALVES?|VLV)\\b|\\b(?:VALVES?|VLV)\\b[^.;]{0,20}\\b(?:2|TWO)[-\\s]POSITION\\b|\\bON\\s*/\\s*OFF\\s+(?:VALVES?|VLV)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "fan_status": {
+      "device": "the unit's fan status proven to the BAS (a current switch, current sensing relay or airflow switch)",
+      "mention": [
+        {
+          "id": "status",
+          "re": "\\bSTATUS\\b|\\bCURRENT\\s+(?:SENSING\\s+|SENSOR\\s+)?(?:RELAY|SWITCH|TRANSFORMER)\\b|\\bCSR\\b",
+          "sources": [
+            "lib",
+            "dev-current-relay"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "fan_status",
+          "re": "\\bFAN\\s+(?:RUN\\s+)?STATUS\\b|\\bSTATUS\\s+OF\\s+THE\\s+(?:SUPPLY\\s+)?FAN\\b",
+          "sources": [
+            "lib",
+            "dev-fan-status",
+            "ufgs-230993-pts"
+          ]
+        },
+        {
+          "id": "current_relay",
+          "re": "\\bCURRENT\\s+(?:SENSING\\s+|SENSOR\\s+)?(?:RELAY|SWITCH)\\b|\\bCSR\\b",
+          "sources": [
+            "lib",
+            "dev-current-relay"
+          ]
+        }
+      ]
+    },
+    "setpoint_adjust": {
+      "device": "occupant setpoint adjustment at the zone (space) sensor or thermostat",
+      "mention": [
+        {
+          "id": "zone_sensor",
+          "re": "\\b(?:SPACE|ZONE|ROOM|WALL)\\s+(?:TEMPERATURE\\s+|TEMP\\.?\\s+)?(?:SENSOR|THERMOSTAT|STAT)S?\\b|\\bTHERMOSTATS?\\b|\\bSET\\s?POINT\\s+ADJUST\\w*|\\bOCCUPANT\\s+ADJUST\\w*",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "software_adjustable",
+          "re": "\\(ADJ(?:USTABLE|\\.)?\\)|\\bOPERATOR\\s+ADJUSTABLE\\b|\\bUSER\\s+DEFINABLE\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "adjustment",
+          "re": "\\bSET\\s?POINT\\s+ADJUST(?:MENT|MENTS|ABLE)?\\b|\\bOCCUPANT\\s+ADJUST(?:MENT|ABILITY|ABLE)\\b|\\bADJUSTABLE\\s+BY\\s+(?:THE\\s+)?OCCUPANTS?\\b",
+          "sources": [
+            "lib",
+            "dev-setpoint-adjust"
+          ]
+        }
+      ]
+    },
+    "freezestat_to_bas": {
+      "device": "the freezestat (low limit) wired to the BAS controller as an input it acts on, rather than hardwired to the fan starter or VFD (and only monitored)",
+      "mention": [
+        {
+          "id": "freezestat",
+          "re": "\\bFREEZE\\s?STAT\\b|\\bLOW\\s+(?:TEMPERATURE\\s+)?LIMIT\\b|\\bFZ-?\\d+\\b|\\bLLT\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-ll",
+            "ufgs-230913-safety"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "to_bas",
+          "re": "\\b(?:FREEZE\\s?STAT|LOW\\s+LIMIT)\\b[^.;]{0,60}\\b(?:WIRED|CONNECTED)\\s+TO\\s+(?:THE\\s+)?(?:DDC|BAS|BMS|CONTROLLER|UNIT\\s+CONTROLLER)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "no": [
+        {
+          "id": "hardwired",
+          "re": "\\b(?:FREEZE\\s?STAT|LOW\\s+LIMIT)\\b[^.;]{0,80}\\b(?:HARD\\s?WIRED?|WIRED?)\\b[^.;]{0,24}\\b(?:TO|INTO|WITH)\\b[^.;]{0,30}\\b(?:STARTERS?|VFDS?|FANS?|MOTORS?|SAFETY\\s+CIRCUIT)\\b|\\bHARD\\s?WIRED?\\s+INTERLOCK\\b[^.;]{0,30}\\b(?:FREEZE\\s?STAT|LOW\\s+LIMIT)\\b",
+          "sources": [
+            "lib",
+            "ufgs-230913-safety",
+            "dev-hardwire"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "id": "wire_to_starter",
+          "re": "^(?:HARD\\s?)?WIRED?\\s+(?:TO|INTO)\\s+(?:THE\\s+)?(?:MOTOR\\s+|FAN\\s+)?(?:STARTERS?|VFDS?|MOTOR\\s+CONTROLLERS?)\\b",
+          "value": "no",
+          "sources": [
+            "lib",
+            "ufgs-230913-safety",
+            "dev-wire-to"
+          ]
+        }
+      ]
+    },
+    "duct_smoke_detectors": {
+      "device": "supply and return duct smoke detectors monitored by the BAS (SA-SMK, RA-SMK)",
+      "mention": [
+        {
+          "id": "smoke_detector",
+          "re": "\\bSMOKE\\s+DETECT\\w*|\\b(?:SA|RA)-?SMK\\b|\\bSMK\\b|\\bSD-?\\d+\\b|\\bDUCT\\s+DETECTORS?\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-smk"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "smoke_not_detector",
+          "re": "\\bSMOKE\\s+(?:MODE|DAMPERS?|CONTROL|EXHAUST|EVACUATION|PURGE|MANAGEMENT)\\b",
+          "sources": [
+            "goal-wp31",
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "smoke_detector",
+          "re": "\\bSMOKE\\s+DETECT(?:OR|ORS|ION)\\b|\\b(?:SA|RA)-?SMK\\b|\\bDUCT\\s+DETECTORS?\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-smk"
+          ]
+        }
+      ]
+    },
+    "isolation_valve": {
+      "device": "a motorized (actuated) isolation valve on the unit, commanded by the BAS, with its status",
+      "mention": [
+        {
+          "id": "isolation_valve",
+          "re": "\\bISOLATION\\s+VALVES?\\b|\\bISO\\.?\\s+(?:VALVES?|VLV)\\b|\\bSHUT-?OFF\\s+VALVES?\\b",
+          "sources": [
+            "lib",
+            "ufgs-230900-iso"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "manual",
+          "re": "\\bMANUAL\\s+(?:ISOLATION|SHUT-?OFF)\\s+VALVES?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "actuated",
+          "re": "\\bISOLATION\\s+VALVES?\\b[^.;]{0,40}\\b(?:AO|DO|BO|DI|BI|CONTROL|COMMAND|STATUS|END\\s+SWITCH(?:ES)?|ACTUATORS?|OPEN|CLOSE|POSITION)\\b|\\b(?:MOTORI[SZ]ED|AUTOMATIC|ACTUATED|MODULAT\\w*|OPEN|CLOSE)\\b[^.;]{0,30}\\bISOLATION\\s+VALVES?\\b",
+          "sources": [
+            "lib",
+            "ufgs-230900-iso",
+            "dev-isolation-valve"
+          ]
+        }
+      ]
+    },
+    "chw_isolation_valve": {
+      "device": "a motorized chilled-water isolation valve at the chiller, commanded by the BAS",
+      "mention": [
+        {
+          "id": "isolation_valve",
+          "re": "\\bISOLATION\\s+VALVES?\\b|\\bISO\\.?\\s+(?:VALVES?|VLV)\\b|\\bSHUT-?OFF\\s+VALVES?\\b",
+          "sources": [
+            "lib",
+            "ufgs-230900-iso"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "manual",
+          "re": "\\bMANUAL\\s+(?:ISOLATION|SHUT-?OFF)\\s+VALVES?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "actuated",
+          "re": "\\bISOLATION\\s+VALVES?\\b[^.;]{0,40}\\b(?:AO|DO|BO|DI|BI|CONTROL|COMMAND|STATUS|END\\s+SWITCH(?:ES)?|ACTUATORS?|OPEN|CLOSE|POSITION)\\b|\\b(?:MOTORI[SZ]ED|AUTOMATIC|ACTUATED|MODULAT\\w*|OPEN|CLOSE)\\b[^.;]{0,30}\\bISOLATION\\s+VALVES?\\b",
+          "sources": [
+            "lib",
+            "ufgs-230900-iso",
+            "dev-isolation-valve"
+          ]
+        }
+      ]
+    },
+    "isolation_end_switches": {
+      "device": "open and closed end switches on 2-position isolation valves",
+      "mention": [
+        {
+          "id": "isolation_valve",
+          "re": "\\bISOLATION\\s+VALVES?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "end_switches",
+          "re": "\\bISOLATION\\s+VALVES?\\b[^.;]{0,50}\\bEND\\s+SWITCH(?:ES)?\\b|\\bEND\\s+SWITCH(?:ES)?\\b[^.;]{0,50}\\bISOLATION\\s+VALVES?\\b",
+          "sources": [
+            "lib",
+            "dev-end-switch"
+          ]
+        }
+      ]
+    },
+    "return_fan": {
+      "device": "a return fan in the unit's return path (RF)",
+      "mention": [
+        {
+          "id": "return_fan",
+          "re": "\\bRETURN\\s+(?:AIR\\s+)?FANS?\\b|\\bRF-?\\d+\\b|\\bRF-S\\b",
+          "sources": [
+            "lib",
+            "dev-return-fan",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "return_fan",
+          "re": "\\bRETURN\\s+(?:AIR\\s+)?FANS?\\b|\\bRF-?\\d+\\b",
+          "sources": [
+            "lib",
+            "dev-return-fan"
+          ]
+        }
+      ]
+    },
+    "relief_fan": {
+      "device": "a relief fan controlling building pressure",
+      "mention": [
+        {
+          "id": "relief_fan",
+          "re": "\\bRELIEF\\s+(?:AIR\\s+)?FANS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "relief_fan",
+          "re": "\\bRELIEF\\s+(?:AIR\\s+)?FANS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "relief_damper": {
+      "device": "a modulating relief damper controlling building pressure",
+      "mention": [
+        {
+          "id": "relief_damper",
+          "re": "\\bRELIEF\\s+(?:AIR\\s+)?DAMPERS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "relief_damper",
+          "re": "\\bRELIEF\\s+(?:AIR\\s+)?DAMPERS?\\b[^.;]{0,60}\\b(?:MODULAT\\w*|BUILDING\\s+(?:STATIC\\s+)?PRESSURE)\\b|\\bMODULAT\\w*\\b[^.;]{0,40}\\bRELIEF\\s+(?:AIR\\s+)?DAMPERS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "enthalpy_economizer": {
+      "device": "an economizer whose high limit uses outdoor-air enthalpy",
+      "mention": [
+        {
+          "id": "economizer",
+          "re": "\\bECONOMI[SZ]\\w*|\\bENTHALPY\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "enthalpy",
+          "re": "\\b(?:OUTSIDE|OUTDOOR|OA)\\s+(?:AIR\\s+)?ENTHALPY\\b|\\bENTHALPY\\b[^.;]{0,60}\\bECONOMI[SZ]\\w*|\\bECONOMI[SZ]\\w*[^.;]{0,60}\\bENTHALPY\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "differential_economizer": {
+      "device": "an economizer high limit that compares outdoor air with return air (differential dry bulb or differential enthalpy)",
+      "mention": [
+        {
+          "id": "economizer",
+          "re": "\\bECONOMI[SZ]\\w*|\\bENTHALPY\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "compares_return",
+          "re": "\\b(?:OUTSIDE|OUTDOOR|OA)\\s+(?:AIR\\s+)?(?:ENTHALPY|TEMPERATURE|DRY[-\\s]?BULB)\\b[^.;]{0,60}\\b(?:BELOW|LESS\\s+THAN|LOWER\\s+THAN)\\b[^.;]{0,30}\\bRETURN\\s+(?:AIR\\s+)?(?:ENTHALPY|TEMPERATURE|DRY[-\\s]?BULB)\\b|\\bDIFFERENTIAL\\s+(?:ENTHALPY|DRY[-\\s]?BULB|TEMPERATURE)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "economizer": {
+      "device": "an airside economizer (modulating outdoor, return and relief dampers for free cooling)",
+      "mention": [
+        {
+          "id": "economizer",
+          "re": "\\bECONOMI[SZ]\\w*|\\bFREE\\s+COOLING\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "economizer",
+          "re": "\\bECONOMI[SZ]ER\\b|\\bECONOMI[SZ]ING\\b|\\bECONOMIZER\\s+MODE\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ]
+    },
+    "exhaust_fan": {
+      "device": "the unit's own exhaust fan with energy recovery (a wheel or heat exchanger between exhaust and outdoor air)",
+      "mention": [
+        {
+          "id": "exhaust_recovery",
+          "re": "\\bEXHAUST\\s+(?:AIR\\s+)?FANS?\\b|\\bENERGY\\s+RECOVERY\\b|\\bHEAT\\s+RECOVERY\\b|\\b(?:ENTHALPY|HEAT|ENERGY|TOTAL\\s+ENERGY)\\s+WHEEL\\b|\\bERV\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "recovery",
+          "re": "\\bENERGY\\s+RECOVERY\\b|\\b(?:ENTHALPY|HEAT|ENERGY|TOTAL\\s+ENERGY)\\s+(?:RECOVERY\\s+)?WHEEL\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "variable_speed_wheel": {
+      "device": "an energy recovery wheel whose speed the BAS varies (VFD)",
+      "mention": [
+        {
+          "id": "wheel",
+          "re": "\\bWHEEL\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "wheel_speed",
+          "re": "\\bWHEEL\\b[^.;]{0,50}\\b(?:VFD|VARIABLE\\s+SPEED|SPEED\\s+(?:CONTROL|SIGNAL|COMMAND)|MODULAT\\w*)\\b|\\b(?:VFD|VARIABLE\\s+SPEED)\\b[^.;]{0,30}\\bWHEEL\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "dedicated_min_oa": {
+      "device": "a separate minimum outdoor-air damper (with its own flow measurement)",
+      "mention": [
+        {
+          "id": "oa_damper",
+          "re": "\\b(?:OUTSIDE|OUTDOOR|OA)\\s+(?:AIR\\s+)?DAMPERS?\\b|\\bMINIMUM\\s+(?:OUTSIDE|OUTDOOR)\\s+AIR\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "min_oa_damper",
+          "re": "\\bMIN(?:IMUM|\\.)?\\s+(?:OUTSIDE|OUTDOOR|OA|O\\.A\\.)\\s+(?:AIR\\s+)?DAMPERS?\\b|\\bOA-D-MIN\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ]
+    },
+    "space_humidity": {
+      "device": "a space (room, zone) humidity sensor the humidifier is controlled from, rather than return-air humidity",
+      "mention": [
+        {
+          "id": "humidity",
+          "re": "\\bHUMIDITY\\b|\\bRH\\b|\\bHUMIDISTAT\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "space_humidity",
+          "re": "\\b(?:SPACE|ROOM|ZONE)\\s+(?:RELATIVE\\s+)?HUMIDITY\\b|\\bZN-RH\\b|\\b(?:SPACE|ROOM|ZONE|WALL)\\s+HUMIDISTAT\\b",
+          "sources": [
+            "lib",
+            "dev-space-humidity",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "no": [
+        {
+          "id": "return_humidity",
+          "re": "\\bRETURN\\s+(?:AIR\\s+)?(?:RELATIVE\\s+)?HUMIDITY\\b",
+          "sources": [
+            "lib",
+            "dev-return-humidity"
+          ]
+        }
+      ]
+    },
+    "co2_sensor": {
+      "device": "a zone (space) CO2 sensor for demand-controlled ventilation",
+      "mention": [
+        {
+          "id": "co2",
+          "re": "\\bCO2\\b|\\bCARBON\\s+DIOXIDE\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "return_co2",
+          "re": "\\bRETURN\\s+AIR\\s+(?:CO2|CARBON\\s+DIOXIDE)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "zone_co2",
+          "re": "\\b(?:SPACE|ZONE|ROOM|WALL)\\s+(?:MOUNTED\\s+)?(?:CO2|CARBON\\s+DIOXIDE)\\b|\\b(?:CO2|CARBON\\s+DIOXIDE)\\s+(?:SENSOR|TRANSMITTER)S?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "occupancy_sensor": {
+      "device": "a zone occupancy sensor",
+      "mention": [
+        {
+          "id": "occupancy",
+          "re": "\\bOCCUPANCY\\s+(?:SENSOR|DETECTOR)S?\\b|\\bZN-OCC\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "occupancy",
+          "re": "\\bOCCUPANCY\\s+(?:SENSOR|DETECTOR)S?\\b|\\bZN-OCC\\b",
+          "sources": [
+            "lib",
+            "ufgs-230993-pts"
+          ]
+        }
+      ]
+    },
+    "window_switch": {
+      "device": "a window switch (contact) reported to the BAS",
+      "mention": [
+        {
+          "id": "window",
+          "re": "\\bWINDOW\\s+(?:SWITCH|CONTACT)E?S?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "window",
+          "re": "\\bWINDOW\\s+(?:SWITCH|CONTACT)E?S?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "variable_speed_fan": {
+      "device": "a variable-speed (EC) fan whose speed the controller modulates, rather than a multi-speed or single-speed fan",
+      "mention": [
+        {
+          "id": "fan",
+          "re": "\\bFANS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "variable",
+          "re": "\\bECM\\b|\\bEC\\s+MOTORS?\\b|\\bELECTRONICALLY\\s+COMMUTATED\\b|\\bVARIABLE[-\\s]SPEED\\s+FANS?\\b|\\bFAN\\s+SPEED\\s+(?:SIGNAL|COMMAND|MODULAT\\w*)\\b|\\bMODULAT\\w*\\b[^.;]{0,20}\\bFAN\\s+SPEED\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "no": [
+        {
+          "id": "multi_speed",
+          "re": "\\bFAN\\s+(?:HIGH|MEDIUM|MED|LOW)\\s+SPEED\\b|\\b(?:HIGH|MEDIUM|LOW)[-\\s]SPEED\\s+FAN\\b|\\b(?:2|3|TWO|THREE)[-\\s]SPEED\\b|\\bMULTI[-\\s]SPEED\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "scr_heat": {
+      "device": "electric heat modulated by an SCR, rather than staged",
+      "mention": [
+        {
+          "id": "electric_heat",
+          "re": "\\bSCR\\b|\\bELECTRIC\\s+(?:RE)?HEAT\\w*|\\bHEAT(?:ING)?\\s+STAGES?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "scr",
+          "re": "\\bSCR\\b|\\bSILICON\\s+CONTROLLED\\s+RECTIFIER\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "no": [
+        {
+          "id": "staged",
+          "re": "\\bSTAGE[SD]?\\b[^.;]{0,30}\\b(?:ELECTRIC\\s+)?(?:RE)?HEAT\\w*|\\b(?:RE)?HEAT(?:ING)?\\s+STAGES?\\b|\\bSTAGE\\s+\\d\\s+(?:RE)?HEAT",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "reheat_water_temps": {
+      "device": "supply and return water temperature sensors at the reheat coil",
+      "mention": [
+        {
+          "id": "water_temp",
+          "re": "\\bWATER\\s+TEMP\\w*|\\bHWS\\b|\\bHWR\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "coil_water_temps",
+          "re": "\\b(?:REHEAT|COIL)\\b[^.;]{0,30}\\b(?:SUPPLY|RETURN|LEAVING|ENTERING)\\s+WATER\\s+TEMP\\w*|\\b(?:SUPPLY|RETURN|LEAVING|ENTERING)\\s+WATER\\s+TEMP\\w*[^.;]{0,30}\\b(?:REHEAT|COIL)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "network_interface": {
+      "device": "the equipment's controls on the network (a BACnet or other protocol interface), rather than hardwired enable, status and alarm points",
+      "mention": [
+        {
+          "id": "interface",
+          "re": "\\bBACNET\\b|\\bMODBUS\\b|\\bLON(?:WORKS)?\\b|\\bNETWORK\\b|\\bINTERFACE\\b|\\bGATEWAY\\b|\\bHARD\\s?WIRED?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "protocol",
+          "re": "\\bBACNET\\b|\\bMODBUS\\b|\\bLONWORKS\\b|\\bNETWORK\\s+(?:INTERFACE|CONNECTION|CARD)\\b|\\bPROTOCOL\\s+(?:INTERFACE|TRANSLATOR|GATEWAY)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "no": [
+        {
+          "id": "hardwired",
+          "re": "\\bHARD\\s?WIRED?\\s+(?:INTERFACE|POINTS|CONNECTION)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "two_speed_fans": {
+      "device": "two-speed (high-low-off) fan motors",
+      "mention": [
+        {
+          "id": "speed",
+          "re": "\\bSPEED\\b|\\bVFD\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "two_speed",
+          "re": "\\b(?:2|TWO)[-\\s]SPEED\\b|\\bHIGH[-\\s]LOW[-\\s]OFF\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "no": [
+        {
+          "id": "vfd",
+          "re": "\\bVARIABLE\\s+FREQUENCY\\s+DRIVES?\\b|\\bVFDS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "cell_isolation_valves": {
+      "device": "a motorized inlet isolation valve per tower cell",
+      "mention": [
+        {
+          "id": "isolation_valve",
+          "re": "\\bISOLATION\\s+VALVES?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "cell_valves",
+          "re": "\\b(?:CELL|INLET)\\b[^.;]{0,30}\\bISOLATION\\s+VALVES?\\b|\\bISOLATION\\s+VALVES?\\b[^.;]{0,30}\\b(?:CELL|INLET)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "vibration_switches": {
+      "device": "a fan vibration switch per tower cell",
+      "mention": [
+        {
+          "id": "vibration",
+          "re": "\\bVIBRATION\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "vibration",
+          "re": "\\bVIBRATION\\s+(?:SWITCH|CUT-?OUT|SENSOR)E?S?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "basin_heater": {
+      "device": "basin heater control",
+      "mention": [
+        {
+          "id": "basin",
+          "re": "\\bBASIN\\s+HEATERS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "basin",
+          "re": "\\bBASIN\\s+HEATERS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "bypass_valve": {
+      "device": "a tower bypass valve",
+      "mention": [
+        {
+          "id": "bypass",
+          "re": "\\bBYPASS\\s+VALVES?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "bypass",
+          "re": "\\b(?:TOWER|CONDENSER\\s+WATER)\\b[^.;]{0,30}\\bBYPASS\\s+VALVES?\\b|\\bBYPASS\\s+VALVES?\\b[^.;]{0,30}\\b(?:TOWER|CONDENSER\\s+WATER)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "condensate_pump": {
+      "device": "a condensate pump whose status the BAS reads (steam)",
+      "mention": [
+        {
+          "id": "condensate",
+          "re": "\\bCONDENSATE\\s+(?:PUMP|RETURN)\\w*",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "condensate_pump",
+          "re": "\\bCONDENSATE\\s+PUMPS?\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    },
+    "frost_control": {
+      "device": "frost control (a defrost cycle) on the energy recovery unit",
+      "mention": [
+        {
+          "id": "frost",
+          "re": "\\b(?:DE)?FROST\\w*",
+          "sources": [
+            "lib"
+          ]
+        }
+      ],
+      "yes": [
+        {
+          "id": "frost",
+          "re": "\\bDEFROST\\w*|\\bFROST\\s+(?:CONTROL|PROTECTION|PREVENTION)\\b",
+          "sources": [
+            "lib"
+          ]
+        }
+      ]
+    }
+  },
+  "exclusive": [
+    {
+      "options": [
+        "return_fan",
+        "relief_fan"
+      ],
+      "why": "G36 building pressure control is one choice (buiPreCon): a return fan (ReturnFanMeasuredAir, ReturnFanDp) or a relief fan (ReliefFan), as the library's option definitions say",
+      "sources": [
+        "lib"
+      ]
+    }
+  ]
+}

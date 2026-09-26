@@ -1,0 +1,317 @@
+# 011_IL_VA_Hines_Finance_Center_Renovation.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260928 (reports/assemblies/tier4/01-split.json); transcription: reports/assemblies/key-work/011_IL_VA_Hines_Finance_Center_Renovation.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet MH-101 (page 16) of the Hines Finance Center renovation, VA Hines IL (Spur Design for Spur SBBL Collaborative JV), the table the fourth tier's seed drew for its HEAT_PUMP stratum.
+#   011_IL_VA_Hines_Finance_Center_Renovation.pdf#16 | EXISTING HEAT PUMP SCHEDULE | HEAT_PUMP | all 15 printed rows | render: page 16 overview at 40 dpi; crop 652,160,745,225 at 3x in 2 tiles (MARK column repeated); second read at 3x of HP 12-1, HP 15-8 and HP 48-15, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Equipment and model numbers, outside air flows (not in the family's vocabulary), the return and discharge arrangement in NOTES, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 011_IL_VA_Hines_Finance_Center_Renovation: 1 table(s), 15 instance(s), 300 keyed attribute value(s) (60 printed, 240 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,cfm,205,cfm,DESIGN AIRFLOW,printed '205 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,heating_mbh,12000,BTU/H,HEATING CAPACITY,"printed '12,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-1,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,cfm,365,cfm,DESIGN AIRFLOW,printed '365 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,heating_mbh,12000,BTU/H,HEATING CAPACITY,"printed '12,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-2,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,cfm,290,cfm,DESIGN AIRFLOW,printed '290 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,heating_mbh,12000,BTU/H,HEATING CAPACITY,"printed '12,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-3,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,cfm,325,cfm,DESIGN AIRFLOW,printed '325 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,heating_mbh,12000,BTU/H,HEATING CAPACITY,"printed '12,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-4,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,cfm,460,cfm,DESIGN AIRFLOW,printed '460 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,heating_mbh,12000,BTU/H,HEATING CAPACITY,"printed '12,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-5,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,cfm,310,cfm,DESIGN AIRFLOW,printed '310 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,heating_mbh,12000,BTU/H,HEATING CAPACITY,"printed '12,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 12-6,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,cfm,490,cfm,DESIGN AIRFLOW,printed '490 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,heating_mbh,15000,BTU/H,HEATING CAPACITY,"printed '15,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-7,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,cfm,620,cfm,DESIGN AIRFLOW,printed '620 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,heating_mbh,15000,BTU/H,HEATING CAPACITY,"printed '15,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-8,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,cfm,645,cfm,DESIGN AIRFLOW,printed '645 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,heating_mbh,15000,BTU/H,HEATING CAPACITY,"printed '15,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 15-9,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,cfm,540,cfm,DESIGN AIRFLOW,printed '540 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,heating_mbh,24000,BTU/H,HEATING CAPACITY,"printed '24,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-10,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,cfm,680,cfm,DESIGN AIRFLOW,printed '680 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,heating_mbh,24000,BTU/H,HEATING CAPACITY,"printed '24,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,volts,265,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 24-11,HEAT_PUMP,phase,1,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,cfm,680,cfm,DESIGN AIRFLOW,printed '680 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,heating_mbh,36000,BTU/H,HEATING CAPACITY,"printed '36,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,volts,460,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 36-12,HEAT_PUMP,phase,3,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,cfm,820,cfm,DESIGN AIRFLOW,printed '820 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,heating_mbh,42000,BTU/H,HEATING CAPACITY,"printed '42,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,volts,460,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-13,HEAT_PUMP,phase,3,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,cfm,960,cfm,DESIGN AIRFLOW,printed '960 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,heating_mbh,42000,BTU/H,HEATING CAPACITY,"printed '42,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,volts,460,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 42-14,HEAT_PUMP,phase,3,,VOLTAGE/PHASE: phase part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,building,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,floor,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,area_served,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,qty,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,cfm,1275,cfm,DESIGN AIRFLOW,printed '1275 CFM'
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,cooling_mbh,,MBH,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,cooling_tons,,tons,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,heating_mbh,48000,BTU/H,HEATING CAPACITY,"printed '48,000 BTU'"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,hw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,hw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,hw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,chw_gpm,,gpm,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,chw_ewt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,chw_lwt_f,,F,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,motor_hp,,hp,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,eh_kw,,kW,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,conn_in,,in,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,bas_interface,,,,not printed
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,volts,460,V,VOLTAGE/PHASE: volts part,author's reading of the printed row
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,EXISTING HEAT PUMP SCHEDULE,HP 48-15,HEAT_PUMP,phase,3,,VOLTAGE/PHASE: phase part,author's reading of the printed row

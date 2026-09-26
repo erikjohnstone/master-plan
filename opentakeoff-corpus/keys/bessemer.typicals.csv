@@ -1,0 +1,16 @@
+# bessemer.typicals.csv — TYPICAL-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-typical-eval.mjs).
+#
+# Judged the way an estimator would: from renders and the PDF's own text of each schedule row, its
+# notes, and the sequences and control schematics the sheets point to. The pipeline's output for
+# these sheets was not consulted. A key that looks wrong is written up in ASSEMBLIES_BUG_CATALOGUE.md,
+# never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Library: us-typicals v1 (web/src/lib/assemblies/starter/us-typicals-v1.json), ids and options frozen at
+# GATE 4. typical_id "none": no v1 typical fits the unit (it is listed as "no assembly").
+# options: every option of the typical as option=true|false. A trailing "?" marks an option the drawings
+# do not decide: it carries the library default, and the eval scores it apart from decided options.
+# Instances: every instance of keys/bessemer.attrs.csv, one row each.
+# Sources read: M001 (page 1) legend and general notes; M101 (page 6) plan; M601 (page 8) schedules and notes. HELD-OUT set: scored at gates only.
+#
+sheet,tag,family,typical_id,options,basis_note
+bessemer-mechanical-bidset.pdf#8,EF-1,FAN,none,,"Bathroom exhaust fan with light on a local switch (schedule control 'LOCAL SWITCH'). Apartment building with no BAS on any sheet (no DDC, controls sheet or sequence); units run on their own thermostats and switches. No BAS typical applies."
+bessemer-mechanical-bidset.pdf#8,HP-1,HEAT_PUMP,none,,"Vertical packaged heat pump, typical of all units; schedule note 'PROVIDE WITH PROGRAMMABLE THERMOSTAT AND WIRING'. Apartment building with no BAS on any sheet (no DDC, controls sheet or sequence); units run on their own thermostats and switches. No BAS typical applies."
