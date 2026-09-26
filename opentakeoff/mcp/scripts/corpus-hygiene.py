@@ -54,6 +54,12 @@ FIRM_TEXT = {
     "crockett-engineering": r"CROCKETT\s+ENGINEERING|TIMBERLAKE\s+ENGINEERING",
     "up-engineers-architects": r"U\.?\s*P\.?\s+ENGINEERS",
     "usda-ars-southeast-area": r"SOUTHEAST\s+AREA|STONEVILLE",
+    # The second tier's held-out drafters (reports/assemblies/tier2/01-split.json).
+    "elara-engineering": r"\bELARA\b",
+    "glumac": r"GLUMAC",
+    "johnsondanforth": r"JOHNSON\s*DANFORTH",
+    "mes-group": r"\bMES\s+GROUP\b",
+    "toland-mizell-molnar": r"TOLAND\s+MIZELL|MIZELL\s+MOLNAR",
 }
 
 
@@ -115,6 +121,13 @@ def main(argv: list[str]) -> int:
     split = json.loads((corpus / "reports" / "assemblies" / "01-split.json").read_text())
     drafters = json.loads((corpus / "reports" / "assemblies" / "drafters.json").read_text())
     role = {**{s: "dev" for s in split["dev"]["sets"]}, **{s: "heldout" for s in split["heldout"]["sets"]}}
+    # The second tier (AS-17), once drawn: dev 2 is dev and held-out 2 is
+    # held-out here too, so their copies and drafters are found the same way.
+    tier2_path = corpus / "reports" / "assemblies" / "tier2" / "01-split.json"
+    if tier2_path.exists():
+        tier2 = json.loads(tier2_path.read_text())
+        role.update({s: "dev" for s in tier2["dev"]["sets"]})
+        role.update({s: "heldout" for s in tier2["heldout"]["sets"]})
     held_groups = {g for g, v in drafters["groups"].items() if any(s in role and role[s] == "heldout" for s in v["sets"])}
     firms = {g: rx for g, rx in FIRM_TEXT.items() if g in held_groups}
     missing = sorted(held_groups - set(firms))

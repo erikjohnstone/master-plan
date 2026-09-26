@@ -223,6 +223,21 @@
   about a second a set. The seeded draws moved to `assembliesSplit.mjs`,
   pure functions a test reproduces.
 
+- **Eval harness: the assemblies goal's second tier is drawn** (AS-17). With
+  the bulk corpus staged, the attribute rules can be tested on drafting they
+  were not grown on. A written seed (20260926, `assembliesSplit.mjs`
+  `drawTier2`, reproduced by a test) shuffled the drafter groups of the 53
+  unseen documents that compile a keyed family, one document per group.
+  Held-out 2 took 5 documents (13 tables). It skipped every group with a
+  document examined before the draw, and each held-out-2 group's other
+  documents are withheld from every tier. Dev 2 took 10 documents (48
+  tables). Dev 2 is keyed from renders before the pipeline runs on any of its
+  sheets. Held-out 2 is keyed only after dev 2's normalizer work is frozen,
+  and is scored at gates, as aggregates. `assemblies-attr-eval.mjs` scores
+  `--dev2` and `--heldout2`, and `--detail` refuses a held-out side. The
+  unseen audit no longer counts either tier: its replay withdrew 24 sets,
+  leaving 66 sets and 181 applied decisions, every one reproduced and right.
+
 - **Eval harness: a scorer's per-set child no longer re-scores its set
   forever** (AS-15). Each corpus-eval scorer (`takeoff-eval`, `graph-eval`,
   `tag-eval`, `table-recall-eval`), and `reference-eval` and

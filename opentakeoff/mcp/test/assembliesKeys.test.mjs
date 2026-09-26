@@ -200,6 +200,38 @@ test("WP0.2: the committed split is reproduced exactly by its seed from the comm
   }
 });
 
+const TIER2 = join(REPORTS, "tier2");
+const hasTier2 = ["00-baseline.json", "examined.json", "01-split.json"].every((f) => existsSync(join(TIER2, f)));
+
+test("AS-17: the committed second tier is reproduced exactly by its seed from its census", { skip: !(hasSplitInputs && hasTier2) && "second tier not drawn here" }, () => {
+  const committed = JSON.parse(readFileSync(join(TIER2, "01-split.json"), "utf8"));
+  const tmp = mkdtempSync(join(tmpdir(), "assemblies-tier2-"));
+  try {
+    mkdirSync(join(tmp, "reports", "assemblies", "tier2"), { recursive: true });
+    copyFileSync(join(CORPUS, "sets.json"), join(tmp, "sets.json"));
+    for (const f of ["drafters.json", "01-split.json"]) copyFileSync(join(REPORTS, f), join(tmp, "reports", "assemblies", f));
+    for (const f of ["00-baseline.json", "examined.json"]) copyFileSync(join(TIER2, f), join(tmp, "reports", "assemblies", "tier2", f));
+    const run = spawnSync(process.execPath, ["--import", "tsx", "scripts/assemblies-baseline.mjs", tmp, "--tier2", String(committed.seed)],
+      { cwd: MCP, encoding: "utf8", timeout: 120_000 });
+    assert.equal(run.status, 0, run.stderr);
+    const redrawn = JSON.parse(readFileSync(join(tmp, "reports", "assemblies", "tier2", "01-split.json"), "utf8"));
+    for (const k of ["generated_at"]) { delete redrawn[k]; delete committed[k]; }
+    assert.deepEqual(redrawn, committed);
+    // No drafter on two sides, no document on two sides, and none of the WP0.2 split's.
+    const split = JSON.parse(readFileSync(join(REPORTS, "01-split.json"), "utf8"));
+    const drafters = JSON.parse(readFileSync(join(REPORTS, "drafters.json"), "utf8"));
+    const groupOf = (id) => Object.entries(drafters.groups).find(([, g]) => g.sets.includes(id))?.[0];
+    const devGroups = new Set(committed.dev.sets.map(groupOf));
+    assert.deepEqual(committed.heldout.sets.filter((id) => devGroups.has(groupOf(id))), []);
+    const wp02 = new Set([...split.dev.sets, ...split.heldout.sets]);
+    assert.deepEqual([...committed.dev.sets, ...committed.heldout.sets, ...committed.heldout.withheld].filter((id) => wp02.has(id)), []);
+    const examined = new Set(JSON.parse(readFileSync(join(TIER2, "examined.json"), "utf8")).sets.map((x) => x.id));
+    assert.deepEqual(committed.heldout.sets.filter((id) => examined.has(id)), [], "an examined document was held out");
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
 const keyFiles = existsSync(join(CORPUS, "keys"))
   ? readdirSync(join(CORPUS, "keys")).filter((f) => f.endsWith(".attrs.csv")) : [];
 
@@ -222,7 +254,10 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
     const setId = f.replace(/\.attrs\.csv$/, "");
     const doc = parseTranscription(readFileSync(join(REPORTS, "key-work", `${setId}.transcription.txt`), "utf8"));
     const heldout = split.heldout.sets.includes(setId);
-    assert.ok(heldout || split.dev.sets.includes(setId), `${setId} is in neither the dev nor the held-out split`);
+    // The second tier (AS-17) keys only its drawn tables, on both sides, as held-out does.
+    const t2 = hasTier2 ? JSON.parse(readFileSync(join(TIER2, "01-split.json"), "utf8")) : null;
+    const tier2Side = t2 && (t2.dev.sets.includes(setId) ? t2.dev : t2.heldout.sets.includes(setId) ? t2.heldout : null);
+    assert.ok(heldout || tier2Side || split.dev.sets.includes(setId), `${setId} is in neither the dev nor the held-out split, nor the second tier`);
     // One printed table can hold two claimed families (a split system's indoor
     // and outdoor unit on one row), so the scope is checked per table x family.
     const instances = new Map();
@@ -233,7 +268,11 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
       if (r.tag) instances.get(key).tags.add(r.tag); // an empty tag keys a table with no instance
     }
     for (const { table, family, tags } of instances.values()) {
-      if (heldout) {
+      if (tier2Side) {
+        const drawn = tier2Side.tables.find((t) => t.set === setId && t.table === table && t.family === family);
+        assert.ok(drawn, `${setId}: ${family} "${table}" was not drawn for the second tier's key`);
+        assert.ok(tags.size <= t2.key_rows_per_table_max, `${setId}: "${table}" keys ${tags.size} rows, the cap is ${t2.key_rows_per_table_max}`);
+      } else if (heldout) {
         const drawn = split.heldout.tables.find((t) => t.set === setId && t.table === table && t.family === family);
         assert.ok(drawn, `${setId}: ${family} "${table}" was not drawn for the held-out key`);
         // The cap is on PRINTED rows in printed order (key-work/README.md step 4),

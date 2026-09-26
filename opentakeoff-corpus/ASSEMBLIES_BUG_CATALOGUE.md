@@ -674,6 +674,39 @@ path, and score held-out again at the next gate. The 6 frozen held-out
 documents never move to dev; the extra documents also give the second
 held-out tier AS-2 describes.
 
+**Addendum 2026-09-26 — the second tier is drawn (AS-2 is lifted).** The
+bulk corpus is staged (121 sets).
+- **Census:** `reports/assemblies/tier2/00-baseline.{json,md}` covers the 84
+  sets that were unseen when it ran. It now reads the content-addressed
+  sheet graph; re-run on the 23 committed sets it is identical to
+  `00-baseline.json`.
+- **Drafters:** `drafters.json` places every eligible document in one of 79
+  groups, from its title block (CI-32 found four held-out drafters' documents
+  that way).
+- **Draw:** seed 20260926 (`assembliesSplit.mjs` `drawTier2`;
+  `tier2/01-split.{json,md}`; the test "AS-17: the committed second tier is
+  reproduced exactly by its seed from its census").
+  - The population is 53 documents in 47 groups.
+  - Held-out 2 is 5 documents in 5 groups, 13 tables, at most 83 keyed rows.
+    It skipped 6 groups with a document examined before the draw
+    (`tier2/examined.json`). 035_AR and 091_IL are withheld as held-out-2
+    groupmates.
+  - Dev 2 is 10 documents, 48 tables, at most 201 keyed rows.
+- **The unseen audit** now excludes both tiers and their withheld
+  groupmates. The replay withdrew 24 sets:
+  - the 15 tier documents and the 2 withheld groupmates;
+  - the 5 CI-32 found (015_VA, 021_XX, 023_US and 038_NC, plus 010_US as a
+    copy);
+  - 2 near copies of dev-2 documents that the hygiene scan now counts as dev
+    (053_VA of 036_LA, 082_OR of 14_OR).
+
+  66 sets and 181 applied decisions remain. All 181 were reproduced (0 new,
+  0 gone), and all are right.
+- **Keying protocol:** each dev-2 key is typed from renders at 3x, with a
+  second read of every row at 4x, before the pipeline runs on any dev-2
+  sheet. Held-out 2 is keyed from renders only after dev 2's normalizer work
+  is frozen, and is scored as aggregates at gates.
+
 
 ---
 
@@ -1055,3 +1088,20 @@ The others rest on one document each, or on a cited standard that document depar
 mechanical contractor), and a default changes every project's lines. Changing a default from dev evidence and then
 reading the held-out result would tune on held-out. This entry is the evidence for that review: the table above,
 reproducible from `keys/*.typicals.csv` and `web/src/lib/assemblies/starter/us-typicals-v1.json`.
+
+---
+
+## AS-26 — two held-out key rows were printed while looking up a transcription convention (PROCESS NOTE, disclosed)
+
+**Found:** 2026-09-26, while starting the second tier's dev keys (AS-17). To see how an existing key types a
+voltage/phase cell split into two attributes, a `grep` over `reports/assemblies/key-work/` picked the first file
+matching "V/PH/HZ: volts part" and printed its grid. That file is `024_MO`'s transcription, a held-out document: two
+rows of its RTU schedule key (RTU-1 and RTU-2, every typed cell) were printed. Nothing else of any held-out key was
+read, and no code has changed since.
+
+**Consequences:**
+- The next held-out GATE 2 is reported twice: over all six held-out documents, and over the five without `024_MO`.
+  The attribute rules grown from here on (AS-17) must each come from a dev or dev-2 miss with a test on its own shape;
+  none may cite the format of those two rows.
+- **Guard:** key-work lookups read dev transcriptions only (the dev sets of `01-split.json` and `tier2/01-split.json`);
+  a search over the folder names its files explicitly, never `*.transcription.txt`.

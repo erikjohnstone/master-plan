@@ -7,13 +7,16 @@
 // scoring below is eval-only; no surface imports it.
 //
 //   node --import tsx scripts/assemblies-attr-eval.mjs <corpus-dir> [setId ...]
-//        [--heldout] [--null] [--report] [--detail]
+//        [--heldout | --dev2 | --heldout2] [--null] [--report] [--detail]
 //
 //   --heldout  score the frozen held-out documents (reports/assemblies/
 //              01-split.json) instead of dev. Gates only: never tune on them,
 //              so only aggregates are printed.
+//   --dev2, --heldout2  the second tier's sides (reports/assemblies/tier2/
+//              01-split.json, AS-17): dev 2 is dev; held-out 2 is scored at
+//              gates only, aggregates only, as held-out is.
 //   --null     score a normalizer that knows nothing: the floor.
-//   --report   write reports/assemblies/02-attr-eval-<dev|heldout>.{json,md}.
+//   --report   write reports/assemblies/02-attr-eval-<side>.{json,md}.
 //   --detail   (dev only) list every wrong, invented, missed and
 //              out-of-scope value with its cite and rule.
 //
@@ -52,6 +55,8 @@ export const GATES = {
   dev: { exact: 0.98, wrong: 0.005, invented: 0 },
   heldout: { exact: 0.95, wrong: 0.01, invented: 0 },
 };
+GATES.dev2 = GATES.dev;
+GATES.heldout2 = GATES.heldout;
 
 function splitCsvLine(line) {
   const cells = [];
@@ -283,6 +288,9 @@ const pct = (x) => (x === null ? "   —  " : `${(x * 100).toFixed(1).padStart(5
 const HEAD = `${"".padEnd(34)}  lines printed  exact  wrong missed    oos | empty c-unkn invent | exact%  wrong%`;
 const row = (label, t) => `${String(label).slice(0, 34).padEnd(34)} ${String(t.lines).padStart(6)} ${String(t.printed).padStart(7)} ${String(t.exact).padStart(6)} ${String(t.wrong).padStart(6)} ${String(t.missed).padStart(6)} ${String(t.out_of_scope).padStart(6)} | ${String(t.empty).padStart(5)} ${String(t.correctly_unknown).padStart(6)} ${String(t.invented).padStart(6)} | ${pct(t.exact_pct)} ${pct(t.wrong_pct)}`;
 
+/** A held-out side (the frozen held-out documents or held-out 2) reports aggregates only. */
+export const isHeldout = (side) => side.startsWith("heldout");
+
 export function renderText(summary, { side, detail, results, normalizer }) {
   const L = [];
   const matched = summary.instances.filter((i) => i.matched).length;
@@ -305,8 +313,9 @@ export function renderText(summary, { side, detail, results, normalizer }) {
   const unmatched = summary.instances.filter((i) => !i.matched);
   if (unmatched.length) {
     L.push("");
-    L.push(`key instances with no compile item (${unmatched.length}):`);
-    for (const i of unmatched) L.push(`  ${i.set} ${i.sheet} "${i.table_title}" ${i.tag} (${i.family}): ${i.why}`);
+    L.push(`key instances with no compile item (${unmatched.length})${isHeldout(side) ? "" : ":"}`);
+    // Which instances went unmatched names held-out key rows: a held-out side prints the count only.
+    if (!isHeldout(side)) for (const i of unmatched) L.push(`  ${i.set} ${i.sheet} "${i.table_title}" ${i.tag} (${i.family}): ${i.why}`);
   }
   if (detail) {
     const outcomes = results.flatMap((r) => r.outcomes);
@@ -424,7 +433,7 @@ async function main() {
   const positional = argv.filter((a, i) => !a.startsWith("--") && !(singleIdx >= 0 && i === singleIdx + 1));
   const [corpusDir, ...only] = positional;
   if (!corpusDir) {
-    console.error("usage: node --import tsx scripts/assemblies-attr-eval.mjs <corpus-dir> [setId ...] [--heldout] [--null] [--report] [--detail]");
+    console.error("usage: node --import tsx scripts/assemblies-attr-eval.mjs <corpus-dir> [setId ...] [--heldout | --dev2 | --heldout2] [--null] [--report] [--detail]");
     process.exit(2);
   }
   const corpus = resolve(corpusDir);
@@ -444,14 +453,15 @@ async function main() {
     process.exit(0);
   }
 
-  const side = flag("--heldout") ? "heldout" : "dev";
+  const side = flag("--heldout") ? "heldout" : flag("--heldout2") ? "heldout2" : flag("--dev2") ? "dev2" : "dev";
   const detail = flag("--detail");
-  if (detail && side === "heldout") {
+  if (detail && isHeldout(side)) {
     console.error("--detail is dev-only: held-out documents are scored at gates, never tuned on");
     process.exit(2);
   }
-  const split = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", "01-split.json"), "utf8"));
-  const sideSets = split[side].sets;
+  const tier2 = side.endsWith("2");
+  const split = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", ...(tier2 ? ["tier2"] : []), "01-split.json"), "utf8"));
+  const sideSets = split[tier2 ? side.slice(0, -1) : side].sets;
   const unknownOnly = only.filter((id) => !sideSets.includes(id));
   if (unknownOnly.length) {
     console.error(`not ${side} documents: ${unknownOnly.join(", ")}`);
@@ -502,7 +512,8 @@ async function main() {
       by_family: Object.fromEntries(summary.by_family),
       by_attribute: Object.fromEntries(summary.by_attribute),
       by_set: Object.fromEntries(summary.by_set),
-      instances_unmatched: summary.instances.filter((i) => !i.matched),
+      instances_unmatched: isHeldout(side) ? undefined : summary.instances.filter((i) => !i.matched),
+      instances_unmatched_count: summary.instances.filter((i) => !i.matched).length,
       out_of_scope_items: summary.out_of_scope_items.length,
       unscored_values: summary.unscored.length,
     };

@@ -1,0 +1,93 @@
+{
+ "about": "Documents looked at closely before the second tier was drawn (2026-09-26): their control drawings, cites or sheets were examined, so none may become held-out 2 (assembliesSplit.mjs drawTier2). Sources: the unseen audit record (a set with an applied, hand-checked decision), the bug catalogues (a set cited for its content), and sheets rendered and viewed outside the title-block sweep. Every eligible document's title block was also viewed at low resolution for drafters.json; that applies to all candidates alike and is disclosed there.",
+ "sets": [
+  {
+   "id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+   "why": "a sheet (p31, a radiant panel detail) was rendered and viewed during the control-intent work"
+  },
+  {
+   "id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+   "why": "CONTROL_INTENT_BUG_CATALOGUE cites its control diagram title as a finder example"
+  },
+  {
+   "id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "why": "the unseen audit checked its 20 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "011_IL_VA_Hines_Finance_Center_Renovation",
+   "why": "CONTROL_INTENT_BUG_CATALOGUE CI-21 and CI-28 cite its 15 heat pumps and their DDC clause"
+  },
+  {
+   "id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+   "why": "the unseen audit checked its 6 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+   "why": "the unseen audit checked its 16 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+   "why": "CONTROL_INTENT_BUG_CATALOGUE CI-11 cites its bindings (MCC-A1, the ACU A-1 sequence)"
+  },
+  {
+   "id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+   "why": "the unseen audit checked its 25 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "03_FL_HurlburtField_ChildDevCenter",
+   "why": "the unseen audit checked its 16 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+   "why": "CONTROL_INTENT_BUG_CATALOGUE CI-29 cites its 2-pipe fan coil diagram and schedule"
+  },
+  {
+   "id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "why": "the unseen audit checked its 2 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "why": "CONTROL_INTENT_BUG_CATALOGUE CI-28 cites its exhaust fans and a finder miss; a sheet (p27) was rendered and viewed"
+  },
+  {
+   "id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+   "why": "the unseen audit checked its 2 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "why": "the unseen audit checked its 16 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "why": "the unseen audit checked its 4 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "why": "the unseen audit checked its 8 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+   "why": "the unseen audit checked its 3 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "why": "the unseen audit checked its 32 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "why": "the unseen audit checked its 79 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "why": "the unseen audit checked its 35 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "16_NV_CarsonValleyMS_HVAC_Replacement",
+   "why": "the unseen audit checked its 33 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  },
+  {
+   "id": "21_VA_OrangeCounty_PublicSafetyBldg",
+   "why": "the unseen audit checked its 115 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)"
+  }
+ ]
+}

@@ -19,6 +19,9 @@
 //
 //   SET <set id>
 //   SEED <split seed that drew these tables>
+//   DRAW <the draw's record>  optional; reports/assemblies/01-split.json unless
+//                             another draw (the second tier's
+//                             reports/assemblies/tier2/01-split.json) drew them
 //   SCOPE <line>        repeatable; goes into the key's '#' header
 //   EXCLUDES <line>     repeatable; what is deliberately not counted
 //   TABLE
@@ -182,7 +185,7 @@ function parseEnum(cell, allowed) {
 
 export function parseTranscription(textIn) {
   const lines = textIn.split(/\r?\n/);
-  const doc = { set: null, seed: null, scope: [], excludes: [], tables: [] };
+  const doc = { set: null, seed: null, draw: null, scope: [], excludes: [], tables: [] };
   let cur = null;
   let inGrid = false;
   lines.forEach((raw, i) => {
@@ -202,6 +205,7 @@ export function parseTranscription(textIn) {
     let m;
     if ((m = line.match(/^SET\s+(\S+)$/))) doc.set = m[1];
     else if ((m = line.match(/^SEED\s+(\d+)$/))) doc.seed = Number(m[1]);
+    else if ((m = line.match(/^DRAW\s+(\S+)$/))) doc.draw = m[1];
     else if ((m = line.match(/^SCOPE\s+(.+)$/))) doc.scope.push(m[1]);
     else if ((m = line.match(/^EXCLUDES\s+(.+)$/))) doc.excludes.push(m[1]);
     else if (line.trim() === "TABLE") cur = { cols: [], derive: [], grid: [] };
@@ -372,7 +376,7 @@ export function renderKeyCsv(doc) {
   H.push("# the pipeline's output for these sheets was not consulted. Where render and pipeline later");
   H.push("# differ, the RENDER decides. A key that looks wrong is written up in");
   H.push("# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).");
-  H.push(`# Tables drawn by seed ${doc.seed ?? "?"} (reports/assemblies/01-split.json); transcription: reports/assemblies/key-work/${setId}.transcription.txt,`);
+  H.push(`# Tables drawn by seed ${doc.seed ?? "?"} (${doc.draw ?? "reports/assemblies/01-split.json"}); transcription: reports/assemblies/key-work/${setId}.transcription.txt,`);
   H.push("# expanded by mcp/scripts/assemblies-key-transcribe.mjs.");
   H.push("#");
   for (const s of doc.scope) H.push(`# Scope: ${s}`);

@@ -10,6 +10,10 @@ test("eligible sets: never dev, held-out, a held-out twin or drafter's set, or a
   const split = { dev: { sets: ["dev-a"] }, heldout: { sets: ["held-b"] } };
   const hygiene = { not_unseen: { heldout_twin: ["twin-c"], heldout_drafter: ["drafter-d"], dev_twin_or_near: ["copy-e"] } };
   assert.deepEqual(eligibleSets(spec, split, hygiene), ["free-f", "free-g"]);
+  // The assemblies second tier's documents, and a held-out-2 drafter's withheld ones, are not unseen either.
+  const spec2 = { sets: [...spec.sets, ...["dev2-h", "held2-i", "withheld-j", "free-k"].map((id) => ({ id }))] };
+  const tier2 = { dev: { sets: ["dev2-h"] }, heldout: { sets: ["held2-i"], withheld: ["withheld-j"] } };
+  assert.deepEqual(eligibleSets(spec2, split, hygiene, tier2), ["free-f", "free-g", "free-k"]);
 });
 
 test("a run's decisions against the record: audited ones keep their verdict, a decision that differs in value or rule is new, one no longer applied is gone", () => {

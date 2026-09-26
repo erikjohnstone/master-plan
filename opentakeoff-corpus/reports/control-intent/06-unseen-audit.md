@@ -1,8 +1,9 @@
 # Unseen audit — the readers on corpus sets never keyed or tuned on
 
 ```
-UNSEEN AUDIT — 90 eligible sets, 54 read (scheduled units and control packets both), 1 with no snapshot, 35 with units or packets only
-  model calls: replayed 582, live 0, not recorded 0, failed 0
-  applied 425: audited 425 (right 425, wrong 0, unaudited 0); new 0; gone 0
-  per set: 21_VA_ 115, 096_IN 79, 14_OR_ 35, 16_NV_ 33, 088_AZ 32, 028_TX 25, 009_FL 20, 03_FL_ 16, 06_MO_ 16, 014_MT 16, 077_MT 8, 015_VA 7, 012_MO 6, 021_XX 6, 061_IA 4, 083_MA 3, 05_MO_ 2, 043_FL 2
+UNSEEN AUDIT — 66 eligible sets, 36 read (scheduled units and control packets both), 1 with no snapshot, 29 with units or packets only
+  model calls: replayed 307, live 0, not recorded 0, failed 0
+  applied 181: audited 181 (right 181, wrong 0, unaudited 0); new 0; gone 0
+  per set: 096_IN 79, 028_TX 25, 009_FL 20, 06_MO_ 16, 014_MT 16, 077_MT 8, 012_MO 6, 061_IA 4, 083_MA 3, 05_MO_ 2, 043_FL 2
+  withdrawn from the record, no longer unseen: 16_NV_CarsonValleyMS_HVAC_Replacement, 03_FL_HurlburtField_ChildDevCenter, 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17, 11_CA_SDSU_EngSciences_Complex_100SD, 14_OR_KlamathCC_LearningCtr_Mechanical, 21_VA_OrangeCounty_PublicSafetyBldg, 010_US_WWYK240146_Design_Implement_Monitoring_Control, 015_VA_P_095_Replace_Submarine_Pier_3_Utility, 021_XX_Laboratory_building_mechanical_drawings_lab, 023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory, 035_AR_564_19_101_Construct_New_Water_Storage, 036_LA_VA_Project_502_21_222_EHRM_Infrastructure, 037_AR_VA_Project_598_19_118_Replace_21_Air_Handling, 038_NC_VA_Project_637_22_700_EHRM_Infrastructure, 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers, 045_FL_VA_Project_516_21_107_EHRM_Infrastructure, 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU, 053_VA_Renovate_Expand_Emergency_Room_System_VA, 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation, 066_MT_Barnard_Hall_111_Lithography_Lab_Renovation, 082_OR_Klamath_Community_College_Career_Learning, 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX, 091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation, 092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation
 ```

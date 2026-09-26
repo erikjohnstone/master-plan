@@ -1,0 +1,81 @@
+# 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation — attribute-key transcription (ASSEMBLIES AS-17, dev 2)
+# Typed from renders of sheet M002 (PDF page 9): an overview at 40 dpi, then each table at
+# 3x (216 dpi) in tiles with the MARK column repeated, rendered with MuPDF
+# (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26; second read at 4x of every
+# row, every cell. The pipeline's output for this sheet was not consulted. The second tier
+# keys the tables its seed drew (tier2/01-split.md): one per keyed family.
+SET 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation
+SEED 20260926
+DRAW reports/assemblies/tier2/01-split.json
+SCOPE Sheet M002 (page 9) of the Montana State University Harrison Hall extruder lab remodel (Morrison-Maierle with Architects Alaska), the tables the second tier's seed drew for its VAV and FAN strata.
+EXCLUDES Manufacturer/model, box size designation and outlet size, coil air temperatures and air pressure drop, damper type, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB: two existing boxes,
+# marked "(E) VAV-105" and "(E) VAV-106" (typed as printed). SIZE and SIZE / INLET (IN)
+# print the same number; the inlet diameter keys inlet_size_in once. SERVES ROOM # prints
+# the rooms served. The RE-HEAT COIL PERFORMANCE block prints one merged "EXISTING" cell
+# across all nine coil columns in both rows: every coil value is printed but not one value
+# ("?EXISTING"). Its headers are a water coil's (WATER FLOW (GPM), EWT, LWT, WPD), so each
+# box's reheat is read as hot water: the author's reading. The title prints no terminal
+# type, so terminal_type stays not printed. The table note ("EQUIPMENT TO BE REBALANCED TO
+# NOTED AIRFLOWS.") keys nothing.
+TABLE
+sheet: 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9
+title: EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB
+family: VAV
+render: page 9 crop 305,100,1885,200 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 305,216,1885,62) of both rows, every cell
+rows: all 2 printed rows
+col: MARK => tag
+col: MFGR. => -
+col: MODEL # => -
+col: SIZE => -
+col: SERVES ROOM # => area_served
+col: SIZE / INLET (IN) => inlet_size_in
+col: SIZE / OUTLET (IN) => -
+col: AIR FLOW (CFM) / MIN => cfm_min
+col: AIR FLOW (CFM) / MAX => cfm_max
+col: HEATING AIR FLOW (CFM) => cfm_heat
+col: RE-HEAT COIL PERFORMANCE / CAPACITY (MBH) => hw_mbh
+col: RE-HEAT COIL PERFORMANCE / ROWS => hw_rows
+col: RE-HEAT COIL PERFORMANCE / EAT (F) => -
+col: RE-HEAT COIL PERFORMANCE / LAT (F) => -
+col: RE-HEAT COIL PERFORMANCE / WATER FLOW (GPM) => hw_gpm
+col: RE-HEAT COIL PERFORMANCE / EWT (F) => hw_ewt_f
+col: RE-HEAT COIL PERFORMANCE / LWT (F) => hw_lwt_f
+col: RE-HEAT COIL PERFORMANCE / WPD (FT) => hw_wpd_ft
+col: RE-HEAT COIL PERFORMANCE / APD (in WC) (BOX & COIL) => -
+col: REMARKS => -
+derive: heat_type = hw ; header=RE-HEAT COIL PERFORMANCE ; note=every row prints EXISTING across a reheat coil block whose headers are a water coil's (WATER FLOW (GPM), EWT (F), LWT (F), WPD (FT))
+grid:
+(E) VAV-105 | PRICE | SDV5 | 8 | =OFFICE, WORK ROOM (OFFICE, WORK ROOM) | 8 | 12x10 | 470 | 470 | 470 | ?EXISTING | ?EXISTING | EXISTING | EXISTING | ?EXISTING | ?EXISTING | ?EXISTING | ?EXISTING | EXISTING | SEE NOTES
+(E) VAV-106 | PRICE | SDV5 | 6 | =EXTRUDER LAB (EXTRUDER LAB) | 6 | 12x8 | 100 | 350 | 100 | ?EXISTING | ?EXISTING | EXISTING | EXISTING | ?EXISTING | ?EXISTING | ?EXISTING | ?EXISTING | EXISTING | SEE NOTES
+END
+
+# EXHAUST FAN SCHEDULE - EXTRUDER LAB: one existing fan, "(E) EF- 4" (typed as printed).
+# SERVES prints the room it serves. The three ELECTRIC DATA columns print one merged cell,
+# "SEE MEP COORDINATION SCHEDULE": printed, but not one value, for volts, phase and the
+# HP / WATTS rating (keyed as motor_hp; motor_watts stays not printed). No SERVICE column
+# prints, so service stays not printed. Note 1 ("REBALANCE EXISTING FAN TO UPDATED
+# AIRFLOW.") keys nothing.
+TABLE
+sheet: 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9
+title: EXHAUST FAN SCHEDULE - EXTRUDER LAB
+family: FAN
+render: page 9 crop 768,326,1422,149 at 3x in 3 tiles (MARK column repeated); second read at 4x (crop 768,414,1422,28) of the row, every cell
+rows: all 1 printed row
+col: MARK => tag
+col: MANUFACTURER => -
+col: MODEL # => -
+col: TYPE => -
+col: SERVES => area_served
+col: DRIVE => drive
+col: CFM => cfm
+col: STATIC PRESSURE (inWC) => esp_in
+col: DAMPER => -
+col: ELECTRIC DATA / VOLTAGE => volts
+col: ELECTRIC DATA / PHASE => phase
+col: ELECTRIC DATA / HP / WATTS => motor_hp
+col: REMARKS => -
+grid:
+(E) EF- 4 | COOK | 90SQ17DEC | INLINE | =ANALYTICAL LAB 02 (ANALYTICAL LAB 02) | direct (DIRECT) | 330 | 0.2 | BACKDRAFT | ?SEE MEP COORDINATION SCHEDULE | ?SEE MEP COORDINATION SCHEDULE | ?SEE MEP COORDINATION SCHEDULE | SEE NOTES
+END

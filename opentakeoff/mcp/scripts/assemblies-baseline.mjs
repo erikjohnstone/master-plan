@@ -47,7 +47,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { childStdoutText } from "./childText.mjs";
 import { createHash } from "node:crypto";
 import pLimit from "p-limit";
-import { CONTROLS_RELEVANT_FAMILIES, drawSplit } from "./assembliesSplit.mjs";
+import { CONTROLS_RELEVANT_FAMILIES, drawSplit, drawTier2 } from "./assembliesSplit.mjs";
 import { resolveSetFiles, validateSets } from "./corpusFiles.mjs";
 import { cachedEvalResult } from "./evalCache.mjs";
 import { resolveVectorGridMode } from "../../web/src/lib/vectorGridMode.mjs";
@@ -61,11 +61,17 @@ if (splitIdx >= 0 && !Number.isSafeInteger(splitSeed)) {
   console.error("--split needs an integer seed");
   process.exit(2);
 }
+const tier2Idx = argv.indexOf("--tier2");
+const tier2Seed = tier2Idx >= 0 ? Number(argv[tier2Idx + 1]) : null;
+if (tier2Idx >= 0 && !Number.isSafeInteger(tier2Seed)) {
+  console.error("--tier2 needs an integer seed");
+  process.exit(2);
+}
 const outIdx = argv.indexOf("--out");
 const outOverride = outIdx >= 0 ? resolve(argv[outIdx + 1]) : null;
 const positional = argv.filter((a, i) => !a.startsWith("--")
   && !(singleIdx >= 0 && i === singleIdx + 1) && !(splitIdx >= 0 && i === splitIdx + 1)
-  && !(outIdx >= 0 && i === outIdx + 1));
+  && !(tier2Idx >= 0 && i === tier2Idx + 1) && !(outIdx >= 0 && i === outIdx + 1));
 const [corpusDir, ...only] = positional;
 if (!corpusDir) {
   console.error("usage: node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> [setId ...]");
@@ -211,6 +217,52 @@ if (splitSeed !== null) {
   L.push("");
   writeFileSync(join(dir, "01-split.md"), `${L.join("\n")}\n`);
   console.log(`split seed ${split.seed}: dev ${split.dev.sets.length} docs / ${split.dev.tables.length} tables / ≤${rows(split.dev.tables)} rows; held-out ${split.heldout.sets.length} docs / ${split.heldout.tables.length} tables / ≤${rows(split.heldout.tables)} rows`);
+} else if (tier2Seed !== null) {
+  // AS-2 / AS-17: the second tier, drawn from the census of the sets that were
+  // unseen when it ran (reports/assemblies/tier2/00-baseline.json, taken with
+  // --out over them), never from the WP0.2 documents.
+  const dir = join(corpus, "reports", "assemblies");
+  const tdir = join(dir, "tier2");
+  const census = JSON.parse(readFileSync(join(tdir, "00-baseline.json"), "utf8"));
+  const drafters = JSON.parse(readFileSync(join(dir, "drafters.json"), "utf8"));
+  const split = JSON.parse(readFileSync(join(dir, "01-split.json"), "utf8"));
+  const examined = JSON.parse(readFileSync(join(tdir, "examined.json"), "utf8"));
+  const eligible = census.per_set.filter((r) => !r.error).map((r) => r.id);
+  const t = drawTier2(census, drafters, split, tier2Seed, { eligible, examined: examined.sets.map((x) => x.id) });
+  t.generated_at = new Date().toISOString();
+  t.census_generated_at = census.generated_at;
+  t.census_errors = census.per_set.filter((r) => r.error).map((r) => r.id);
+  writeFileSync(join(tdir, "01-split.json"), `${JSON.stringify(t, null, 1)}\n`);
+  const rows = (ts) => ts.reduce((n, x) => n + x.keyed_rows_max, 0);
+  const L = [];
+  L.push("# Assemblies goal — the second tier: dev 2 and held-out 2 (AS-2, AS-17)");
+  L.push("");
+  L.push(`Seed **${t.seed}**, drawn ${t.generated_at} from the census of ${t.census_generated_at} (\`tier2/00-baseline.{json,md}\`: the corpus sets unseen when it ran).`);
+  L.push(`Reproduce: \`cd opentakeoff/mcp && node --import tsx scripts/assemblies-baseline.mjs ../../opentakeoff-corpus --tier2 ${t.seed}\`.`);
+  L.push("");
+  L.push(`Rules (\`scripts/assembliesSplit.mjs\` drawTier2): the population is the census's documents with ≥ 1 compiled row in a keyed family, less every document whose drafter group (\`drafters.json\`) holds a WP0.2 document. The seed shuffles the drafter groups, and each group draws one document. Held-out 2 takes groups in that order until it holds ${t.heldout_min_docs} documents, skipping a group any of whose documents was examined before the draw (\`tier2/examined.json\`) or whose document alone covers a required family; a held-out-2 group's other documents are withheld from every tier and from the unseen audit. Dev 2 takes the remaining groups in order until it holds ${t.dev_min_docs} documents, then only groups that add a required family it lacks. Each document keys one claimed table per keyed family, drawn by the seed, every printed row up to ${t.key_rows_per_table_max}. WP0.2's split never moves. Held-out 2 is keyed from renders only after dev 2's normalizer work is frozen, and is scored at gates only, aggregates only.`);
+  L.push("");
+  L.push(`Population: ${t.population_docs} documents in ${t.population_groups} drafter groups. Left out as a WP0.2 drafter's: ${t.left_out_split_drafters.map((x) => `\`${x.set}\` (${x.group})`).join(", ") || "none"}. No census: ${t.census_errors.join(", ") || "none"}.`);
+  if (t.required_coverage_missing_from_population.length) L.push(`Required families absent from the population: ${t.required_coverage_missing_from_population.join(", ")}.`);
+  L.push(`Seeded group order (group: its documents, the one drawn): ${t.shuffled_group_order.map((g) => `\`${g.group}\` ${g.docs}→\`${g.pick.split("_").slice(0, 2).join("_")}\``).join(" · ")}.`);
+  if (t.skipped_for_heldout.length) L.push(`Not held out: ${t.skipped_for_heldout.map((x) => `\`${x.group}\` (${x.examined ? `examined: ${x.examined.join(", ")}` : `alone covers ${x.would_uncover.join(", ")}`})`).join("; ")}.`);
+  for (const side of ["dev", "heldout"]) {
+    const x = t[side];
+    L.push("");
+    L.push(`## ${side === "dev" ? "Dev 2" : "HELD-OUT 2"} — ${x.sets.length} documents, ${x.tables.length} tables, ≤ ${rows(x.tables)} keyed rows (upper bound from the compile's claimed rows)`);
+    L.push("");
+    L.push(`Drafter groups: ${x.groups.map((g) => `\`${g}\``).join(", ")}. Covers: ${x.covers.join(", ") || "—"}.`);
+    if (side === "dev" && x.added_for_coverage.length) L.push(`Added for coverage: ${x.added_for_coverage.map((g) => `\`${g.group}\` (${g.adds.join(", ")})`).join("; ")}.`);
+    if (side === "heldout") L.push(`Withheld (a held-out-2 drafter's other documents): ${x.withheld.map((id) => `\`${id}\``).join(", ") || "none"}.`);
+    L.push("");
+    L.push("| Set | Family | Table drawn (sheet :: title) | Claimed rows | Keyed rows ≤ | Tables in stratum |");
+    L.push("|---|---|---|---|---|---|");
+    for (const r of x.tables) L.push(`| \`${r.set}\` | ${r.family} | ${r.table} | ${r.claimed_rows} | ${r.keyed_rows_max} | ${r.tables_in_stratum} |`);
+  }
+  if (t.dev_coverage_missing.length) { L.push(""); L.push(`Dev 2 does not cover: ${t.dev_coverage_missing.join(", ")}.`); }
+  L.push("");
+  writeFileSync(join(tdir, "01-split.md"), `${L.join("\n")}\n`);
+  console.log(`tier 2 seed ${t.seed}: dev ${t.dev.sets.length} docs / ${t.dev.tables.length} tables / ≤${rows(t.dev.tables)} rows; held-out ${t.heldout.sets.length} docs / ${t.heldout.tables.length} tables / ≤${rows(t.heldout.tables)} rows; withheld ${t.heldout.withheld.length}`);
 } else if (singleSetId) {
   const set = spec.sets.find((s) => s.id === singleSetId);
   if (!set) { console.error(`unknown set id: ${singleSetId}`); process.exit(2); }

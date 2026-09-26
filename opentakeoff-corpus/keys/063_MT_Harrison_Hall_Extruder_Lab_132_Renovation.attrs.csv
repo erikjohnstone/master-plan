@@ -1,0 +1,80 @@
+# 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260926 (reports/assemblies/tier2/01-split.json); transcription: reports/assemblies/key-work/063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheet M002 (page 9) of the Montana State University Harrison Hall extruder lab remodel (Morrison-Maierle with Architects Alaska), the tables the second tier's seed drew for its VAV and FAN strata.
+#   063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9 | EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB | VAV | all 2 printed rows | render: page 9 crop 305,100,1885,200 at 3x in 4 tiles (MARK column repeated); second read at 4x (crop 305,216,1885,62) of both rows, every cell
+#   063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9 | EXHAUST FAN SCHEDULE - EXTRUDER LAB | FAN | all 1 printed row | render: page 9 crop 768,326,1422,149 at 3x in 3 tiles (MARK column repeated); second read at 4x (crop 768,414,1422,28) of the row, every cell
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturer/model, box size designation and outlet size, coil air temperatures and air pressure drop, damper type, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 063_MT_Harrison_Hall_Extruder_Lab_132_Renovation: 2 table(s), 3 instance(s), 62 keyed attribute value(s) (16 printed, 46 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,building,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,floor,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,area_served,"OFFICE, WORK ROOM",,SERVES ROOM #,"printed 'OFFICE, WORK ROOM'"
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,terminal_type,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,inlet_size_in,8,in,SIZE / INLET (IN),
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,cfm_max,470,cfm,AIR FLOW (CFM) / MAX,
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,cfm_min,470,cfm,AIR FLOW (CFM) / MIN,
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,cfm_heat,470,cfm,HEATING AIR FLOW (CFM),
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,heat_type,hw,,RE-HEAT COIL PERFORMANCE,"every row prints EXISTING across a reheat coil block whose headers are a water coil's (WATER FLOW (GPM), EWT (F), LWT (F), WPD (FT))"
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_gpm,,gpm,RE-HEAT COIL PERFORMANCE / WATER FLOW (GPM),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_ewt_f,,F,RE-HEAT COIL PERFORMANCE / EWT (F),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_lwt_f,,F,RE-HEAT COIL PERFORMANCE / LWT (F),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_wpd_ft,,ft,RE-HEAT COIL PERFORMANCE / WPD (FT),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_mbh,,MBH,RE-HEAT COIL PERFORMANCE / CAPACITY (MBH),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_rows,,,RE-HEAT COIL PERFORMANCE / ROWS,printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_conn_in,,in,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,hw_glycol_pct,,%,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,eh_kw,,kW,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,eh_stages,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,motor_hp,,hp,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,ecm,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,volts,,V,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-105,VAV,phase,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,building,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,floor,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,area_served,EXTRUDER LAB,,SERVES ROOM #,printed 'EXTRUDER LAB'
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,terminal_type,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,inlet_size_in,6,in,SIZE / INLET (IN),
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,cfm_max,350,cfm,AIR FLOW (CFM) / MAX,
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,cfm_min,100,cfm,AIR FLOW (CFM) / MIN,
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,cfm_heat,100,cfm,HEATING AIR FLOW (CFM),
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,heat_type,hw,,RE-HEAT COIL PERFORMANCE,"every row prints EXISTING across a reheat coil block whose headers are a water coil's (WATER FLOW (GPM), EWT (F), LWT (F), WPD (FT))"
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_gpm,,gpm,RE-HEAT COIL PERFORMANCE / WATER FLOW (GPM),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_ewt_f,,F,RE-HEAT COIL PERFORMANCE / EWT (F),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_lwt_f,,F,RE-HEAT COIL PERFORMANCE / LWT (F),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_wpd_ft,,ft,RE-HEAT COIL PERFORMANCE / WPD (FT),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_mbh,,MBH,RE-HEAT COIL PERFORMANCE / CAPACITY (MBH),printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_rows,,,RE-HEAT COIL PERFORMANCE / ROWS,printed 'EXISTING' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_conn_in,,in,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,hw_glycol_pct,,%,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,eh_kw,,kW,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,eh_stages,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,motor_hp,,hp,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,ecm,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,volts,,V,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXISTING VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE - EXTRUDER LAB,(E) VAV-106,VAV,phase,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,building,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,floor,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,area_served,ANALYTICAL LAB 02,,SERVES,printed 'ANALYTICAL LAB 02'
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,qty,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,service,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,cfm,330,cfm,CFM,
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,esp_in,0.2,in. w.c.,STATIC PRESSURE (inWC),
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,motor_hp,,hp,ELECTRIC DATA / HP / WATTS,printed 'SEE MEP COORDINATION SCHEDULE' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,motor_watts,,W,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,rpm,,rpm,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,drive,direct,,DRIVE,printed 'DIRECT'
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,vfd,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,ecm,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,control,,,,not printed
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,volts,,V,ELECTRIC DATA / VOLTAGE,printed 'SEE MEP COORDINATION SCHEDULE' — not a single value for this attribute
+063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf#9,EXHAUST FAN SCHEDULE - EXTRUDER LAB,(E) EF- 4,FAN,phase,,,ELECTRIC DATA / PHASE,printed 'SEE MEP COORDINATION SCHEDULE' — not a single value for this attribute

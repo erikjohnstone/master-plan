@@ -13,7 +13,7 @@ import { expandTranscription, parseTranscription } from "../scripts/assemblies-k
 import { childStdoutText } from "../scripts/childText.mjs";
 import {
   KEY_COLUMNS, canonTag, compileTableTitle, gateVerdict, keyTables, lineSlice, parseAttrKeyCsv,
-  sameCanonical, scoreSet, summarize, tally,
+  renderText, sameCanonical, scoreSet, summarize, tally,
 } from "../scripts/assemblies-attr-eval.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -186,6 +186,25 @@ test("slices and the gate", () => {
   assert.equal(gateVerdict({ ...pass, invented: 1 }, "dev").pass, false);
   assert.equal(gateVerdict({ ...pass, exact_pct: 0.979 }, "dev").pass, false);
   assert.equal(gateVerdict({ ...pass, exact_pct: 0.96, wrong_pct: 0.009 }, "heldout").pass, true);
+  assert.equal(gateVerdict({ ...pass, exact_pct: 0.96, wrong_pct: 0.009 }, "heldout2").pass, true);
+  assert.equal(gateVerdict({ ...pass, exact_pct: 0.96, wrong_pct: 0.009 }, "dev2").pass, false);
+});
+
+test("a held-out side prints aggregates only: an unmatched key instance is counted, never named", () => {
+  const key = parseAttrKeyCsv([KEY_COLUMNS.join(","),
+    "a.pdf#2,PUMP SCHEDULE,P-7,PUMP,gpm,50,gpm,GPM,"].join("\n"), "k.csv");
+  const result = scoreSet({ setId: "s", key, snapshot: { items: [], tables: [] },
+    normalize: (it, family) => ({ family, tag: it.tag, attributes: {}, unknown: {} }) });
+  const summary = summarize([{ id: "s", ...result }]);
+  for (const side of ["dev", "dev2"]) {
+    const text = renderText(summary, { side, detail: false, results: [], normalizer: "null" });
+    assert.match(text, /key instances with no compile item \(1\):\n  s a\.pdf#2 "PUMP SCHEDULE" P-7 \(PUMP\)/);
+  }
+  for (const side of ["heldout", "heldout2"]) {
+    const text = renderText(summary, { side, detail: false, results: [], normalizer: "null" });
+    assert.match(text, /key instances with no compile item \(1\)$/m);
+    assert.doesNotMatch(text, /P-7/);
+  }
 });
 
 test("a child's JSON comes back whole: a character split across two pipe reads is never two U+FFFD", async () => {
