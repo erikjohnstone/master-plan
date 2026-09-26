@@ -621,6 +621,20 @@ process for that set was alive. Each set's lines equal the baseline's
 The live baker chain turned over at 10:10:27. Its new link loaded the fixed
 `graph-eval.mjs`, so it ends when that link does.
 
+**With the chain gone (2026-09-26, 10:22 on).** The last link exited at 10:22:17 and started no successor.
+- 01_NY now snapshots: 39 compile items in 682 s, the machine peaking at 12.8 GB. Its "no snapshot" had been
+  the chain's 6 GB.
+- 058_CA does not. At the eval environment's 8 GB V8 heap (`--max-old-space-size=8192`), it fails with
+  "JavaScript heap out of memory" after about 210 s. Given a 12 GB heap, its compile child reached 13.4 GB and the
+  memory cgroup killed it, with the machine at 14.5 GB. That is a ceiling of its own on this 16 GB container.
+
+**A cost to know about.** The sheet-graph cache key covers `mcp/package.json` (it pins dependency versions). The
+unseen audit's commit added two tests to its `test` list, and so every cached graph was rebuilt on the next
+run, at about one to seven minutes a set. The rebuilt graphs are the same. 096_IN's snapshot from its rebuilt
+graph (156 items, 21 tables, 24 packets) is byte-identical to its earlier one in items, tables, pages, points and
+packets, although its table sidecar was killed for memory near the end of that build. The other 89 unseen
+sets read the same units and packets as before the rebuild (06-unseen-audit.json, before and after).
+
 ---
 
 ## AS-17 — held-out GATE 2 fails: the normalizer's rules do not yet carry to drafting they were not grown on (OPEN — this goal; closing it needs dev documents the environment cannot stage, AS-2)

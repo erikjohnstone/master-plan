@@ -179,6 +179,23 @@
   limit killed their compile while an orphaned scorer (AS-15) held about
   6 GB.
 
+  **A vision reply cut off by its token limit is asked again.** The vision
+  model reasons before it answers, and on some drawings it spent the whole
+  16,000-token budget reasoning and returned nothing: 37 of the unseen
+  audit's 358 vision calls and 7 of dev's 126. That run's answers vanished,
+  so neither an absence (which needs both vision runs) nor an agreement
+  through it could apply. A reply cut off before it holds any answer is now
+  asked again with 32,000 tokens, and if still cut off, with low reasoning
+  effort as well. The first request and every reply that finished are
+  unchanged, so every recorded run still replays.
+  - Dev: 294 applied, 0 wrong (was 291), 48 absences (was 43).
+  - The unseen audit: 425 applied, all checked by hand, all right (was 412).
+    01_NY now snapshots, with the orphaned scorer gone.
+  - Two dev boiler roles and one unseen pump role are now held open: a
+    recovered run says otherwise on evidence that does not verify.
+  - GATE D's live re-run changes 2.8% of dev decisions (the limit is 2%), none
+    to a wrong value.
+
 - **Eval harness: a scorer's per-set child no longer re-scores its set
   forever** (AS-15). Each corpus-eval scorer (`takeoff-eval`, `graph-eval`,
   `tag-eval`, `table-recall-eval`), and `reference-eval` and

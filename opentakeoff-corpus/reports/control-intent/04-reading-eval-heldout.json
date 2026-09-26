@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T09:02:16.686Z",
+  "generated_at": "2026-09-26T13:38:19.077Z",
   "side": "heldout",
   "documents": [
     "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
@@ -58,8 +58,8 @@
       "r2a": {
         "right": 41,
         "wrong": 9,
-        "abstained": 28,
-        "unverified": 1,
+        "abstained": 29,
+        "unverified": 2,
         "undecided-key": 9
       },
       "r2b": {

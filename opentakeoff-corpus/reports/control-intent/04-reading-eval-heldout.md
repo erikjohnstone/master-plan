@@ -11,6 +11,6 @@ READING EVAL (instrument 4) — heldout, replayed runs (live top-up)
 per reader (answers on keyed questions):
   r0     right 10  wrong 0  abstained 242  unverified 0  (key undecided 0)
   r1     right 156  wrong 3  abstained 14  unverified 42  (key undecided 37)
-  r2a    right 41  wrong 9  abstained 28  unverified 1  (key undecided 9)
+  r2a    right 41  wrong 9  abstained 29  unverified 2  (key undecided 9)
   r2b    right 37  wrong 6  abstained 40  unverified 1  (key undecided 6)
 ```

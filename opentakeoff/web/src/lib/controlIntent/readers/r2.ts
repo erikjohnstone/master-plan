@@ -18,6 +18,12 @@
 //     than "absent" or "not shown", is UNVERIFIED. An option read as absent
 //     while the drawing prints the device's name (the term list's mention,
 //     traps aside) is not an absence: it reads as not_shown.
+//   · CUT OFF: the model reasons before it answers, and may spend the whole
+//     budget doing so (10% of the unseen audit's calls ended at 16,000
+//     reasoning tokens with no reply). A reply the token limit cut off before
+//     it held an answer is asked again: with twice the room, then with low
+//     reasoning effort too (R2_RETRIES). The first request, and every reply
+//     that finished, are unchanged.
 // Answers from a unit's several drawings are joined per run: an option is
 // there if some drawing shows it and none shows its alternative, absent only
 // if every drawing lacks it; a role is "commands" if any drawing has the BAS
@@ -35,6 +41,24 @@ import { normText, printedIn, squeeze } from "./text";
 
 export const R2_PROMPT_VERSION = "control_r2_v2";
 export const R2_MODEL = "qwen-3.8-27b";
+
+/** A request's completion budget, and how a cut-off reply is asked again:
+ * with twice the room, then (still cut off) twice the room and low reasoning
+ * effort. Each is its own request, so a replay finds each one recorded. */
+export const R2_MAX_TOKENS = 16_000;
+export const R2_RETRIES: ReadonlyArray<{ max_completion_tokens: number; reasoning_effort?: "low" }> = [
+  { max_completion_tokens: 32_000 },
+  { max_completion_tokens: 32_000, reasoning_effort: "low" },
+];
+
+/** Whether a reply ended at the token limit before it held any answer (see
+ * the header): its JSON has no answers list. A reply that finished, or one
+ * cut off after its answers, is read as it is. */
+export function cutOff(reply: { content: string | null; finish_reason?: string | null } | null | undefined): boolean {
+  if (!reply || reply.finish_reason !== "length") return false;
+  const json = replyJson(reply.content) as { answers?: unknown } | null;
+  return !Array.isArray(json?.answers);
+}
 
 /** Span space is the page's viewport at sheets.ts RENDER_SCALE (2) px per
  * point, rotation applied: the sheet graph's convention (a test pins the
@@ -124,7 +148,7 @@ export function r2Request(unit: ReadUnit, bp: BoundPacket, questions: readonly R
     }],
     response_format: { type: "json_schema", json_schema: { name: "control_drawing_reading", strict: true, schema: r2Schema(questions.map((q) => q.id)) } },
     temperature: 0,
-    max_completion_tokens: 16_000,
+    max_completion_tokens: R2_MAX_TOKENS,
   };
   return { req, summary: { units: unit.tags, family: unit.family, packet: bp.packet.id, run, crop: spec, questions: questions.map((q) => q.id) } };
 }

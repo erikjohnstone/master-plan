@@ -31,7 +31,7 @@ import { memoryRunStore, PENDING_IMAGE, recordedCall, RUNS_VERSION, type ModelRe
 import { QUESTIONS_VERSION, unitQuestions, type ReadingQuestion } from "./readers/questions";
 import { aboutOthers, headsOthers, namesUnit, ownPacket, R0_VERSION, readR0, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
 import { R1_MODEL, R1_PROMPT_VERSION, r1Answers, r1Request, type ReadUnit } from "./readers/r1";
-import { cropSpec, joinRun, R2_MODEL, R2_PROMPT_VERSION, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
+import { cropSpec, cutOff, joinRun, R2_MODEL, R2_PROMPT_VERSION, R2_RETRIES, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
 import { TERM_LIST, type TermList } from "./readers/terms";
 import { normText, packetText, TEXT_VERSION, type PacketText } from "./readers/text";
 import type { Packet } from "./evidence";
@@ -212,9 +212,18 @@ export async function readControlIntent(input: {
             if (!url) return null;
             return { ...req, messages: req.messages.map((m) => (typeof m.content === "string" ? m : { ...m, content: m.content.map((p) => (p.type === "image_url" ? { type: "image_url" as const, image_url: { url } } : p)) })) } as ModelRequest;
           };
-          const res = await recordedCall(store, opts.render ? opts.transport ?? null : null, "r2", R2_PROMPT_VERSION, prep.req, prep.summary, { imageKeys: [key], materialize });
+          const transport = opts.render ? opts.transport ?? null : null;
+          let res = await recordedCall(store, transport, "r2", R2_PROMPT_VERSION, prep.req, prep.summary, { imageKeys: [key], materialize });
           tally(out.calls.r2, res.status, res.run);
           if (res.run && res.status !== "failed") runs.add(res.run.hash);
+          // Cut off before any answer: asked again, with room to finish
+          // (readers/r2.ts).
+          for (const [i, retry] of R2_RETRIES.entries()) {
+            if (!cutOff(res.run)) break;
+            res = await recordedCall(store, transport, "r2", R2_PROMPT_VERSION, { ...prep.req, ...retry }, { ...prep.summary, retry: i + 1 }, { imageKeys: [key], materialize });
+            tally(out.calls.r2, res.status, res.run);
+            if (res.run && res.status !== "failed") runs.add(res.run.hash);
+          }
           perRun[run].push(res.content === null ? [] : r2PacketAnswers(res.content, bp, questions, run, spec.dpi < 200, TERM_LIST));
         }
       }

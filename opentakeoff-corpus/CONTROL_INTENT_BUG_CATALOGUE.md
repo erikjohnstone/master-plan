@@ -837,3 +837,54 @@ their units.
 
 **Watch:** the finder still takes a phasing note titled "SEQUENCE …" for a sequence of operation (CI-26's finder
 batch). Only the false binding is fixed here.
+
+## CI-31: a vision reply the token limit cut off returned nothing, and that run's answers vanished (FIXED, next commit)
+
+**Found:** 2026-09-26, the reader recall census. On confirmed-bound questions, one vision run answered while the
+other said nothing 402 times. The recorded replies show why: 37 of the unseen audit's 358 vision calls (10%) and 7
+of dev's 126 ended with finish_reason "length" and no content. `qwen-3.8-27b` reasons before it answers, and on
+those drawings it spent the whole 16,000-token budget reasoning. A finished call's reasoning runs from a few hundred
+tokens to 15,848 (median about 3,500), so 16,000 cuts off the tail. A run with no answers is not a disagreement, but
+it blocks an absence (C9 needs both vision runs) and any agreement through the vision reader. The text reader never
+hit its limit (154 of 154 unseen, 55 of 55 dev).
+
+**Fix (`readers/r2.ts`, `record.ts`):** a reply that ended at the token limit before it held an answer (its JSON has
+no answers list) is asked again: with 32,000 tokens, then, still cut off, with 32,000 and low reasoning effort
+(`R2_RETRIES`). Each retry is its own request, recorded and replayed like any other. The first request and every
+reply that finished are unchanged, so every recorded run still replays; only the cut-off calls gain a retry. Nothing
+about what counts changed: a retry's answers pass the same label check (CI2) and combine the same way.
+
+**Checked:**
+- The new record test (a run cut off twice, answered at the third ask; replay needs every ask recorded) and a
+  `cutOff` test.
+- Live, the retry finishes: dev's 7 cut-off calls all recovered (5 at the first retry, with 11,484 to 17,612
+  reasoning tokens; 2 at the second, low effort, with 883 and 1,718).
+- Dev, replayed with the retries recorded: 294 applied, 0 applied-wrong (was 291, 0). Absences: 48 applied (was 43).
+  Vision run a right 312 (was 304), run b 320 (was 317). Two role decisions become unresolved: federal-mech B-1 and
+  B-2 had applied "in" on R0 and R1; a recovered run now says "monitors only" on labels the drawing does not print,
+  and an unverified contrary reading holds a decision open (CI2). Typical eval 227/244, unchanged; class R 55/71.
+- The unseen audit, live (only the retries, and 01_NY, which now snapshots, called the models): 90 sets, 54 read,
+  520 calls replayed and 62 live, none missing or failed. 425 decisions apply, all checked by hand, all right:
+  - 14 new decisions, all checked against the drawings (all right). 088_AZ's three cooling towers get their role,
+    vibration switches and bypass valve from "COOLING TOWER - CONTROLS" ("BO - Fan Start/Stop", "BI - Vibration
+    Switch", "AO - Bypass Valve"). 096_IN's five cabinet unit heaters get setpoint adjustment from the unit heater
+    schematic's "ZONE SETPOINT ADJUST".
+  - 8 of 096_IN's audited decisions now apply with the recovered vision runs agreeing as well (same values).
+  - 1 is held open: 03_FL HWP-1's role, which R0 and R1 read in "THE DDC CONTROLLER SHALL START THE HOT WATER
+    PUMP". Both recovered runs say "not connected" on evidence that names no part of the pump, and an unverified
+    contrary reading holds a decision open (CI2).
+- GATE D (live top-up, a fresh re-run) passes every item but the re-run:
+  - negative controls, model-off, raster and cost (188 calls, 1.40 M tokens, at most 102 s a document) pass;
+  - the adversarial swaps apply nothing through a swapped packet (56 of 56 and 26 of 26 answers fail
+    verification);
+  - replay is byte-identical, 11 of 11.
+  The re-run changes 14 of 493 decisions (2.8%), above the 2% limit; the last re-run changed 7 of 491 (1.4%). All
+  14 are federal-mech, the text and vision models answering a fresh call differently (CI-24), in both directions.
+  Two are CI-31's own: B-1 and B-2's roles, held open by the recorded retry's unverified claim, apply in the fresh
+  re-run, whose runs say nothing. No decision either run applies is wrong against the dev keys. AHU-1's economizer is not a keyed option, but the key's note records its economizer damper D-6. With the vision model now
+  answering calls it used to lose, its variability shows in more decisions. The gate item stays failed as defined;
+  it was measured once and is not re-run to pass.
+- Held-out (aggregates only, live top-up): the recorded runs had 3 cut-off calls. B2: 5 applied, 5 right, 0 wrong
+  (unchanged); 13 proposals right, 6 wrong; 228 abstained. Vision run a: 41 right, 9 wrong, 29 abstained, 2
+  unverified (was 28 and 1). GATE C 33/91, unchanged. B1 is not re-measured: no binding changed.
+- Tests: web control intent and assemblies 215/215; the new record test fails without the retry.

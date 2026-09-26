@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T04:57:45.369Z",
+  "generated_at": "2026-09-26T10:50:41.085Z",
   "side": "dev",
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -31,21 +31,21 @@
   },
   "summary": {
     "total": {
-      "applied-right": 291,
+      "applied-right": 294,
       "applied-wrong": 0,
       "INVENTED": 0,
-      "proposal-right": 51,
+      "proposal-right": 47,
       "proposal-wrong": 6,
-      "unresolved": 6,
-      "abstained": 293
+      "unresolved": 8,
+      "abstained": 292
     },
-    "applied": 291,
+    "applied": 294,
     "applied_wrong_rate": 0,
     "absence": {
-      "applied-right": 43,
+      "applied-right": 48,
       "applied-wrong": 0,
       "INVENTED": 0,
-      "proposal-right": 32,
+      "proposal-right": 27,
       "proposal-wrong": 0,
       "unresolved": 0,
       "abstained": 0
@@ -67,17 +67,17 @@
         "undecided-key": 2
       },
       "r2a": {
-        "right": 304,
+        "right": 312,
         "wrong": 5,
-        "abstained": 275,
-        "unverified": 15,
+        "abstained": 280,
+        "unverified": 17,
         "undecided-key": 2
       },
       "r2b": {
-        "right": 317,
-        "wrong": 1,
-        "abstained": 269,
-        "unverified": 18,
+        "right": 320,
+        "wrong": 2,
+        "abstained": 272,
+        "unverified": 20,
         "undecided-key": 2
       },
       "rp": {
@@ -90,22 +90,22 @@
     },
     "by_set": {
       "federal-mech": {
-        "applied-right": 153,
+        "applied-right": 151,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 8,
         "proposal-wrong": 1,
-        "unresolved": 4,
+        "unresolved": 6,
         "abstained": 225
       },
       "bldg5406-hvac-demo": {
-        "applied-right": 59,
+        "applied-right": 64,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 18,
+        "proposal-right": 14,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 5
+        "abstained": 4
       },
       "094_FL_Orange_County_Regional_History_Center_HVAC": {
         "applied-right": 32,
@@ -200,19 +200,19 @@
         "abstained": 233
       },
       "AHU": {
-        "applied-right": 33,
+        "applied-right": 35,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 24,
+        "proposal-right": 22,
         "proposal-wrong": 2,
         "unresolved": 2,
         "abstained": 11
       },
       "FAN": {
-        "applied-right": 32,
+        "applied-right": 33,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 4,
+        "proposal-right": 3,
         "proposal-wrong": 0,
         "unresolved": 1,
         "abstained": 3
@@ -227,13 +227,13 @@
         "abstained": 12
       },
       "FCU": {
-        "applied-right": 9,
+        "applied-right": 11,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 5,
+        "proposal-right": 4,
         "proposal-wrong": 0,
         "unresolved": 0,
-        "abstained": 5
+        "abstained": 4
       },
       "PUMP": {
         "applied-right": 4,
@@ -245,12 +245,12 @@
         "abstained": 9
       },
       "BOILER": {
-        "applied-right": 4,
+        "applied-right": 2,
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 0,
         "proposal-wrong": 2,
-        "unresolved": 2,
+        "unresolved": 4,
         "abstained": 2
       },
       "RTU": {
@@ -319,13 +319,13 @@
     },
     "by_question": {
       "role": {
-        "applied-right": 124,
+        "applied-right": 122,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 12,
+        "proposal-right": 13,
         "proposal-wrong": 4,
-        "unresolved": 3,
-        "abstained": 25
+        "unresolved": 5,
+        "abstained": 24
       },
       "opt.setpoint_adjust": {
         "applied-right": 72,
@@ -337,19 +337,19 @@
         "abstained": 11
       },
       "opt.occupancy_sensor": {
-        "applied-right": 4,
+        "applied-right": 5,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 10,
+        "proposal-right": 9,
         "proposal-wrong": 0,
         "unresolved": 0,
         "abstained": 63
       },
       "opt.window_switch": {
-        "applied-right": 12,
+        "applied-right": 13,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 1,
+        "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 0,
         "abstained": 63
@@ -373,10 +373,10 @@
         "abstained": 58
       },
       "opt.motorized_damper": {
-        "applied-right": 10,
+        "applied-right": 11,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 2,
+        "proposal-right": 1,
         "proposal-wrong": 0,
         "unresolved": 1,
         "abstained": 0
@@ -418,19 +418,19 @@
         "abstained": 6
       },
       "opt.relief_damper": {
-        "applied-right": 0,
+        "applied-right": 1,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 4,
+        "proposal-right": 3,
         "proposal-wrong": 1,
         "unresolved": 0,
         "abstained": 1
       },
       "opt.relief_fan": {
-        "applied-right": 3,
+        "applied-right": 4,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 1,
+        "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 1,
         "abstained": 1

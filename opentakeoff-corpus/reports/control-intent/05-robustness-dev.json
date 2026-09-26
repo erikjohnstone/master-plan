@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-26T07:32:42.906Z",
-  "live": false,
+  "generated_at": "2026-09-26T13:09:50.803Z",
+  "live": true,
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
     "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -168,9 +168,9 @@
         "unresolved": 0,
         "elsewhere": 2,
         "elsewhere_applied": 2,
-        "answers": 55,
-        "unverified": 55,
-        "calls": 0,
+        "answers": 56,
+        "unverified": 56,
+        "calls": 10,
         "applied_list": [],
         "not_applied_share": 1,
         "pass": true
@@ -221,7 +221,7 @@
           "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
           "identical": true,
           "lines": 73,
-          "replayed": 11,
+          "replayed": 13,
           "not_recorded": 0
         },
         {
@@ -270,14 +270,14 @@
           "id": "bldg5406-hvac-demo",
           "identical": true,
           "lines": 414,
-          "replayed": 31,
+          "replayed": 35,
           "not_recorded": 0
         },
         {
           "id": "federal-mech",
           "identical": true,
           "lines": 2038,
-          "replayed": 59,
+          "replayed": 62,
           "not_recorded": 0
         },
         {
@@ -298,15 +298,15 @@
           "changed": 0,
           "calls": 4,
           "tokens": 16544,
-          "wall_s": 1
+          "wall_s": 2
         },
         {
           "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
           "decisions": 5,
           "changed": 0,
-          "calls": 11,
-          "tokens": 92808,
-          "wall_s": 33
+          "calls": 12,
+          "tokens": 106174,
+          "wall_s": 45
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
@@ -314,23 +314,23 @@
           "changed": 0,
           "calls": 14,
           "tokens": 85723,
-          "wall_s": 18
+          "wall_s": 19
         },
         {
           "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
           "decisions": 4,
           "changed": 0,
           "calls": 12,
-          "tokens": 84114,
-          "wall_s": 18
+          "tokens": 90951,
+          "wall_s": 24
         },
         {
           "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
           "decisions": 1,
           "changed": 0,
           "calls": 3,
-          "tokens": 12717,
-          "wall_s": 6
+          "tokens": 9648,
+          "wall_s": 4
         },
         {
           "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
@@ -338,7 +338,7 @@
           "changed": 0,
           "calls": 9,
           "tokens": 89095,
-          "wall_s": 22
+          "wall_s": 26
         },
         {
           "id": "12_MT_MSU_ReidHall_Renovation",
@@ -346,7 +346,7 @@
           "changed": 0,
           "calls": 1,
           "tokens": 3831,
-          "wall_s": 2
+          "wall_s": 1
         },
         {
           "id": "baker-county-eoc",
@@ -358,32 +358,32 @@
         },
         {
           "id": "bldg5406-hvac-demo",
-          "decisions": 96,
+          "decisions": 97,
           "changed": 0,
-          "calls": 31,
-          "tokens": 237760,
-          "wall_s": 85
+          "calls": 35,
+          "tokens": 299980,
+          "wall_s": 102
         },
         {
           "id": "federal-mech",
-          "decisions": 179,
-          "changed": 7,
-          "calls": 59,
-          "tokens": 437087,
-          "wall_s": 109
+          "decisions": 180,
+          "changed": 14,
+          "calls": 61,
+          "tokens": 441982,
+          "wall_s": 102
         },
         {
           "id": "itd-d1-lab",
           "decisions": 54,
           "changed": 0,
           "calls": 36,
-          "tokens": 257580,
-          "wall_s": 90
+          "tokens": 256118,
+          "wall_s": 85
         }
       ],
-      "decisions": 491,
-      "changed": 7,
-      "share": 0.014256619144602852,
+      "decisions": 493,
+      "changed": 14,
+      "share": 0.028397565922920892,
       "changes": [
         {
           "id": "federal-mech",
@@ -391,7 +391,7 @@
           "question": "opt.relief_damper",
           "from": "proposal true",
           "to": "none",
-          "from_readers": "r0:not_shown r1:yes",
+          "from_readers": "r0:not_shown r1:yes r2a:not_shown r2b:not_shown",
           "to_readers": ""
         },
         {
@@ -400,8 +400,8 @@
           "question": "opt.enthalpy_economizer",
           "from": "applied true",
           "to": "proposal true",
-          "from_readers": "r0:yes r1:yes",
-          "to_readers": "r0:yes r1:not_shown r2b:not_shown"
+          "from_readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+          "to_readers": "r0:yes r1:not_shown r2a:not_shown r2b:not_shown"
         },
         {
           "id": "federal-mech",
@@ -409,8 +409,62 @@
           "question": "opt.freezestat_to_bas",
           "from": "proposal false",
           "to": "applied false",
-          "from_readers": "r0:no r1:not_shown",
-          "to_readers": "r0:no r1:no r2b:not_shown"
+          "from_readers": "r0:no r1:not_shown r2a:no r2b:no(unverified)",
+          "to_readers": "r0:no r1:no r2a:no(unverified) r2b:no"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "AHU-1",
+          "question": "opt.duct_smoke_detectors",
+          "from": "proposal true",
+          "to": "unresolved null",
+          "from_readers": "r0:yes r1:not_shown r2a:not_shown r2b:not_shown",
+          "to_readers": "r0:yes r1:not_shown r2a:no r2b:no"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "AHU-1",
+          "question": "opt.economizer",
+          "from": "proposal true",
+          "to": "applied true",
+          "from_readers": "r0:yes r1:yes(unverified) r2a:not_shown r2b:yes",
+          "to_readers": "r0:yes r1:yes(unverified) r2a:yes r2b:yes"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "B-1",
+          "question": "role",
+          "from": "unresolved null",
+          "to": "applied \"in\"",
+          "from_readers": "r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands",
+          "to_readers": "r0:commands r1:commands r2a:not_shown r2b:not_shown"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "B-2",
+          "question": "role",
+          "from": "unresolved null",
+          "to": "applied \"in\"",
+          "from_readers": "r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands",
+          "to_readers": "r0:commands r1:commands r2a:not_shown r2b:not_shown"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "HWP-1",
+          "question": "role",
+          "from": "proposal \"in\"",
+          "to": "none",
+          "from_readers": "r0:not_shown r1:commands(unverified) r2a:commands r2b:commands",
+          "to_readers": ""
+        },
+        {
+          "id": "federal-mech",
+          "tag": "HWP-2",
+          "question": "role",
+          "from": "proposal \"in\"",
+          "to": "none",
+          "from_readers": "r0:not_shown r1:commands(unverified) r2a:commands r2b:commands",
+          "to_readers": ""
         },
         {
           "id": "federal-mech",
@@ -447,15 +501,24 @@
           "to": "proposal true",
           "from_readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
           "to_readers": "r0:not_shown r1:yes(unverified) r2a:yes r2b:yes"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "AHU-1",
+          "question": "role",
+          "from": "none",
+          "to": "proposal \"in\"",
+          "from_readers": "",
+          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands(unverified) r2a:commands r2b:commands"
         }
       ],
-      "pass": true
+      "pass": false
     },
     "cost": {
-      "calls": 181,
-      "tokens": 1322170,
-      "max_wall_s": 109,
-      "total_wall_s": 385,
+      "calls": 188,
+      "tokens": 1404957,
+      "max_wall_s": 102,
+      "total_wall_s": 411,
       "recorded_at": "2026-09-26T06:24:56.693Z",
       "pass": true
     },
@@ -479,7 +542,7 @@
     "swap (tag)": true,
     "model-off": true,
     "replay": true,
-    "re-run": true,
+    "re-run": false,
     "cost": true,
     "raster": true
   },

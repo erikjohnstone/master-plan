@@ -13,7 +13,7 @@ import { compileTermList, TERM_LIST } from "../../src/lib/controlIntent/readers/
 import { aboutOthers, headsOthers, readR0, namesUnit, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
 import type { ReadingQuestion } from "../../src/lib/controlIntent/readers/questions.ts";
 import { r1Answers, r1Request } from "../../src/lib/controlIntent/readers/r1.ts";
-import { cropSpec, joinRun, r2PacketAnswers, SPAN_PX_PER_PT } from "../../src/lib/controlIntent/readers/r2.ts";
+import { cropSpec, cutOff, joinRun, r2PacketAnswers, R2_MAX_TOKENS, R2_RETRIES, SPAN_PX_PER_PT } from "../../src/lib/controlIntent/readers/r2.ts";
 import { combineUnit, decisionIntent } from "../../src/lib/controlIntent/combine.ts";
 import { memoryRunStore, recordedCall, requestHash, type ModelRequest, type Transport } from "../../src/lib/controlIntent/runs.ts";
 import { readControlIntent } from "../../src/lib/controlIntent/record.ts";
@@ -576,4 +576,40 @@ test("record: a unit bound to another unit's titled packet reads nothing from it
   const models = ef2.answers.filter((a) => a.reader !== "r0" && a.cites.length);
   assert.ok(models.length > 0 && models.every((a) => a.note === "unverified"));
   assert.match(models[0].why!, /about other units \(its title names EF-1, not EF-2\), and does not print EF-2/);
+});
+
+test("record: a vision reply the token limit cut off before any answer is asked again, with room to finish; a finished reply never is (CI-31)", async () => {
+  assert.equal(cutOff({ content: "", finish_reason: "length" }), true);
+  assert.equal(cutOff({ content: "{\"answers\": [{\"question\": \"role\"", finish_reason: "length" }), true, "cut off inside its JSON");
+  assert.equal(cutOff({ content: JSON.stringify({ answers: [] }), finish_reason: "length" }), false, "cut off after its answers: read as it is");
+  assert.equal(cutOff({ content: "", finish_reason: "stop" }), false);
+  const items = [row("FAN", "EF-1", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "CONSTANT" })];
+  const spans = [
+    sp("MOTORIZED DAMPER", 700, 300), sp("BO - FAN START/STOP", 700, 400), sp("BI - FAN STATUS", 700, 500),
+    sp("1", 651, 1020, 50), sp("EXHAUST FAN EF-1 CONTROL DIAGRAM", 734, 1000, 50), sp("SCALE: NONE", 734, 1060, 25),
+    ...Array.from({ length: 12 }, (_, i) => sp("THE CONTROLLER SHALL MODULATE THE VALVE TO MAINTAIN SETPOINT", 3000, 300 + i * 23)),
+  ];
+  const project: CompiledProject = { items, control: { version: "control_evidence_v1", packets: findPackets("set.pdf#5", spans), sheet_numbers: {} } };
+  // Run "a" is cut off at the first budget and the first retry, and answers at
+  // the last; run "b" answers at once.
+  const asked: string[] = [];
+  const reasoning: Transport = async (r) => {
+    const vision = typeof r.messages.find((m) => m.role === "user")!.content !== "string";
+    if (!vision) return cannedModel(r);
+    const variant = `${r.max_completion_tokens}${r.reasoning_effort ? `/${r.reasoning_effort}` : ""}`;
+    asked.push(variant);
+    const firstLook = asked.filter((v) => v === `${R2_MAX_TOKENS}`).length === 1;
+    if (firstLook && variant !== `${R2_RETRIES[1].max_completion_tokens}/low`) return { content: "", finish_reason: "length" };
+    return { ...(await cannedModel(r)), finish_reason: "stop" };
+  };
+  const store = memoryRunStore();
+  const readings = await readControlIntent({ project, library: LIB }, { store, transport: reasoning, render: async () => "data:image/png;base64,AAAA" });
+  assert.deepEqual(asked, [`${R2_MAX_TOKENS}`, "32000", "32000/low", `${R2_MAX_TOKENS}`], "run a: the budget, then both retries; run b: answered at once");
+  const u = readings.units.find((x) => x.tag === "EF-1")!;
+  assert.deepEqual(u.answers.filter((a) => a.reader === "r2" && a.question === "opt.motorized_damper").map((a) => [a.run, a.answer]), [["a", "yes"], ["b", "yes"]]);
+  assert.equal(readings.calls.r2.live, 4);
+  // Replay needs every ask recorded, and reads the same with no model.
+  const replay = await readControlIntent({ project, library: LIB }, { store: memoryRunStore(store.all()) });
+  assert.deepEqual(replay.units, readings.units);
+  assert.deepEqual([replay.calls.r2.replayed, replay.calls.r2.not_recorded], [4, 0]);
 });

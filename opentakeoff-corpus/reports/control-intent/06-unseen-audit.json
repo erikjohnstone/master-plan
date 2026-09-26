@@ -26,7 +26,7 @@
    "status": "read",
    "units": 27,
    "packets": 18,
-   "applied": 17
+   "applied": 16
   },
   {
    "id": "08_ME_BGS_Augusta_EastCampus_Renovation",
@@ -123,8 +123,10 @@
   },
   {
    "id": "01_NY_VA_Northport_Dialysis_100CD",
-   "status": "no_snapshot",
-   "error": "child exited null with no result"
+   "status": "read",
+   "units": 39,
+   "packets": 10,
+   "applied": 0
   },
   {
    "id": "02_UT_FAA_Ogden_AirTrafficControlTower",
@@ -532,7 +534,7 @@
    "status": "read",
    "units": 64,
    "packets": 21,
-   "applied": 23
+   "applied": 32
   },
   {
    "id": "089_FL_Airport_Terminal_and_Hangar_Development",
@@ -571,7 +573,7 @@
    "status": "read",
    "units": 156,
    "packets": 24,
-   "applied": 74
+   "applied": 79
   },
   {
    "id": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
@@ -595,9 +597,9 @@
  ],
  "totals": {
   "eligible": 90,
-  "read": 53,
-  "applied": 412,
-  "right": 412,
+  "read": 54,
+  "applied": 425,
+  "right": 425,
   "wrong": 0,
   "unaudited": 0,
   "gone": []
@@ -642,7 +644,7 @@
    "question": "opt.economizer",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:no",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29#p1",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29",
@@ -690,7 +692,7 @@
    "question": "opt.economizer",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:no",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29#p1",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29",
@@ -738,7 +740,7 @@
    "question": "opt.economizer",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:no",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29#p1",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29",
@@ -786,7 +788,7 @@
    "question": "opt.economizer",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:no",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29#p1",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#29",
@@ -802,7 +804,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -818,7 +820,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -834,7 +836,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -850,7 +852,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -866,7 +868,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -882,7 +884,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -898,7 +900,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -914,7 +916,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -930,7 +932,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -946,7 +948,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -962,7 +964,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -978,7 +980,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -994,7 +996,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1010,7 +1012,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1026,7 +1028,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1042,7 +1044,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1058,7 +1060,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1074,7 +1076,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1090,7 +1092,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1106,7 +1108,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1122,7 +1124,7 @@
    "question": "opt.fan_status",
    "value": true,
    "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2a:absent",
+   "readers": "r0:yes r1:yes r2a:absent r2b:absent",
    "cite": {
     "packet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28#p2",
     "sheet": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf#28",
@@ -1383,22 +1385,6 @@
     "packet": "03_FL_HurlburtField_ChildDevCenter.pdf#86#p2",
     "sheet": "03_FL_HurlburtField_ChildDevCenter.pdf#86",
     "text": "CHILLER CONTROL SUMMARY UPON CHILLED WATER SYSTEM STARTUP, THE DDC SYSTEM SHALL ENABLE CHILLER ACC-2 BASED ON BUILDING LOAD AND THE CHILLER SHALL OPERATE THROUGH ITS INTERNAL CONTROLS TO MAINTAIN CHILLED WATER SUPPLY TEMPERATURE AT SETPOINT OF 44°F (ADJ.). UPON A CALL FOR COOLING, THE DDC SHALL STAR"
-   },
-   "verdict": "right",
-   "checked": "2026-09-26"
-  },
-  {
-   "set": "03_FL_HurlburtField_ChildDevCenter",
-   "tag": "HWP-1",
-   "family": "PUMP",
-   "question": "role",
-   "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands",
-   "cite": {
-    "packet": "03_FL_HurlburtField_ChildDevCenter.pdf#86#p1",
-    "sheet": "03_FL_HurlburtField_ChildDevCenter.pdf#86",
-    "text": "SECONDARY HOT WATER PUMP START/STOP THE DDC CONTROLLER SHALL START THE HOT WATER PUMP THROUGH A THRU A \"HAND-OFF-AUTO\" SWITCH."
    },
    "verdict": "right",
    "checked": "2026-09-26"
@@ -5965,6 +5951,159 @@
   },
   {
    "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-1",
+   "family": "COOLING_TOWER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "BO - Fan Start/Stop AO - Fan VFD Speed AO - Bypass Valve BO - Condenser Water Pump Start/Stop BO - Makeup Valve BO - Condenser Water Isolation Valve"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245), the family's typical detail: \"BO - Fan Start/Stop\" and \"AO - Fan VFD Speed\"; the BAS commands the tower fan."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-1",
+   "family": "COOLING_TOWER",
+   "question": "opt.vibration_switches",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "BI - Vibration Switch"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245): a vibration switch drawn at the fan, \"BI - Vibration Switch\", and \"Vibration Status\" in its points table."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-1",
+   "family": "COOLING_TOWER",
+   "question": "opt.bypass_valve",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "AO - Bypass Valve"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245): a modulating three-way valve on the condenser water, \"AO - Bypass Valve\" (\"Bypass Valve Output\")."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-2",
+   "family": "COOLING_TOWER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "BO - Fan Start/Stop AO - Fan VFD Speed AO - Bypass Valve BO - Condenser Water Pump Start/Stop BO - Makeup Valve BO - Condenser Water Isolation Valve"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245), the family's typical detail: \"BO - Fan Start/Stop\" and \"AO - Fan VFD Speed\"; the BAS commands the tower fan."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-2",
+   "family": "COOLING_TOWER",
+   "question": "opt.vibration_switches",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "BI - Vibration Switch"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245): a vibration switch drawn at the fan, \"BI - Vibration Switch\", and \"Vibration Status\" in its points table."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-2",
+   "family": "COOLING_TOWER",
+   "question": "opt.bypass_valve",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "AO - Bypass Valve"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245): a modulating three-way valve on the condenser water, \"AO - Bypass Valve\" (\"Bypass Valve Output\")."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-3",
+   "family": "COOLING_TOWER",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "BO - Fan Start/Stop AO - Fan VFD Speed AO - Bypass Valve BO - Condenser Water Pump Start/Stop BO - Makeup Valve BO - Condenser Water Isolation Valve"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245), the family's typical detail: \"BO - Fan Start/Stop\" and \"AO - Fan VFD Speed\"; the BAS commands the tower fan."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-3",
+   "family": "COOLING_TOWER",
+   "question": "opt.vibration_switches",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "BI - Vibration Switch"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245): a vibration switch drawn at the fan, \"BI - Vibration Switch\", and \"Vibration Status\" in its points table."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tag": "CT-3",
+   "family": "COOLING_TOWER",
+   "question": "opt.bypass_valve",
+   "value": true,
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
+   "cite": {
+    "packet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245#p1",
+    "sheet": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245",
+    "text": "AO - Bypass Valve"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "COOLING TOWER - CONTROLS (sheet 245): a modulating three-way valve on the condenser water, \"AO - Bypass Valve\" (\"Bypass Valve Output\")."
+  },
+  {
+   "set": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
    "tag": "EF-1",
    "family": "FAN",
    "question": "role",
@@ -6081,15 +6220,16 @@
    "family": "FCU",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p4",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "AO-1 AO-2 BO-1"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision (R0 and R1 read the FCU schematic's outputs and sequence); the recovered vision runs now agree, citing DDC CONTROLLER ON FCU ENCLOSURE and the modulated coil valves."
   },
   {
    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
@@ -6097,15 +6237,16 @@
    "family": "FCU",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p4",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "AO-1 AO-2 BO-1"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision (R0 and R1 read the FCU schematic's outputs and sequence); the recovered vision runs now agree, citing DDC CONTROLLER ON FCU ENCLOSURE and the modulated coil valves."
   },
   {
    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
@@ -6113,15 +6254,16 @@
    "family": "FCU",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p4",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "AO-1 AO-2 BO-1"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision (R0 and R1 read the FCU schematic's outputs and sequence); the recovered vision runs now agree, citing DDC CONTROLLER ON FCU ENCLOSURE and the modulated coil valves."
   },
   {
    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
@@ -7121,15 +7263,33 @@
    "family": "UNIT_HEATER",
    "question": "opt.modulating_valve",
    "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2b:yes",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:yes r1:yes r2a:yes r2b:yes",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "2. BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED TO ACHIEVE A SPACE TEMPERATURE SET AT 70°."
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision; the recovered vision runs now agree, citing \"BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED…\" on the same schematic."
+  },
+  {
+   "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "tag": "CUH-1",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
+    "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
+    "text": "ZONE SETPOINT ADJUST"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC (sheet 36): the zone sensor \"T\" with \"AI - ZONE TEMP\" and \"ZONE SETPOINT ADJUST\"."
   },
   {
    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
@@ -7137,15 +7297,33 @@
    "family": "UNIT_HEATER",
    "question": "opt.modulating_valve",
    "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2b:yes",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:yes r1:yes r2a:yes r2b:yes",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "2. BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED TO ACHIEVE A SPACE TEMPERATURE SET AT 70°."
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision; the recovered vision runs now agree, citing \"BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED…\" on the same schematic."
+  },
+  {
+   "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "tag": "CUH-2",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
+    "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
+    "text": "ZONE SETPOINT ADJUST"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC (sheet 36): the zone sensor \"T\" with \"AI - ZONE TEMP\" and \"ZONE SETPOINT ADJUST\"."
   },
   {
    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
@@ -7153,15 +7331,33 @@
    "family": "UNIT_HEATER",
    "question": "opt.modulating_valve",
    "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2b:yes",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:yes r1:yes r2a:yes r2b:yes",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "2. BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED TO ACHIEVE A SPACE TEMPERATURE SET AT 70°."
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision; the recovered vision runs now agree, citing \"BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED…\" on the same schematic."
+  },
+  {
+   "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "tag": "CUH-3",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
+    "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
+    "text": "ZONE SETPOINT ADJUST"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC (sheet 36): the zone sensor \"T\" with \"AI - ZONE TEMP\" and \"ZONE SETPOINT ADJUST\"."
   },
   {
    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
@@ -7169,15 +7365,33 @@
    "family": "UNIT_HEATER",
    "question": "opt.modulating_valve",
    "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2b:yes",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:yes r1:yes r2a:yes r2b:yes",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "2. BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED TO ACHIEVE A SPACE TEMPERATURE SET AT 70°."
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision; the recovered vision runs now agree, citing \"BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED…\" on the same schematic."
+  },
+  {
+   "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "tag": "CUH-4",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
+    "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
+    "text": "ZONE SETPOINT ADJUST"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC (sheet 36): the zone sensor \"T\" with \"AI - ZONE TEMP\" and \"ZONE SETPOINT ADJUST\"."
   },
   {
    "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
@@ -7185,15 +7399,33 @@
    "family": "UNIT_HEATER",
    "question": "opt.modulating_valve",
    "value": true,
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:yes r1:yes r2b:yes",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:yes r1:yes r2a:yes r2b:yes",
    "cite": {
     "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
     "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
     "text": "2. BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED TO ACHIEVE A SPACE TEMPERATURE SET AT 70°."
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-26",
+   "note": "Same value as the audited decision; the recovered vision runs now agree, citing \"BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED…\" on the same schematic."
+  },
+  {
+   "set": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "tag": "CUH-5",
+   "family": "UNIT_HEATER",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r2)",
+   "readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+   "cite": {
+    "packet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36#p8",
+    "sheet": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36",
+    "text": "ZONE SETPOINT ADJUST"
+   },
+   "verdict": "right",
+   "checked": "2026-09-26",
+   "note": "UNIT HEATER (HEATING ONLY) CONTROL SCHEMATIC (sheet 36): the zone sensor \"T\" with \"AI - ZONE TEMP\" and \"ZONE SETPOINT ADJUST\"."
   }
  ]
 }
