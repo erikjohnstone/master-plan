@@ -218,3 +218,14 @@ test("a child's JSON comes back whole: a character split across two pipe reads i
   assert.equal(out().length, text.length);
   assert.equal(out(), text);
 });
+
+test("AS-27 diagnostic: a status-marked tag the scorer cannot pair is re-scored by its base tag; one it pairs is left alone", async () => {
+  const { STATUS_MARK, withBaseTags } = await import("../scripts/assemblies-status-mark-diagnostic.mjs");
+  for (const t of ["(E)ATU A", "(N) VAV-105", "B-1(E)", "(EXISTING) CH-3"]) assert.ok(STATUS_MARK.test(t), t);
+  for (const t of ["ATU A", "E-1", "(2) PUMPS"]) assert.ok(!STATUS_MARK.test(t), t);
+  const line = (tag) => ({ sheet: "s#1", table_title: "T", tag, family: "VAV", attribute: "cfm_max", value: "500", unit: "cfm", source_header: "MAX CFM", note: "" });
+  const key = { rows: [line("(E)ATU A"), line("B-1(E)"), line("(E) VAV-1"), line("(N) VAV-1")], parts: [] };
+  const { key: based, replaced } = withBaseTags(key, new Set(["s#1|T|(E)ATU A", "s#1|T|(E) VAV-1", "s#1|T|(N) VAV-1"]));
+  assert.deepEqual(based.rows.map((r) => r.tag), ["ATU A", "B-1(E)", "(E) VAV-1", "(N) VAV-1"], "an existing and a new VAV-1 in one table stay apart");
+  assert.deepEqual([...replaced], ["s#1|T|ATU A"]);
+});

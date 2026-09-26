@@ -4,7 +4,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  headerText, normalizeCompileItem, parseElectricalCell, parseNumberCell, parseSizeCell, vfdDrivenTags,
+  headerText, normalizeCompileItem, parseElectricalCell, parseNumberCell, parseSizeCell, quantitiesOf, vfdDrivenTags,
   type CompileItem,
 } from "../../src/lib/assemblies/normalize.ts";
 
@@ -405,11 +405,15 @@ test("codes a cited note or the table's legend defines, and a drive schedule's l
   assert.deepEqual([ahu("MXTD3-PF-FF-CC-HF-FAN").humidifier, ahu("MXTD3-PF-FF-CC-HF-FAN").heating_type], ["yes", "none"]);
   assert.deepEqual([ahu("OAI-PF-FF-CC-HCS-FAN").humidifier, ahu("OAI-PF-FF-CC-HCS-FAN").heating_type], ["no", "electric"]);
   assert.equal(ahu("OAI-PF-XX-FAN").humidifier, undefined, "a code the legend does not define: no reading");
-  const pump = (tag: string) => values(normalizeCompileItem(row(tag, "NEW PUMP SCHEDULE", { "CAPACITY FLOW (GPM)": "80" }), "PUMP", { headers: [], driven: vfdDrivenTags([
+  const driven = vfdDrivenTags([
     { family: "PUMP", tag: "HWP-1", cells: {} }, { family: "PUMP", tag: "BP-1", cells: {} },
-    { family: "VARIABLE_FREQUENCY_DRIVE", tag: "VFD-1", cells: { PURPOSE: { text: "HWP-1", bbox: null } } },
-  ]) })).vfd;
-  assert.deepEqual([pump("HWP-1"), pump("BP-1")], ["yes", undefined]);
+    { family: "VARIABLE_FREQUENCY_DRIVE", tag: "VFD-1", sheet_id: "set.pdf#5", table_title: "NEW VARIABLE FREQUENCY DRIVE SCHEDULE", cells: { PURPOSE: { text: "HWP-1", bbox: [1, 2, 3, 4] } } },
+  ]);
+  const pump = (tag: string) => normalizeCompileItem(row(tag, "NEW PUMP SCHEDULE", { "CAPACITY FLOW (GPM)": "80" }), "PUMP", { headers: [], driven });
+  assert.deepEqual([values(pump("HWP-1")).vfd, values(pump("BP-1")).vfd], ["yes", undefined]);
+  // The value is printed in the drive schedule, so it cites that row (a key
+  // of the pump's own table scores it out of scope, never invented).
+  assert.deepEqual(pump("HWP-1").attributes.vfd.cite, { sheet: "set.pdf#5", table_title: "NEW VARIABLE FREQUENCY DRIVE SCHEDULE", header: "PURPOSE", bbox: [1, 2, 3, 4] });
 });
 
 test("two units of one kind on a row are no split pair; a legend column must list the unit's sections", () => {
@@ -419,4 +423,143 @@ test("two units of one kind on a row are no split pair; a legend column must lis
   const legend = { PF: "PREFILTER", FF: "FINAL FILTER", HF: "ELECTRIC HUMIDIFIER SECTION" };
   const filters = values(normalizeCompileItem(row("AHU-9", "AHU SCHEDULE", { "FILTER TYPE (SEE LEGEND)": "PF-FF" }), "AHU", { headers: [], legend }));
   assert.equal(filters.humidifier, undefined, "a filter column's codes are not the unit's whole list of sections");
+});
+
+// ── AS-17: rules from the second dev tier's misses (each from a dev-2 row) ──
+
+test("electrical tuples: labeled parts, V/HZ/PH and V/H/P orders, a dash separator, ELECTRICAL DATA V", () => {
+  assert.deepEqual(parseElectricalCell("208V 3ph"), { volts: 208, phase: 3 }); // 036_LA "VOLTAGE- PHASE"
+  assert.deepEqual(parseElectricalCell("208/60/1"), { volts: 208, phase: 1 }); // 066_MT "V/HZ/PH"
+  assert.deepEqual(parseElectricalCell("120/1"), { volts: 120, phase: 1 }); // 14_OR "ELEC [V/H/P]"
+  assert.deepEqual(parseElectricalCell("115/5"), { volts: 115, phase: null }, "a printed 5 is no phase");
+  assert.equal(parseElectricalCell("208/230/1"), null, "two voltages");
+  for (const h of ["ELECTRICAL VOLTAGE- PHASE", "ELEC [V/H/P]", "POWER (1) V/HZ/PH", "ELECTRICAL VOLTS/ PH /HZ", "ELECTRICAL VOLTS / PHASE / HERTZ"]) assert.ok(quantitiesOf(headerText(h)).includes("vph"), h);
+  assert.deepEqual(quantitiesOf(headerText("ELECTRICAL DATA V")), ["volts"]);
+  assert.ok(!quantitiesOf(headerText("V-BELT DRIVE")).includes("vph"));
+  const cu = values(normalizeCompileItem(row("07-A-CU-1", "VRV- AIR-COOLED CONDENSING UNIT SCHEDULE", { "ELECTRICAL VOLTAGE- PHASE": "208V 3ph" }), "CONDENSING_UNIT"));
+  assert.deepEqual([cu.volts, cu.phase], [208, 3]);
+  // 044_NY: ELECTRICAL DATA over three unlabeled sub-columns.
+  const accu = values(normalizeCompileItem(row("ACCU-1", "AIR-COOLED CONDENSING UNIT SCHEDULES (ACCU)", { "ELECTRICAL DATA": "208", "ELECTRICAL DATA 2": "1", "ELECTRICAL DATA 3": "60" }), "CONDENSING_UNIT"));
+  assert.deepEqual([accu.volts, accu.phase], [208, 1]);
+});
+
+test("a US unit in brackets is the column's unit; an SI twin in brackets is never read", () => {
+  const b = values(normalizeCompileItem(row("B-1", "HOT WATER CONDENSING BOILER", {
+    "INPUT [MBH]": "600", "HIGH FIRE OUTPUT [MBH]": "585", "EWT [°F]": "110", "LWT [°F]": "130", "ELEC [V/H/P]": "120/1",
+    "MIN GAS PRESS [IN. WC]": "5", "MAX GPM": "105", "MIN GPM": "10", "AIR INLET [IN]": "4", "GAS INLET [IN]": "1",
+  }), "BOILER"));
+  assert.deepEqual(b, { input_mbh: 600, output_mbh: 585, ewt_f: 110, lwt_f: 130, volts: 120, phase: 1, fuel: "gas" },
+    "a MAX and a MIN flow are limits, not the design flow; a burner's air and gas inlets are no water connection");
+  const ahu = values(normalizeCompileItem(row("AHU-1", "AHU SCHEDULE", { "AIR FLOW SUPPLY [L/S]": "[ 6400 ]", "TOTAL CAPACITY [KW]": "[ 170 ]", "AIR FLOW SUPPLY CFM": "13500" }), "AHU"));
+  assert.deepEqual(ahu, { supply_cfm: 13500 });
+});
+
+test("a cell printing one value per labeled part of its header", () => {
+  const vav = (cell: string) => values(normalizeCompileItem(row("VAV-1-01", "VAV TERMINAL BOX SCHEDULE", { "CFM DESIGN": "220", "CFM COOL MIN / HEATING": cell }), "VAV"));
+  assert.deepEqual(vav("80 / 125"), { cfm_max: 220, cfm_min: 80, cfm_heat: 125 }); // 21_VA
+  assert.deepEqual(vav("200 / -"), { cfm_max: 220, cfm_min: 200 }, "a dash part is none");
+  assert.deepEqual(vav("80 / N/A"), { cfm_max: 220 }, "not two parts");
+  const n = normalizeCompileItem(row("B1", "2-STAGE, GAS FIRED FURNACE SCHEDULE", { "HEATING PERFORMANCE OUTPUT CAPACITY SECOND STAGE/FIRST STAGE (MBH)": "60/42" }), "FURNACE");
+  assert.equal(n.attributes.heating_mbh.value, 60, "the full (second-stage) capacity"); // 16_NV
+  assert.equal(n.attributes.heating_mbh.printed, "60/42");
+  assert.equal(n.attributes.heating_mbh.cite.header, "HEATING PERFORMANCE OUTPUT CAPACITY SECOND STAGE/FIRST STAGE (MBH)");
+  assert.deepEqual(values(normalizeCompileItem(row("VAV-2", "VAV SCHEDULE", { "MAX/MIN CFM": "800/300" }), "VAV")), { cfm_max: 800, cfm_min: 300 });
+  assert.deepEqual(values(normalizeCompileItem(row("P-1", "PUMP SCHEDULE", { "EFFICIENCY KW/TON": "0.6/0.5" }), "PUMP")), {}, "a unit's own slash");
+});
+
+test("unitary capacity words (COOL MBH TC/SC, HEAT MBH, HEAT MBH IN/OUT), a fired heater, a fan coil's chilled-water coil", () => {
+  const hp = values(normalizeCompileItem(row("HP-01", "SPLIT SYSTEM HEAT PUMPS", { "COOL MBH TC": "30", "COOL MBH SC": "22", "HEAT MBH": "30" }), "HEAT_PUMP"));
+  assert.deepEqual([hp.cooling_mbh, hp.heating_mbh], [30, 30]); // 14_OR
+  const mau = values(normalizeCompileItem(row("MAU-1", "MAKE UP AIR UNITS", { "COOL MBH TC": "91", "COOL MBH SC": "90", "HEAT MBH IN": "174", "HEAT MBH OUT": "141", SEER: "18.6" }), "OUTDOOR_AIR_UNIT"));
+  assert.deepEqual([mau.cooling_mbh, mau.gas_input_mbh, mau.heating_mbh, mau.heating_type, mau.cooling_type], [91, 174, 141, "gas", "dx"]);
+  const fcu = values(normalizeCompileItem(row("FCU-1", "CHILLED WATER FAN COIL UNIT SCHEDULE", { "CHILLED WATER COIL TOTAL BTU/H": "24197.00", "CHILLED WATER COIL SENS. BTU/H": "18759.00", "CHILLED WATER COIL GPM": "3.4" }), "FCU"));
+  assert.equal(fcu.chw_mbh, 24.197); // 088_AZ
+  assert.equal(fcu.cooling_mbh, undefined);
+  const ch = values(normalizeCompileItem(row("CH-1", "WATER COOLED CENTRIFUGAL CHILLER SCHEDULE", { TONS: "300", "MAX (KW/TON)": "0.630" }), "AIR_COOLED_CHILLER"));
+  assert.deepEqual([ch.tons, ch.kw_input], [300, undefined], "KW/TON is an efficiency");
+  assert.equal(values(normalizeCompileItem(row("CT-2", "COOLING TOWER SCHEDULE", { "HEAT REJECTION TONNAGE": "300", "# OF FANS": "1" }), "COOLING_TOWER")).tons, 300);
+  assert.equal(values(normalizeCompileItem(row("CT-2", "COOLING TOWER SCHEDULE", { "# OF FANS": "1" }), "COOLING_TOWER")).qty, undefined, "a count of fans is no count of towers");
+});
+
+test("the unit's own speed over its motor's; each motor's HP over a TOTAL; NO. OF FAN(S); a package's TOTAL flow", () => {
+  const p = values(normalizeCompileItem(row("CHP-1", "HYDRONIC PUMPS", { "OPER. RPM": "1893", "MOTOR RPM": "2000", "MOTOR CONTROL": "VFD" }), "PUMP"));
+  assert.deepEqual([p.rpm, p.vfd], [1893, "yes"]); // 14_OR
+  assert.equal(values(normalizeCompileItem(row("BP-1", "HYDRONIC PUMPS", { "MOTOR CONTROL": "ECM" }), "PUMP")).vfd, "no", "an ECM motor runs on no VFD");
+  const ahu = values(normalizeCompileItem(row("AHU-1", "VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE", {
+    "FAN DATA FAN MOTOR NO. OF FAN(S)": "2", "FAN DATA FAN MOTOR FAN POWER HP": "4", "FAN DATA FAN MOTOR TOTAL FAN POWER HP": "8",
+  }), "AHU"));
+  assert.deepEqual([ahu.supply_fan_qty, ahu.supply_fan_hp], [2, 4]); // 03_FL
+  assert.equal(values(normalizeCompileItem(row("BP-1", "DOMESTIC WATER BOOSTER PUMP SCHEDULE", { "TOTAL FLOW GPM": "100", "PUMP FLOW RATE GPM": "50" }), "PUMP")).gpm, 100); // 21_VA
+  assert.equal(values(normalizeCompileItem(row("FOP-1", "GENERATOR FUEL OIL PUMP SCHEDULE", { "GENERATOR GPH": "757" }), "PUMP")).gpm, Number((757 / 60).toPrecision(12)), "GPH converts");
+  assert.equal(values(normalizeCompileItem(row("C1", "ENERGY RECOVERY VENTILATOR SCHEDULE", { "OUTDOOR AIR PERFORMANCE QUANTITY": "1" }), "ERV")).qty, undefined, "a section's count"); // 16_NV
+});
+
+test("a coil's rows are a water coil's only where the row prints or names that water", () => {
+  const dx = values(normalizeCompileItem(row("B1", "OUTDOOR AIR UNIT SCHEDULE", { "COOLING PERFORMANCE CAPACITY (MBH) TOTAL": "50.0", "COOLING PERFORMANCE ROWS": "3" }), "OUTDOOR_AIR_UNIT"));
+  assert.equal(dx.chw_rows, undefined); // 16_NV
+  const chw = values(normalizeCompileItem(row("DOAS-1", "DEDICATED OUTDOOR AIR SYSTEM", { "CHILLED WATER COIL ROWS": "6", "CHILLED WATER COIL FLOW GPM": "11" }), "DOAS"));
+  assert.equal(chw.chw_rows, 6);
+});
+
+test("SERVICE names a duty; SERVING names what is served; a family with no service reads either as the area", () => {
+  const fan = (header: string, cell: string) => values(normalizeCompileItem(row("EF-1", "FAN SCHEDULE", { [header]: cell }), "FAN"));
+  assert.deepEqual(fan("SERVING", "KH-1"), { area_served: "KH-1" }); // 03_FL
+  assert.deepEqual(fan("SERVING", "RESTROOMS"), { area_served: "RESTROOMS" });
+  assert.deepEqual(fan("SERVING", "110° F RETURN"), { service: "110° F RETURN" }, "a system is a service");
+  assert.deepEqual(fan("SERVICE", "RESTROOMS"), { service: "RESTROOMS" }, "SERVICE names the fan's duty (bldg5406)");
+  assert.deepEqual(fan("SYSTEM AND/OR SERVICE", "WHSE-AHU-1"), { service: "WHSE-AHU-1" });
+  const unit = (family: string, header: string, cell: string) => values(normalizeCompileItem(row("U-1", "SCHEDULE", { [header]: cell }), family)).area_served;
+  assert.equal(unit("DOAS", "SERVING", "SECTOR A - WEST"), "SECTOR A - WEST"); // 14_OR
+  assert.equal(unit("FURNACE", "GENERAL UNIT DATA SERVICE", "CLASSROOM 23"), "CLASSROOM 23"); // 16_NV
+  assert.equal(unit("CONDENSING_UNIT", "UNIT GENERAL DATA SERVICE", "F-B1 AND EC-B1"), "F-B1 AND EC-B1");
+  assert.equal(unit("OUTDOOR_AIR_UNIT", "UNIT GENERAL DATA SERVICE", "BUILDING B OUTSIDE AIR"), undefined, "a cell naming a system is not only an area");
+  assert.equal(unit("FCU", "ELECTRICAL SERVICE", "208/1"), undefined);
+});
+
+test("a mezzanine in the word printed; a heating block printed empty is no heat; a heat pump schedule's indoor unit", () => {
+  const loc = (cell: string) => values(normalizeCompileItem(row("U-1", "SCHEDULE", { LOCATION: cell }), "DOAS")).floor;
+  assert.deepEqual([loc("RR 136 MEZZ"), loc("MEZZANINE")], ["MEZZ", "MEZZANINE"]); // 14_OR, 044_NY
+  const vav = values(normalizeCompileItem(row("VAV-1-16", "VAV TERMINAL BOX SCHEDULE", {
+    "REHEAT COIL DATA E.A.T DEG. F": "55.0", "REHEAT COIL DATA E.W.T. DEG. F": "-", "REHEAT COIL DATA P FT. H20": "-", "REHEAT COIL DATA GPM": "-", "REHEAT COIL DATA MBH": "-",
+  }), "VAV"));
+  assert.equal(vav.heat_type, "none"); // 21_VA
+  const hwCells = { "HOT WATER HEATING PERFORMANCE CAPACITY (MBH)": "N/A", "HOT WATER HEATING PERFORMANCE FLUID FLOW (GPM)": "N/A", "HOT WATER HEATING PERFORMANCE EWT (°F)": "N/A" };
+  assert.equal(values(normalizeCompileItem(row("B1", "OUTDOOR AIR UNIT SCHEDULE", hwCells), "OUTDOOR_AIR_UNIT")).heating_type, "none"); // 16_NV
+  assert.equal(values(normalizeCompileItem(row("B1", "GAS FIRED OUTDOOR AIR UNIT SCHEDULE", hwCells), "OUTDOOR_AIR_UNIT")).heating_type, undefined, "the title names another heat");
+  assert.equal(values(normalizeCompileItem(row("VAV-1", "VAV SCHEDULE", { "REHEAT COIL DATA P FT. H20": "0.16" }), "VAV")).hw_wpd_ft, 0.16, "a ΔP whose Δ the text lost");
+  assert.equal(values(normalizeCompileItem(row("FC-01", "SPLIT SYSTEM HEAT PUMPS", { "COOL MBH TC": "30" }), "FCU")).heating_type, "heat_pump"); // 14_OR
+});
+
+test("a dual-fuel boiler's primary fuel rating; fuel from a firing rate in CFH or a gas pressure", () => {
+  const b = values(normalizeCompileItem(row("B-1", "FIRE TUBE STEAM BOILER SCHEDULE", {
+    "NATURAL GAS INPUT MBH": "24,494", "NATURAL GAS OUTPUT MBH": "20085", "# 2 OIL INPUT MBH": "24500", "# 2 OIL OUTPUT MBH": "20090",
+  }), "BOILER"));
+  assert.deepEqual([b.fuel, b.input_mbh, b.output_mbh], ["dual_fuel", 24494, 20085]); // 044_NY
+  assert.equal(values(normalizeCompileItem(row("B-1", "CONDENSING BOILER SCHEDULE", { "BOILER RATINGS FIRING RATE (CFH)": "390" }), "BOILER")).fuel, "gas"); // 03_FL
+  assert.equal(values(normalizeCompileItem(row("B-1", "BOILER", { "# 2 OIL INPUT MBH": "900" }), "BOILER")).fuel, "oil");
+});
+
+test("a heat exchanger's hot and cold sides by duty; a flue gas economizer's water; the heat it exchanges", () => {
+  const hx = values(normalizeCompileItem(row("HX-1", "HEAT EXCHANGER", {
+    "HOT SIDE FLOW (GPM)": "15.8", "HOT SIDE INLET TEMP (ºF)": "130", "HOT SIDE OUTLET TEMP (ºF)": "100",
+    "COLD SIDE FLOW (GPM)": "17", "COLD SIDE INLET TEMP (ºF)": "85", "COLD SIDE OUTLET TEMP (ºF)": "115",
+  }), "HEAT_EXCHANGER"));
+  assert.deepEqual(hx, { primary_gpm: 15.8, primary_ewt_f: 130, primary_lwt_f: 100, secondary_gpm: 17, secondary_ewt_f: 85, secondary_lwt_f: 115 }); // 14_OR
+  const eco = values(normalizeCompileItem(row("WSE-1", "PLATE HEAT EXCHANGER", {
+    "HOT SIDE FLOW (GPM)": "400", "HOT SIDE INLET TEMP (ºF)": "58", "COLD SIDE FLOW (GPM)": "380", "COLD SIDE INLET TEMP (ºF)": "45",
+  }), "HEAT_EXCHANGER"));
+  assert.deepEqual([eco.primary_gpm, eco.secondary_gpm], [380, 400], "cooling duty: the cold side is the source");
+  const fhx = values(normalizeCompileItem(row("FHX-1", "ECONOMIZER SCHEDULE, FLUE GAS/FEEDWATER HEAT EXCHANGERS", {
+    "MIN HEAT EXCHANGED MBH": "672.94", "WATER FLOW GPM": "41.0", "DESIGN WATER TEMPERATURES DEG F IN": "210", "DESIGN WATER TEMPERATURES DEG F OUT": "242.5",
+  }), "HEAT_EXCHANGER"));
+  assert.deepEqual(fhx, { capacity_mbh: 672.94, secondary_gpm: 41, secondary_ewt_f: 210, secondary_lwt_f: 242.5, primary_medium: "other", secondary_medium: "other" }); // 044_NY
+});
+
+test("a duplex starter's LEAD/LAG; a trap's load (not its rated capacity); a humidifier's KW; a pump's SUCT. SIZE", () => {
+  assert.equal(values(normalizeCompileItem(row("FOP-1", "FUEL OIL PUMP SCHEDULE", { STARTER: "AUTOMATIC W/LEAD LAG" }), "PUMP")).pump_arrangement, "lead_lag"); // 044_NY
+  assert.equal(values(normalizeCompileItem(row("UH-3", "STEAM UNIT HEATER SCHEDULE", { "TRAP LBS/HR": "52.5" }), "UNIT_HEATER")).steam_lb_hr, 52.5);
+  const hum = values(normalizeCompileItem(row("H-1", "HUMIDIFIER SCHEDULE", { "STEAM FLOW LBS/HR": "79.2", "TRAP CAPACITY LBS/HR": "80" }), "HUMIDIFIER"));
+  assert.equal(hum.capacity_lb_hr ?? hum.steam_lb_hr, 79.2, "a trap's rated capacity is not the flow (031_MO)");
+  assert.equal(values(normalizeCompileItem(row("H-1", "HUMIDIFIER SCHEDULE", { "POWER KW": "3" }), "HUMIDIFIER")).eh_kw, 3); // 066_MT
+  assert.equal(values(normalizeCompileItem(row("P-1", "PUMP SCHEDULE", { "PIPING DATA SUCT. SIZE (IN.)": "4", "PIPING DATA DISCH. SIZE (IN.)": "3" }), "PUMP")).conn_in, 4); // 047_NC
 });

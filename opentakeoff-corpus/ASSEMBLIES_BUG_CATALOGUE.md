@@ -252,6 +252,33 @@ table-level line, so every value reported from these tables scores invented.
 **Next:** as AS-8. A family claim may need more than a tag prefix, for
 example the sheet's discipline or a header check.
 
+**Addendum 2026-09-26 — the second dev tier's claims (keyed from renders,
+AS-17).** Three more claimed tables print no instance of their family, and
+are keyed `rows: none`:
+- 047_NC page 10 "-CONDENSING UNIT" (CONDENSING_UNIT, census 1 row) is the
+  line "CU -CONDENSING UNIT" of M-001's HVAC ABBREVIATIONS legend.
+- 047_NC page 27 "EQUIPMENT SCHEDULE" (HEAT_RECOVERY_CHILLER, census 2 rows)
+  is E-601's list of electrical equipment connections. Its CH-1 and CH-2 are
+  the air-cooled chillers M-801 schedules; the claim comes from the family's
+  `^CH[\s-]` tag prefix.
+- 21_VA page 117, untitled, claimed as FAN, is sheet TA001's AV DEVICE
+  SCHEDULE (floor boxes FB1, FB2; flat panels FP1, FP2).
+
+Two claims name the family by a broader word than the family's own:
+- 088_AZ's WATER COOLED CENTRIFUGAL CHILLER SCHEDULE is drawn for
+  AIR_COOLED_CHILLER. It is keyed as that family, with `condenser = water`
+  from the title: the family stands for "chiller".
+- 088_AZ's ELECTRIC DUCT HEATER SCHEDULE is drawn for UNIT_HEATER, whose
+  spec takes ELECTRIC DUCT HEATER titles and EDH marks. A duct heater has no
+  fan of its own.
+
+One claim counts a transposed table's labels as rows: 21_VA page 51's AIR
+COOLED CONDENSING UNIT SCHEDULE prints one value column ("ACCU-1 AND
+ACCU-2") with the attributes as row labels. The census claims 9 rows, its
+label rows; the compile's items are those labels ("OPERATING VOLTAGE", "MODEL
+NUMBER"), so the key's ACCU-1 and ACCU-2 (6 printed values) have no item to
+pair with.
+
 ---
 
 ## AS-10 — a claimed table's printed title is not taken (OPEN — owned by the table/compile loops)
@@ -291,6 +318,32 @@ them.
   The key reads the water temperatures from the AIR SIDE cells as the
   author's reading, so a normalizer that trusts the header grouping gets them
   wrong.
+
+**Addendum 2026-09-26 — the second dev tier's documents (AS-17).** Each is
+keyed as printed, or "?" where the row disagrees with itself.
+- **044_NY:** ACCU-1's RATED COOLING CAPACITY (MBH) prints 12000 for a
+  12,000 BTU/h unit (basis of design Hitachi DHP12CBS21S): the header's unit
+  is off by 1,000. One printed row "FOP-1, 2" names two fuel oil pumps. The
+  economizers' DESIGN WATER TEMPERATURES IN prints 210 while note 1 says
+  "FEEDWATER INLET TEMPERATURE SHALL BE 228 °F".
+- **088_AZ:** CH-2's refrigerant charge prints 331/311 where CH-1 prints
+  331/331. CU-3 and CU-5 print one model (LSU180HSV4) at 18,200 and 22,000
+  BTU/H.
+- **14_OR:** every pump row cites note 2, which the table does not print. SP-2
+  prints V/PH 115/5 (SP-1: 115/1); keyed phase 5 as printed, so no reader
+  can match it. The snowmelt pumps print MOTOR CONTROL "ECM" and cite note 1
+  ("INVERTER DUTY MOTOR AND INTEGRATED VFD"): the row disagrees with itself
+  (vfd "?"). The chiller prints GLYCOL 30%; the pumps' general note B says
+  the chilled water system is 40% propylene glycol.
+- **16_NV:** marks print bare under a hexagon symbol that carries the prefix
+  (F, CU, ERV, OAU, AC), so one bare mark (B1) names a furnace, a condensing
+  unit, a coil and an outdoor air unit in four tables; the SERVICE text
+  composes them ("F-B1 AND EC-B1"). Right per table, ambiguous across
+  tables. The ERV's general note 1 says "ENTHALPY WHEEL TYPE" and its unit
+  feature 4 "POLYMER MEMBRANE ENERGY RECOVERY CORE" (recovery_type "?"). A
+  furnace SERVICE prints "CLASROOM 28".
+- **21_VA:** VAV-1-27's air pressure drop prints 0.78 where its neighbors
+  print 0.0xx.
 
 ---
 
@@ -707,6 +760,82 @@ bulk corpus is staged (121 sets).
   sheet. Held-out 2 is keyed from renders only after dev 2's normalizer work
   is frozen, and is scored as aggregates at gates.
 
+**Addendum 2026-09-26 — the dev-2 keys, the first dev-2 measurement, and one
+round of normalizer rules from it.**
+- **Keys:** all ten dev-2 documents are keyed from renders before any
+  pipeline output on them was read: 47 tables (48 draws), 189 instances,
+  4,013 key lines, 1,451 printed values, 3 tables `rows: none` (AS-9's
+  addendum). Commits 9175a44 (036_LA, 063_MT, 066_MT), e4c89ec (047_NC,
+  03_FL), 636747f (044_NY), 6bd027c (088_AZ), aeccb9f (14_OR), 022e72f
+  (16_NV) and 3281058 (21_VA). GATE 1 holds: 11 attributes gained their
+  first key example (capacity_mbh, primary_conn_in, secondary_conn_in,
+  steam_lb_hr, steam_psig, return_fan_hp, outdoor_air_pct, primary_ewt_f,
+  primary_gpm, primary_lwt_f, recovery_type). The printed inconsistencies the
+  keys met are in AS-11's addendum.
+- **First measurement** (normalizer of 3281058): 937 of 1,451 printed values
+  exact (64.6%), 14 wrong (1.0%), 500 missed, 16 invented; 167 of 189
+  instances paired. The gap is the one this entry names: rules grown on 11
+  documents meet ten new drafting firms.
+- **One round of rules**, each from a dev-2 miss with a test on its shape
+  (`web/test/assemblies/normalize.test.ts` and `scheduleNotes.test.ts`, the
+  tests under "AS-17"): electrical tuples in any part order (V/HZ/PH, V/H/P,
+  VOLTAGE-PHASE, "208V 3ph", unlabeled ELECTRICAL DATA sub-columns); US units
+  in brackets kept, SI twins still dropped; one value per labeled part of a
+  cell ("COOL MIN / HEATING"; a staged unit's full capacity); unitary COOL /
+  HEAT MBH, TC / SC, IN / OUT; a fired heater's input; a fan coil's
+  chilled-water coil capacity; KW/TON an efficiency; TONNAGE; the unit's
+  own RPM over its motor's; each fan motor's HP over a TOTAL; NO. OF FAN(S);
+  a package's TOTAL flow; GPH; a MAX and MIN flow pair is a range; a count
+  under an airstream group is not the unit count; a coil's rows need its
+  water; SERVICE is the duty and SERVING what is served (dev 1's keys type a
+  SERVICE cell naming rooms as the service, dev 2's type a SERVING cell
+  naming rooms or units as the area served; both hold); a family without a
+  service attribute reads either as the area served unless it names a
+  system; MOTOR CONTROL VFD / ECM; a mezzanine in the word printed; a heating
+  block printed "-" or "N/A" throughout is no heat; a hot-water block printed
+  EXISTING throughout is an existing hot-water coil; a heat pump schedule's
+  indoor unit; SEER / EER is DX; dual fuel and the first fuel's rating; CFH
+  and gas pressure name gas; a heat exchanger's HOT / COLD SIDE by duty; a
+  flue gas economizer's water side and media; TRAP LBS/HR (never a trap's
+  rated CAPACITY); a humidifier's KW; SUCT. / DISCH. SIZE; a ΔP whose Δ the
+  text layer lost. Notes: BACnet's variant, a named interface, the system a
+  controller interfaces with (never a component connected to the BAS);
+  glycol by the sentence's system; 100% outside air; the energy recovery
+  type; coil rows; interlocks; a control device without its purpose clause;
+  a second notes list under the first; a label a little apart from its list;
+  notes no row cites speak for every row; a cited note contradicting the
+  row's own cell leaves the value unknown; a REMARKS cell that is the motor's
+  starter. A drive schedule's VFD now cites the drive schedule's row, where
+  it is printed.
+- **Result** (`reports/assemblies/02-attr-eval-dev2.{json,md}`): 1,259 of
+  1,451 exact (86.8%), 0 wrong, 0 invented. Of the 192 missed, 173 are the 20
+  status-marked instances the frozen scorer cannot pair (AS-27; all 173
+  exact when paired by their base tag), 6 are the transposed ACCU table
+  (AS-9), and 13 need what no rule here reads: an economizer's connections
+  in a note (4), a unit features list and a filter data note (4), a snow-melt
+  exchanger's media (2), a SERVICE cell's trailing "OUTSIDE AIR" (2), and
+  SP-2's printed phase 5 (1, AS-11).
+- **Dev 1** (`02-attr-eval-dev.{json,md}`): 1,965 of 2,053 (95.7%), wrong 2,
+  invented 0; outside bldg5406 (AS-16), 1,900 of 1,908. The only change is
+  069_ID's HWP-1 and HWP-2 VFD: the value is printed in the drive schedule,
+  so it now cites that row and scores out of key scope (the key's reading
+  names the drive schedule's PURPOSE).
+- **Checks:** the control-intent reading, binding and questions evals and the
+  typical eval print the same dev output before and after (A/B against the
+  commit before this round). On 65 unseen documents (the unseen audit's
+  eligible sets that snapshot) the normalizer's output changed for 132 of 872
+  compile items, each read and found right: a VAV reheat block's heating
+  airflow (58), fan coil chilled-water capacities (24), electrical tuples
+  (12), fan counts no longer read as unit counts (5), BACnet MS/TP (4), heat
+  pump COOL / HEAT MBH, propane boilers, an exchanger's capacity, a chiller's
+  design flow over its flow limits, a humidifier's element, an EER-rated
+  RTU; 15 pump speeds keep their value under a new rule id. Across dev, dev 2
+  and those sets, 60 of 1,705 rows gained notes (uncited table notes, second
+  lists).
+- **Next:** freeze, key held-out 2 from renders, and measure GATE 2 on
+  held-out and held-out 2 (aggregates; held-out also without 024_MO,
+  AS-26). AS-27's pairing question is the owner's.
+
 
 ---
 
@@ -1105,3 +1234,38 @@ read, and no code has changed since.
   none may cite the format of those two rows.
 - **Guard:** key-work lookups read dev transcriptions only (the dev sets of `01-split.json` and `tier2/01-split.json`);
   a search over the folder names its files explicitly, never `*.transcription.txt`.
+
+---
+
+## AS-27 — a status-marked key tag ("(E)ATU A") cannot be paired with the compile's unmarked item ("ATU A"): 20 dev-2 instances, 173 printed values (OPEN — a scorer question for the owner; the key and the scorer stay as frozen)
+
+**Found:** 2026-09-26, the first dev-2 attribute eval (AS-17).
+
+**Evidence:** the keys type the tag cell as printed (key-work/README.md). Three dev-2 documents print a status mark
+with the mark: 03_FL's AIR TERMINAL UNIT SCHEDULE prints "(E)ATU A" through "(E)ATU H" and "(N)ATU I" through
+"(N)ATU N"; 063_MT prints "(E) VAV-105", "(E) VAV-106" and "(E) EF- 4"; 088_AZ prints "(E) CH-3" and "(E) CT-1". The
+sheet graph keeps the printed text (the row's MARK cell is "(E)ATU A"), and the compile's tag drops the mark ("ATU
+A"), as the tag reconciliation does for plan marks. The scorer pairs a key instance with a compile item by tag, with
+case, whitespace and dashes ignored (`assemblies-attr-eval.mjs` `canonTag`, `matchItem`); a status mark is none of
+those, so the 20 instances pair with nothing and all 173 of their printed values score missed. Dev 1 has no such tag
+("B-1(E)" in 069_ID keeps its mark in the compile too).
+
+**Measured, as a diagnostic only** (`mcp/scripts/assemblies-status-mark-diagnostic.mjs --dev2`; it changes no
+score): with the mark
+removed from those key tags, where the base tag is unique in its table, all 20 instances pair, and 173 of their 173
+printed values are exact (0 wrong). The official dev-2 number stays as scored.
+
+**Why it is not changed here:** "never improve a score by changing a key or a scorer" (AGENTS.md, coordinator policy
+7), and a key is never edited after the pipeline ran on its sheet (key-work/README.md). The values are right in the
+product (ATU A carries them), so the gap is the instrument's, not the normalizer's; but both remedies are exactly the
+kind of change that rule reserves for the owner.
+
+**Proposed (for the owner's decision):** a third tag equivalence in `matchItem`, after exact and dashless: a key tag
+with a printed status mark ("(E)", "(N)", "(R)", "(D)", "(X)", "(EX)", "(NEW)", "(EXIST)", "(EXISTING)") before or
+after it pairs with the item of its base tag, only where no other key instance in the table shares that base tag
+and exactly one item has it, reported as `how: "tag without its status mark"`. It would be applied to every side
+alike, before held-out 2 is keyed, with the before and after numbers reported.
+
+**Also:** the printed status is itself worth carrying. An existing unit is not bought new, and "(E)" / "(N)" is on
+the page (the row's MARK cell). A normalizer attribute for it (existing or new) needs a key column first; recorded
+here, not built.

@@ -2,18 +2,18 @@
 
 ```
 ATTRIBUTE EVAL (instrument 2) — dev, normalizer: normalize.ts
-key instances matched to a compile item: 244/244; out-of-key-scope compile items in keyed tables: 0; unscored values (extensions): 20
+key instances matched to a compile item: 244/244; out-of-key-scope compile items in keyed tables: 0; unscored values (extensions): 21
 
                                     lines printed  exact  wrong missed    oos | empty c-unkn invent | exact%  wrong%
-ALL                                  5280    2053   1967      2     84      0 |  3227   3227      0 |  95.8%   0.1%
+ALL                                  5280    2053   1965      2     84      2 |  3227   3227      0 |  95.7%   0.1%
   slice: grid                        4881    1677   1629      2     46      0 |  3204   3204      0 |  97.1%   0.1%
-  slice: reading                      316     316    278      0     38      0 |     0      0      0 |  88.0%   0.0%
+  slice: reading                      316     316    276      0     38      2 |     0      0      0 |  87.3%   0.0%
   slice: notes                         83      60     60      0      0      0 |    23     23      0 | 100.0%   0.0%
 
 per family
   VAV                                1633     663    618      0     45      0 |   970    970      0 |  93.2%   0.0%
   FAN                                 480     287    272      0     15      0 |   193    193      0 |  94.8%   0.0%
-  PUMP                                450     239    231      2      6      0 |   211    211      0 |  96.7%   0.8%
+  PUMP                                450     239    229      2      6      2 |   211    211      0 |  95.8%   0.8%
   DUCT_MOUNTED_COIL                   480     159    159      0      0      0 |   321    321      0 | 100.0%   0.0%
   UNIT_HEATER                         340     158    158      0      0      0 |   182    182      0 | 100.0%   0.0%
   AHU                                 450     147    135      0     12      0 |   303    303      0 |  91.8%   0.0%
@@ -38,7 +38,7 @@ per set
   040_IL_VA_Solicitation_36C77623B    228     144    144      0      0      0 |    84     84      0 | 100.0%   0.0%
   004_MO_T2504_03_Interior_and_Ext    455     126    126      0      0      0 |   329    329      0 | 100.0%   0.0%
   094_FL_Orange_County_Regional_Hi    254      98     98      0      0      0 |   156    156      0 | 100.0%   0.0%
-  069_ID_ITD_District_2_Laboratory    165      87     87      0      0      0 |    78     78      0 | 100.0%   0.0%
+  069_ID_ITD_District_2_Laboratory    165      87     85      0      0      2 |    78     78      0 |  97.7%   0.0%
   baker-county-eoc                    217      72     72      0      0      0 |   145    145      0 | 100.0%   0.0%
   12_MT_MSU_ReidHall_Renovation       206      52     48      0      4      0 |   154    154      0 |  92.3%   0.0%
   074_CA_West_Valley_College_STEM_     11       5      5      0      0      0 |     6      6      0 | 100.0%   0.0%
@@ -61,7 +61,7 @@ per attribute
   hw_conn_in                          103      58     58      0      0      0 |    45     45      0 | 100.0%   0.0%
   hw_mbh                              103      58     58      0      0      0 |    45     45      0 | 100.0%   0.0%
   rpm                                  60      56     56      0      0      0 |     4      4      0 | 100.0%   0.0%
-  vfd                                  81      40     40      0      0      0 |    41     41      0 | 100.0%   0.0%
+  vfd                                  81      40     38      0      0      2 |    41     41      0 |  95.0%   0.0%
   gpm                                  37      36     35      0      1      0 |     1      1      0 |  97.2%   0.0%
   cooling_type                         32      30     29      0      1      0 |     2      2      0 |  96.7%   0.0%
   esp_in                               30      28     28      0      0      0 |     2      2      0 | 100.0%   0.0%
@@ -142,5 +142,5 @@ per attribute
   steam_lb_hr                          42       0      0      0      0      0 |    42     42      0 |    —      —  
   steam_psig                           42       0      0      0      0      0 |    42     42      0 |    —      —  
 
-GATE 2 (dev): exact 95.8% (need >= 98.0%) FAIL · wrong 0.1% (need <= 0.5%) ok · invented 0 (need = 0) ok → FAIL
+GATE 2 (dev): exact 95.7% (need >= 98.0%) FAIL · wrong 0.1% (need <= 0.5%) ok · invented 0 (need = 0) ok → FAIL
 ```

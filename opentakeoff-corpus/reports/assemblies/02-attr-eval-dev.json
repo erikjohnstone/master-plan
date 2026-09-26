@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-24T05:04:16.667Z",
+  "generated_at": "2026-09-26T18:03:07.223Z",
   "side": "dev",
   "normalizer": "normalize.ts",
-  "normalize_ts_sha256": "bb3ffecf804c",
-  "attributes_ts_sha256": "68d94125ef1b",
+  "normalize_ts_sha256": "6121595e9c10",
+  "attributes_ts_sha256": "ca338fe73841",
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
     "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -28,13 +28,13 @@
     "lines": 5280,
     "printed": 2053,
     "empty": 3227,
-    "exact": 1967,
+    "exact": 1965,
     "wrong": 2,
     "missed": 84,
-    "out_of_scope": 0,
+    "out_of_scope": 2,
     "correctly_unknown": 3227,
     "invented": 0,
-    "exact_pct": 0.9581100828056502,
+    "exact_pct": 0.9571358986848514,
     "wrong_pct": 0.000974184120798831
   },
   "by_slice": {
@@ -55,13 +55,13 @@
       "lines": 316,
       "printed": 316,
       "empty": 0,
-      "exact": 278,
+      "exact": 276,
       "wrong": 0,
       "missed": 38,
-      "out_of_scope": 0,
+      "out_of_scope": 2,
       "correctly_unknown": 0,
       "invented": 0,
-      "exact_pct": 0.879746835443038,
+      "exact_pct": 0.8734177215189873,
       "wrong_pct": 0
     },
     "notes": {
@@ -109,13 +109,13 @@
       "lines": 450,
       "printed": 239,
       "empty": 211,
-      "exact": 231,
+      "exact": 229,
       "wrong": 2,
       "missed": 6,
-      "out_of_scope": 0,
+      "out_of_scope": 2,
       "correctly_unknown": 211,
       "invented": 0,
-      "exact_pct": 0.9665271966527197,
+      "exact_pct": 0.9581589958158996,
       "wrong_pct": 0.008368200836820083
     },
     "DUCT_MOUNTED_COIL": {
@@ -540,13 +540,13 @@
       "lines": 81,
       "printed": 40,
       "empty": 41,
-      "exact": 40,
+      "exact": 38,
       "wrong": 0,
       "missed": 0,
-      "out_of_scope": 0,
+      "out_of_scope": 2,
       "correctly_unknown": 41,
       "invented": 0,
-      "exact_pct": 1,
+      "exact_pct": 0.95,
       "wrong_pct": 0
     },
     "gpm": {
@@ -1673,13 +1673,13 @@
       "lines": 165,
       "printed": 87,
       "empty": 78,
-      "exact": 87,
+      "exact": 85,
       "wrong": 0,
       "missed": 0,
-      "out_of_scope": 0,
+      "out_of_scope": 2,
       "correctly_unknown": 78,
       "invented": 0,
-      "exact_pct": 1,
+      "exact_pct": 0.9770114942528736,
       "wrong_pct": 0
     },
     "baker-county-eoc": {
@@ -1723,6 +1723,7 @@
     }
   },
   "instances_unmatched": [],
+  "instances_unmatched_count": 0,
   "out_of_scope_items": 0,
-  "unscored_values": 20
+  "unscored_values": 21
 }

@@ -1,5 +1,36 @@
 # Changelog
 
+- **Assemblies read more of the ways schedules are drawn.** The attribute
+  normalizer (`web/src/lib/assemblies/normalize.ts`, shared by the Takeoff
+  panel and the MCP tools) was grown on ten more documents from ten more
+  drafting firms, each rule from a measured miss with a test on its own
+  shape. It now reads an electrical cell whatever order its header names
+  (V/HZ/PH, V/H/P, VOLTAGE-PHASE, "208V 3ph", unlabeled ELECTRICAL DATA
+  sub-columns); US units printed in brackets ("INPUT [MBH]"), while SI twins
+  stay unread; one value per labeled part of a cell ("COOL MIN / HEATING" =
+  "80 / 125"; a two-stage furnace's full capacity); unitary COOL/HEAT MBH
+  columns, a fired heater's input and output, and a fan coil's chilled-water
+  coil; the unit's own speed over its motor's; each fan motor's HP over a
+  TOTAL; a package's TOTAL flow; flow in GPH. A MAX and MIN flow pair is a
+  range, not the design flow; a fan count is not a unit count; KW/TON is an
+  efficiency. SERVICE names a unit's duty and SERVING what it serves (a room,
+  an area or another unit is the area served). A heating block printed "-"
+  or "N/A" throughout is no heat; a SEER or EER rating is DX cooling; a heat
+  pump schedule's indoor unit heats by heat pump; a gas and an oil rating
+  make a dual-fuel boiler, rated by its first fuel. A heat exchanger's HOT
+  and COLD SIDE map to its source and load by duty. Notes: BACnet's variant
+  (MS/TP, IP), a named interface or gateway, the system a controller
+  interfaces with; a glycol sentence scoped to its water system; 100% outside
+  air; the energy recovery type; coil rows; interlocks; a second notes list
+  under the first; notes no row cites speak for every row; a cited note that
+  contradicts the row's own cell leaves the value unknown. A drive schedule's
+  VFD now cites the drive schedule's row. Second-tier dev documents: 64.6% →
+  86.8% of printed values exact, 0 wrong, 0 invented; the first tier is
+  unchanged but for the two drive-schedule values, now cited where they are
+  printed. `mcp/scripts/assemblies-status-mark-diagnostic.mjs` shows the
+  status-marked tags ("(E)ATU A") the frozen scorer cannot pair
+  (ASSEMBLIES_BUG_CATALOGUE AS-27).
+
 - **Assemblies read the control drawings, the zone plans and the project's
   answers (MCP 0.9.85).** Each scheduled unit's controls typical now takes
   what its own control drawings say, not only what its schedule row prints.

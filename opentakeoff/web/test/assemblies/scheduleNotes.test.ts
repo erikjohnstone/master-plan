@@ -83,7 +83,7 @@ const row = (tag: string, table_title: string, cells: Record<string, string>): C
   cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text, bbox: null }])),
 });
 
-test("a row gets the notes its REMARKS cell cites; the grid outranks a note", () => {
+test("a row gets the notes its REMARKS cell cites; a cited note that contradicts the row's cell leaves it unknown", () => {
   const notes = [
     { id: "1", text: "PROVIDE MOTORIZED DAMPER." },
     { id: "2", text: "PROVIDE NEMA-1 TOGGLE SWITCH." },
@@ -95,8 +95,11 @@ test("a row gets the notes its REMARKS cell cites; the grid outranks a note", ()
   assert.equal(ef1.attributes.control.value, "NEMA-1 TOGGLE SWITCH; SOLID STATE SPEED CONTROL");
   assert.equal(ef1.attributes.control.cite.header, "(table note 2)");
   assert.equal(ef1.attributes.vfd, undefined, "note 4 is not cited");
+  // 14_OR's SP-1: MOTOR CONTROL "ECM" while its NOTES cite note 1, "INTEGRATED
+  // VFD" (the key: not one value).
   const ef2 = normalizeCompileItem(row("EF-2", "FAN SCHEDULE", { CFM: "400", VFD: "NO", REMARKS: "SEE NOTES 2, 4" }), "FAN", table);
-  assert.equal(ef2.attributes.vfd.value, "no", "the row's own VFD cell outranks note 4");
+  assert.equal(ef2.attributes.vfd, undefined, "the row's VFD cell and the note it cites disagree");
+  assert.match(ef2.unknown.vfd.reason, /state it differently/);
   const ef3 = normalizeCompileItem(row("EF-3", "FAN SCHEDULE", { CFM: "300", REMARKS: "" }), "FAN", table);
   assert.equal(ef3.attributes.control, undefined, "a citation column that cites nothing applies no note");
 });
@@ -293,4 +296,83 @@ test("the codes a header's cited note defines, confirmed by the note naming the 
   assert.equal(citedCodeLegend(sheet, "FAN RPM (NOTE D)"), null, "a note that defines no codes");
   assert.equal(citedCodeLegend(sheet, "CURB TYPE (NOTE C)"), null, "a note that does not name the column");
   assert.equal(citedCodeLegend(sheet, "CONTROLLER/ STARTER TYPE"), null, "a header citing no note");
+});
+
+// ── AS-17: note forms from the second dev tier (each from a dev-2 table) ────
+
+test("a BAS interface: BACnet's variant, a named interface, the system a controller interfaces with; never a component's connection", () => {
+  const bas = (text: string) => noteValues({ id: "1", text }, new Set(["bas_interface"]))[0]?.value;
+  assert.equal(bas("PROVIDE WITH BACNET MSTP OPTION FOR INTEGRATION INTO BAS. PROVIDE WITH FLOW SWITCH."), "BACNET MSTP"); // 14_OR
+  assert.equal(bas("PROVIDE BACnet INTEGRATION CARD"), "BACNET"); // itd-d1-lab
+  assert.equal(bas("PROVIDE BMS GATEWAY INTERFACE AND CONNECT TO DDC SYSTEM."), "BMS GATEWAY"); // 03_FL
+  assert.equal(bas("PROVIDE WITH ABB INTERFACE FOR INTEGRATION."), "ABB"); // 088_AZ
+  assert.equal(bas("CONTROLLER SHALL INTERFACE WITH BUILDING AUTOMATION SYSTEM."), "BUILDING AUTOMATION SYSTEM"); // 047_NC
+  assert.equal(bas("PROVIDE FACTORY FURNISHED CONTROLLER AND CONNECT TO EXISTING BMS"), "EXISTING BMS"); // 094_FL
+  assert.equal(bas("FACTORY INSTALLED AIR PURIFICATION SYSTEM. CONNECT TO BAS SYSTEM TO MONITOR STATUS AND PROVIDE ALARM."), undefined, "a component's connection");
+  assert.equal(bas("PROVIDE A COMMUNICATION INTERFACE."), undefined, "no name");
+});
+
+test("a loop's glycol by the sentence's system; 100% outside air; the energy recovery type; coil rows", () => {
+  const b = { id: "B", text: "CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY." };
+  const glycol = (service: string | null) => noteValues(b, new Set(["glycol_pct"]), service)[0]?.value;
+  assert.deepEqual([glycol("CHILLED WATER"), glycol("PRIMARY HW"), glycol("SNOWMELT"), glycol(null)], [40, 0, undefined, undefined]); // 14_OR
+  assert.equal(noteValues({ id: "1", text: "SYSTEM IS 30% PROPYLENE GLYCOL." }, new Set(["glycol_pct"]))[0]?.value, 30, "a sentence naming no system speaks for every row");
+  const doas = noteValues({ id: "2", text: "100% OSA UNIT WITH STATIC PLATE ENERGY RECOVERY." }, new Set(["outdoor_air_pct", "energy_recovery"]));
+  assert.deepEqual(doas.map((v) => [v.attr, v.value]), [["outdoor_air_pct", 100], ["energy_recovery", "plate"]]);
+  assert.equal(noteValues({ id: "1", text: "UNIT SHALL BE ENTHALPY WHEEL TYPE." }, new Set(["energy_recovery"]))[0]?.value, "wheel"); // 16_NV
+  assert.equal(noteValues({ id: "1", text: "UNIT WITHOUT ENERGY RECOVERY WHEEL." }, new Set(["energy_recovery"]))[0], undefined);
+  const rows = noteValues({ id: "11", text: "PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS." }, new Set(["chw_rows", "hw_rows"]));
+  assert.deepEqual(rows.map((v) => [v.attr, v.value]), [["chw_rows", 8], ["hw_rows", 1]]); // 03_FL
+});
+
+test("a control note: what the unit is interlocked with; the device without its purpose", () => {
+  assert.deepEqual(controlItems("INTERLOCK FAN WITH SMOKE CONTROL PANEL LOCATED IN XXX ROOM."), ["INTERLOCK WITH SMOKE CONTROL PANEL"]); // 088_AZ
+  assert.deepEqual(controlItems("INTERLOCK WITH HOOD EXHAUST FAN."), ["INTERLOCK WITH HOOD EXHAUST FAN"]); // 03_FL
+  assert.deepEqual(controlItems("PROVIDE FANS WITH SPEED CONTROLLER FOR AIR FLOW BALANCING. MOUNT CONTROLLER WITHIN FAN HOUSING."), ["SPEED CONTROLLER"]);
+  assert.deepEqual(controlItems("INTERLOCK AHU'S TO ENABLE FAN SHUTDOWN UPON AN INDICATION OF ALARM."), [], "no WITH: nothing it is interlocked with");
+});
+
+test("a second list printed under the first (GENERAL NOTES, then NOTES); a label a little apart from its list", () => {
+  // 14_OR page 3, the HYDRONIC PUMPS notes.
+  const spans: NoteSpan[] = [
+    { str: "CHP-1", x0: 400, y0: 480, x1: 450, y1: 500 },
+    { str: "GENERAL NOTES:", x0: 393.4, y0: 534.5, x1: 539.7, y1: 555.1 },
+    { str: "A. EFFICIENCY LISTED IS WIRE TO WATER EFFICIENCY.", x0: 460.1, y0: 561.6, x1: 910.2, y1: 582.2 },
+    { str: "B. CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY.", x0: 460.8, y0: 591.6, x1: 1248.4, y1: 612.2 },
+    { str: "NOTES:", x0: 393.4, y0: 621.6, x1: 456.2, y1: 642.2 },
+    { str: "1. PROVIDE WITH INVERTER DUTY MOTOR AND INTEGRATED VFD.", x0: 461.5, y0: 651.6, x1: 1019.7, y1: 672.2 },
+  ];
+  assert.deepEqual(scheduleNotes(spans, [390, 300, 1500, 510]).map((n) => n.id), ["A", "B", "1"]);
+  // 044_NY page 21, the FAN SCHEDULE: its NOTES label sits almost three lines above note 1.
+  const apart: NoteSpan[] = [
+    { str: "EF-7", x0: 500, y0: 1885.5, x1: 540, y1: 1904.4 },
+    { str: "NOTES", x0: 499.9, y0: 1945.7, x1: 564.6, y1: 1964.6 },
+    { str: "1. ALL SELECTIONS ARE BASED ON AN ALTITUDE OF 200 FEET.", x0: 499.9, y0: 2018, x1: 1074.2, y1: 2036.9 },
+    { str: "4. PROVIDE VFD (BY DIV 26)", x0: 499.9, y0: 2039.1, x1: 751.7, y1: 2058 },
+  ];
+  assert.deepEqual(scheduleNotes(apart, [490, 1500, 3000, 1910]).map((n) => n.id), ["1", "4"]);
+});
+
+test("notes no row cites are the table's own; a cited note against the row's cell; a remark that is the motor's starter", () => {
+  const notes = [
+    { id: "1", text: "PROVIDE WITH INVERTER DUTY MOTOR AND INTEGRATED VFD." },
+    { id: "A", text: "EFFICIENCY LISTED IS WIRE TO WATER EFFICIENCY." },
+    { id: "B", text: "CHILLED WATER SYSTEM IS 40% PROPYLENE GLYCOL. HOT WATER SYSTEM IS WATER ONLY." },
+  ];
+  const cells = (service: string, control: string, cites: string) => ({ SERVICE: service, "MOTOR CONTROL": control, NOTES: cites });
+  const rows = [
+    { key: "CHP-1", cells: cells("CHILLED WATER", "VFD", "1,2") },
+    { key: "BP-1", cells: cells("PRIMARY HW", "ECM", "2") },
+    { key: "SP-1", cells: cells("SNOWMELT", "ECM", "1,2") },
+  ];
+  const table = { headers: ["MARK", "SERVICE", "MOTOR CONTROL", "NOTES"], notes, rows };
+  const pump = (r: typeof rows[number]) => normalizeCompileItem(row(r.key, "HYDRONIC PUMPS", r.cells), "PUMP", table);
+  const [chp, bp, sp] = rows.map(pump);
+  assert.deepEqual([chp.attributes.vfd?.value, chp.attributes.glycol_pct?.value], ["yes", 40]);
+  assert.deepEqual([bp.attributes.vfd?.value, bp.attributes.glycol_pct?.value], ["no", 0], "note B, cited by no row, speaks for every row");
+  assert.equal(sp.attributes.vfd, undefined, "ECM against its cited note 1's integrated VFD");
+  assert.equal(sp.attributes.glycol_pct, undefined, "note B names no snowmelt system");
+  const starter = normalizeCompileItem(row("CHWP-1", "PUMP SCHEDULE", { SERVICE: "CHILLED", REMARKS: "PROVIDE WITH MOTOR STARTER" }), "PUMP", { headers: ["MARK", "SERVICE", "REMARKS"] });
+  assert.equal(starter.attributes.vfd?.value, "no"); // 03_FL
+  assert.equal(starter.attributes.vfd?.cite.header, "REMARKS");
 });
