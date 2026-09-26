@@ -279,6 +279,17 @@ label rows; the compile's items are those labels ("OPERATING VOLTAGE", "MODEL
 NUMBER"), so the key's ACCU-1 and ACCU-2 (6 printed values) have no item to
 pair with.
 
+**Addendum 2026-09-26 — held-out 2's claims (keyed from renders after the
+freeze, 328e572).** Two of the thirteen tables the seed drew for held-out 2
+print no instance of their family, each claimed under no title:
+- 037_AR page 56 (PUMP, census 1 row) is AE105, an architectural pad plan.
+  Its one one-row table is NEW CONSTRUCTION KEYED NOTES, key value P3 ("NEW
+  HOUSEKEEPING PAD ..."); the page prints no pump. P3 reads as a pump mark.
+- 042_VA page 24 (FAN, census 1 row) is 1-EP202-N, an electrical power plan.
+  Its FOOD SERVICE EQUIPMENT SCHEDULE ends in three EXHAUST HOOD rows (H1-H3)
+  that print nothing else; the page prints no fan.
+Both are keyed "rows: none", as the protocol keys every such claim.
+
 ---
 
 ## AS-10 — a claimed table's printed title is not taken (OPEN — owned by the table/compile loops)
@@ -842,6 +853,33 @@ round of normalizer rules from it.**
   is measured with exactly these files, and each report's sha256 fields must
   match them. If the owner accepts AS-27's pairing rule, its number is
   reported beside the frozen scorer's, never instead of it.
+- **Held-out 2 keyed** from renders after the freeze (328e572): 11_CA (8
+  tables, 64 instances, 326 printed values), 092_IL (2 tables, 8 instances,
+  83), 045_FL (1 table, 9 instances, 63); 037_AR's and 042_VA's claims print
+  no instance of their family (AS-9 addendum). The withheld documents are
+  not keyed.
+- **GATE 2, measured once at the freeze** (`reports/assemblies/02-attr-eval-
+  heldout{,2}.{json,md}`, normalize.ts 6121595e9c10, attributes.ts
+  ca338fe73841; aggregates only):
+  - Held-out: 893 of 1,008 exact (88.6%; 85.8% at 3f836e9), wrong 0 (was
+    4), invented 2 (unchanged). Without 024_MO (AS-26): 837 of 940 (89.0%),
+    wrong 0, invented 2. **FAIL** (95% exact, 0 invented).
+  - Held-out 2: 266 of 472 exact (56.4%), wrong 1 (0.2%), invented 2; 79 of
+    81 key instances pair with a compile item. **FAIL.**
+  - What the aggregates say, and all they are used for: the rules grown on
+    dev and dev 2 carry to a first sheet of an unseen drafter at about half
+    their dev rate, and when they do not know they mostly say nothing (1
+    wrong, 2 invented in 472). The missed values concentrate in attributes
+    the dev keys print rarely or not at all (a title's pipe count or reheat
+    medium, a location's level, a SPACE SERVED or SERVICE place, values
+    stated in table notes, a fan array's count and each fan's horsepower).
+    Held-out 2's two unpaired instances are a key tag that prints its fans'
+    letters ("EF-1 - A,B,C"), a pairing question like AS-27's; the scorer
+    and the key stay as they are.
+- **Next:** no rule is written from these numbers (a rule needs a dev miss
+  with a test on its own shape). The next evidence is a third dev tier,
+  drawn by seed from the drafters no tier holds yet, keyed from renders like
+  dev 2; held-out and held-out 2 are measured again only at the next freeze.
 
 
 ---
