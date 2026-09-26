@@ -128,8 +128,8 @@ def main(argv: list[str]) -> int:
         tier2 = json.loads(tier2_path.read_text())
         role.update({s: "dev" for s in tier2["dev"]["sets"]})
         role.update({s: "heldout" for s in tier2["heldout"]["sets"]})
-    # The third and fourth tiers (AS-17) are dev only.
-    for tier in ("tier3", "tier4"):
+    # The third to fifth tiers (AS-17) are dev only.
+    for tier in ("tier3", "tier4", "tier5"):
         tier_path = corpus / "reports" / "assemblies" / tier / "01-split.json"
         if tier_path.exists():
             role.update({s: "dev" for s in json.loads(tier_path.read_text())["dev"]["sets"]})

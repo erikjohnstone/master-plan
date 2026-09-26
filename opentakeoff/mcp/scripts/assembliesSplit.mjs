@@ -283,8 +283,20 @@ export function drawTier4(census, drafters, split, tier2, tier3, seed, { eligibl
   return drawDevTier(census, drafters, split, tier2, [{ label: "tier 3", sets: tier3.dev.sets }], seed, { eligible, minDocs: TIER4_DEV_MIN_DOCS });
 }
 
-/** A dev-only tier after the second (drawTier3, drawTier4): `later` names the
- * dev tiers drawn after the second one, whose drafters add nothing new. */
+export const TIER5_DEV_MIN_DOCS = 8;
+
+/**
+ * The fifth tier: a fifth dev tier drawn exactly as the third and fourth,
+ * less every drafter group WP0.2, the second, the third or the fourth tier
+ * holds. Held-out and held-out 2 stay the gates.
+ */
+export function drawTier5(census, drafters, split, tier2, tier3, tier4, seed, { eligible }) {
+  return drawDevTier(census, drafters, split, tier2, [{ label: "tier 3", sets: tier3.dev.sets }, { label: "tier 4", sets: tier4.dev.sets }], seed, { eligible, minDocs: TIER5_DEV_MIN_DOCS });
+}
+
+/** A dev-only tier after the second (drawTier3, drawTier4, drawTier5):
+ * `later` names the dev tiers drawn after the second one, whose drafters add
+ * nothing new. */
 function drawDevTier(census, drafters, split, tier2, later, seed, { eligible, minDocs }) {
   const rand = mulberry32(seed);
   const excluded = { ...(drafters.duplicates || {}), ...(drafters.derived || {}) };

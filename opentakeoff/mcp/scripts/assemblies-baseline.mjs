@@ -36,14 +36,15 @@
 // It reads <corpus>/reports/assemblies/drafters.json (which firm drafted each
 // document, with the text evidence) and writes 01-split.{json,md}.
 //
-// The second, third and fourth tiers (AS-17) are drawn the same way from the
-// second tier's census (tier2/00-baseline.json), never recompiling:
+// The second to fifth tiers (AS-17) are drawn the same way from the second
+// tier's census (tier2/00-baseline.json), never recompiling:
 //
 //   node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> --tier2 <seed>
 //   node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> --tier3 <seed>
 //   node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> --tier4 <seed>
+//   node --import tsx scripts/assemblies-baseline.mjs <corpus-dir> --tier5 <seed>
 //
-// writing tier{2,3,4}/01-split.{json,md}.
+// writing tier{2,3,4,5}/01-split.{json,md}.
 //
 // Env: OPENTAKEOFF_EVAL_CONCURRENCY (default 1 — one heavy job at a time),
 //      OPENTAKEOFF_EVAL_TIMEOUT_MS (default 45 min per set),
@@ -56,7 +57,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { childStdoutText } from "./childText.mjs";
 import { createHash } from "node:crypto";
 import pLimit from "p-limit";
-import { CONTROLS_RELEVANT_FAMILIES, drawSplit, drawTier2, drawTier3, drawTier4 } from "./assembliesSplit.mjs";
+import { CONTROLS_RELEVANT_FAMILIES, drawSplit, drawTier2, drawTier3, drawTier4, drawTier5 } from "./assembliesSplit.mjs";
 import { resolveSetFiles, validateSets } from "./corpusFiles.mjs";
 import { cachedEvalResult } from "./evalCache.mjs";
 import { resolveVectorGridMode } from "../../web/src/lib/vectorGridMode.mjs";
@@ -88,11 +89,18 @@ if (tier4Idx >= 0 && !Number.isSafeInteger(tier4Seed)) {
   console.error("--tier4 needs an integer seed");
   process.exit(2);
 }
+const tier5Idx = argv.indexOf("--tier5");
+const tier5Seed = tier5Idx >= 0 ? Number(argv[tier5Idx + 1]) : null;
+if (tier5Idx >= 0 && !Number.isSafeInteger(tier5Seed)) {
+  console.error("--tier5 needs an integer seed");
+  process.exit(2);
+}
 const outIdx = argv.indexOf("--out");
 const outOverride = outIdx >= 0 ? resolve(argv[outIdx + 1]) : null;
 const positional = argv.filter((a, i) => !a.startsWith("--")
   && !(singleIdx >= 0 && i === singleIdx + 1) && !(splitIdx >= 0 && i === splitIdx + 1)
   && !(tier2Idx >= 0 && i === tier2Idx + 1) && !(tier3Idx >= 0 && i === tier3Idx + 1) && !(tier4Idx >= 0 && i === tier4Idx + 1)
+  && !(tier5Idx >= 0 && i === tier5Idx + 1)
   && !(outIdx >= 0 && i === outIdx + 1));
 const [corpusDir, ...only] = positional;
 if (!corpusDir) {
@@ -330,9 +338,12 @@ if (splitSeed !== null) {
   L.push("");
   writeFileSync(join(tdir, "01-split.md"), `${L.join("\n")}\n`);
   console.log(`tier 3 seed ${t.seed}: dev ${t.dev.sets.length} docs / ${t.dev.tables.length} tables / ≤${rows(t.dev.tables)} rows`);
-} else if (tier4Seed !== null) {
-  // The fourth tier, a dev tier only, drawn as the third from the second
-  // tier's census less every drafter an earlier tier holds, the third's too.
+} else if (tier4Seed !== null || tier5Seed !== null) {
+  // The fourth and fifth tiers, dev tiers only, drawn as the third from the
+  // second tier's census less every drafter an earlier tier holds, the third's
+  // (and the fourth's) too.
+  const n = tier5Seed !== null ? 5 : 4;
+  const ordinal = n === 5 ? "fifth" : "fourth";
   const dir = join(corpus, "reports", "assemblies");
   const census = JSON.parse(readFileSync(join(dir, "tier2", "00-baseline.json"), "utf8"));
   const drafters = JSON.parse(readFileSync(join(dir, "drafters.json"), "utf8"));
@@ -340,31 +351,33 @@ if (splitSeed !== null) {
   const tier2 = JSON.parse(readFileSync(join(dir, "tier2", "01-split.json"), "utf8"));
   const tier3 = JSON.parse(readFileSync(join(dir, "tier3", "01-split.json"), "utf8"));
   const eligible = census.per_set.filter((r) => !r.error).map((r) => r.id);
-  const t = drawTier4(census, drafters, split, tier2, tier3, tier4Seed, { eligible });
+  const t = n === 5
+    ? drawTier5(census, drafters, split, tier2, tier3, JSON.parse(readFileSync(join(dir, "tier4", "01-split.json"), "utf8")), tier5Seed, { eligible })
+    : drawTier4(census, drafters, split, tier2, tier3, tier4Seed, { eligible });
   t.generated_at = new Date().toISOString();
   t.census_generated_at = census.generated_at;
   t.census_errors = census.per_set.filter((r) => r.error).map((r) => r.id);
   // A corpus set no census measured cannot be drawn: named, so the gap is on the record.
   const censused = new Set([...census.per_set.map((r) => r.id), ...JSON.parse(readFileSync(join(dir, "00-baseline.json"), "utf8")).per_set.map((r) => r.id)]);
   t.not_in_census = spec.sets.map((s) => s.id).filter((id) => !censused.has(id)).sort();
-  const tdir = join(dir, "tier4");
+  const tdir = join(dir, `tier${n}`);
   mkdirSync(tdir, { recursive: true });
   writeFileSync(join(tdir, "01-split.json"), `${JSON.stringify(t, null, 1)}\n`);
   const rows = (ts) => ts.reduce((n, x) => n + x.keyed_rows_max, 0);
   const L = [];
-  L.push("# Assemblies goal — the fourth tier: dev 4 (AS-17)");
+  L.push(`# Assemblies goal — the ${ordinal} tier: dev ${n} (AS-17)`);
   L.push("");
   L.push(`Seed **${t.seed}**, drawn ${t.generated_at} from the second tier's census of ${t.census_generated_at} (\`tier2/00-baseline.{json,md}\`).`);
-  L.push(`Reproduce: \`cd opentakeoff/mcp && node --import tsx scripts/assemblies-baseline.mjs ../../opentakeoff-corpus --tier4 ${t.seed}\`.`);
+  L.push(`Reproduce: \`cd opentakeoff/mcp && node --import tsx scripts/assemblies-baseline.mjs ../../opentakeoff-corpus --tier${n} ${t.seed}\`.`);
   L.push("");
-  L.push(`Rules (\`scripts/assembliesSplit.mjs\` drawTier4, drawn as drawTier3): the population is the census's documents with ≥ 1 compiled row in a keyed family, less every document whose drafter group (\`drafters.json\`) holds a WP0.2 document, a second-tier one (dev 2, held-out 2, or withheld) or a dev-3 one. The seed shuffles the drafter groups, and each group draws one document. Dev 4 takes groups in that order until it holds ${t.dev_min_docs} documents, then only groups that add a required family it lacks. Each document keys one claimed table per keyed family, drawn by the seed, every printed row up to ${t.key_rows_per_table_max}. There is no held-out 4, for the third tier's reason (AS-28 read the column names of every document no tier held). Held-out and held-out 2 stay the gates. WP0.2's split and the second and third tiers never move.`);
+  L.push(`Rules (\`scripts/assembliesSplit.mjs\` drawTier${n}, drawn as drawTier3): the population is the census's documents with ≥ 1 compiled row in a keyed family, less every document whose drafter group (\`drafters.json\`) holds a WP0.2 document, a second-tier one (dev 2, held-out 2, or withheld) ${n === 5 ? "or a dev-3 or dev-4 one" : "or a dev-3 one"}. The seed shuffles the drafter groups, and each group draws one document. Dev ${n} takes groups in that order until it holds ${t.dev_min_docs} documents, then only groups that add a required family it lacks. Each document keys one claimed table per keyed family, drawn by the seed, every printed row up to ${t.key_rows_per_table_max}. There is no held-out ${n}, for the third tier's reason (AS-28 read the column names of every document no tier held). Held-out and held-out 2 stay the gates. WP0.2's split and the ${n === 5 ? "second, third and fourth tiers" : "second and third tiers"} never move.`);
   L.push("");
   L.push(`Population: ${t.population_docs} documents in ${t.population_groups} drafter groups. Left out as an earlier tier's drafter's: ${t.left_out_earlier_drafters.map((x) => `\`${x.set}\` (${x.group})`).join(", ") || "none"}. Census errors: ${t.census_errors.join(", ") || "none"}. In neither census (never unseen, or staged after the second tier's census ran): ${t.not_in_census.map((id) => `\`${id}\``).join(", ") || "none"}.`);
   if (t.required_coverage_missing_from_population.length) L.push(`Required families absent from the population: ${t.required_coverage_missing_from_population.join(", ")}.`);
   L.push(`Seeded group order (group: its documents, the one drawn): ${t.shuffled_group_order.map((g) => `\`${g.group}\` ${g.docs}→\`${g.pick.split("_").slice(0, 2).join("_")}\``).join(" · ")}.`);
   const x = t.dev;
   L.push("");
-  L.push(`## Dev 4 — ${x.sets.length} documents, ${x.tables.length} tables, ≤ ${rows(x.tables)} keyed rows (upper bound from the compile's claimed rows)`);
+  L.push(`## Dev ${n} — ${x.sets.length} documents, ${x.tables.length} tables, ≤ ${rows(x.tables)} keyed rows (upper bound from the compile's claimed rows)`);
   L.push("");
   L.push(`Drafter groups: ${x.groups.map((g) => `\`${g}\``).join(", ")}. Covers: ${x.covers.join(", ") || "—"}.`);
   if (x.added_for_coverage.length) L.push(`Added for coverage: ${x.added_for_coverage.map((g) => `\`${g.group}\` (${g.adds.join(", ")})`).join("; ")}.`);
@@ -372,10 +385,10 @@ if (splitSeed !== null) {
   L.push("| Set | Family | Table drawn (sheet :: title) | Claimed rows | Keyed rows ≤ | Tables in stratum |");
   L.push("|---|---|---|---|---|---|");
   for (const r of x.tables) L.push(`| \`${r.set}\` | ${r.family} | ${r.table} | ${r.claimed_rows} | ${r.keyed_rows_max} | ${r.tables_in_stratum} |`);
-  if (t.dev_coverage_missing.length) { L.push(""); L.push(`Dev 4 does not cover: ${t.dev_coverage_missing.join(", ")}.`); }
+  if (t.dev_coverage_missing.length) { L.push(""); L.push(`Dev ${n} does not cover: ${t.dev_coverage_missing.join(", ")}.`); }
   L.push("");
   writeFileSync(join(tdir, "01-split.md"), `${L.join("\n")}\n`);
-  console.log(`tier 4 seed ${t.seed}: dev ${t.dev.sets.length} docs / ${t.dev.tables.length} tables / ≤${rows(t.dev.tables)} rows`);
+  console.log(`tier ${n} seed ${t.seed}: dev ${t.dev.sets.length} docs / ${t.dev.tables.length} tables / ≤${rows(t.dev.tables)} rows`);
 } else if (singleSetId) {
   const set = spec.sets.find((s) => s.id === singleSetId);
   if (!set) { console.error(`unknown set id: ${singleSetId}`); process.exit(2); }

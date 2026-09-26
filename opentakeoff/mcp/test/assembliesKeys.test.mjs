@@ -11,7 +11,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { expandTranscription, parseNumber, parseTranscription, renderKeyCsv } from "../scripts/assemblies-key-transcribe.mjs";
-import { drawTier2, drawTier3, drawTier4, HELDOUT_MIN_DOCS, KEY_ROWS_PER_TABLE_MAX, TIER2_DEV_MIN_DOCS, TIER3_DEV_MIN_DOCS } from "../scripts/assembliesSplit.mjs";
+import { drawTier2, drawTier3, drawTier4, drawTier5, HELDOUT_MIN_DOCS, KEY_ROWS_PER_TABLE_MAX, TIER2_DEV_MIN_DOCS, TIER3_DEV_MIN_DOCS } from "../scripts/assembliesSplit.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP = resolve(HERE, "..");
@@ -320,6 +320,40 @@ test("the committed fourth tier is reproduced exactly by its seed from the secon
   }
 });
 
+const TIER5 = join(REPORTS, "tier5");
+const hasTier5 = existsSync(join(TIER5, "01-split.json"));
+
+test("the committed fifth tier is reproduced exactly by its seed from the second tier's census", { skip: !(hasSplitInputs && hasTier2 && hasTier3 && hasTier4 && hasTier5) && "fifth tier not drawn here" }, () => {
+  const committed = JSON.parse(readFileSync(join(TIER5, "01-split.json"), "utf8"));
+  const tmp = mkdtempSync(join(tmpdir(), "assemblies-tier5-"));
+  try {
+    for (const d of ["tier2", "tier3", "tier4"]) mkdirSync(join(tmp, "reports", "assemblies", d), { recursive: true });
+    copyFileSync(join(CORPUS, "sets.json"), join(tmp, "sets.json"));
+    for (const f of ["drafters.json", "00-baseline.json", "01-split.json"]) copyFileSync(join(REPORTS, f), join(tmp, "reports", "assemblies", f));
+    for (const f of ["00-baseline.json", "01-split.json"]) copyFileSync(join(TIER2, f), join(tmp, "reports", "assemblies", "tier2", f));
+    copyFileSync(join(TIER3, "01-split.json"), join(tmp, "reports", "assemblies", "tier3", "01-split.json"));
+    copyFileSync(join(TIER4, "01-split.json"), join(tmp, "reports", "assemblies", "tier4", "01-split.json"));
+    const run = spawnSync(process.execPath, ["--import", "tsx", "scripts/assemblies-baseline.mjs", tmp, "--tier5", String(committed.seed)],
+      { cwd: MCP, encoding: "utf8", timeout: 120_000 });
+    assert.equal(run.status, 0, run.stderr);
+    const redrawn = JSON.parse(readFileSync(join(tmp, "reports", "assemblies", "tier5", "01-split.json"), "utf8"));
+    for (const k of ["generated_at"]) { delete redrawn[k]; delete committed[k]; }
+    assert.deepEqual(redrawn, committed);
+    // One document per drafter, and no drafter WP0.2's split, the second tier, dev 3 or dev 4 holds.
+    const split = JSON.parse(readFileSync(join(REPORTS, "01-split.json"), "utf8"));
+    const t2 = JSON.parse(readFileSync(join(TIER2, "01-split.json"), "utf8"));
+    const t3 = JSON.parse(readFileSync(join(TIER3, "01-split.json"), "utf8"));
+    const t4 = JSON.parse(readFileSync(join(TIER4, "01-split.json"), "utf8"));
+    const drafters = JSON.parse(readFileSync(join(REPORTS, "drafters.json"), "utf8"));
+    const groupOf = (id) => Object.entries(drafters.groups).find(([, g]) => g.sets.includes(id))?.[0];
+    const earlier = new Set([...split.dev.sets, ...split.heldout.sets, ...t2.dev.sets, ...t2.heldout.sets, ...t2.heldout.withheld, ...t3.dev.sets, ...t4.dev.sets].map(groupOf));
+    assert.deepEqual(committed.dev.sets.filter((id) => earlier.has(groupOf(id))), []);
+    assert.equal(new Set(committed.dev.sets.map(groupOf)).size, committed.dev.sets.length);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
 const keyFiles = existsSync(join(CORPUS, "keys"))
   ? readdirSync(join(CORPUS, "keys")).filter((f) => f.endsWith(".attrs.csv")) : [];
 
@@ -342,16 +376,18 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
     const setId = f.replace(/\.attrs\.csv$/, "");
     const doc = parseTranscription(readFileSync(join(REPORTS, "key-work", `${setId}.transcription.txt`), "utf8"));
     const heldout = split.heldout.sets.includes(setId);
-    // The second, third and fourth tiers (AS-17) key only their drawn tables, on every side, as held-out does.
+    // The second to fifth tiers (AS-17) key only their drawn tables, on every side, as held-out does.
     const t2 = hasTier2 ? JSON.parse(readFileSync(join(TIER2, "01-split.json"), "utf8")) : null;
     const t3 = hasTier3 ? JSON.parse(readFileSync(join(TIER3, "01-split.json"), "utf8")) : null;
     const t4 = hasTier4 ? JSON.parse(readFileSync(join(TIER4, "01-split.json"), "utf8")) : null;
+    const t5 = hasTier5 ? JSON.parse(readFileSync(join(TIER5, "01-split.json"), "utf8")) : null;
     const tier2Side = t2 && (t2.dev.sets.includes(setId) ? t2.dev : t2.heldout.sets.includes(setId) ? t2.heldout : null);
     const tier3Side = t3 && t3.dev.sets.includes(setId) ? t3.dev : null;
     const tier4Side = t4 && t4.dev.sets.includes(setId) ? t4.dev : null;
-    const tierSide = tier2Side || tier3Side || tier4Side;
-    const tierName = tier2Side ? "second" : tier3Side ? "third" : "fourth";
-    const tierCap = (tier2Side ? t2 : tier3Side ? t3 : t4)?.key_rows_per_table_max;
+    const tier5Side = t5 && t5.dev.sets.includes(setId) ? t5.dev : null;
+    const tierSide = tier2Side || tier3Side || tier4Side || tier5Side;
+    const tierName = tier2Side ? "second" : tier3Side ? "third" : tier4Side ? "fourth" : "fifth";
+    const tierCap = (tier2Side ? t2 : tier3Side ? t3 : tier4Side ? t4 : t5)?.key_rows_per_table_max;
     assert.ok(heldout || tierSide || split.dev.sets.includes(setId), `${setId} is in neither the dev nor the held-out split, nor a later tier`);
     // One printed table can hold two claimed families (a split system's indoor
     // and outdoor unit on one row), so the scope is checked per table x family.
@@ -549,4 +585,19 @@ test("tier 4: drawn as the third, less every drafter dev 3 holds as well", () =>
   assert.deepEqual(a.dev.sets.filter((id) => dev3Groups.has(groupOf(id))), [], "no dev-3 drafter in dev 4");
   for (const id of t3.dev.sets) assert.ok(a.left_out_earlier_drafters.some((x) => x.set === id && x.shares_drafter_with.includes(`${id} (tier 3)`)));
   assert.equal(new Set(a.dev.sets.map(groupOf)).size, a.dev.sets.length, "one dev-4 document per drafter");
+});
+
+test("tier 5: drawn as the fourth, less every drafter dev 4 holds as well", () => {
+  const w = world();
+  const t3 = drawTier3(w.census, w.drafters, w.split, noTier2, 20260927, { eligible: w.eligible });
+  const t4 = drawTier4(w.census, w.drafters, w.split, noTier2, t3, 20260928, { eligible: w.eligible });
+  // With no fourth tier to leave out, the fifth draws exactly as the fourth.
+  assert.deepEqual(drawTier5(w.census, w.drafters, w.split, noTier2, t3, { dev: { sets: [] } }, 20260928, { eligible: w.eligible }), t4);
+  const a = drawTier5(w.census, w.drafters, w.split, noTier2, t3, t4, 20260929, { eligible: w.eligible });
+  assert.deepEqual(a, drawTier5(structuredClone(w.census), structuredClone(w.drafters), w.split, noTier2, structuredClone(t3), structuredClone(t4), 20260929, { eligible: [...w.eligible] }));
+  const groupOf = (id) => Object.entries(w.drafters.groups).find(([, g]) => g.sets.includes(id))[0];
+  const earlier = new Set([...t3.dev.sets, ...t4.dev.sets].map(groupOf));
+  assert.deepEqual(a.dev.sets.filter((id) => earlier.has(groupOf(id))), [], "no dev-3 or dev-4 drafter in dev 5");
+  for (const id of t4.dev.sets) assert.ok(a.left_out_earlier_drafters.some((x) => x.set === id && x.shares_drafter_with.includes(`${id} (tier 4)`)));
+  assert.equal(new Set(a.dev.sets.map(groupOf)).size, a.dev.sets.length, "one dev-5 document per drafter");
 });

@@ -26,8 +26,10 @@
    "068_US_Antelope_Valley_College_Applied_Arts_Math",
    "072_CA_CA07_2627_West_Valley_College_Science_Math",
    "082_OR_Klamath_Community_College_Career_Learning",
+   "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
    "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
    "09_ME_BGS_KennebecValleyCC_Renovation",
+   "15_IA_IowaState_Biorenewables_Lab",
    "18_OR_BakerMS_HVAC_Electrical_FullSet",
    "itd-d1-lab-raster"
   ],
@@ -115,6 +117,13 @@
    "share": 0.68
   },
   {
+   "set": "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+   "relation": "near",
+   "of": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
+   "side": "dev",
+   "share": 0.44
+  },
+  {
    "set": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
    "relation": "near",
    "of": "itd-d1-lab",
@@ -134,6 +143,13 @@
    "of": "071_ME_BGS_Project_3809_Health_Science_Center",
    "side": "dev",
    "share": 0.37
+  },
+  {
+   "set": "15_IA_IowaState_Biorenewables_Lab",
+   "relation": "near",
+   "of": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "side": "dev",
+   "share": 0.16
   },
   {
    "set": "18_OR_BakerMS_HVAC_Electrical_FullSet",
