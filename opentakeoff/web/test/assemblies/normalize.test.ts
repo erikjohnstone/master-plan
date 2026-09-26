@@ -563,3 +563,96 @@ test("a duplex starter's LEAD/LAG; a trap's load (not its rated capacity); a hum
   assert.equal(values(normalizeCompileItem(row("H-1", "HUMIDIFIER SCHEDULE", { "POWER KW": "3" }), "HUMIDIFIER")).eh_kw, 3); // 066_MT
   assert.equal(values(normalizeCompileItem(row("P-1", "PUMP SCHEDULE", { "PIPING DATA SUCT. SIZE (IN.)": "4", "PIPING DATA DISCH. SIZE (IN.)": "3" }), "PUMP")).conn_in, 4); // 047_NC
 });
+
+// ── AS-28: columns the frozen normalizer left unread on the unseen corpus ───
+// Each shape below is printed on an unseen (non-held-out) document; every
+// value these rules add there was checked against the print.
+
+test("AS-28: a water side's PRESS. DROP is its pressure drop; an air side's never", () => {
+  const n = normalizeCompileItem(row("1-3", "FAN COIL UNIT SCHEDULE", {
+    "COOLING COIL EWT (F)": "44", "COOLING COIL WATER SIDE PRESS. DROP (FT W.G.)": "8.8", "COOLING COIL AIR SIDE PRESS. DROP (IN W.G.)": "0.05",
+    "HEATING COIL EWT (F)": "140", "HEATING COIL WATER SIDE PRESS. DROP (FT W.G.)": "5.7", "HEATING COIL AIR SIDE PRESS. DROP (IN W.G.)": "0.05",
+  }), "FCU");
+  assert.equal(values(n).chw_wpd_ft, 8.8);
+  assert.equal(values(n).hw_wpd_ft, 5.7);
+  assert.ok(!quantitiesOf(headerText("COOLING COIL AIR SIDE PRESS. DROP (IN W.G.)")).includes("wpd"));
+});
+
+test("AS-28: PIPE DIA is a coil's connection; a drain pipe is not", () => {
+  assert.equal(values(normalizeCompileItem(row("VAV-1", "VAV BOX SCHEDULE", { "MAX CFM": "450", "HEATING COIL PIPE DIA": '3/4"' }), "VAV")).hw_conn_in, 0.75);
+  assert.equal(values(normalizeCompileItem(row("FTR-1", "FIN TUBE RADIATION SCHEDULE", { "PIPE DIA.": "3/4" }), "FIN_TUBE_RADIATION")).conn_in, 0.75);
+  assert.ok(!quantitiesOf(headerText("COND DRAIN PIPE (IN)")).includes("conn_size"));
+});
+
+test("AS-28: a bare ELEC column and VOLTS PHASE HERTZ read as the power connection", () => {
+  const vav = values(normalizeCompileItem(row("VAV-G-1", "VAV SCHEDULE", { "MAX CFM": "450", ELEC: "208/3" }), "VAV"));
+  assert.equal(vav.volts, 208);
+  assert.equal(vav.phase, 3);
+  assert.equal(values(normalizeCompileItem(row("VAV-G-2", "VAV SCHEDULE", { "MAX CFM": "450", ELEC: "SCR" }), "VAV")).volts, undefined);
+  const ch = values(normalizeCompileItem(row("CH-1", "AIR COOLED CHILLER SCHEDULE", { "UNIT ELECTRICAL DATA VOLTS PHASE HERTZ": "460/3/60" }), "AIR_COOLED_CHILLER"));
+  assert.equal(ch.volts, 460);
+  assert.equal(ch.phase, 3);
+});
+
+test("AS-28: a REHEAT HW / ELEC / NONE column marked YES names the reheat", () => {
+  const hw = normalizeCompileItem(row("VAV-1", "VAV TERMINAL SCHEDULE", { "MAX CFM": "450", "REHEAT HW": "YES", "REHEAT ELEC": "NO", "REHEAT NONE": "NO" }), "VAV");
+  assert.equal(values(hw).heat_type, "hw");
+  assert.equal(hw.attributes.heat_type.rule, "enum.reheat_marked");
+  assert.equal(values(normalizeCompileItem(row("VAV-2", "VAV TERMINAL SCHEDULE", { "MAX CFM": "450", "REHEAT HW": "NO", "REHEAT NONE": "YES" }), "VAV")).heat_type, "none");
+});
+
+test("AS-28: … SERVES and … SERVED name the place a unit serves; SERVED BY and a pointer do not", () => {
+  assert.equal(values(normalizeCompileItem(row("AC-1", "VRF SCHEDULE", { "AIR HANDLER SERVES": "FLIGHT CREW" }), "VRF_INDOOR")).area_served, "FLIGHT CREW");
+  assert.equal(values(normalizeCompileItem(row("ERV-1", "ERV SCHEDULE", { "LOCATION SERVED": "NURSE" }), "ERV")).area_served, "NURSE");
+  assert.equal(values(normalizeCompileItem(row("HP-1A", "HEAT PUMP SCHEDULE", { "SPACES SERVED": "0137, 0138" }), "HEAT_PUMP")).area_served, "0137, 0138");
+  assert.equal(values(normalizeCompileItem(row("CU-1", "CONDENSING UNIT SCHEDULE", { "UNIT SERVED": "AHU-1" }), "CONDENSING_UNIT")).area_served, "AHU-1");
+  assert.equal(values(normalizeCompileItem(row("HP-1", "HEAT PUMP SCHEDULE", { "FAN COIL(S) SERVED": "LIBRARY" }), "HEAT_PUMP")).area_served, "LIBRARY");
+  assert.equal(values(normalizeCompileItem(row("FC-1", "FAN COIL SCHEDULE", { "SERVED BY": "HP-30" }), "HEAT_PUMP")).area_served, undefined);
+  assert.equal(values(normalizeCompileItem(row("ERV-2", "ERV SCHEDULE", { "LOCATION SERVED": "REFER TO PLANS" }), "ERV")).area_served, undefined);
+  assert.equal(values(normalizeCompileItem(row("AHU-1", "AHU SCHEDULE", { "AREA SERVED": "SEE PLANS" }), "AHU")).area_served, undefined);
+});
+
+test("AS-28: SYSTEM SERVED and FAN SERVICE are the unit's service", () => {
+  assert.equal(values(normalizeCompileItem(row("P-1", "PUMP SCHEDULE", { "SYSTEM SERVED": "HEATING", GPM: "40" }), "PUMP")).service, "HEATING");
+  assert.equal(values(normalizeCompileItem(row("EF-1", "FAN SCHEDULE", { "FAN SERVICE": "GENERAL EXHAUST", CFM: "400" }), "FAN")).service, "GENERAL EXHAUST");
+});
+
+test("AS-28: VSC and VARIABLE SPEED name the drive; YES / VFD is one, NO is none", () => {
+  assert.equal(values(normalizeCompileItem(row("HWP-1", "PUMP SCHEDULE", { "MOTOR VSC": "NO", GPM: "40" }), "PUMP")).vfd, "no");
+  assert.equal(values(normalizeCompileItem(row("P-2", "PUMP SCHEDULE", { "VARIABLE SPEED": "VFD", GPM: "40" }), "PUMP")).vfd, "yes");
+});
+
+test("AS-28: an evaporator's or a circulating fluid's ENTERING / LEAVING temperature is its water's; a condenser's and air's are not", () => {
+  const ch = values(normalizeCompileItem(row("CH-1", "AIR COOLED CHILLER SCHEDULE", {
+    "EVAPORATOR DATA ENTERING TEMP (°F)": "56", "EVAPORATOR DATA LEAVING TEMP (°F)": "44.0", "CONDENSER DATA ENTERING TEMP (°F)": "85",
+  }), "AIR_COOLED_CHILLER"));
+  assert.equal(ch.chw_ewt_f, 56);
+  assert.equal(ch.chw_lwt_f, 44);
+  const cc = values(normalizeCompileItem(row("CC-1", "DUCT MOUNTED COIL SCHEDULE", {
+    "CIRCULATING FLUID ENTERING (°F)": "40", "CIRCULATING FLUID LEAVING (°F)": "55", "ENTERING AIR TEMPERATURE (F)": "80",
+  }), "DUCT_MOUNTED_COIL"));
+  assert.equal(cc.chw_ewt_f, 40);
+  assert.equal(cc.chw_lwt_f, 55);
+  assert.deepEqual(quantitiesOf(headerText("ENTERING AIR TEMPERATURE (F)")).filter((q) => q === "ewt"), []);
+});
+
+test("AS-28: a BACnet accessory marked YES is the BAS interface", () => {
+  assert.equal(values(normalizeCompileItem(row("CH-1", "CHILLER SCHEDULE", { "ACCESSORIES (BACNET) (YES/NO)": "Yes" }), "AIR_COOLED_CHILLER")).bas_interface, "BACNET");
+  assert.equal(values(normalizeCompileItem(row("CH-2", "CHILLER SCHEDULE", { "ACCESSORIES (BACNET) (YES/NO)": "No" }), "AIR_COOLED_CHILLER")).bas_interface, undefined);
+});
+
+test("AS-28: a capacity cell printing BTU is BTU/H", () => {
+  assert.equal(values(normalizeCompileItem(row("12-1", "HEAT PUMP SCHEDULE", { "HEATING CAPACITY": "12,000 BTU" }), "HEAT_PUMP")).heating_mbh, 12);
+});
+
+test("AS-28: the design head outranks a shut-off head", () => {
+  assert.equal(values(normalizeCompileItem(row("HCP-1", "PUMP SCHEDULE", { "DESIGN HEAD (FT./HD.)": "30", "MAX SHUT OFF HEAD (FT./HD.)": "32", GPM: "40" }), "PUMP")).head_ft, 30);
+});
+
+test("AS-28: a DIRECT DRIVE or BELT DRIVE column marked YES names the drive; NO names none", () => {
+  const drive = (cells: Record<string, string>) => values(normalizeCompileItem(row("SF-3", "FAN SCHEDULE", { CFM: "400", ...cells }), "FAN")).drive;
+  assert.equal(drive({ "MOTOR DIRECT DRIVE (YES/NO)": "YES" }), "direct");
+  assert.equal(drive({ "MOTOR DIRECT DRIVE (YES/NO)": "NO" }), undefined);
+  assert.equal(drive({ "DRIVE DIRECT": "X" }), "direct");
+  assert.equal(drive({ "BELT DRIVE": "YES" }), "belt");
+});

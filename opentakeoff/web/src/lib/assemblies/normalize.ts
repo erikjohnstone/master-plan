@@ -134,7 +134,7 @@ export function headerText(header: string): string {
 
 /** Printed unit words a cell or header can carry, as attributes.ts units. */
 const UNIT_WORDS: Array<[RegExp, string]> = [
-  [/^(?:BTUH|BTU\/H|BTU\/HR)$/, "BTU/H"],
+  [/^(?:BTUH|BTU\/H|BTU\/HR|BTU)$/, "BTU/H"],
   [/^MBH$/, "MBH"],
   [/^KW$/, "kW"],
   [/^(?:W|WATTS?)$/, "W"],
@@ -314,7 +314,8 @@ export type Quantity =
   | "airflow" | "waterflow" | "ewt" | "lwt" | "ewt_lwt" | "capacity" | "hp" | "watts" | "kw" | "volts" | "phase" | "vph"
   | "rpm" | "esp" | "tsp" | "head" | "wpd" | "inlet_size" | "conn_size" | "tons" | "merv" | "qty" | "rows"
   | "lbhr" | "psig" | "area_served" | "service" | "location" | "drive" | "fuel" | "vfd" | "ecm" | "control"
-  | "fluid" | "glycol" | "hp_qty" | "cells" | "economizer" | "humidifier" | "energy_recovery" | "type" | "rows_fins" | "arrangement" | "controller";
+  | "fluid" | "glycol" | "hp_qty" | "cells" | "economizer" | "humidifier" | "energy_recovery" | "type" | "rows_fins" | "arrangement" | "controller"
+  | "reheat_kind" | "bas_protocol";
 
 /** A header naming the parts of an electrical cell: V/PH, VOLTS/ PH /HZ,
  * V/HZ/PH, V/H/P, VOLT-PH-CY, VOLTAGE-PHASE (headerText has read Ø as PH). */
@@ -329,7 +330,11 @@ export function quantitiesOf(h: string): Quantity[] {
   if (/\bKW\s*\/\s*TONS?\b|\bKW\s+PER\s+TONS?\b/.test(h)) return q;
   // An electrical tuple (V/PH, V/PH/HZ, V/HZ/PH, V/H/P, VOLTAGE-PHASE), or a
   // V/…/HZ triple whose phase symbol the text lost.
-  const electricalPair = ELECTRICAL_TUPLE.test(h) || (/\bV\b/.test(h) && /\bHZ\b/.test(h) && !/\bVOLT/.test(h));
+  const electricalPair = ELECTRICAL_TUPLE.test(h) || (/\bV\b/.test(h) && /\bHZ\b/.test(h) && !/\bVOLT/.test(h))
+    // A bare ELEC column ("208/3"): the vph case reads only a V/PH cell.
+    || /^(?:ELEC|ELECTRICAL)$/.test(h)
+    // VOLTS PHASE HERTZ with no separators ("460/3/60").
+    || /\bVOLTS?\s+PHASES?(?:\s+(?:HERTZ|HZ))?$/.test(h);
   if (electricalPair) q.push("vph");
   else {
     if (/\bVOLT(?:S|AGE)?\b/.test(h) || h === "V" || /\b(?:ELECTRICAL|ELEC|POWER|MOTOR)(?:\s+DATA)?\s+V$/.test(h)) q.push("volts");
@@ -349,8 +354,13 @@ export function quantitiesOf(h: string): Quantity[] {
   // A water side's INLET / OUTLET TEMP ("HOT SIDE INLET TEMP (ºF)").
   const waterSide = water || /\b(?:HOT|COLD|PRIMARY|SECONDARY|SHELL|TUBE)\s+SIDE\b|\bFLUID\b/.test(h);
   // "WATER TEMPERATURES DEG F IN / OUT", "TEMP ENT / LVG".
-  const ewt = /\bEWT\b|\bENT(?:ERING)?\s+(?:WATER|WTR)\b/.test(h) || (water && /\bTEMP\w*(?:\s+DEG)?(?:\s+F)?\s+(?:ENT|IN)$/.test(h)) || (waterSide && /\bINLET\s+TEMP/.test(h));
-  const lwt = /\bLWT\b|\bLE?AV(?:ING)?\s+(?:WATER|WTR)\b|\bLVG\s+(?:WATER|WTR)\b|\bEXT\s+WTR\b/.test(h) || (water && /\bTEMP\w*(?:\s+DEG)?(?:\s+F)?\s+(?:LVG|OUT)$/.test(h)) || (waterSide && /\bOUTLET\s+TEMP/.test(h));
+  // "EVAPORATOR DATA ENTERING TEMP (F)", "CIRCULATING FLUID LEAVING (F)": the
+  // water side's temperatures; never a condenser's or an air side's.
+  const fluidEnds = (waterSide || /\bEVAPORATOR\b/.test(h)) && !/\bCONDENSER\b|\bAIR\b/.test(h);
+  const ewt = /\bEWT\b|\bENT(?:ERING)?\s+(?:WATER|WTR)\b/.test(h) || (water && /\bTEMP\w*(?:\s+DEG)?(?:\s+F)?\s+(?:ENT|IN)$/.test(h)) || (waterSide && /\bINLET\s+TEMP/.test(h))
+    || (fluidEnds && /\bENTERING(?:\s+TEMP\w*)?\s*(?:\(\s*F\s*\)|F)?$/.test(h));
+  const lwt = /\bLWT\b|\bLE?AV(?:ING)?\s+(?:WATER|WTR)\b|\bLVG\s+(?:WATER|WTR)\b|\bEXT\s+WTR\b/.test(h) || (water && /\bTEMP\w*(?:\s+DEG)?(?:\s+F)?\s+(?:LVG|OUT)$/.test(h)) || (waterSide && /\bOUTLET\s+TEMP/.test(h))
+    || (fluidEnds && /\bLEAVING(?:\s+TEMP\w*)?\s*(?:\(\s*F\s*\)|F)?$/.test(h));
   if (ewt && lwt) q.push("ewt_lwt");
   else if (ewt) q.push("ewt");
   else if (lwt) q.push("lwt");
@@ -361,9 +371,9 @@ export function quantitiesOf(h: string): Quantity[] {
   if (/\bHEAD\b|\bTDH\b/.test(h) && !/\bNPSH\b/.test(h)) q.push("head");
   // A water pressure drop: WPD, PD, PRESSURE DROP, or a ΔP in feet of water
   // ("Δ P FT. H20"; the text layer may lose the Δ, leaving "P FTWC").
-  if ((/\bW?PD\b|\bPRESSURE\s+DROP\b|\bP\s?D\b|\bDELTA\s+P\b|(?:^|\s)(?:Δ\s?)?P\s+FTWC\b/.test(h)) && !/\bAIR\s+(?:P\s?D|PD|PRESSURE)\b|\bAPD\b|\bINWC\b|\bOUTLET\b|\bINLET\s+SP\b/.test(h)) q.push("wpd");
+  if ((/\bW?PD\b|\bPRESS(?:URE)?\s+DROP\b|\bP\s?D\b|\bDELTA\s+P\b|(?:^|\s)(?:Δ\s?)?P\s+FTWC\b/.test(h)) && !/\bAIR\s+(?:P\s?D|PD|PRESSURE)\b|\bAIR\s+SIDE\b|\bAPD\b|\bINWC\b|\bOUTLET\b|\bINLET\s+SP\b/.test(h)) q.push("wpd");
   if (/\bINLET\b/.test(h) && /\b(?:SIZE|DIA(?:METER)?|IN(?:CHES)?)\b/.test(h) && !/\bSP\b|\bTEMP|\bAIR\s+INLET\b|\bGAS\b|\bFLUE\b|\bVENT\b|\bCOMBUSTION\b/.test(h)) q.push("inlet_size");
-  else if (/\bCONN\w*|\bRUNOUT\b|\bSUCT(?:ION)?\b|\bDISCH(?:ARGE)?\s+SIZE\b|\bPIPE\s+SIZE\b/.test(h) && !/\bCONNECTED\b|\bDIFFUSER\b|\bVENT\b|\bFLUE\b|\bCOMBUSTION\b|\bDRAIN\b|\bCONDENSATE\b|\bDUCT\b/.test(h)) q.push("conn_size");
+  else if (/\bCONN\w*|\bRUNOUT\b|\bSUCT(?:ION)?\b|\bDISCH(?:ARGE)?\s+SIZE\b|\bPIPE\s+(?:SIZE|DIA(?:METER)?)\b/.test(h) && !/\bCONNECTED\b|\bDIFFUSER\b|\bVENT\b|\bFLUE\b|\bCOMBUSTION\b|\bDRAIN\b|\bCONDENSATE\b|\bDUCT\b/.test(h)) q.push("conn_size");
   if (/\bTONS?\b|\bTONNAGE\b/.test(h)) q.push("tons");
   if (/\bMERV\b|\bFINAL\s+FILTER\b|\bFILTERS?$/.test(h) && !/\bDEPTH\b|\bPD\b|\bFACE\b|\bQTY\b|\bPRE-?\s?FILTER\b/.test(h)) q.push("merv");
   if (/(?:\b(?:NO|NUMBER)|#)\s+OF\s+CELLS\b|^CELLS$/.test(h)) q.push("cells");
@@ -373,15 +383,16 @@ export function quantitiesOf(h: string): Quantity[] {
   // own LBS/HR is the condensate load it passes.
   if (/\bLBHR\b/.test(h) && !(/\bTRAP\b/.test(h) && /\bCAPACITY\b|\bRAT(?:ED|ING)\b|\bSIZE\b/.test(h))) q.push("lbhr");
   if (/\bPSIG?\b/.test(h)) q.push("psig");
-  if (/\bAREA\b.*\bSERV(?:ED|ICED)\b|^SERVES(?:\s+(?:ROOMS?|AREAS?|SPACES?)(?:\s*#|\s+NO)?)?$|^AREA$/.test(h)) q.push("area_served");
+  if ((/\bAREA\b.*\bSERV(?:ED|ICED)\b|^SERVES(?:\s+(?:ROOMS?|AREAS?|SPACES?)(?:\s*#|\s+NO)?)?$|^AREA$/.test(h)
+    || /\sSERVES$/.test(h) || /\b(?:LOCATION|SPACES?|ROOMS?|UNITS?|ZONES?|FAN\s+COIL(?:\(S\)|S)?)\s+SERVED$/.test(h)) && !/\bSERVED\s+BY\b/.test(h)) q.push("area_served");
   // SERVICE / SERVING, alone or under a unit-data group ("UNIT GENERAL DATA
   // SERVICE"); SYSTEM (AND/OR SERVICE).
-  else if (/^(?:SYSTEM|SYSTEM AND\/OR SERVICE|SYSTEM AND\/OR SEVICE)$/.test(h) || /^(?:(?:UNIT|GENERAL|DATA|EQUIPMENT|INFORMATION|INFO|BASIC)\s+)*(?:SERVICE|SERVING)$/.test(h)) q.push("service");
+  else if (/^(?:SYSTEM|SYSTEM AND\/OR SERVICE|SYSTEM AND\/OR SEVICE|SYSTEM\s+SERVED)$/.test(h) || /^(?:(?:UNIT|GENERAL|DATA|EQUIPMENT|INFORMATION|INFO|BASIC|FAN|PUMP)\s+)*(?:SERVICE|SERVING)$/.test(h)) q.push("service");
   if (/^LOCATION$/.test(h)) q.push("location");
   if (/^(?:REMARKS|ARRANGEMENT|OPERATION|PUMP\s+ARRANGEMENT)$/.test(h)) q.push("arrangement");
   if (/\bDRIVE\b/.test(h) && !/\bFREQ|VARIABLE|VFD\b/.test(h)) q.push("drive");
   if (/^FUEL$|\bFUEL\s+TYPE\b/.test(h)) q.push("fuel");
-  if (/\bVFD\b|\bVAR(?:IABLE)?\s+FREQ/.test(h)) q.push("vfd");
+  if (/\bVFD\b|\bVAR(?:IABLE)?\s+FREQ|\bVSC\b|\bVSD\b|^VARIABLE\s+SPEED$/.test(h)) q.push("vfd");
   if (/(?:^|\s)EC$|\bECM\b/.test(h)) q.push("ecm");
   if (/\bSPEED\s+CONTROL\b|\bCONTROL\s+TYPE\b|\bVOLUME\s+CONTROL\b/.test(h)) q.push("control");
   // Not a "… BY" column: that names who furnishes it ("EC" there is the
@@ -393,6 +404,8 @@ export function quantitiesOf(h: string): Quantity[] {
   if (/\bHUMIDIFIER\b|\bHUMIDIFICATION\b/.test(h)) q.push("humidifier");
   if (/\b(?:ENERGY|HEAT)\s+RECOVERY\b|\bENTHALPY\s+WHEEL\b/.test(h)) q.push("energy_recovery");
   if (/^(?:UNIT\s+)?TYPE$/.test(h)) q.push("type");
+  if (/^REHEAT\s+(?:HW|HOT\s+WATER|ELEC(?:TRIC)?|STEAM|NONE)$/.test(h)) q.push("reheat_kind");
+  if (/\bBACNET\b|\bLONWORKS\b|\bMODBUS\b/.test(h)) q.push("bas_protocol");
   return q;
 }
 
@@ -703,6 +716,9 @@ function firedHeater(ctx: RowContext): boolean {
  * EXHAUST", "PRIMARY HW", "110° F RETURN"), not a place. */
 const SYSTEM_WORDS = /\b(?:EXHAUST|SUPPLY|RETURN|RELIEF|TRANSFER|MAKE[-\s]?UP|OUTSIDE\s+AIR|OUTDOOR\s+AIR|VENTILATION|SMOKE|PRESSURIZATION|HOT\s+WATER|HEATING\s+WATER|CHILLED|CONDENSER|CONDENSATE|GLYCOL|STEAM|DOMESTIC|HEATING|COOLING|LOOP|PRIMARY|SECONDARY|H?HWS?|CHWS?|CWS?|GENERAL|SYSTEMS?)\b/;
 
+/** A cell that points elsewhere instead of naming a place. */
+const PLACE_POINTER = /^(?:SEE|REFER\s+TO|PER)\b|^(?:TBD|N\/?A|-+|VARIES)$/i;
+
 /** A place a unit serves: a room, an area, a building or other units
  * ("RESTROOMS", "CLASSROOM 23", "SECTOR A - WEST", "KH-1", "F-B1 AND
  * EC-B1"); never a cell naming a system. */
@@ -935,7 +951,7 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       }
       case "esp": num(pick(ctx, "esp_in"), q, "pressure.external"); break;
       case "tsp": num(pick(ctx, "esp_in"), q, "pressure.total", 5); break;
-      case "head": num(pick(ctx, "head_ft"), q, "pressure.head"); break;
+      case "head": num(pick(ctx, "head_ft"), q, "pressure.head", /\bSHUT\s*-?\s*OFF\b/.test(h) ? 3 : W.max.test(h) ? 2 : W.design.test(h) ? 0 : 1); break;
       case "wpd": {
         const s = waterService(col, ctx);
         num(s === "hw" ? pick(ctx, "hw_wpd_ft") : s === "chw" ? pick(ctx, "chw_wpd_ft") : s === "source" ? pick(ctx, "source_wpd_ft") : null, q, `water.${s ?? "unit"}.wpd`);
@@ -1039,7 +1055,8 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         // ("SOIL/AGGREGATE 126 / SAV-2").
         const valve = /\//.test(h) && /\bSUPPLY\s+VALVE\b/.test(h) ? text.match(/^(.*\S)\s*\/\s*[A-Z]{1,5}-?\d{1,3}[A-Z]?\s*$/i) : null;
         const v = valve ? valve[1].trim() : text.trim();
-        if (v) found.push({ attr: "area_served", col, value: v, printed: text, rule: "text.area_served", rank: 0 });
+        // A pointer ("REFER TO PLANS", "SEE NOTE 2", "TBD") names no place.
+        if (v && !PLACE_POINTER.test(v)) found.push({ attr: "area_served", col, value: v, printed: text, rule: "text.area_served", rank: 0 });
         break;
       }
       case "service": {
@@ -1074,8 +1091,11 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       case "drive": {
         if (!col.cell || !ctx.attrs.has("drive")) break;
         const t = text.toUpperCase().trim();
-        const v = /^(?:DIRECT|DD|DIRECT\s+DRIVE|DIR)$/.test(t) ? "direct" : /^(?:BELT|BD|BELT\s+DRIVE)$/.test(t) ? "belt" : null;
-        if (v) found.push({ attr: "drive", col, value: v, printed: text, rule: "enum.drive", rank: 0 });
+        const marked = /^(?:YES|Y|X)$/.test(t);
+        const v = /^(?:DIRECT|DD|DIRECT\s+DRIVE|DIR)$/.test(t) ? "direct" : /^(?:BELT|BD|BELT\s+DRIVE)$/.test(t) ? "belt"
+          : marked && /\bDIRECT\b/.test(h) && !/\bBELT\b/.test(h) ? "direct" : marked && /\bBELT\b/.test(h) && !/\bDIRECT\b/.test(h) ? "belt" : null;
+        if (/^(?:NO|N)$/.test(t) && /\bDIRECT\b|\bBELT\b/.test(h)) break;
+        if (v) found.push({ attr: "drive", col, value: v, printed: text, rule: marked ? "enum.drive_marked" : "enum.drive", rank: 0 });
         else failed.push({ attr: "drive", reason: `cell "${text}" is not DIRECT or BELT` });
         break;
       }
@@ -1094,6 +1114,19 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         const v = /^(?:YES|Y|X|VFD|VARIABLE\s+FREQUENCY\s+DRIVE)$/.test(t) ? "yes" : /^(?:NO|N)$/.test(t) ? "no" : null;
         if (v) found.push({ attr: "vfd", col, value: v, printed: text, rule: "enum.vfd", rank: 0 });
         else failed.push({ attr: "vfd", reason: `cell "${text}" is not yes or no` });
+        break;
+      }
+      case "reheat_kind": {
+        if (!col.cell || !ctx.attrs.has("heat_type") || !/^(?:YES|Y|X)$/i.test(text.trim())) break;
+        const kind = h.replace(/^REHEAT\s+/, "");
+        const v = /^(?:HW|HOT\s+WATER)$/.test(kind) ? "hw" : /^ELEC/.test(kind) ? "electric" : kind === "STEAM" ? "steam" : kind === "NONE" ? "none" : null;
+        if (v) found.push({ attr: "heat_type", col, value: v, printed: text, rule: "enum.reheat_marked", rank: 0 });
+        break;
+      }
+      case "bas_protocol": {
+        if (!col.cell || !ctx.attrs.has("bas_interface") || !/^(?:YES|Y|X)$/i.test(text.trim())) break;
+        const v = /\bBACNET\b/.test(h) ? "BACNET" : /\bLONWORKS\b/.test(h) ? "LONWORKS" : "MODBUS";
+        found.push({ attr: "bas_interface", col, value: v, printed: text, rule: "text.bas_protocol_marked", rank: 0 });
         break;
       }
       case "ecm": {

@@ -1,5 +1,20 @@
 # Changelog
 
+- **Assemblies read more column names from drafters they were not built
+  on.** A census of the columns left unread on 65 unseen corpus documents
+  found printed attributes under spellings the rules did not know. The
+  shared normalizer now reads a water side's PRESS. DROP; a coil's PIPE DIA;
+  a bare ELEC column ("208/3") and VOLTS PHASE HERTZ ("460/3/60"); REHEAT
+  HW / ELEC / NONE columns marked YES; the place a unit serves under "…
+  SERVES" or "LOCATION / SPACES / UNIT / FAN COIL(S) SERVED" (never "SERVED
+  BY"); SYSTEM SERVED and FAN SERVICE as the service; MOTOR VSC and VARIABLE
+  SPEED as the drive; an evaporator's or circulating fluid's ENTERING /
+  LEAVING temperature; a BACnet accessory marked YES; a capacity printed in
+  "BTU"; the DESIGN head over a shut-off head; a DIRECT or BELT DRIVE column
+  marked YES. A cell that points elsewhere ("SEE PLANS") is no longer read
+  as the area served. On the unseen documents 189 of 872 units gain or
+  correct values, each read against its printed cell; the dev documents'
+  readings are unchanged (ASSEMBLIES_BUG_CATALOGUE AS-28).
 - **Assemblies read more of the ways schedules are drawn.** The attribute
   normalizer (`web/src/lib/assemblies/normalize.ts`, shared by the Takeoff
   panel and the MCP tools) was grown on ten more documents from ten more

@@ -1314,3 +1314,75 @@ alike, before held-out 2 is keyed, with the before and after numbers reported.
 **Also:** the printed status is itself worth carrying. An existing unit is not bought new, and "(E)" / "(N)" is on
 the page (the row's MARK cell). A normalizer attribute for it (existing or new) needs a key column first; recorded
 here, not built.
+
+---
+
+## AS-28 — the unseen corpus's unread columns: printed attributes under headers the rules did not know (FIXED for the shapes below — this goal)
+
+**Found:** 2026-09-26, after GATE 2 at the freeze (AS-17), by a census of the
+columns the frozen normalizer leaves unread on the 65 unseen documents (the
+unseen audit's eligible sets: no dev, held-out, held-out 2 or withheld
+document, none by their drafters, no twin). Of 11,152 non-empty cells in
+their compile items, 8,333 sit in columns no attribute is ever read from;
+most name nothing the schema keeps (manufacturer, model, weights, sound,
+air-side temperatures, electrical protection). In the keyed families, 1,553
+column kinds are never read: 1,097 under headers the rules do not recognize,
+456 recognized but deliberately not chosen (a sensible capacity, a motor's
+RPM beside the fan's, a LOCATION naming no level).
+
+**Why it matters:** held-out 2 (56.4%) says the rules carry to a new
+drafter's sheets at about half their dev rate. No rule may come from
+held-out numbers, and dev and dev 2 are already read; the unseen corpus is
+where new drafters' spellings can be studied honestly.
+
+**The evidence class (new):** a rule may come from an unseen document's
+column when it has a unit test on that document's shape and every value it
+adds on the unseen corpus is read against its printed cell. The list below
+was taken whole from the census (the attribute-like headers, by how many
+documents print them), not from memory: held-out 2 was keyed from renders by
+the same author, so no rule here is for a shape only held-out 2 prints.
+
+**Fixed (each with a test that fails on the frozen normalizer):**
+- A water side's "PRESS. DROP" is its pressure drop (028_TX's fan coils and
+  DOAS); an AIR SIDE's never.
+- "PIPE DIA(METER)" is a connection size, as PIPE SIZE is (096_IN's VAV
+  reheat coils, 016_NY's fin tube); a drain pipe is not.
+- A bare "ELEC" column printing "208/3", and "VOLTS PHASE HERTZ" printing
+  "460/3/60", are the power connection (071_ME's VAV boxes, 096_IN's
+  chillers).
+- "REHEAT HW / ELEC / STEAM / NONE" columns marked YES name the reheat
+  (05_MO; the value was already read, now by its own column).
+- "… SERVES" and "LOCATION / SPACES / UNIT / FAN COIL(S) SERVED" name the
+  place or unit served (089_FL, 077_MT, 083_MA, 016_NY); "SERVED BY" does
+  not.
+- "SYSTEM SERVED" and "FAN SERVICE" are the unit's service (016_NY's pumps,
+  096_IN's fans).
+- "MOTOR VSC" and "VARIABLE SPEED" name the drive (096_IN, 014_MT).
+- An evaporator's and a circulating fluid's ENTERING / LEAVING temperatures
+  are its water's (012_MO's chillers, 096_IN's cooling coils); a condenser's
+  and an air side's are not.
+- A BACnet accessory marked YES is the BAS interface (096_IN's chillers).
+- A capacity cell that prints its own "BTU" is BTU/H (011_IL's heat pumps).
+- A DESIGN head outranks a MAX or SHUT OFF head, the curve's end (096_IN's
+  pumps; the two printed apart had left the head unknown).
+- A DIRECT DRIVE or BELT DRIVE column marked YES (or X) names the drive; NO
+  names none (096_IN, 009_FL).
+- A cell that points elsewhere ("SEE PLANS", "REFER TO PLANS", "TBD") is no
+  area served: two such values read before (016_NY, 28_WA) are gone.
+
+**Measured:**
+- Unseen: 189 of 872 compile items change; every changed value was read
+  against its printed cell: 58 VAV reheat connections, 25 areas served, 22
+  voltages and phases, 16 drives, 15 heat pump capacities, 28 water pressure
+  drops, 14 evaporator and coil water temperatures, 10 pump heads, 10 VFDs,
+  5 services, 2 BAS interfaces, 1 fin tube connection; 12 reheats and 2 VFDs
+  keep their value under their own column's rule; 2 pointers are removed.
+  One area served is a make, as printed ("SWEGON" under FAN COIL(S) SERVED).
+- Dev and dev 2: 0 of 833 compile items change; the attribute eval prints
+  the frozen reports' lines (1,965 of 2,053; 1,259 of 1,451; 0 invented).
+- The schema's `pipes` now cites the key that prints it (092_IL's TABLE
+  TITLE): GATE 1's schema test checks that an attribute with no example is
+  printed in no key, and held-out 2's keys print it.
+
+**Next:** held-out and held-out 2 are measured again only at the next freeze,
+after the third dev tier (AS-17).

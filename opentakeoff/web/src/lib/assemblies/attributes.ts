@@ -153,7 +153,7 @@ const ATTRIBUTE_TABLE = {
   outdoor_air_pct: { kind: "number", unit: "%", definition: "Minimum outdoor air as a percent of supply airflow.", example: { source: "key", set: "14_OR_KlamathCC_LearningCtr_Mechanical", header: "NOTE 2" } },
   output_mbh: { kind: "number", unit: "MBH", definition: "Boiler output capacity.", example: { source: "key", set: "069_ID_ITD_District_2_Laboratory_Heating_Upgrades", header: "CAPACITY / OUTPUT MBH" } },
   phase: { kind: "number", unit: "", definition: "Phase of the unit's power connection (1 or 3).", example: { source: "key", set: "navfac-cherry-point-atc", header: "ELECTRICAL / VOLTS/PH/HZ: phase part" } },
-  pipes: { kind: "number", unit: "", definition: "Pipes to a fan coil: 2 or 4.", example: null, noExampleReason: NO_EXAMPLE },
+  pipes: { kind: "number", unit: "", definition: "Pipes to a fan coil: 2 or 4.", example: { source: "key", set: "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation", header: "TABLE TITLE" } },
   primary_conn_in: { kind: "number", unit: "in", definition: "Primary-side connection size of a heat exchanger, inches.", example: { source: "key", set: "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers", header: "NOTE 5" } },
   primary_ewt_f: { kind: "number", unit: "F", definition: "Primary-side water entering a heat exchanger.", example: { source: "key", set: "14_OR_KlamathCC_LearningCtr_Mechanical", header: "HOT SIDE / INLET TEMP (ºF)" } },
   primary_gpm: { kind: "number", unit: "gpm", definition: "Primary-side water flow of a heat exchanger.", example: { source: "key", set: "14_OR_KlamathCC_LearningCtr_Mechanical", header: "HOT SIDE / FLOW (GPM)" } },
