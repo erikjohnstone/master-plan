@@ -110,6 +110,32 @@ END
   assert.equal(rows.find((r) => r.attribute === "chw_conn_in").value, "2.5");
 });
 
+test("expandTranscription: one cell printed in its own unit keys that unit (16W in an HP column), and only that cell", () => {
+  const doc = parseTranscription(`SET t-uh
+TABLE
+sheet: t.pdf#2
+title: STEAM UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: test
+rows: all 2 printed rows
+col: MARK => tag
+col: MOTOR / HP => motor_hp
+col: CAPACITY / BTUH => heating_mbh [BTU/H]
+grid:
+UH-1 | 1/20 | 48000
+UH-2 | 16 [W] | 18000
+END
+`);
+  const rows = expandTranscription(doc);
+  const line = (tag, a) => rows.find((r) => r.tag === tag && r.attribute === a);
+  assert.deepEqual([line("UH-1", "motor_hp").value, line("UH-1", "motor_hp").unit], ["0.05", "hp"]);
+  assert.deepEqual([line("UH-2", "motor_hp").value, line("UH-2", "motor_hp").unit, line("UH-2", "motor_hp").note], ["16", "W", "printed '16'"]);
+  assert.equal(line("UH-2", "heating_mbh").unit, "BTU/H");
+  // Without the cell's unit, "16W" would key 16 hp: the transcriber reads the
+  // number and drops a trailing unit word.
+  assert.equal(parseNumber("16W"), "16");
+});
+
 const part = (n, cols, cells) => `TABLE
 sheet: t.pdf#3
 title: WATER SOURCE HEAT PUMP

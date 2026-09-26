@@ -51,7 +51,9 @@
 // with the printed text in the note, so a pipeline that picks one scores
 // "invented". "col: <header> => <attr> [<unit>]" records the unit the
 // header PRINTS when it differs from the attribute's usual one (a static
-// pressure printed in "(FT)"); values are never converted here. The
+// pressure printed in "(FT)"); a number cell typed "<number> [<unit>]" is
+// one cell printed in a unit its column's header does not name (an HP column
+// whose one cell prints "16W"). Values are never converted here. The
 // attribute vocabulary below is the key's own; WP1 maps every keyed
 // attribute to exactly one canonical attribute.
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
@@ -310,8 +312,16 @@ export function expandTranscription(doc) {
           }
           let value;
           let note = "";
+          // "<number> [<unit>]": this one cell prints a unit its column's
+          // header does not name ("16W" in an HP column); the key line takes
+          // the cell's unit, and the printed text goes in the note.
+          const cellUnit = (spec.type === "num" || spec.type === "size") ? cell.match(/^(.*\S)\s*\[([^\]]+)\]$/) : null;
           try {
-            if (spec.type === "num") value = parseNumber(cell);
+            if (cellUnit) {
+              value = parseNumber(cellUnit[1]);
+              unit = cellUnit[2];
+              note = `printed '${cellUnit[1]}'`;
+            } else if (spec.type === "num") value = parseNumber(cell);
             else if (spec.type === "size") value = parseSize(cell);
             else if (spec.type === "enum") {
               const e = parseEnum(cell, spec.values);

@@ -22,7 +22,8 @@
 //
 // Units: a number attribute has one canonical unit and accepts only printed
 // units of the same dimension, each with an exact factor (48,400 BTU/H =
-// 48.4 MBH; 745.7 W = 1 hp). Temperatures accept °F only: °C would need an
+// 48.4 MBH; 745.7 W = 1 hp; 60 GPH = 1 GPM, a fuel-oil pump's flow).
+// Temperatures accept °F only: °C would need an
 // offset, and the keys type every bracketed SI column "-". A value is never
 // converted across dimensions, and never guessed from a header that prints the
 // wrong unit.
@@ -39,7 +40,7 @@ import { z } from "zod";
 export const UNITS = {
   "": { "": 1 }, // counts: phase, quantities, rows, stages, speeds, MERV
   cfm: { cfm: 1 },
-  gpm: { gpm: 1 },
+  gpm: { gpm: 1, GPH: 1 / 60 },
   F: { F: 1 },
   "%": { "%": 1 },
   MBH: { MBH: 1, "BTU/H": 0.001 },
@@ -76,14 +77,14 @@ export interface AttributeSpec {
   noExampleReason?: string;
 }
 
-const NO_EXAMPLE = "No keyed table in the present corpus (23 of 121 sets, AS-2) prints it.";
+const NO_EXAMPLE = "No committed key's table prints it (WP0.2's keys and the second tier's, AS-17).";
 
 const ATTRIBUTE_TABLE = {
   area_served: { kind: "text", unit: null, definition: "The area, room or system the unit serves, as printed (AREA SERVED, SERVES, a SERVICE column naming an area).", example: { source: "key", set: "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for", header: "AREA AND/OR BLDG SERVED" } },
   bas_interface: { kind: "text", unit: null, definition: "A printed network or BAS interface (BACNET, BACNET IP, a hardwired DDC interface, an existing BMS connection).", example: { source: "key", set: "itd-d1-lab", header: "NOTE 5, where the row's REMARKS cite it: PROVIDE BACnet INTEGRATION CARD" } },
   building: { kind: "text", unit: null, definition: "The building the unit serves or sits in, where a schedule column prints one (multi-building sets).", example: null, noExampleReason: NO_EXAMPLE },
   capacity_lb_hr: { kind: "number", unit: "lb/hr", definition: "Humidifier steam capacity.", example: { source: "key", set: "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for", header: "STEAM / FLOW / LBS/HR" } },
-  capacity_mbh: { kind: "number", unit: "MBH", definition: "Heat exchanger capacity.", example: null, noExampleReason: NO_EXAMPLE },
+  capacity_mbh: { kind: "number", unit: "MBH", definition: "Heat exchanger capacity.", example: { source: "key", set: "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers", header: "MIN HEAT EXCHANGED / MBH" } },
   cells: { kind: "number", unit: "", definition: "Cooling tower cells.", example: { source: "key", set: "094_FL_Orange_County_Regional_History_Center_HVAC", header: "# Of Cells" } },
   cfm: { kind: "number", unit: "cfm", definition: "The unit's rated airflow: the design or high-speed CFM.", example: { source: "key", set: "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for", header: "AIR FLOW / CFM" } },
   cfm_heat: { kind: "number", unit: "cfm", definition: "Heating airflow of a terminal unit, where printed apart from the minimum.", example: { source: "key", set: "12_MT_MSU_ReidHall_Renovation", header: "DESIGN QUANTITIES / HOT: heating maximum" } },
@@ -153,7 +154,7 @@ const ATTRIBUTE_TABLE = {
   output_mbh: { kind: "number", unit: "MBH", definition: "Boiler output capacity.", example: { source: "key", set: "069_ID_ITD_District_2_Laboratory_Heating_Upgrades", header: "CAPACITY / OUTPUT MBH" } },
   phase: { kind: "number", unit: "", definition: "Phase of the unit's power connection (1 or 3).", example: { source: "key", set: "navfac-cherry-point-atc", header: "ELECTRICAL / VOLTS/PH/HZ: phase part" } },
   pipes: { kind: "number", unit: "", definition: "Pipes to a fan coil: 2 or 4.", example: null, noExampleReason: NO_EXAMPLE },
-  primary_conn_in: { kind: "number", unit: "in", definition: "Primary-side connection size of a heat exchanger, inches.", example: null, noExampleReason: NO_EXAMPLE },
+  primary_conn_in: { kind: "number", unit: "in", definition: "Primary-side connection size of a heat exchanger, inches.", example: { source: "key", set: "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers", header: "NOTE 5" } },
   primary_ewt_f: { kind: "number", unit: "F", definition: "Primary-side water entering a heat exchanger.", example: null, noExampleReason: NO_EXAMPLE },
   primary_gpm: { kind: "number", unit: "gpm", definition: "Primary-side water flow of a heat exchanger.", example: null, noExampleReason: NO_EXAMPLE },
   primary_lwt_f: { kind: "number", unit: "F", definition: "Primary-side water leaving a heat exchanger.", example: null, noExampleReason: NO_EXAMPLE },
@@ -167,7 +168,7 @@ const ATTRIBUTE_TABLE = {
   return_fan_hp: { kind: "number", unit: "hp", definition: "Horsepower of each return or relief fan motor.", example: null, noExampleReason: NO_EXAMPLE },
   return_fan_qty: { kind: "number", unit: "", definition: "Return or relief fans in an air handler.", example: { source: "column", set: "federal-mech", header: "RELIEF FAN / RF QTY" } },
   rpm: { kind: "number", unit: "rpm", definition: "Rotational speed as printed (a fan's or motor's).", example: { source: "key", set: "federal-mech", header: "MOTOR DATA / RPM" } },
-  secondary_conn_in: { kind: "number", unit: "in", definition: "Secondary-side connection size of a heat exchanger, inches.", example: null, noExampleReason: NO_EXAMPLE },
+  secondary_conn_in: { kind: "number", unit: "in", definition: "Secondary-side connection size of a heat exchanger, inches.", example: { source: "key", set: "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers", header: "NOTE 5" } },
   secondary_ewt_f: { kind: "number", unit: "F", definition: "Secondary-side water entering a heat exchanger.", example: { source: "key", set: "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for", header: "WATER CONDITIONS / EWT / °F" } },
   secondary_gpm: { kind: "number", unit: "gpm", definition: "Secondary-side water flow of a heat exchanger.", example: { source: "key", set: "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for", header: "WATER CONDITIONS / FLOW / GPM" } },
   secondary_lwt_f: { kind: "number", unit: "F", definition: "Secondary-side water leaving a heat exchanger.", example: { source: "key", set: "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for", header: "WATER CONDITIONS / LWT / °F" } },
@@ -177,8 +178,8 @@ const ATTRIBUTE_TABLE = {
   source_gpm: { kind: "number", unit: "gpm", definition: "Source-loop water flow of a water-source heat pump.", example: { source: "column", set: "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center", header: "COOLING / WATER SIDE / FLOW (GPM)" } },
   source_lwt_f: { kind: "number", unit: "F", definition: "Source-loop water leaving a water-source heat pump.", example: { source: "column", set: "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center", header: "COOLING / WATER SIDE / LWT (°F)" } },
   source_wpd_ft: { kind: "number", unit: "ft", definition: "Source-loop water pressure drop of a water-source heat pump, feet of water.", example: { source: "column", set: "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center", header: "COOLING / WATER SIDE / WPD (FT)" } },
-  steam_lb_hr: { kind: "number", unit: "lb/hr", definition: "Steam flow (condensate load) of a steam coil.", example: null, noExampleReason: NO_EXAMPLE },
-  steam_psig: { kind: "number", unit: "psig", definition: "Steam pressure supplied to a steam coil, psig.", example: null, noExampleReason: NO_EXAMPLE },
+  steam_lb_hr: { kind: "number", unit: "lb/hr", definition: "Steam flow (condensate load) of a steam coil.", example: { source: "key", set: "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers", header: "TRAP / LBS/HR: the heater's condensate load" } },
+  steam_psig: { kind: "number", unit: "psig", definition: "Steam pressure supplied to a steam coil, psig.", example: { source: "key", set: "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers", header: "PRESS ENT HEATER / PSIG" } },
   supply_cfm: { kind: "number", unit: "cfm", definition: "Supply airflow of an air handler: the design or maximum.", example: { source: "key", set: "004_MO_T2504_03_Interior_and_Exterior_Renovation", header: "SUPPLY FAN / CFM" } },
   supply_fan_hp: { kind: "number", unit: "hp", definition: "Horsepower of each supply fan motor.", example: { source: "key", set: "004_MO_T2504_03_Interior_and_Exterior_Renovation", header: "SUPPLY FAN / HP" } },
   supply_fan_qty: { kind: "number", unit: "", definition: "Supply fans in the unit.", example: { source: "key", set: "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri", header: "SUPPLY / MOTOR QUANTITY" } },

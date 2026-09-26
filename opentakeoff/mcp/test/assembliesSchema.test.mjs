@@ -12,7 +12,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { KEY_ATTRIBUTES, expandTranscription, parseTranscription } from "../scripts/assemblies-key-transcribe.mjs";
 import {
-  ASSEMBLY_FAMILIES, ATTRIBUTES, familyAttributes, canonicalAttributeFor, keyValueToCanonical,
+  ASSEMBLY_FAMILIES, ATTRIBUTES, familyAttributes, canonicalAttributeFor, keyValueToCanonical, toCanonical,
 } from "../../web/src/lib/assemblies/attributes.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -89,3 +89,10 @@ test("GATE 1: every example source column is real, and an attribute with no exam
       }
     }
   });
+
+test("units: a flow printed in GPH converts to GPM (60 GPH = 1 GPM); a watt rating converts to hp", () => {
+  assert.equal(toCanonical("gpm", 757, "GPH"), 757 / 60);
+  assert.equal(toCanonical("gpm", 60, "GPH"), 1);
+  assert.equal(toCanonical("motor_hp", 745.7, "W"), 1);
+  assert.throws(() => toCanonical("gpm", 1, "GPD"), /does not accept unit "GPD"/);
+});
