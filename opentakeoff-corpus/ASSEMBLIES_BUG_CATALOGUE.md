@@ -428,7 +428,7 @@ No fitted value came from a held-out key.
 
 ---
 
-## AS-15 — every corpus-eval scorer child spawns an orphan that re-scores its set, forever (OPEN — owned by the scorers' loops; worked around per run)
+## AS-15 — every corpus-eval scorer child spawns an orphan that re-scores its set, forever (FIXED 2026-09-26: the child exits after its write)
 
 **Found:** 2026-09-23, recording the loop's corpus-eval baseline (task: measure 1).
 
@@ -596,6 +596,30 @@ children while a link held about 6 GB:
 Their "no snapshot" (`reports/control-intent/06-unseen-audit.json`) is
 therefore not shown to be a ceiling of their own. They are to be
 re-snapshotted once no chain is alive.
+
+**Fix (2026-09-26).** Two more scripts have the same `--single-json`
+branch and fall through the same way: `reference-eval.mjs` and
+`table-box-eval.mjs`. In all six, the child now awaits its write and then
+exits, so the orchestrator code below never runs in a child:
+`await new Promise((flushed) => process.stdout.write(json, flushed));
+process.exit(0);`. That is the proposed fix above. The owning loops'
+scoring is untouched; only how the child ends changes. The standing goal
+("do whatever you need to do") lets this loop fix it now, since the chain
+was costing its own runs their snapshots.
+
+Checked with each fixed scorer's orchestrator on one dev set
+(`source /root/.ot-env.sh`, one child). After every run, no `--single-json`
+process for that set was alive. Each set's lines equal the baseline's
+(`reports/assemblies/00-corpus-eval-baseline.txt`):
+- takeoff + reference, bldg5406: its row and its 13-line mismatch block;
+- sheet graph, bldg5406: its row;
+- tag census, bldg5406: its 10-line block (exit 1 by design, below floor);
+- table recall, 12_MT: its row and 2 EXTRA lines;
+- reference alone, bldg5406: its row;
+- table boxes, 12_MT (no baseline): exit 0.
+
+The live baker chain turned over at 10:10:27. Its new link loaded the fixed
+`graph-eval.mjs`, so it ends when that link does.
 
 ---
 

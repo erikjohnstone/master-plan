@@ -74,6 +74,23 @@ export function compareWithRecord(applied, record) {
   };
 }
 
+/** A run over some sets (`ids`) against the record: it is compared with
+ * those sets' part of the record only, and the record it leaves keeps every
+ * other set's decisions, verdicts and status as they were. A new decision is
+ * "unaudited" until a person checks it. */
+export function mergeRun(record, ids, sets, applied) {
+  const inRun = new Set(ids);
+  const prior = record.decisions ?? [];
+  const cmp = compareWithRecord(applied, prior.filter((r) => inRun.has(r.set)));
+  const kept = prior.filter((r) => !inRun.has(r.set));
+  const had = new Map(prior.map((r) => [decisionKey(r), r]));
+  const decisions = [...kept, ...applied.map((d) => {
+    const h = had.get(decisionKey(d));
+    return { set: d.set, tag: d.tag, family: d.family, question: d.question, value: d.value, rule: d.rule, readers: d.readers, cite: d.cite, verdict: h?.verdict ?? "unaudited", ...(h?.checked ? { checked: h.checked } : {}), ...(h?.note ? { note: h.note } : {}) };
+  })];
+  return { cmp, kept, decisions, sets: [...(record.sets ?? []).filter((s) => !inRun.has(s.id)), ...sets] };
+}
+
 async function main() {
   const argv = process.argv.slice(2);
   const flag = (f) => argv.includes(f);
@@ -136,28 +153,37 @@ async function main() {
     sets.push({ id, status: "read", units, packets, applied: mine.length, ...(missing ? { not_recorded: missing } : {}) });
     process.stderr.write(`  ${id}: ${units} units, ${packets} packets; applied ${mine.length}${missing ? `; ${missing} requests not recorded (run with --live)` : ""}\n`);
   }
-  const cmp = compareWithRecord(applied, recordFile.decisions);
-  const read = sets.filter((s) => s.status === "read");
-  const L = [];
-  L.push(`UNSEEN AUDIT — ${ids.length} eligible sets, ${read.length} read (scheduled units and control packets both), ${sets.filter((s) => s.status === "no_snapshot").length} with no snapshot, ${sets.filter((s) => s.status.startsWith("no_") && s.status !== "no_snapshot").length} with units or packets only`);
-  L.push(`  model calls: replayed ${calls.replayed}, live ${calls.live}, not recorded ${calls.not_recorded}, failed ${calls.failed}`);
-  L.push(`  applied ${applied.length}: audited ${cmp.audited.length} (right ${cmp.right}, wrong ${cmp.wrong}, unaudited ${cmp.unaudited}); new ${cmp.new.length}; gone ${cmp.gone.length}`);
-  for (const d of cmp.new) L.push(`  NEW  ${d.set.slice(0, 24)} ${d.tag} ${d.question}=${JSON.stringify(d.value)} [${d.rule}] ${d.cite ? `"${d.cite.text.slice(0, 120)}"` : ""}`);
-  for (const d of cmp.gone) L.push(`  GONE ${d.set.slice(0, 24)} ${d.tag} ${d.question}=${JSON.stringify(d.value)} [${d.rule}]`);
-  for (const d of cmp.audited.filter((x) => x.verdict === "wrong")) L.push(`  WRONG ${d.set.slice(0, 24)} ${d.tag} ${d.question}=${JSON.stringify(d.value)} [${d.rule}]`);
-  const perSet = read.filter((s) => s.applied).sort((a, b) => b.applied - a.applied).map((s) => `${s.id.slice(0, 6)} ${s.applied}`).join(", ");
-  if (perSet) L.push(`  per set: ${perSet}`);
-  for (const l of L) console.error(l);
+  // A run over some of the sets is compared with their part of the record
+  // only, and --report rewrites only that part: the other sets' decisions,
+  // verdicts and statuses stay as recorded.
+  const merged = mergeRun(recordFile, ids, sets, applied);
+  const { cmp } = merged;
+  const count = (xs, v) => xs.filter((d) => d.verdict === v).length;
+  const summary = (setList, kept) => {
+    const read = setList.filter((s) => s.status === "read");
+    const L = [];
+    const whole = ids.length === eligible.length || kept !== null;
+    L.push(`UNSEEN AUDIT — ${whole ? `${eligible.length} eligible sets` : `${ids.length} of ${eligible.length} eligible sets`}, ${read.length} read (scheduled units and control packets both), ${setList.filter((s) => s.status === "no_snapshot").length} with no snapshot, ${setList.filter((s) => s.status.startsWith("no_") && s.status !== "no_snapshot").length} with units or packets only`);
+    L.push(`  model calls: replayed ${calls.replayed}, live ${calls.live}, not recorded ${calls.not_recorded}, failed ${calls.failed}${kept?.length ? ` (this run's ${ids.length} sets)` : ""}`);
+    const k = kept ?? [];
+    const unaudited = k.length - count(k, "right") - count(k, "wrong") + cmp.unaudited;
+    L.push(`  applied ${k.length + applied.length}: audited ${k.length + cmp.audited.length} (right ${count(k, "right") + cmp.right}, wrong ${count(k, "wrong") + cmp.wrong}, unaudited ${unaudited}); new ${cmp.new.length}; gone ${cmp.gone.length}`);
+    for (const d of cmp.new) L.push(`  NEW  ${d.set.slice(0, 24)} ${d.tag} ${d.question}=${JSON.stringify(d.value)} [${d.rule}] ${d.cite ? `"${d.cite.text.slice(0, 120)}"` : ""}`);
+    for (const d of cmp.gone) L.push(`  GONE ${d.set.slice(0, 24)} ${d.tag} ${d.question}=${JSON.stringify(d.value)} [${d.rule}]`);
+    for (const d of [...k, ...cmp.audited].filter((x) => x.verdict === "wrong")) L.push(`  WRONG ${d.set.slice(0, 24)} ${d.tag} ${d.question}=${JSON.stringify(d.value)} [${d.rule}]`);
+    const perSet = read.filter((s) => s.applied).sort((a, b) => b.applied - a.applied).map((s) => `${s.id.slice(0, 6)} ${s.applied}`).join(", ");
+    if (perSet) L.push(`  per set: ${perSet}`);
+    return L;
+  };
+  // What this run read; with --report, the record after it.
+  for (const l of summary(sets, null)) console.error(l);
   if (flag("--report")) {
-    const kept = new Map(recordFile.decisions.map((r) => [decisionKey(r), r]));
-    const decisions = applied.map((d) => {
-      const had = kept.get(decisionKey(d));
-      return { set: d.set, tag: d.tag, family: d.family, question: d.question, value: d.value, rule: d.rule, readers: d.readers, cite: d.cite, verdict: had?.verdict ?? "unaudited", ...(had?.checked ? { checked: had.checked } : {}), ...(had?.note ? { note: had.note } : {}) };
-    });
+    const { decisions, sets: allSets } = merged;
+    const L = summary(allSets, merged.kept);
     const out = {
       about: "Every decision the readers apply on the unseen corpus sets, with a person's verdict against its cites and the drawing (right, wrong, or unaudited until checked). mcp/scripts/control-intent-unseen-audit.mjs replays the recorded runs (unseen-runs/) and compares.",
-      sets,
-      totals: { eligible: ids.length, read: read.length, applied: applied.length, right: cmp.right, wrong: cmp.wrong, unaudited: cmp.unaudited + cmp.new.length, gone: cmp.gone.map((d) => ({ set: d.set, tag: d.tag, question: d.question, value: d.value, rule: d.rule })) },
+      sets: allSets,
+      totals: { eligible: eligible.length, read: allSets.filter((s) => s.status === "read").length, applied: decisions.length, right: count(decisions, "right"), wrong: count(decisions, "wrong"), unaudited: decisions.length - count(decisions, "right") - count(decisions, "wrong"), gone: cmp.gone.map((d) => ({ set: d.set, tag: d.tag, question: d.question, value: d.value, rule: d.rule })) },
       decisions,
     };
     writeFileSync(recordPath, `${JSON.stringify(out, null, 1)}\n`);

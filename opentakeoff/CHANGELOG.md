@@ -171,12 +171,23 @@
   recorded. Its record, `06-unseen-audit.json`, holds every applied
   decision with a person's verdict against its cites and the drawing. A run
   lists every decision that is new since the record (to be checked before
-  it counts), every one that is gone, and any the record calls wrong. At
+  it counts), every one that is gone, and any the record calls wrong. A
+  run over some of the sets compares and rewrites only their part. At
   this commit it reads 90 sets, 53 with both scheduled units and control
   drawings, and replays 520 calls: 412 decisions apply, the same 412 the
   audit checked, all right. Two sets have no snapshot: the kernel's memory
   limit killed their compile while an orphaned scorer (AS-15) held about
   6 GB.
+
+- **Eval harness: a scorer's per-set child no longer re-scores its set
+  forever** (AS-15). Each corpus-eval scorer (`takeoff-eval`, `graph-eval`,
+  `tag-eval`, `table-recall-eval`), and `reference-eval` and
+  `table-box-eval`, runs each set in a `--single-json` child. That child
+  wrote its result with the exit in the write's callback, so it fell
+  through into the orchestrator below and spawned a child for the same set
+  before it exited. The orphan did the same, forever: up to 6 GB each, and
+  the container's memory limit then killed other runs' work. The child now
+  awaits its write and exits. Scores are unchanged.
 
 - **Eval harness: a character split across two pipe reads no longer
   corrupts a snapshot.** The assemblies evals read each document's JSON from
