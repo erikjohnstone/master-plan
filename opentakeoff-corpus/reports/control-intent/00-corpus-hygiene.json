@@ -5,6 +5,9 @@
    "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations"
   ],
   "heldout_drafter": [
+   "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+   "021_XX_Laboratory_building_mechanical_drawings_lab",
+   "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
    "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
    "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
    "075_MT_Renne_Library_Innovation_Learning_Studio",
@@ -21,6 +24,9 @@
    "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
    "18_OR_BakerMS_HVAC_Electrical_FullSet",
    "itd-d1-lab-raster"
+  ],
+  "unseen_copy": [
+   "010_US_WWYK240146_Design_Implement_Monitoring_Control"
   ]
  },
  "split_dev_heldout_overlaps": [],
@@ -117,6 +123,27 @@
    "share": 1.0
   },
   {
+   "set": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+   "relation": "drafter",
+   "of": "burns-mcdonnell",
+   "side": "heldout",
+   "pages": "drafters.json"
+  },
+  {
+   "set": "021_XX_Laboratory_building_mechanical_drawings_lab",
+   "relation": "drafter",
+   "of": "usda-ars-southeast-area",
+   "side": "heldout",
+   "pages": "drafters.json"
+  },
+  {
+   "set": "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+   "relation": "drafter",
+   "of": "usda-ars-southeast-area",
+   "side": "heldout",
+   "pages": "drafters.json"
+  },
+  {
    "set": "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
    "relation": "drafter",
    "of": "coffman-engineers",
@@ -150,6 +177,13 @@
    "of": "navfac-cherry-point-atc",
    "side": "heldout",
    "share": 1.0
+  },
+  {
+   "set": "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+   "relation": "duplicate",
+   "of": "tinker-afb-iwcs-controls",
+   "side": "unseen",
+   "share": "drafters.json"
   }
  ]
 }

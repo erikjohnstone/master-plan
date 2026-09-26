@@ -15,7 +15,9 @@ pipeline, so it reads no output of any held-out document):
 - **drafter:** a set whose text names the firm that drafted a held-out
   document (`reports/assemblies/drafters.json`; the split keeps one drafter's
   documents on one side, so tuning on such a set would tune on a held-out
-  drafter's style);
+  drafter's style), or that drafters.json itself places in a held-out
+  drafter's group: a firm printed only as an image has no text to find, and
+  is named from a render of the title block;
 - **duplicate / derived:** a copy drafters.json already records (a derived
   rendition with no text layer is found by no other test).
 
@@ -145,6 +147,12 @@ def main(argv: list[str]) -> int:
                 rows.append({"set": other, "relation": "near", "of": sid, "side": role[sid], "share": round(share, 2)})
         for group, pages in sorted(named.items()):
             rows.append({"set": other, "relation": "drafter", "of": group, "side": "heldout", "pages": pages})
+    # A held-out drafter's document that drafters.json names from a render of
+    # its title block (the firm printed as an image, with no text form).
+    for group in sorted(held_groups):
+        for other in drafters["groups"][group]["sets"]:
+            if other in seen and other not in role and not any(r["set"] == other and r["relation"] == "drafter" for r in rows):
+                rows.append({"set": other, "relation": "drafter", "of": group, "side": "heldout", "pages": "drafters.json"})
     # Copies drafters.json already records (a derived rendition has no text
     # layer to compare: "itd-d1-lab-raster").
     for relation, entries in (("duplicate", drafters.get("duplicates", {})), ("derived", drafters.get("derived", {}))):
@@ -152,6 +160,9 @@ def main(argv: list[str]) -> int:
             of = v.get("duplicate_of") or v.get("derived_from")
             if other in seen and of in role and not any(r["set"] == other and r["of"] == of for r in rows):
                 rows.append({"set": other, "relation": relation, "of": of, "side": role[of], "share": "drafters.json"})
+            elif other in seen and of in seen and of not in role:
+                # A copy of another unseen set: the original counts, once.
+                rows.append({"set": other, "relation": relation, "of": of, "side": "unseen", "share": "drafters.json"})
 
     # The split itself: a dev document sharing drawings with a held-out one
     # would leak held-out content into tuning.
@@ -167,9 +178,10 @@ def main(argv: list[str]) -> int:
     held_twins = sorted({r["set"] for r in rows if r["side"] == "heldout" and r["relation"] in ("twin", "duplicate", "derived")})
     held_drafter = sorted({r["set"] for r in rows if r["relation"] == "drafter"} - set(held_twins))
     dev_like = sorted({r["set"] for r in rows if r["side"] == "dev"} - set(held_twins) - set(held_drafter))
+    unseen_copies = sorted({r["set"] for r in rows if r["side"] == "unseen"} - set(held_twins) - set(held_drafter) - set(dev_like))
     summary = {
         "scanned": len(seen),
-        "not_unseen": {"heldout_twin": held_twins, "heldout_drafter": held_drafter, "dev_twin_or_near": dev_like},
+        "not_unseen": {"heldout_twin": held_twins, "heldout_drafter": held_drafter, "dev_twin_or_near": dev_like, "unseen_copy": unseen_copies},
         "split_dev_heldout_overlaps": split_pairs,
         "rows": sorted(rows, key=lambda r: (r["side"], r["relation"], r["set"])),
     }
@@ -181,6 +193,7 @@ def main(argv: list[str]) -> int:
         f"- **Held-out twin (never read):** {', '.join(f'`{s}`' for s in held_twins) or 'none'}",
         f"- **Held-out drafter (never tuned on):** {', '.join(f'`{s}`' for s in held_drafter) or 'none'}",
         f"- **Dev twin or near copy (counts as dev, never as unseen):** {', '.join(f'`{s}`' for s in dev_like) or 'none'}",
+        f"- **Copy of another unseen set (the original counts, once):** {', '.join(f'`{s}`' for s in unseen_copies) or 'none'}",
         f"- **Dev and held-out documents sharing printed text (>= {NEAR:.0%}):** "
         + (", ".join(f"`{p['dev']}` / `{p['heldout']}` ({p['share']})" for p in split_pairs) or "none"),
         "",

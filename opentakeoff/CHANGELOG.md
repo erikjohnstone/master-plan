@@ -205,6 +205,23 @@
   it (4 units, 3 control drawings) and applied nothing there. A set that
   stops being unseen now leaves the audit's record, decisions and all, and
   the record keeps naming it.
+  A by-eye check of every eligible document's title block found three more
+  that no text scan could: 015_VA prints a Burns & McDonnell joint venture's
+  logo as an image, and 021_XX and 023_US are USDA ARS in-house designs, as
+  held-out 018_GA is. `drafters.json` now names every eligible document's
+  drafter, with its evidence, and the scan withholds any document it places
+  with a held-out drafter. 010_US, a byte-identical copy of another unseen
+  set, is counted once. The audit's record drops to 85 sets and 412
+  decisions, all right (CONTROL_INTENT_BUG_CATALOGUE CI-32).
+
+- **Eval harness: the assemblies census reads the cached sheet graph.**
+  `assemblies-baseline.mjs` rebuilt every document's graph through a fresh
+  Session, taking minutes a set, where the attribute and typical evals read
+  the content-addressed graph cache. It now reads the same cache and
+  compiles from the graph alone, as they do. Re-run on the 23 committed
+  sets, the census is identical to the committed one (timing aside), at
+  about a second a set. The seeded draws moved to `assembliesSplit.mjs`,
+  pure functions a test reproduces.
 
 - **Eval harness: a scorer's per-set child no longer re-scores its set
   forever** (AS-15). Each corpus-eval scorer (`takeoff-eval`, `graph-eval`,

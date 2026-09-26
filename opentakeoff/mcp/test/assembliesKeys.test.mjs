@@ -11,6 +11,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { expandTranscription, parseNumber, parseTranscription, renderKeyCsv } from "../scripts/assemblies-key-transcribe.mjs";
+import { drawTier2, HELDOUT_MIN_DOCS, KEY_ROWS_PER_TABLE_MAX, TIER2_DEV_MIN_DOCS } from "../scripts/assembliesSplit.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP = resolve(HERE, "..");
@@ -243,4 +244,107 @@ test("WP0.3: keys stay inside the frozen scope (dev: claimed tables; held-out: t
       }
     }
   }
+});
+
+// AS-2 / AS-17 — the second tier's draw (scripts/assembliesSplit.mjs drawTier2):
+// which staged documents become dev 2, held-out 2, or withheld.
+// A census row: one document with the given families, each in `tables` tables of `rows` rows.
+const doc = (id, fams, { tables = 1, rows = 12 } = {}) => ({
+  id,
+  families: Object.fromEntries(fams.map((f) => [f, {
+    items: tables * rows,
+    table_rows: Object.fromEntries(Array.from({ length: tables }, (_, i) => [`${id}.pdf#${i + 1} :: ${f} SCHEDULE ${i + 1}`, rows])),
+  }])),
+});
+
+function world() {
+  const perSet = [];
+  const groups = {};
+  // 16 one-document drafters, the common families; two of them also print rarer ones.
+  for (let i = 0; i < 16; i++) {
+    const id = `s${String(i).padStart(2, "0")}`;
+    const fams = [["VAV", "AHU", "FAN"], ["PUMP", "BOILER"], ["FCU", "UNIT_HEATER"], ["FAN", "PUMP"]][i % 4];
+    perSet.push(doc(id, i === 5 ? [...fams, "HUMIDIFIER"] : i === 9 ? [...fams, "COOLING_TOWER", "HEAT_EXCHANGER"] : fams, { tables: 1 + (i % 3), rows: 10 + i * 3 }));
+    groups[`firm-${id}`] = { sets: [id] };
+  }
+  // One drafter with three documents, one with a copy and a document with no keyed family.
+  for (const id of ["m1", "m2", "m3"]) perSet.push(doc(id, ["VAV", "AHU"]));
+  groups["firm-multi"] = { sets: ["m1", "m2", "m3", "m4"] };
+  perSet.push(doc("m4", ["CONTROL_DAMPER"]));
+  // A document by a WP0.2 dev drafter, and a set the census could not measure.
+  perSet.push(doc("d1", ["VAV"]));
+  groups["firm-dev"] = { sets: ["dev-a", "d1"] };
+  perSet.push({ id: "err", error: "out of memory" });
+  groups["firm-err"] = { sets: ["err"] };
+  const split = { dev: { sets: ["dev-a"] }, heldout: { sets: ["held-b"] } };
+  groups["firm-held"] = { sets: ["held-b"] };
+  const eligible = perSet.map((r) => r.id);
+  return { census: { per_set: perSet }, drafters: { groups, duplicates: {}, derived: {} }, split, eligible };
+}
+
+test("tier 2: a pure function of its inputs; one document per drafter; no drafter on both sides", () => {
+  const w = world();
+  const a = drawTier2(w.census, w.drafters, w.split, 20260926, { eligible: w.eligible });
+  const b = drawTier2(structuredClone(w.census), structuredClone(w.drafters), w.split, 20260926, { eligible: [...w.eligible] });
+  assert.deepEqual(a, b);
+  assert.notDeepEqual(a.heldout.sets, drawTier2(w.census, w.drafters, w.split, 7, { eligible: w.eligible }).heldout.sets);
+  assert.equal(a.heldout.sets.length, HELDOUT_MIN_DOCS);
+  assert.ok(a.dev.sets.length >= TIER2_DEV_MIN_DOCS);
+  const groupOf = (id) => Object.entries(w.drafters.groups).find(([, g]) => g.sets.includes(id))[0];
+  const devGroups = a.dev.sets.map(groupOf);
+  const heldGroups = a.heldout.sets.map(groupOf);
+  assert.equal(new Set(devGroups).size, devGroups.length, "one dev document per drafter");
+  assert.equal(new Set(heldGroups).size, heldGroups.length, "one held-out document per drafter");
+  assert.deepEqual(devGroups.filter((g) => heldGroups.includes(g)), []);
+  // The dev drafter's document is left out; the unmeasured set and the damper-only document are not in the population.
+  assert.deepEqual(a.left_out_split_drafters, [{ set: "d1", group: "firm-dev", shares_drafter_with: ["dev-a"] }]);
+  assert.equal(a.population_docs, 19);
+  assert.ok(![...a.dev.sets, ...a.heldout.sets].some((id) => ["d1", "err", "m4"].includes(id)));
+});
+
+test("tier 2: a held-out drafter's other documents are withheld; an examined document's drafter never goes to held-out", () => {
+  const w = world();
+  // Find a seed whose held-out side takes the three-document drafter, then mark one of its documents examined.
+  let seed = 1;
+  let t;
+  for (; seed < 500; seed++) {
+    t = drawTier2(w.census, w.drafters, w.split, seed, { eligible: w.eligible });
+    if (t.heldout.groups.includes("firm-multi")) break;
+  }
+  assert.ok(t.heldout.groups.includes("firm-multi"), "some seed puts the multi-document drafter on the held-out side");
+  const pick = t.heldout.sets.find((id) => id.startsWith("m"));
+  assert.deepEqual(t.heldout.withheld, ["m1", "m2", "m3", "m4"].filter((id) => id !== pick));
+  const e = drawTier2(w.census, w.drafters, w.split, seed, { eligible: w.eligible, examined: ["m2"] });
+  assert.ok(!e.heldout.groups.includes("firm-multi"));
+  assert.deepEqual(e.skipped_for_heldout.find((s) => s.group === "firm-multi"), { group: "firm-multi", examined: ["m2"] });
+  assert.ok(!e.heldout.withheld.some((id) => id.startsWith("m")));
+});
+
+test("tier 2: dev 2 covers every required family the population holds, and held-out 2 never takes the only document of one", () => {
+  const w = world();
+  for (const seed of [1, 2, 3, 20260926, 99]) {
+    const t = drawTier2(w.census, w.drafters, w.split, seed, { eligible: w.eligible });
+    assert.deepEqual(t.dev_coverage_missing, [], `seed ${seed}`);
+    // s05 alone prints a humidifier and s09 alone a cooling tower and HX: neither can be held out.
+    assert.ok(!t.heldout.sets.includes("s05") && !t.heldout.sets.includes("s09"), `seed ${seed}`);
+    assert.ok(t.dev.sets.includes("s05") && t.dev.sets.includes("s09"), `seed ${seed}`);
+    assert.deepEqual(t.required_coverage_missing_from_population, ["chiller", "ERV"]);
+    // One table per document × keyed family, capped rows.
+    for (const side of [t.dev, t.heldout]) {
+      const strata = side.sets.flatMap((id) => Object.keys(w.census.per_set.find((r) => r.id === id).families));
+      assert.equal(side.tables.length, strata.length);
+      for (const tb of side.tables) assert.equal(tb.keyed_rows_max, Math.min(tb.claimed_rows, KEY_ROWS_PER_TABLE_MAX));
+    }
+  }
+});
+
+test("tier 2: an unplaced document, or an eligible one by a held-out drafter, stops the draw", () => {
+  const w = world();
+  const unplaced = structuredClone(w.drafters);
+  delete unplaced.groups["firm-s03"];
+  assert.throws(() => drawTier2(w.census, unplaced, w.split, 1, { eligible: w.eligible }), /does not place: s03/);
+  const leaked = structuredClone(w.drafters);
+  leaked.groups["firm-held"].sets.push("s04");
+  delete leaked.groups["firm-s04"];
+  assert.throws(() => drawTier2(w.census, leaked, w.split, 1, { eligible: w.eligible }), /s04 shares drafter group firm-held with held-out held-b.*hygiene scan must withhold it/);
 });

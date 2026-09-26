@@ -916,3 +916,33 @@ The exposure of `30_WA` through Coffman was already disclosed (CI-16, through 27
   it had not been part of the run. Test: `controlIntentUnseenAudit.test.mjs` (4/4).
 - The audit record drops 038_NC at its next run.
 
+**Addendum (same day): three more documents withheld, found on title-block renders.** Naming the drafter of every
+eligible document for the assemblies second tier (AS-17), each document's title block was also checked by eye on a
+low-resolution render of one sheet. A firm printed only as an image has no text for any scan to find:
+- **015_VA** prints the "MN+ BMcD Joint Venture" logo (Moffatt & Nichol with Burns & McDonnell) as an image in its
+  NAVFAC Mid-Atlantic title block (AM704), and its text layer holds no form of either name. Burns & McDonnell drafted
+  held-out `navfac-cherry-point-atc` (NAVFAC Mid-Atlantic, Chesapeake VA office) and `060_XX`. The audit read 015_VA
+  and checked its 7 applied decisions (all right). CI-17 was found on it and CI-20 was checked on its EF-6. Both are
+  general rules, each with examples from other sets (014_MT and 061_IA; 009_FL), but a held-out drafter's document
+  informed them. navfac and 060_XX were already reported as exposed (CI-16); 018_GA, 024_MO and bessemer are not
+  touched by this.
+- **021_XX** and **023_US** are USDA Agricultural Research Service in-house designs. 021_XX's title block (M-601) is
+  the ARS one, naming ARS project staff and no outside firm, and its text layer is nearly empty; 023_US's names the
+  ARS Pacific West Area office in Albany CA. Held-out `018_GA` was drafted by the ARS Southeast Area office. The
+  offices differ, but the ARS title block and standards are shared, so both are grouped with 018_GA as one design
+  organization: conservative, as the split's drafter rule is. The audit read 021_XX and checked its 6 applied
+  decisions (all right); CI-27's plant binder counted it among the seven sets it changed (its chillers and pumps took
+  two chilled water sequences as ambiguous, applying nothing there); and the CI-31 live probe ran on it. 023_US was
+  read with nothing applied. **018_GA's "no exposure" now carries this caveat:** a document of possibly the same
+  design organization was among the examples of one general binder rule.
+- `drafters.json` records all three in their held-out drafter's group with the render as evidence, and
+  `corpus-hygiene.py` now withholds any set drafters.json places in a held-out drafter's group, as it withholds a
+  set whose text names the firm.
+- **010_US** is byte-identical to `tinker-afb-iwcs-controls`. Both were counted as unseen sets (both have no
+  scheduled units, so no decision was counted twice). The scan now lists a copy of another unseen set, and the
+  audit counts the original once.
+- No other eligible document shows a held-out firm (Burns & McDonnell, Coffman, Crockett/Timberlake, U.P. Engineers
+  & Architects, USDA ARS) in its title block.
+- At the audit's next run the record withdraws 015_VA, 021_XX, 023_US, 038_NC and 010_US: 425 applied decisions
+  become 412, all right; 90 eligible sets become 85.
+

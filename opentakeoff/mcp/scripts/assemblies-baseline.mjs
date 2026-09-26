@@ -41,12 +41,13 @@
 //      OPENTAKEOFF_EVAL_NO_CACHE=1 to recompute.
 // Writes <corpus>/reports/assemblies/00-baseline.json and 00-baseline.md.
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { childStdoutText } from "./childText.mjs";
 import { createHash } from "node:crypto";
 import pLimit from "p-limit";
+import { CONTROLS_RELEVANT_FAMILIES, drawSplit } from "./assembliesSplit.mjs";
 import { resolveSetFiles, validateSets } from "./corpusFiles.mjs";
 import { cachedEvalResult } from "./evalCache.mjs";
 import { resolveVectorGridMode } from "../../web/src/lib/vectorGridMode.mjs";
@@ -76,41 +77,10 @@ validateSets(spec);
 const thisScript = fileURLToPath(import.meta.url);
 const SCRIPT_DIGEST = createHash("sha256").update(readFileSync(thisScript)).digest("hex");
 
-// Reporting buckets only (which compiled families a controls or hook-up
-// estimator would put a typical on). Not a classifier: the family names are
-// the compile's own HVAC_FAMILY_SPECS keys, taken as given.
-export const CONTROLS_RELEVANT_FAMILIES = new Set([
-  "AHU", "DOAH_UNIT", "DOAH_HANDLING", "DOAS", "OUTDOOR_AIR_UNIT", "FCU", "VAV", "RTU",
-  "AIR_COOLED_CHILLER", "HEAT_RECOVERY_CHILLER", "BOILER", "PUMP", "FAN", "UNIT_HEATER",
-  "CABINET_UNIT_HEATER", "HEAT_PUMP", "ERV", "CRAH", "RAH", "COOLING_TOWER", "HEAT_EXCHANGER",
-  "HUMIDIFIER", "DEHUMIDIFIER", "VARIABLE_FREQUENCY_DRIVE", "CONDENSING_UNIT", "VRF_INDOOR",
-  "VRF_OUTDOOR", "FURNACE", "DUCT_MOUNTED_COIL", "CONTROL_DAMPER", "CHW_CONTROL_VALVE",
-  "HHW_CONTROL_VALVE", "BYPASS_CONTROL_VALVE", "MIXING_VALVE", "LAB_AIR_VALVE",
-  "FUME_HOOD_DAMPER", "FIN_TUBE_RADIATION", "RADIANT_CEILING_PANEL",
-]);
-
-/** Equipment families whose schedule attributes the *.attrs.csv keys cover
- * (TRUTH: "equipment-schedule tables … claimed for a controls-relevant
- * family"). Devices — valves, dampers, VFDs, air valves — are selection
- * roles keyed with their own fields later (WP7), not equipment here. */
-export const ATTR_KEY_FAMILIES = new Set([...CONTROLS_RELEVANT_FAMILIES]
-  .filter((f) => !/VALVE|DAMPER|VARIABLE_FREQUENCY_DRIVE/.test(f)));
-
-/** The equipment GOAL TRUTH says the dev keys must cover, as compile families. */
-export const REQUIRED_KEY_COVERAGE = [
-  ["VAV", ["VAV"]],
-  ["AHU/DOAS/RTU", ["AHU", "DOAH_UNIT", "DOAH_HANDLING", "DOAS", "OUTDOOR_AIR_UNIT", "RTU"]],
-  ["FCU", ["FCU"]],
-  ["pump", ["PUMP"]],
-  ["fan", ["FAN"]],
-  ["UH/CUH", ["UNIT_HEATER", "CABINET_UNIT_HEATER"]],
-  ["boiler", ["BOILER"]],
-  ["chiller", ["AIR_COOLED_CHILLER", "HEAT_RECOVERY_CHILLER"]],
-  ["cooling tower", ["COOLING_TOWER"]],
-  ["HX", ["HEAT_EXCHANGER"]],
-  ["ERV", ["ERV"]],
-  ["humidifier", ["HUMIDIFIER"]],
-];
+// The family buckets, the coverage list and the seeded draws live in
+// assembliesSplit.mjs (pure, so tests reproduce every draw); re-exported here
+// for the scripts and comments that name this file.
+export { ATTR_KEY_FAMILIES, CONTROLS_RELEVANT_FAMILIES, HELDOUT_MIN_DOCS, KEY_ROWS_PER_TABLE_MAX, REQUIRED_KEY_COVERAGE, drawSplit } from "./assembliesSplit.mjs";
 
 /** Header text as printed, normalized only for counting: upper-case,
  * collapsed whitespace. No synonym folding — that is WP1's job, done from
@@ -118,16 +88,29 @@ export const REQUIRED_KEY_COVERAGE = [
 const normHeader = (h) => String(h || "").toUpperCase().replace(/\s+/g, " ").trim();
 
 async function computeSet(set) {
-  const { Session } = await import("../src/session.ts");
+  const { cachedSheetGraph } = await import("./sheetGraphCache.mjs");
   const { compileTakeoff } = await import("../../web/src/lib/compileTakeoff.mjs");
   const t0 = Date.now();
   const files = resolveSetFiles(corpus, spec, set);
-  const session = new Session();
-  for (let i = 0; i < files.length; i++) await session.loadPlan(files[i], { merge: i > 0 });
-  const graph = await session.graphForPipeline();
+  const sha = (p) => createHash("sha256").update(readFileSync(p)).digest("hex");
+  // The same content-addressed sheet graph the attribute and typical evals
+  // read (sheetGraphCache.mjs; its key covers the graph build), so the census
+  // never rebuilds a graph those runs already hold. The compiles read the
+  // graph alone (corpusTakeoff.mjs sheetRecords: the UI path).
+  const graph = await cachedSheetGraph(files[0], {
+    expectedSha256: sha(files[0]),
+    identity: files.slice(1).map(sha),
+    names: files.slice(1).map((p) => basename(p)),
+    compute: async () => {
+      const { Session } = await import("../src/session.ts");
+      const session = new Session();
+      for (let i = 0; i < files.length; i++) await session.loadPlan(files[i], { merge: i > 0 });
+      return session.graphForPipeline();
+    },
+  });
   const tGraph = Date.now() - t0;
 
-  const hvac = compileTakeoff(session, graph, "hvac_equipment");
+  const hvac = compileTakeoff(null, graph, "hvac_equipment");
   const families = {};
   for (const [family, cat] of Object.entries(hvac.categories || {})) {
     const items = cat.items || [];
@@ -157,13 +140,13 @@ async function computeSet(set) {
     };
   }
 
-  const valves = compileTakeoff(session, graph, "control_valves");
+  const valves = compileTakeoff(null, graph, "control_valves");
   const valveRows = {};
   for (const [family, cat] of Object.entries(valves.categories || {})) {
     if ((cat.items || []).length) valveRows[family] = cat.items.length;
   }
 
-  const coils = compileTakeoff(session, graph, "embedded_coil_gaps");
+  const coils = compileTakeoff(null, graph, "embedded_coil_gaps");
   const coilsFound = coils.totals?.coils_found ?? 0;
   const coilGaps = coils.totals?.gaps ?? 0;
   // The compile exposes every coil only as a count; the rows it returns are
@@ -174,7 +157,7 @@ async function computeSet(set) {
     gapLabels[label] = (gapLabels[label] || 0) + 1;
   }
 
-  const bas = compileTakeoff(session, graph, "bas_points");
+  const bas = compileTakeoff(null, graph, "bas_points");
   const basTotals = bas.totals || {};
 
   return {
@@ -190,98 +173,6 @@ async function computeSet(set) {
       AI: basTotals.AI ?? 0, AO: basTotals.AO ?? 0, BI: basTotals.BI ?? 0, BO: basTotals.BO ?? 0,
     },
     ms: { graph: tGraph, total: Date.now() - t0 },
-  };
-}
-
-/** Small seeded PRNG (mulberry32) — the draw must reproduce from the seed alone. */
-function mulberry32(seed) {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6D2B79F5) >>> 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-function seededShuffle(list, rand) {
-  const out = [...list];
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
-  }
-  return out;
-}
-
-/** Rows keyed per sampled table, in PRINTED order (read off the render, not
- * the pipeline), so one 150-row VAV schedule cannot swamp the sample. */
-export const KEY_ROWS_PER_TABLE_MAX = 30;
-export const HELDOUT_MIN_DOCS = 5;
-
-/**
- * WP0.2 draw (TRUTH): documents are grouped by drafter so no drafter sits on
- * both sides; drafter groups are shuffled by the seed; groups go to HELD-OUT
- * in that order until it holds ≥ HELDOUT_MIN_DOCS documents, skipping any
- * group whose removal would leave a required family uncovered on the dev
- * side. Then, per document and per keyed family (the family × drafter
- * stratum), ONE claimed table is drawn by the same seed, and every printed row
- * of it (up to KEY_ROWS_PER_TABLE_MAX) is keyed from the render.
- */
-export function drawSplit(baseline, drafters, seed) {
-  const rand = mulberry32(seed);
-  const measured = new Map(baseline.per_set.filter((r) => !r.error).map((r) => [r.id, r]));
-  const excluded = { ...(drafters.duplicates || {}), ...(drafters.derived || {}) };
-  const docs = new Map(); // set id -> [{ family, tables: {table: rows} }]
-  for (const [id, r] of measured) {
-    if (excluded[id]) continue;
-    const fams = Object.entries(r.families).filter(([f, v]) => ATTR_KEY_FAMILIES.has(f) && v.items > 0);
-    if (fams.length) docs.set(id, fams.map(([family, v]) => ({ family, table_rows: v.table_rows })));
-  }
-  const bucketsOf = (setIds) => new Set(REQUIRED_KEY_COVERAGE
-    .filter(([, fams]) => setIds.some((id) => docs.get(id).some((d) => fams.includes(d.family))))
-    .map(([name]) => name));
-  const groups = Object.entries(drafters.groups)
-    .map(([gid, g]) => ({ gid, sets: g.sets.filter((id) => docs.has(id)) }))
-    .filter((g) => g.sets.length)
-    .sort((a, b) => a.gid.localeCompare(b.gid));
-  const ungrouped = [...docs.keys()].filter((id) => !groups.some((g) => g.sets.includes(id)));
-  if (ungrouped.length) throw new Error(`drafters.json does not place: ${ungrouped.join(", ")}`);
-  const order = seededShuffle(groups, rand);
-  const heldout = [];
-  let heldoutDocs = 0;
-  const skipped = [];
-  for (const g of order) {
-    if (heldoutDocs >= HELDOUT_MIN_DOCS) break;
-    const rest = groups.filter((x) => x !== g && !heldout.includes(x)).flatMap((x) => x.sets);
-    const restCover = bucketsOf(rest);
-    const lost = [...bucketsOf(g.sets)].filter((b) => !restCover.has(b));
-    if (lost.length) { skipped.push({ group: g.gid, would_uncover: lost }); continue; }
-    heldout.push(g);
-    heldoutDocs += g.sets.length;
-  }
-  const dev = groups.filter((g) => !heldout.includes(g));
-  const sampleTables = (setIds) => setIds.flatMap((id) => docs.get(id).map(({ family, table_rows }) => {
-    const tables = Object.keys(table_rows).sort();
-    const pick = tables[Math.floor(rand() * tables.length)];
-    return { set: id, family, table: pick, claimed_rows: table_rows[pick], keyed_rows_max: Math.min(table_rows[pick], KEY_ROWS_PER_TABLE_MAX), tables_in_stratum: tables.length };
-  }));
-  // Tables are drawn dev first, then held-out, each in sorted set order, so
-  // the draw is a pure function of (baseline, drafters, seed).
-  const devSets = dev.flatMap((g) => g.sets).sort();
-  const heldoutSets = heldout.flatMap((g) => g.sets).sort();
-  const devTables = sampleTables(devSets);
-  const heldoutTables = sampleTables(heldoutSets);
-  return {
-    seed,
-    heldout_min_docs: HELDOUT_MIN_DOCS,
-    key_rows_per_table_max: KEY_ROWS_PER_TABLE_MAX,
-    population_docs: docs.size,
-    shuffled_group_order: order.map((g) => g.gid),
-    skipped_for_dev_coverage: skipped,
-    dev: { groups: dev.map((g) => g.gid), sets: devSets, covers: [...bucketsOf(devSets)], tables: devTables },
-    heldout: { groups: heldout.map((g) => g.gid), sets: heldoutSets, covers: [...bucketsOf(heldoutSets)], tables: heldoutTables },
-    required_coverage_missing_from_population: REQUIRED_KEY_COVERAGE.map(([n]) => n)
-      .filter((n) => !bucketsOf([...docs.keys()]).has(n)),
-    excluded_from_population: excluded,
   };
 }
 
