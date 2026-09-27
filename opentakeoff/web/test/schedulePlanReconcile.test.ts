@@ -768,6 +768,35 @@ test("reconcile scaffold dedupes duplicate MARK extracts (compile parity)", () =
   assert.deepEqual(rows.map((r) => r.tag).sort(), ["HP-10", "HP-20"]);
 });
 
+test("reconcile scaffold reads marks under a building token or letter, one row per unit (AS-62)", () => {
+  // The compile's mark rule (markMatchesKeyRe): 1-AC-15, 40-AHU-2, 1-CP-2 and
+  // HWP-A-2 are read in one of their forms, so each unit the takeoff counts
+  // has its row. Such a mark adds no second row for a unit already held (the
+  // untitled copy of 1-CP-1 and 1-EF-36, HWP-A-1 in a general EQUIPMENT
+  // SCHEDULE); a mark read as printed keeps its row per table as before (P-1,
+  // EF-2), which is the scaffold's own identity rule and not this one's.
+  const table = (sheet: string, title: string, keys: string[]) => ({
+    kind: "equipment", sheet, title: { text: title },
+    rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+  });
+  const graph = { tables: [
+    table("m.pdf#3", "AIR HANDLING UNIT SCHEDULE", ["1-AC-15", "40-AHU-2", "AHU-3"]),
+    table("m.pdf#4", "STEAM CONDENSATE PUMP SCHEDULE", ["1-CP-1"]),
+    table("m.pdf#4", "HYDRONIC PUMP SCHEDULE", ["HWP-A-1", "P-1"]),
+    table("m.pdf#4", "FAN SCHEDULE", ["EF-2", "1-EF-36"]),
+    table("e.pdf#9", "", ["1-CP-1", "1-CP-2", "1-EF-36"]),
+    table("e.pdf#10", "EQUIPMENT SCHEDULE", ["HWP-A-1", "HWP-A-2", "P-1", "EF-2"]),
+  ] };
+  const rowsOf = (family: string) => reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
+    .map((r: any) => `${r.tag}@${r.row_id.split("::")[0]}`);
+  assert.deepEqual(rowsOf("AHU"), ["1-AC-15@m.pdf#3", "40-AHU-2@m.pdf#3", "AHU-3@m.pdf#3"]);
+  assert.deepEqual(rowsOf("PUMP"), [
+    "1-CP-1@m.pdf#4", "HWP-A-1@m.pdf#4", "P-1@m.pdf#4",
+    "1-CP-2@e.pdf#9", "HWP-A-2@e.pdf#10", "P-1@e.pdf#10",
+  ]);
+  assert.deepEqual(rowsOf("FAN"), ["EF-2@m.pdf#4", "1-EF-36@m.pdf#4", "EF-2@e.pdf#10"]);
+});
+
 test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parity)", () => {
   const graph = {
     tables: [{

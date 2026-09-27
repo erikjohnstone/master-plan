@@ -7,7 +7,9 @@ import { describe, it } from "node:test";
 import {
   HVAC_FAMILY_SPECS,
   markCoreForKeyRe,
+  markFormsForKeyRe,
   isScheduleHeaderJunkMark,
+  compileHvacTakeoff,
 } from "../src/lib/corpusTakeoff.mjs";
 
 describe("Vol2 RTU packaged title", () => {
@@ -161,5 +163,71 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
     assert.equal(altTitleRe.test("HHW CONTROL VALVE SCHEDULE"), false);
     assert.equal(altKeyRe.test("V-HHWR-11"), true);
     assert.equal(altKeyRe.test("V-CHW-1"), false);
+  });
+});
+
+// AS-62: marks the family rules read as no unit (named by AS-61) — a numbered
+// or coded building token (05_MO's 1-VAV-1, 041_IL's 40-AHU-2, 031_MO's
+// W05-TU-01, 067_CA's B950-AHU-3001), a building letter between the family
+// token and the number (074_CA's FC-A-2), exhaust fans named by a qualifier
+// before EF (096_IN's PEF-1, JEF-1) and TU terminal units.
+describe("AS-62 building tokens, building letters, qualified exhaust fans, TU terminals", () => {
+  it("strips a numbered or coded building token, as it strips WHSE-", () => {
+    for (const [mark, core] of [["1-VAV-1", "VAV-1"], ["40-AHU-2", "AHU-2"], ["W05-TU-01", "TU-01"], ["WC01A-TU-05", "TU-05"], ["B950-AHU-3001", "AHU-3001"], ["1-TU-28-1", "TU-28-1"], ["1-CU-28", "CU-28"]]) {
+      assert.equal(markCoreForKeyRe(mark), core, mark);
+    }
+    // Not a building token, or not a short equipment mark after it.
+    for (const mark of ["1-AC-36TEMP", "1-EF-36TEMPA", "1-1/2", "2-WAY", "460-3-60", "10-HP", "1234-AHU-1", "ST-H-3", "TPLFY-EP15NEM4"]) {
+      assert.equal(markCoreForKeyRe(mark), mark, mark);
+    }
+  });
+
+  it("reads a building letter between the family token and the number", () => {
+    assert.deepEqual(markFormsForKeyRe("FC-A-2"), ["FC-A-2", "FC-2"]);
+    assert.deepEqual(markFormsForKeyRe("FC-A-13-1"), ["FC-A-13-1", "FC-13-1"]);
+    // A building token and a building letter together are left alone: no
+    // document prints one, and the rule reads one convention at a time.
+    assert.deepEqual(markFormsForKeyRe("1-FC-B-4"), ["1-FC-B-4"]);
+    // A one-letter family token keeps its letter (E-A-1 is no EF), and a
+    // steam trap's building letter reads as no humidifier.
+    assert.deepEqual(markFormsForKeyRe("E-A-1"), ["E-A-1"]);
+    assert.equal(markFormsForKeyRe("ST-H-3").some((f) => HVAC_FAMILY_SPECS.HUMIDIFIER.keyRe.test(f)), false);
+    // Without its letter the rest must still be a short equipment mark: a
+    // five-digit number is a model or a part, and reads as no pump.
+    assert.deepEqual(markFormsForKeyRe("HWP-A-12345"), ["HWP-A-12345"]);
+    assert.deepEqual(markFormsForKeyRe("HWP-A-1"), ["HWP-A-1", "HWP-1"]);
+  });
+
+  it("FAN reads an exhaust fan named by a one- or two-letter qualifier before EF", () => {
+    const { keyRe } = HVAC_FAMILY_SPECS.FAN;
+    for (const m of ["PEF-1", "JEF-6", "BEF-2", "CEF1", "KEF-1", "GEF-2"]) assert.equal(keyRe.test(m), true, m);
+    for (const m of ["BF-1", "HEF", "DEF", "PEFX-1", "AHU-1", "HC-A-1"]) assert.equal(keyRe.test(m), false, m);
+  });
+
+  it("VAV reads TU-n terminal units, never a TU word", () => {
+    const { keyRe } = HVAC_FAMILY_SPECS.VAV;
+    for (const m of ["TU-01", "TU-28-1", "TU1"]) assert.equal(keyRe.test(m), true, m);
+    for (const m of ["TU", "TUB-1", "TURN", "A"]) assert.equal(keyRe.test(m), false, m);
+  });
+
+  it("compiles those rows as units under their schedule's family, each mark as printed", () => {
+    const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
+    const graph = {
+      tables: [
+        { kind: "equipment", sheet: "m.pdf#40", title: { text: "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE" }, rows: ["ATU-6-1", "1-TU-28-1", "W05-TU-01", "A"].map(row) },
+        { kind: "equipment", sheet: "m.pdf#39", title: { text: "AIR HANDLING UNIT SCHEDULE" }, rows: ["AC-57", "1-AC-15", "40-AHU-2", "1-AC-36TEMP"].map(row) },
+        { kind: "equipment", sheet: "m.pdf#21", title: { text: "EXHAUST FAN SCHEDULE" }, rows: ["KEF-1", "PEF-1", "JEF-1", "BF-1"].map(row) },
+        { kind: "equipment", sheet: "m.pdf#25", title: { text: "DUCTED FAN COIL UNITS" }, rows: ["FC-A-2", "FC-A-13-1"].map(row) },
+        { kind: "equipment", sheet: "m.pdf#2", title: { text: "" }, rows: ["1-1/2", "2-WAY", "460-3-60"].map(row) },
+      ],
+    };
+    const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+    const tags = (f: string) => cats[f].items.map((i) => i.tag).sort();
+    assert.deepEqual(tags("VAV"), ["1-TU-28-1", "ATU-6-1", "W05-TU-01"]);
+    assert.deepEqual(tags("AHU"), ["1-AC-15", "40-AHU-2", "AC-57"]);
+    assert.deepEqual(tags("FAN"), ["JEF-1", "KEF-1", "PEF-1"]);
+    assert.deepEqual(tags("FCU"), ["FC-A-13-1", "FC-A-2"]);
+    const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
+    for (const t of ["A", "1-AC-36TEMP", "BF-1", "1-1/2", "2-WAY", "460-3-60"]) assert.equal(all.includes(t), false, t);
   });
 });

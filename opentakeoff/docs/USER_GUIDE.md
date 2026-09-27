@@ -598,8 +598,10 @@ number, page and file) in red above the settings, with the share of it the
 pictures cover, and the PDF section lists
 them after the totals. Check each sheet: if it schedules equipment, the estimate
 is missing that equipment. The takeoff reads a family's schedule rows by their
-marks, so a row whose mark it does not read as that family's (a building prefix
-such as 1-VAV-1, or letters such as W05-TU-01 or PEF-1) is no unit either: the
+marks, a mark under a building number or code (1-VAV-1, 40-AHU-2, W05-TU-01)
+or with a building letter (FC-A-2) included, so a row whose mark it still does
+not read as that family's (a temporary unit's 1-AC-36TEMP, or E-A-1 under a
+return fan title) is no unit either: the
 panel names each such schedule in red (its title, sheet, page and file, the
 family, and every mark left out), and the PDF section lists them after the
 totals. Those units are not in the estimate: count them by hand. Below the exceptions sit a table per family (units, typicals,

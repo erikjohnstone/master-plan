@@ -1,5 +1,26 @@
 # Changelog
 
+- **Takeoff: marks under a building number, code or letter, and more fan and
+  terminal marks, are read.** The takeoff reads a family's schedule rows by
+  their marks and drops a mark its rule for the family does not read, so
+  05_MO's report held one of its five air handlers, none of its 11 fans and
+  12 of its 36 terminal units (AS-61 named them). Each family's mark rule now
+  also reads a mark after one building number or code (05_MO's 1-AC-15 and
+  1-VAV-1, 041_IL's 40-AHU-2, 031_MO's W05-TU-01, 067_CA's B950-AHU-3001, as
+  it read WHSE-ET-1) and a building letter between the family's letters and
+  the number (074_CA's FC-A-2); FAN reads an exhaust fan named by one or two
+  letters before EF (096_IN's PEF-1 and JEF-1); VAV reads TU-n terminal
+  units. What is left must still be a short equipment mark, so a size, a
+  voltage, a temporary unit's 1-AC-36TEMP or a steam trap's ST-H-3 reads as
+  no unit. On the 58 cached dev documents (held-out excluded) the takeoff
+  counts 93 more units on 6 of them, and every unit it counted before is
+  unchanged; the rows AS-61 names fall from 119 in 24 schedules to 40 in 15.
+  The schedule↔plan reconciliation reads marks by the same rule
+  (`markMatchesKeyRe`), so every unit the takeoff counts has its row (031_MO's
+  25 WHSE- units had none); a mark only this reading admits adds no second
+  row for a unit already reconciled (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-62).
+
 - **Assemblies: scheduled rows the takeoff reads as no unit are named.** The
   takeoff reads a family's schedule rows by their marks, and a mark its rule
   for the family does not know gives no unit at all: a building prefix

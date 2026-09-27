@@ -3700,6 +3700,9 @@ changes `compile_corpus_takeoff` and the schedule↔plan reconciliation, which
 this goal leaves alone, so it is proposed and not done. If it is done, the
 corpus eval and the reconciliation tests should guard it: every existing
 answer unchanged, and only these units added.
+**Then:** the owner asked for it, guarded by the evals. AS-62 does it for the
+building tokens, the building letter, PEF and JEF, and TU; what it leaves is
+named here as before.
 
 **Tests:**
 - leftOut.test.ts: mark shapes; a row carried by place or by mark (a row
@@ -3724,3 +3727,158 @@ answer unchanged, and only these units added.
 - The first 05_MO run failed in the proof itself: its in-page copy of the
   report was built without the new rows, and the proof now passes them.
 
+## AS-62 — the takeoff's family mark rules read no building number, code or letter, nor PEF, JEF or TU (FIXED — the owner asked; guarded by the evals)
+
+**Found:** AS-61's census, 2026-09-27. Most rows it names are units the
+compile's family mark rules could read. The owner asked for the widening
+"guarded by the evals": every existing answer unchanged, only missing units
+added.
+
+**What:** the compile (`corpusTakeoff.mjs` `uniqueFamily`) reads a family
+schedule's rows through `markMatchesKeyRe`: the family's keyRe on the mark
+as printed, or on its core without one leading building token
+(`markCoreForKeyRe`). The core strip took a token of letters only (WHSE-ET-1
+→ ET-1), so 05_MO's 1-AC-15 and 1-VAV-1, 041_IL's 40-AHU-2, 031_MO's
+W05-TU-01 and 067_CA's B950-AHU-3001 read as no unit. Nothing read a
+building letter between the family's letters and the number (074_CA's
+FC-A-2). FAN's keyRe listed its qualified exhaust fans one by one (KEF, GEF,
+TEF, LEF, SEF) and lacked 096_IN's PEF and JEF; VAV's lacked TU. The
+schedule↔plan reconcile scaffold (`reconcileScheduleFamilyFromGraph`) did
+not strip at all, so 031_MO's 25 WHSE- units, which the compile counted, had
+no reconcile row.
+
+**Fix (the shared path):**
+- `markCoreForKeyRe` strips one leading token of letters, a number of at
+  most three digits, or a short code (one to three letters, one to four
+  digits, an optional letter), as before only when the rest starts with a
+  family token of two or more letters and a number and is a short equipment
+  mark (`SHORT_EQUIP_MARK_RE`: at most four digits and one short trailing
+  part). 1234-AHU-1, 1-1/2, 2-WAY, 460-3-60 and 1-AC-36TEMP keep their form.
+- `markFormsForKeyRe` adds the form without a building letter printed
+  between a family token of two or more letters and the number (FC-A-2 →
+  FC-2, FC-A-13-1 → FC-13-1), again only when the rest is a short equipment
+  mark (HWP-A-12345 keeps its form). A one-letter token keeps its letter
+  (E-A-1 is no EF), and a steam trap's ST-H-3 reads as no humidifier.
+- `markMatchesKeyRe`, now exported, reads the mark, its core and those
+  forms.
+- FAN reads `[A-Z]{1,2}EF` before a number (PEF-1, JEF-6, BEF-2; never BF-1,
+  HEF, PEFX-1). VAV reads `TU` before a number (TU-01, TU-28-1; never TU,
+  TUB-1, TURN).
+- The compile keeps each mark as printed: the units are 1-VAV-1 and FC-A-2.
+- The reconcile scaffold gates rows by `markMatchesKeyRe` too, so each unit
+  the compile counts has its row. A mark only a form admits adds a row only
+  for a unit the scaffold holds none for yet, as the compile counts it
+  once. 05_MO's untitled table lists 1-CP-1, 1-CU-28 and seven fans again,
+  and 061_IA's general EQUIPMENT SCHEDULE lists HWP-A-1 and HWP-A-2 again:
+  the same units, not new rows. A mark read as printed keeps the scaffold's
+  own identity rule (a row per mark, table title and drawing group), so its
+  19 duplicate marks are the same before and after.
+
+**Measured** on the 58 dev documents whose graph is cached (held-out
+excluded), every census on the same set:
+- **Compile:** 93 units added on 6 documents; 0 removed, 0 changed. Beyond
+  its units, only the counts, totals and page accounting that follow them
+  change. 05_MO: 40 (3 air handlers, 24
+  terminal units, 7 fans, 6 coils). 031_MO: 13 terminal units (W05-TU-01 to
+  W11-TU-13). 041_IL: 12 (40-AHU-2, 5 terminals, 2 fans, a tank, 3 coils).
+  096_IN: 12 exhaust fans (PEF-1 to PEF-6, JEF-1 to JEF-6). 074_CA: 11 fan
+  coils (FC-A-2 to FC-A-20-1). 067_CA: 5 (B950-AHU-3001, a separator, a tank,
+  a coil, a pot feeder). Each is a row of its titled family schedule.
+- **Downstream compiles:** `bas_points` changes only by the added units (its
+  family inventory, schedule-derived estimate, inventory without printed
+  points and plan targets grow). `control_valves` adds and drops no valve;
+  its page accounting lists the schedule titles the units now come from.
+- **Reconcile:** rows only added (0 removed, 0 changed, the order the same).
+  Compiled units with no reconcile row: 52 to 27. The rest are
+  CHW_CONTROL_VALVE marks on 074_CA, 013_MO and 009_FL, the same before and
+  after. Reconcile rows with no compiled unit: 8 before and after.
+- **AS-61's notice:** 119 rows in 24 schedules on 13 documents, now 40 in 15
+  on 10.
+- **Evals** on the affected dev documents that have keys, before and after:
+  every score is identical. That is attributes dev 1 (031_MO, 074_CA), dev 3
+  (096_IN) and dev 4 (067_CA), typicals dev 1, binding dev 1 and reading dev
+  1. Project questions dev 1 answer the same; only their effects grow with
+  the units (031_MO PQ1 78 to 481 lines, 074_CA PQ1 19 to 294).
+- **Takeoff eval:** the 5 active keyed dev sets compile and reconcile byte for
+  byte as before. weld-county-permit is retired (its schedules are raster
+  sheets).
+- **WP1 compile acceptance** (the 58 cached sets on its list): the same 18
+  pass and the same 40 fail, with the same first failing check, before and
+  after. Its snapshots are stale on the base (mostly the HVAC total), so it
+  cannot guard a compile change; the A/B above does.
+- **Held-out** (aggregates only; the gates rebuilt the held-out graphs):
+  GATE 2 held-out 897/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472,
+  1 wrong, 2 invented; GATE 5 21/91; GATE C 35/91. Each is as recorded at
+  the last freeze.
+- **UI proof** (the dev server, headless Chrome, byte-identical to
+  `apply_assemblies`):
+  - 05_MO: 77 units, 37 before (20 checks); 4 of its 5 air handlers, 7 of
+    its 11 fans and all 36 terminal units, where it held 1, 0 and 12. The
+    rest are temporary units, still named.
+  - 096_IN: 168 units, 156 before (19 checks). 031_MO: 107, 94 before (16).
+    074_CA: 35, 24 before (16). 041_IL: 19 units (17). 067_CA: 9 units (16).
+  - 069_ID, which AS-62 does not change: its report is byte-identical to its
+    AS-61 run (17 checks).
+  - The first 031_MO run crashed Chromium while three heavy jobs ran; alone
+    it passes.
+
+**Still named by AS-61 (40 rows), each left for a reason:**
+- 05_MO's temporary units: 1-AC-36TEMP, and 1-EF-36TEMPA to C.
+- 017_MD's E-A-1 to E-A-8 and E-A-13 under a RETURN FAN SCHEDULE title: a
+  one-letter token that every table's rule would read.
+- 041_IL's 40-HM-140-HM-2: two marks the graph ran together.
+- 22_GA's FCU-n/HP-n pairs under a split air handler title: another
+  family's marks.
+- Marks no family's rule knows: EWH, HF, DAC, NACC, HRC, BC-1, BF-1,
+  SS-1/SSCU-1, and DOAS-1 to DOAS-3 in 096_IN's air handler index.
+
+**Rejected:**
+- **E-A-n as a fan:** the one-letter token would read in every table the
+  FAN rule reads, blank and general ones included.
+- **A building letter after a building token** (1-FC-B-4): no document
+  prints one.
+- **Removing the reconcile's as-printed duplicates** (19 marks listed in a
+  family schedule and again in a general or untitled table): that changes
+  existing reconcile answers, so it is the owner's call and left as it is.
+
+**Tests:**
+- corpusTakeoffVol2Families.test.ts: building tokens and what keeps its
+  form; building letters, the one-letter token, the steam trap and the
+  short-mark check; FAN's and VAV's marks and non-marks; a compile of those
+  rows under their families, each mark as printed.
+- schedulePlanReconcile.test.ts: a row per unit read in a form, no second
+  row for a unit held, as-printed duplicates as before.
+- Mutations: the tests fail for each of these nine changes: the old
+  letters-only strip; no building-letter form; FAN without xEF; VAV without
+  TU; the letter form without the short-mark check; the core without it; the
+  reconcile without the held check; the reconcile without forms; and the
+  held check on every row.
+
+**The reconcile tests, unmasked:** two MCP reconcile test files were red on
+the base before any of their checks ran.
+- `reconcileGolden.test.mjs` (in `test:workflows`): its header regex predates
+  the CSV's added columns. It now checks the contractor columns in order,
+  and passes on the base and with AS-62.
+- `reconcileWorkflow.test.mjs`: three calls passed the PDF where the helper
+  takes the corpus root. The ENOENT ended the file after its 7th of 89
+  tests, so the rest had not run.
+With the calls fixed, every test on a document AS-62 changes, and 21_VA's,
+ran on the base and with AS-62:
+- **Same on both:** the same passes and failures, with identical messages.
+- **Except 05_MO's VAV test.** It pinned the 12 ATU marks and now asserts:
+  - those 12 MATCH as before;
+  - the 24 building-numbered units are rows, 15 of them MATCH with plan
+    cites (1-VAV-1 to 1-VAV-17) and 9 honestly SCHEDULE_ONLY (1-TU-28-1 to
+    9, no plan tag).
+- **096_IN's served plan paint:** its 92 existing targets sweep as before; its
+  12 new fans sweep AMBIGUOUS, as 60 of its old targets already do.
+The stale expectations it surfaces are the same on the base, and are left to
+the reconcile loop's owner:
+- 21_VA's VAV table now reads 57 rows where its key has 32 (VAV-2-* too),
+  and its transposed pump schedule reads 17 "pumps" (AS-33).
+- 074_CA's key counts its fan coils as 11 FAN (the compile reads no FAN
+  now), and its ERV sweep does not MATCH.
+- 067_CA reads 1 heat exchanger where its key has 2; 041_IL 2 GRD where 1.
+- 096_IN's served plan paint reads 236 BAS rows where 231 are keyed. Beyond
+  that check, 2 of its 92 targets MATCH where the test asks for 50, with 60
+  AMBIGUOUS: a gap of its own, recorded here and not investigated further.

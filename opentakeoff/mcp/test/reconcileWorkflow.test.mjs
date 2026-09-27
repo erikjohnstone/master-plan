@@ -217,7 +217,7 @@ test("Orange County bulk VAV reconcile scaffold matches compile (DESIGNATION col
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const graph = await graphForPdf(pdf, key.set_id);
+  const graph = await graphForPdf(CORPUS, pdf, key.set_id);
   const compiled = compileCorpusTakeoff(null, graph, "hvac_equipment");
   assert.equal(compiled.categories?.VAV?.count ?? 0, key.categories.VAV);
 
@@ -271,7 +271,7 @@ test("Vermillion County Jail bulk VAV reconcile scaffold matches compile", async
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const graph = await graphForPdf(pdf, key.set_id);
+  const graph = await graphForPdf(CORPUS, pdf, key.set_id);
   const compiled = compileCorpusTakeoff(null, graph, "hvac_equipment");
   assert.equal(compiled.categories?.VAV?.count ?? 0, key.categories.VAV);
 
@@ -1272,7 +1272,7 @@ test("Douglas County DOAS reconcile: misc-schedule DOAS-30 MATCH", async () => {
   assert.ok(result.rows.some((r) => /^DOAS-30$/i.test(r.tag)));
 });
 
-test("St Louis bulk VAV reconcile: all 12 ATU tags MATCH (WP1 cross-set)", async () => {
+test("St Louis bulk VAV reconcile: the 12 ATU tags MATCH; its building-numbered terminals are rows too (WP1 cross-set, AS-62)", async () => {
   const keyPath = resolve(CROSS, "05_MO_VA_StLouis_AHU_VAV_Replacement.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
@@ -1292,17 +1292,30 @@ test("St Louis bulk VAV reconcile: all 12 ATU tags MATCH (WP1 cross-set)", async
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
   });
-  assert.equal(result.rows.length, key.categories.VAV, "reconcile rows = compile VAV");
-  assert.equal(
-    result.rows.filter((r) => r.status === "MATCH").length,
-    key.categories.VAV,
-    "every St Louis ATU is plan-drawn MATCH",
-  );
-  for (const row of result.rows) {
-    assert.ok(/^ATU-/i.test(row.tag), `${row.tag} is ATU mark`);
+  const compiled = compileCorpusTakeoff(null, graph, "hvac_equipment");
+  assert.equal(result.rows.length, compiled.categories.VAV.count, "reconcile rows = compile VAV");
+  // The key's 12 ATU marks, each plan-drawn MATCH, as before AS-62.
+  const atu = result.rows.filter((r) => /^ATU-/i.test(r.tag));
+  assert.equal(atu.length, key.categories.VAV, "the key's ATU marks");
+  for (const row of atu) {
+    assert.equal(row.status, "MATCH", `${row.tag} MATCH`);
     assert.ok(row.installed_qty >= 1, `${row.tag} installed qty`);
     assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
   }
+  // AS-62: the dual duct and single duct schedules print their other units
+  // under building 1 (1-VAV-1, 1-TU-28-1), which the VAV rule now reads.
+  // The plans label the 1-VAV boxes (MATCH, cited); the single duct
+  // 1-TU-28 units have no plan tag and stay honestly SCHEDULE_ONLY.
+  const building = result.rows.filter((r) => !/^ATU-/i.test(r.tag));
+  assert.equal(building.length, 24, "building-numbered terminal units");
+  assert.ok(building.every((r) => /^1-(?:VAV|TU)-/i.test(r.tag)), "each a building 1 VAV or TU mark");
+  const vav = building.filter((r) => /^1-VAV-/i.test(r.tag));
+  assert.equal(vav.length, 15);
+  for (const row of vav) {
+    assert.equal(row.status, "MATCH", `${row.tag} MATCH`);
+    assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+  }
+  assert.ok(building.filter((r) => /^1-TU-/i.test(r.tag)).every((r) => r.status === "SCHEDULE_ONLY"), "1-TU units schedule-only");
 });
 
 test("Valdosta + St Louis GRD reconcile scaffold matches compile (reference-kind parity)", async () => {
@@ -1318,7 +1331,7 @@ test("Valdosta + St Louis GRD reconcile scaffold matches compile (reference-kind
       test.skip(`PDF missing: ${key.source_file}`);
       return;
     }
-    const graph = await graphForPdf(pdf, key.set_id);
+    const graph = await graphForPdf(CORPUS, pdf, key.set_id);
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "GRD");
     const rows = reconcileScheduleFamilyFromGraph(graph, needle);
     assert.equal(rows.length, key.categories.GRD, `${key.set_id} GRD scaffold = compile`);
@@ -1363,7 +1376,7 @@ test("blank-title FAN tables join reconcile scaffold via keyRe (Macon Bibb shape
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const graph = await graphForPdf(pdf, key.set_id);
+  const graph = await graphForPdf(CORPUS, pdf, key.set_id);
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN");
   const rows = reconcileScheduleFamilyFromGraph(graph, needle);
   assert.equal(rows.length, key.categories.FAN, "blank-title EF rows reach reconcile");

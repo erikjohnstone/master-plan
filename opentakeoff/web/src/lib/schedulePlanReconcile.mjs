@@ -6,7 +6,7 @@
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
-import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
+import { normalizeEquipMark, expandAmpersandEquipMarks, markMatchesKeyRe } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
 
@@ -786,6 +786,8 @@ export function summarizeReconcile(rows) {
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
   const rows = [];
   const seen = new Set();
+  // The marks the scaffold holds a row for, in any table (AS-62).
+  const held = new Set();
   const keyRe = needle?.keyRe || null;
   const blankKeyRe = needle?.blankKeyRe || null;
   const altTitleRe = needle?.altTitleRe || null;
@@ -836,13 +838,20 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       for (const tag of (tagList.length ? tagList : [rawTag])) {
         if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
         const canonTag = String(tag).toUpperCase().replace(/\s+/g, "");
+        // The compile's own mark rule (markMatchesKeyRe): a building prefix
+        // (WHSE-ET-1, 1-VAV-1) or a building letter (FC-A-2) reads as the
+        // family's mark here too, so every unit the takeoff counts has its row.
+        // 2 = the rule reads the mark as printed, 1 = only in one of its forms.
+        const reads = (re) => (!re ? 0
+          : re.test(tag) || re.test(canonTag) ? 2
+            : markMatchesKeyRe(re, tag, canonTag) ? 1 : 0);
+        let read = 2;
         if (catchAllSchedule) {
-          const okBlank = blankKeyRe && (blankKeyRe.test(tag) || blankKeyRe.test(canonTag));
-          const okKey = keyRe && (keyRe.test(tag) || keyRe.test(canonTag));
-          const okAlt = altKeyRe && (altKeyRe.test(tag) || altKeyRe.test(canonTag));
-          if (!(okBlank || okKey || okAlt)) continue;
-        } else if (filterRe && !filterRe.test(tag) && !filterRe.test(canonTag)) {
-          continue;
+          read = Math.max(reads(blankKeyRe), reads(keyRe), reads(altKeyRe));
+          if (!read) continue;
+        } else if (filterRe) {
+          read = reads(filterRe);
+          if (!read) continue;
         }
         // Parity with compile uniqueFamily — continuation / duplicate extracts
         // of the same MARK must not inflate reconcile rows (Douglas HP-20).
@@ -851,7 +860,13 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         const rowId = `${table.sheet}::${canon}`;
         const scopeIdentity = `${canon}\0${tableFamily}\0${table.drawing_group || "(unscoped)"}`;
         if (!canon || seen.has(scopeIdentity)) continue;
+        // A mark only one of its forms reads adds a row only for a unit the
+        // scaffold holds none for yet, as the compile counts it once: a second
+        // listing of 05_MO's 1-CP-1 in an untitled table, or of 061_IA's
+        // HWP-A-1 in a general EQUIPMENT SCHEDULE, is the same pump.
+        if (read === 1 && held.has(canon)) continue;
         seen.add(scopeIdentity);
+        held.add(canon);
         const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);
         const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly });
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;

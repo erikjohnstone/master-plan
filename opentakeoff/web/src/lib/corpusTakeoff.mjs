@@ -361,34 +361,66 @@ export function normalizeEquipMark(raw) {
  * Digits-only right half reuses the left prefix. Prose ("B & G MODEL") is unchanged.
  */
 
+/** A short equipment mark: a family token, optional lettered segments, a
+ * number of at most four digits and one short trailing segment (ET-1, SH1,
+ * CC-15-6, S-A-1, TU-28-1, AHU-3001) — never a catalog model. */
+const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,4})?$/;
+
 /**
- * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1). Strip one
- * leading TOKEN- when the remainder still looks like an equipment mark so
- * family keyRe stays set-agnostic across multi-building schedules.
+ * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1), including
+ * a numbered or coded building or area (1-VAV-1, 40-AHU-2, W05-TU-01,
+ * B950-AHU-3001: 05_MO, 041_IL, 031_MO and 067_CA print their marks so, AS-62).
+ * Strip one leading TOKEN- when the remainder still looks like an equipment
+ * mark so family keyRe stays set-agnostic across multi-building schedules.
  */
 export function markCoreForKeyRe(tag) {
   const canon = String(tag || "").toUpperCase().replace(/\s+/g, "");
   if (!canon) return canon;
-  // WHSE-ET-1 → ET-1; WHSE-SH1 → SH1. Remainder must start with a ≥2-letter
-  // family token so steam-trap ST-H-3 is NOT stripped to H-3 (false humidifier).
-  const stripped = canon.replace(/^[A-Z]{2,8}-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  // WHSE-ET-1 → ET-1; WHSE-SH1 → SH1; 1-VAV-1 → VAV-1; W05-TU-01 → TU-01.
+  // The token is letters, a number of at most three digits, or a short code
+  // of letters and digits. Remainder must start with a ≥2-letter family
+  // token so steam-trap ST-H-3 is NOT stripped to H-3 (false humidifier).
+  const stripped = canon.replace(/^(?:[A-Z]{2,8}|\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
   if (stripped === canon) return canon;
   // Only accept building-prefix strip when the remainder is a short equip mark
   // (ET-1, SH1, CC-15-6, S-A-1) — not catalog models (TPLFY-EP15NEM4 → EP15NEM4
   // falsely matching PUMP blankKeyRe /^EP/).
-  if (/^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,4})?$/.test(stripped)) {
+  if (SHORT_EQUIP_MARK_RE.test(stripped)) {
     return stripped;
   }
   return canon;
 }
 
-function markMatchesKeyRe(re, one, canon) {
+/**
+ * The forms of a mark a family keyRe reads: the mark, its core without a
+ * building prefix (markCoreForKeyRe), and either without a building letter
+ * printed between the family token and the number (074_CA's FC-A-2,
+ * FC-A-13-1 → FC-2, FC-13-1; the letter buildingCodeFromTag reads in
+ * AHU-A1), when what is left is still a short equipment mark (AS-62).
+ */
+export function markFormsForKeyRe(tag) {
+  const canon = String(tag || "").toUpperCase().replace(/\s+/g, "");
+  if (!canon) return [];
+  const forms = [canon];
+  const core = markCoreForKeyRe(canon);
+  if (core !== canon) forms.push(core);
+  for (const f of [...forms]) {
+    const lettered = f.replace(/^([A-Z]{2,8})-[A-Z]-(?=\d)/, "$1-");
+    if (lettered !== f && SHORT_EQUIP_MARK_RE.test(lettered) && !forms.includes(lettered)) forms.push(lettered);
+  }
+  return forms;
+}
+
+/** Whether a family's mark rule reads a mark, in any of its forms
+ * (markFormsForKeyRe). The compile and the reconcile scaffold both gate rows
+ * through it (AS-62), so a unit the takeoff counts has its reconcile row. */
+export function markMatchesKeyRe(re, one, canon) {
   if (!re) return false;
   if (re.test(canon) || re.test(one)) return true;
-  const core = markCoreForKeyRe(canon);
-  // Building-prefix strip (WHSE-ET-1 → ET-1) keeps family keyRe set-agnostic.
-  if (core !== canon && re.test(core)) return true;
-  return false;
+  // Building-prefix strip (WHSE-ET-1 → ET-1, 1-VAV-1 → VAV-1) and a building
+  // letter between the family token and the number (FC-A-2 → FC-2) keep
+  // family keyRe set-agnostic.
+  return markFormsForKeyRe(canon).slice(1).some((f) => re.test(f));
 }
 
 /**
@@ -1022,8 +1054,9 @@ export const HVAC_FAMILY_SPECS = {
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor.
-    keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU)/i,
+    // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor;
+    // TU-* terminal units numbered under an AIR TERMINAL UNIT title (AS-62).
+    keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU|TU(?=[\s\-]?\d))/i,
   },
   RTU: {
     // PACKAGED EQUIPMENT SCHEDULE (RTU) — common finish/replacement sheets.
@@ -1167,7 +1200,10 @@ export const HVAC_FAMILY_SPECS = {
     // KEF-* kitchen exhaust (blank-title hydronic/exhaust summaries — Klamath).
     // S-A-* / R-A-* = supply/return fans on zone-lettered SUPPLY/RETURN FAN schedules
     // (NIST-style); DSF-* = duct supply fans; EG-* = general exhaust; SEF-* = stair/smoke exhaust on HVAC FAN schedules.
-    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-)[\s\-]?/i,
+    // Any exhaust fan named by a one- or two-letter qualifier before EF and a
+    // number (the KEF/GEF/TEF/LEF/SEF convention: 096_IN's pod and jail
+    // exhaust fans PEF-1, JEF-1; AS-62).
+    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-|[A-Z]{1,2}EF(?=[\s\-]?\d))[\s\-]?/i,
   },
   // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
   // — FAN titleRe already excludes CEILING FAN so these do not double-count.
