@@ -14,6 +14,7 @@ import starterTypicals from "../../web/src/lib/assemblies/starter/us-typicals-v1
 import starterHookups from "../../web/src/lib/assemblies/starter/us-hookups-v1.json" with { type: "json" };
 import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type CompiledProject, type HvacCompile } from "../../web/src/lib/assemblies/apply.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
+import { unmatchedOverrides } from "../../web/src/lib/assemblies/expand.ts";
 import { assembliesReport, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
 import { assembliesCsvSet, type ExportFile } from "../../web/src/lib/assemblies/exportSet.ts";
 import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
@@ -215,6 +216,9 @@ export interface ApplyAssembliesResult {
   control: ReturnType<typeof controlSummary>;
   /** The Session's answer journal, when a question is answered. */
   answers?: { head: string | null; events: number; applied: Record<string, string>; error?: string };
+  /** Overrides no unit takes, each with why (AS-45); absent when every one
+   * applies. */
+  overrides_unmatched?: Array<{ tag: string; family?: string; layer?: string; why: string }>;
 }
 
 // ── Project questions (Track A): the Session's answer journal ──────────────
@@ -314,6 +318,9 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   const mode = opts.control_readings ?? defaultControlReadingMode();
   const readings = await sessionControlReadings(session, { project, library }, mode);
   const { instances, applications, lines } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [], readings });
+  // An override no unit takes is named, never kept silently (AS-45).
+  const unmatched = unmatchedOverrides(instances, library, opts.overrides ?? [])
+    .map(({ override: o, why }) => ({ tag: o.tag, ...(o.family ? { family: o.family } : {}), ...(o.layer ? { layer: o.layer } : {}), why }));
   const want = opts.families?.length ? new Set(opts.families) : null;
   const inst = want ? instances.filter((i) => want.has(i.family)) : instances;
   const apps = want ? applications.filter((a) => want.has(a.instance.family)) : applications;
@@ -337,5 +344,6 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
     ...(detail === "lines" ? { applications: apps, lines: lns } : {}),
     ...(csv ? { csv, csvReport: whole } : {}),
     ...(journal.events || journal.error ? { answers: { head: journal.head, events: journal.events, applied: journal.answers as Record<string, string>, ...(journal.error ? { error: journal.error } : {}) } } : {}),
+    ...(unmatched.length ? { overrides_unmatched: unmatched } : {}),
   };
 }

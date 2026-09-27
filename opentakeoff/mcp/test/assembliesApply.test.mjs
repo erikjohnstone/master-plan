@@ -181,10 +181,21 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   const ahu = only.data.report.units.find((u) => u.tag === "AHU-1" && u.layer === "controls");
   assert.equal(ahu?.derived?.terminals_served?.rule, "derive.terminals_served.sole_air_handler", "derived against the whole project");
 
-  // An override with a reason is a user choice on the record.
-  const o = await call(client, "apply_assemblies", { detail: "units", families: ["AHU"], overrides: [{ tag: "AHU-1", layer: "controls", reason: "test", options: { ufc_minimum_points: true } }] });
+  // An override with a reason is a user choice on the record. One no unit
+  // takes is named with why, never kept silently (AS-45).
+  const o = await call(client, "apply_assemblies", { detail: "units", families: ["AHU"], overrides: [
+    { tag: "AHU-1", layer: "controls", reason: "test", options: { ufc_minimum_points: true } },
+    { tag: "AHU-99", reason: "a typo", exclude: true },
+    { tag: "AHU-1", family: "PUMP", reason: "another family", exclude: true },
+    { tag: "(project)", reason: "the project's own", exclude: true },
+  ] });
   const oa = o.data.report.units.find((u) => u.tag === "AHU-1" && u.layer === "controls");
   assert.deepEqual(oa.options.ufc_minimum_points, { value: true, source: "user" });
   assert.equal(oa.assembly, ahu.assembly, "an option override keeps the rule's typical");
+  assert.deepEqual(o.data.overrides_unmatched.map((u) => [u.tag, u.family ?? null]), [["AHU-99", null], ["AHU-1", "PUMP"], ["(project)", null]]);
+  assert.match(o.data.overrides_unmatched[0].why, /no unit is tagged "AHU-99"/);
+  assert.match(o.data.overrides_unmatched[1].why, /no PUMP is tagged "AHU-1" \(AHU is\)/);
+  assert.match(o.data.overrides_unmatched[2].why, /follow its settings/);
+  assert.equal(only.data.overrides_unmatched, undefined, "absent when every override applies");
   await client.close();
 });

@@ -162,6 +162,35 @@ function sourceOf(src: string, sources: Map<string, ValueSource | null>): Expand
 /** Choose and expand every unit in every layer the library offers its
  * family: instances in tag order, layers in name order, so the result does
  * not depend on the order they arrive in. */
+/** Whether an override is for this unit's layer: its tag, its family where
+ * it names one (AS-43), the layer (none: every layer), and a typical it
+ * chooses that the library offers in that layer. */
+export function overrideFits(o: Override, inst: Pick<Instance, "tag" | "family">, layer: string, library: readonly AssemblyDefinition[]): boolean {
+  return o.tag === inst.tag && (!o.family || o.family === inst.family) && (o.layer ?? layer) === layer
+    && (!o.assembly || library.some((a) => a.id === o.assembly!.id && (a.applies_to.layer ?? "controls") === layer));
+}
+
+/** The overrides no unit takes, each with why, so none is kept silently
+ * (AS-45): a tag no unit has (a typo; a unit a later read no longer finds),
+ * a family or layer its units have not, a typical the layer does not
+ * offer, and any for the project's own records, which follow the project
+ * settings instead. */
+export function unmatchedOverrides(instances: readonly Instance[], library: readonly AssemblyDefinition[], overrides: readonly Override[]): Array<{ override: Override; why: string }> {
+  const out: Array<{ override: Override; why: string }> = [];
+  for (const o of overrides) {
+    if (instances.some((inst) => layersFor(inst.family, library).some((layer) => overrideFits(o, inst, layer, library)))) continue;
+    const tagged = instances.filter((i) => i.tag === o.tag);
+    const ofFamily = tagged.filter((i) => !o.family || i.family === o.family);
+    const why = o.tag === PROJECT_INSTANCE.tag ? "the project's own records follow its settings (the project variables), not an override"
+      : !tagged.length ? `no unit is tagged "${o.tag}"`
+        : !ofFamily.length ? `no ${o.family} is tagged "${o.tag}" (${[...new Set(tagged.map((i) => i.family))].join(", ")} is)`
+          : o.layer && !ofFamily.some((i) => layersFor(i.family, library).includes(o.layer!)) ? `"${o.tag}" has no ${o.layer} layer`
+            : `the library offers ${o.assembly?.id ?? "that typical"} in no layer of "${o.tag}"${o.layer ? ` (${o.layer})` : ""}`;
+    out.push({ override: o, why });
+  }
+  return out;
+}
+
 export function expandAll(
   instances: readonly Instance[],
   library: readonly AssemblyDefinition[],
@@ -178,10 +207,8 @@ export function expandAll(
       // (AS-43), and of those, an exclusion before a choice, wherever each
       // sits: an excluded unit stays excluded until its exclusion is removed,
       // its earlier choices kept (AS-44). Otherwise the first, as before.
-      const fits = (o: Override) => o.tag === inst.tag && (!o.family || o.family === inst.family) && (o.layer ?? layer) === layer
-        && (!o.assembly || library.some((a) => a.id === o.assembly!.id && (a.applies_to.layer ?? "controls") === layer));
       const rank = (o: Override) => (o.family === inst.family ? 0 : 2) + (o.exclude ? 0 : 1);
-      const override = overrides.filter(fits).reduce<Override | undefined>((best, o) => (!best || rank(o) < rank(best) ? o : best), undefined);
+      const override = overrides.filter((o) => overrideFits(o, inst, layer, library)).reduce<Override | undefined>((best, o) => (!best || rank(o) < rank(best) ? o : best), undefined);
       const app = selectAssembly(inst, library, settings, override, layer);
       applications.push(app);
       lines.push(...expandApplication(app, inst, library, settings, evidence[inst.tag]));

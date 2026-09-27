@@ -1,5 +1,15 @@
 # Changelog
 
+- **Assemblies: an override that applies to nothing is named.** The project's
+  own rows (building meters, a plant's controls) offered "Use …", option and
+  Exclude buttons whose overrides the engine never reads: they follow the
+  project settings. An override for a tag no unit has (a typo, a unit a later
+  read no longer finds) was kept silently too. `apply_assemblies` now lists
+  such overrides under `overrides_unmatched`, each with why. "Your overrides"
+  marks them, and a project row's button opens the Project settings that
+  resolve it (`web/src/lib/assemblies/expand.ts` `unmatchedOverrides`,
+  ASSEMBLIES_BUG_CATALOGUE AS-45).
+
 - **Assemblies: an override is its own unit's, and an exclusion is final.**
   Two fixes to how a unit finds its override
   (`web/src/lib/assemblies/expand.ts`), on the shared path the panel and

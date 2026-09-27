@@ -7,7 +7,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { sanitizeAssemblyDefinitions, validateAssembly, type AssemblyDefinition, type ExpandedLine } from "../../src/lib/assemblies/schema.ts";
 import { selectAssembly, type Instance } from "../../src/lib/assemblies/select.ts";
-import { expandAll, expandApplication } from "../../src/lib/assemblies/expand.ts";
+import { expandAll, expandApplication, unmatchedOverrides } from "../../src/lib/assemblies/expand.ts";
 import { rollup, type Breakdown } from "../../src/lib/assemblies/rollup.ts";
 import type { Value } from "../../src/lib/assemblies/expr.ts";
 
@@ -278,6 +278,18 @@ test("an exclusion wins over the unit's other overrides, wherever it sits; remov
   // Only a layer's own exclusion covers the layer; one naming another family never does.
   assert.deepEqual(status([choice, { ...exclusion, layer: "hookup" }]), [["controls", "overridden", "vav-cool"]]);
   assert.deepEqual(status([choice, { ...exclusion, family: "FCU" }]), [["controls", "overridden", "vav-cool"]]);
+});
+
+test("an override no unit takes is named with why, never kept silently (AS-45)", () => {
+  const box = vav("VAV-1", { heat_type: "hw" });
+  const coil = { ...vav("FCU-1", {}), family: "FCU" };
+  const why = (overrides: Parameters<typeof unmatchedOverrides>[2]) => unmatchedOverrides([box, coil], LIB, overrides).map((u) => [u.override.tag, u.why]);
+  assert.deepEqual(why([{ tag: "VAV-1", reason: "fits", exclude: true }, { tag: "FCU-1", reason: "fits, no typical", exclude: true }]), []);
+  assert.deepEqual(why([{ tag: "VAV-9", reason: "a typo", exclude: true }]), [["VAV-9", 'no unit is tagged "VAV-9"']]);
+  assert.deepEqual(why([{ tag: "VAV-1", family: "FCU", reason: "another family", exclude: true }]), [["VAV-1", 'no FCU is tagged "VAV-1" (VAV is)']]);
+  assert.deepEqual(why([{ tag: "VAV-1", layer: "hookup", reason: "a layer it has not", exclude: true }]), [["VAV-1", '"VAV-1" has no hookup layer']]);
+  assert.deepEqual(why([{ tag: "VAV-1", layer: "controls", reason: "a typical not offered", assembly: { id: "no-such-typical" } }]), [["VAV-1", 'the library offers no-such-typical in no layer of "VAV-1" (controls)']]);
+  assert.match(why([{ tag: "(project)", reason: "the project's own", exclude: true }])[0][1], /follow its settings/);
 });
 
 test("every selector false is no assembly, not unresolved", () => {

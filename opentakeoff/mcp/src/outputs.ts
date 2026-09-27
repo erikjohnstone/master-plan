@@ -1874,6 +1874,8 @@ export const applyAssembliesOutput = {
   }),
   applications: z.array(z.record(z.string(), z.unknown())).optional(),
   lines: z.array(z.record(z.string(), z.unknown())).optional(),
+  overrides_unmatched: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), why: z.string() })).optional()
+    .describe("Overrides that no unit takes, each with why (a tag no unit has, a family or layer its units have not, a typical the layer does not offer, or the project's own records, which follow the project settings). They applied nothing"),
   path: z.string().optional(),
   export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
   answers: z.object({

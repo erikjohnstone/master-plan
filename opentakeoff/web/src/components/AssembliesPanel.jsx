@@ -17,6 +17,8 @@
 // overrides.
 import { useEffect, useMemo, useState } from "react";
 import { applyAssemblies } from "../lib/assemblies/apply";
+import { unmatchedOverrides } from "../lib/assemblies/expand";
+import { PROJECT_INSTANCE } from "../lib/assemblies/select";
 import { assembliesCsvSet } from "../lib/assemblies/exportSet";
 import { importLibraryCsv, libraryToCsv } from "../lib/assemblies/libraryCsv";
 import { downloadText } from "../lib/totals";
@@ -105,6 +107,9 @@ function ControlReadings({ unit, readings, onOverride, onOpenCitation }) {
 
 function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
   const derived = Object.entries(unit.derived || {});
+  // The project's own records (building meters, a plant's controls) follow
+  // the project settings: an override would change nothing (AS-45).
+  const own = unit.tag !== PROJECT_INSTANCE.tag;
   return (
     <div style={{ padding: "8px 12px 14px 28px", background: "var(--paper)" }} data-assembly-unit-detail={unit.tag} role="region" aria-label={`${unit.tag} ${unit.family} ${unit.layer} details`}>
       {unit.reason && <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginBottom: 6 }}>Rule: <span style={mono}>{unit.reason}</span></div>}
@@ -129,9 +134,11 @@ function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
                 <td style={td}>{o.value === null ? <span style={{ color: "var(--c-danger)" }}>unresolved{o.missing?.length ? ` (waits for ${o.missing.join(", ")})` : ""}</span> : String(o.value)}</td>
                 <td style={{ ...td, color: "var(--ink-muted)" }}>{o.source ?? "—"}</td>
                 <td style={td}>
-                  <button type="button" style={btn} onClick={() => onOverride({ options: { [id]: !(o.value === true) } }, `setting ${id} to ${!(o.value === true)} on ${unit.tag}`)}>
-                    Set {String(!(o.value === true))}
-                  </button>
+                  {own && (
+                    <button type="button" style={btn} onClick={() => onOverride({ options: { [id]: !(o.value === true) } }, `setting ${id} to ${!(o.value === true)} on ${unit.tag}`)}>
+                      Set {String(!(o.value === true))}
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -154,7 +161,9 @@ function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
         </tbody>
       </table></div>
       <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
-        <button type="button" style={btn} onClick={() => onOverride({ exclude: true }, `excluding ${unit.tag}`)}>Exclude unit…</button>
+        {own
+          ? <button type="button" style={btn} onClick={() => onOverride({ exclude: true }, `excluding ${unit.tag}`)}>Exclude unit…</button>
+          : <span style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)" }}>A project record: what it waits for is set under Project settings (the project variables), not by an override.</span>}
       </div>
     </div>
   );
@@ -565,6 +574,15 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   const replaces = (o, unit, layer) => sameSlot(o, unit, layer) && (o.family === unit.family || (!o.family && !sharedTags.has(unit.tag)));
   const priorOf = (unit) => (state?.overrides ?? []).find((o) => sameSlot(o, unit, unit.layer) && o.family === unit.family)
     ?? (state?.overrides ?? []).find((o) => sameSlot(o, unit, unit.layer) && !o.family);
+  // Overrides no unit takes, each with why (AS-45): a unit a later read no
+  // longer finds, or the project's own records, which follow the settings.
+  const unmatched = useMemo(() => new Map(applied && state
+    ? unmatchedOverrides(applied.instances, projectLibrary(state, library), state.overrides).map(({ override, why }) => [override, why])
+    : []), [applied, state, library]);
+  const openSettings = () => {
+    const el = document.querySelector("[data-assemblies-settings]");
+    if (el) { el.open = true; el.scrollIntoView({ block: "start", behavior: "smooth" }); }
+  };
   // A group's schedule and what it waits for, in its header, its buttons'
   // names and each override's note: a table may print no title, and tied
   // typicals wait for nothing but a choice.
@@ -723,10 +741,12 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                       <td style={{ ...td, ...mono }}>{e.waits_for.join(", ") || "—"}</td>
                       <td style={{ ...td, ...mono }}>{e.candidates.join(", ") || e.assembly || "—"}</td>
                       <td style={td}>
-                        {e.candidates.map((c) => {
-                          const [id, version] = c.split("@");
-                          return <button key={c} type="button" style={{ ...btn, marginRight: 4 }} onClick={() => override(e)({ assembly: { id, version } }, `choosing ${c} for ${e.tag}`)}>Use {id}</button>;
-                        })}
+                        {e.tag === PROJECT_INSTANCE.tag
+                          ? <button type="button" style={{ ...btn, marginRight: 4 }} onClick={openSettings} data-assemblies-open-settings>Project settings</button>
+                          : e.candidates.map((c) => {
+                            const [id, version] = c.split("@");
+                            return <button key={c} type="button" style={{ ...btn, marginRight: 4 }} onClick={() => override(e)({ assembly: { id, version } }, `choosing ${c} for ${e.tag}`)}>Use {id}</button>;
+                          })}
                         <button type="button" style={btn} onClick={() => { setFamily(""); setFilter(""); setOpen(`${e.tag}|${e.layer}|${JSON.stringify(e.cites[0])}`); }}>Details</button>
                       </td>
                     </tr>
@@ -803,6 +823,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                 <div key={i} style={{ fontSize: "var(--fs-s)", marginBottom: 4 }}>
                   <span style={mono}>{o.tag}</span>{sharedTags.has(o.tag) ? ` ${o.family ?? "(every unit with the tag)"}` : ""}{o.layer ? ` (${o.layer})` : ""}: {o.exclude ? "excluded" : [o.assembly ? `typical ${o.assembly.id}` : "", ...Object.entries(o.options ?? {}).map(([k, v]) => `${k}=${v}`)].filter(Boolean).join(", ")}
                   <span style={{ color: "var(--ink-muted)" }}> — {o.reason}</span>
+                  {unmatched.has(o) && <span style={{ color: "var(--c-danger)" }} data-assemblies-override-unmatched> · applies to nothing: {unmatched.get(o)}</span>}
                   <button type="button" style={{ ...btn, marginLeft: 8, padding: "1px 6px" }} onClick={() => removeOverride(i)}>Remove</button>
                 </div>
               ))}

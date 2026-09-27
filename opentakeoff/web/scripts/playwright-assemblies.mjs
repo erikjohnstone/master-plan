@@ -186,8 +186,9 @@ try {
     // A unit with a typical and options: its details open from the keyboard.
     // A document whose resolved records carry no options (hook-ups only, as
     // 26_CA's) still has a unit with a typical to open.
-    const unit = mcp.report.units.find((u) => u.assembly && Object.keys(u.options).length)
-      ?? mcp.report.units.find((u) => u.assembly);
+    // A unit's own record: the project's (tag "(project)") follow the settings.
+    const unit = mcp.report.units.find((u) => u.tag !== '(project)' && u.assembly && Object.keys(u.options).length)
+      ?? mcp.report.units.find((u) => u.tag !== '(project)' && u.assembly);
     assert.ok(unit, 'the document has a unit with a typical');
     const toggle = panel.getByRole('button', { name: `${unit.tag} ${unit.family} ${unit.layer} details`, exact: true }).first();
     await toggle.focus();
@@ -211,9 +212,13 @@ try {
       const cells = optionRow().getByRole('cell');
       assert.equal((await cells.nth(1).innerText()).trim(), String(!(option.value === true)), 'the value is the one chosen');
       assert.equal((await cells.nth(2).innerText()).trim(), 'user', 'the option now comes from the user');
-      checks.push(`override ${unit.tag} ${optionId} with a reason`);
+      // A unit of another family under the same tag keeps its own records (AS-43).
+      const beside = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === unit.tag && a.instance.family !== unit.family);
+      assert.ok(beside.every((a) => a.selected_by !== 'user'), `the other units tagged ${unit.tag} keep their records: ${beside.map((a) => `${a.instance.family} ${a.layer} ${a.selected_by}`).join('; ')}`);
+      checks.push(`override ${unit.tag} ${optionId} with a reason${beside.length ? ` (the ${[...new Set(beside.map((a) => a.instance.family))].join(', ')} also tagged ${unit.tag} untouched)` : ''}`);
     } else {
-      const ex = mcp.report.exceptions.find((e) => e.candidates.length && mcp.report.exceptions.filter((o) => o.tag === e.tag).length === 1);
+      // A unit's row, never the project's own (they follow the settings).
+      const ex = mcp.report.exceptions.find((e) => e.tag !== '(project)' && e.candidates.length && mcp.report.exceptions.filter((o) => o.tag === e.tag).length === 1);
       assert.ok(ex, 'the document has an option to override or a waiting unit to choose a typical for');
       const [id] = ex.candidates[0].split('@');
       const exRow = panel.getByRole('table', { name: 'Records that wait for something' }).getByRole('row')
@@ -332,6 +337,19 @@ try {
         assert.ok(beside.every((a) => !String(a.reason ?? '').startsWith(GROUP_EXCLUDE_REASON)), `units sharing their tags keep their records: ${beside.map((a) => `${a.instance.tag} ${a.instance.family} ${a.status}`).slice(0, 5).join('; ')}`);
         checks.push(`${m} rows of another schedule excluded together (${records.length} records, every layer), an override each${beside.length ? `; ${beside.length} records of other families under the same tags untouched` : ''}`);
       }
+    }
+
+    // Every override the proof made applies to a unit, and the project's own
+    // rows, which follow the settings, open them rather than offer an
+    // override that would change nothing (AS-45).
+    assert.equal(await panel.locator('[data-assemblies-override-unmatched]').count(), 0, 'no override applies to nothing');
+    const toSettings = panel.locator('[data-assemblies-open-settings]').first();
+    if (await toSettings.count()) {
+      const settingsEl = panel.locator('[data-assemblies-settings]');
+      await settingsEl.evaluate((el) => { el.open = false; });
+      await toSettings.click();
+      assert.equal(await settingsEl.evaluate((el) => el.open), true, "a project row's button opens the project settings");
+      checks.push("the project's own rows open the project settings; no override applies to nothing");
     }
   }
 

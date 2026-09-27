@@ -2690,3 +2690,40 @@ unit. MCP's apply_assemblies describes the rule on `exclude`.
 a choice, both exclude. The choice alone still applies, and neither another
 layer's exclusion nor another family's excludes the unit. It fails without
 the fix.
+
+## AS-45 — an override that applied to nothing was kept without a word: the project's own rows, a typo, a unit no longer read (FIXED — this goal)
+
+**Found:** 2026-09-27, following AS-43 and AS-44 through every place an
+override is written. The panel lists the project's own records, such as
+building meters and a plant's controls, as exceptions tagged "(project)",
+with "Use chw-plant" and, under Details, option and Exclude buttons. The
+engine chooses those records from the project settings
+(selectProjectAssemblies) and never reads an override for them. So on
+federal-mech, "Use chw-plant" asked for a reason, listed the override
+under "Your overrides", and changed nothing: the row still waited for
+var.plants. An override for a tag no unit has, such as a typo over MCP or a
+unit a later read of the drawings no longer finds, was kept the same way.
+
+**Fix (expand.ts, the shared path; MCP and the panel both report through
+it):**
+- **The shared check:** unmatchedOverrides names every override that no
+  unit takes, with why. The reason is one of: a tag no unit has, a family
+  or layer its units have not, a typical that layer does not offer, or the
+  project's own records, which follow the project settings.
+- **MCP:** apply_assemblies lists these under overrides_unmatched. The
+  field is absent when every override applies.
+- **The panel:** "Your overrides" marks each with "applies to nothing" and
+  the reason. A project row's resolve button is "Project settings", which
+  opens the project variables its waits are set with (chw_plants,
+  hw_plants, closed_loops, buildings, gas_service, steam_service). Its
+  Details shows no override buttons.
+- **Unchanged:** the matching itself (overrideFits, AS-43 and AS-44) and
+  every record and line.
+
+**Tests:**
+- engine.test.ts names each reason: a typo, another family, a missing
+  layer, a typical not offered and the project's own records. Two overrides
+  that fit are not named.
+- assembliesApply.test.mjs sends apply_assemblies three unmatched overrides
+  beside one that applies. Only the three are named, each with its reason,
+  and a call whose overrides all apply carries no overrides_unmatched.
