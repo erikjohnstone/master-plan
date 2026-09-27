@@ -568,7 +568,11 @@ read as equipment). You give one reason, and each unit still gets its own
 override, naming the group it was decided with. An override is its own unit's:
 where units of two families share a tag, overriding or excluding one leaves the
 other alone. Excluding a unit keeps the choices you made for it, and removing the
-exclusion under **Your overrides** brings them back. Below the exceptions sit a table per family (units, typicals,
+exclusion under **Your overrides** brings them back. The project's own records (a
+plant's controls, the building meters) follow the project variables, so their
+row offers **Project settings** instead of **Use …**. An override that no unit
+takes, such as one for a tag the drawings no longer have, is marked *applies to
+nothing* under **Your overrides**, with why. Below the exceptions sit a table per family (units, typicals,
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its
 **Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.

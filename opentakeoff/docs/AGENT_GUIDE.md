@@ -200,7 +200,9 @@ the options, variables and expanded lines, each citing the schedule row and the 
 Read `report.exceptions` first. An unresolved unit names what it waits for: an attribute the
 schedule does not print, a project setting, or two typicals that tie. That is the answer, not a
 failure. Report it, or pass the partner's value in `settings` or an override with a reason. Never
-pick a typical or an option the drawing does not decide. `control_readings` reads the control
+pick a typical or an option the drawing does not decide. Where units of two families share a tag,
+give the override the unit's `family`. An override listed in `overrides_unmatched` applied nothing:
+correct its tag, or set a project record's value in `settings`, before you report it as applied. `control_readings` reads the control
 drawings bound to each unit (sequences, schematics, points lists): a reading applies only where two
 readers agree or on a phrase that states it outright (a unit printed standalone); one reader alone
 is a proposal, and readers that disagree leave the option unresolved. A zone plan (a sheet whose
