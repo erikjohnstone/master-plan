@@ -135,3 +135,34 @@ export function assembliesReport(
     units,
   };
 }
+
+/** Exceptions one answer resolves together: unresolved records of one
+ * schedule (its sheet and title), family and layer that wait for the same
+ * things with the same candidates ("EF-1 … EF-9 of the EXHAUST FAN SCHEDULE
+ * wait for attr.vfd"). The estimator's choice is still an override on each
+ * unit with its reason; a group only saves making it once per row. Groups of
+ * one are left out. */
+export interface ExceptionGroup {
+  family: string;
+  layer: string;
+  sheet: string | null;
+  /** The schedule's title, as its rows' cites print it. */
+  schedule: string | null;
+  waits_for: string[];
+  candidates: string[];
+  units: UnitRow[];
+}
+
+export function exceptionGroups(exceptions: readonly UnitRow[]): ExceptionGroup[] {
+  const groups = new Map<string, ExceptionGroup>();
+  for (const u of exceptions) {
+    if (u.status !== "unresolved" || !u.candidates.length) continue;
+    const cite = u.cites[0];
+    const waits = [...u.waits_for].sort();
+    const k = JSON.stringify([u.family, u.layer, cite?.sheet ?? null, cite?.table_title ?? null, waits, u.candidates]);
+    let g = groups.get(k);
+    if (!g) groups.set(k, g = { family: u.family, layer: u.layer, sheet: cite?.sheet ?? null, schedule: cite?.table_title ?? null, waits_for: waits, candidates: [...u.candidates], units: [] });
+    g.units.push(u);
+  }
+  return [...groups.values()].filter((g) => g.units.length > 1);
+}

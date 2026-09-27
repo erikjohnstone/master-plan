@@ -39,6 +39,7 @@ const url = process.env.OT_UI_URL || 'http://127.0.0.1:5173';
 const smoke = process.env.OT_ASM_SMOKE === '1';
 const mcp = JSON.parse(readFileSync(resolve(process.env.OT_MCP_APPLY), 'utf8'));
 const REASON = "UI proof: the estimator's own choice";
+const GROUP_REASON = "UI proof: one answer for the schedule's rows";
 const PRESET = 'valve-shipped-to-kit-maker';
 
 const browser = await chromium.launch({ executablePath: process.env.OT_BROWSER_PATH || undefined });
@@ -174,8 +175,11 @@ try {
 
   if (!smoke) {
     // A unit with a typical and options: its details open from the keyboard.
-    const unit = mcp.report.units.find((u) => u.assembly && Object.keys(u.options).length);
-    assert.ok(unit, 'the document has a unit with a typical and options');
+    // A document whose resolved records carry no options (hook-ups only, as
+    // 26_CA's) still has a unit with a typical to open.
+    const unit = mcp.report.units.find((u) => u.assembly && Object.keys(u.options).length)
+      ?? mcp.report.units.find((u) => u.assembly);
+    assert.ok(unit, 'the document has a unit with a typical');
     const toggle = panel.getByRole('button', { name: `${unit.tag} ${unit.family} ${unit.layer} details`, exact: true }).first();
     await toggle.focus();
     await page.keyboard.press('Enter');
@@ -184,18 +188,35 @@ try {
     assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
     checks.push(`keyboard: ${unit.tag} (${unit.layer}) details`);
 
-    // An override asks for a reason and is kept on the record.
-    const [optionId, option] = Object.entries(unit.options)[0];
-    const optionRow = () => detail.getByRole('table', { name: `${unit.tag} options` }).getByRole('row')
-      .filter({ has: page.getByRole('cell', { name: optionId, exact: true }) });
-    page.once('dialog', (d) => d.accept(REASON));
-    await optionRow().getByRole('button').click();
-    await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
-    assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
-    const cells = optionRow().getByRole('cell');
-    assert.equal((await cells.nth(1).innerText()).trim(), String(!(option.value === true)), 'the value is the one chosen');
-    assert.equal((await cells.nth(2).innerText()).trim(), 'user', 'the option now comes from the user');
-    checks.push(`override ${unit.tag} ${optionId} with a reason`);
+    // An override asks for a reason and is kept on the record: one of the
+    // unit's options, or, where no typical carries an option, a typical
+    // chosen for a unit that waits.
+    if (Object.keys(unit.options).length) {
+      const [optionId, option] = Object.entries(unit.options)[0];
+      const optionRow = () => detail.getByRole('table', { name: `${unit.tag} options` }).getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: optionId, exact: true }) });
+      page.once('dialog', (d) => d.accept(REASON));
+      await optionRow().getByRole('button').click();
+      await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
+      assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
+      const cells = optionRow().getByRole('cell');
+      assert.equal((await cells.nth(1).innerText()).trim(), String(!(option.value === true)), 'the value is the one chosen');
+      assert.equal((await cells.nth(2).innerText()).trim(), 'user', 'the option now comes from the user');
+      checks.push(`override ${unit.tag} ${optionId} with a reason`);
+    } else {
+      const ex = mcp.report.exceptions.find((e) => e.candidates.length && mcp.report.exceptions.filter((o) => o.tag === e.tag).length === 1);
+      assert.ok(ex, 'the document has an option to override or a waiting unit to choose a typical for');
+      const [id] = ex.candidates[0].split('@');
+      const exRow = panel.getByRole('table', { name: 'Records that wait for something' }).getByRole('row')
+        .filter({ has: page.getByRole('button', { name: ex.tag, exact: true }) }).first();
+      page.once('dialog', (d) => d.accept(REASON));
+      await exRow.getByRole('button', { name: `Use ${id}`, exact: true }).click();
+      await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
+      assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
+      const chosen = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === ex.tag && a.layer === ex.layer);
+      assert.ok(chosen.length && chosen.every((a) => a.selected_by === 'user' && a.assembly?.id === id), `${ex.tag} takes ${id} by override`);
+      checks.push(`override: ${ex.tag} (${ex.layer}) takes ${id} with a reason`);
+    }
     await page.screenshot({ path: `${out}/override.png` });
 
     // The library: read-only starter, live validation, an update the project
@@ -254,6 +275,27 @@ try {
     await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible', timeout: 120000 });
     assert.deepEqual(await annotations(), saved, 'reload keeps the pins, settings and override');
     checks.push('actual IndexedDB autosave; reload keeps pins and the override');
+
+    // One schedule's rows that wait for the same things resolve together: one
+    // choice and one reason, an override on each unit (report.ts
+    // exceptionGroups). Each record then takes the chosen typical.
+    const groupRow = panel.locator('[data-assemblies-group]').first();
+    if (await groupRow.count()) {
+      const n = Number(await groupRow.getAttribute('data-assemblies-group'));
+      const use = groupRow.locator('[data-assemblies-group-use]').first();
+      const [chosen] = String(await use.getAttribute('data-assemblies-group-use')).split('@');
+      const exceptionsBefore = Number(await panel.locator('[data-assemblies-exceptions]').getAttribute('data-assemblies-exceptions'));
+      const overridesBefore = (await annotations())?.overrides?.length ?? 0;
+      page.once('dialog', (d) => d.accept(GROUP_REASON));
+      await use.click();
+      await panel.locator(`[data-assemblies-overrides="${overridesBefore + n}"]`).waitFor({ state: 'visible', timeout: 120000 });
+      const exceptionsAfter = (await panel.locator('[data-assemblies-exceptions]').count())
+        ? Number(await panel.locator('[data-assemblies-exceptions]').getAttribute('data-assemblies-exceptions')) : 0;
+      assert.equal(exceptionsAfter, exceptionsBefore - n, `the group's ${n} units leave the exceptions`);
+      const chosenByUser = JSON.parse((await applyInPage()).applications).filter((a) => a.selected_by === 'user' && a.assembly?.id === chosen && String(a.reason).startsWith(GROUP_REASON));
+      assert.ok(chosenByUser.length >= n, `${n} records take ${chosen}, each with the reason (${chosenByUser.length})`);
+      checks.push(`${n} waiting units of one schedule resolved together with ${chosen}, an override each`);
+    }
   }
 
   assert.deepEqual(errors, []);

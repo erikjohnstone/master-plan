@@ -23,7 +23,7 @@ import { downloadText } from "../lib/totals";
 import { cloneForEdit, combinedLibrary, overridesOf, validateEdit } from "../lib/assemblies/libraryEdit";
 import { activeResponsibilityPresets, HOOKUP_SWITCHES, HOOKUP_VARIABLES, hookupProfileDefaults, RESPONSIBILITY_PRESETS, withResponsibilityPreset } from "../lib/assemblies/presets";
 import { adoptUpdate, emptyAssembliesState, libraryUpdates, pinUsed, projectLibrary } from "../lib/assemblies/projectState";
-import { assembliesReport } from "../lib/assemblies/report";
+import { assembliesReport, exceptionGroups } from "../lib/assemblies/report";
 import { PARTIES } from "../lib/assemblies/schema";
 import { answerSettings, appendAnswer, replayAnswers } from "../lib/controlIntent/journal";
 import { projectQuestions } from "../lib/controlIntent/questions";
@@ -562,6 +562,25 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
       : { tag: unit.tag, layer: unit.layer, reason, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}), ...(patch.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
     onStateChange?.({ ...base, overrides: [...others, entry] });
   };
+  // One schedule's rows that wait for the same things (report.ts
+  // exceptionGroups): one choice and one reason, an override on each unit.
+  const overrideMany = (group) => (patch, what) => {
+    const reason = askReason(what);
+    if (!reason) return;
+    const base = state ?? emptyAssembliesState();
+    const note = `${reason} (one of ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"}, decided together)`;
+    // Each unit as override() keys it: its tag and layer, or its tag alone
+    // when it is excluded.
+    const layerOf = (u) => (patch.exclude ? null : u.layer);
+    const units = [...new Map(group.units.map((u) => [JSON.stringify([u.tag, layerOf(u)]), u])).values()];
+    const others = base.overrides.filter((o) => !units.some((u) => o.tag === u.tag && (o.layer ?? null) === layerOf(u)));
+    const entries = units.map((u) => {
+      if (patch.exclude) return { tag: u.tag, reason: note, exclude: true };
+      const prior = base.overrides.find((o) => o.tag === u.tag && o.layer === u.layer);
+      return { tag: u.tag, layer: u.layer, reason: note, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
+    });
+    onStateChange?.({ ...base, overrides: [...others, ...entries] });
+  };
   const setSettings = (next) => onStateChange?.({ ...(state ?? emptyAssembliesState()), settings: next });
   const removeOverride = (i) => {
     const base = state ?? emptyAssembliesState();
@@ -583,6 +602,24 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
       setExportErr(`Couldn't build the CSV set: ${e?.message || e}`);
     }
   };
+  // Exceptions in their order, each group's header before its first row and
+  // its rows together.
+  const exceptionRows = useMemo(() => {
+    if (!report) return [];
+    const groups = exceptionGroups(report.exceptions);
+    const groupOf = new Map(groups.flatMap((g) => g.units.map((u) => [u, g])));
+    const rows = [];
+    const shown = new Set();
+    report.exceptions.forEach((e, i) => {
+      const g = groupOf.get(e);
+      if (!g) { rows.push({ e, i }); return; }
+      if (shown.has(g)) return;
+      shown.add(g);
+      rows.push({ group: g, i });
+      for (const u of g.units) rows.push({ e: u, i: report.exceptions.indexOf(u) });
+    });
+    return rows;
+  }, [report]);
   const linesOf = (u) => applied.lines.filter((l) => l.tag === u.tag && l.layer === u.layer && l.family === u.family && JSON.stringify(l.cites[0]) === JSON.stringify(u.cites[0]));
   const units = report ? report.units.filter((u) => (!family || u.family === family) && (!filter || `${u.tag} ${u.family} ${u.assembly ?? ""}`.toLowerCase().includes(filter.toLowerCase()))) : [];
 
@@ -643,7 +680,22 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
               <div style={{ overflowX: "auto" }}><table style={{ borderCollapse: "collapse", width: "100%" }} aria-label="Records that wait for something">
                 <thead><tr><th style={th}>Unit</th><th style={th}>Family</th><th style={th}>Layer</th><th style={th}>Waits for</th><th style={th}>Candidates</th><th style={th}>Resolve</th></tr></thead>
                 <tbody>
-                  {report.exceptions.map((e, i) => (
+                  {exceptionRows.map(({ group, e, i }) => group ? (
+                    <tr key={`group-${i}`} data-assemblies-group={group.units.length} style={{ background: "color-mix(in srgb, var(--ink-faint) 22%, transparent)" }}>
+                      <td style={td} colSpan={5}>
+                        <strong>{group.units.length} {group.family} units</strong> of {group.schedule ?? "one schedule"} wait for <span style={mono}>{group.waits_for.join(", ")}</span>
+                      </td>
+                      <td style={td}>
+                        {group.candidates.map((c) => {
+                          const [id, version] = c.split("@");
+                          const label = `Use ${id} for all ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"} waiting for ${group.waits_for.join(", ")}`;
+                          return <button key={c} type="button" style={{ ...btn, marginRight: 4 }} data-assemblies-group-use={c} aria-label={label} onClick={() => overrideMany(group)({ assembly: { id, version } }, `choosing ${c} for the ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"}`)}>Use {id} for all {group.units.length}</button>;
+                        })}
+                        <button type="button" style={btn} data-assemblies-group-exclude aria-label={`Exclude all ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"} waiting for ${group.waits_for.join(", ")}`}
+                          onClick={() => overrideMany(group)({ exclude: true }, `excluding the ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"}`)}>Exclude all {group.units.length}…</button>
+                      </td>
+                    </tr>
+                  ) : (
                     <tr key={`${e.tag}-${e.layer}-${i}`}>
                       <td style={td}><button type="button" style={{ ...btn, border: "none", padding: 0, textDecoration: "underline", background: "transparent" }} onClick={() => onOpenCitation?.(citeRow(e.cites[0], e.tag))}>{e.tag}</button></td>
                       <td style={td}>{e.family}{e.compiled_family !== e.family ? ` (from ${e.compiled_family})` : ""}</td>

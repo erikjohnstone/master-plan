@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies, type CompiledItem } from "../../src/lib/assemblies/apply.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
-import { assembliesReport } from "../../src/lib/assemblies/report.ts";
+import { assembliesReport, exceptionGroups } from "../../src/lib/assemblies/report.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
 
@@ -59,4 +59,21 @@ test("the report: exceptions first (each naming what it waits for), a family tab
     lines.filter((l) => l.tag === "P-1" && l.layer === "controls").length);
   // Line status totals add up.
   assert.equal(Object.values(r.totals.lines_by_status).reduce((a, b) => a + b, 0), lines.length);
+});
+
+test("exception groups: one schedule's rows that wait for the same things with the same candidates resolve together", () => {
+  const at = (family: string, tag: string, i: number, sheet = "s.pdf#2"): CompiledItem => ({ ...row(family, tag, i), sheet_id: sheet });
+  const items = [at("FAN", "EF-1", 0), at("FAN", "EF-2", 1), at("FAN", "EF-3", 2), at("FAN", "EF-4", 3, "s.pdf#3"),
+    at("PUMP", "P-1", 4), at("PUMP", "P-2", 5), at("PUMP", "P-3", 6)];
+  const normalized = items.map((it, i) => norm(it, i === 6 ? { vfd: "yes" } : {}));
+  const { instances, applications, lines } = applyAssemblies({ project: { items }, library: LIB, normalized });
+  const r = assembliesReport(instances, applications, lines);
+  const groups = exceptionGroups(r.exceptions);
+  assert.deepEqual(groups.map((g) => [g.family, g.layer, g.schedule, g.units.map((u) => u.tag)]), [
+    ["FAN", "controls", "FAN SCHEDULE", ["EF-1", "EF-2", "EF-3"]],
+    ["PUMP", "controls", "PUMP SCHEDULE", ["P-1", "P-2"]],
+  ], "EF-4 is printed on another sheet, and P-3's row prints its drive");
+  assert.deepEqual(groups[0].waits_for, ["attr.vfd"]);
+  assert.deepEqual([...groups[0].candidates].sort(), ["fan-constant@1", "fan-variable@1"]);
+  assert.deepEqual(exceptionGroups(r.exceptions.filter((e) => e.tag === "EF-1")), [], "a group of one is no group");
 });
