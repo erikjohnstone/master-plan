@@ -26,6 +26,8 @@
 //     (OT_MCP_EXPORT_DIR_SCOPED); cleared again before the override checks;
 //   · another typical chosen from a unit's details, with a reason, and the
 //     same choice for every row of a schedule like one unit (AS-55);
+//   · the overrides of that choice for all as one row, removed in one step
+//     (AS-59);
 //   · a sheet added after the schedules were read, named over the earlier
 //     set's units (AS-58).
 //
@@ -530,6 +532,18 @@ try {
     if (group) {
       await chooseTypical(panel, group, { all: true });
       checks.push(`the same choice for all ${group.count} ${group.family} units of a schedule like ${group.tag}: each takes ${group.pick.id}, one reason and an override each (AS-55)`);
+      // Its overrides are one row under Your overrides, and Remove all N
+      // takes them back in one step (AS-59).
+      const row = panel.locator('[data-assemblies-override-group]').filter({ hasText: CHOICE_REASON });
+      await row.waitFor({ state: 'visible' });
+      const n = Number(await row.getAttribute('data-assemblies-override-group'));
+      assert.equal(n, new Set(group.tags).size, `the ${group.count} overrides of the choice are one row`);
+      const before = await shownOverrides(panel);
+      await row.locator('[data-assemblies-override-group-remove]').click();
+      await waitForAsync(async () => (await shownOverrides(panel)) === before - n, { timeout: 180000, label: `the ${n} overrides removed together` });
+      const left = await page.evaluate(() => (window.__opentakeoff.probe.assembliesState()?.overrides ?? []).map((o) => o.reason));
+      assert.ok(!left.some((r) => r.startsWith(CHOICE_REASON) && r.endsWith('decided together)')), 'none of the choice is left');
+      checks.push(`Remove all ${n} takes back the choice for all ${n} in one step (AS-59)`);
     }
     assert.equal(await panel.locator('[data-assemblies-override-unmatched]').count(), 0, 'the choices apply to their units');
   }

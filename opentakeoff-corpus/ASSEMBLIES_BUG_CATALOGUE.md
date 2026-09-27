@@ -3474,3 +3474,41 @@ nor is a set before any read; files added, removed or revised are named, a
 revision by its rev and the epoch, and the epoch alone says a file was
 replaced; the notice names them all, its button reads the schedules again,
 and it is disabled while they are read.
+
+## AS-59 — a group decision could only be taken back one override at a time (FIXED — this goal)
+
+**Found:** 2026-09-27, reading the panel as an estimator who picks the wrong
+group action. "Use … for all N", "Exclude all N", an option for all N (the
+exceptions' groups, AS-48) and "…for all N like it" (AS-55) write an override
+on each unit, one reason for all, and "Your overrides" listed each with its
+own Remove. Over the 98 cached documents (held-out filtered) the exceptions
+form 62 groups of 2 to 42 units (071_ME's transposed rooftop schedule, 42),
+and a unit's details offer 432 "…for all N like it" choices of 2 to 58 units
+(federal-mech's and 096_IN's 58 VAV boxes), 56 of them over 10. Taking one of
+those back took N clicks in a list N lines long, where the one decision was
+the thing to undo. Nothing was lost or wrong; the list only made the
+decision hard to see and to reverse.
+
+**Fix (the panel's; the overrides are unchanged):** `overrideRows`
+(AssembliesPanel.jsx) takes the overrides one group action wrote as one row:
+the same reason with the "(one of N … units of …, decided together)" note
+`overrideMany` writes, the same layer, and the same exclusion or typical (a
+member's own earlier options may differ). **OverridesView** shows such a row
+with the change its units share, the reason and **Remove all N**, over the
+list of its units, each with its own Remove and its own marks (AS-45's
+*applies to nothing*, AS-49's *not applied*); a row with a marked unit opens.
+One left of a group, and any other override, is a row of its own. The
+override count the panel shows, what each override is, and what the engine
+does with it are unchanged, so MCP parity holds as before.
+
+**Measured:** the UI proof now finds the overrides of its "…for all N like it"
+choice as one row and takes them back with Remove all N: 069_ID (4 pumps, 16
+checks) and 053_VA (4 grilles, 9 checks), the override count down by N and
+none of the choice left.
+
+**Tests:** panelSections.test.ts: a group's overrides are one row in the
+order of its first, with members whose earlier options differ, apart from a
+single override and from the same note on another layer; one left of a group
+is its own row; the row counts overrides, names what every unit shares, keeps
+each unit's mark on its line and opens when one is marked; Remove all N
+removes the group's overrides, and a unit's own Remove its own.

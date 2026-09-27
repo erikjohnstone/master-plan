@@ -1,11 +1,12 @@
 // The Takeoff panel's sections that name what cannot stand (AS-50, AS-53, AS-54),
-// a unit's choice of another typical (AS-55), and a drawing set changed since
-// its schedules were read (AS-58), rendered as the panel renders them.
+// a unit's choice of another typical (AS-55), a drawing set changed since its
+// schedules were read (AS-58), and the overrides one group action wrote
+// (AS-59), rendered as the panel renders them.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { drawingSetChange, LineErrorsView, ProjectSettingsView, StaleProjectView, TypicalChoiceView, UnreadSchedulesView } from "../../src/components/AssembliesPanel.jsx";
+import { drawingSetChange, LineErrorsView, OverridesView, overrideRows, ProjectSettingsView, StaleProjectView, TypicalChoiceView, UnreadSchedulesView } from "../../src/components/AssembliesPanel.jsx";
 
 test("the lines that cannot be counted are listed, each with its unit, rule and why (AS-53)", () => {
   const cites = [{ sheet: "m.pdf#3", table_title: "COOLING TOWER SCHEDULE", header: "MARK", bbox: [0, 0, 1, 1] }];
@@ -105,4 +106,51 @@ test("a drawing set changed since its schedules were read is named: files added,
   const button = [view.props.children].flat().find((c: any) => c?.props?.["data-assemblies-stale-reread"]);
   button.props.onClick();
   assert.equal(reads, 1);
+});
+
+test("the overrides one group action wrote are one row, with Remove all N over their units (AS-59)", () => {
+  const note = "not in the BAS scope (one of 3 FAN units of EXHAUST FAN SCHEDULE, decided together)";
+  const use = "per the spec (one of 2 AHU units of AIR HANDLING UNIT SCHEDULE, decided together)";
+  const overrides = [
+    { tag: "P-1", family: "PUMP", layer: "controls", reason: "the estimator's own", assembly: { id: "pump-vfd" } },
+    { tag: "EF-1", family: "FAN", reason: note, exclude: true },
+    { tag: "AHU-1", family: "AHU", layer: "controls", reason: use, assembly: { id: "ahu-constant-volume" }, options: { economizer: true } },
+    { tag: "EF-2", family: "FAN", reason: note, exclude: true },
+    // A member's earlier options ride its override: the same group all the same.
+    { tag: "AHU-2", family: "AHU", layer: "controls", reason: use, assembly: { id: "ahu-constant-volume" }, options: {} },
+    { tag: "EF-3", family: "FAN", reason: note, exclude: true },
+    // The same note on another layer, or a lone one left, is its own row.
+    { tag: "EF-9", family: "FAN", layer: "hookup", reason: note },
+  ];
+  assert.deepEqual(overrideRows(overrides), [
+    { indices: [0], together: false },
+    { indices: [1, 3, 5], together: true },
+    { indices: [2, 4], together: true },
+    { indices: [6], together: false },
+  ]);
+  assert.deepEqual(overrideRows([overrides[1]]), [{ indices: [0], together: false }], "one left of a group is a row of its own");
+
+  const unmatched = new Map([[overrides[3], "no unit EF-2 is in this project"]]);
+  let removed: number[][] = [];
+  const props = { overrides, sharedTags: new Set<string>(), unmatched, ignored: new Map(), onRemove: (ix: number[]) => { removed.push(ix); } };
+  const html = renderToStaticMarkup(createElement(OverridesView, props));
+  assert.match(html, /data-assemblies-overrides="7"/, "the count is still of overrides");
+  assert.match(html, /data-assemblies-override-group="3"/);
+  assert.match(html, /<strong>3 units decided together<\/strong> \(FAN\): excluded/);
+  assert.match(html, /<strong>2 units decided together<\/strong> \(AHU, controls\): typical ahu-constant-volume</, "what every unit shares");
+  assert.match(html, /Remove all 3/);
+  assert.match(html, /1 marked below/);
+  assert.equal((html.match(/data-assemblies-override-unmatched/g) ?? []).length, 1, "the unit's own mark stays on its line");
+  assert.match(html, /<details open=""/, "a group with a marked unit opens");
+  assert.equal((html.match(/<details open=""/g) ?? []).length, 1, "and only that one");
+  // Remove all N removes the group's overrides; a unit's own Remove, its own.
+  const view = OverridesView(props) as any;
+  const rows = [view.props.children].flat(2).filter(Boolean);
+  const group = rows.find((r: any) => r?.props?.["data-assemblies-override-group"] === 3);
+  const removeAll = [group.props.children].flat().find((c: any) => c?.props?.["data-assemblies-override-group-remove"] === 3);
+  removeAll.props.onClick();
+  const details = [group.props.children].flat().find((c: any) => c?.type === "details");
+  const second = [details.props.children].flat(2).filter((c: any) => c?.type === "div")[1];
+  [second.props.children].flat().find((c: any) => c?.type === "button").props.onClick();
+  assert.deepEqual(removed, [[1, 3, 5], [3]]);
 });

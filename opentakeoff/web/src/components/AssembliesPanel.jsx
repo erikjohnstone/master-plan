@@ -290,6 +290,75 @@ export function StaleProjectView({ change, onReload, loading = false }) {
   );
 }
 
+// The note a group action writes on each of its overrides (overrideMany).
+const DECIDED_TOGETHER = /\(one of \d+ .+, decided together\)$/;
+
+/** Your overrides as rows (AS-59): the overrides one group action wrote
+ * (one reason, "…decided together", the same layer and exclusion or typical)
+ * are one row; any other override is its own. In the order of each row's
+ * first override.
+ * @param {ReadonlyArray<{ reason?: string, family?: string, layer?: string, exclude?: boolean, assembly?: { id: string } }>} overrides
+ * @returns {Array<{ indices: number[], together: boolean }>} */
+export function overrideRows(overrides) {
+  const rows = [];
+  const at = new Map();
+  overrides.forEach((o, i) => {
+    const together = DECIDED_TOGETHER.test(String(o.reason ?? ""));
+    const key = together ? JSON.stringify([o.reason, o.layer ?? null, Boolean(o.exclude), o.assembly?.id ?? null]) : null;
+    if (key !== null && at.has(key)) { rows[at.get(key)].indices.push(i); return; }
+    if (key !== null) at.set(key, rows.length);
+    rows.push({ indices: [i], together });
+  });
+  return rows.map((r) => ({ ...r, together: r.together && r.indices.length > 1 }));
+}
+
+const overrideWhat = (o) => (o.exclude ? ["excluded"] : [o.assembly ? `typical ${o.assembly.id}` : "", ...[o.options, o.variables].flatMap((set) => Object.entries(set ?? {}).map(([k, v]) => `${k}=${v}`))].filter(Boolean));
+
+/** "Your overrides": each override with Remove, and the overrides a group
+ * action wrote as one row, with Remove all N, over the list of its units
+ * (AS-59). What applies to nothing, or in part not at all, is marked on the
+ * unit's own line (AS-45, AS-49).
+ * @param {{ overrides: ReadonlyArray<any>, sharedTags: Set<string>, unmatched: Map<any, string>, ignored: Map<any, string>, onRemove: (indices: number[]) => void }} props */
+export function OverridesView({ overrides, sharedTags, unmatched, ignored, onRemove }) {
+  const line = (o, i) => (
+    <div key={i} style={{ fontSize: "var(--fs-s)", marginBottom: 4 }}>
+      <span style={mono}>{o.tag}</span>{sharedTags.has(o.tag) ? ` ${o.family ?? "(every unit with the tag)"}` : ""}{o.layer ? ` (${o.layer})` : ""}: {overrideWhat(o).join(", ")}
+      <span style={{ color: "var(--ink-muted)" }}> — {o.reason}</span>
+      {unmatched.has(o) && <span style={{ color: "var(--c-danger)" }} data-assemblies-override-unmatched> · applies to nothing: {unmatched.get(o)}</span>}
+      {ignored.has(o) && <span style={{ color: "var(--c-danger)" }} data-assemblies-override-ignored> · not applied: {ignored.get(o)}</span>}
+      <button type="button" style={{ ...btn, marginLeft: 8, padding: "1px 6px" }} onClick={() => onRemove([i])}>Remove</button>
+    </div>
+  );
+  return (
+    <section style={{ marginTop: 16 }} data-assemblies-overrides={overrides.length} aria-label="Your overrides">
+      <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>Your overrides</h3>
+      {overrideRows(overrides).map((row) => {
+        if (!row.together) return line(overrides[row.indices[0]], row.indices[0]);
+        const members = row.indices.map((i) => overrides[i]);
+        const first = members[0];
+        const families = [...new Set(members.map((o) => o.family ?? "every unit with the tag"))].join(", ");
+        const what = members.map(overrideWhat).reduce((a, b) => a.filter((x) => b.includes(x)));
+        const tags = members.map((o) => o.tag);
+        const marked = members.filter((o) => unmatched.has(o) || ignored.has(o)).length;
+        return (
+          <div key={`group-${row.indices[0]}`} data-assemblies-override-group={members.length} style={{ fontSize: "var(--fs-s)", marginBottom: 6 }}>
+            <strong>{members.length} units decided together</strong> ({families}{first.layer ? `, ${first.layer}` : ""}): {what.join(", ") || "their own options"}
+            <span style={{ color: "var(--ink-muted)" }}> — {first.reason}</span>
+            {marked > 0 && <span style={{ color: "var(--c-danger)" }}> · {marked} marked below</span>}
+            <button type="button" style={{ ...btn, marginLeft: 8, padding: "1px 6px" }} data-assemblies-override-group-remove={members.length}
+              aria-label={`Remove the ${members.length} overrides decided together: ${tags.slice(0, 6).join(", ")}${tags.length > 6 ? ", …" : ""}`}
+              onClick={() => onRemove(row.indices)}>Remove all {members.length}</button>
+            <details open={marked > 0} style={{ margin: "4px 0 0 12px" }}>
+              <summary style={{ cursor: "pointer", color: "var(--ink-muted)" }}>{tags.slice(0, 6).join(", ")}{tags.length > 6 ? `, … (${tags.length})` : ""}</summary>
+              {row.indices.map((i) => line(overrides[i], i))}
+            </details>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
 /** A typed setting: blank is unset; true/yes, false/no, a number, or text. */
 function parseSetting(text) {
   const t = String(text ?? "").trim();
@@ -763,9 +832,10 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     onStateChange?.({ ...base, overrides: [...others, ...entries] });
   };
   const setSettings = (next) => onStateChange?.({ ...(state ?? emptyAssembliesState()), settings: next });
-  const removeOverride = (i) => {
+  const removeOverrides = (indices) => {
     const base = state ?? emptyAssembliesState();
-    onStateChange?.({ ...base, overrides: base.overrides.filter((_, j) => j !== i) });
+    const gone = new Set(indices);
+    onStateChange?.({ ...base, overrides: base.overrides.filter((_, j) => !gone.has(j)) });
   };
   // The CSV set is the shared builder's bytes (exportSet.ts, the same files
   // apply_assemblies writes with export_dir); only the zip is this surface's.
@@ -973,18 +1043,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
           </section>
 
           {(state?.overrides?.length ?? 0) > 0 && (
-            <section style={{ marginTop: 16 }} data-assemblies-overrides={state.overrides.length} aria-label="Your overrides">
-              <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>Your overrides</h3>
-              {state.overrides.map((o, i) => (
-                <div key={i} style={{ fontSize: "var(--fs-s)", marginBottom: 4 }}>
-                  <span style={mono}>{o.tag}</span>{sharedTags.has(o.tag) ? ` ${o.family ?? "(every unit with the tag)"}` : ""}{o.layer ? ` (${o.layer})` : ""}: {o.exclude ? "excluded" : [o.assembly ? `typical ${o.assembly.id}` : "", ...[o.options, o.variables].flatMap((set) => Object.entries(set ?? {}).map(([k, v]) => `${k}=${v}`))].filter(Boolean).join(", ")}
-                  <span style={{ color: "var(--ink-muted)" }}> — {o.reason}</span>
-                  {unmatched.has(o) && <span style={{ color: "var(--c-danger)" }} data-assemblies-override-unmatched> · applies to nothing: {unmatched.get(o)}</span>}
-                  {ignored.has(o) && <span style={{ color: "var(--c-danger)" }} data-assemblies-override-ignored> · not applied: {ignored.get(o)}</span>}
-                  <button type="button" style={{ ...btn, marginLeft: 8, padding: "1px 6px" }} onClick={() => removeOverride(i)}>Remove</button>
-                </div>
-              ))}
-            </section>
+            <OverridesView overrides={state.overrides} sharedTags={sharedTags} unmatched={unmatched} ignored={ignored} onRemove={removeOverrides} />
           )}
         </>
       )}

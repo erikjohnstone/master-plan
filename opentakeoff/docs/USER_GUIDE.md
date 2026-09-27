@@ -573,7 +573,9 @@ the unit. Every override asks for a reason and is kept on the record under
 same candidates, sit together under one header: **Use … for all N** gives them one
 typical, and **Exclude all N** takes out rows that are no units (a notes table
 read as equipment). You give one reason, and each unit still gets its own
-override, naming the group it was decided with. A typical you choose can still
+override, naming the group it was decided with. Under **Your overrides** the
+overrides one such decision wrote are one row, with **Remove all N** to take
+them back together; its units are listed under it, each with its own Remove. A typical you choose can still
 wait for a value its options read, such as an air handler's economizer: the
 unit then stays among the exceptions until you set it. Rows under one typical
 whose same options wait sit together too (fan coils whose schedule prints no

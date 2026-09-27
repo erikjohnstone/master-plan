@@ -1,5 +1,16 @@
 # Changelog
 
+- **Assemblies: a group decision is one row under Your overrides.** "Use …
+  for all N", "Exclude all N", an option for all N and "…for all N like it"
+  write an override on each unit, and "Your overrides" listed each with its
+  own Remove: taking back "Exclude all 42" (071_ME's transposed rooftop
+  schedule) took 42 clicks, in a list 42 lines long. The overrides one such
+  decision wrote (its reason, "…decided together", and the same layer and
+  exclusion or typical) are now one row with **Remove all N**, over the list
+  of its units, each still with its own Remove and its own marks; a row with a
+  marked unit opens. Nothing an override is or does changes (`overrideRows`,
+  `OverridesView` in `AssembliesPanel.jsx`, ASSEMBLIES_BUG_CATALOGUE AS-59).
+
 - **Assemblies: the panel names a drawing set changed since its schedules
   were read.** The assemblies project is read from the PDFs open when
   **Apply assemblies** is pressed, and nothing cleared or flagged it after:
