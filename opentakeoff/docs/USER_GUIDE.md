@@ -565,7 +565,10 @@ the unit. Every override asks for a reason and is kept on the record under
 same candidates, sit together under one header: **Use … for all N** gives them one
 typical, and **Exclude all N** takes out rows that are no units (a notes table
 read as equipment). You give one reason, and each unit still gets its own
-override, naming the group it was decided with. Below the exceptions sit a table per family (units, typicals,
+override, naming the group it was decided with. An override is its own unit's:
+where units of two families share a tag, overriding or excluding one leaves the
+other alone. Excluding a unit keeps the choices you made for it, and removing the
+exclusion under **Your overrides** brings them back. Below the exceptions sit a table per family (units, typicals,
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its
 **Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.
