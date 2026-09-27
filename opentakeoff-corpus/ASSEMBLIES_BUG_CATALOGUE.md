@@ -3361,3 +3361,25 @@ was the panel's.
   and layer with its typical, or none, and never an excluded row, a row with
   another typical, another schedule, sheet, family or layer, or the
   project's own records.
+
+## AS-56 — three censuses of what an estimate could get wrong without a word (MEASURED; NO DEFECT)
+
+**Run:** 2026-09-27, over the 98 cached documents (held-out filtered), each
+a read-only script with a negative control that fails.
+- **Multipliers:** a unit whose row prints a quantity under one mark
+  multiplies every line, so a misread one inflates the estimate silently.
+  16 of 2,037 controls records carry one: 28_WA's VHP (43 heat pumps under
+  one mark, its QUANTITY column), the ITD District 1 lab's LEF-1 and
+  031_MO's WHSE-SF1 (2 fans under one mark, "BLOWER # OF FANS" and "FAN
+  NUMBER OF FANS", as the dev key reads LEF-1), and 12 of 017_MD's duct
+  coils (COIL DATA QUANTITY, no typical). Each is its print.
+- **Units read twice:** a tag and family read from two rows would take its
+  typical twice. None of the 2,037 units is.
+- **The project questions' claims:** each question card says how many lines
+  and records each answer changes. For every shown question and every
+  answer on every document (285 answers; 64 documents show questions), the
+  answer went through the journal as the panel records it (appendAnswer,
+  replayAnswers, answerSettings), and a fresh apply was diffed against one
+  without it: every count is the card's. The 793 answers of questions never
+  shown change nothing. With PQ1's yes and no swapped in the journal path,
+  all 128 PQ1 answers fail.

@@ -692,6 +692,14 @@ your version changes from the starter is tinted amber. **Export CSV** saves the
 whole library as one spreadsheet, a row per option, variable, line and record, and
 **Import CSV…** reads your edited copy back through the same checks, listing any
 problem by row and column. The columns are in [ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md#the-library-as-csv-assemblies-librarycsv).
+A family the starter has no typical for (control dampers, flow meters, lab air
+valves) can have yours: clone a typical and give the copy its own `id` (a copy
+that keeps the id is that typical's next version, which replaces it for its own
+family too). Name the new family in its `applies_to.family`, and let its
+selector, options and lines read no attribute, since the schedule reading keeps
+attributes for the starter's families alone (the editor names any that fail). The rules
+then give it to that family's units; a selector that reads `false` (as
+lab-airflow's) leaves it to your choice under **Use another typical…**.
 Your own part numbers, unit costs, hours and labor categories go on your
 version's lines (the starter ships none). They come back labelled
 *partner-entered*: in `lines.csv`, with the cost and hours extended by each
