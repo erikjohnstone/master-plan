@@ -1,5 +1,21 @@
 # Changelog
 
+- **Assemblies: a unit's details offer another typical.** The Takeoff panel
+  offered a typical only for a unit that waits, among the exceptions: a
+  unit's details held its options and Exclude alone. So a rule's pick could
+  not be changed there, `lab-airflow` (which the starter applies only by
+  override) was reachable from no control, and a unit whose family no typical
+  lists (26_CA's constant-volume exhaust terminals; the ITD District 1 lab's
+  21 lab air valves) could take none. `apply_assemblies` overrides could do all three.
+  The details now carry **Use another typical…**: the other typicals of the
+  unit's family, or, for a family no typical lists, the layer's others. It
+  asks why and writes the override `apply_assemblies` takes; **…for all N like
+  it** makes the same choice for every row of the unit's schedule with the same
+  typical, one reason and an override each (`unitsLike`, `report.ts`). The list is
+  `typicalChoices` (`web/src/lib/assemblies/select.ts`), the same list the
+  rules choose among; no record changes without a choice
+  (ASSEMBLIES_BUG_CATALOGUE AS-55).
+
 - **Assemblies: a schedule sheet whose tables are pictures is named.** A
   schedule sheet whose tables are pasted images or a scan gives the compile no
   table, so any unit it schedules never reached the assemblies, and the panel

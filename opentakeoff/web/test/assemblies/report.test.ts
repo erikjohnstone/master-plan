@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies, type CompiledItem } from "../../src/lib/assemblies/apply.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
-import { assembliesReport, exceptionGroups, familiesLeftOut, unreadScheduleLabel } from "../../src/lib/assemblies/report.ts";
+import { assembliesReport, exceptionGroups, familiesLeftOut, unitsLike, unreadScheduleLabel, type UnitRow } from "../../src/lib/assemblies/report.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
 
@@ -150,4 +150,23 @@ test("exception groups: the rows of a table that prints no title are one untitle
   const { instances, applications, lines } = applyAssemblies({ project: { items }, library: LIB, normalized: items.map((it) => norm(it)) });
   const groups = exceptionGroups(assembliesReport(instances, applications, lines).exceptions);
   assert.deepEqual(groups.map((g) => [g.schedule, g.sheet, g.units.map((u) => u.tag)]), [[null, "s.pdf#4", ["SF1", "SF2"]]]);
+});
+
+test("the units a typical choice is made for together: its schedule's rows of its family and layer with its typical, or none (AS-55)", () => {
+  const cite = (sheet: string, table_title: string) => ({ sheet, table_title, header: "MARK", bbox: [0, 0, 1, 1] });
+  const row = (tag: string, over: Partial<UnitRow> = {}) => ({ tag, family: "LAB_AIR_VALVE", compiled_family: "LAB_AIR_VALVE", layer: "controls", assembly: null, status: "no_assembly", cites: [cite("m.pdf#4", "GENERAL EXHAUST VALVE SCHEDULE")], ...over }) as UnitRow;
+  const units = [
+    row("GEV-1"), row("GEV-2"), row("GEV-3"),
+    row("GEV-4", { status: "excluded" }),
+    row("GEV-5", { assembly: "lab-airflow@1", status: "overridden" }),
+    row("SV-1", { cites: [cite("m.pdf#4", "SUPPLY VALVE SCHEDULE")] }),
+    row("GEV-9", { cites: [cite("m.pdf#5", "GENERAL EXHAUST VALVE SCHEDULE")] }),
+    row("GEV-1", { family: "FAN", compiled_family: "FAN" }),
+    row("GEV-1", { layer: "hookup" }),
+    row("(project)"),
+  ];
+  assert.deepEqual(unitsLike(units, units[0]).map((u) => u.tag), ["GEV-1", "GEV-2", "GEV-3"], "not an excluded row, one with another typical, another schedule or sheet, family or layer, or the project's");
+  assert.deepEqual(unitsLike(units, units[4]).map((u) => u.tag), ["GEV-5"], "a row with its own typical is like those with the same one");
+  assert.deepEqual(unitsLike(units, units[3]), [], "an excluded row is decided nothing for");
+  assert.deepEqual(unitsLike(units, units[9]), [], "nor the project's own records");
 });

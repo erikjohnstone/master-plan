@@ -221,6 +221,17 @@ export function layersFor(family: string, library: readonly AssemblyDefinition[]
   return layers.length ? layers : ["controls"];
 }
 
+/** The typicals a unit can be given in one layer (AS-55): the library's
+ * newest equipment assemblies of that layer that list the unit's family (the
+ * rules' own candidates, whatever their selectors say), and the rest of the
+ * layer's, which an estimator may still choose, with a reason, for a family
+ * no typical lists. The engine's candidates and the Takeoff panel's choices
+ * are this one list. */
+export function typicalChoices(family: string, library: readonly AssemblyDefinition[], layer = "controls"): { family: AssemblyDefinition[]; other: AssemblyDefinition[] } {
+  const inLayer = latest(library).filter((a) => a.kind === "equipment" && (a.applies_to.layer ?? "controls") === layer);
+  return { family: inLayer.filter((a) => familiesOf(a).includes(family)), other: inLayer.filter((a) => !familiesOf(a).includes(family)) };
+}
+
 /** Choose one unit's assembly, options and variables in one layer. */
 export function selectAssembly(instance: Instance, library: readonly AssemblyDefinition[], settings: ProjectSettings = {}, override?: Override, layer = "controls"): ApplicationRecord {
   const base = {
@@ -276,7 +287,7 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
   }
 
   // A part is never chosen on its own; it expands where a line names it.
-  const candidates = latest(library).filter((a) => a.kind === "equipment" && familiesOf(a).includes(instance.family) && (a.applies_to.layer ?? "controls") === layer);
+  const candidates = typicalChoices(instance.family, library, layer).family;
   if (!candidates.length) return { ...base, ...empty, assembly: null, selected_by: "rule", reason: null, status: "no_assembly" };
   const applicable: AssemblyDefinition[] = [];
   const possible: Array<{ def: AssemblyDefinition; missing: string[] }> = [];

@@ -18,14 +18,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { applyAssemblies } from "../lib/assemblies/apply";
 import { ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../lib/assemblies/expand";
-import { PROJECT_INSTANCE } from "../lib/assemblies/select";
+import { PROJECT_INSTANCE, typicalChoices } from "../lib/assemblies/select";
 import { assembliesCsvSet } from "../lib/assemblies/exportSet";
 import { importLibraryCsv, libraryToCsv } from "../lib/assemblies/libraryCsv";
 import { downloadText } from "../lib/totals";
 import { cloneForEdit, combinedLibrary, overridesOf, validateEdit } from "../lib/assemblies/libraryEdit";
 import { activeResponsibilityPresets, HOOKUP_SWITCHES, HOOKUP_VARIABLES, hookupProfileDefaults, RESPONSIBILITY_PRESETS, withResponsibilityPreset } from "../lib/assemblies/presets";
 import { adoptUpdate, emptyAssembliesState, libraryUpdates, pinUsed, projectLibrary } from "../lib/assemblies/projectState";
-import { assembliesReport, exceptionGroups, unreadScheduleLabel } from "../lib/assemblies/report";
+import { assembliesReport, exceptionGroups, unitsLike, unreadScheduleLabel } from "../lib/assemblies/report";
 import { PARTIES } from "../lib/assemblies/schema";
 import { answerSettings, appendAnswer, replayAnswers } from "../lib/controlIntent/journal";
 import { projectQuestionsPaced } from "../lib/controlIntent/questions";
@@ -105,7 +105,47 @@ function ControlReadings({ unit, readings, onOverride, onOpenCitation }) {
   );
 }
 
-function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
+/** Another typical for a unit (AS-55): the typicals of its family the rules
+ * did not give it (lab-airflow, which only an estimator applies, among
+ * them), or, for a family no typical lists, the layer's others. Choosing one
+ * asks why and writes the override apply_assemblies takes; the second list
+ * makes the same choice for every row of its schedule like it (report.ts
+ * unitsLike), one reason and an override each.
+ * @param {{ unit: { tag: string, family: string, layer: string, assembly: string | null }, choices: { family: Array<{ id: string, version: string, title: string }>, other: Array<{ id: string, version: string, title: string }> }, onOverride: (patch: object, what: string) => void, like?: { count: number, schedule: string | null, onOverride: (patch: object, what: string) => void } }} props */
+export function TypicalChoiceView({ unit, choices, onOverride, like }) {
+  const key = (a) => `${a.id}@${a.version}`;
+  const byId = (a, b) => a.id.localeCompare(b.id);
+  const family = choices.family.filter((a) => key(a) !== unit.assembly).sort(byId);
+  const other = choices.family.length ? [] : choices.other.filter((a) => key(a) !== unit.assembly).sort(byId);
+  if (!family.length && !other.length) return null;
+  const pickOf = (value) => [...family, ...other].find((a) => key(a) === value);
+  const option = (a) => <option key={key(a)} value={key(a)}>{key(a)}: {a.title}</option>;
+  const groups = [
+    family.length > 0 && <optgroup key="family" label={`${unit.family} typicals`}>{family.map(option)}</optgroup>,
+    other.length > 0 && <optgroup key="other" label={`No typical lists ${unit.family}; other families' (their lines may wait for values its row does not print)`}>{other.map(option)}</optgroup>,
+  ];
+  const all = like && like.count > 1 ? like : null;
+  const schedule = all ? all.schedule ?? "an untitled schedule" : "";
+  const them = all ? `the ${all.count} ${unit.family} units of ${schedule} ${unit.assembly ? `with ${unit.assembly}` : "without a typical"}` : "";
+  return (
+    <>
+      <select value="" onChange={(e) => { const p = pickOf(e.target.value); if (p) onOverride({ assembly: { id: p.id, version: p.version } }, `choosing ${p.id} for ${unit.tag}`); }}
+        style={input} data-assemblies-choose-typical={unit.tag} aria-label={`Use another typical for ${unit.tag} (${unit.family}, ${unit.layer})`}>
+        <option value="">Use another typical…</option>
+        {groups}
+      </select>
+      {all && (
+        <select value="" onChange={(e) => { const p = pickOf(e.target.value); if (p) all.onOverride({ assembly: { id: p.id, version: p.version } }, `choosing ${p.id} for ${them}`); }}
+          style={input} data-assemblies-choose-typical-all={all.count} aria-label={`Use another typical for all ${them}`}>
+          <option value="">…for all {all.count} like it</option>
+          {groups}
+        </select>
+      )}
+    </>
+  );
+}
+
+function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation, choices, like }) {
   const derived = Object.entries(unit.derived || {});
   // The project's own records (building meters, a plant's controls) follow
   // the project settings: an override would change nothing (AS-45).
@@ -160,7 +200,8 @@ function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
           ))}
         </tbody>
       </table></div>
-      <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+      <div style={{ marginTop: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {own && unit.status !== "excluded" && choices && <TypicalChoiceView unit={unit} choices={choices} onOverride={onOverride} like={like} />}
         {own
           ? <button type="button" style={btn} onClick={() => onOverride({ exclude: true }, `excluding ${unit.tag}`)}>Exclude unit…</button>
           : <span style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)" }}>A project record: what it waits for is set under Project settings (the project variables), not by an override.</span>}
@@ -646,6 +687,13 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   // names and each override's note: a table may print no title, and tied
   // typicals wait for nothing but a choice.
   const scheduleOf = (group) => group.schedule ?? "an untitled schedule";
+  // A choice of typical for every row of a unit's schedule like it (AS-55),
+  // made as the exceptions' groups are: one reason, an override each.
+  const likeOf = (unit) => {
+    const units = report ? unitsLike(report.units, unit) : [];
+    const schedule = unit.cites?.[0]?.table_title || null;
+    return { count: units.length, schedule, onOverride: overrideMany({ units, family: unit.family, schedule }) };
+  };
   const waitingFor = (group) => (group.waits_for.length ? group.waits_for.join(", ") : "a choice between typicals");
   const override = (unit) => (patch, what) => {
     const reason = askReason(what);
@@ -878,7 +926,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                           onClick={(ev) => { ev.stopPropagation(); setOpen(open === k ? null : k); }}>{open === k ? "Hide" : "Details"}</button>
                       </td>
                     </tr>,
-                    open === k ? <tr key={`${k}-d`}><td colSpan={8} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} readings={readingsOf(u)} onOpenCitation={onOpenCitation} /></td></tr> : null,
+                    open === k ? <tr key={`${k}-d`}><td colSpan={8} style={{ padding: 0 }}><UnitDetail unit={u} lines={linesOf(u)} onOverride={override(u)} readings={readingsOf(u)} onOpenCitation={onOpenCitation} choices={typicalChoices(u.family, projectLibrary(state, library), u.layer)} like={likeOf(u)} /></td></tr> : null,
                   ];
                 })}
               </tbody>

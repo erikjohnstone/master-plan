@@ -210,6 +210,17 @@ export function exceptionGroups(exceptions: readonly UnitRow[]): ExceptionGroup[
   return [...groups.values()].filter((g) => g.units.length > 1);
 }
 
+/** The units a choice made in one unit's details is made for together
+ * (AS-55): the rows of its schedule (the same sheet and title) of its family
+ * and layer that have its typical, or none as it has none, the unit among
+ * them. Never the project's own records, and never an excluded unit. */
+export function unitsLike(units: readonly UnitRow[], unit: UnitRow): UnitRow[] {
+  if (unit.tag === "(project)" || unit.status === "excluded") return [];
+  const key = (u: UnitRow) => JSON.stringify([u.family, u.layer, u.cites[0]?.sheet ?? null, u.cites[0]?.table_title ?? null, u.assembly]);
+  const k = key(unit);
+  return units.filter((u) => u.tag !== "(project)" && u.status !== "excluded" && key(u) === k);
+}
+
 /** The families a reply is narrowed to that leave units out, each with why,
  * so a narrowed reply never drops them without a word (AS-51): one no unit
  * applies as (a typo, or a family the set has none of), and units scheduled

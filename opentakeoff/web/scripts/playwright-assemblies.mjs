@@ -23,12 +23,15 @@
 //     responsibility preset set from the panel, saved with the project, and the
 //     mechanical-scope download equal to apply_assemblies with
 //     settings { hookup_defaults, responsibility_preset } and export_scope
-//     (OT_MCP_EXPORT_DIR_SCOPED); cleared again before the override checks.
+//     (OT_MCP_EXPORT_DIR_SCOPED); cleared again before the override checks;
+//   · another typical chosen from a unit's details, with a reason, and the
+//     same choice for every row of a schedule like one unit (AS-55).
 //
 //   OT_UI_PDF=plan.pdf OT_ASM_OUT=dir OT_MCP_APPLY=result.json OT_MCP_EXPORT_DIR=dir \
 //     OT_MCP_EXPORT_DIR_SCOPED=dir2 node scripts/playwright-assemblies.mjs
-// OT_UI_URL defaults to http://127.0.0.1:5173. OT_ASM_SMOKE=1 stops after the
-// parity checks (a document with no typical-bearing unit has nothing to override).
+// OT_UI_URL defaults to http://127.0.0.1:5173. OT_ASM_SMOKE=1 skips from the
+// parity checks to the typical choice (a document with no typical-bearing unit
+// has no option or group to override).
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
@@ -47,6 +50,7 @@ const mcp = JSON.parse(readFileSync(resolve(process.env.OT_MCP_APPLY), 'utf8'));
 const REASON = "UI proof: the estimator's own choice";
 const GROUP_REASON = "UI proof: one answer for the schedule's rows";
 const GROUP_EXCLUDE_REASON = "UI proof: these rows are no units";
+const CHOICE_REASON = "UI proof: another typical for this unit";
 const PRESET = 'valve-shipped-to-kit-maker';
 const ABSENT_OPTION = 'ui_proof_no_such_option';
 const ABSENT_SWITCH = 'ui_proof_no_such_switch';
@@ -94,6 +98,59 @@ async function applyInPage() {
 async function shownOverrides(panel) {
   const el = panel.locator('[data-assemblies-overrides]');
   return (await el.count()) ? Number(await el.getAttribute('data-assemblies-overrides')) : 0;
+}
+
+/** A unit's own row whose details offer another typical (AS-55), never the
+ * project's or an excluded one: its family's other typicals first, else, for
+ * a family no typical lists, the layer's others. With `group`, the first row
+ * whose schedule has others like it (report.ts unitsLike), and them. */
+async function typicalOffer({ group = false } = {}) {
+  return JSON.parse(await page.evaluate(async (group) => {
+    const { applyAssemblies } = await import('/src/lib/assemblies/apply.ts');
+    const { combinedLibrary } = await import('/src/lib/assemblies/libraryEdit.ts');
+    const { projectLibrary } = await import('/src/lib/assemblies/projectState.ts');
+    const { assembliesReport, unitsLike } = await import('/src/lib/assemblies/report.ts');
+    const { typicalChoices } = await import('/src/lib/assemblies/select.ts');
+    const { loadStarterLibrary } = await import('/src/lib/assemblies/starterLibrary.ts');
+    const { localStore } = await import('/src/lib/store.js');
+    const project = window.__opentakeoff.probe.assembliesProject();
+    const state = window.__opentakeoff.probe.assembliesState();
+    const lib = projectLibrary(state, combinedLibrary(await loadStarterLibrary(), await localStore.loadEquipmentAssemblies()).library);
+    const applied = applyAssemblies({ project, library: lib, settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
+    const report = assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules);
+    const found = [];
+    for (const u of report.units) {
+      if (u.tag === '(project)' || u.status === 'excluded') continue;
+      const like = unitsLike(report.units, u);
+      if (group && like.length < 2) continue;
+      const ch = typicalChoices(u.family, lib, u.layer);
+      const alt = (ch.family.length ? ch.family : ch.other).filter((d) => `${d.id}@${d.version}` !== u.assembly).sort((x, y) => x.id.localeCompare(y.id));
+      if (alt.length) found.push({ tag: u.tag, family: u.family, layer: u.layer, own: ch.family.length > 0, count: like.length, tags: like.map((l) => l.tag), pick: { id: alt[0].id, version: alt[0].version } });
+    }
+    return JSON.stringify((group ? found[0] : found.find((f) => f.own) ?? found[0]) ?? null);
+  }, group));
+}
+
+/** Choose the offer's typical in its unit's details (for all like it with
+ * `all`), answering the reason prompt; the records that took it. */
+async function chooseTypical(panel, offer, { all = false, reason = CHOICE_REASON } = {}) {
+  const name = `${offer.tag} ${offer.family} ${offer.layer} details`;
+  const toggle = panel.getByRole('button', { name, exact: true }).first();
+  if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
+  const detail = panel.getByRole('region', { name, exact: true }).first();
+  const select = detail.locator(all ? `[data-assemblies-choose-typical-all="${offer.count}"]` : `[data-assemblies-choose-typical="${offer.tag}"]`);
+  await select.waitFor({ state: 'visible' });
+  page.once('dialog', (d) => d.accept(reason));
+  await select.selectOption(`${offer.pick.id}@${offer.pick.version}`);
+  const tags = all ? offer.tags : [offer.tag];
+  let taken = [];
+  for (let i = 0; i < 120 && taken.length < tags.length; i++) {
+    taken = JSON.parse((await applyInPage()).applications).filter((a) => tags.includes(a.instance.tag) && a.instance.family === offer.family && a.layer === offer.layer
+      && a.assembly?.id === offer.pick.id && a.selected_by === 'user' && String(a.reason).startsWith(reason) && (!all || String(a.reason).includes('decided together')));
+    if (taken.length < tags.length) await page.waitForTimeout(500);
+  }
+  assert.equal(taken.length, tags.length, `${all ? `all ${tags.length} ${offer.family} units like ${offer.tag}` : `${offer.tag} (${offer.family}, ${offer.layer})`} take ${offer.pick.id} by the choice, with the reason`);
+  return taken;
 }
 
 async function annotations() {
@@ -239,18 +296,28 @@ try {
     } else {
       // A unit's row, never the project's own (they follow the settings).
       const ex = mcp.report.exceptions.find((e) => e.tag !== '(project)' && e.candidates.length && mcp.report.exceptions.filter((o) => o.tag === e.tag).length === 1);
-      assert.ok(ex, 'the document has an option to override or a waiting unit to choose a typical for');
-      const [id] = ex.candidates[0].split('@');
-      const exRow = panel.getByRole('table', { name: 'Records that wait for something' }).getByRole('row')
-        .filter({ has: page.getByRole('button', { name: ex.tag, exact: true }) }).first();
-      page.once('dialog', (d) => d.accept(REASON));
-      await exRow.getByRole('button', { name: `Use ${id}`, exact: true }).click();
-      await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
-      assert.ok(await panel.getByText(REASON, { exact: false }).first().isVisible(), 'the reason is shown with the override');
-      const chosen = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === ex.tag && a.layer === ex.layer);
-      assert.ok(chosen.length && chosen.every((a) => a.selected_by === 'user' && a.assembly?.id === id), `${ex.tag} takes ${id} by override`);
-      checks.push(`override: ${ex.tag} (${ex.layer}) takes ${id} with a reason`);
-      if (!target) [target, targetVersion] = [id, chosen[0].assembly.version];
+      // A document whose typicals carry no option and whose units all
+      // resolve (093_ME's VRF units) still has an override to make: another
+      // typical from a unit's details (AS-55).
+      const offer = ex ? null : await typicalOffer();
+      assert.ok(ex || offer, 'the document has an option to override, a waiting unit to choose a typical for, or a unit to give another typical');
+      if (offer) {
+        const [rec] = await chooseTypical(panel, offer, { reason: REASON });
+        await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
+        checks.push(`override: ${offer.tag} (${offer.family}, ${offer.layer}) takes ${offer.pick.id} from its details with a reason, ${rec.status} (AS-55)`);
+      } else {
+        const [id] = ex.candidates[0].split('@');
+        const exRow = panel.getByRole('table', { name: 'Records that wait for something' }).getByRole('row')
+          .filter({ has: page.getByRole('button', { name: ex.tag, exact: true }) }).first();
+        page.once('dialog', (d) => d.accept(REASON));
+        await exRow.getByRole('button', { name: `Use ${id}`, exact: true }).click();
+        await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
+        assert.ok(await panel.getByText(REASON, { exact: false }).first().isVisible(), 'the reason is shown with the override');
+        const chosen = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === ex.tag && a.layer === ex.layer);
+        assert.ok(chosen.length && chosen.every((a) => a.selected_by === 'user' && a.assembly?.id === id), `${ex.tag} takes ${id} by override`);
+        checks.push(`override: ${ex.tag} (${ex.layer}) takes ${id} with a reason`);
+        if (!target) [target, targetVersion] = [id, chosen[0].assembly.version];
+      }
     }
     await page.screenshot({ path: `${out}/override.png` });
 
@@ -441,6 +508,24 @@ try {
       assert.equal(await settingsEl.evaluate((el) => el.open), true, "a project row's button opens the project settings");
       checks.push("the project's own rows open the project settings; no override applies to nothing");
     }
+  }
+
+  {
+    // Another typical from a unit's details (AS-55): the record is then the
+    // user's choice of it, with the reason.
+    const offer = await typicalOffer();
+    if (offer) {
+      const [rec] = await chooseTypical(panel, offer);
+      checks.push(`another typical from a unit's details: ${offer.tag} (${offer.family}, ${offer.layer}) takes ${offer.pick.id}${offer.own ? '' : " (another family's: no typical lists its own)"} with a reason, ${rec.status}${rec.status === 'unresolved' ? ` (waits for ${rec.unresolved?.missing?.join(', ') || 'a value'})` : ''} (AS-55)`);
+    }
+    // The same choice for every row of a schedule like one unit (report.ts
+    // unitsLike): one reason, an override on each, as the exceptions' groups.
+    const group = await typicalOffer({ group: true });
+    if (group) {
+      await chooseTypical(panel, group, { all: true });
+      checks.push(`the same choice for all ${group.count} ${group.family} units of a schedule like ${group.tag}: each takes ${group.pick.id}, one reason and an override each (AS-55)`);
+    }
+    assert.equal(await panel.locator('[data-assemblies-override-unmatched]').count(), 0, 'the choices apply to their units');
   }
 
   assert.deepEqual(errors, []);

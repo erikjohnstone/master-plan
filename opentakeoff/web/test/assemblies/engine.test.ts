@@ -6,7 +6,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { sanitizeAssemblyDefinitions, validateAssembly, type AssemblyDefinition, type ExpandedLine } from "../../src/lib/assemblies/schema.ts";
-import { selectAssembly, type Instance } from "../../src/lib/assemblies/select.ts";
+import { selectAssembly, typicalChoices, type Instance, type Override } from "../../src/lib/assemblies/select.ts";
 import { expandAll, expandApplication, ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../../src/lib/assemblies/expand.ts";
 import { rollup, type Breakdown } from "../../src/lib/assemblies/rollup.ts";
 import type { Value } from "../../src/lib/assemblies/expr.ts";
@@ -440,4 +440,36 @@ test("a line's label (its description on a points schedule) is carried to the ex
   assert.deepEqual(bad, []);
   assert.deepEqual(expandAll([vav("VAV-1", {})], assemblies).lines.map((l) => l.label), ["Zone temperature"]);
   assert.equal(validateAssembly({ ...rec, lines: [line({ id: "zt", kind: "point", io: "AI", qty: "1", label: "", role: { vocab: "xeto", id: "x" } })] }).ok, false, "an empty label is refused");
+});
+
+test("a unit's typical choices: its family's (the rules' candidates), else the layer's others (AS-55)", () => {
+  // The rules choose among exactly the family's typicals; a part is never one.
+  const vavs = typicalChoices("VAV", LIB);
+  assert.deepEqual(vavs.family.map((a) => a.id).sort(), ["vav-any", "vav-cool", "vav-hw"]);
+  assert.deepEqual(vavs.other, [], "a part (coil-hookup) is no choice");
+  assert.ok(vavs.family.some((a) => a.id === selectAssembly(vav("VAV-1", { heat_type: "hw" }), LIB).assembly?.id), "the rules' pick is among them");
+  assert.deepEqual(typicalChoices("VAV", LIB, "hookup"), { family: [], other: [] }, "another layer's are not this layer's");
+  // The newest version of each id only.
+  const v2 = sanitizeAssemblyDefinitions([...RAW, { ...(RAW[1] as object), version: "2", title: "VAV, cooling only (v2)" }]).assemblies;
+  assert.deepEqual(typicalChoices("VAV", v2).family.filter((a) => a.id === "vav-cool").map((a) => a.version), ["2"]);
+  // A family no typical lists: the rules pick none, and the layer's others are offered.
+  const valve: Instance = { ...vav("GEV-1", {}), family: "LAB_AIR_VALVE" };
+  const labs = typicalChoices("LAB_AIR_VALVE", LIB);
+  assert.deepEqual(labs.family, []);
+  assert.deepEqual(labs.other.map((a) => a.id).sort(), ["vav-any", "vav-cool", "vav-hw"]);
+  assert.equal(selectAssembly(valve, LIB).status, "no_assembly");
+  // The estimator's choice of one applies as theirs, and nothing of it is left unmatched or unread.
+  const o: Override = { tag: "GEV-1", family: "LAB_AIR_VALVE", layer: "controls", reason: "a lab exhaust valve", assembly: { id: "vav-any", version: "1" } };
+  const rec = selectAssembly(valve, LIB, {}, o);
+  assert.deepEqual([rec.status, rec.assembly?.id, rec.selected_by], ["overridden", "vav-any", "user"]);
+  assert.deepEqual(unmatchedOverrides([valve], LIB, [o]), []);
+  const { applications, lines } = expandAll([valve], LIB, {}, [o]);
+  assert.deepEqual(ignoredOverrideParts(applications, LIB, [o]), []);
+  assert.deepEqual(lines.map((l) => [l.tag, l.role.id, l.status]), [["GEV-1", "ZoneTemperatureSensor", "ok"]]);
+  // One that reads what the unit's row does not print waits among the exceptions, naming it (AS-47).
+  const other: Override = { ...o, assembly: { id: "vav-hw" } };
+  const waits = selectAssembly(valve, LIB, {}, other);
+  assert.deepEqual([waits.status, waits.assembly?.id, waits.selected_by], ["unresolved", "vav-hw", "user"]);
+  assert.deepEqual(waits.unresolved?.missing, ["attr.cfm_max", "attr.hw_conn_in"]);
+  assert.deepEqual(expandAll([valve], LIB, {}, [other]).lines.filter((l) => l.status === "unresolved").map((l) => [l.role.id, l.missing]), [["CO2Sensor", ["opt.co2"]], ["lv-cable", ["profile.cable_per_device"]]]);
 });

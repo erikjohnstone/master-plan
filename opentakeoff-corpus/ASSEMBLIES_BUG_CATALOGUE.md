@@ -3256,3 +3256,101 @@ sheet. `pictureScheduleSheets` now gives at most the whole sheet (1, "100%"),
 as the output schema's "0 to 1" says. A test stretches the fixture's picture
 past the page's edges (117% summed) and expects 1; without the clamp it
 reads 1.17 and fails. `sheet_graph`'s own note is unchanged.
+
+## AS-55 — the Takeoff panel could not give a unit another typical (FIXED — this goal)
+
+**Found:** 2026-09-27, by a census of the units no typical takes (98 cached
+documents, 2,037 controls records), then by asking whether an estimator can
+give them one. The panel offered a typical only for a unit that waits: the
+exceptions' "Use …" buttons. A unit's details held its options and "Exclude
+unit…" alone. So, in the panel:
+- a rule's pick could not be changed (a box the estimator knows is cooling
+  only, read as hot-water reheat, kept vav-reheat-hw);
+- `lab-airflow`, which the starter applies only by override (its selector is
+  `false`; NOTICE.md: "It is applied only by override"), was reachable from
+  no control;
+- a unit whose family no typical lists could take none. The census's controls
+  families of that kind, each corpus twin counted once: 74 control valve rows
+  (053_VA's 38, 072_CA's 22, the ITD District 1 lab's 9, 013_MO's 3, 009_FL's
+  2), 21 lab air valves (the ITD District 1 lab's GEV rows), 26 control
+  dampers (096_IN's 24, 16_NV's 2) and 4 flow meters. 26_CA's seven
+  constant-volume exhaust terminals are VAV units whose selectors are all
+  false, so they took none either.
+
+`apply_assemblies` could do all three: an override names a typical by id, and
+the engine takes it whatever its family (select.ts) as long as its layer is
+the record's (expand.ts `overrideFits`).
+
+A partner library covers any of those families already: a probe gave each of
+the 31 families a partner typical, through the library CSV round trip and the
+combined gate, and every one of the 602 units took it (0 failures). The gap
+was the panel's.
+
+**Fix (the list is the shared path's; only the control is the panel's):**
+- **`typicalChoices(family, library, layer)`** (web/src/lib/assemblies/select.ts):
+  the newest equipment typicals of the layer that list the family, and the
+  layer's others. `selectAssembly`'s candidates are now its first list, so
+  what the rules choose among and what an estimator is offered are one list.
+- **The panel** (UnitDetail): **Use another typical…**, beside Exclude unit…,
+  on a unit's own row (never the project's, never an excluded one). It offers
+  the other typicals of the unit's family, or, for a family no typical lists,
+  the layer's others, each as `id@version: title`. Choosing one asks why and
+  writes the override `apply_assemblies` takes. **…for all N like it** makes
+  the same choice for every row like the unit, `unitsLike` (report.ts): the
+  rows of its schedule (sheet and title) of its family and layer with its
+  typical, or none, never an excluded row or the project's own. One reason,
+  an override each, as the exceptions' groups ("Use … for all N", 5d199ba).
+- **MCP:** unchanged; the README and AGENT_GUIDE say an override's `assembly`
+  may name any typical of the layer (on the estimator's word, for an agent).
+- **Unchanged:** no record or line without a choice. A typical whose lines
+  read values the unit's row does not print leaves the unit among the
+  exceptions, waiting for them (AS-47): a lab air valve given
+  vav-reheat-hw waits for `attr.cfm_max` and `attr.hw_conn_in`.
+- **Not done, for the library review (INPUT 4):** listing LAB_AIR_VALVE among
+  `lab-airflow`'s families, so the lab valves are offered it first. The starter
+  is frozen at v1 (starter.test.ts: "Changing one is a new library version,
+  never an edit of v1"), and `lab-airflow`'s room-level lines (the room
+  pressure sensor, the program) would count once per valve where a lab room
+  has several; a partner review decides both. Control valves, dampers and flow
+  meters have no starter typical: the hook-ups count a coil's valve
+  (research 04), and the valve schedule rows feed the HIT workbook.
+
+**Measured:**
+- **A/B, the main tree's engine against this one** over the 98 cached
+  documents: with no override, and with an override choosing each other
+  typical offered for up to six units a document (3 each): 526 runs, 0
+  differences. Every one of the 428 choices is taken (`selected_by: "user"`);
+  43 of them wait for values the unit's row does not print. With the helper
+  broken (dropping one of the family's typicals), all 973 runs differ.
+- **UI proof:** on every document, parity-only ones included, the
+  Assemblies proof now chooses another typical from a unit's details, then
+  makes one choice for every row like a unit. Each record is the user's
+  choice with its reason ("decided together" for the rows), and no override
+  applies to nothing. 068_US passes 13 checks (P-1, a pump, takes pump-vfd),
+  069_ID 14 (AHU-1(E) takes ahu-constant-volume and waits for the
+  economizer, AS-47; the 4 pumps like BP-1 take pump-vfd together) and 053_VA
+  7 (EG-A, a grille, takes another family's typical; the 4 grilles like RG-A
+  together).
+- **093_ME, found by round 11's fourth batch:** the proof failed there in
+  itself. Its 20 VRF indoor and 3 VRF outdoor units resolve with typicals
+  that carry no option, and only the project's own records wait, so the
+  proof found no override to make. The typical choice is that override now
+  (DWH-1, a water heater no typical lists), and 093_ME passes 12 checks.
+
+**Tests:**
+- engine.test.ts: a unit's choices are its family's (the rules' pick among
+  them, a part never one, another layer's not this layer's, the newest
+  version only); a family no typical lists has none of its own and the
+  layer's others, and the rules pick none; the estimator's choice of one
+  applies as theirs, with nothing unmatched or ignored; one whose lines read
+  what the row does not print waits, naming it.
+- panelSections.test.ts: the control offers the family's other typicals and
+  not the one the unit has, another family's only when none of its own
+  exists, nothing when there is nothing else to choose, and choosing writes
+  `{ assembly: { id, version } }` with what was chosen for the reason prompt;
+  the second list appears only with rows like the unit, and makes its choice
+  for all of them.
+- report.test.ts: `unitsLike` takes the schedule's rows of the unit's family
+  and layer with its typical, or none, and never an excluded row, a row with
+  another typical, another schedule, sheet, family or layer, or the
+  project's own records.

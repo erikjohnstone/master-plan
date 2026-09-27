@@ -590,6 +590,16 @@ is missing that equipment. Below the exceptions sit a table per family (units, t
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its
 **Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.
+**Use another typical…** in the details gives the unit another typical of its
+family: the rules' pick is not always yours, and `lab-airflow` is applied only
+this way. For a family no typical lists (lab air valves, control valves,
+grilles), it offers the other families' typicals instead. It asks why, and the
+choice is an override like any other, listed under **Your overrides**. Beside
+it, **…for all N like it** makes the same choice for every row of the unit's
+schedule with the same typical (or none), with one reason and an override each,
+as the exceptions' groups do: the 21 exhaust valves of a lab's valve schedule
+take one typical in one step. A typical whose lines read values the unit's row
+does not print leaves the unit among the exceptions, waiting for them.
 Clicking a tag paints its schedule row on the drawing. **Printed points** shows the
 rows of any printed points list that names the unit. That list stands instead of
 the typical's point lines, which show as *replaced*: the drawing's own list wins.
