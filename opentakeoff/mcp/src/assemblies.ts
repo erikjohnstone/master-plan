@@ -343,7 +343,7 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   const { settings, journal } = await sessionSettings(session, opts.settings);
   const mode = opts.control_readings ?? defaultControlReadingMode();
   const readings = await sessionControlReadings(session, { project, library }, mode);
-  const { instances, applications, lines } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [], readings });
+  const { instances, applications, lines, rows_left_out: rowsLeftOut } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [], readings });
   // An override no unit takes is named, never kept silently (AS-45).
   const slot = (o: NonNullable<ApplyAssembliesOptions["overrides"]>[number]) => ({ tag: o.tag, ...(o.family ? { family: o.family } : {}), ...(o.layer ? { layer: o.layer } : {}) });
   const unmatched = unmatchedOverrides(instances, library, opts.overrides ?? []).map(({ override: o, why }) => ({ ...slot(o), why }));
@@ -360,12 +360,15 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   const apps = want ? applications.filter((a) => want.has(a.instance.family)) : applications;
   const lns = want ? lines.filter((l) => want.has(l.family)) : lines;
   // The schedule sheets whose tables are pictures ride the report, so the
-  // reply, its PDF and the panel's name them alike (AS-54).
-  const report = assembliesReport(inst, apps, lns, project.unread_schedules);
+  // reply, its PDF and the panel's name them alike (AS-54); so do the rows of
+  // family schedules the takeoff reads as no unit, of the reply's families
+  // (AS-61).
+  const left = want ? rowsLeftOut.map((e) => ({ ...e, families: e.families.filter((f) => want.has(f)) })).filter((e) => e.families.length) : rowsLeftOut;
+  const report = assembliesReport(inst, apps, lns, project.unread_schedules, left);
   const detail = opts.detail ?? "summary";
   const { units: _units, ...summary } = report;
   // The CSV set is the whole project's, whatever the reply's families.
-  const whole = opts.csv ? (want ? assembliesReport(instances, applications, lines, project.unread_schedules) : report) : undefined;
+  const whole = opts.csv ? (want ? assembliesReport(instances, applications, lines, project.unread_schedules, rowsLeftOut) : report) : undefined;
   let csv: Record<ExportFile, string> | undefined;
   try {
     csv = whole ? assembliesCsvSet({ instances, applications, lines, report: whole, scope: opts.export_scope ?? null }) : undefined;

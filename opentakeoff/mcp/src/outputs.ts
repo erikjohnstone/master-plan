@@ -1872,6 +1872,8 @@ export const applyAssembliesOutput = {
     line_errors: z.array(z.record(z.string(), z.unknown())).describe("Lines whose quantity cannot stand, each with its unit, rule and why: an expression that fails, a negative quantity, or a point or device count that is not whole. No total counts them; report them with the exceptions"),
     schedules_unread: z.array(z.object({ sheet: z.string(), sheet_number: z.string().optional(), picture_share: z.number(), why: z.string() })).optional()
       .describe("The schedule sheets whose tables are pictures (pasted images or a scan): no table could be read from them, so any unit they schedule is missing from this report, however complete it looks. Each with its printed sheet number when the title block has one, the share of the sheet the pictures cover (0 to 1) and why. Absent when there is none"),
+    schedules_left_out: z.array(z.object({ sheet: z.string(), sheet_number: z.string().optional(), title: z.string(), families: z.array(z.string()), rows: z.number().int(), marks: z.array(z.string()), why: z.string() })).optional()
+      .describe("The schedules titled as a family the library prices whose rows the takeoff reads as no unit: it does not read their marks as the family's (a building prefix such as 1-VAV-1, a letter its rule does not know), so no record or line counts them, however complete the report looks. Each with its sheet (and printed sheet number), title, families, rows that carry a mark, the marks left out as printed, and why. Absent when there is none"),
     families: z.array(z.record(z.string(), z.unknown())),
     units: z.array(z.record(z.string(), z.unknown())).optional(),
   }),

@@ -97,7 +97,7 @@ async function applyInPage() {
     // The panel applies the control drawings' readings the project carries
     // (AssembliesPanel: project.control_readings), as apply_assemblies does.
     const applied = applyAssemblies({ project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
-    const report = assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules);
+    const report = assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules, applied.rows_left_out);
     return { applications: JSON.stringify(applied.applications), lines: JSON.stringify(applied.lines), report: JSON.stringify(report),
       groups: JSON.stringify(exceptionGroups(report.exceptions).map((g) => ({ units: g.units.map((u) => [u.tag, u.family, u.layer]), options: g.options, candidates: g.candidates }))) };
   });
@@ -127,7 +127,7 @@ async function typicalOffer({ group = false } = {}) {
     const state = window.__opentakeoff.probe.assembliesState();
     const lib = projectLibrary(state, combinedLibrary(await loadStarterLibrary(), await localStore.loadEquipmentAssemblies()).library);
     const applied = applyAssemblies({ project, library: lib, settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
-    const report = assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules);
+    const report = assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules, applied.rows_left_out);
     const found = [];
     for (const u of report.units) {
       if (u.tag === '(project)' || u.status === 'excluded') continue;
@@ -206,6 +206,19 @@ try {
   const picturesShown = (await picturesEl.count()) ? Number(await picturesEl.getAttribute('data-assemblies-schedules-unread')) : 0;
   assert.equal(picturesShown, mcp.report.schedules_unread?.length ?? 0, 'the schedule sheets read as pictures are named, all of them');
   if (picturesShown) checks.push(`${picturesShown} schedule sheet${picturesShown === 1 ? '' : 's'} read as pictures named on screen (AS-54)`);
+  // So are the rows of family schedules the takeoff reads as no unit, every
+  // schedule and every row the report holds (AS-61).
+  const leftEl = panel.locator('[data-assemblies-rows-left-out]');
+  const leftShown = (await leftEl.count())
+    ? { schedules: Number(await leftEl.getAttribute('data-assemblies-rows-left-out')), rows: Number(await leftEl.getAttribute('data-assemblies-rows-left-out-rows')) }
+    : { schedules: 0, rows: 0 };
+  const leftWant = mcp.report.schedules_left_out ?? [];
+  assert.deepEqual(leftShown, { schedules: leftWant.length, rows: leftWant.reduce((n, e) => n + e.marks.length, 0) }, 'the scheduled rows that are no unit are named, all of them');
+  if (leftShown.schedules) {
+    const listed = await leftEl.locator('[data-assemblies-rows-left-out-schedule]').allTextContents();
+    for (const [i, e] of leftWant.entries()) assert.ok(e.marks.every((m) => listed[i]?.includes(m)), `every mark of ${e.title} is on screen`);
+    checks.push(`${leftShown.rows} scheduled row${leftShown.rows === 1 ? '' : 's'} in ${leftShown.schedules} schedule${leftShown.schedules === 1 ? '' : 's'} named as no unit on screen (AS-61)`);
+  }
   await page.screenshot({ path: `${out}/units.png` });
 
   // The CSV set: the download's files are export_dir's, byte for byte.

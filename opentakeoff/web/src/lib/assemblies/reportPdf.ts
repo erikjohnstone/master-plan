@@ -9,7 +9,7 @@
 // appends it, and apply_assemblies' export_dir writes it as assemblies.pdf.
 // Neither surface lays out a row of its own.
 import type { PDFDocument, PDFFont, PDFPage } from "pdf-lib";
-import { unreadScheduleLabel, type AssembliesReport } from "./report";
+import { rowsLeftOutLabel, unreadScheduleLabel, type AssembliesReport } from "./report";
 
 const W = 792;
 const H = 612;
@@ -25,9 +25,11 @@ interface Ctx {
   y: number;
 }
 
+// The standard fonts encode WinAnsi only: anything else prints as "?".
+const winAnsi = (text: unknown) => String(text ?? "").replace(/[^\x20-\x7E\u00A0-\u00FF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026]/g, "?");
+
 function clip(font: PDFFont, text: unknown, maxW: number, size: number): string {
-  // The standard fonts encode WinAnsi only: anything else prints as "?".
-  const s = String(text ?? "").replace(/[^\x20-\x7E\u00A0-\u00FF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026]/g, "?");
+  const s = winAnsi(text);
   if (font.widthOfTextAtSize(s, size) <= maxW) return s;
   let out = s;
   while (out.length > 1 && font.widthOfTextAtSize(`${out}…`, size) > maxW) out = out.slice(0, -1);
@@ -69,6 +71,23 @@ function table(c: Ctx, headers: string[], widths: number[], rows: unknown[][]) {
   c.y -= 8;
 }
 
+/** Items in lines no wider than maxW, joined by `sep`: an item never
+ * splits, so every one of them is printed (a list's comma ends its line). */
+function wrapItems(font: PDFFont, items: readonly string[], maxW: number, size: number, sep: ", " | " "): string[] {
+  const lines: string[] = [];
+  const end = sep.trim();
+  let cur = "";
+  for (const item of items.map(winAnsi)) {
+    const next = cur ? `${cur}${sep}${item}` : item;
+    if (cur && font.widthOfTextAtSize(`${next}${end}`, size) > maxW) {
+      lines.push(`${cur}${end}`);
+      cur = item;
+    } else cur = next;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
 const cite = (u: { cites: Array<{ sheet: string; table_title: string }> }) => (u.cites[0] ? `${u.cites[0].sheet} · ${u.cites[0].table_title}` : "");
 
 /** Draw the assemblies section onto `doc`, starting a new page. */
@@ -92,6 +111,23 @@ export async function drawAssembliesSection(doc: PDFDocument, report: Assemblies
     text(c, `Schedule sheets read as pictures: ${unread.length} (any unit they schedule is missing here)`, 10, true);
     table(c, ["Schedule sheet", "Pictures", "Why"], [0.3, 0.08, 0.62],
       unread.map((u) => [unreadScheduleLabel(u), `${Math.round(u.picture_share * 100)}%`, u.why]));
+  }
+
+  // The rows of family schedules the takeoff reads as no unit: no record or
+  // line counts them, and every mark is printed (AS-61).
+  const left = report.schedules_left_out ?? [];
+  if (left.length) {
+    const n = left.reduce((k, e) => k + e.marks.length, 0);
+    text(c, `Scheduled rows that are no unit: ${n} in ${left.length} schedule${left.length === 1 ? "" : "s"} (no record or line counts them)`, 10, true);
+    text(c, "The takeoff does not read these rows' marks as marks of the family their schedule's title names.", 8.5, false, 0.3);
+    const widths = [0.34, 0.12, 0.07, 0.47];
+    const colW = (i: number) => widths[i] * (W - 2 * M) - 3;
+    table(c, ["Schedule", "Family", "Rows", "Marks"], widths, left.flatMap((e) => {
+      const label = wrapItems(c.font, rowsLeftOutLabel(e).split(" "), colW(0), 7.5, " ");
+      const marks = wrapItems(c.font, e.marks, colW(3), 7.5, ", ");
+      return Array.from({ length: Math.max(label.length, marks.length) }, (_, i) =>
+        [label[i] ?? "", i ? "" : e.families.join(", "), i ? "" : `${e.marks.length} of ${e.rows}`, marks[i] ?? ""]);
+    }));
   }
 
   text(c, report.exceptions.length ? `Exceptions first: ${report.exceptions.length} record(s) wait for something` : "Exceptions: none", 10, true);

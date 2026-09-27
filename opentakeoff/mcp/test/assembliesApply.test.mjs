@@ -135,7 +135,9 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   assert.equal(JSON.stringify(r.data.lines), JSON.stringify(ui.lines), "ExpandedLines byte-identical");
   assert.equal(JSON.stringify(r.data.applications), JSON.stringify(ui.applications), "records byte-identical");
   assert.deepEqual(r.structured.lines.length, ui.lines.length, "structuredContent carries the same lines");
-  assert.equal(JSON.stringify(r.data.report), JSON.stringify(assembliesReport(ui.instances, ui.applications, ui.lines)), "the report is the shared report");
+  // With what the reply names beside the units: the picture sheets (AS-54)
+  // and the rows of family schedules that are no unit (AS-61).
+  assert.equal(JSON.stringify(r.data.report), JSON.stringify(assembliesReport(ui.instances, ui.applications, ui.lines, wire.unread_schedules, ui.rows_left_out)), "the report is the shared report");
 
   // The reply's shape: exceptions first, each naming what it waits for.
   assert.equal(r.data.report.exceptions.length, r.data.report.totals.by_status.unresolved);

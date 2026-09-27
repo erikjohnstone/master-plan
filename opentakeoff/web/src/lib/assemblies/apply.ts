@@ -46,6 +46,7 @@ import { EVIDENCE_VERSION, findPackets, sheetNumberOf, type Packet } from "../co
 import { bindPackets, type Binding } from "../controlIntent/binding";
 import { readingIntents, type Decision } from "../controlIntent/combine";
 import { namesZones, readZonePlan, type PageRegion, type ZonePlan } from "../controlIntent/zonePlan";
+import { pricedFamilies, rowsLeftOutPriced, scheduleRowsLeftOut, type RowsLeftOut } from "./leftOut";
 
 /** One compiled row: a compileTakeoff("hvac_equipment") item and its family. */
 export type CompiledItem = CompileItem & { family: string };
@@ -94,6 +95,10 @@ export interface CompiledProject {
    * sheet the images cover: any unit on them is missing from this project
    * (AS-54). */
   unread_schedules?: readonly UnreadSchedule[];
+  /** The rows of schedules titled as a family the takeoff reads that it
+   * reads as no unit, their marks as printed: no record or line counts them
+   * (AS-61; leftOut.ts). */
+  rows_left_out?: readonly RowsLeftOut[];
 }
 
 /** A schedule sheet whose tables are pictures (Session.pictureScheduleSheets). */
@@ -184,7 +189,7 @@ export function sheetPage(sheet: string): { file: string; page: number } | null 
 /** What the apply path reads of an hvac_equipment compile and of the sheet
  * graph it was compiled from (loosely typed: both are JSON on the wire). */
 export interface HvacCompile {
-  categories?: Record<string, { items?: ReadonlyArray<{ tag: string; sheet_id: string; table_title: string; cells?: CompileItem["cells"]; building?: string | null; description?: string | null }> }>;
+  categories?: Record<string, { items?: ReadonlyArray<{ tag: string; sheet_id: string; table_title: string; cells?: CompileItem["cells"]; building?: string | null; description?: string | null; bbox_px?: readonly number[] | null }> }>;
 }
 export interface GraphTables {
   sheets?: ReadonlyArray<{ key: string }>;
@@ -193,7 +198,7 @@ export interface GraphTables {
     title?: { text?: string | null } | null;
     headers?: readonly string[];
     region?: Box | null;
-    rows?: ReadonlyArray<{ key: string; cells?: Readonly<Record<string, { text?: string | null } | null>> }>;
+    rows?: ReadonlyArray<{ key: string; cells?: Readonly<Record<string, { text?: string | null; bbox?: readonly number[] | null } | null>> }>;
   }>;
 }
 
@@ -281,7 +286,15 @@ export async function compiledProjectOf(
     if (no) sheetNumbers[sheet] = no;
   }
   const control: ControlPages = { version: EVIDENCE_VERSION, packets, sheet_numbers: sheetNumbers, ...(zones.length ? { zones } : {}) };
-  return { items, tables, pages, printed_points: printedPointRows(basPoints), control };
+  // The rows of family schedules the compile reads as no unit (AS-61), each
+  // with the sheet number its title block prints.
+  const left: RowsLeftOut[] = [];
+  for (const e of scheduleRowsLeftOut(compiled, graph)) {
+    const spans = sheetPage(e.sheet) ? pages[e.sheet] ?? (await spansOf(e.sheet)) : null;
+    const no = spans?.length ? sheetNumberOf(spans) : null;
+    left.push({ ...e, ...(no ? { sheet_number: no } : {}) });
+  }
+  return { items, tables, pages, printed_points: printedPointRows(basPoints), control, ...(left.length ? { rows_left_out: left } : {}) };
 }
 
 interface ReadTable extends CompiledTable {
@@ -652,7 +665,7 @@ export function applyAssemblies(input: {
   /** The project's control-drawing readings (controlIntent/record.ts
    * readControlIntent), when read: their applied decisions become facts. */
   readings?: { units: ReadonlyArray<{ item: number; decisions: readonly Decision[] }> } | null;
-}): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[]; control: ControlEvidenceMap } {
+}): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[]; control: ControlEvidenceMap; rows_left_out: RowsLeftOut[] } {
   const normalized = input.normalized ?? projectNormalization(input.project);
   const instances = instancesOf(input.project, normalized);
   // Control intent: what the unit's own row prints (the row reader), what the
@@ -683,7 +696,9 @@ export function applyAssemblies(input: {
     evidence[tag] = { ...(evidence[tag] ?? {}), ...e, declaredRoles: [...(evidence[tag]?.declaredRoles ?? []), ...(e.declaredRoles ?? [])] };
   }
   const { applications, lines } = expandAll(instances, input.library, input.settings ?? {}, input.overrides ?? [], evidence);
-  return { instances, applications, lines, control };
+  // The project's left-out rows of the families this library prices: a
+  // family it prices none of would add no record (AS-61).
+  return { instances, applications, lines, control, rows_left_out: rowsLeftOutPriced(input.project.rows_left_out, pricedFamilies(input.library)) };
 }
 
 /** The control-evidence map: the set's packets, and each unit's bindings

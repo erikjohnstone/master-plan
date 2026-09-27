@@ -7,6 +7,7 @@
 // many each typical got is the takeoff's answer. The Takeoff panel and the
 // MCP tool both render this object; neither counts on its own.
 import type { AppliedInstance, DerivedAttribute, PrintedPointRow, UnreadSchedule } from "./apply";
+import type { RowsLeftOut } from "./leftOut";
 import { partnerSummary, type PartnerSummary } from "./partner";
 import type { ApplicationRecord, Cite, ExpandedLine } from "./schema";
 import { parseSheetKey } from "../sheetKey";
@@ -78,6 +79,10 @@ export interface AssembliesReport {
    * they schedule is missing from this report (AS-54). Absent when there is
    * none. */
   schedules_unread?: Array<UnreadSchedule & { why: string }>;
+  /** The schedules titled as a family the library prices whose rows the
+   * takeoff reads as no unit, each with the rows' marks and why: no record or
+   * line counts them (AS-61). Absent when there is none. */
+  schedules_left_out?: Array<RowsLeftOut & { why: string }>;
   families: FamilyRow[];
   units: UnitRow[];
 }
@@ -101,6 +106,9 @@ export function assembliesReport(
   lines: readonly ExpandedLine[],
   /** The project's schedule sheets whose tables are pictures (AS-54). */
   unreadSchedules: readonly UnreadSchedule[] = [],
+  /** The rows of family schedules the takeoff reads as no unit, of the
+   * families the library prices (applyAssemblies' rows_left_out, AS-61). */
+  rowsLeftOut: readonly RowsLeftOut[] = [],
 ): AssembliesReport {
   const inst = new Map(instances.map((i) => [keyOf(i.tag, i.family, "", i.cites[0]), i]));
   const lineCounts = new Map<string, Record<LineStatus, number>>();
@@ -160,6 +168,7 @@ export function assembliesReport(
     exceptions,
     line_errors: lineErrors,
     ...(unreadSchedules.length ? { schedules_unread: unreadSchedules.map((u) => ({ ...u, why: unreadScheduleWhy(u) })) } : {}),
+    ...(rowsLeftOut.length ? { schedules_left_out: rowsLeftOut.map((e) => ({ ...e, why: rowsLeftOutWhy(e) })) } : {}),
     families,
     units,
   };
@@ -249,10 +258,23 @@ export function familiesLeftOut(instances: readonly Pick<AppliedInstance, "tag" 
  * apply_assemblies name it (AS-54): its printed sheet number when the title
  * block has one, its page, and the file the page is in, as every other cite
  * names it: a set opened as several files has a page 3 in each (AS-57). */
-export function unreadScheduleLabel(u: UnreadSchedule): string {
+export function unreadScheduleLabel(u: Pick<UnreadSchedule, "sheet" | "sheet_number">): string {
   const { file, page } = parseSheetKey(u.sheet);
   const where = `page ${page} of ${file}`;
   return u.sheet_number ? `${u.sheet_number} (${where})` : where;
+}
+
+/** A schedule whose rows the takeoff reads as no unit, as every surface
+ * names it (AS-61): its title, then its sheet as unreadScheduleLabel names
+ * it. */
+export function rowsLeftOutLabel(e: Pick<RowsLeftOut, "title" | "sheet" | "sheet_number">): string {
+  return `${e.title}, ${unreadScheduleLabel(e)}`;
+}
+
+/** Why such a schedule's rows are not in the assemblies (AS-61). */
+export function rowsLeftOutWhy(e: Pick<RowsLeftOut, "families" | "rows" | "marks">): string {
+  const n = e.marks.length;
+  return `${n} of its ${e.rows} row${e.rows === 1 ? "" : "s"} ${n === 1 ? "is" : "are"} no unit in this takeoff, whose ${e.families.join(" or ")} rule does not read ${n === 1 ? "its mark" : "their marks"}: no record or line counts ${n === 1 ? "it" : "them"}`;
 }
 
 /** Why such a sheet's units are not in the assemblies (AS-54). */

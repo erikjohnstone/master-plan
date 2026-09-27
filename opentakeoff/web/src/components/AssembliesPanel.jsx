@@ -25,7 +25,7 @@ import { downloadText } from "../lib/totals";
 import { cloneForEdit, combinedLibrary, overridesOf, validateEdit } from "../lib/assemblies/libraryEdit";
 import { activeResponsibilityPresets, HOOKUP_SWITCHES, HOOKUP_VARIABLES, hookupProfileDefaults, RESPONSIBILITY_PRESETS, withResponsibilityPreset } from "../lib/assemblies/presets";
 import { adoptUpdate, emptyAssembliesState, libraryUpdates, pinUsed, projectLibrary } from "../lib/assemblies/projectState";
-import { assembliesReport, exceptionGroups, unitsLike, unreadScheduleLabel } from "../lib/assemblies/report";
+import { assembliesReport, exceptionGroups, rowsLeftOutLabel, unitsLike, unreadScheduleLabel } from "../lib/assemblies/report";
 import { PARTIES } from "../lib/assemblies/schema";
 import { answerSettings, appendAnswer, replayAnswers } from "../lib/controlIntent/journal";
 import { projectQuestionsPaced } from "../lib/controlIntent/questions";
@@ -248,6 +248,27 @@ export function UnreadSchedulesView({ schedules }) {
   return (
     <div role="note" data-assemblies-schedules-unread={schedules.length} style={{ margin: "0 0 12px", fontSize: "var(--fs-s)", color: "var(--c-danger)" }}>
       {one ? "A schedule sheet is" : `${schedules.length} schedule sheets are`} pictures (pasted images or a scan): no table could be read from {one ? "it" : "them"}, so any unit {one ? "it schedules" : "they schedule"} is missing here: {schedules.map((u) => `${unreadScheduleLabel(u)}, ${Math.round(u.picture_share * 100)}% pictures`).join("; ")}.
+    </div>
+  );
+}
+
+/** The rows of family schedules the takeoff reads as no unit (AS-61): their
+ * marks are not the family's to it, so no record or line counts them, however
+ * complete the totals look. Every mark is named.
+ * @param {{ schedules: NonNullable<import("../lib/assemblies/report").AssembliesReport["schedules_left_out"]> }} props */
+export function RowsLeftOutView({ schedules }) {
+  if (!schedules.length) return null;
+  const rows = schedules.reduce((n, e) => n + e.marks.length, 0);
+  return (
+    <div role="note" data-assemblies-rows-left-out={schedules.length} data-assemblies-rows-left-out-rows={rows} style={{ margin: "0 0 12px", fontSize: "var(--fs-s)", color: "var(--c-danger)" }}>
+      {rows === 1 ? "A scheduled row is" : `${rows} scheduled rows are`} no unit here: the takeoff does not read {rows === 1 ? "its mark" : "their marks"} as marks of the family {schedules.length === 1 ? "the schedule's" : "their schedule's"} title names, so no record or line counts {rows === 1 ? "it" : "them"}.
+      <ul style={{ margin: "4px 0 0", paddingLeft: 18 }}>
+        {schedules.map((e) => (
+          <li key={`${e.sheet}|${e.title}|${e.marks[0]}`} data-assemblies-rows-left-out-schedule={e.marks.length}>
+            {rowsLeftOutLabel(e)} ({e.families.join(" or ")}), {e.marks.length} of {e.rows} rows: {e.marks.join(", ")}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -745,7 +766,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   }, [readings]);
   // The schedule sheets whose tables are pictures ride the report, as they
   // do apply_assemblies' (AS-54).
-  const report = useMemo(() => (applied ? assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules) : null), [applied, project]);
+  const report = useMemo(() => (applied ? assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules, applied.rows_left_out) : null), [applied, project]);
   const updates = useMemo(() => (state ? libraryUpdates(state, library) : []), [state, library]);
   // The Takeoff panel's PDF carries this report's section.
   useEffect(() => { onReport?.(report); }, [report]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -925,6 +946,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
           </div>
 
           <UnreadSchedulesView schedules={report.schedules_unread ?? []} />
+          <RowsLeftOutView schedules={report.schedules_left_out ?? []} />
 
           <ProjectSettingsView settings={state?.settings ?? {}} onChange={setSettings} unread={unreadSettingsList} />
 

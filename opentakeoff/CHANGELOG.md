@@ -1,5 +1,24 @@
 # Changelog
 
+- **Assemblies: scheduled rows the takeoff reads as no unit are named.** The
+  takeoff reads a family's schedule rows by their marks, and a mark its rule
+  for the family does not know gives no unit at all: a building prefix
+  (05_MO's 1-AC-15, 1-VAV-1 and 1-SF-15; 041_IL's 40-AHU-2 and 40-VAV-01) or
+  letters the rule lacks (031_MO's W05-TU-01, 096_IN's PEF-1 and JEF-1,
+  017_MD's E-A-1, 074_CA's FC-A-2). Those units never reached the assemblies,
+  and the panel and `apply_assemblies` priced fewer units without a word:
+  05_MO's report held one of its five air handlers, none of its 11 fans and
+  12 of its 36 terminal units. The report now carries `schedules_left_out`:
+  each schedule titled as a family the library prices whose rows no compiled
+  row carries (none sits in the row, and none has its mark), with its sheet,
+  title, family, every mark left out, and why. A key that does not read as a
+  tag is never named (an abbreviations list or a transposed schedule's
+  attribute names read under a family's title). The panel names them in red
+  above its settings, the PDF section lists every mark after the totals, and
+  `apply_assemblies` returns them in `report`. Nothing is counted from them,
+  and the takeoff's mark rules are unchanged (`web/src/lib/assemblies/leftOut.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-61).
+
 - **Assemblies: the library CSV survives a spreadsheet.** The Library view's
   Export CSV is meant to be edited in a spreadsheet and imported back, and the
   starter cites its standards with "§" in every record. Excel on Windows opens

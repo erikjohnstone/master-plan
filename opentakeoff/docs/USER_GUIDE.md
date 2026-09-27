@@ -597,7 +597,12 @@ unit it schedules is missing here: the panel names each such sheet (its sheet
 number, page and file) in red above the settings, with the share of it the
 pictures cover, and the PDF section lists
 them after the totals. Check each sheet: if it schedules equipment, the estimate
-is missing that equipment. Below the exceptions sit a table per family (units, typicals,
+is missing that equipment. The takeoff reads a family's schedule rows by their
+marks, so a row whose mark it does not read as that family's (a building prefix
+such as 1-VAV-1, or letters such as W05-TU-01 or PEF-1) is no unit either: the
+panel names each such schedule in red (its title, sheet, page and file, the
+family, and every mark left out), and the PDF section lists them after the
+totals. Those units are not in the estimate: count them by hand. Below the exceptions sit a table per family (units, typicals,
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its
 **Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.

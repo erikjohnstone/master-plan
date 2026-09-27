@@ -72,6 +72,20 @@ test("lines that cannot be counted are listed after the exceptions (AS-53)", asy
   assert.doesNotMatch(drawnText(await assembliesPdfBytes(report)), /Lines that cannot be counted/, "a report with none shows none");
 });
 
+test("the rows of family schedules the takeoff reads as no unit are listed, every mark printed (AS-61)", async () => {
+  const marks = Array.from({ length: 15 }, (_, i) => `1-VAV-${i + 1}`);
+  const left = [{ sheet: "m.pdf#40", sheet_number: "M-602", title: "DUAL DUCT AIR TERMINAL UNIT SCHEDULE", families: ["VAV"], rows: 15, marks }];
+  const named = assembliesReport(applied.instances, applied.applications, applied.lines, [], left);
+  const text = drawnText(await assembliesPdfBytes(named));
+  assert.match(text, /Scheduled rows that are no unit: 15 in 1 schedule \(no record or line counts them\)/);
+  // The label wraps at a word, never clipped: its title and its sheet whole.
+  assert.match(text, /DUAL DUCT AIR TERMINAL UNIT SCHEDULE, M-602 \(page 40 of Tj/);
+  assert.match(text, /m\.pdf\) Tj/);
+  assert.match(text, /15 of 15/);
+  for (const m of marks) assert.match(text, new RegExp(`${m}(?!\\d)`), `${m} is printed, not clipped`);
+  assert.doesNotMatch(drawnText(await assembliesPdfBytes(report)), /no unit:/, "a report with none shows none");
+});
+
 test("the schedule sheets whose tables are pictures are listed after the totals (AS-54)", async () => {
   const unread = [{ sheet: "m.pdf#21", sheet_number: "M-601", picture_share: 0.59 }];
   const named = assembliesReport(applied.instances, applied.applications, applied.lines, unread);

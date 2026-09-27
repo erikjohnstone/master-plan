@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies, type CompiledItem } from "../../src/lib/assemblies/apply.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
-import { assembliesReport, exceptionGroups, familiesLeftOut, unitsLike, unreadScheduleLabel, type UnitRow } from "../../src/lib/assemblies/report.ts";
+import { assembliesReport, exceptionGroups, familiesLeftOut, rowsLeftOutLabel, unitsLike, unreadScheduleLabel, type UnitRow } from "../../src/lib/assemblies/report.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
 
@@ -143,6 +143,25 @@ test("the schedule sheets whose tables are pictures ride the report, each with w
     ["page 3 of mech.pdf", "E-601 (page 3 of elec.pdf)"]);
   assert.equal("schedules_unread" in assembliesReport(r.instances, r.applications, r.lines), false, "absent when there is none");
   const { schedules_unread: _named, ...rest } = report;
+  assert.deepEqual(rest, assembliesReport(r.instances, r.applications, r.lines), "nothing else in the report changes");
+});
+
+test("the rows of family schedules the takeoff reads as no unit ride the report, each with why; none when there is none (AS-61)", () => {
+  const items = [row("COOLING_TOWER", "CT-2", 1)];
+  const r = applyAssemblies({ project: { items }, library: LIB, normalized: [norm(items[0], { cells: 2 })] });
+  const left = [
+    { sheet: "m.pdf#40", sheet_number: "M-602", title: "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE", families: ["VAV"], rows: 21, marks: ["1-TU-28-1", "1-TU-28-2"] },
+    { sheet: "m.pdf#39", title: "AIR HANDLING UNIT SCHEDULE", families: ["AHU"], rows: 5, marks: ["1-AC-15"] },
+  ];
+  const report = assembliesReport(r.instances, r.applications, r.lines, [], left);
+  assert.deepEqual(report.schedules_left_out, [
+    { ...left[0], why: "2 of its 21 rows are no unit in this takeoff, whose VAV rule does not read their marks: no record or line counts them" },
+    { ...left[1], why: "1 of its 5 rows is no unit in this takeoff, whose AHU rule does not read its mark: no record or line counts it" },
+  ]);
+  assert.deepEqual(left.map(rowsLeftOutLabel), ["SINGLE DUCT AIR TERMINAL UNIT SCHEDULE, M-602 (page 40 of m.pdf)", "AIR HANDLING UNIT SCHEDULE, page 39 of m.pdf"],
+    "its title, then its sheet as a picture sheet is named");
+  assert.equal("schedules_left_out" in assembliesReport(r.instances, r.applications, r.lines), false, "absent when there is none");
+  const { schedules_left_out: _named, ...rest } = report;
   assert.deepEqual(rest, assembliesReport(r.instances, r.applications, r.lines), "nothing else in the report changes");
 });
 

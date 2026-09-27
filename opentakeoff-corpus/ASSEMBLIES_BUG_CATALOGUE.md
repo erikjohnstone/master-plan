@@ -244,6 +244,21 @@ page 11's SINGLE DUCT CAV EXHAUST TERMINAL, SOUND TRAP SCHEDULE and WATER
 FILTRATION UNIT. The seed drew a riser diagram for the document's AHU stratum,
 since no AHU schedule is claimed.
 
+**Addendum 2026-09-27 — 014_MT, an unseen document audited as a new set
+(AS-61).** Its assemblies hold no air handler. Sheet M0.2 (page 2) prints a
+CUSTOM AIR HANDLING UNIT SCHEDULE (AHU-A1: TEMTROL, 48,400 to 75,000 CFM, a
+supply fan array of 12 fans at 7.5 HP, each on its own VFD) and, under
+ALTERNATE 3 - VAV AHU, a COMFORT AIR HANDLING UNIT SCHEDULE (AHU-A2: DAIKIN,
+8,000 CFM, supply and return fans on VFDs). The sheet graph's first reader
+saw both tables (its tag census places AHU-A1 in "CUSTOM AIR HANDLING UNIT
+SCHEDULE" and AHU-A2 in a table it titled "BASE BID"). The final graph holds
+neither: its 26 tables all come from the vector pipeline's fallbacks, and
+page 2 keeps only the two coil schedules and the condensing unit schedule.
+The set's M.E.P. COORDINATION SCHEDULE (page 5, which the graph titles "BURN
+CHAMBER") lists both air handlers with CONTROL TYPE "VFD / DDC", Division
+23. The loss is extraction's. AS-61 cannot name a table the graph does not
+hold.
+
 ---
 
 ## AS-9 — claimed tables that print no instance of their claimed family (OPEN — owned by the table/compile loops)
@@ -3571,3 +3586,141 @@ and FALSE read as booleans in a default and kept in a title; the semicolon
 file named. With Windows-1252 decoding removed, 2 of the new tests fail; with
 the booleans left as written, 2 fail. assembliesApply.test.mjs: MCP's
 `library_path` reads a Windows-1252 CSV with TRUE and FALSE as the starter.
+
+---
+
+## AS-61 — scheduled rows the takeoff reads as no unit left the assemblies short without a word (FIXED — named; the count is the compile's)
+
+**Found:** 2026-09-27, auditing an unseen document (014_MT) as a stand-in for
+a new customer set: its assemblies hold no air handler (AS-8 addendum: the
+graph never kept the tables). A census for the same failure over the cached
+documents found a larger one that is not the graph's. The graph reads these
+family schedules whole, and the compile reads their rows as no unit.
+
+**What:** the compile (`corpusTakeoff.mjs` `uniqueFamily`) reads a titled
+family schedule's rows through the family's mark rule (`HVAC_FAMILY_SPECS`
+keyRe), and drops a row whose mark the rule does not admit. Two shapes:
+- **A building token the rule's prefix strip does not remove**
+  (`markCoreForKeyRe` strips letters only): 05_MO's 1-AC-15, 1-VAV-1,
+  1-SF-15 and 1-TU-28-1; 041_IL's 40-AHU-2, 40-VAV-01, 40-EF-01 and 40-SF-1;
+  067_CA's B950-AHU-3001.
+- **Letters the family's rule lacks:** 031_MO's W05-TU-01 (TU); 096_IN's
+  PEF-1, JEF-1 and BF-1 under an EXHAUST FAN SCHEDULE, HRC-1 under an AIR
+  COOLED CHILLER SCHEDULE, and DOAS-1 in its air handler index; 017_MD's
+  E-A-1; 074_CA's FC-A-2; 094_FL's HF-4; baker-county-eoc's EWH-1; 03_FL's
+  NACC-2 (air-cooled chiller) and DAC-1; 040_IL's SS-1/SSCU-1.
+
+Those units reached no record and no line, and the report counted fewer
+units. 05_MO's held one of its five air handlers, none of its 11 fans and 12
+of its 36 terminal units.
+
+**Fix (the shared path):**
+- `scheduleRowsLeftOut(compiled, graph)` (web/src/lib/assemblies/leftOut.ts)
+  takes each graph table whose title names a family the compile reads, by
+  `HVAC_FAMILY_SPECS`' own titleRe and exclude, and never a points list. It
+  lists the rows no compiled row carries: none sits in the row (a compiled
+  mark's box centred in the row's cells), and none has its mark (the
+  compile's normalization, then letters and digits only, so AHU-1(E) is
+  AHU-1E). What is left is named only when its key reads as a tag
+  (`isEquipTag`, as printed or after one leading building token, for each
+  "/" part).
+- `compiledProjectOf` carries them as `rows_left_out`, each with the sheet
+  number its title block prints. `applyAssemblies` returns those of the
+  families the library prices (`rowsLeftOutPriced`): a family no assembly
+  prices adds no record.
+- The report carries `schedules_left_out` with why ("9 of its 21 rows are no
+  unit in this takeoff, whose VAV rule does not read their marks: no record
+  or line counts them"). The panel names each schedule in red with every
+  mark (`RowsLeftOutView`). The PDF section lists them after the totals,
+  wrapping the marks so every one is printed. MCP returns them in `report`,
+  narrowed by `families` like the rest.
+- **Unchanged:** every unit, record, line and count, and the compile's mark
+  rules.
+
+**Measured:** 40 dev documents whose graph is cached under the current
+engine (held-out excluded). The notice names 21 schedules and 109 rows on 11
+documents; the other 29 name none.
+
+| Document | Schedule (page) | Family | Rows left out |
+|---|---|---|---|
+| 05_MO | AIR HANDLING UNIT SCHEDULE (39) | AHU | 4 of 5 |
+| 05_MO | FAN SCHEDULE (39) | FAN | 11 of 11 |
+| 05_MO | DUAL DUCT AIR TERMINAL UNIT SCHEDULE (40) | VAV | 15 of 15 |
+| 05_MO | SINGLE DUCT AIR TERMINAL UNIT SCHEDULE (40) | VAV | 9 of 21 |
+| 031_MO | SINGLE DUCT AIR TERMINAL UNIT SCHEDULE (72) | VAV | 13 of 13 |
+| 041_IL | AIR HANDLING UNIT SCHEDULE (26) | AHU | 1 of 1 |
+| 041_IL | AIR TERMINAL UNIT SIZING SCHEDULE (25) | VAV | 5 of 5 |
+| 041_IL | FAN SCHEDULE (25), FAN SCHEDULE (26) | FAN | 1 of 1, 1 of 1 |
+| 041_IL | STEAM HUMIDIFER SCHEDULE (26) | HUMIDIFIER | 1 of 1 |
+| 096_IN | EXHAUST FAN SCHEDULE (21) | FAN | 13 of 16 |
+| 096_IN | AIR COOLED CHILLER SCHEDULE (20) | AIR_COOLED_CHILLER | 2 of 4 |
+| 096_IN | AIR HANDLING UNIT SYSTEM INDEX SCHEDULE (19) | AHU | 3 of 4 |
+| 074_CA | DUCTED FAN COIL UNITS (25) | FCU | 11 of 11 |
+| 017_MD | RETURN FAN SCHEDULE (13) | FAN | 9 of 9 |
+| 094_FL | Disposable Cylinder Electric Humidifier Schedule (8) | HUMIDIFIER | 4 of 4 |
+| 03_FL | AIR COOLED CHILLER SCHEDULE (64) | AIR_COOLED_CHILLER | 1 of 1 |
+| 03_FL | DX COOLING ONLY DUCTLESS SPLIT UNIT SCHEDULE (65) | FCU | 1 of 1 |
+| baker-county-eoc | ELECTRIC UNIT HEATER SCHEDULE (41) | UNIT_HEATER | 2 of 2 |
+| 067_CA | AIR HANDLING UNIT SCHEDULE (EXISTING) (8) | AHU | 1 of 1 |
+| 040_IL | SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (47) | FCU | 1 of 1 |
+
+Each schedule was checked against its rows and its compile. Four were also
+checked by eye in renders: 031_MO's (13 terminal units whose printed marks
+are W05-TU-01 to W11-TU-13), 096_IN's exhaust fans (PEF-1 to PEF-6 and JEF-1
+to JEF-6 with motorized dampers, and BF-1), 074_CA's 11 four-pipe fan coils,
+and 017_MD's return fans E-A-1 to E-A-8 and E-A-13.
+- **What the tag rule excludes:** without it, a prototype named seven more
+  tables whose keys are not marks. They are the abbreviations lists of
+  02_UT and tinker-afb read under the titles AIR HANDLING UNIT and FAN COIL
+  UNIT, 040_IL's transposed AIR HANDLING UNIT SCHEDULE (its attribute names
+  as keys), 031_MO's AIR TERMINAL UNIT SIZING SCHEDULE (size letters A to
+  J), and 12_MT's heat pump rows keyed DAIKIN.
+- **Given up:** 061_IA's HUM-A, since a two-part key with no digit reads as
+  no tag (hyphenated English must not).
+
+**Rejected approaches:**
+- **Tables the first reader saw that the final graph lacks** (the tag
+  census's in_table titles). 16_NV's "STAGE, GAS FIRED FURNACE SCHEDULE"
+  would be named, yet its 21 furnaces are units: the final table is titled
+  "2-STAGE, …", with rows B1 to C5, where the plans print F-B1. In the
+  priced families that is one true case (014_MT) and one false.
+- **A coordination schedule's DDC rows that no unit carries.** 014_MT's
+  prints AHU-A1 and AHU-A2 as "VFD / DDC", but also HWP-A1 and HWP-A2 where
+  its pump schedule prints HWP-1 and HWP-2: the same pumps. Only one such
+  table appears in 36 documents.
+- **Reading these rows as units on the assemblies side.** That would be a
+  second answer to "how many VAV boxes" beside the compile's, which the
+  shared-path rule forbids.
+
+**Not fixed (the owner's decision):** the count. The compile's family mark
+rules would admit these marks if they stripped a numeric or alphanumeric
+building token (1-, 40-, W05-, B950-) and knew TU, TAB, PEF, JEF, BF, EWH,
+HF, DAC, E-A-n and FC-A-n, and ACC under an air-cooled chiller title. That
+changes `compile_corpus_takeoff` and the schedule↔plan reconciliation, which
+this goal leaves alone, so it is proposed and not done. If it is done, the
+corpus eval and the reconciliation tests should guard it: every existing
+answer unchanged, and only these units added.
+
+**Tests:**
+- leftOut.test.ts: mark shapes; a row carried by place or by mark (a row
+  the compile read by another cell; AHU-1(E) against AHU-1E; an index
+  printing a unit scheduled elsewhere); what is never named (an
+  abbreviations list, a transposed schedule, an untitled table, a points
+  list, a title that names no family); title families and exclusions; the
+  library filter and apply's return.
+- report.test.ts, panelSections.test.ts and reportPdf.test.ts: every one of
+  a 15-row schedule's marks is printed.
+- assembliesApply.test.mjs: the parity report now passes the project's
+  picture sheets and left-out rows.
+- Mutations: the tests fail if the tag rule, the in-row check, the
+  same-mark check or the library filter is removed.
+
+**UI proof** (the dev server, headless Chrome, byte-identical to
+`apply_assemblies`):
+- 05_MO names 39 rows in 4 schedules on screen (17 checks).
+- 096_IN names 18 rows in 3 schedules (19 checks).
+- 069_ID names none (17 checks).
+- On each, the CSV set and assemblies.pdf are MCP's, byte for byte.
+- The first 05_MO run failed in the proof itself: its in-page copy of the
+  report was built without the new rows, and the proof now passes them.
+

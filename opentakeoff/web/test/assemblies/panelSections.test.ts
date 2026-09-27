@@ -6,7 +6,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { drawingSetChange, LineErrorsView, OverridesView, overrideRows, ProjectSettingsView, StaleProjectView, TypicalChoiceView, UnreadSchedulesView } from "../../src/components/AssembliesPanel.jsx";
+import { drawingSetChange, LineErrorsView, OverridesView, overrideRows, ProjectSettingsView, RowsLeftOutView, StaleProjectView, TypicalChoiceView, UnreadSchedulesView } from "../../src/components/AssembliesPanel.jsx";
 
 test("the lines that cannot be counted are listed, each with its unit, rule and why (AS-53)", () => {
   const cites = [{ sheet: "m.pdf#3", table_title: "COOLING TOWER SCHEDULE", header: "MARK", bbox: [0, 0, 1, 1] }];
@@ -35,6 +35,22 @@ test("the schedule sheets whose tables are pictures are named above the rest, ea
   assert.match(html, /2 schedule sheets are pictures \(pasted images or a scan\): no table could be read from them, so any unit they schedule is missing here: M-601 \(page 21 of m\.pdf\), 59% pictures; page 22 of m\.pdf, 58% pictures\./);
   assert.match(renderToStaticMarkup(createElement(UnreadSchedulesView, { schedules: two.slice(0, 1) })), /A schedule sheet is pictures .* from it, so any unit it schedules is missing here/);
   assert.equal(renderToStaticMarkup(createElement(UnreadSchedulesView, { schedules: [] })), "", "none: nothing shown");
+});
+
+test("the rows of family schedules the takeoff reads as no unit are named, every mark of them (AS-61)", () => {
+  const two = [
+    { sheet: "m.pdf#40", sheet_number: "M-602", title: "DUAL DUCT AIR TERMINAL UNIT SCHEDULE", families: ["VAV"], rows: 15, marks: ["1-VAV-1", "1-VAV-2"], why: "…" },
+    { sheet: "m.pdf#39", title: "FAN SCHEDULE", families: ["FAN"], rows: 11, marks: ["1-EF-36"], why: "…" },
+  ];
+  const html = renderToStaticMarkup(createElement(RowsLeftOutView, { schedules: two }));
+  assert.match(html, /data-assemblies-rows-left-out="2"/);
+  assert.match(html, /data-assemblies-rows-left-out-rows="3"/);
+  assert.match(html, /role="note"/);
+  assert.match(html, /3 scheduled rows are no unit here: the takeoff does not read their marks as marks of the family their schedule&#x27;s title names, so no record or line counts them\./);
+  assert.match(html, /DUAL DUCT AIR TERMINAL UNIT SCHEDULE, M-602 \(page 40 of m\.pdf\) \(VAV\), 2 of 15 rows: 1-VAV-1, 1-VAV-2/);
+  assert.match(html, /FAN SCHEDULE, page 39 of m\.pdf \(FAN\), 1 of 11 rows: 1-EF-36/);
+  assert.match(renderToStaticMarkup(createElement(RowsLeftOutView, { schedules: two.slice(1) })), /A scheduled row is no unit here: the takeoff does not read its mark as marks of the family the schedule&#x27;s title names, so no record or line counts it\./);
+  assert.equal(renderToStaticMarkup(createElement(RowsLeftOutView, { schedules: [] })), "", "none: nothing shown");
 });
 
 test("a unit's details offer the other typicals of its family, else the layer's others, and choosing one writes the override (AS-55)", () => {
