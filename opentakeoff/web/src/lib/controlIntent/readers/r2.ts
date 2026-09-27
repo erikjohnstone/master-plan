@@ -172,6 +172,9 @@ function packetRows(lines: BoundPacket["text"]["lines"]): Array<{ ids: string[];
 
 const ROLE = new Set(["commands", "monitors_only", "not_connected", "not_shown"]);
 const OPTION = new Set(["yes", "no", "absent", "not_shown"]);
+/** C0 controls other than tab and line breaks, and DEL: never printed text. */
+const CONTROL_CHAR = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
+const CONTROL_CHARS = new RegExp(CONTROL_CHAR.source, "g");
 
 /** Check one packet's reply: per question, the answer with its printed
  * labels as cites, or UNVERIFIED. `lowRes`: the crop is below 200 dpi, so an
@@ -207,10 +210,14 @@ export function r2PacketAnswers(content: string | null, bp: BoundPacket, questio
       if (!ids) continue;
       const ls = bp.text.lines.filter((l) => ids.includes(l.id));
       const box = ls.map((l) => l.box).reduce((m, b) => [Math.min(m[0], b[0]), Math.min(m[1], b[1]), Math.max(m[2], b[2]), Math.max(m[3], b[3])] as Box);
-      cites.push({ packet: bp.packet.id, sheet: bp.packet.sheet, lines: ids, text: label, box });
+      // A glyph the model could not copy can come back as a control character
+      // ("55\u0000 OAT" for "55° OAT"). The label still matches the print
+      // letter for letter; the cite quotes the print, not the copy.
+      const text = CONTROL_CHAR.test(label) ? (line ? line.text : pg ? pg.text : row!.text) : label;
+      cites.push({ packet: bp.packet.id, sheet: bp.packet.sheet, lines: ids, text, box });
     }
     if (!cites.length || cites.length < Math.ceil(labels.length / 2)) {
-      out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites, note: "unverified", why: labels.length ? `labels not printed in the drawing: ${labels.filter((l) => !texts.some((t) => printedIn(l, t)) && !(rows ?? []).some((r) => printedIn(l, r.text))).slice(0, 4).join(" | ")}` : "no label given" });
+      out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites, note: "unverified", why: labels.length ? `labels not printed in the drawing: ${labels.filter((l) => !texts.some((t) => printedIn(l, t)) && !(rows ?? []).some((r) => printedIn(l, r.text))).slice(0, 4).map((l) => l.replace(CONTROL_CHARS, "�")).join(" | ")}` : "no label given" });
       continue;
     }
     out.push({ ...base, answer: answer as ReaderAnswer["answer"], cites });

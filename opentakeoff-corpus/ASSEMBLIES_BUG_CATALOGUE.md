@@ -1981,3 +1981,78 @@ document's cached sheet graph that prints its tag
 value moves; control intent replays identically; the invariant sweep's 12
 flags are unchanged. The application census: 713 resolved (from 700), 569
 waiting (from 582), attr.vfd 234 (from 247).
+
+**Addendum, a model column mapper, tried and rejected (2026-09-27):** could a
+model map the headers the rules do not know, so a new drafter's columns read
+without a new rule? Tested on dev 5 as the normalizer stood before its rules
+(b407614, the cold state): every header of each keyed table that read as no
+quantity, with up to three of its cells and the family's vocabulary
+(definitions, kinds, units), one request per table on the platform endpoint,
+scored against the dev-5 keys' column maps (scratch colmap/exp1.mjs).
+gpt-oss-120b mapped 4 columns right and mapped 18 the keys leave unmapped (15
+of them "high" confidence): a coil's WATER EAT and ENTERING DB (air
+temperatures) as water temperatures, FAN BHP and MOTOR BHP (brake
+horsepower) as motor horsepower, a condensate drain as a pipe connection,
+DESCRIPTION as a pump's service. qwen-3.8-27b mapped the same 4 right and 6
+wrongly (4 "high"). Each wrong mapping would be an invented value; the
+conventions the models miss are the ones the rules encode. Rejected; the
+rules stay the way a new drafter's columns are read. Where the cold-state
+losses are: of dev 5's 150, 40 are printed columns the rules did not know
+(37 read since), 51 readings (39 read since) and 40 units the compile does
+not make (none recoverable here); of dev 4's 474, 368 are units the compile
+does not make (tag spellings the compile and the key read differently:
+028_TX's FCC 1-1, 030_NY's 001-FCU-01-CG06A), which is extraction's.
+
+## AS-34 — the Takeoff panel on two more documents: packet ids kept the upload's hash name, and a model's copy of a glyph reached a cite (FIXED — this goal)
+
+**Found:** 2026-09-27, running the UI proof (web/scripts/playwright-assemblies.mjs:
+a real PDF through the dev server's /__ot/assemblies-project into Takeoff →
+Assemblies, byte for byte against apply_assemblies over MCP) on two
+documents it had not run on. 28_WA (dev 5; a heat pump schedule with QTY 43,
+no control drawings) passed all 10 checks. 096_IN (dev 3; 24 control
+packets) did not, for three reasons:
+
+- **The proof's own recomputation left the readings out.** The panel
+  applies the control drawings' readings the project carries
+  (AssembliesPanel: project.control_readings); the proof's in-page
+  applyAssemblies call predated control intent and passed none. Fixed in
+  the script; it also saves the browser's records beside its lines, so a
+  mismatch can be read.
+- **Packet ids kept the upload's hash name (UI path).** The dev server
+  spools an upload as <sha256>.pdf, and the browser puts the real name back
+  (graphKeys.js) on every sheet key, but a control packet's id
+  ("<sha>.pdf#36#p8", whose page marker is not the key's last part) was left:
+  every reading's cite and the panel's "(control packet …)" label named a
+  64-character hash beside a sheet named for the file. The boundary now
+  remaps a packet id in a `packet` or `id` field when its sha is one the
+  client uploaded; cell text is still never rewritten (tests in
+  graphKeys.test.ts).
+- **A model's copy of a glyph reached a cite (shared readers).** On one of
+  two runs qwen-3.8-27b copied "BELOW 55° OAT" as "BELOW 55\u0000 OAT". The
+  label still matches the print letter for letter, so it was verified, and
+  its NUL characters were quoted into the cite (and so into the panel and
+  the CSV set). A label carrying a control character now cites the printed
+  text it was verified against; a clean label is cited as before, and no
+  committed replay run holds such a label (readers.test.ts).
+
+**Measured:** with the readings read by printed phrases on both surfaces
+(OPENTAKEOFF_CONTROL_READINGS=deterministic), 096_IN passes all 10 checks:
+243 records and 3,252 lines byte-identical to MCP, the CSV set and the
+mechanical-scope set byte for byte, settings, keyboard, override, library,
+themes at three widths, autosave and reload. Read by the models, the two
+surfaces' records now carry no hash name, and every unit's decisions are the
+same; 65 records differ only in which printed lines each of two live runs
+quoted. That is two model runs, not two code paths: the dev server's CLI
+keeps its runs per PDF set (~/.cache/opentakeoff-control-runs) and replays
+them, while apply_assemblies keeps a Session's runs in memory, and a run's
+hash covers the request, which names the file (a spooled hash name in the
+browser's upload, the real name over MCP), so the two cannot replay each
+other's runs today. OPEN (proposed): name-independent run hashes and one run
+store per PDF set for both surfaces. The fan rule of AS-33 holds on the
+product path: 096_IN's 13 AHU fans apply fan-variable over MCP and in the
+panel.
+
+**Process note (disclosed):** while checking whether any committed replay
+run held a label with a NUL, one count ran over every control-intent runs
+file, held-out ones included. It printed only the total (0); no run's
+content was displayed. Later checks name dev and unseen files only.

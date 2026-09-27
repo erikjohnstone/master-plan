@@ -484,6 +484,24 @@ test("R2: labels must be printed in the drawing; a low-resolution crop never rea
   assert.ok(spec.long_edge <= 3200);
 });
 
+test("R2: a label the model copied with a control character for a glyph cites the printed text", () => {
+  // 096_IN CUH-1 (the unit heaters' sequence, page 36): qwen-3.8-27b copied
+  // "BELOW 55° OAT" as "BELOW 55\u0000 OAT" on one run and with the degree
+  // sign on another. The label still matches the print letter for letter.
+  const printed = "BELOW 55° OAT THE UNIT COIL VALVE IS MODULATED";
+  const bp = bound(packet("p1", "CABINET UNIT HEATER CONTROLS", [sp(printed, 100, 100)]));
+  const q = [opt("modulating_valve")];
+  const reply = (label: string) => JSON.stringify({ answers: [{ question: "opt.modulating_valve", answer: "yes", labels: [label] }] });
+  const nul = r2PacketAnswers(reply("BELOW 55\u0000 OAT THE UNIT COIL VALVE IS MODULATED"), bp, q, "a")[0];
+  assert.equal(nul.note, undefined);
+  assert.equal(nul.cites[0].text, printed, "the print, not the copy");
+  const clean = r2PacketAnswers(reply("THE UNIT COIL VALVE IS MODULATED"), bp, q, "a")[0];
+  assert.equal(clean.cites[0].text, "THE UNIT COIL VALVE IS MODULATED", "a clean label is cited as the model gave it");
+  const unprinted = r2PacketAnswers(reply("ABOVE 60\u0000 OAT THE FAN STOPS"), bp, q, "a")[0];
+  assert.equal(unprinted.note, "unverified");
+  assert.ok(!/\u0000/.test(unprinted.why ?? ""), "no control character reaches the reason either");
+});
+
 test("R2: a label read across one row of a points table, cell to cell, is printed; one joined across two rows is not", () => {
   // Robustness find (unseen sets): the vision model cites a points table's
   // row as one label ("BO-2 INTAKE DAMPER OPEN/CLOSE"); its designator and

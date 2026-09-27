@@ -1,5 +1,18 @@
 # Changelog
 
+- **The Takeoff panel names control packets by the file, and never quotes a
+  model's garbled glyph.** A PDF opened in the browser is spooled under its
+  content hash; the panel restored the file's name on every sheet key but not
+  on a control packet's id, so a control drawing reading cited "(control
+  packet 72da836a…pdf#36#p8)". The browser boundary
+  (`web/src/lib/graphKeys.js`) now restores packet ids too. And a vision
+  reply that copied "55° OAT" as "55\u0000 OAT" had its control characters
+  quoted into the cite, the panel and the CSV set; the vision reader
+  (`web/src/lib/controlIntent/readers/r2.ts`) now cites the printed text such a
+  label was verified against. Found by running the assemblies UI proof on two
+  more documents; with the drawings read by printed phrases, the panel and
+  apply_assemblies agree byte for byte (ASSEMBLIES_BUG_CATALOGUE AS-34).
+
 - **A fan whose control column prints "VFD" runs on a VFD.** A schedule
   that prints the drive under a control heading ("VARIABLE CONTROL TYPE:
   VFD") gave the fan's control text but not its VFD, so the shared

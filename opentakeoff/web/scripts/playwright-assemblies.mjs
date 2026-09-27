@@ -70,7 +70,9 @@ async function applyInPage() {
     const project = window.__opentakeoff.probe.assembliesProject();
     const state = window.__opentakeoff.probe.assembliesState();
     const { library } = combinedLibrary(await loadStarterLibrary(), await localStore.loadEquipmentAssemblies());
-    const applied = applyAssemblies({ project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [] });
+    // The panel applies the control drawings' readings the project carries
+    // (AssembliesPanel: project.control_readings), as apply_assemblies does.
+    const applied = applyAssemblies({ project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
     const report = assembliesReport(applied.instances, applied.applications, applied.lines);
     return { applications: JSON.stringify(applied.applications), lines: JSON.stringify(applied.lines), report: JSON.stringify(report) };
   });
@@ -102,6 +104,7 @@ try {
   // Parity in the running app: the browser's own computation against MCP's.
   const mine = await applyInPage();
   writeFileSync(`${out}/browser-lines.json`, mine.lines);
+  writeFileSync(`${out}/browser-records.json`, mine.applications);
   assert.equal(mine.applications, JSON.stringify(mcp.applications), 'browser records are the MCP records, byte for byte');
   assert.equal(mine.lines, JSON.stringify(mcp.lines), 'browser lines are the MCP lines, byte for byte');
   assert.equal(mine.report, JSON.stringify(mcp.report), 'the browser report is the MCP report');
