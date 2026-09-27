@@ -1,0 +1,69 @@
+# 23_GA_MaconBibb_RecreationCenter — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheets A1-2 ENLARGED FLOOR PLAN, SCHEDULES & ACCESSORIES (PDF page 15) and
+# M601 MECHANICAL LEGEND, GENERAL NOTES & SCHEDULES (PDF page 35) of the Renovation & Addition to
+# North Macon Park Recreation Center, 815 N Macon Park Dr, Macon GA, Bibb County Recreation
+# Department (W/2A Architects, with Andrews, Hammock & Powell): an overview of each page at 40 dpi,
+# then each table at 3x (216 dpi; the architectural schedule at 2x), rendered with MuPDF (pymupdf
+# get_pixmap(clip)) and read by eye on 2026-09-27, with the PDF's own text layer (pymupdf words,
+# row by row) as a reading aid; second read of every row against the text layer. Each drawn title
+# was found with the text layer (pymupdf search_for). The pipeline's output for these tables was
+# not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (16 units, 4 packets, nothing applied), and AS-28 read its column names. The fifth
+# tier keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 23_GA_MaconBibb_RecreationCenter
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheets A1-2 and M601 (pages 15 and 35) of the North Macon Park Recreation Center renovation and addition (W/2A Architects, with Andrews, Hammock & Powell), the tables the fifth tier's seed drew for its FCU and ERV strata.
+EXCLUDES Model numbers, DX and heat pump capacities (outside the fan coil vocabulary), outdoor airflow, external static pressure and entering air temperatures, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# FAN COIL UNITS (page 35): one row, FCU-1, a vertical draw-through fan coil matched with a heat
+# pump (notes 2-5). TOTAL SUPPLY CFM keys cfm, AUX. HTG. KW @208 eh_kw (the unit's electric strip
+# heat, note 7), and BLOWER MOTOR HP motor_hp. The row cites every note (1:2:...:11): note 4
+# ("PROVIDE DX COOLING COIL WITH FACTORY INSTALLED THERMOSTATIC EXPANSION VALVE FOR REFRIGERANT
+# CONTROL.") keys cooling_type dx, note 3 (a heating capacity "MATCHED WITH INDICATED HEAT PUMP
+# UNIT") heating_type heat_pump (INT. HTG. CAP. is the heat pump's heating; the strip heat is
+# auxiliary), and note 10 ("PROVIDE VARIABLE SPEED ECM SUPPLY FAN MOTOR.") ecm yes. The electric
+# heat is rated "@208" and note 7 gives the unit a single point power connection: volts 208 (the
+# author's reading); no phase prints. The FCU vocabulary has no DX or heat pump capacity (chw_mbh
+# and hw_mbh are water coils'), so TOTAL NET COOLING MBH and INT. HTG. CAP. MBH are typed "-".
+TABLE
+sheet: 23_GA_MaconBibb_RecreationCenter.pdf#35
+title: FAN COIL UNITS
+family: FCU
+render: page 35 overview at 40 dpi; crop 365,45,970,90 at 3x in 2 tiles (TAG column repeated), and the notes read in the text layer (crop 365,45,970,320); second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: TAG => tag
+col: CARRIER MODEL NUMBER => -
+col: TOTAL NET COOLING MBH => -
+col: SENSIBLE NET COOLING MBH => -
+col: TOTAL SUPPLY CFM => cfm
+col: OA CFM => -
+col: INT. HTG. CAP. MBH => -
+col: AUX. HTG. KW @208 => eh_kw
+col: APPROX. ESP IN. WG => -
+col: BLOWER MOTOR HP => motor_hp
+col: ENTERING AIR TEMP. / °FDB => -
+col: ENTERING AIR TEMP. / °FWB => -
+col: NOTES => -
+derive: cooling_type = dx ; header=NOTE 4 ; note=note 4, cited by the row: 'PROVIDE DX COOLING COIL WITH FACTORY INSTALLED THERMOSTATIC EXPANSION VALVE FOR REFRIGERANT CONTROL.'
+derive: heating_type = heat_pump ; header=NOTE 3 ; note=note 3, cited by the row: 'HEATING CAPACITY BASED ON 70°F RETURN AIR AND OUTDOOR AIR AT 17°F, AND MATCHED WITH INDICATED HEAT PUMP UNIT.' (the strip heat of note 7 is auxiliary)
+derive: ecm = yes ; header=NOTE 10 ; note=note 10, cited by the row: 'PROVIDE VARIABLE SPEED ECM SUPPLY FAN MOTOR.'
+derive: volts = 208 ; header=AUX. HTG. KW @208 ; note=the unit's electric heat is rated at 208 V and note 7 gives the unit a single point power connection at the connected voltage (the author's reading)
+grid:
+FCU-1 | FV4C | 44 | 32 | 1400 | 200 | 24 | 7.5 | 0.70 | 3/4 | 78 | 65 | 1:2:3:4:5:6:7:8:9:10:11
+END
+
+# SPECIALTY EQUIPMENT SCHEDULE (page 15, architectural sheet A1-2): the census claims it as ERV
+# with 15 rows. It lists architectural specialties by CATEGORY, TYPE MARK, DESCRIPTION and COUNT:
+# basketball hoops, a folding changing bench, a fire extinguisher bracket (FE) and cabinets (FEC),
+# telescoping bleachers (AE-1), vending machines (GE-05), a computer (IT-1), markerboards (MB-1), a
+# trophy case (TC-01) and toilet accessories T1 to T24. No row is an energy recovery ventilator.
+TABLE
+sheet: 23_GA_MaconBibb_RecreationCenter.pdf#15
+title: SPECIALTY EQUIPMENT SCHEDULE
+family: ERV
+render: page 15 overview at 40 dpi; crop 530,70,600,460 at 2x, every row's type mark and description read, and the text layer row by row
+rows: none — A1-2's architectural SPECIALTY EQUIPMENT SCHEDULE of athletic, general and toilet accessory items; no row is an energy recovery ventilator
+grid:
+END

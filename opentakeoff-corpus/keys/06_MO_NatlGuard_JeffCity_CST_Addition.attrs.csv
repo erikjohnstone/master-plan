@@ -1,0 +1,453 @@
+# 06_MO_NatlGuard_JeffCity_CST_Addition.attrs.csv — ATTRIBUTE-tier ground truth for the ASSEMBLIES goal (mcp/scripts/assemblies-attr-eval.mjs).
+#
+# Authored from RENDERS (mcp/scripts/render-page-crop.mjs, 2-4x) by reading each table by eye;
+# the pipeline's output for these sheets was not consulted. Where render and pipeline later
+# differ, the RENDER decides. A key that looks wrong is written up in
+# ASSEMBLIES_BUG_CATALOGUE.md, never edited (goals/ASSEMBLIES.md ANTI-GAMING).
+# Tables drawn by seed 20260929 (reports/assemblies/tier5/01-split.json); transcription: reports/assemblies/key-work/06_MO_NatlGuard_JeffCity_CST_Addition.transcription.txt,
+# expanded by mcp/scripts/assemblies-key-transcribe.mjs.
+#
+# Scope: Sheets P111, M601 and M611 (pages 68, 74 and 75) of the Jefferson City Readiness Center CST Building Addition (Klingner & Associates), the tables the fifth tier's seed drew for its FCU, VAV, RTU, HEAT_PUMP, PUMP, FAN and UNIT_HEATER strata.
+#   06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75 | FAN COIL UNT SCHEDULE | FCU | all 3 printed rows | render: page 75 overview at 40 dpi; crop 1435,338,860,170 at 3x in 2 tiles (TAG column repeated); second read of every row, every cell, against the text layer
+#   06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74 | VARIABLE-AIR-VOLUME BOX SCHEDULE | VAV | all 9 printed rows | render: page 74 overview at 40 dpi; crop 155,280,1050,225 at 3x in 2 tiles (Mark column repeated), notes included; second read of every row, every cell, against the text layer
+#   06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74 | ROOFTOP UNIT SCHEDULE | RTU | all 1 printed row | render: page 74 overview at 40 dpi; crop 155,115,1450,140 at 3x in 3 tiles (Mark column repeated), notes included; second read of the row, every cell, against the text layer
+#   06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75 | HEAT PUMP SCHEDULE | HEAT_PUMP | all 2 printed rows | render: page 75 overview at 40 dpi; crop 1340,160,955,130 at 3x in 2 tiles (TAG column repeated); second read of both rows, every cell, against the text layer
+#   06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68 | SINK PUMP SCHEDULE | PUMP | all 1 printed row | render: page 68 overview at 40 dpi; crop 262,310,740,95 at 3x; second read of the row, every cell, against the text layer
+#   06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75 | EXHAUST FAN SCHEDULE | FAN | all 1 printed row | render: page 75 overview at 40 dpi; crop 1318,532,977,110 at 3x in 2 tiles (TAG column repeated); second read of the row, every cell, against the text layer
+#   06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75 | ELECTRIC DUCT HEATER SCHEDULE | UNIT_HEATER | all 1 printed row | render: page 75 overview at 40 dpi; crop 575,532,667,95 at 3x; second read of the row, every cell, against the text layer
+# Covered attributes: every attribute of the family's key vocabulary (assemblies-key-transcribe.mjs KEY_ATTRIBUTES),
+# one line per instance x attribute. Empty value + note 'not printed' = the table has no such column;
+# empty value + note 'blank cell' = the column exists but this row prints nothing. Both score 'invented' if the pipeline fills them.
+# Not counted: Manufacturers, model numbers and weights, filters, efficiencies (IEER, COP), ambient design temperatures, frequencies, currents (MCA, MOP, MOCP), coil air temperatures, the rooftop unit's external static pressure and gas turndown, the exhaust fan's accessories, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+# 06_MO_NatlGuard_JeffCity_CST_Addition: 7 table(s), 18 instance(s), 430 keyed attribute value(s) (105 printed, 325 empty)
+sheet,table_title,tag,family,attribute,value,unit,source_header,note
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,pipes,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,cfm,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,fan_speeds,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,cooling_type,dx,,COOLING CAP.,"no water column prints, and the sheet's HVAC SCHEMATIC DIAGRAM pipes refrigerant between heat pumps HP-1/HP-2 and the fan coil units: refrigerant (DX) indoor units (the author's reading)"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,chw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,heating_type,heat_pump,,HEATING CAP.,"a DX fan coil printing a heating capacity and no water, gas or electric heat, served by outdoor heat pumps HP-1/HP-2: heat pump heating (the author's reading)"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,eh_kw,,kW,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,volts,208,V,ELECTRICAL / VOLT,printed '208 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-1,FCU,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,pipes,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,cfm,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,fan_speeds,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,cooling_type,dx,,COOLING CAP.,"no water column prints, and the sheet's HVAC SCHEMATIC DIAGRAM pipes refrigerant between heat pumps HP-1/HP-2 and the fan coil units: refrigerant (DX) indoor units (the author's reading)"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,chw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,heating_type,heat_pump,,HEATING CAP.,"a DX fan coil printing a heating capacity and no water, gas or electric heat, served by outdoor heat pumps HP-1/HP-2: heat pump heating (the author's reading)"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,eh_kw,,kW,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,volts,208,V,ELECTRICAL / VOLT,printed '208 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-2,FCU,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,pipes,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,cfm,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,fan_speeds,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,cooling_type,dx,,COOLING CAP.,"no water column prints, and the sheet's HVAC SCHEMATIC DIAGRAM pipes refrigerant between heat pumps HP-1/HP-2 and the fan coil units: refrigerant (DX) indoor units (the author's reading)"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,chw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,heating_type,heat_pump,,HEATING CAP.,"a DX fan coil printing a heating capacity and no water, gas or electric heat, served by outdoor heat pumps HP-1/HP-2: heat pump heating (the author's reading)"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,eh_kw,,kW,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,volts,208,V,ELECTRICAL / VOLT,printed '208 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,FAN COIL UNT SCHEDULE,FCU-3,FCU,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,inlet_size_in,4,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,cfm_max,120,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,heat_type,electric,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed '2.0'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,eh_kw,2,kW,ELECTRIC HEAT (KW),printed '2.0'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,volts,120,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-1,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,inlet_size_in,4,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,cfm_max,170,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,heat_type,electric,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed '2.5'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,eh_kw,2.5,kW,ELECTRIC HEAT (KW),
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,volts,120,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-2,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,inlet_size_in,7,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,cfm_max,510,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,heat_type,electric,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed '7.5'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,eh_kw,7.5,kW,ELECTRIC HEAT (KW),
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,volts,208,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-3,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,inlet_size_in,9,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,cfm_max,840,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,heat_type,electric,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed '12.0'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,eh_kw,12,kW,ELECTRIC HEAT (KW),printed '12.0'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,volts,208,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-4,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,inlet_size_in,4,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,cfm_max,60,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,heat_type,none,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed 'N/A'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,eh_kw,,kW,ELECTRIC HEAT (KW),printed 'N/A'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,volts,24,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-5,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,inlet_size_in,4,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,cfm_max,60,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,heat_type,none,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed 'N/A'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,eh_kw,,kW,ELECTRIC HEAT (KW),printed 'N/A'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,volts,24,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-6,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,inlet_size_in,10,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,cfm_max,1040,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,heat_type,electric,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed '15.0'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,eh_kw,15,kW,ELECTRIC HEAT (KW),printed '15.0'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,volts,208,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-7,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,inlet_size_in,4,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,cfm_max,115,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,heat_type,electric,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed '2.0'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,eh_kw,2,kW,ELECTRIC HEAT (KW),printed '2.0'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,volts,120,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-8,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,terminal_type,single_duct,,DESCRIPTION,printed 'DIGITAL SINGLE DUCT TERMINAL'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,inlet_size_in,7,in,"SIZE: the terminal's size number, its nominal inlet diameter in inches",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,cfm_max,600,cfm,"AIRFLOW (CFM): the box's one printed airflow, its design maximum",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,cfm_min,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,cfm_heat,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,heat_type,electric,,"ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none",printed '9.0'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,eh_kw,9,kW,ELECTRIC HEAT (KW),printed '9.0'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,eh_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,volts,208,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,VARIABLE-AIR-VOLUME BOX SCHEDULE,VAV-9,VAV,phase,1,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,supply_cfm,3520,cfm,AIRFLOW / CFM,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,oa_cfm_min,340,cfm,OUTDOOR AIRFLOW (CFM),
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,supply_fan_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,supply_fan_qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,return_fan_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,exhaust_fan_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,vfd,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,economizer,airside,,NOTE 1,"note 1, cited by the row: '... BACNET COMMUNICATION CARD, AND ECONOMIZER.' (a packaged rooftop unit's economizer is airside)"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,outdoor_air_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,cooling_type,dx,,COOLING / CAPACITY (BTU/HR),a packaged rooftop unit's cooling block with no water column: refrigerant (DX) cooling (the author's reading)
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,cooling_mbh,119000,BTU/H,COOLING / CAPACITY (BTU/HR),"printed '119,000'"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,cooling_tons,,tons,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,dx_stages,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,chw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,heating_type,gas,,HEATING / HEATING TYPE,printed 'NAT. GAS'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,heating_mbh,150000,BTU/H,HEATING / OUTPUT CAPACITY (BTU/HR),"printed '150,000'"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_wpd_ft,,ft,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_rows,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,hw_glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,steam_psig,,psig,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,steam_lb_hr,,lb/hr,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,gas_input_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,eh_kw,,kW,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,humidifier,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,energy_recovery,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,filter_merv,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,bas_interface,BACNET,,NOTE 1,"note 1, cited by the row: 'PROVIDE WITH 14"" FLAT ROOF CURB WITH HOLDDOWN CLIPS, POWERED CONVENIENCE OUTLET, BACNET COMMUNICATION CARD, AND ECONOMIZER.'"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,volts,208,V,ELECTRICAL / VOLTAGE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74,ROOFTOP UNIT SCHEDULE,ACU-6,RTU,phase,3,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,cfm,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,cooling_mbh,47000,BTU/H,CAPACITY / COOLING,"printed '47,000 BTU/H'"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,cooling_tons,,tons,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,heating_mbh,33000,BTU/H,CAPACITY / HEATING,"printed '33,000 BTU/H'"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,chw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,chw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,chw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,eh_kw,,kW,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,bas_interface,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,volts,208,V,ELECTRICAL / VOLT,printed '208 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-1,HEAT_PUMP,phase,3,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cfm,,cfm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cooling_mbh,47000,BTU/H,CAPACITY / COOLING,"printed '47,000 BTU/H'"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,cooling_tons,,tons,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,heating_mbh,33000,BTU/H,CAPACITY / HEATING,"printed '33,000 BTU/H'"
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,chw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,eh_kw,,kW,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,bas_interface,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,volts,208,V,ELECTRICAL / VOLT,printed '208 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,HEAT PUMP SCHEDULE,HP-2,HEAT_PUMP,phase,3,,ELECTRICAL / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,service,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,gpm,18,gpm,FLOW,printed '18.0 GPM'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,head_ft,16,ft,HEAD: the number before ftH2O,printed '16.0'; author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,rpm,,rpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,vfd,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,pump_arrangement,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,glycol_pct,,%,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,volts,120,V,ELECTRICAL / VOLT,printed '120 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68,SINK PUMP SCHEDULE,SP-1,PUMP,phase,1,,"ELECTRICAL / POLES: one pole at 120 V, single phase",author's reading of the printed row
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,service,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,cfm,1740,cfm,AIR FLOW,printed '1740 CFM'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,esp_in,0.5,in. w.c.,S.P.,printed '0.5 IN.W.C.'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_hp,0.75,hp,ELECTRICAL PARAMETERS / HP,printed '3/4 HP'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,motor_watts,,W,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,rpm,,rpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,drive,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,vfd,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,ecm,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,control,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,volts,120,V,ELECTRICAL PARAMETERS / VOLTAGE,printed '120 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,EXHAUST FAN SCHEDULE,EF-1,FAN,phase,1,,ELECTRICAL PARAMETERS / PHASE,
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,building,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,floor,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,area_served,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,qty,,,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,heating_medium,electric,,TABLE TITLE,title printed 'ELECTRIC DUCT HEATER SCHEDULE'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,cfm,400,cfm,AIRFLOW,printed '400 CFM'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,heating_mbh,,MBH,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,hw_gpm,,gpm,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,hw_ewt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,hw_lwt_f,,F,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,steam_psig,,psig,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,steam_lb_hr,,lb/hr,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,eh_kw,8,kW,CAPACITY,printed '8 kW'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,motor_hp,,hp,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,conn_in,,in,,not printed
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,volts,208,V,VOLT,printed '208 V'
+06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75,ELECTRIC DUCT HEATER SCHEDULE,EDH-1,UNIT_HEATER,phase,1,,PHASE,

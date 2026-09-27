@@ -1,0 +1,47 @@
+# 097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheet H-001 MECHANICAL SYMBOL LEGEND AND SCHEDULES (PDF page 2) of the JVWTP
+# Chemical Buildings HVAC Upgrades, Jordan Valley Water Conservancy District, Herriman UT (Heath
+# Engineering Company): an overview of the page at 40 dpi, then the table at 3x (216 dpi),
+# rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-27, with the PDF's own
+# text layer (pymupdf words, row by row) as a reading aid; second read of both rows against the
+# text layer. The drawn title was found with the text layer (pymupdf search_for). The pipeline's
+# output for this table was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (3 units, 2 packets, nothing applied), and AS-28 read its column names. The corpus
+# hygiene report names 095_UT a near copy of this document (withdrawn with dev 5). The fifth tier
+# keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheet H-001 (page 2) of the JVWTP Chemical Buildings HVAC Upgrades, Jordan Valley Water Conservancy District (Heath Engineering Company), the table the fifth tier's seed drew for its UNIT_HEATER stratum.
+EXCLUDES Model numbers, frequency and current, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# ELECTRIC UNIT HEATER SCHEDULE: two rows, UH-1 and UH-2. The title names the medium:
+# heating_medium electric (as 031_MO's ELECTRIC UNIT HEATER SCHEDULE). BTUH OUTPUT keys heating_mbh
+# in the BTU/H it prints, NOMINAL CFM cfm, and ELECTRICAL DATA / KW eh_kw; VOLTS and PHASE key volts
+# and phase. DUTY prints the chemical room each heater serves (PRIMARY COAGULANT; the sheet's
+# ventilation fans and louvers print the same column for their rooms): area_served (the author's
+# reading). REMARKS prints "-".
+TABLE
+sheet: 097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf#2
+title: ELECTRIC UNIT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 2 overview at 40 dpi; crop 580,1195,1000,150 at 3x, the REMARKS column read in the text layer; second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: SYMBOL => tag
+col: BTUH OUTPUT => heating_mbh [BTU/H]
+col: NOMINAL CFM => cfm
+col: ELECTRICAL DATA / VOLTS => volts
+col: ELECTRICAL DATA / HZ => -
+col: ELECTRICAL DATA / PHASE => phase
+col: ELECTRICAL DATA / AMPS => -
+col: ELECTRICAL DATA / KW => eh_kw
+col: MARKEL MODEL => -
+col: DUTY => -
+col: [DUTY: the chemical room the heater serves] => area_served
+col: REMARKS => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC UNIT HEATER SCHEDULE'
+grid:
+UH-1 | 34,130 | 700 | 480 | 60 | 3 | 12.1 | 10 | P3P5510T | PRIMARY COAGULANT | PRIMARY COAGULANT | -
+UH-2 | 34,130 | 700 | 480 | 60 | 3 | 12.1 | 10 | P3P5510T | PRIMARY COAGULANT | PRIMARY COAGULANT | -
+END

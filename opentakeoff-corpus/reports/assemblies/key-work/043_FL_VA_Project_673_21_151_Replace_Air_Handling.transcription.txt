@@ -1,0 +1,49 @@
+# 043_FL_VA_Project_673_21_151_Replace_Air_Handling — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheet E001 ELECTRICAL SYMBOLS, ABBREVIATIONS, NOTES, AND SCHEDULES (PDF page
+# 23) of Replace Air Handling Unit ED-203, James A. Haley VA Hospital, VA project 673-21-151 (Aesus
+# design group): an overview of the page at 40 dpi, then the table at 3x (216 dpi), rendered with
+# MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-26, with the PDF's own text layer
+# (pymupdf words, row by row) as a reading aid; second read of every row against the text layer.
+# The drawn title was found with the text layer (pymupdf search_for), and the pump tags were found
+# in the text layer of the plan sheets (pages 12, 15, 28 and 32 print HWP-1, HWP-2, CWP-9 and
+# CWP-10). The pipeline's output for this table was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (2 units, 7 packets, 2 applied), and AS-28 read its column names. The fifth tier
+# keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 043_FL_VA_Project_673_21_151_Replace_Air_Handling
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheet E001 (page 23) of Replace Air Handling Unit ED-203, James A. Haley VA Hospital (Aesus design group), the table the fifth tier's seed drew for its PUMP stratum.
+EXCLUDES Currents (F.L.A., M.C.A., MOCP), disconnect and fuse data other than the drive, feeder wire and conduit, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# MECHANICAL EQUIPMENT SCHEDULE: an electrical connection list of three rows: ED 203 (AIR HANDLING
+# UNIT, outside the PUMP stratum), then two pump rows whose EQUIP ID boxes print "HWP" over "1-2"
+# and "CWP" over "9-10": each names two pumps (the plans print HWP-1, HWP-2, CWP-9 and CWP-10),
+# keyed as HWP-1, HWP-2, CWP-9 and CWP-10 with their row's values (as 028_TX keys "UH-1 & UH-2").
+# DESCRIPTION names the equipment (HOT WATER PUMP, CHILLED WATER PUMP), as a title does; no column
+# prints a service (as 009_FL's CHILLED WATER PUMP title). EQUIPMENT RATING / VOLTS keys volts,
+# PHASE ("3Ø") keys phase by its number, and HP keys motor_hp. DISC SWITCH/FUSE DATA prints "VFD
+# WITH INTEGRAL DISCONNECT" on both pump rows: vfd yes. No note prints.
+TABLE
+sheet: 043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23
+title: MECHANICAL EQUIPMENT SCHEDULE
+family: PUMP
+render: page 23 overview at 40 dpi; crop 295,1440,1105,245 at 3x in 2 tiles (EQUIP ID column repeated); second read of every row, every cell, against the text layer
+rows: the 2 printed pump rows (EQUIP ID "HWP 1-2" and "CWP 9-10", each naming two pumps: keyed as HWP-1, HWP-2, CWP-9 and CWP-10); ED 203, an air handling unit, is not keyed
+col: EQUIP ID => tag
+col: DESCRIPTION => -
+col: EQUIPMENT RATING / VOLTS => volts
+col: EQUIPMENT RATING / PHASE => -
+col: [EQUIPMENT RATING / PHASE: the number before Ø] => phase
+col: EQUIPMENT RATING / F.L.A. => -
+col: EQUIPMENT RATING / M.C.A. => -
+col: EQUIPMENT RATING / MOCP => -
+col: EQUIPMENT RATING / HP => motor_hp
+col: DISC SWITCH/FUSE DATA => vfd
+col: UNIT TAP CONNECTION WIRE-CONDUIT => -
+grid:
+HWP-1 | HOT WATER PUMP | 480 | 3Ø | 3 | - | - | - | 2 | yes (VFD WITH INTEGRAL DISCONNECT) | 3/4" C, (3)#12(CU), #12(CU)G
+HWP-2 | HOT WATER PUMP | 480 | 3Ø | 3 | - | - | - | 2 | yes (VFD WITH INTEGRAL DISCONNECT) | 3/4" C, (3)#12(CU), #12(CU)G
+CWP-9 | CHILLED WATER PUMP | 480 | 3Ø | 3 | - | - | - | 7.5 | yes (VFD WITH INTEGRAL DISCONNECT) | 3/4" C, (3)#12(CU), #12(CU)G
+CWP-10 | CHILLED WATER PUMP | 480 | 3Ø | 3 | - | - | - | 7.5 | yes (VFD WITH INTEGRAL DISCONNECT) | 3/4" C, (3)#12(CU), #12(CU)G
+END

@@ -1,0 +1,193 @@
+# 24_IA_JohnsonCounty_Courthouse — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheet M-601.4 MECHANICAL SCHEDULES (PDF page 23) of the Johnson County
+# Courthouse Second Level Courtroom Renovation, Iowa City IA (Neumann Monson Architects, with Modus
+# Engineering): an overview of the page at 40 dpi, then each table at 3x (216 dpi), rendered with
+# MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-27, with the PDF's own text layer
+# (pymupdf words, row by row) as a reading aid; second read of every row against the text layer
+# (the fan coil's second row re-rendered on its own). Each drawn title was found with the text
+# layer (pymupdf search_for). The pipeline's output for these tables was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (8 units, 3 packets, nothing applied), and AS-28 read its column names. The fifth
+# tier keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 24_IA_JohnsonCounty_Courthouse
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheet M-601.4 MECHANICAL SCHEDULES (page 23) of the Johnson County Courthouse second level courtroom renovation (Neumann Monson Architects, with Modus Engineering), the tables the fifth tier's seed drew for its FCU, ERV, PUMP and RADIANT_CEILING_PANEL strata.
+EXCLUDES Manufacturers, model numbers, dimensions and weights, filters, external static pressure, sensible capacities and air temperatures, the energy recovery effectiveness and conditions, the ventilator's coils and electric preheat (outside its vocabulary), fan brake horsepower and motor counts, currents (MCA, MOCP, FLA), panel sizes, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# FAN COIL UNIT SCHEDULE - PROJECT 4: two rows, FCU-00 and FCU-04. FAN / CFM keys cfm. MOTOR TYPE
+# prints "MODULATING ECM" for FCU-04 (ecm yes) and "-" for FCU-00. The CHILLED WATER COIL block
+# keys chw_mbh (TOTAL CAPACITY, this family's coil capacity), chw_gpm, chw_wpd_ft (FLUID PD),
+# chw_rows (FCU-00 prints "-") and the EWT/LWT cell's parts chw_ewt_f and chw_lwt_f; FLUID WATER
+# keys no glycol; the block's title names chilled water (cooling_type chw). The HOT WATER COIL
+# block keys hw_mbh, hw_gpm, hw_wpd_ft, hw_rows and the EWT/LWT parts hw_ewt_f and hw_lwt_f;
+# heating_type hw. CHILLED WATER and HEATING WATER SUPPLY/RETURN (IN) key chw_conn_in and
+# hw_conn_in. ELECTRICAL / VOLTAGE/PHASE keys volts and phase. Notes 1-4 (a fused disconnect, an
+# overflow switch, access panels, a condensate pump) key nothing. No pipe count prints.
+TABLE
+sheet: 24_IA_JohnsonCounty_Courthouse.pdf#23
+title: FAN COIL UNIT SCHEDULE - PROJECT 4
+family: FCU
+render: page 23 overview at 40 dpi; crop 255,302,2020,110 at 3x in 4 tiles (UNIT TAG column repeated) and the second row alone (crop 255,380,2020,26) at 3x in 4 tiles, notes read in the text layer; second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: UNIT TAG => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: DIMENSIONS (LxWxH) => -
+col: WEIGHT => -
+col: FILTER / DEPTH (IN) => -
+col: FILTER / MERV => -
+col: FAN / CFM => cfm
+col: FAN / ESP (IN) => -
+col: FAN / MOTOR TYPE => -
+col: [FAN / MOTOR TYPE: ECM, an EC motor] => ecm
+col: CHILLED WATER COIL / TOTAL CAPACITY (MBH) => chw_mbh
+col: CHILLED WATER COIL / SENSIBLE CAPACITY (MBH) => -
+col: CHILLED WATER COIL / ENTERING DB/WB => -
+col: CHILLED WATER COIL / LEAVING DB/WB => -
+col: CHILLED WATER COIL / EWT/LWT => -
+col: [CHILLED WATER COIL / EWT/LWT: EWT part] => chw_ewt_f
+col: [CHILLED WATER COIL / EWT/LWT: LWT part] => chw_lwt_f
+col: CHILLED WATER COIL / GPM => chw_gpm
+col: CHILLED WATER COIL / FLUID PD (FT) => chw_wpd_ft
+col: CHILLED WATER COIL / ROWS => chw_rows
+col: CHILLED WATER COIL / FLUID => -
+col: [CHILLED WATER COIL / FLUID: WATER, so no glycol] => chw_glycol_pct
+col: HOT WATER COIL / TOTAL CAPACITY (MBH) => hw_mbh
+col: HOT WATER COIL / ENTERING DB => -
+col: HOT WATER COIL / LEAVING DB => -
+col: HOT WATER COIL / EWT/LWT => -
+col: [HOT WATER COIL / EWT/LWT: EWT part] => hw_ewt_f
+col: [HOT WATER COIL / EWT/LWT: LWT part] => hw_lwt_f
+col: HOT WATER COIL / GPM => hw_gpm
+col: HOT WATER COIL / FLUID PD (FT) => hw_wpd_ft
+col: HOT WATER COIL / ROWS => hw_rows
+col: HOT WATER COIL / FLUID => -
+col: [HOT WATER COIL / FLUID: WATER, so no glycol] => hw_glycol_pct
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: ELECTRICAL / VOLTAGE/PHASE => -
+col: [ELECTRICAL / VOLTAGE/PHASE: volts part] => volts
+col: [ELECTRICAL / VOLTAGE/PHASE: phase part] => phase
+col: CHILLED WATER SUPPLY/RETURN (IN) => chw_conn_in
+col: HEATING WATER SUPPLY/RETRUN (IN) => hw_conn_in
+derive: cooling_type = chw ; header=CHILLED WATER COIL ; note=every row prints the CHILLED WATER COIL block
+derive: heating_type = hw ; header=HOT WATER COIL ; note=every row prints the HOT WATER COIL block (EWT 180)
+grid:
+FCU-00 | EMI RETROAIRE | CAW_08A8 | 24x24x14 | 70 | - | - | 300 | - | - | | 5.20 | 5.20 | 72.0/60.1 | 55.9/53.6 | 44.0/54.0 | 44.0 | 54.0 | 1.0 | 1.6 | - | WATER | 0 | 10.0 | 70.0 | 98.9 | 180.0/140.0 | 180.0 | 140.0 | 0.5 | 0.5 | 1 | WATER | 0 | 1.2 | 15 | 120/1 | 120 | 1 | 3/4 | 3/4
+FCU-04 | DAIKIN | FCHH204 | 17.3x36.0x12.4 | 76 | 1" | 8 | 300 | 0.5 | MODULATING ECM | yes (MODULATING ECM) | 7.36 | 6.39 | 72.0/61.0 | 52.5/52.3 | 44.0/54.0 | 44.0 | 54.0 | 1.5 | 1.04 | 4 | WATER | 0 | 10.5 | 68.0 | 104.5 | 180.0/139.6 | 180.0 | 139.6 | 0.5 | 0.27 | 1 | WATER | 0 | 3.1 | 5.6 | 120/1 | 120 | 1 | 3/4 | 3/4
+END
+
+# ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4: one row, ERV-2. SUPPLY FANS / CFM keys
+# supply_cfm and EXHAUST FANS / CFM exhaust_cfm. Each fan group's MOTOR HP column prints kilowatts
+# ("2.0 kW", "1.0 kW"), a unit this vocabulary's horsepower does not take (values are never
+# converted): supply_fan_hp and exhaust_fan_hp are not one printed value in the key's units. The
+# energy recovery block prints effectiveness and air conditions but no recovery type. MAIN UNIT
+# ELECTRICAL / VOLTAGE/PHASE ("208V/3PH") keys volts and phase. The chilled water coil, hot water
+# coil and electric preheat coil (notes 1-3) are outside the ERV vocabulary; note 4 (the unit
+# breaks down to fit the stairs) keys nothing.
+TABLE
+sheet: 24_IA_JohnsonCounty_Courthouse.pdf#23
+title: ENERGY RECOVERY VENTILATOR SCHEDULE - PROJECT 4
+family: ERV
+render: page 23 overview at 40 dpi; crop 50,98,2220,90 at 3x in 5 tiles (UNIT TAG column repeated), notes read in the text layer; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT TAG => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: SUPPLY FANS / CFM => supply_cfm
+col: SUPPLY FANS / ESP => -
+col: SUPPLY FANS / MOTOR HP => supply_fan_hp
+col: SUPPLY FANS / BHP => -
+col: SUPPLY FANS / MOTOR QUANTITY => -
+col: EXHAUST FANS / CFM => exhaust_cfm
+col: EXHAUST FANS / ESP => -
+col: EXHAUST FANS / MOTOR HP => exhaust_fan_hp
+col: EXHAUST FANS / BHP => -
+col: EXHAUST FANS / MOTOR QUANTITY => -
+col: ENERGY RECOVERY / TOTAL EFFECTIVENESS % / SUMMER => -
+col: ENERGY RECOVERY / TOTAL EFFECTIVENESS % / WINTER => -
+col: ENERGY RECOVERY / SUMMER / RETURN AIR EDB/EWB => -
+col: ENERGY RECOVERY / SUMMER / OUTSIDE AIR EDB/EWB => -
+col: ENERGY RECOVERY / SUMMER / LDB/LWB => -
+col: ENERGY RECOVERY / WINTER / RETURN AIR EAT => -
+col: ENERGY RECOVERY / WINTER / OUTSIDE AIR EAT => -
+col: ENERGY RECOVERY / WINTER / LAT => -
+col: CHILLED WATER COIL / UNIT TAG => -
+col: CHILLED WATER COIL / TOTAL CAPACITY (MBH) => -
+col: CHILLED WATER COIL / ENTERING DB/WB => -
+col: CHILLED WATER COIL / LEAVING DB/WB => -
+col: CHILLED WATER COIL / EWT/LWT => -
+col: CHILLED WATER COIL / GPM => -
+col: CHILLED WATER COIL / FLUID PD (FT) => -
+col: CHILLED WATER COIL / ROWS => -
+col: CHILLED WATER COIL / FLUID => -
+col: HOT WATER COIL / UNIT TAG => -
+col: HOT WATER COIL / TOTACL CAPACITY (MBH) => -
+col: HOT WATER COIL / ENTERING DB => -
+col: HOT WATER COIL / LEAVING DB => -
+col: HOT WATER COIL / EWT/LWT => -
+col: HOT WATER COIL / GPM => -
+col: HOT WATER COIL / FLUID PD (FT) => -
+col: HOT WATER COIL / ROWS => -
+col: HOT WATER COIL / FLUID => -
+col: OUTSIDE & RETURN AIR FILTERS => -
+col: MAIN UNIT ELECTRICAL / VOLTAGE/PHASE => -
+col: [MAIN UNIT ELECTRICAL / VOLTAGE/PHASE: volts part] => volts
+col: [MAIN UNIT ELECTRICAL / VOLTAGE/PHASE: phase part] => phase
+col: MAIN UNIT ELECTRICAL / MCA => -
+col: MAIN UNIT ELECTRICAL / MOCP => -
+col: ELECTRIC PREHEAT COIL / CAPACITY (kW) => -
+col: ELECTRIC PREHEAT COIL / VOLTAGE/PHASE => -
+col: ELECTRIC PREHEAT COIL / FLA => -
+col: ELECTRIC PREHEAT COIL / MOCP (A) => -
+grid:
+ERV-2 | OXYGEN-8 | C40IN | 4000 | 1.5 | ?2.0 kW | 2.9 kW | 2 | 4000 | 1.5 | ?1.0 kW | 2.8 kW | 2 | 52.5 | 62.2 | 75.0/63.0 | 95.0/78.0 | 82.0/70.7 | 70.0 | -12.0 | 41.5 | CWC-1 | 235.4 | 82.0/70.7 | 51.9/51.8 | 44.0/54.0 | 47 | 17.4 | 5 | WATER | HWC-1 | 142 | 41.5 | 75.1 | 180/150 | 10 | 8.0 | 1 | WATER | MERV8 | 208V/3PH | 208 | 3 | 27.33 | 35 | 11.1 | 208V/3PH | 30.8 | 40
+END
+
+# INLINE PUMP SCHEDULE - PROJECT 4: one row, CP-1. SYSTEM keys service (HOT WATER), FLOWRATE (GPM)
+# gpm, TOTAL HEAD (FT) head_ft and CONNECTION SIZE ('1 1/2"') conn_in. MOTOR HP prints "-".
+# VOLTAGE/PHASE ("115V/1PH") keys volts and phase.
+TABLE
+sheet: 24_IA_JohnsonCounty_Courthouse.pdf#23
+title: INLINE PUMP SCHEDULE - PROJECT 4
+family: PUMP
+render: page 23 overview at 40 dpi; crop 1505,485,770,70 at 3x in 2 tiles (UNIT TAG column repeated); second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT TAG => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: SYSTEM => service
+col: FLOWRATE (GPM) => gpm
+col: TOTAL HEAD (FT) => head_ft
+col: CONNECTION SIZE => conn_in
+col: MOTOR NOL HP => -
+col: MOTOR HP => motor_hp
+col: VOLTAGE/PHASE => -
+col: [VOLTAGE/PHASE: volts part] => volts
+col: [VOLTAGE/PHASE: phase part] => phase
+grid:
+CP-1 | GRUNDFOS | UPS 43-100 F | HOT WATER | 10 | 25 | 1 1/2" | - | - | 115V/1PH | 115 | 1
+END
+
+# ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4: one row, ECP-1. CAPACITY (kW) keys eh_kw
+# and VOLTAGE/PHASE ("120/1Ø") volts and phase. Note 1 (a remote room thermostat) keys nothing.
+TABLE
+sheet: 24_IA_JohnsonCounty_Courthouse.pdf#23
+title: ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4
+family: RADIANT_CEILING_PANEL
+render: page 23 overview at 40 dpi; crop 1690,810,585,90 at 3x, notes included; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: UNIT TAG => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: WIDTH (IN) => -
+col: LENGTH (IN) => -
+col: CAPACITY (kW) => eh_kw
+col: VOLTAGE/PHASE => -
+col: [VOLTAGE/PHASE: volts part] => volts
+col: [VOLTAGE/PHASE: phase part] => phase
+col: FLA => -
+grid:
+ECP-1 | INDEECO | AS2448 | 24 | 48 | 0.5 | 120/1Ø | 120 | 1 | 4.2
+END

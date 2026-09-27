@@ -1,0 +1,372 @@
+# 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheets M-601 MECHANICAL SCHEDULES (PDF page 58) and EP601 ELECTRICAL
+# SCHEDULES (PDF page 71) of the Ames Laboratory Wilhelm Hall HVAC Upgrades, 2332 Pammel Drive,
+# Ames IA (BBS Architects Engineers, with Raker Rhodes Engineering): an overview of each page at
+# 40 dpi, then each table at 3x (216 dpi; the EP601 table at 2.2x), rendered with MuPDF (pymupdf
+# get_pixmap(clip)) and read by eye on 2026-09-26, with the PDF's own text layer (pymupdf words,
+# row by row) as a reading aid; second read of every row against the text layer. Each drawn title
+# was found with the text layer (pymupdf search_for). The pipeline's output for these tables was
+# not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (39 units, 9 packets, 4 applied), AS-29's unseen A/B read the SHELL AND TUBE title's
+# exchanger types against the print, and AS-28 read its column names. The fifth tier keys the
+# tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheets M-601 and EP601 (pages 58 and 71) of the Ames Laboratory Wilhelm Hall HVAC Upgrades (BBS Architects Engineers), the tables the fifth tier's seed drew for its AHU, FCU, HEAT_PUMP, PUMP, FAN and HEAT_EXCHANGER strata.
+EXCLUDES Manufacturers and model numbers, weights, fan arrays, motor types, rated speeds, brake horsepower and static pressures of the air handler's fans, its louvers, air blender and prefilters, every coil's air temperatures, face velocity, fins, coil count and air pressure drop, the heat recovery coil's performance, impeller diameters and efficiencies, the exchangers' passes, shell size and fouling, currents, kVA, disconnects other than the drive, feeders and panels, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE, part 1 of the air handler's schedule: one row, AHU-A.
+# The schedule continues in "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)" below it (supply fan and
+# final filter; the next block), keyed under this title as its second part. TOTAL AIRFLOW (CFM)
+# keys supply_cfm and MINIMUM VENTILATION AIRFLOW (CFM) oa_cfm_min. RETURN FAN / MOTOR NOMINAL HP
+# (EACH) keys return_fan_hp (each of the four fans' motor, as printed); its VOLTS/Ø (460/3) is a
+# motor rating, typed for audit (the unit's volts key from the supply fans, part 2). The row prints
+# an ECONOMIZER LOUVER block (35,000 CFM): an airside economizer (the author's reading). The HEAT
+# RECOVERY COIL (BASE BID) is a 30% PG coil whose remark 9 ties it to the water-to-water heat pump
+# and the heat recovery unit: a coil loop, energy_recovery runaround (the author's reading); its
+# performance is not the unit's heating or cooling. The HEATING COIL prints FLUID WATER at
+# E.W.T./L.W.T. 120.0/95.3 (heating_type hw, the author's reading): TOTAL CAPACITY keys heating_mbh,
+# ROWS hw_rows, FLOW RATE hw_gpm, W.P.D. hw_wpd_ft, and the E.W.T./L.W.T. cell's parts hw_ewt_f
+# and hw_lwt_f; FLUID WATER keys no glycol. The COOLING COIL prints FLUID WATER at 42.0/58.0 and
+# remark 4 names the unit's CHILLED WATER COIL (cooling_type chw, the author's reading): TOTAL
+# CAPACITY keys cooling_mbh, ROWS chw_rows, FLOW RATE chw_gpm, W.P.D. chw_wpd_ft, and the
+# E.W.T./L.W.T. parts chw_ewt_f and chw_lwt_f.
+TABLE
+sheet: 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58
+title: CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: part 1, page 58 overview at 40 dpi; crop 208,72,2530,275 at 3x in 5 tiles (DESIGNATION column repeated); second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: DESIGNATION => tag
+col: MANUFACTURER => -
+col: OPERATING WEIGHT (LBS) => -
+col: TOTAL AIRFLOW (CFM) => supply_cfm
+col: MINIMUM VENTILATION AIRFLOW (CFM) => oa_cfm_min
+col: RETURN FAN / QUANTITY => -
+col: RETURN FAN / ARRAY (ROWxCOL) => -
+col: RETURN FAN / MOTOR TYPE => -
+col: RETURN FAN / VOLTS/Ø => -
+col: RETURN FAN / MOTOR NOMINAL HP (EACH) => return_fan_hp
+col: RETURN FAN / MOTOR RATED RPM => -
+col: RETURN FAN / E.S.P. (IN. W.C.) => -
+col: RETURN FAN / T.S.P. (IN. W.C.) => -
+col: RETURN FAN / MOTOR BHP => -
+col: RETURN FAN / MOTOR RPM => -
+col: RELIEF LOUVER / AIRFLOW (CFM) => -
+col: RELIEF LOUVER / DIMENSIONS (WXH, IN.) => -
+col: RELIEF LOUVER / FREE AREA VELOCITY => -
+col: RELIEF LOUVER / A.P.D. (IN. W.C.) => -
+col: ECONOMIZER LOUVER / AIRFLOW (CFM) => -
+col: ECONOMIZER LOUVER / DIMENSIONS (WXH, IN.) => -
+col: ECONOMIZER LOUVER / FREE AREA VELOCITY => -
+col: ECONOMIZER LOUVER / A.P.D. (IN. W.C.) => -
+col: MINIMUM VENTILATION LOUVER / AIRFLOW (CFM) => -
+col: MINIMUM VENTILATION LOUVER / DIMENSIONS (WXH, IN.) => -
+col: MINIMUM VENTILATION LOUVER / FREE AREA VELOCITY => -
+col: MINIMUM VENTILATION LOUVER / A.P.D. (IN. W.C.) => -
+col: MINIMUM VENTILATION PRE-FILTER / TYPE => -
+col: MINIMUM VENTILATION PRE-FILTER / SIZE (WXHXD, IN.) => -
+col: MINIMUM VENTILATION PRE-FILTER / ASHRAE MERV RATING => -
+col: PRE-FILTER SECTION / TYPE => -
+col: PRE-FILTER SECTION / SIZE (WXHXD, IN.) => -
+col: PRE-FILTER SECTION / ASHRAE MERV RATING => -
+col: AIR BLENDER SECTION / QUANTITY => -
+col: AIR BLENDER SECTION / SIZE (WXH, IN.) => -
+col: AIR BLENDER SECTION / A.P.D. (IN. W.C.) => -
+col: HEAT RECOVERY COIL (BASE BID) / FLUID => -
+col: HEAT RECOVERY COIL (BASE BID) / COILS => -
+col: HEAT RECOVERY COIL (BASE BID) / ROWS => -
+col: HEAT RECOVERY COIL (BASE BID) / FPI => -
+col: HEAT RECOVERY COIL (BASE BID) / FACE VELOCITY (FPM) => -
+col: HEAT RECOVERY COIL (BASE BID) / FLOW RATE => -
+col: HEAT RECOVERY COIL (BASE BID) / W.P.D. (FT. H2O) => -
+col: HEAT RECOVERY COIL (BASE BID) / A.P.D. (IN. W.C.) => -
+col: HEAT RECOVERY COIL (BASE BID) / WINTER - NO HEAT PUMP / TOTAL CAPACITY (MBH) => -
+col: HEAT RECOVERY COIL (BASE BID) / WINTER - NO HEAT PUMP / ENTERING/LEAVING D.B. (°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / WINTER - NO HEAT PUMP / E.W.T./L.W.T.(°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / WINTER - HEAT PUMP / TOTAL CAPACITY (MBH) => -
+col: HEAT RECOVERY COIL (BASE BID) / WINTER - HEAT PUMP / ENTERING/LEAVING D.B. (°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / WINTER - HEAT PUMP / E.W.T./L.W.T.(°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMMER - NO HEAT PUMP / TOTAL CAPACITY (MBH) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMMER - NO HEAT PUMP / SENSIBLE CAPACITY (MBH) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMMER - NO HEAT PUMP / ENTERING D.B./W.B. (°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMMER - NO HEAT PUMP / LEAVING D.B./W.B. (°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMMER - NO HEAT PUMP / E.W.T./L.W.T.(°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMER - HEAT PUMP / TOTAL CAPACITY (MBH) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMER - HEAT PUMP / SENSIBLE CAPACITY (MBH) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMER - HEAT PUMP / ENTERING D.B./W.B. (°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMER - HEAT PUMP / LEAVING D.B./W.B. (°F/°F) => -
+col: HEAT RECOVERY COIL (BASE BID) / SUMER - HEAT PUMP / E.W.T./L.W.T.(°F/°F) => -
+col: HEATING COIL / FLUID => -
+col: [HEATING COIL / FLUID: WATER, so no glycol] => hw_glycol_pct
+col: HEATING COIL / COILS => -
+col: HEATING COIL / ROWS => hw_rows
+col: HEATING COIL / FPI => -
+col: HEATING COIL / FACE VELOCITY (FPM) => -
+col: HEATING COIL / TOTAL CAPACITY (MBH) => heating_mbh
+col: HEATING COIL / ENTERING/LEAVING D.B. (°F/°F) => -
+col: HEATING COIL / FLOW RATE (GPM) => hw_gpm
+col: HEATING COIL / E.W.T./L.W.T.(°F/°F) => -
+col: [HEATING COIL / E.W.T./L.W.T.(°F/°F): E.W.T. part] => hw_ewt_f
+col: [HEATING COIL / E.W.T./L.W.T.(°F/°F): L.W.T. part] => hw_lwt_f
+col: HEATING COIL / W.P.D. (FT. H2O) => hw_wpd_ft
+col: HEATING COIL / A.P.D. (IN. W.C.) => -
+col: COOLING COIL / FLUID => -
+col: [COOLING COIL / FLUID: WATER, so no glycol] => chw_glycol_pct
+col: COOLING COIL / COILS => -
+col: COOLING COIL / ROWS => chw_rows
+col: COOLING COIL / FPI => -
+col: COOLING COIL / FACE VELOCITY (FPM) => -
+col: COOLING COIL / TOTAL CAPACITY (MBH) => cooling_mbh
+col: COOLING COIL / SENSIBLE CAPACITY (MBH) => -
+col: COOLING COIL / FLOW RATE (GPM) => chw_gpm
+col: COOLING COIL / ENTERING D.B./W.B. (°F/°F) => -
+col: COOLING COIL / LEAVING D.B./W.B. (°F/°F) => -
+col: COOLING COIL / E.W.T./L.W.T.(°F/°F) => -
+col: [COOLING COIL / E.W.T./L.W.T.(°F/°F): E.W.T. part] => chw_ewt_f
+col: [COOLING COIL / E.W.T./L.W.T.(°F/°F): L.W.T. part] => chw_lwt_f
+col: COOLING COIL / W.P.D. (FT. H2O) => chw_wpd_ft
+col: COOLING COIL / A.P.D. (IN. W.C.) => -
+derive: economizer = airside ; header=ECONOMIZER LOUVER ; note=the row prints an ECONOMIZER LOUVER block sized for 35,000 CFM, the outdoor air louver of an airside economizer (the author's reading)
+derive: energy_recovery = runaround ; header=HEAT RECOVERY COIL (BASE BID) ; note=the heat recovery coil is a 30% PG water coil, and remark 9 ties it to the water-to-water heat pump and the heat recovery unit: a pumped coil loop (the author's reading)
+derive: heating_type = hw ; header=HEATING COIL ; note=the heating coil prints FLUID WATER at E.W.T./L.W.T. 120.0/95.3 (the author's reading)
+derive: cooling_type = chw ; header=COOLING COIL ; note=the cooling coil prints FLUID WATER at E.W.T./L.W.T. 42.0/58.0, and remark 4 names the unit's CHILLED WATER COIL (the author's reading)
+grid:
+AHU-A | HAAKON | 66,100 | 60,000 | 18,000 | 4 | 2x2 | DIRECT | 460/3 | 15 | 1,750 | 1 | 1.75 | 5.3 | 1750 | 42,000 | 84X102 | 1,258 | 0.25 | 35,000 | 60X120 | 738 | 0.1 | 25,000 | 42X120 | 763 | 0.1 | PLEATED | (15) 24x24x2 | MERV-8 | PLEATED | (30) 24x24x2 | MERV-8 | 2 | 60 | 0.4 | 30% PG | 6 | 2 | 7 | 494 | 156.1 | 15.9 | 0.14 | 285.8 | 41.6/46.0 | 55.6/51.6 | 793.8 | 41.6/53.8 | 80.0/59.3 | 66.7 | 66.7 | 80.9/67.0 | 79.9/66.5 | 77.8/78.3 | 1,092.6 | 979.3 | 80.9/67.0 | 66.1/61.4 | 33.0/47.8 | WATER | 0 | 6 | 1 | 10 | 499 | 1,225.7 | 41.6/60.4 | 100.0 | 120.0/95.3 | 120.0 | 95.3 | 9.8 | 0.1 | WATER | 0 | 6 | 8 | 10 | 499 | 2904.6 | 1967.6 | 362 | 81.0/67.0 | 51.0/50.5 | 42.0/58.0 | 42.0 | 58.0 | 17.0 | 0.9
+END
+
+# CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.), part 2 of the air handler's schedule (supply fan and
+# final filter), keyed under the drawn title. SUPPLY FAN / QUANTITY keys supply_fan_qty and MOTOR
+# NOMINAL HP (EACH) supply_fan_hp (each fan's motor, as printed). No unit-level voltage prints: the
+# supply fans' VOLTS/Ø cell (480/3) keys the unit's volts and phase (the author's reading; EP601
+# feeds every supply and return fan at 480 V, 3 phase, and the return fans' 460/3 is a motor
+# rating). FINAL FILTER / ASHRAE MERV RATING keys filter_merv (the prefilters' MERV-8 is typed for
+# audit only). The schedule's remarks print beside this part and apply to its one unit (the table
+# has no REMARKS column): remark 5 ("FACTORY PROVIDED HUMIDIFIER DISPERSION TUBES USING CONTRACTOR
+# PROVIDED STEAM-TO-STEAM GENERATOR.") keys humidifier yes, and remark 10 ("SUPPLY AND RETURN FANS
+# SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES.") vfd yes. Remarks 1-3,
+# 6-8 (color, conduit, backdraft dampers, leakage test, the return fan's airflow, N+1 fans) key
+# nothing; remarks 4 and 9 are read in part 1.
+TABLE
+sheet: 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58
+title: CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE
+family: AHU
+render: part 2, printed as "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)", page 58 crop 208,360,560,230 at 3x, and the remarks beside it read in the text layer (crop 760,360,800,160); second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: DESIGNATION => tag
+col: SUPPLY FAN / QUANTITY => supply_fan_qty
+col: SUPPLY FAN / ARRAY SIZE (ROWXCOL) => -
+col: SUPPLY FAN / MOTOR TYPE => -
+col: SUPPLY FAN / VOLTS/Ø => -
+col: [SUPPLY FAN / VOLTS/Ø: volts part; the unit's service, EP601] => volts
+col: [SUPPLY FAN / VOLTS/Ø: phase part; the unit's service, EP601] => phase
+col: SUPPLY FAN / MOTOR NOMINAL HP (EACH) => supply_fan_hp
+col: SUPPLY FAN / MOTOR RATED RPM => -
+col: SUPPLY FAN / E.S.P. (IN. W.C.) => -
+col: SUPPLY FAN / T.S.P. (IN. W.C.) => -
+col: SUPPLY FAN / MOTOR BHP (EACH) => -
+col: SUPPLY FAN / MOTOR RPM (EACH) => -
+col: FINAL FILTER / TYPE => -
+col: FINAL FILTER / SIZE (WXHXD, IN.) => -
+col: FINAL FILTER / ASHRAE MERV RATING => filter_merv
+derive: humidifier = yes ; header=NOTE 5 ; note=remark 5 (the table has no REMARKS column; its remarks apply to its one unit): 'FACTORY PROVIDED HUMIDIFIER DISPERSION TUBES USING CONTRACTOR PROVIDED STEAM-TO-STEAM GENERATOR.'
+derive: vfd = yes ; header=NOTE 10 ; note=remark 10 (the table has no REMARKS column; its remarks apply to its one unit): 'SUPPLY AND RETURN FANS SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES.'
+grid:
+AHU-A | 6 | 3X3 | DIRECT | 480/3 | 480 | 3 | 20 | 1,750 | 2.5 | 6.2 | 14.5 | 1,750 | PLEATED | (6) 12x24x12 (30 24x24x12 | 13
+END
+
+# FAN COIL UNIT SCHEDULE: one row, FCU-A. SUPPLY FAN / MOTOR (HP) prints "PSC", a motor type (a
+# permanent split capacitor motor), not a horsepower: motor_hp is not one printed value, and the
+# motor is not EC, ecm no (the author's reading). AIRFLOW (CFM) keys cfm. The COOLING COIL prints
+# FLUID WATER leaving at 60.0 °F, and remark 2 rates it on 42 °F entering water: a chilled water
+# coil (cooling_type chw, the author's reading), no glycol. TOTAL CAPACITY (MBh) keys chw_mbh (this
+# family's coil capacity), ROWS chw_rows, FLOW RATE chw_gpm, L.W.T. chw_lwt_f and W.P.D. chw_wpd_ft;
+# remark 2 (the table has no REMARKS column; its remarks apply to its one unit) keys chw_ewt_f 42.
+# ELECTRICAL DATA / VOLT/Ø keys volts and phase. Remarks 1 and 3 (a disconnect and filter housing;
+# thermostat and valve by the BAS sub-contractor) key nothing.
+TABLE
+sheet: 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58
+title: FAN COIL UNIT SCHEDULE
+family: FCU
+render: page 58 overview at 40 dpi; crop 1700,1880,1040,140 at 3x in 2 tiles (DESIGNATION column repeated), remarks included; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: DESIGNATION => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: SUPPLY FAN / TYPE => -
+col: SUPPLY FAN / MOTOR (HP) => motor_hp
+col: [SUPPLY FAN / MOTOR (HP): PSC, a permanent split capacitor motor, not EC] => ecm
+col: SUPPLY FAN / AIRFLOW (CFM) => cfm
+col: SUPPLY FAN / E.S.P. (IN. W.G.) => -
+col: COOLING COIL / FLUID => -
+col: [COOLING COIL / FLUID: WATER, so no glycol] => chw_glycol_pct
+col: COOLING COIL / ROWS => chw_rows
+col: COOLING COIL / TOTAL CAPACITY (MBh) => chw_mbh
+col: COOLING COIL / SENSIBLE CAPACITY (MBh) => -
+col: COOLING COIL / FLOW RATE (GPM) => chw_gpm
+col: COOLING COIL / LEAVING D.B./W.B. (°F/°F) => -
+col: COOLING COIL / L.W.T. (°F) => chw_lwt_f
+col: COOLING COIL / W.P.D. (FT. H2O) => chw_wpd_ft
+col: ELECTRICAL DATA / VOLT/Ø => -
+col: [ELECTRICAL DATA / VOLT/Ø: volts part] => volts
+col: [ELECTRICAL DATA / VOLT/Ø: phase part] => phase
+col: ELECTRICAL DATA / MCA => -
+col: ELECTRICAL DATA / MOCP => -
+derive: cooling_type = chw ; header=COOLING COIL / FLUID ; note=the cooling coil prints FLUID WATER leaving at 60.0 °F, and remark 2 rates it on 42 °F entering water: a chilled water coil (the author's reading)
+derive: chw_ewt_f = 42 ; header=NOTE 2 ; note=remark 2 (the table has no REMARKS column; its remarks apply to its one unit): 'CAPACITY BASED ON 42 DEG. F. ENTERING WATER TEMPERATURE AND 80 DEG. F. D.B./67 DEG. F. W.B. ENTERING AIR CONDITIONS.'
+grid:
+FCU-A | DAIKIN | FCHH208 | DIRECT | ?PSC | no (PSC) | 667 | 0.0 | WATER | 0 | 4 | 22.3 | 16.7 | 2.5 | 57.1/56.4 | 60.0 | 3.5 | 120/1 | 120 | 1 | 1.8 | 20
+END
+
+# HYDRONIC PUMP SCHEDULE: seven rows. SERVICE keys service as printed. INLET SIZE is the pump's
+# suction connection: conn_in (as 047_NC's suction size). FLUID TYPE prints the glycol ("30% PG @
+# 30°F", keyed 30 by its percentage) or WATER ("WATER @ 120°F": no glycol). FLOW RATE (GPM) keys
+# gpm, TOTAL HEAD (FT. H20) head_ft, MOTOR NOMINAL POWER (HP) motor_hp and MOTOR NOMINAL SPEED
+# (RPM) rpm; ELECTRICAL DATA / VOLT/Ø keys volts and phase. Remark 1 ("PUMP SHALL BE STARTED AND
+# CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES."), cited by the six rows whose REMARKS
+# print 1, keys vfd yes; HWP-B-1's REMARKS print "-". Remark 2 ("BID ALTERNATE #1.") keys nothing.
+# TYPE (INLINE) is a pump type, not an arrangement.
+TABLE
+sheet: 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58
+title: HYDRONIC PUMP SCHEDULE
+family: PUMP
+render: page 58 overview at 40 dpi; crop 1450,1175,1290,200 at 3x in 2 tiles (DESIGNATION column repeated), remarks included; second read of every row, every cell, against the text layer
+rows: all 7 printed rows
+col: DESIGNATION => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: SERVICE => service
+col: INLET SIZE => conn_in
+col: TYPE => -
+col: FLUID TYPE => -
+col: [FLUID TYPE: its glycol percentage; WATER, so no glycol] => glycol_pct
+col: IMPELLER DIAMETER (IN.) => -
+col: FLOW RATE (GPM) => gpm
+col: TOTAL HEAD (FT. H20) => head_ft
+col: DUTY POINT EFFICIENCY (%) => -
+col: MOTOR NOMINAL POWER (HP) => motor_hp
+col: MOTOR NOMINAL SPEED (RPM) => rpm
+col: MOTOR BHP => -
+col: ELECTRICAL DATA / VOLT/Ø => -
+col: [ELECTRICAL DATA / VOLT/Ø: volts part] => volts
+col: [ELECTRICAL DATA / VOLT/Ø: phase part] => phase
+col: ELECTRICAL DATA / FLA => -
+col: ELECTRICAL DATA / MOCP => -
+col: REMARKS => -
+col: [NOTE 1, where the row's REMARKS cite it: PUMP SHALL BE STARTED AND CONTROLLED VIA INDIVIDUAL VARIABLE FREQUENCY DRIVES] => vfd
+grid:
+GWP-A-1 | TACO | KS3011D | HEAT RECOVERY - CONDENSER | 3 | INLINE | 30% PG @ 30°F | 30 | 9.5 | 150 | 90 | 68 | 7.5 | 1,760 | 5.2 | 480/3 | 480 | 3 | 11 | 20 | 1,2 | yes (REMARK 1)
+GWP-A-2 | TACO | KS3011D | HEAT RECOVERY - CONDENSER | 3 | INLINE | 30% PG @ 30°F | 30 | 9.5 | 150 | 90 | 68 | 7.5 | 1,760 | 5.2 | 480/3 | 480 | 3 | 11 | 20 | 1,2 | yes (REMARK 1)
+GWP-B-1 | TACO | KV2009D | HEAT RECOVERY - EVAPORATOR | 2 | INLINE | 30% PG @ 30°F | 30 | 9.0 | 150 | 70 | 71 | 5.0 | 1,760 | 3.9 | 480/3 | 480 | 3 | 7.6 | 20 | 1,2 | yes (REMARK 1)
+GWP-B-2 | TACO | KV2009D | HEAT RECOVERY - EVAPORATOR | 2 | INLINE | 30% PG @ 30°F | 30 | 9.0 | 150 | 70 | 71 | 5.0 | 1,760 | 3.9 | 480/3 | 480 | 3 | 7.6 | 20 | 1,2 | yes (REMARK 1)
+HWP-A-1 | TACO | KV4007D | HEATING HOT WATER | 4 | INLINE | WATER @ 120°F | 0 | 6.6 | 250 | 40 | 81 | 5.0 | 1,760 | 3.1 | 480/3 | 480 | 3 | 7.6 | 20 | 1 | yes (REMARK 1)
+HWP-A-2 | TACO | KV4007D | HEATING HOT WATER | 4 | INLINE | WATER @ 120°F | 0 | 6.6 | 250 | 40 | 81 | 5.0 | 1,760 | 3.1 | 480/3 | 480 | 3 | 7.6 | 20 | 1 | yes (REMARK 1)
+HWP-B-1 | TACO | 2400-60 | HEATING HOT WATER - AHU COIL | 2 | INLINE | WATER @ 120°F | 0 | - | 25 | 10 | - | 1/6 | 1,760 | - | 120/1 | 120 | 1 | 4.4 | 20 | - |
+END
+
+# SHELL AND TUBE HEAT EXCHANGER SCHEDULE: two rows, HX-A-1 and HX-A-2. The title names the type:
+# hx_type shell_and_tube. The SHELL SIDE carries STEAM, the heating (primary) side:
+# primary_medium steam, its CAPACITY (LBS/H) primary_steam_lb_hr and PRESSURE (PSI)
+# primary_steam_psig. The TUBE SIDE carries WATER heated from 95 to 120 °F, the heating hot water
+# of the HWP-A pumps (WATER @ 120°F): secondary_medium hw (the author's reading); its CAPACITY
+# (MBH) keys capacity_mbh, FLOW RATE (GPM) secondary_gpm, and the E.W.T./L.W.T. cell's parts
+# secondary_ewt_f and secondary_lwt_f. Remark 1 (a fouling factor) keys nothing.
+TABLE
+sheet: 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58
+title: SHELL AND TUBE HEAT EXCHANGER SCHEDULE
+family: HEAT_EXCHANGER
+render: page 58 overview at 40 dpi; crop 278,1175,1080,125 at 3x in 2 tiles (DESIGNATION column repeated), remarks included; second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: DESIGNATION => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: WEIGHT (LBS) => -
+col: PASSES => -
+col: DIAMETER (IN.) => -
+col: LENGTH (FT.) => -
+col: SHELL SIDE / FLUID => primary_medium
+col: SHELL SIDE / CAPACITY (LBS/H) => primary_steam_lb_hr
+col: SHELL SIDE / PRESSURE (PSI) => primary_steam_psig
+col: TUBE SIDE / FLUID => -
+col: [TUBE SIDE / FLUID: WATER heated from 95 to 120 °F, the heating hot water] => secondary_medium
+col: TUBE SIDE / CAPACITY (MBH) => capacity_mbh
+col: TUBE SIDE / FLOW RATE (GPM) => secondary_gpm
+col: TUBE SIDE / E.W.T./L.W.T. (°F/°F) => -
+col: [TUBE SIDE / E.W.T./L.W.T. (°F/°F): E.W.T. part] => secondary_ewt_f
+col: [TUBE SIDE / E.W.T./L.W.T. (°F/°F): L.W.T. part] => secondary_lwt_f
+col: TUBE SIDE / W.P.D. (FT. H2O) => -
+derive: hx_type = shell_and_tube ; header=TABLE TITLE ; note=title printed 'SHELL AND TUBE HEAT EXCHANGER SCHEDULE'
+grid:
+HX-A-1 | TACO | E10208-S | 415 | 2 | 10 | 4 | steam (STEAM) | 3256.8 | 12 | WATER | hw (WATER) | 3093.0 | 250 | 95/120 | 95 | 120 | 1.6
+HX-A-2 | TACO | E10208-S | 415 | 2 | 10 | 4 | steam (STEAM) | 3256.8 | 12 | WATER | hw (WATER) | 3093.0 | 250 | 95/120 | 95 | 120 | 1.6
+END
+
+# EQUIPMENT SCHEDULE (page 71, electrical sheet EP601): the electrical connection list of the
+# project's motors and packaged units, drawn for two strata. Its fan rows (this block) are SF-1 to
+# SF-6 (AHU SUPPLY FAN, the air handler's six supply fans), RF-1 to RF-4 (AHU RETURN FAN) and EF-2
+# and EF-3 (EXHAUST FAN); WWHP-A, the water-to-water heat pump, is keyed as HEAT_PUMP in the next
+# block, and the pumps are not keyed here (the PUMP stratum drew M-601's HYDRONIC PUMP SCHEDULE).
+# DESCRIPTION names the equipment, as a title does (no service column prints). ELECTRICAL
+# CHARACTERISTICS / HP keys motor_hp, VOLTAGE volts and PHASE phase. LOCAL DISCONNECT / SWITCH
+# prints "VFD" (with a 60A3P local non-fused disconnect on the return and exhaust fans): vfd yes.
+# Notes 1-2 (a VFD by the electrical contractor; an existing VFD) and 5 (bid alternate #2) add no
+# other key attribute.
+TABLE
+sheet: 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71
+title: EQUIPMENT SCHEDULE
+family: FAN
+render: page 71 overview at 40 dpi; crop 1700,72,1060,830 at 2.2x in 2 tiles (TAG column repeated), and the notes read in the text layer; second read of every fan row, every keyed cell, against the text layer
+rows: the 12 printed fan rows (SF-1 to SF-6, RF-1 to RF-4, EF-2, EF-3); the heat pump is keyed in the next block, and the pumps are outside the FAN stratum
+col: TAG => tag
+col: DESCRIPTION => -
+col: ELECTRICAL CHARACTERISTICS / HP => motor_hp
+col: ELECTRICAL CHARACTERISTICS / KVA => -
+col: ELECTRICAL CHARACTERISTICS / FLA => -
+col: ELECTRICAL CHARACTERISTICS / VOLTAGE => volts
+col: ELECTRICAL CHARACTERISTICS / PHASE => phase
+col: LOCAL DISCONNECT / SWITCH => vfd
+col: LOCAL DISCONNECT / FUSE => -
+col: BRANCH CIRCUIT OR FEEDER KEY => -
+col: PANELBOARD/ DISTRIBUTION BOARD => -
+col: NOTES => -
+grid:
+SF-1 | AHU SUPPLY FAN | 20 | 22.45 | 27.00 | 480 | 3 | yes (VFD) | BREAKER IN VFD | 50A3G | PDB-480:13,15,17 |
+SF-2 | AHU SUPPLY FAN | 20 | 22.45 | 27.00 | 480 | 3 | yes (VFD) | BREAKER IN VFD | 50A3G | PDB-480:14,16,18 |
+SF-3 | AHU SUPPLY FAN | 20 | 22.45 | 27.00 | 480 | 3 | yes (VFD) | BREAKER IN VFD | 50A3G | PDB-480:19,21,23 |
+SF-4 | AHU SUPPLY FAN | 20 | 22.45 | 27.00 | 480 | 3 | yes (VFD) | BREAKER IN VFD | 50A3G | PDB-480:20,22,24 |
+SF-5 | AHU SUPPLY FAN | 20 | 22.45 | 27.00 | 480 | 3 | yes (VFD) | BREAKER IN VFD | 50A3G | PDB-480:25,27,29 |
+SF-6 | AHU SUPPLY FAN | 20 | 22.45 | 27.00 | 480 | 3 | yes (VFD) | BREAKER IN VFD | 50A3G | PDB-480:26,28,30 |
+RF-1 | AHU RETURN FAN | 15 | 17.46 | 21.00 | 480 | 3 | yes (VFD 60A3P LOCAL - NF - NEMA 3R) | BREAKER IN VFD | 40A3G | PDB-480:31,33,35 | 1
+RF-2 | AHU RETURN FAN | 15 | 17.46 | 21.00 | 480 | 3 | yes (VFD 60A3P LOCAL - NF - NEMA 3R) | BREAKER IN VFD | 40A3G | PDB-480:32,34,36 | 1
+RF-3 | AHU RETURN FAN | 15 | 17.46 | 21.00 | 480 | 3 | yes (VFD 60A3P LOCAL - NF - NEMA 3R) | BREAKER IN VFD | 40A3G | PDB-480:37,39,41 | 1
+RF-4 | AHU RETURN FAN | 15 | 17.46 | 21.00 | 480 | 3 | yes (VFD 60A3P LOCAL - NF - NEMA 3R) | BREAKER IN VFD | 40A3G | PDB-480:38,40,42 | 1
+EF-2 | EXHAUST FAN | 30 | 33.14 | 92.00 | 208 | 3 | yes (VFD 60A3P LOCAL - NF - NEMA 3R) | BREAKER IN VFD | RETERMINATE EXISTING | EMX-7:32,34,36 VIA EXISTING VFD | 2, 5
+EF-3 | EXHAUST FAN | 30 | 33.26 | 40.00 | 480 | 3 | yes (VFD 60A3P LOCAL - NF - NEMA 3R) | BREAKER IN VFD | RETERMINATE EXISTING | PF-41:8,10,12 VIA EXISTING VFD | 2, 5
+END
+
+# EQUIPMENT SCHEDULE (page 71), the heat pump row: WWHP-A (WATER TO WATER HEAT PUMP). HP prints
+# "--". VOLTAGE keys volts and PHASE phase. Its disconnect and fuse are INTEGRAL; note 4 (bid
+# alternate #1) keys nothing.
+TABLE
+sheet: 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71
+title: EQUIPMENT SCHEDULE
+family: HEAT_PUMP
+render: page 71 overview at 40 dpi; crop 1700,72,1060,830 at 2.2x in 2 tiles (TAG column repeated); second read of the row, every cell, against the text layer
+rows: the 1 printed heat pump row (WWHP-A); the fans are keyed in the block above
+col: TAG => tag
+col: DESCRIPTION => -
+col: ELECTRICAL CHARACTERISTICS / HP => motor_hp
+col: ELECTRICAL CHARACTERISTICS / KVA => -
+col: ELECTRICAL CHARACTERISTICS / FLA => -
+col: ELECTRICAL CHARACTERISTICS / VOLTAGE => volts
+col: ELECTRICAL CHARACTERISTICS / PHASE => phase
+col: LOCAL DISCONNECT / SWITCH => -
+col: LOCAL DISCONNECT / FUSE => -
+col: BRANCH CIRCUIT OR FEEDER KEY => -
+col: PANELBOARD/ DISTRIBUTION BOARD => -
+col: NOTES => -
+grid:
+WWHP-A | WATER TO WATER HEAT PUMP | -- | 88.96 | 107.00 | 480 | 3 | INTEGRAL | INTEGRAL | 175A3G | PDB-480:43,45,47 | 4
+END

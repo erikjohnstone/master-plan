@@ -1,0 +1,245 @@
+# 06_MO_NatlGuard_JeffCity_CST_Addition — attribute-key transcription (ASSEMBLIES AS-17, dev 5)
+# Typed from renders of sheets P111 PLUMBING PLAN - ALT #1 (PDF page 68), M601 MECHANICAL
+# SCHEDULES AND DETAILS (page 74) and M611 HVAC SCHEDULES & DETAILS - ALT #1 (page 75) of the
+# Jefferson City Readiness Center, Civil Support Team Building Addition, 1225 Cooper Drive,
+# Jefferson City MO (Klingner & Associates): an overview of each page at 40 dpi, then each table
+# at 3x (216 dpi), rendered with MuPDF (pymupdf get_pixmap(clip)) and read by eye on 2026-09-27,
+# with the PDF's own text layer (pymupdf words, row by row) as a reading aid; second read of every
+# row against the text layer. Each drawn title was found with the text layer (pymupdf search_for).
+# The pipeline's output for these tables was not consulted while keying.
+# Disclosed before the draw (tier5/01-split.json's commit): the control-intent unseen audit read
+# the document (34 units, 11 packets, 16 applied), and AS-28 read its column names. The fifth tier
+# keys the tables its seed drew (tier5/01-split.md): one per keyed family.
+SET 06_MO_NatlGuard_JeffCity_CST_Addition
+SEED 20260929
+DRAW reports/assemblies/tier5/01-split.json
+SCOPE Sheets P111, M601 and M611 (pages 68, 74 and 75) of the Jefferson City Readiness Center CST Building Addition (Klingner & Associates), the tables the fifth tier's seed drew for its FCU, VAV, RTU, HEAT_PUMP, PUMP, FAN and UNIT_HEATER strata.
+EXCLUDES Manufacturers, model numbers and weights, filters, efficiencies (IEER, COP), ambient design temperatures, frequencies, currents (MCA, MOP, MOCP), coil air temperatures, the rooftop unit's external static pressure and gas turndown, the exhaust fan's accessories, and every printed column outside the family's key vocabulary (mapped "-", still typed for audit).
+
+# FAN COIL UNT SCHEDULE (page 75, the ALT #1 schedules; the title prints "UNT"): three rows. The
+# units are refrigerant indoor units: no water column prints, and the sheet's HVAC SCHEMATIC
+# DIAGRAM pipes refrigerant between heat pumps HP-1 and HP-2 and the fan coil units: cooling_type
+# dx, and a DX fan coil printing a heating capacity and no water, gas or electric heat heats as a
+# heat pump, heating_type heat_pump (the author's reading, as 083_MA's). The FCU vocabulary has no
+# DX capacity (chw_mbh and hw_mbh are water coils'), so COOLING CAP. and HEATING CAP. are typed "-"
+# (as federal-mech's DX fan coils). ELECTRICAL / VOLT and PHASE key volts and phase.
+TABLE
+sheet: 06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75
+title: FAN COIL UNT SCHEDULE
+family: FCU
+render: page 75 overview at 40 dpi; crop 1435,338,860,170 at 3x in 2 tiles (TAG column repeated); second read of every row, every cell, against the text layer
+rows: all 3 printed rows
+col: TAG => tag
+col: DESCRIPTION => -
+col: FILTER => -
+col: COOLING CAP. => -
+col: HEATING CAP. => -
+col: ELECTRICAL / VOLT => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / FREQ => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOP => -
+col: BASIS OF DESIGN / MAKE => -
+col: BASIS OF DESIGN / MODEL => -
+col: BASIS OF DESIGN / WEIGHT => -
+derive: cooling_type = dx ; header=COOLING CAP. ; note=no water column prints, and the sheet's HVAC SCHEMATIC DIAGRAM pipes refrigerant between heat pumps HP-1/HP-2 and the fan coil units: refrigerant (DX) indoor units (the author's reading)
+derive: heating_type = heat_pump ; header=HEATING CAP. ; note=a DX fan coil printing a heating capacity and no water, gas or electric heat, served by outdoor heat pumps HP-1/HP-2: heat pump heating (the author's reading)
+grid:
+FCU-1 | EXPOSED CEILING CASSETTE | WASHABLE | 11,400 Btu/h | 10,000 | 208 V | 1 | 60 Hz | 0.8 A | 15 A | DAIKIN LG CARRIER | FXUQ24PVJU | 55 lb
+FCU-2 | EXPOSED CEILING CASSETTE | WASHABLE | 22,000 Btu/h | 20,000 | 208 V | 1 | 60 Hz | 1.8 A | 15 A | DAIKIN LG CARRIER | FXUQ36PVJU | 85 lb
+FCU-3 | DUCTED OUTDOOR AIR PROCESSING UNIT | WASHABLE | 40,000 Btu/h | 20,000 | 208 V | 1 | 60 Hz | 1.9 A | 15 A | DAIKIN LG CARRIER | FXMQ48PBVJU | 200 lb
+END
+
+# VARIABLE-AIR-VOLUME BOX SCHEDULE (page 74): nine rows. DESCRIPTION prints "DIGITAL SINGLE DUCT
+# TERMINAL": terminal_type single_duct. SIZE prints the terminal's size number (04, 07, 09, 10),
+# the nominal inlet diameter in inches of a TITUS DESV: inlet_size_in (the author's reading).
+# AIRFLOW (CFM) is the box's one printed airflow, its design (maximum) flow: cfm_max (the author's
+# reading; no minimum prints). ELECTRIC HEAT (KW) keys eh_kw; a kW prints on seven rows (electric
+# heat, heat_type electric) and N/A on VAV-5 and VAV-6 (no heat: heat_type none). Note 1 ("PROVIDE
+# WITH SCR CONTROLLER FOR ELECTRIC HEAT."), cited by the heated rows, names a modulating
+# controller, no stages. ELECTRICAL / VOLTAGE and PHASE key volts and phase.
+TABLE
+sheet: 06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74
+title: VARIABLE-AIR-VOLUME BOX SCHEDULE
+family: VAV
+render: page 74 overview at 40 dpi; crop 155,280,1050,225 at 3x in 2 tiles (Mark column repeated), notes included; second read of every row, every cell, against the text layer
+rows: all 9 printed rows
+col: Mark => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: DESCRIPTION => terminal_type
+col: SIZE => -
+col: [SIZE: the terminal's size number, its nominal inlet diameter in inches] => inlet_size_in
+col: AIRFLOW (CFM) => -
+col: [AIRFLOW (CFM): the box's one printed airflow, its design maximum] => cfm_max
+col: ELECTRIC HEAT (KW) => eh_kw
+col: [ELECTRIC HEAT (KW): a kW prints, so electric; N/A, so none] => heat_type
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / HZ => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: NOTES => -
+grid:
+VAV-1 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 04 | 4 | 120 | 120 | 2.0 | electric (2.0) | 120 | 1 | 60 | 20.8 | 25 | 1,2
+VAV-2 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 04 | 4 | 170 | 170 | 2.5 | electric (2.5) | 120 | 1 | 60 | 26.0 | 30 | 1,2
+VAV-3 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 07 | 7 | 510 | 510 | 7.5 | electric (7.5) | 208 | 1 | 60 | 39.1 | 40 | 1,2
+VAV-4 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 09 | 9 | 840 | 840 | 12.0 | electric (12.0) | 208 | 1 | 60 | 36.1 | 40 | 1,2
+VAV-5 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 04 | 4 | 60 | 60 | N/A | none (N/A) | 24 | 1 | 60 | -- | -- | 2
+VAV-6 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 04 | 4 | 60 | 60 | N/A | none (N/A) | 24 | 1 | 60 | -- | -- | 2
+VAV-7 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 10 | 10 | 1040 | 1040 | 15.0 | electric (15.0) | 208 | 1 | 60 | 45.1 | 50 | 1,2
+VAV-8 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 04 | 4 | 115 | 115 | 2.0 | electric (2.0) | 120 | 1 | 60 | 20.8 | 25 | 1,2
+VAV-9 | TITUS | DESV | single_duct (DIGITAL SINGLE DUCT TERMINAL) | 07 | 7 | 600 | 600 | 9.0 | electric (9.0) | 208 | 1 | 60 | 27.1 | 30 | 1,2
+END
+
+# ROOFTOP UNIT SCHEDULE (page 74): one row, ACU-6 (AAON RN). AIRFLOW / CFM keys supply_cfm and
+# OUTDOOR AIRFLOW (CFM) oa_cfm_min. COOLING / CAPACITY (BTU/HR) keys cooling_mbh in the BTU/H it
+# prints; a packaged rooftop unit's cooling with no water column is refrigerant: cooling_type dx
+# (the author's reading, as baker's rooftop units). HEATING / OUTPUT CAPACITY (BTU/HR) keys
+# heating_mbh in BTU/H, and HEATING TYPE ("NAT. GAS") heating_type gas. ELECTRICAL / VOLTAGE and
+# PHASE key volts and phase. Note 1, cited by the row ("PROVIDE WITH 14" FLAT ROOF CURB WITH
+# HOLDDOWN CLIPS, POWERED CONVENIENCE OUTLET, BACNET COMMUNICATION CARD, AND ECONOMIZER."), keys
+# bas_interface BACNET and economizer airside (a packaged rooftop unit's economizer, as baker's).
+# Note 2 (alternate vendors) keys nothing.
+TABLE
+sheet: 06_MO_NatlGuard_JeffCity_CST_Addition.pdf#74
+title: ROOFTOP UNIT SCHEDULE
+family: RTU
+render: page 74 overview at 40 dpi; crop 155,115,1450,140 at 3x in 3 tiles (Mark column repeated), notes included; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: Mark => tag
+col: MANUFACTURER => -
+col: MODEL => -
+col: AIRFLOW / CFM => supply_cfm
+col: AIRFLOW / ESP (IN WG) => -
+col: OUTDOOR AIRFLOW (CFM) => oa_cfm_min
+col: COOLING / CAPACITY (BTU/HR) => cooling_mbh [BTU/H]
+col: COOLING / ENTERING AIR (DEG. F) => -
+col: COOLING / LEAVING AIR (DEG. F) => -
+col: HEATING / OUTPUT CAPACITY (BTU/HR) => heating_mbh [BTU/H]
+col: HEATING / HEATING TYPE => heating_type
+col: HEATING / TURNDOWN => -
+col: HEATING / ENTERING AIR (DEG. F) => -
+col: HEATING / LEAVING AIR (DEG. F) => -
+col: ELECTRICAL / VOLTAGE => volts
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / HZ => -
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOCP => -
+col: NOTES => -
+derive: cooling_type = dx ; header=COOLING / CAPACITY (BTU/HR) ; note=a packaged rooftop unit's cooling block with no water column: refrigerant (DX) cooling (the author's reading)
+derive: bas_interface = BACNET ; header=NOTE 1 ; note=note 1, cited by the row: 'PROVIDE WITH 14" FLAT ROOF CURB WITH HOLDDOWN CLIPS, POWERED CONVENIENCE OUTLET, BACNET COMMUNICATION CARD, AND ECONOMIZER.'
+derive: economizer = airside ; header=NOTE 1 ; note=note 1, cited by the row: '... BACNET COMMUNICATION CARD, AND ECONOMIZER.' (a packaged rooftop unit's economizer is airside)
+grid:
+ACU-6 | AAON | RN | 3520 | 1.25 | 340 | 119,000 | 80/67 | 56.5/56.3 | 150,000 | gas (NAT. GAS) | 8:1 | 60 | 90 | 208 | 3 | 60 | 56 | 80 | 1,2
+END
+
+# HEAT PUMP SCHEDULE (page 75, the ALT #1 schedules): two rows, HP-1 and HP-2 (OUTDOOR HEAT
+# PUMP). CAPACITY / COOLING and HEATING key cooling_mbh and heating_mbh in the BTU/H every cell
+# prints. ELECTRICAL / VOLT and PHASE key volts and phase.
+TABLE
+sheet: 06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75
+title: HEAT PUMP SCHEDULE
+family: HEAT_PUMP
+render: page 75 overview at 40 dpi; crop 1340,160,955,130 at 3x in 2 tiles (TAG column repeated); second read of both rows, every cell, against the text layer
+rows: all 2 printed rows
+col: TAG => tag
+col: DESCRIPTION => -
+col: AMBIENT CONDITIONS / LOW TEMP => -
+col: AMBIENT CONDITIONS / HIGH TEMP => -
+col: CAPACITY / COOLING => cooling_mbh [BTU/H]
+col: CAPACITY / HEATING => heating_mbh [BTU/H]
+col: EFFICIENCY / IEER => -
+col: EFFICIENCY / COP @ 47°F => -
+col: ELECTRICAL / VOLT => volts
+col: ELECTRICAL / FREQ => -
+col: ELECTRICAL / PHASE => phase
+col: ELECTRICAL / MCA => -
+col: ELECTRICAL / MOP => -
+col: BASIS OF DESIGN / MAKE => -
+col: BASIS OF DESIGN / MODEL => -
+col: BASIS OF DESIGN / WEIGHT => -
+grid:
+HP-1 | OUTDOOR HEAT PUMP | 32°F | 95°F | 47,000 BTU/H | 33,000 BTU/H | 20.4 | 32 | 208 V | 60 HZ | 3 | 29.1 A | 35 A | DAIKIN LG CARRIER | REYQ48TAVJUA | 175 LBS
+HP-2 | OUTDOOR HEAT PUMP | 32°F | 95°F | 47,000 BTU/H | 33,000 BTU/H | 20.4 | 32 | 208 V | 60 HZ | 3 | 29.1 A | 35 A | DAIKIN LG CARRIER | REYQ48TAVJUA | 175 LBS
+END
+
+# SINK PUMP SCHEDULE (page 68, plumbing sheet P111): one row, SP-1, a packaged sink drain pump
+# system. FLOW keys gpm, and HEAD ("16.0 ftH2O") keys head_ft by its number. ELECTRICAL / VOLT keys
+# volts; no phase column prints, and POLES prints 1 at 120 V: a one-pole 120 V circuit is single
+# phase (the author's reading). TYPE names the pump, not a service column; REMARKS is blank.
+TABLE
+sheet: 06_MO_NatlGuard_JeffCity_CST_Addition.pdf#68
+title: SINK PUMP SCHEDULE
+family: PUMP
+render: page 68 overview at 40 dpi; crop 262,310,740,95 at 3x; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: TAG => tag
+col: TYPE => -
+col: FLOW => gpm
+col: HEAD => -
+col: [HEAD: the number before ftH2O] => head_ft
+col: ELECTRICAL / VOLT => volts
+col: ELECTRICAL / POLES => -
+col: [ELECTRICAL / POLES: one pole at 120 V, single phase] => phase
+col: ELECTRICAL / MOP => -
+col: BASIS OF DESIGN / MAKE => -
+col: BASIS OF DESIGN / MODEL => -
+col: BASIS OF DESIGN / WEIGHT => -
+col: REMARKS => -
+grid:
+SP-1 | PACKAGED SYSTEM SINK DRAIN PUMP | 18.0 GPM | 16.0 ftH2O | 16.0 | 120 V | 1 | 1 | 15 A | SANIVITE LIBERTY ZOELLER | 008 | 50 lb |
+END
+
+# EXHAUST FAN SCHEDULE (page 75, the ALT #1 schedules): one row, EF-1 (SIDEWALL EXHAUST FAN). AIR
+# FLOW keys cfm and S.P. ("0.5 IN.W.C.") esp_in. ELECTRICAL PARAMETERS / VOLTAGE, PHASE and HP key
+# volts, phase and motor_hp. ACCESSORIES (a backdraft damper, a unit mounted disconnect) key
+# nothing.
+TABLE
+sheet: 06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75
+title: EXHAUST FAN SCHEDULE
+family: FAN
+render: page 75 overview at 40 dpi; crop 1318,532,977,110 at 3x in 2 tiles (TAG column repeated); second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: TAG => tag
+col: DESCRIPTION => -
+col: AIR FLOW => cfm
+col: S.P. => esp_in
+col: ELECTRICAL PARAMETERS / VOLTAGE => volts
+col: ELECTRICAL PARAMETERS / FREQUENCY => -
+col: ELECTRICAL PARAMETERS / PHASE => phase
+col: ELECTRICAL PARAMETERS / MOP => -
+col: ELECTRICAL PARAMETERS / HP => motor_hp
+col: BASIS OF DESIGN / MAKE => -
+col: BASIS OF DESIGN / MODEL => -
+col: BASIS OF DESIGN / WEIGHT => -
+col: ACCESSORIES => -
+grid:
+EF-1 | SIDEWALL EXHAUST FAN | 1740 CFM | 0.5 IN.W.C. | 120 V | 60 HZ | 1 | 20 A | 3/4 HP | GREENHECK ACME PENN BARRY | CUE-180-VG | 100 LBS | BACKDRAFT DAMPER, UNIT MOUNTED DISCONNECT
+END
+
+# ELECTRIC DUCT HEATER SCHEDULE (page 75, the ALT #1 schedules): one row, EDH-1. The title names
+# the medium: heating_medium electric (as 009_FL's ELECTRIC DUCT HEATER). AIRFLOW keys cfm and
+# CAPACITY ("8 kW") eh_kw; VOLT and PHASE key volts and phase.
+TABLE
+sheet: 06_MO_NatlGuard_JeffCity_CST_Addition.pdf#75
+title: ELECTRIC DUCT HEATER SCHEDULE
+family: UNIT_HEATER
+render: page 75 overview at 40 dpi; crop 575,532,667,95 at 3x; second read of the row, every cell, against the text layer
+rows: all 1 printed row
+col: TAG => tag
+col: DESCRIPTION => -
+col: AIRFLOW => cfm
+col: CAPACITY => eh_kw
+col: VOLT => volts
+col: FREQ => -
+col: PHASE => phase
+col: MCA => -
+col: MOP => -
+col: MAKE => -
+col: MODEL => -
+col: WEIGHT => -
+derive: heating_medium = electric ; header=TABLE TITLE ; note=title printed 'ELECTRIC DUCT HEATER SCHEDULE'
+grid:
+EDH-1 | DUCT MOUNTED WITH DUCT FLANGE CONNECTIONS | 400 CFM | 8 kW | 208 V | 60 Hz | 1 | 38 A | 50 A | GREENHECK BERKO MARLEY | IDHB | 50 lb
+END
