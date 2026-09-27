@@ -161,6 +161,7 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   const scoped = await call(client, "apply_assemblies", { export_dir: scopedDir, export_scope: "mechanical", settings: presets });
   assert.equal(scoped.isError, false, JSON.stringify(scoped.data).slice(0, 300));
   assert.equal(scoped.data.export_dir.scope, "mechanical");
+  assert.equal(scoped.data.settings_unread, undefined, "the starter reads its own hook-up defaults and presets (AS-50)");
   const uiPresets = applyAssemblies({ project: wire, library, readings: wire.control_readings, settings: settingsWithPresets({}, { hookupDefaults: true, responsibilityPreset: "valve-shipped-to-kit-maker" }) });
   const expectedScoped = assembliesCsvSet({ ...uiPresets, report: assembliesReport(uiPresets.instances, uiPresets.applications, uiPresets.lines), scope: "mechanical" });
   for (const [name, text] of Object.entries(expectedScoped)) assert.equal(await readFile(join(scopedDir, name), "utf8"), text, `${name}: mechanical scope under the presets`);
@@ -175,6 +176,14 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   // summary (default) leaves units and lines out; families narrows the reply only.
   const s = await call(client, "apply_assemblies", {});
   assert.equal(s.data.report.units, undefined);
+  // A setting no part of the library reads is named, and changes nothing (AS-50).
+  const typo = await call(client, "apply_assemblies", { settings: { partnerDefaults: { economiser: true }, profile: { strainerz: true } } });
+  assert.deepEqual(typo.data.settings_unread, [
+    { key: "partnerDefaults.economiser", why: "no typical has an option or variable economiser" },
+    { key: "profile.strainerz", why: "no line has the switch strainerz" },
+  ]);
+  assert.deepEqual(typo.data.report.totals, s.data.report.totals);
+  assert.equal(s.data.settings_unread, undefined);
   assert.equal(s.data.lines, undefined);
   const only = await call(client, "apply_assemblies", { families: ["AHU"], detail: "units" });
   assert.ok(only.data.report.units.every((u) => u.family === "AHU"));

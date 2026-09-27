@@ -22,7 +22,7 @@
 
 import { ExprError, type Value } from "./expr";
 import type { ApplicationRecord, AssemblyDefinition, AssemblyLine, ExpandedLine, ValueSource } from "./schema";
-import { familiesOf, SELECTION } from "./schema";
+import { ACTIVITIES, familiesOf, PARTIES, SELECTION } from "./schema";
 import { envFor, latest, layersFor, PROJECT_INSTANCE, run, selectAssembly, selectProjectAssemblies, type Instance, type Override, type ProjectSettings } from "./select";
 
 /** What the drawing itself says about a unit's controls (read-only inputs from
@@ -239,6 +239,45 @@ export function ignoredOverrideParts(applications: readonly ApplicationRecord[],
       }
     }
     if (options.length || variables.length || !decided.length) out.push({ override: o, options, variables, why: [...new Set(whys)].join("; ") });
+  }
+  return out;
+}
+
+/** The settings no part of the library reads, each with why (AS-50), so
+ * none is kept silently: a project variable no typical takes from the
+ * project, a partner default for an id no typical has (or, for an option,
+ * one that is not true or false), a hook-up switch no line names, and a
+ * responsibility edit for a role no line has, or an activity or party the
+ * matrix does not know. A partner default keyed "<assembly id>.<id>" is
+ * read by that typical's own options and variables. */
+export function unreadSettings(library: readonly AssemblyDefinition[], settings: ProjectSettings = {}): Array<{ key: string; why: string }> {
+  const out: Array<{ key: string; why: string }> = [];
+  const lines = library.flatMap((d) => d.lines);
+  const fromProject = new Set(library.flatMap((d) => d.variables.flatMap((v) => (v.from?.startsWith("project.") ? [v.from.slice(8)] : []))));
+  for (const k of Object.keys(settings.variables ?? {})) {
+    if (!fromProject.has(k)) out.push({ key: `variables.${k}`, why: `no typical takes project.${k}` });
+  }
+  for (const [k, value] of Object.entries(settings.partnerDefaults ?? {})) {
+    const dot = k.lastIndexOf(".");
+    const owner = dot > 0 && library.some((d) => d.id === k.slice(0, dot)) ? k.slice(0, dot) : null;
+    const id = owner ? k.slice(dot + 1) : k;
+    const defs = owner ? library.filter((d) => d.id === owner) : library;
+    const option = defs.some((d) => d.options.some((o) => o.id === id));
+    const variable = defs.some((d) => d.variables.some((v) => v.id === id));
+    if (!option && !variable) out.push({ key: `partnerDefaults.${k}`, why: owner ? `${owner} has no option or variable ${id}` : `no typical has an option or variable ${id}` });
+    else if (!variable && typeof value !== "boolean") out.push({ key: `partnerDefaults.${k}`, why: `${id} is an option: its default is true or false` });
+  }
+  const switches = new Set(lines.flatMap((l) => (l.profile_switch ? [l.profile_switch] : [])));
+  for (const k of Object.keys(settings.profile ?? {})) {
+    if (!switches.has(k)) out.push({ key: `profile.${k}`, why: `no line has the switch ${k}` });
+  }
+  const roles = new Set(lines.map((l) => l.role.id));
+  for (const [role, cells] of Object.entries(settings.responsibility ?? {})) {
+    if (!roles.has(role)) { out.push({ key: `responsibility.${role}`, why: `no line has the role ${role}` }); continue; }
+    for (const [activity, party] of Object.entries(cells ?? {})) {
+      if (!(ACTIVITIES as readonly string[]).includes(activity)) out.push({ key: `responsibility.${role}.${activity}`, why: `the matrix's activities are ${ACTIVITIES.join(", ")}` });
+      else if (!(PARTIES as readonly string[]).includes(String(party))) out.push({ key: `responsibility.${role}.${activity}`, why: `${party} is no party of the matrix (${PARTIES.join(", ")})` });
+    }
   }
   return out;
 }

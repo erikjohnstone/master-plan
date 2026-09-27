@@ -205,7 +205,9 @@ give the override the unit's `family`. A typical you choose by override can stil
 correct its tag, or set a project record's value in `settings`, before you report it as applied.
 One listed in `overrides_ignored` applied in part: the options and variables it names are not the
 unit's typical's (check the ids against the record's own), or wait for a typical, or another
-override for the unit decides. Correct them before you report them as applied. `control_readings` reads the control
+override for the unit decides. Correct them before you report them as applied.
+A key listed in `settings_unread` changed nothing: no part of the library reads it. Correct it
+(a unit's record names its typical's options and variables) before you report it as applied. `control_readings` reads the control
 drawings bound to each unit (sequences, schematics, points lists): a reading applies only where two
 readers agree or on a phrase that states it outright (a unit printed standalone); one reader alone
 is a proposal, and readers that disagree leave the option unresolved. A zone plan (a sheet whose

@@ -618,7 +618,9 @@ specifications that make it a choice.
 switch or count left unset keeps its lines waiting. **Who does what** applies a
 responsibility preset, for example "the controls contractor furnishes the valve
 and ships it to the kit maker". It shows which presets the project holds and
-lists your edits, which **Clear responsibility edits** removes.
+lists your edits, which **Clear responsibility edits** removes. A setting the
+project's library reads nowhere, such as one kept from a project file made with
+another library, is listed at the top of the settings with why.
 
 **Project questions** (below the settings) ask the few facts only you know that
 decide many units at once:

@@ -1878,6 +1878,8 @@ export const applyAssembliesOutput = {
     .describe("Overrides that no unit takes, each with why (a tag no unit has, a family or layer its units have not, a typical the layer does not offer, or the project's own records, which follow the project settings). They applied nothing"),
   overrides_ignored: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), options: z.array(z.string()), variables: z.array(z.string()), why: z.string() })).optional()
     .describe("What overrides that fit a unit set and no record takes, each with why: the options and variables its typical has not (a typo; a typical chosen without them), any while the unit has no typical (none chosen yet, or out of scope), or an override another for the same unit and layer decides (options and variables then list all of it). The rest of each override applied; one an exclusion sets aside is not listed"),
+  settings_unread: z.array(z.object({ key: z.string(), why: z.string() })).optional()
+    .describe("The settings no part of the library reads, each with why: a project variable no typical takes from the project, a partner default for an id no typical has (or not true or false, for an option), a hook-up switch no line names, or a responsibility edit for a role no line has or an activity or party the matrix does not know. They changed nothing"),
   path: z.string().optional(),
   export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
   answers: z.object({

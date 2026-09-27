@@ -17,7 +17,7 @@
 // overrides.
 import { useEffect, useMemo, useState } from "react";
 import { applyAssemblies } from "../lib/assemblies/apply";
-import { ignoredOverrideParts, unmatchedOverrides } from "../lib/assemblies/expand";
+import { ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../lib/assemblies/expand";
 import { PROJECT_INSTANCE } from "../lib/assemblies/select";
 import { assembliesCsvSet } from "../lib/assemblies/exportSet";
 import { importLibraryCsv, libraryToCsv } from "../lib/assemblies/libraryCsv";
@@ -186,7 +186,7 @@ const input = { padding: "4px 6px", border: "1px solid var(--ink-faint)", border
 /** The project's settings the library reads: the hook-up profile's switches
  * and variables, and who does what (a responsibility preset, or the edits it
  * leaves). Each change is saved with the project and re-applies at once. */
-function ProjectSettingsView({ settings, onChange }) {
+function ProjectSettingsView({ settings, onChange, unread = [] }) {
   const profile = settings.profile ?? {};
   const variables = settings.variables ?? {};
   const active = activeResponsibilityPresets(settings);
@@ -221,6 +221,11 @@ function ProjectSettingsView({ settings, onChange }) {
           {" "}· {setCount} of {HOOKUP_SWITCHES.length + HOOKUP_VARIABLES.length} hook-up settings set · responsibility: {active.length ? active.join(", ") : settings.responsibility ? "edited" : "the typicals' matrix"}
         </span>
       </summary>
+      {unread.length > 0 && (
+        <div style={{ fontSize: "var(--fs-s)", color: "var(--c-danger)", padding: "6px 2px 0" }} data-assemblies-settings-unread={unread.length}>
+          The project's library reads none of these: {unread.map((u) => `${u.key} (${u.why})`).join("; ")}.
+        </div>
+      )}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, padding: "8px 2px" }}>
         <fieldset style={fieldset}>
           <legend style={legend}>Hook-up profile</legend>
@@ -582,6 +587,9 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   // What an override sets that no record takes, with why (AS-49): an option
   // its unit's typical has not (a typical updated or chosen without it), any
   // while the unit has no typical, or all of one another override decides.
+  // The settings the project's library reads none of, with why (AS-50): a
+  // project file's from another library, say.
+  const unreadSettingsList = useMemo(() => (state ? unreadSettings(projectLibrary(state, library), state.settings ?? {}) : []), [state, library]);
   const ignored = useMemo(() => new Map(applied && state
     ? ignoredOverrideParts(applied.applications, projectLibrary(state, library), state.overrides).map(({ override, why }) => [override, why])
     : []), [applied, state, library]);
@@ -712,7 +720,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
             <button type="button" style={btn} onClick={() => onLoadProject?.()} disabled={!!projectStatus.loading}>{projectStatus.loading ? "Reading…" : "Re-read schedules"}</button>
           </div>
 
-          <ProjectSettingsView settings={state?.settings ?? {}} onChange={setSettings} />
+          <ProjectSettingsView settings={state?.settings ?? {}} onChange={setSettings} unread={unreadSettingsList} />
 
           <ProjectQuestionsView questions={questions.value} busy={questions.busy} error={journal.error || questions.error} journal={journal} onAnswer={answer} onOpenCitation={onOpenCitation} />
 

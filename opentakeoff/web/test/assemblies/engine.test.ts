@@ -7,7 +7,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { sanitizeAssemblyDefinitions, validateAssembly, type AssemblyDefinition, type ExpandedLine } from "../../src/lib/assemblies/schema.ts";
 import { selectAssembly, type Instance } from "../../src/lib/assemblies/select.ts";
-import { expandAll, expandApplication, ignoredOverrideParts, unmatchedOverrides } from "../../src/lib/assemblies/expand.ts";
+import { expandAll, expandApplication, ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../../src/lib/assemblies/expand.ts";
 import { rollup, type Breakdown } from "../../src/lib/assemblies/rollup.ts";
 import type { Value } from "../../src/lib/assemblies/expr.ts";
 
@@ -344,6 +344,33 @@ test("what an override sets that no record takes is named with why, the rest sti
   // one that fits no unit is unmatchedOverrides' (AS-45).
   assert.deepEqual(ignored([{ tag: "VAV-1", reason: "choice", options: { c02: true } }, { tag: "VAV-1", reason: "out", exclude: true }]), []);
   assert.deepEqual(ignored([{ tag: "VAV-9", reason: "a typo", options: { co2: true } }]), []);
+});
+
+test("the settings no part of the library reads are named with why (AS-50)", () => {
+  const unread = (settings: Parameters<typeof unreadSettings>[1]) => unreadSettings(LIB, settings).map((u) => [u.key, u.why]);
+  // Read: partner defaults for an option and variables (plain, or under
+  // their typical), a switch a line names, a role's cells.
+  assert.deepEqual(unread({ partnerDefaults: { co2: true, spare: 2, "vav-hw.valve_size": 1 }, profile: { cable_per_device: true },
+    responsibility: { Valve: { furnish: "mechanical", install: "mechanical" } } }), []);
+  assert.deepEqual(unread({
+    variables: { chw_plants: 1 },
+    partnerDefaults: { c02: true, co2: "yes", "vav-cool.co2": true },
+    profile: { cable_per_devise: true },
+    responsibility: { Valve: { fitting: "mechanical", furnish: "kit_maker" }, NoSuchRole: { furnish: "controls" } },
+  }), [
+    ["variables.chw_plants", "no typical takes project.chw_plants"],
+    ["partnerDefaults.c02", "no typical has an option or variable c02"],
+    ["partnerDefaults.co2", "co2 is an option: its default is true or false"],
+    ["partnerDefaults.vav-cool.co2", "vav-cool has no option or variable co2"],
+    ["profile.cable_per_devise", "no line has the switch cable_per_devise"],
+    ["responsibility.Valve.fitting", "the matrix's activities are furnish, install, wire_lv, power, program, test"],
+    ["responsibility.Valve.furnish", "kit_maker is no party of the matrix (controls, mechanical, electrical, fire_alarm, factory, owner, general, unassigned)"],
+    ["responsibility.NoSuchRole", "no line has the role NoSuchRole"],
+  ]);
+  // Each changes nothing, which is why it is named.
+  const box = vav("VAV-1", { heat_type: "hw" });
+  const bytes = (settings: Parameters<typeof expandAll>[2]) => JSON.stringify(expandAll([box], LIB, settings));
+  assert.equal(bytes({ variables: { chw_plants: 1 }, partnerDefaults: { c02: true, "vav-cool.co2": true }, profile: { cable_per_devise: true }, responsibility: { NoSuchRole: { furnish: "controls" } } }), bytes({}));
 });
 
 test("every selector false is no assembly, not unresolved", () => {

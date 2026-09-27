@@ -2971,3 +2971,60 @@ it):**
   into the saved override, reloads, and checks that "Your overrides" marks
   it "not applied: <typical>@<version> has no option …" while the rest of
   the override still applies.
+
+## AS-50 — a setting no part of the library reads changed nothing without a word: a typo'd partner default, a switch or role the library lacks (FIXED — this goal)
+
+**Found:** 2026-09-27, following AS-49 from overrides to settings. Every
+setting is read by id:
+- a project variable, by the typicals whose variables take it from the
+  project (`from: "project.<id>"`);
+- a partner default, by an option or variable of that id (keyed "<assembly
+  id>.<id>" or "<id>"), and for an option only as true or false (select.ts
+  skips any other value);
+- a hook-up switch, by the lines that name it (`profile_switch`);
+- a responsibility edit, by the lines of its role, and only for the
+  matrix's six activities and eight parties.
+
+Any other key was accepted and dropped, and neither apply_assemblies nor the
+panel said so. On federal-mech, each of these left the records and lines
+byte-identical: `variables: { chw_plantz: 1 }`, `partnerDefaults:
+{ economiser: true }`, `partnerDefaults: { "ahu-multizone-vav.no_such": true }`,
+`partnerDefaults: { dedicated_min_oa: "yes" }`, `profile: { strainerz: true }`
+and `responsibility: { no_role: { furnish: "mechanical" } }`. An activity the
+matrix does not know (`fitting`) was carried in the records and reached no
+CSV file. A party it does not know (`kit_maker`) reached lines.csv as
+written, where no export scope selects it. MCP accepts these keys as free
+strings, and so does the project file, which can also keep settings made
+with another library.
+
+**Fix (expand.ts, the shared path; MCP and the panel both report through
+it):**
+- **The shared check:** unreadSettings names every key no part of the
+  library reads, with why.
+- **MCP:** apply_assemblies lists these under settings_unread, checked
+  against the settings it applied (the hook-up defaults and preset
+  included). The field is absent when every key is read.
+- **The panel:** Project settings lists them at its top, checked against
+  the project's own library (its pinned versions).
+- **Unchanged:** no record or line, since the check only reads the library.
+
+**Measured:**
+- **The starter reads everything the panel offers:** its library reads
+  every hook-up switch and variable the settings form offers (9 and 5) and
+  every cell of the four responsibility presets.
+- **A library without the hook-ups** reads none of the switches, and says
+  so for each.
+- **On federal-mech,** every key named above changes nothing when applied,
+  and each is named with its reason.
+
+**Tests:**
+- engine.test.ts, with the fixture library: keys that are read (an
+  option's and a variable's partner default, plain and under their
+  typical, a switch a line names, a role's cells) are not named. Each kind
+  of unread key is named with its reason, and together they leave the
+  expansion byte-identical.
+- presets.test.ts: the starter reads every switch, variable and preset cell,
+  and a library without the hook-ups reads none of the switches.
+- assembliesApply.test.mjs: a call with a typo'd partner default and switch
+  names both and keeps the report's totals, and the call with the starter's
+  hook-up defaults and the kit-maker preset carries no settings_unread.

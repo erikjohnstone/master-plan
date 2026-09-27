@@ -1,5 +1,19 @@
 # Changelog
 
+- **Assemblies: a setting no part of the library reads is named.** Settings are
+  read by id: a project variable by the typicals that take it from the
+  project, a partner default by an option or variable of that id, a hook-up
+  switch by the lines that name it, a responsibility edit by the lines of its
+  role. Any other key changed nothing, and nothing said so: an agent's
+  `partnerDefaults: { economiser: true }`, a partner default of "yes" for an
+  option (true or false only), a switch or role the project's library does
+  not have, an activity or party the responsibility matrix does not know.
+  `apply_assemblies` now lists such keys under `settings_unread`, each with
+  why, and Project settings lists them at its top. The starter library reads
+  every switch, variable and preset the panel offers; no record or line
+  changes (`web/src/lib/assemblies/expand.ts` `unreadSettings`,
+  ASSEMBLIES_BUG_CATALOGUE AS-50).
+
 - **Assemblies: what an override sets that no record takes is named.** An
   override that fits a unit could still set what its record never reads: an
   option or variable the unit's typical has not (an agent's `economiser` for
