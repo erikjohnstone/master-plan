@@ -1,5 +1,5 @@
 // Real PDF -> /__ot/assemblies-project (the production CLI) -> Takeoff -> Assemblies.
-// Checks, in the running app and with nothing injected:
+// Checks, in the running app, with nothing injected but one saved option (below):
 //   · the browser's records and lines are byte-identical to apply_assemblies over
 //     MCP for the same PDF (mcp/scripts/assemblies-apply.mjs wrote OT_MCP_APPLY),
 //     and the totals, exceptions and unit rows on screen are that report's;
@@ -10,7 +10,10 @@
 //     (A5), and deleting it withdraws the offer;
 //   · both themes at three widths without a horizontal page scroll;
 //   · the project file's assemblies block reaches IndexedDB, and a reload keeps
-//     the pins and the override;
+//     the pins and the override; an option the saved override sets that its
+//     unit's typical has not (written into the saved project, as a file saved
+//     before its typical was updated or an agent's typo would) is marked not
+//     applied after the reload, and the rest of the override applies (AS-49);
 //   · "Download CSV set" gives the same bytes, file for file, as
 //     apply_assemblies' export_dir (OT_MCP_EXPORT_DIR);
 //   · project settings: the starter's hook-up defaults and the kit-maker
@@ -42,6 +45,7 @@ const REASON = "UI proof: the estimator's own choice";
 const GROUP_REASON = "UI proof: one answer for the schedule's rows";
 const GROUP_EXCLUDE_REASON = "UI proof: these rows are no units";
 const PRESET = 'valve-shipped-to-kit-maker';
+const ABSENT_OPTION = 'ui_proof_no_such_option';
 
 const browser = await chromium.launch({ executablePath: process.env.OT_BROWSER_PATH || undefined });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -285,6 +289,23 @@ try {
       return a?.overrides?.length === 1 && a.pinned.length > 0 ? a : null;
     }, { timeout: 30000, label: 'assemblies autosave' });
     assert.equal(saved.overrides[0].reason, REASON);
+    // The saved override also sets an option its unit's typical has not, as
+    // a project file saved before its typical was updated, or an agent's
+    // typo, would. (A debounced save of the editor's own state lands within
+    // 700 ms: the write is read back after that.)
+    const kept = await waitForAsync(() => page.evaluate(async (absent) => {
+      const { localStore } = await import('/src/lib/store.js');
+      const { annotationGeneration } = await import('/src/lib/annotationGeneration.js');
+      const ann = await localStore.loadAnnotations();
+      const [o] = ann.assemblies.overrides;
+      if (!(absent in (o.options ?? {}))) {
+        const assemblies = { ...ann.assemblies, overrides: [{ ...o, options: { ...(o.options ?? {}), [absent]: true } }] };
+        await localStore.saveAnnotations({ ...ann, assemblies }, { generation: annotationGeneration(ann) });
+      }
+      await new Promise((r) => setTimeout(r, 1500));
+      const back = (await localStore.loadAnnotations()).assemblies;
+      return absent in (back.overrides[0].options ?? {}) ? back : null;
+    }, ABSENT_OPTION), { timeout: 30000, label: 'a saved override with an option its typical has not' });
     await page.reload({ waitUntil: 'domcontentloaded' });
     await openImportedSheet(page);
     panel = await openAssemblies();
@@ -293,8 +314,18 @@ try {
     await panel.locator('[data-assemblies-load]').click();
     assert.equal((await again).status(), 200);
     await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible', timeout: 120000 });
-    assert.deepEqual(await annotations(), saved, 'reload keeps the pins, settings and override');
-    checks.push('actual IndexedDB autosave; reload keeps pins and the override');
+    assert.deepEqual(await annotations(), kept, 'reload keeps the pins, settings and override');
+    // "Your overrides" marks the part no record takes, with why; the rest of
+    // the override still applies (AS-49).
+    const [keptOverride] = kept.overrides;
+    const keptRecord = JSON.parse((await applyInPage()).applications)
+      .find((a) => a.instance.tag === keptOverride.tag && a.layer === keptOverride.layer && (!keptOverride.family || a.instance.family === keptOverride.family));
+    const marked = panel.locator('[data-assemblies-override-ignored]');
+    assert.equal(await marked.count(), 1, 'the option its typical has not is marked');
+    assert.equal((await marked.innerText()).trim(), `· not applied: ${keptRecord.assembly.id}@${keptRecord.assembly.version} has no option ${ABSENT_OPTION}`);
+    assert.ok(!(ABSENT_OPTION in keptRecord.options) && (keptRecord.selected_by === 'user' || Object.values(keptRecord.options).some((x) => x.source === 'user')), 'the rest of the override still applies');
+    await panel.locator('[data-assemblies-overrides]').screenshot({ path: `${out}/override-not-applied.png` });
+    checks.push(`actual IndexedDB autosave; reload keeps pins and the override; an option ${keptOverride.tag}'s typical has not is marked not applied, the rest applied (AS-49)`);
 
     // One schedule's rows that wait for the same things resolve together: one
     // choice and one reason, an override on each unit (report.ts
@@ -379,6 +410,8 @@ try {
     // rows, which follow the settings, open them rather than offer an
     // override that would change nothing (AS-45).
     assert.equal(await panel.locator('[data-assemblies-override-unmatched]').count(), 0, 'no override applies to nothing');
+    // Every part of them applies, but the option the saved file added (AS-49).
+    for (const text of await panel.locator('[data-assemblies-override-ignored]').allInnerTexts()) assert.match(text, new RegExp(`has no option ${ABSENT_OPTION}$`));
     const toSettings = panel.locator('[data-assemblies-open-settings]').first();
     if (await toSettings.count()) {
       const settingsEl = panel.locator('[data-assemblies-settings]');

@@ -182,9 +182,10 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   assert.equal(ahu?.derived?.terminals_served?.rule, "derive.terminals_served.sole_air_handler", "derived against the whole project");
 
   // An override with a reason is a user choice on the record. One no unit
-  // takes is named with why, never kept silently (AS-45).
+  // takes is named with why, never kept silently (AS-45), and so is what one
+  // sets that the unit's typical has not (AS-49).
   const o = await call(client, "apply_assemblies", { detail: "units", families: ["AHU"], overrides: [
-    { tag: "AHU-1", layer: "controls", reason: "test", options: { ufc_minimum_points: true } },
+    { tag: "AHU-1", layer: "controls", reason: "test", options: { ufc_minimum_points: true, economiser: true }, variables: { no_such_variable: 3 } },
     { tag: "AHU-99", reason: "a typo", exclude: true },
     { tag: "AHU-1", family: "PUMP", reason: "another family", exclude: true },
     { tag: "(project)", reason: "the project's own", exclude: true },
@@ -197,5 +198,8 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   assert.match(o.data.overrides_unmatched[1].why, /no PUMP is tagged "AHU-1" \(AHU is\)/);
   assert.match(o.data.overrides_unmatched[2].why, /follow its settings/);
   assert.equal(only.data.overrides_unmatched, undefined, "absent when every override applies");
+  assert.deepEqual(o.data.overrides_ignored.map((x) => [x.tag, x.layer, x.options, x.variables]), [["AHU-1", "controls", ["economiser"], ["no_such_variable"]]]);
+  assert.equal(o.data.overrides_ignored[0].why, `${oa.assembly} has no option economiser, variable no_such_variable`);
+  assert.equal(only.data.overrides_ignored, undefined, "absent when every part applies");
   await client.close();
 });

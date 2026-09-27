@@ -1876,6 +1876,8 @@ export const applyAssembliesOutput = {
   lines: z.array(z.record(z.string(), z.unknown())).optional(),
   overrides_unmatched: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), why: z.string() })).optional()
     .describe("Overrides that no unit takes, each with why (a tag no unit has, a family or layer its units have not, a typical the layer does not offer, or the project's own records, which follow the project settings). They applied nothing"),
+  overrides_ignored: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), options: z.array(z.string()), variables: z.array(z.string()), why: z.string() })).optional()
+    .describe("What overrides that fit a unit set and no record takes, each with why: the options and variables its typical has not (a typo; a typical chosen without them), any while the unit has no typical (none chosen yet, or out of scope), or an override another for the same unit and layer decides (options and variables then list all of it). The rest of each override applied; one an exclusion sets aside is not listed"),
   path: z.string().optional(),
   export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
   answers: z.object({

@@ -1,5 +1,19 @@
 # Changelog
 
+- **Assemblies: what an override sets that no record takes is named.** An
+  override that fits a unit could still set what its record never reads: an
+  option or variable the unit's typical has not (an agent's `economiser` for
+  `economizer`; a typical adopted or chosen without it), any while the unit
+  has no typical (none chosen yet, or out of scope), or all of it where
+  another override for the same unit and layer decides (a project file from
+  before AS-43). It was dropped without a word: `apply_assemblies` said
+  nothing, and "Your overrides" listed it as applied. `apply_assemblies` now
+  lists such parts under `overrides_ignored`, each with its ids and why, and
+  "Your overrides" marks them *not applied*. The rest of each override
+  applies as before; no record or line changes
+  (`web/src/lib/assemblies/expand.ts` `ignoredOverrideParts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-49).
+
 - **Assemblies: rows whose typical's options wait resolve together.** The
   exceptions grouped a schedule's rows only while they waited for a typical.
   Rows under one typical whose same options wait (59 fan coils in 16 of the

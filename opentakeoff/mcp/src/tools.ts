@@ -1100,6 +1100,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       report: want === "summary" ? summary : { ...summary, units },
       ...(want === "lines" ? { applications: full.applications, lines: full.lines } : {}),
       ...(full.overrides_unmatched ? { overrides_unmatched: full.overrides_unmatched } : {}),
+      ...(full.overrides_ignored ? { overrides_ignored: full.overrides_ignored } : {}),
     };
     const { mkdir, writeFile } = await import("node:fs/promises");
     let exported: { dir: string; files: string[] } | undefined;

@@ -14,7 +14,7 @@ import starterTypicals from "../../web/src/lib/assemblies/starter/us-typicals-v1
 import starterHookups from "../../web/src/lib/assemblies/starter/us-hookups-v1.json" with { type: "json" };
 import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type CompiledProject, type HvacCompile } from "../../web/src/lib/assemblies/apply.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
-import { unmatchedOverrides } from "../../web/src/lib/assemblies/expand.ts";
+import { ignoredOverrideParts, unmatchedOverrides } from "../../web/src/lib/assemblies/expand.ts";
 import { assembliesReport, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
 import { assembliesCsvSet, type ExportFile } from "../../web/src/lib/assemblies/exportSet.ts";
 import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
@@ -219,6 +219,9 @@ export interface ApplyAssembliesResult {
   /** Overrides no unit takes, each with why (AS-45); absent when every one
    * applies. */
   overrides_unmatched?: Array<{ tag: string; family?: string; layer?: string; why: string }>;
+  /** What overrides that fit a unit set and no record takes, each with why
+   * (AS-49); absent when every part applies. */
+  overrides_ignored?: Array<{ tag: string; family?: string; layer?: string; options: string[]; variables: string[]; why: string }>;
 }
 
 // ── Project questions (Track A): the Session's answer journal ──────────────
@@ -319,8 +322,12 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   const readings = await sessionControlReadings(session, { project, library }, mode);
   const { instances, applications, lines } = applyAssemblies({ project, library, settings, overrides: opts.overrides ?? [], readings });
   // An override no unit takes is named, never kept silently (AS-45).
-  const unmatched = unmatchedOverrides(instances, library, opts.overrides ?? [])
-    .map(({ override: o, why }) => ({ tag: o.tag, ...(o.family ? { family: o.family } : {}), ...(o.layer ? { layer: o.layer } : {}), why }));
+  const slot = (o: NonNullable<ApplyAssembliesOptions["overrides"]>[number]) => ({ tag: o.tag, ...(o.family ? { family: o.family } : {}), ...(o.layer ? { layer: o.layer } : {}) });
+  const unmatched = unmatchedOverrides(instances, library, opts.overrides ?? []).map(({ override: o, why }) => ({ ...slot(o), why }));
+  // So is what one sets that no record takes (AS-49): an option or variable
+  // the unit's typical has not, any while it has none, or an override
+  // another for the same unit and layer decides.
+  const ignored = ignoredOverrideParts(applications, library, opts.overrides ?? []).map(({ override: o, options, variables, why }) => ({ ...slot(o), options, variables, why }));
   const want = opts.families?.length ? new Set(opts.families) : null;
   const inst = want ? instances.filter((i) => want.has(i.family)) : instances;
   const apps = want ? applications.filter((a) => want.has(a.instance.family)) : applications;
@@ -345,5 +352,6 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
     ...(csv ? { csv, csvReport: whole } : {}),
     ...(journal.events || journal.error ? { answers: { head: journal.head, events: journal.events, applied: journal.answers as Record<string, string>, ...(journal.error ? { error: journal.error } : {}) } } : {}),
     ...(unmatched.length ? { overrides_unmatched: unmatched } : {}),
+    ...(ignored.length ? { overrides_ignored: ignored } : {}),
   };
 }

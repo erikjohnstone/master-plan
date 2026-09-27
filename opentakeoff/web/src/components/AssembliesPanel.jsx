@@ -17,7 +17,7 @@
 // overrides.
 import { useEffect, useMemo, useState } from "react";
 import { applyAssemblies } from "../lib/assemblies/apply";
-import { unmatchedOverrides } from "../lib/assemblies/expand";
+import { ignoredOverrideParts, unmatchedOverrides } from "../lib/assemblies/expand";
 import { PROJECT_INSTANCE } from "../lib/assemblies/select";
 import { assembliesCsvSet } from "../lib/assemblies/exportSet";
 import { importLibraryCsv, libraryToCsv } from "../lib/assemblies/libraryCsv";
@@ -579,6 +579,12 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   const unmatched = useMemo(() => new Map(applied && state
     ? unmatchedOverrides(applied.instances, projectLibrary(state, library), state.overrides).map(({ override, why }) => [override, why])
     : []), [applied, state, library]);
+  // What an override sets that no record takes, with why (AS-49): an option
+  // its unit's typical has not (a typical updated or chosen without it), any
+  // while the unit has no typical, or all of one another override decides.
+  const ignored = useMemo(() => new Map(applied && state
+    ? ignoredOverrideParts(applied.applications, projectLibrary(state, library), state.overrides).map(({ override, why }) => [override, why])
+    : []), [applied, state, library]);
   const openSettings = () => {
     const el = document.querySelector("[data-assemblies-settings]");
     if (el) { el.open = true; el.scrollIntoView({ block: "start", behavior: "smooth" }); }
@@ -827,9 +833,10 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
               <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>Your overrides</h3>
               {state.overrides.map((o, i) => (
                 <div key={i} style={{ fontSize: "var(--fs-s)", marginBottom: 4 }}>
-                  <span style={mono}>{o.tag}</span>{sharedTags.has(o.tag) ? ` ${o.family ?? "(every unit with the tag)"}` : ""}{o.layer ? ` (${o.layer})` : ""}: {o.exclude ? "excluded" : [o.assembly ? `typical ${o.assembly.id}` : "", ...Object.entries(o.options ?? {}).map(([k, v]) => `${k}=${v}`)].filter(Boolean).join(", ")}
+                  <span style={mono}>{o.tag}</span>{sharedTags.has(o.tag) ? ` ${o.family ?? "(every unit with the tag)"}` : ""}{o.layer ? ` (${o.layer})` : ""}: {o.exclude ? "excluded" : [o.assembly ? `typical ${o.assembly.id}` : "", ...[o.options, o.variables].flatMap((set) => Object.entries(set ?? {}).map(([k, v]) => `${k}=${v}`))].filter(Boolean).join(", ")}
                   <span style={{ color: "var(--ink-muted)" }}> — {o.reason}</span>
                   {unmatched.has(o) && <span style={{ color: "var(--c-danger)" }} data-assemblies-override-unmatched> · applies to nothing: {unmatched.get(o)}</span>}
+                  {ignored.has(o) && <span style={{ color: "var(--c-danger)" }} data-assemblies-override-ignored> · not applied: {ignored.get(o)}</span>}
                   <button type="button" style={{ ...btn, marginLeft: 8, padding: "1px 6px" }} onClick={() => removeOverride(i)}>Remove</button>
                 </div>
               ))}

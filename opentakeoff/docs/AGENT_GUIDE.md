@@ -202,7 +202,10 @@ schedule does not print, a project setting, or two typicals that tie. That is th
 failure. Report it, or pass the partner's value in `settings` or an override with a reason. Never
 pick a typical or an option the drawing does not decide. Where units of two families share a tag,
 give the override the unit's `family`. A typical you choose by override can still wait for a value its options read (an economizer, say); the record stays unresolved until an override or setting gives it. An override listed in `overrides_unmatched` applied nothing:
-correct its tag, or set a project record's value in `settings`, before you report it as applied. `control_readings` reads the control
+correct its tag, or set a project record's value in `settings`, before you report it as applied.
+One listed in `overrides_ignored` applied in part: the options and variables it names are not the
+unit's typical's (check the ids against the record's own), or wait for a typical, or another
+override for the unit decides. Correct them before you report them as applied. `control_readings` reads the control
 drawings bound to each unit (sequences, schematics, points lists): a reading applies only where two
 readers agree or on a phrase that states it outright (a unit printed standalone); one reader alone
 is a proposal, and readers that disagree leave the option unresolved. A zone plan (a sheet whose

@@ -163,9 +163,6 @@ function sourceOf(src: string, sources: Map<string, ValueSource | null>): Expand
   return "expr";
 }
 
-/** Choose and expand every unit in every layer the library offers its
- * family: instances in tag order, layers in name order, so the result does
- * not depend on the order they arrive in. */
 /** Whether an override is for this unit's layer: its tag, its family where
  * it names one (AS-43), the layer (none: every layer), and a typical it
  * chooses that the library offers in that layer. */
@@ -195,6 +192,60 @@ export function unmatchedOverrides(instances: readonly Instance[], library: read
   return out;
 }
 
+/** The override a unit's record takes in a layer: one naming its family
+ * before one naming none (AS-43), and of those, an exclusion before a
+ * choice, wherever each sits: an excluded unit stays excluded until its
+ * exclusion is removed, its earlier choices kept (AS-44). Otherwise the
+ * first, as before. */
+export function effectiveOverride(overrides: readonly Override[], inst: Pick<Instance, "tag" | "family">, layer: string, library: readonly AssemblyDefinition[]): Override | undefined {
+  const rank = (o: Override) => (o.family === inst.family ? 0 : 2) + (o.exclude ? 0 : 1);
+  return overrides.filter((o) => overrideFits(o, inst, layer, library)).reduce<Override | undefined>((best, o) => (!best || rank(o) < rank(best) ? o : best), undefined);
+}
+
+/** What an override sets that no record takes (AS-49), each with why, so
+ * none of it is dropped silently: an option or variable its unit's typical
+ * has no such id for (a typo over MCP; a typical chosen after it, without
+ * it), any of them while the unit has no typical, and a whole override that
+ * another for the same unit and layer decides instead. An id counts as
+ * taken where any record the override decides has it. One the unit's
+ * exclusion sets aside is not named: it applies again once the exclusion is
+ * removed (AS-44); one that fits no unit is unmatchedOverrides'. */
+export function ignoredOverrideParts(applications: readonly ApplicationRecord[], library: readonly AssemblyDefinition[], overrides: readonly Override[]): Array<{ override: Override; options: string[]; variables: string[]; why: string }> {
+  const out: Array<{ override: Override; options: string[]; variables: string[]; why: string }> = [];
+  for (const o of overrides) {
+    if (o.exclude) continue;
+    const decided: ApplicationRecord[] = [], whys: string[] = [];
+    let setAside = false;
+    for (const a of applications) {
+      if (a.instance.tag === PROJECT_INSTANCE.tag || !overrideFits(o, a.instance, a.layer, library)) continue;
+      const winner = effectiveOverride(overrides, a.instance, a.layer, library);
+      if (winner === o) decided.push(a);
+      else if (winner?.exclude) setAside = true;
+      else whys.push(`another override for ${a.instance.tag} (${a.layer}) decides it`);
+    }
+    if (setAside || (!decided.length && !whys.length)) continue;
+    // A record's options and variables are its typical's own.
+    const options = Object.keys(o.options ?? {}).filter((k) => !decided.some((a) => k in a.options));
+    const variables = Object.keys(o.variables ?? {}).filter((k) => !decided.some((a) => k in a.variables));
+    if (options.length || variables.length) {
+      const ids = [...options.map((k) => `option ${k}`), ...variables.map((k) => `variable ${k}`)].join(", ");
+      for (const a of decided) {
+        const unit = `${a.instance.tag} (${a.layer})`;
+        whys.push(a.assembly ? `${a.assembly.id}@${a.assembly.version} has no ${ids}`
+          : a.status === "not_in_scope" ? `${unit} is out of scope`
+            : a.status === "unresolved" ? `no typical is chosen for ${unit} yet`
+              : o.assembly ? `the library has no ${o.assembly.id}${o.assembly.version ? `@${o.assembly.version}` : ""}`
+                : `no typical applies to ${unit}`);
+      }
+    }
+    if (options.length || variables.length || !decided.length) out.push({ override: o, options, variables, why: [...new Set(whys)].join("; ") });
+  }
+  return out;
+}
+
+/** Choose and expand every unit in every layer the library offers its
+ * family: instances in tag order, layers in name order, so the result does
+ * not depend on the order they arrive in. */
 export function expandAll(
   instances: readonly Instance[],
   library: readonly AssemblyDefinition[],
@@ -207,12 +258,7 @@ export function expandAll(
   const lines: ExpandedLine[] = [];
   for (const inst of sorted) {
     for (const layer of layersFor(inst.family, library)) {
-      // The unit's override: one naming its family before one naming none
-      // (AS-43), and of those, an exclusion before a choice, wherever each
-      // sits: an excluded unit stays excluded until its exclusion is removed,
-      // its earlier choices kept (AS-44). Otherwise the first, as before.
-      const rank = (o: Override) => (o.family === inst.family ? 0 : 2) + (o.exclude ? 0 : 1);
-      const override = overrides.filter((o) => overrideFits(o, inst, layer, library)).reduce<Override | undefined>((best, o) => (!best || rank(o) < rank(best) ? o : best), undefined);
+      const override = effectiveOverride(overrides, inst, layer, library);
       const app = selectAssembly(inst, library, settings, override, layer);
       applications.push(app);
       lines.push(...expandApplication(app, inst, library, settings, evidence[inst.tag]));

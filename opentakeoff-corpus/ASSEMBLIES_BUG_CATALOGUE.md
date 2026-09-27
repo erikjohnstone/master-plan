@@ -2891,3 +2891,83 @@ it is not in it; one answer for the group leaves no group; two air handlers
 the estimator gave ahu-constant-volume are one group deciding economizer.
 The UI proof decides the first option group on screen for all its units
 (after its group Use, on 26_CA, the air handlers' economizer).
+
+## AS-49 — what an override set that its unit's record never reads was dropped without a word: a typo, a typical without the option, a unit out of scope (FIXED — this goal)
+
+**Found:** 2026-09-27, following AS-45 to the overrides that do fit a
+unit. An override's options and variables are read only through the ids of
+the unit's typical (select.ts optionsOf, variablesOf). Any other id was
+dropped. On federal-mech, apply_assemblies with AHU-1 `options:
+{ economiser: true, dedicated_min_oa: false }, variables: { no_such_var: 3 }`
+applied dedicated_min_oa from the user, but not economiser (the typical,
+ahu-multizone-vav@1, has no such option) or no_such_var. It also returned
+no overrides_unmatched: the override fits AHU-1, so AS-45 does not apply.
+The same silence met:
+- an option the typical lost when the project adopted an updated version,
+  or when a different typical was chosen for the unit;
+- options set on a unit with no typical: one still waiting between
+  typicals, one no typical applies to, one a project answer puts out of
+  scope (PQ1 "no BAS scope"), and one whose chosen version the library
+  does not have;
+- an override that another for the same unit and layer decides entirely,
+  such as a project file from before AS-43 that keeps a family-less
+  override beside the unit's own.
+"Your overrides" listed each of these as if applied.
+
+**Fix (expand.ts, the shared path; MCP and the panel both report through
+it):**
+- **The shared check:** ignoredOverrideParts names, for each override that
+  fits a unit, the options and variables no record it decides takes, with
+  why. An id counts as taken where any record the override decides has it,
+  so an override without a layer that applies to both the controls and
+  hook-up layers names only the ids neither typical has. The reasons are:
+  "<typical>@<version> has no option …, variable …", "no typical is chosen
+  for <tag> (<layer>) yet", "<tag> (<layer>) is out of scope", "no typical
+  applies to <tag> (<layer>)", "the library has no <typical>@<version>", or
+  "another override for <tag> (<layer>) decides it" (then all of the
+  override's ids are named).
+- **Exclusions:** an override that an exclusion sets aside is not named;
+  it applies again once the exclusion is removed (AS-44). An override that
+  fits no unit stays unmatchedOverrides' (AS-45).
+- **One rule for which override decides:** expandAll and the check now
+  both use effectiveOverride, the rank AS-43 and AS-44 set (family first,
+  then an exclusion before a choice).
+- **MCP:** apply_assemblies lists these under overrides_ignored (tag,
+  family, layer, options, variables, why). The field is absent when every
+  part applies.
+- **The panel:** "Your overrides" marks each with "not applied" and the
+  reason, and shows an override's variables beside its options.
+- **Unchanged:** every record and line, since the check only reads them.
+
+**Measured (over the 98 cached documents):**
+- **A/B of the engine before and after:** main and the fix apply 2,058
+  seeded states (6,304 overrides in all: the panel's actions, typos,
+  family-less copies and PQ1 answers) to byte-identical records and lines.
+- **The panel's own actions alone** (the AS-47 random walk, 2,940 steps):
+  no part is named. Groups, options on a unit's own typical, exclusions and
+  removals only set ids the typical has.
+- **A behavioural invariant with the MCP-like actions added** (typos,
+  family-less copies, options on units that wait, PQ1): 2,940 steps, 0
+  failures. At each step one id of one override is removed and the project
+  reapplied. Of 1,690 ids sampled, the 901 named change nothing when
+  removed, and the 789 not named each change something. All four common
+  reasons occur: another override decides it, the typical has no such id,
+  out of scope, and no typical yet.
+- **Negative controls on 12 documents:** naming nothing fails 176 checks;
+  naming every id fails 114.
+
+**Tests:**
+- engine.test.ts covers the fitting override, a typo in an option and a
+  variable (the ids the typical has still come from the user), a typical
+  chosen without the option, a unit that waits, one out of scope (and back
+  in scope when the estimator chooses its typical), a version the library
+  lacks, a family-less override the unit's own decides over, an exclusion
+  that sets a choice aside, and an unmatched override.
+- assembliesApply.test.mjs sends a typo'd option and variable beside
+  ufc_minimum_points on AHU-1: only the two are named, with the typical in
+  the reason. A call whose overrides all apply carries no
+  overrides_ignored.
+- The Assemblies UI proof writes one option the unit's typical has not
+  into the saved override, reloads, and checks that "Your overrides" marks
+  it "not applied: <typical>@<version> has no option …" while the rest of
+  the override still applies.

@@ -7,7 +7,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { sanitizeAssemblyDefinitions, validateAssembly, type AssemblyDefinition, type ExpandedLine } from "../../src/lib/assemblies/schema.ts";
 import { selectAssembly, type Instance } from "../../src/lib/assemblies/select.ts";
-import { expandAll, expandApplication, unmatchedOverrides } from "../../src/lib/assemblies/expand.ts";
+import { expandAll, expandApplication, ignoredOverrideParts, unmatchedOverrides } from "../../src/lib/assemblies/expand.ts";
 import { rollup, type Breakdown } from "../../src/lib/assemblies/rollup.ts";
 import type { Value } from "../../src/lib/assemblies/expr.ts";
 
@@ -312,6 +312,38 @@ test("an override no unit takes is named with why, never kept silently (AS-45)",
   assert.deepEqual(why([{ tag: "VAV-1", layer: "hookup", reason: "a layer it has not", exclude: true }]), [["VAV-1", '"VAV-1" has no hookup layer']]);
   assert.deepEqual(why([{ tag: "VAV-1", layer: "controls", reason: "a typical not offered", assembly: { id: "no-such-typical" } }]), [["VAV-1", 'the library offers no-such-typical in no layer of "VAV-1" (controls)']]);
   assert.match(why([{ tag: "(project)", reason: "the project's own", exclude: true }])[0][1], /follow its settings/);
+});
+
+test("what an override sets that no record takes is named with why, the rest still applied (AS-49)", () => {
+  // VAV-1 takes vav-hw (option co2; variables valve_size, spare); VAV-2
+  // prints no heat type and waits between typicals; VAV-3 is out of scope.
+  const box = vav("VAV-1", { heat_type: "hw" });
+  const open = vav("VAV-2", {});
+  const out = vav("VAV-3", { heat_type: "hw" }, { intent: { out_of_scope: { value: true, source: "project", rule: "project_answer:PQ1=no", basis: "no BAS scope", cites: [] } } });
+  const ignored = (overrides: Parameters<typeof ignoredOverrideParts>[2]) => {
+    const { applications } = expandAll([box, open, out], LIB, {}, overrides);
+    return ignoredOverrideParts(applications, LIB, overrides).map((x) => [x.override.reason, x.options, x.variables, x.why]);
+  };
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "fits", options: { co2: true }, variables: { spare: 2 } }]), []);
+  // A typo over MCP: the ids the typical has apply, and the others are named.
+  const typo = { tag: "VAV-1", reason: "typo", options: { co2: true, c02: true }, variables: { spares: 2 } };
+  assert.deepEqual(ignored([typo]), [["typo", ["c02"], ["spares"], "vav-hw@1 has no option c02, variable spares"]]);
+  const rec = expandAll([box], LIB, {}, [typo]).applications[0];
+  assert.deepEqual([rec.options.co2, rec.variables.spare.source], [{ value: true, source: "user" }, "starter_default"]);
+  // A typical chosen without the option; a unit with no typical yet; one out of scope.
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "cooling only", assembly: { id: "vav-cool" }, options: { co2: true } }]), [["cooling only", ["co2"], [], "vav-cool@1 has no option co2"]]);
+  assert.deepEqual(ignored([{ tag: "VAV-2", reason: "early", options: { co2: true } }]), [["early", ["co2"], [], "no typical is chosen for VAV-2 (controls) yet"]]);
+  assert.deepEqual(ignored([{ tag: "VAV-3", reason: "out", options: { co2: true } }]), [["out", ["co2"], [], "VAV-3 (controls) is out of scope"]]);
+  assert.deepEqual(ignored([{ tag: "VAV-3", reason: "chosen anyway", assembly: { id: "vav-hw" }, options: { co2: true } }]), [], "a typical the estimator chooses takes the unit back in");
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "v9", assembly: { id: "vav-hw", version: "9" }, options: { co2: true } }]), [["v9", ["co2"], [], "the library has no vav-hw@9"]]);
+  // Another override for the unit and layer decides it: all of it (a
+  // project file from before AS-43 left one without a family).
+  assert.deepEqual(ignored([{ tag: "VAV-1", family: "VAV", reason: "own", options: { co2: false } }, { tag: "VAV-1", reason: "older, no family", options: { co2: true } }]),
+    [["older, no family", ["co2"], [], "another override for VAV-1 (controls) decides it"]]);
+  // An exclusion sets a choice aside, to apply again once it goes (AS-44);
+  // one that fits no unit is unmatchedOverrides' (AS-45).
+  assert.deepEqual(ignored([{ tag: "VAV-1", reason: "choice", options: { c02: true } }, { tag: "VAV-1", reason: "out", exclude: true }]), []);
+  assert.deepEqual(ignored([{ tag: "VAV-9", reason: "a typo", options: { co2: true } }]), []);
 });
 
 test("every selector false is no assembly, not unresolved", () => {
