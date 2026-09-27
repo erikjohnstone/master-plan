@@ -372,6 +372,12 @@ test("a heat pump on one row with the unit it serves is its outdoor half: that u
   assert.equal(hp3.attributes.volts.cite.header, "HEAT PUMP OUTDOOR UNIT ELECTRICAL FOR HEAT PUMP V/Ø");
   const ahu3 = values(normalizeCompileItem(ahuItems[0], "AHU", ahuContext(ahuItems[0], ahuTable)));
   assert.deepEqual([ahu3.supply_cfm, ahu3.eh_kw, ahu3.cooling_mbh, ahu3.heating_mbh], [10000, 90, 274, 181], "the air handler keeps its own");
+  // However the row's cell joins the two tags, and in either order.
+  for (const symbol of ["AHU-3 / HP-3", "AHU-3 & HP-3", "AHU-3 AND HP-3", "HP-3, AHU-3", "AHU-3,HP-3"]) {
+    const t = { ...ahuTable, rows: [{ key: "AHU-3HP-3", cells: { SYMBOL: symbol, ...ahuCells } }] };
+    const hp = values(normalizeCompileItem(ahuItems[1], "HEAT_PUMP", ahuContext(ahuItems[1], t)));
+    assert.deepEqual([hp.cfm, hp.eh_kw, hp.cooling_mbh], [undefined, undefined, 274], symbol);
+  }
 
   const eruCells = {
     "AREA SERVED": "BOYS & GIRLS LOCKER ROOMS", "SUPPLY FAN CFM": "2200", "SUPPLY FAN HP": "1.63", "EXHAUST FAN CFM": "2800", "EXHAUST FAN HP": "2.17",

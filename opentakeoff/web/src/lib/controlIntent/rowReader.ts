@@ -58,6 +58,14 @@ const noteCite = (u: RowUnit, n: ScheduleNote): Cite => ({ sheet: u.cite.sheet, 
 export function rowIntents(units: readonly RowUnit[]): Map<number, UnitIntent> {
   const out = new Map<number, UnitIntent>();
   const airHandlers = new Map(units.filter((u) => AIR_HANDLERS.has(u.family)).map((u) => [canonTag(u.tag), u.tag]));
+  // A cell may drop a tag's dash ("LOCATION: WHSE-AHU1" for WHSE-AHU-1); that
+  // looser spelling names an air handler only when no other scheduled unit
+  // reads the same way ("AHU-1-1" and "AHU-11" both read "AHU11"), as the
+  // apply path reads a printed points list's marks.
+  const loose = (t: string) => canonTag(t).replace(/-/g, "");
+  const looseCount = new Map<string, number>();
+  for (const u of units) looseCount.set(loose(u.tag), (looseCount.get(loose(u.tag)) ?? 0) + 1);
+  const looseAirHandlers = new Map([...airHandlers.values()].filter((t) => looseCount.get(loose(t)) === 1).map((t) => [loose(t), t]));
   for (const u of units) {
     const it: UnitIntent = {};
     // row.not_used: the schedule keeps the row but prints that it is not used.
@@ -73,7 +81,7 @@ export function rowIntents(units: readonly RowUnit[]): Map<number, UnitIntent> {
     if (!it.out_of_scope && u.family === "FAN") {
       const service = [clean(u.attributes.service?.value), ...Object.entries(u.cells).filter(([h]) => /\bSERVICE\b|\bSYSTEM\b/i.test(h) || LOCATION_HEADER.test(h)).map(([, v]) => clean(v))];
       for (const s of service) {
-        const owner = airHandlers.get(canonTag(s));
+        const owner = airHandlers.get(canonTag(s)) ?? (s ? looseAirHandlers.get(loose(s)) : undefined);
         if (owner && canonTag(owner) !== canonTag(u.tag)) {
           const header = Object.entries(u.cells).find(([, v]) => clean(v) === s)?.[0] ?? "SERVICE";
           const where = LOCATION_HEADER.test(header) ? `is located in ${owner}` : `is scheduled for ${owner}`;

@@ -63,6 +63,18 @@ test("row.component_of: a fan whose location is a scheduled air handler is part 
   assert.equal(m.get(1)!.out_of_scope!.cites[0].header, "LOCATION");
   assert.equal(m.get(2)!.out_of_scope!.rule, "drawing_read:row.component_of");
   assert.deepEqual([3, 4, 5, 6].map((i) => m.get(i)?.out_of_scope), [undefined, undefined, undefined, undefined]);
+
+  // 031_MO prints WHSE-SF1's location "WHSE-AHU1" for WHSE-AHU-1: a dropped
+  // dash still names it, unless another scheduled unit reads the same way.
+  const loose = rowIntents([
+    unit(0, "WHSE-AHU-1", "AHU"),
+    unit(1, "WHSE-SF1", "FAN", { cells: { LOCATION: "WHSE-AHU1" } }),
+    unit(2, "AHU-1-1", "AHU"),
+    unit(3, "AHU-11", "VAV"),
+    unit(4, "SF-9", "FAN", { cells: { LOCATION: "AHU11" } }),
+  ]);
+  assert.match(loose.get(1)!.out_of_scope!.basis, /located in WHSE-AHU-1/);
+  assert.equal(loose.get(4)?.out_of_scope, undefined, "AHU-1-1 and AHU-11 both read AHU11");
 });
 
 test("row.standalone: a statement about the unit or its controls, never a standalone disconnect", () => {

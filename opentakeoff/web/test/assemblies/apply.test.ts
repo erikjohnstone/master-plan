@@ -134,6 +134,10 @@ test("the family the library applies: a heat pump that moves no air in a split s
   assert.deepEqual(split.instances.map((i) => i.family), ["CONDENSING_UNIT", "FCU"]);
   assert.match(split.instances[0].derived.family.basis, /lists indoor units on rows of their own \(FC-01\)/);
   assert.equal(split.applications.find((a) => a.layer === "controls" && a.instance.tag === "HP-01")!.status, "no_assembly");
+  // However the title names the split system, and however the row leaves its airflow empty.
+  for (const [t, cfm] of [["SPLIT-SYSTEM HEAT PUMP SCHEDULE", "-"], ["MINI-SPLIT HEAT PUMPS", "--"], ["DUCTLESS SPLIT SYSTEMS", "N/A"], [title, ""]]) {
+    assert.equal(applyAssemblies({ project: project(t, { ...hp, CFM: cfm }), library: LIB }).instances[0].family, "CONDENSING_UNIT", `${t} / "${cfm}"`);
+  }
   // Negative controls: a table that is no split system's, and a heat pump row
   // that prints its own airflow, keep the heat pump and its typical.
   assert.equal(applyAssemblies({ project: project("HEAT PUMP AND FAN COIL SCHEDULE", hp), library: LIB }).instances[0].family, "HEAT_PUMP");

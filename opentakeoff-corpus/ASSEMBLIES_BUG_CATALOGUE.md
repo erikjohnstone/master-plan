@@ -2300,3 +2300,18 @@ queued restore starts", which waits a bounded 1,000 event-loop turns for a
 queued Web Lock. That test passes 5 of 5 on its own and in an uncontended
 full run (3,822 of 3,838, the three AS-1 failures only). It exercises the BAS
 sync store, which this change does not touch.
+
+**Addendum, spellings (robustness; no key read):** a cell that drops a
+tag's dash names the air handler too: 031_MO prints WHSE-SF1's location as
+"WHSE-AHU1" for WHSE-AHU-1 (already taken through its SERVICE cell). The
+looser spelling counts only when no other scheduled unit reads the same way
+("AHU-1-1" and "AHU-11" both read "AHU11"), as the apply path reads a
+printed points list's marks. The split-system rules are checked the same
+way: a paired cell joined by "/", "&", "AND" or a bare comma, in either
+order, and a split table titled SPLIT-SYSTEM, MINI-SPLIT or DUCTLESS SPLIT
+whose heat pump row leaves its airflow "-", "--", "N/A" or blank, each read
+as the printed spelling does (normalize.test.ts, apply.test.ts,
+rowReader.test.ts). No record changes on the 106 cached documents, and
+the control-intent dev replays are identical. The UI proof on 096_IN passes
+all 10 checks with the fan rule: 243 records and 3,224 lines byte-identical
+to apply_assemblies, 28 lines fewer than AS-34's run, the four fans' own.
