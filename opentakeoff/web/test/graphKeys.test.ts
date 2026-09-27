@@ -91,6 +91,11 @@ test("a control packet's id is rekeyed where the readings cite it; drawing text 
   assert.equal(remapPacketId(`${SHA}.pdf#36#p8`, map), "05__USDA_APHIS.pdf#36#p8");
   assert.equal(remapPacketId("plans.pdf#36#p8", map), "plans.pdf#36#p8");
   assert.equal(remapPacketId(`${"a".repeat(64)}.pdf#36#p8`, map), `${"a".repeat(64)}.pdf#36#p8`, "a sha we did not upload stays");
+  // federal-mech through the Takeoff panel: a zone plan's readings cite
+  // "<sha>.pdf#2#zones" (the VAV boxes' CO2 sensors drawn in their zones).
+  assert.equal(remapPacketId(`${SHA}.pdf#2#zones`, map), "05__USDA_APHIS.pdf#2#zones");
+  assert.equal(remapPacketId(`${SHA}.pdf#2#zonesX`, map), `${SHA}.pdf#2#zonesX`, "only the zone plan's own suffix");
+  assert.equal(remapPacketId(`${SHA}.pdf#2`, map), `${SHA}.pdf#2`, "a sheet key is remapKey's");
   const g: any = {
     control: { packets: [{ id: `${SHA}.pdf#36#p8`, sheet: `${SHA}.pdf#36` }] },
     control_readings: { units: [{ item: 3, decisions: [{ cites: [{ packet: `${SHA}.pdf#36#p8`, sheet: `${SHA}.pdf#36`, text: `${SHA}.pdf#36#p8` }] }] }] },

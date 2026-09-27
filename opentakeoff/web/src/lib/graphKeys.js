@@ -55,10 +55,11 @@ export function remapKey(key, shaToName) {
 }
 
 /** A control packet's id is its sheet key and its place on the sheet
- *  ("<sha>.pdf#36#p8"): the page marker is not the key's last part, so
- *  remapKey leaves it. The readings cite packets by it, and the cite the
- *  browser prints names it ("(control packet …)"). */
-const PACKET_ID = /^([0-9a-f]{64})\.pdf(#\d+#p\d+)$/i;
+ *  ("<sha>.pdf#36#p8"), or, for a zone plan's readings, its sheet key and
+ *  "#zones" (controlIntent/record.ts): the page marker is not the key's last
+ *  part, so remapKey leaves it. The readings cite packets by it, and the cite
+ *  the browser prints names it ("(control packet …)"). */
+const PACKET_ID = /^([0-9a-f]{64})\.pdf(#\d+#(?:p\d+|zones))$/i;
 export function remapPacketId(id, shaToName) {
   if (typeof id !== "string") return id;
   const m = PACKET_ID.exec(id);
