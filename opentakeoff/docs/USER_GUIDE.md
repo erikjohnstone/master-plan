@@ -581,7 +581,12 @@ as an option the unit's typical no longer has after you adopt an updated typical
 is marked *not applied*, with why; the rest of it still applies. A line whose
 quantity cannot stand, such as a fan command counted from -2 cells the schedule
 reading got wrong, is listed under **Lines that cannot be counted**, with why: no
-total counts it, so check the unit's schedule row. Below the exceptions sit a table per family (units, typicals,
+total counts it, so check the unit's schedule row. A schedule sheet whose tables
+are pictures (pasted images or a scan) gives the takeoff no table to read, so any
+unit it schedules is missing here: the panel names each such sheet in red above
+the settings, with the share of it the pictures cover, and the PDF section lists
+them after the totals. Check each sheet: if it schedules equipment, the estimate
+is missing that equipment. Below the exceptions sit a table per family (units, typicals,
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its
 **Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.

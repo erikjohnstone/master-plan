@@ -71,3 +71,13 @@ test("lines that cannot be counted are listed after the exceptions (AS-53)", asy
   assert.match(text, /qty -2 is negative/);
   assert.doesNotMatch(drawnText(await assembliesPdfBytes(report)), /Lines that cannot be counted/, "a report with none shows none");
 });
+
+test("the schedule sheets whose tables are pictures are listed after the totals (AS-54)", async () => {
+  const unread = [{ sheet: "m.pdf#21", sheet_number: "M-601", picture_share: 0.59 }];
+  const named = assembliesReport(applied.instances, applied.applications, applied.lines, unread);
+  const text = drawnText(await assembliesPdfBytes(named));
+  assert.match(text, /Schedule sheets read as pictures: 1 \(any unit they schedule is missing here\)/);
+  assert.match(text, /M-601 \(page 21\)/);
+  assert.match(text, /59%/);
+  assert.doesNotMatch(drawnText(await assembliesPdfBytes(report)), /read as pictures/, "a report with none shows none");
+});

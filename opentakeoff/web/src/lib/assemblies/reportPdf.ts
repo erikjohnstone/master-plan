@@ -9,7 +9,7 @@
 // appends it, and apply_assemblies' export_dir writes it as assemblies.pdf.
 // Neither surface lays out a row of its own.
 import type { PDFDocument, PDFFont, PDFPage } from "pdf-lib";
-import type { AssembliesReport } from "./report";
+import { unreadScheduleLabel, type AssembliesReport } from "./report";
 
 const W = 792;
 const H = 612;
@@ -84,6 +84,15 @@ export async function drawAssembliesSection(doc: PDFDocument, report: Assemblies
   text(c, `${t.units} units · ${t.records} records: ${t.by_status.ok ?? 0} ok, ${t.by_status.overridden ?? 0} overridden, ${t.by_status.unresolved ?? 0} unresolved, ${t.by_status.no_assembly ?? 0} without a typical, ${t.by_status.excluded ?? 0} excluded${t.by_status.not_in_scope ? `, ${t.by_status.not_in_scope} outside the BAS scope` : ""}`, 8.5, false, 0.3);
   text(c, `${t.lines} lines: ${t.lines_by_status.ok ?? 0} ok, ${t.lines_by_status.unresolved ?? 0} unresolved, ${t.lines_by_status.replaced ?? 0} replaced by drawing evidence, ${t.lines_by_status.error ?? 0} errors. Every line cites its schedule row and its library rule; nothing is guessed.`, 8.5, false, 0.3);
   c.y -= 6;
+
+  // The schedule sheets whose tables are pictures: any unit they schedule is
+  // missing from the section (AS-54).
+  const unread = report.schedules_unread ?? [];
+  if (unread.length) {
+    text(c, `Schedule sheets read as pictures: ${unread.length} (any unit they schedule is missing here)`, 10, true);
+    table(c, ["Schedule sheet", "Pictures", "Why"], [0.18, 0.08, 0.74],
+      unread.map((u) => [unreadScheduleLabel(u), `${Math.round(u.picture_share * 100)}%`, u.why]));
+  }
 
   text(c, report.exceptions.length ? `Exceptions first: ${report.exceptions.length} record(s) wait for something` : "Exceptions: none", 10, true);
   if (report.exceptions.length) {

@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies, type CompiledItem } from "../../src/lib/assemblies/apply.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
-import { assembliesReport, exceptionGroups, familiesLeftOut } from "../../src/lib/assemblies/report.ts";
+import { assembliesReport, exceptionGroups, familiesLeftOut, unreadScheduleLabel } from "../../src/lib/assemblies/report.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
 
@@ -126,6 +126,21 @@ test("lines whose quantity cannot stand are listed beside the exceptions, each w
   assert.ok(report.line_errors.some((l) => l.rule.startsWith("cooling-tower@1:")), "the tower's own points");
   const clean = applyAssemblies({ project: { items: [items[1]] }, library: LIB, normalized: [norm(items[1], { cells: 2 })] });
   assert.deepEqual(assembliesReport(clean.instances, clean.applications, clean.lines).line_errors, []);
+});
+
+test("the schedule sheets whose tables are pictures ride the report, each with why; none when there is none (AS-54)", () => {
+  const items = [row("COOLING_TOWER", "CT-2", 1)];
+  const r = applyAssemblies({ project: { items }, library: LIB, normalized: [norm(items[0], { cells: 2 })] });
+  const unread = [{ sheet: "m.pdf#21", sheet_number: "M-601", picture_share: 0.59 }, { sheet: "m.pdf", picture_share: 0.174 }];
+  const report = assembliesReport(r.instances, r.applications, r.lines, unread);
+  assert.deepEqual(report.schedules_unread, [
+    { ...unread[0], why: "no table could be read from it: 59% of the sheet is pictures (pasted images or a scan), so any unit it schedules is missing from these assemblies" },
+    { ...unread[1], why: "no table could be read from it: 17% of the sheet is pictures (pasted images or a scan), so any unit it schedules is missing from these assemblies" },
+  ]);
+  assert.deepEqual(unread.map(unreadScheduleLabel), ["M-601 (page 21)", "page 1"], "the printed sheet number when there is one, and the page");
+  assert.equal("schedules_unread" in assembliesReport(r.instances, r.applications, r.lines), false, "absent when there is none");
+  const { schedules_unread: _named, ...rest } = report;
+  assert.deepEqual(rest, assembliesReport(r.instances, r.applications, r.lines), "nothing else in the report changes");
 });
 
 test("exception groups: the rows of a table that prints no title are one untitled schedule", () => {

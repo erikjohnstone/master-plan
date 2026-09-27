@@ -6,7 +6,7 @@
 // SHOULD THIS BE ON THE SHARED PATH? Yes: which units wait for what and how
 // many each typical got is the takeoff's answer. The Takeoff panel and the
 // MCP tool both render this object; neither counts on its own.
-import type { AppliedInstance, DerivedAttribute, PrintedPointRow } from "./apply";
+import type { AppliedInstance, DerivedAttribute, PrintedPointRow, UnreadSchedule } from "./apply";
 import { partnerSummary, type PartnerSummary } from "./partner";
 import type { ApplicationRecord, Cite, ExpandedLine } from "./schema";
 
@@ -73,6 +73,10 @@ export interface AssembliesReport {
   /** Lines whose quantity cannot stand, beside the exceptions, each with
    * why: no total counts them, and none is left out quietly. */
   line_errors: LineError[];
+  /** The schedule sheets whose tables are pictures, each with why: any unit
+   * they schedule is missing from this report (AS-54). Absent when there is
+   * none. */
+  schedules_unread?: Array<UnreadSchedule & { why: string }>;
   families: FamilyRow[];
   units: UnitRow[];
 }
@@ -94,6 +98,8 @@ export function assembliesReport(
   instances: readonly AppliedInstance[],
   applications: readonly ApplicationRecord[],
   lines: readonly ExpandedLine[],
+  /** The project's schedule sheets whose tables are pictures (AS-54). */
+  unreadSchedules: readonly UnreadSchedule[] = [],
 ): AssembliesReport {
   const inst = new Map(instances.map((i) => [keyOf(i.tag, i.family, "", i.cites[0]), i]));
   const lineCounts = new Map<string, Record<LineStatus, number>>();
@@ -152,6 +158,7 @@ export function assembliesReport(
     partner: partnerSummary(lines),
     exceptions,
     line_errors: lineErrors,
+    ...(unreadSchedules.length ? { schedules_unread: unreadSchedules.map((u) => ({ ...u, why: unreadScheduleWhy(u) })) } : {}),
     families,
     units,
   };
@@ -224,4 +231,18 @@ export function familiesLeftOut(instances: readonly Pick<AppliedInstance, "tag" 
     out.push({ family: f, why: `${one ? "1 unit" : `${moved.length} units`} scheduled as ${f} ${one ? "applies" : "apply"} as ${as.join(", ")} (${tags.slice(0, 6).join(", ")}${tags.length > 6 ? ", …" : ""}); name ${as.join(" and ")} too to see ${one ? "it" : "them"}` });
   }
   return out;
+}
+
+/** A schedule sheet whose tables are pictures, as the panel, the PDF and
+ * apply_assemblies name it (AS-54): its printed sheet number when the title
+ * block has one, and its page. */
+export function unreadScheduleLabel(u: UnreadSchedule): string {
+  const hash = u.sheet.lastIndexOf("#");
+  const page = `page ${hash >= 0 ? u.sheet.slice(hash + 1) : "1"}`;
+  return u.sheet_number ? `${u.sheet_number} (${page})` : page;
+}
+
+/** Why such a sheet's units are not in the assemblies (AS-54). */
+export function unreadScheduleWhy(u: UnreadSchedule): string {
+  return `no table could be read from it: ${Math.round(u.picture_share * 100)}% of the sheet is pictures (pasted images or a scan), so any unit it schedules is missing from these assemblies`;
 }

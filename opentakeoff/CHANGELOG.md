@@ -1,5 +1,19 @@
 # Changelog
 
+- **Assemblies: a schedule sheet whose tables are pictures is named.** A
+  schedule sheet whose tables are pasted images or a scan gives the compile no
+  table, so any unit it schedules never reached the assemblies, and the panel
+  and `apply_assemblies` gave only a count of units: 0 on a set whose
+  schedules are all pictures. The report now carries `schedules_unread`: each
+  such sheet (a schedule-role sheet that read no table while its embedded
+  images pass the raster policy, the case `sheet_graph`'s notes already
+  named), its printed sheet number, the share of it the pictures cover, and
+  why. The panel names them above its settings, and the PDF section lists them
+  after the totals. Nothing is read from the pictures, and a sheet that reads
+  some tables while pasting others as pictures is not named yet
+  (`mcp/src/session.ts` `pictureScheduleSheets`,
+  `web/src/lib/assemblies/report.ts`, ASSEMBLIES_BUG_CATALOGUE AS-54).
+
 - **Assemblies: the lines that cannot be counted are listed.** A line whose
   quantity cannot stand (AS-52's negative or fractional counts, or an
   expression that fails) had no quantity, and no total counted it. The

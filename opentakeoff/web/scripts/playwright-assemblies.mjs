@@ -83,7 +83,7 @@ async function applyInPage() {
     // The panel applies the control drawings' readings the project carries
     // (AssembliesPanel: project.control_readings), as apply_assemblies does.
     const applied = applyAssemblies({ project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
-    const report = assembliesReport(applied.instances, applied.applications, applied.lines);
+    const report = assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules);
     return { applications: JSON.stringify(applied.applications), lines: JSON.stringify(applied.lines), report: JSON.stringify(report),
       groups: JSON.stringify(exceptionGroups(report.exceptions).map((g) => ({ units: g.units.map((u) => [u.tag, u.family, u.layer]), options: g.options, candidates: g.candidates }))) };
   });
@@ -133,6 +133,12 @@ try {
   assert.equal(exceptionsShown, mcp.report.exceptions.length, 'exceptions listed first, all of them');
   assert.equal(await panel.locator('[data-assembly-unit]').count(), mcp.report.units.length, 'one row per unit and layer');
   checks.push('on-screen totals, exceptions and unit rows are the report');
+  // The schedule sheets whose tables are pictures are named above the rest,
+  // every one the report holds (AS-54).
+  const picturesEl = panel.locator('[data-assemblies-schedules-unread]');
+  const picturesShown = (await picturesEl.count()) ? Number(await picturesEl.getAttribute('data-assemblies-schedules-unread')) : 0;
+  assert.equal(picturesShown, mcp.report.schedules_unread?.length ?? 0, 'the schedule sheets read as pictures are named, all of them');
+  if (picturesShown) checks.push(`${picturesShown} schedule sheet${picturesShown === 1 ? '' : 's'} read as pictures named on screen (AS-54)`);
   await page.screenshot({ path: `${out}/units.png` });
 
   // The CSV set: the download's files are export_dir's, byte for byte.

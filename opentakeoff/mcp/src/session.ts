@@ -7979,6 +7979,27 @@ export class Session {
     return notes;
   }
 
+  /** The schedule sheets whose tables are pictures: rasterScheduleNotes'
+   * first case as data (a schedule-role sheet that extracted no table while
+   * enough of it is embedded raster image for the raster policy), with the
+   * share of the sheet the images cover. The assemblies project carries
+   * them, so apply_assemblies and the Takeoff panel say which schedules
+   * their units cannot come from (AS-54). Best effort, as the notes are. */
+  async pictureScheduleSheets(): Promise<Array<{ sheet: string; picture_share: number }>> {
+    const g = await this.ensureGraph();
+    const out: Array<{ sheet: string; picture_share: number }> = [];
+    for (const s of g.sheets) {
+      if (s.role !== "schedule" || s.schedules.length > 0) continue;
+      try {
+        const sheetState = this.sheet(s.key);
+        const geo = await this.ensureGeometry(sheetState);
+        const sheetArea = sheetState.widthPx * sheetState.heightPx;
+        if (sheetArea > 0 && this.rasterPolicy(sheetState, geo).rasterEligible) out.push({ sheet: s.key, picture_share: Math.round((geo.imageArea / sheetArea) * 100) / 100 });
+      } catch { /* diagnostic only */ }
+    }
+    return out;
+  }
+
   /**
    * Legend/unknown sheets that print T-BAS-01 extractable POINTS/DDC list
    * titles (not Air Ops schematic siblings). NAVFAC #64/#65/#67 land as

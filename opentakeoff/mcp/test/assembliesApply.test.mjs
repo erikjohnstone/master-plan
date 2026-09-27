@@ -108,6 +108,7 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 500));
   assert.equal(r.data.control.mode, "deterministic");
   assert.equal(r.data.control.units_read, control_readings.units.length, "the tool read the same units");
+  assert.equal(r.data.report.schedules_unread, undefined, "every schedule sheet here has its tables in text: none is named (AS-54)");
   assert.equal(JSON.stringify(r.data.lines), JSON.stringify(ui.lines), "ExpandedLines byte-identical");
   assert.equal(JSON.stringify(r.data.applications), JSON.stringify(ui.applications), "records byte-identical");
   assert.deepEqual(r.structured.lines.length, ui.lines.length, "structuredContent carries the same lines");
@@ -214,5 +215,34 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   assert.deepEqual(o.data.families_left_out.map((f) => f.family), ["AHUS"]);
   assert.match(o.data.families_left_out[0].why, /^no unit applies as AHUS \(the families here: .*\bAHU\b/);
   assert.equal(only.data.families_left_out, undefined, "absent when every family asked for has its units");
+  await client.close();
+});
+
+test("apply_assemblies: a schedule sheet whose tables are pictures is named in the report, so no units never reads as a set that schedules none (AS-54)", { timeout: 10 * 60 * 1000 }, async () => {
+  // test/fixtures/raster-schedule.pdf: page 2 is titled EQUIPMENT SCHEDULE
+  // (a schedule-role sheet) and carries its table as an embedded picture
+  // (62.5% of the page), so no table is read from it (tools.test.ts).
+  const { Session } = await import("../src/session.ts");
+  const session = new Session();
+  const [ct, st] = InMemoryTransport.createLinkedPair();
+  await buildServer(session).connect(st);
+  const client = new Client({ name: "as54", version: "0.0.0" });
+  await client.connect(ct);
+  assert.equal((await call(client, "load_plan", { path: resolve(HERE, "fixtures/raster-schedule.pdf") })).isError, false);
+  const r = await call(client, "apply_assemblies", { detail: "units" });
+  assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 500));
+  assert.equal(r.data.report.totals.units, 0, "no unit is read from a picture");
+  const named = r.data.report.schedules_unread;
+  assert.deepEqual(named.map((u) => u.sheet), ["raster-schedule.pdf#2"], "the plan sheet, with no picture, is never named");
+  assert.ok(named[0].picture_share > 0.6 && named[0].picture_share < 0.65, String(named[0].picture_share));
+  assert.match(named[0].why, /^no table could be read from it: 6[23]% of the sheet is pictures \(pasted images or a scan\), so any unit it schedules is missing from these assemblies$/);
+  // The project the Takeoff panel reads carries the same sheets, and its
+  // report (the browser's apply of that project) names them alike.
+  const project = await sessionAssembliesProject(session);
+  assert.deepEqual(project.unread_schedules, named.map(({ why: _why, ...u }) => u));
+  const wire = JSON.parse(JSON.stringify(project));
+  const { library } = await loadAssemblyLibrary();
+  const ui = applyAssemblies({ project: wire, library });
+  assert.deepEqual(assembliesReport(ui.instances, ui.applications, ui.lines, wire.unread_schedules).schedules_unread, named);
   await client.close();
 });

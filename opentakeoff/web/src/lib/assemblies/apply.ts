@@ -89,6 +89,20 @@ export interface CompiledProject {
   printed_points?: readonly PrintedPointRow[];
   /** The control packets printed in the set (control intent WP2), when read. */
   control?: ControlPages;
+  /** Schedule sheets the compile could read no table from because their
+   * tables are pictures (pasted images or a scan), with the share of the
+   * sheet the images cover: any unit on them is missing from this project
+   * (AS-54). */
+  unread_schedules?: readonly UnreadSchedule[];
+}
+
+/** A schedule sheet whose tables are pictures (Session.pictureScheduleSheets). */
+export interface UnreadSchedule {
+  sheet: string;
+  /** The sheet number its title block prints, when it prints one. */
+  sheet_number?: string;
+  /** The share of the sheet embedded images cover, 0 to 1. */
+  picture_share: number;
 }
 
 /** The set's control evidence as printed: every packet the finder reads on

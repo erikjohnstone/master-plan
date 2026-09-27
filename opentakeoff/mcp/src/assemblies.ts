@@ -12,7 +12,7 @@ import { readFile } from "node:fs/promises";
 // The starter library is bundled (the published package ships only dist/).
 import starterTypicals from "../../web/src/lib/assemblies/starter/us-typicals-v1.json" with { type: "json" };
 import starterHookups from "../../web/src/lib/assemblies/starter/us-hookups-v1.json" with { type: "json" };
-import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type CompiledProject, type HvacCompile } from "../../web/src/lib/assemblies/apply.ts";
+import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type CompiledProject, type HvacCompile, type UnreadSchedule } from "../../web/src/lib/assemblies/apply.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../../web/src/lib/assemblies/expand.ts";
 import { assembliesReport, familiesLeftOut, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
@@ -22,6 +22,7 @@ import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
 import type { Override, ProjectSettings } from "../../web/src/lib/assemblies/select.ts";
 import { readControlIntent, type ControlReadings } from "../../web/src/lib/controlIntent/record.ts";
+import { sheetNumberOf } from "../../web/src/lib/controlIntent/evidence.ts";
 import { answerSettings, appendAnswer, replayAnswers } from "../../web/src/lib/controlIntent/journal.ts";
 import { projectQuestions } from "../../web/src/lib/controlIntent/questions.ts";
 import { httpTransport, memoryRunStore, type RunStore } from "../../web/src/lib/controlIntent/runs.ts";
@@ -44,7 +45,18 @@ export async function sessionAssembliesProject(session: Session): Promise<Compil
   // The printed points lists and the units their rows serve (D6 evidence):
   // the compile alone, without the BAS workflow's Python math.
   const basPoints = compileTakeoff(session, graph, "bas_points") as unknown as BasPointsCompile;
-  return compiledProjectOf(compiled, graph, (sheet) => session.sheetTextSpans(sheet), basPoints, (sheet) => session.sheetRegions(sheet));
+  const project = await compiledProjectOf(compiled, graph, (sheet) => session.sheetTextSpans(sheet), basPoints, (sheet) => session.sheetRegions(sheet));
+  // The schedule sheets whose tables are pictures: any unit they schedule
+  // is missing from the project, and the reply and the Takeoff panel (which reads
+  // this project) name them rather than report fewer units without a word
+  // (AS-54).
+  const unread: UnreadSchedule[] = [];
+  for (const p of await session.pictureScheduleSheets()) {
+    const spans = session.sheetTextSpans(p.sheet);
+    const no = spans?.length ? sheetNumberOf(spans.map((sp) => ({ str: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1, ...(sp.rot ? { rot: sp.rot } : {}) }))) : null;
+    unread.push({ sheet: p.sheet, ...(no ? { sheet_number: no } : {}), picture_share: p.picture_share });
+  }
+  return unread.length ? { ...project, unread_schedules: unread } : project;
 }
 
 /** A library through the load gate: every record the gate rejects fails the
@@ -342,11 +354,13 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   const inst = want ? instances.filter((i) => want.has(i.family)) : instances;
   const apps = want ? applications.filter((a) => want.has(a.instance.family)) : applications;
   const lns = want ? lines.filter((l) => want.has(l.family)) : lines;
-  const report = assembliesReport(inst, apps, lns);
+  // The schedule sheets whose tables are pictures ride the report, so the
+  // reply, its PDF and the panel's name them alike (AS-54).
+  const report = assembliesReport(inst, apps, lns, project.unread_schedules);
   const detail = opts.detail ?? "summary";
   const { units: _units, ...summary } = report;
   // The CSV set is the whole project's, whatever the reply's families.
-  const whole = opts.csv ? (want ? assembliesReport(instances, applications, lines) : report) : undefined;
+  const whole = opts.csv ? (want ? assembliesReport(instances, applications, lines, project.unread_schedules) : report) : undefined;
   let csv: Record<ExportFile, string> | undefined;
   try {
     csv = whole ? assembliesCsvSet({ instances, applications, lines, report: whole, scope: opts.export_scope ?? null }) : undefined;

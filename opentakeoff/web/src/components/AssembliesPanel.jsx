@@ -25,7 +25,7 @@ import { downloadText } from "../lib/totals";
 import { cloneForEdit, combinedLibrary, overridesOf, validateEdit } from "../lib/assemblies/libraryEdit";
 import { activeResponsibilityPresets, HOOKUP_SWITCHES, HOOKUP_VARIABLES, hookupProfileDefaults, RESPONSIBILITY_PRESETS, withResponsibilityPreset } from "../lib/assemblies/presets";
 import { adoptUpdate, emptyAssembliesState, libraryUpdates, pinUsed, projectLibrary } from "../lib/assemblies/projectState";
-import { assembliesReport, exceptionGroups } from "../lib/assemblies/report";
+import { assembliesReport, exceptionGroups, unreadScheduleLabel } from "../lib/assemblies/report";
 import { PARTIES } from "../lib/assemblies/schema";
 import { answerSettings, appendAnswer, replayAnswers } from "../lib/controlIntent/journal";
 import { projectQuestionsPaced } from "../lib/controlIntent/questions";
@@ -194,6 +194,20 @@ export function LineErrorsView({ lineErrors, onOpenCitation }) {
         </tbody>
       </table></div>
     </section>
+  );
+}
+
+/** The schedule sheets whose tables are pictures (AS-54): no table could be
+ * read from them, so any unit they schedule is missing here, however
+ * complete the totals look.
+ * @param {{ schedules: NonNullable<import("../lib/assemblies/report").AssembliesReport["schedules_unread"]> }} props */
+export function UnreadSchedulesView({ schedules }) {
+  if (!schedules.length) return null;
+  const one = schedules.length === 1;
+  return (
+    <div role="note" data-assemblies-schedules-unread={schedules.length} style={{ margin: "0 0 12px", fontSize: "var(--fs-s)", color: "var(--c-danger)" }}>
+      {one ? "A schedule sheet is" : `${schedules.length} schedule sheets are`} pictures (pasted images or a scan): no table could be read from {one ? "it" : "them"}, so any unit {one ? "it schedules" : "they schedule"} is missing here: {schedules.map((u) => `${unreadScheduleLabel(u)}, ${Math.round(u.picture_share * 100)}% pictures`).join("; ")}.
+    </div>
   );
 }
 
@@ -579,7 +593,9 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     const ds = (readings?.units || []).flatMap((u) => u.decisions);
     return { applied: ds.filter((d) => d.outcome === "applied").length, proposal: ds.filter((d) => d.outcome === "proposal").length, unresolved: ds.filter((d) => d.outcome === "unresolved").length };
   }, [readings]);
-  const report = useMemo(() => (applied ? assembliesReport(applied.instances, applied.applications, applied.lines) : null), [applied]);
+  // The schedule sheets whose tables are pictures ride the report, as they
+  // do apply_assemblies' (AS-54).
+  const report = useMemo(() => (applied ? assembliesReport(applied.instances, applied.applications, applied.lines, project?.unread_schedules) : null), [applied, project]);
   const updates = useMemo(() => (state ? libraryUpdates(state, library) : []), [state, library]);
   // The Takeoff panel's PDF carries this report's section.
   useEffect(() => { onReport?.(report); }, [report]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -748,6 +764,8 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
             <button type="button" style={btn} onClick={downloadCsvSet} data-assemblies-export>Download CSV set</button>
             <button type="button" style={btn} onClick={() => onLoadProject?.()} disabled={!!projectStatus.loading}>{projectStatus.loading ? "Reading…" : "Re-read schedules"}</button>
           </div>
+
+          <UnreadSchedulesView schedules={report.schedules_unread ?? []} />
 
           <ProjectSettingsView settings={state?.settings ?? {}} onChange={setSettings} unread={unreadSettingsList} />
 

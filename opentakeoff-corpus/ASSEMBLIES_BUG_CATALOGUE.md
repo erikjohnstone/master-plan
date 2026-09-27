@@ -3159,3 +3159,91 @@ unit's own Details, or the PDF's total, showed why.
   Project settings' unread-settings notice (AS-50).
 - The Assemblies UI proof passes on 09_ME (11 checks) with the section in
   place.
+
+## AS-54 — a schedule sheet whose tables are pictures left the assemblies empty without a word (FIXED — this goal)
+
+**Found:** 2026-09-27, reading why round 11's UI proof ran eight documents
+on their parity checks alone: their compiles read no unit. On 07_MO, 15_IA
+and 029_ME the schedule sheets carry their tables as embedded pictures
+(pasted images), and the text layer holds only the title block:
+- 07_MO's M-601 (page 21) is a VAV box schedule of 29 units with hydronic
+  reheat, an expansion tank schedule and an air device schedule (59% of
+  the sheet is pictures). Pages 22, 23, 40 and 41 (M-602, M-603, E-601 and
+  E-602) are 50-58% pictures too.
+- 029_ME's ME601 (page 7) prints its boiler schedule (B-1, B-2) and pump
+  schedule (six pumps) as pictures (17% of the sheet).
+- 15_IA's E2 (page 11) is 59% pictures.
+
+The sheet graph already said so (`sheet_graph`'s notes: "classified as a
+schedule sheet but 0 tables extracted from it, and 59% of its own area is
+embedded raster image content"). The assemblies never did: the panel and
+`apply_assemblies` reported 0 units, a count that reads like a set with no
+equipment. Reading the pictures is extraction's (no OCR fallback for
+schedules, a known gap), and this branch leaves it alone.
+
+**Fix (the shared path: the session builds the project both surfaces
+read, and report.ts words it):**
+- **Session.pictureScheduleSheets** (mcp/src/session.ts) is
+  `rasterScheduleNotes`' first case as data: a schedule-role sheet that
+  extracted no table while its embedded images pass the raster policy, with
+  the share of the sheet they cover. `sheet_graph`'s own notes are
+  unchanged.
+- **The project** (`sessionAssembliesProject`, which the Takeoff panel
+  reads through production-graph-cli) carries them as `unread_schedules`,
+  each with its printed sheet number when the title block has one.
+- **The report** (`assembliesReport`) carries `schedules_unread`: each sheet
+  with why ("no table could be read from it: 59% of the sheet is pictures
+  (pasted images or a scan), so any unit it schedules is missing from these
+  assemblies"). The wording is conditional because a picture schedule sheet
+  may hold room calculations or panel schedules rather than equipment. The
+  field is absent when there is none, and nothing else in the report
+  changes.
+- **The panel** names them in red above its settings; **the PDF section**
+  lists them after the totals; **MCP** returns them in `report` in every
+  detail, and the output schema describes the field.
+- **Unchanged:** no record or line. Nothing is read from the pictures.
+- **Not yet named:** a sheet that reads some tables and carries others as
+  pictures (the pipeline counts those only in a note).
+
+**Measured:** of the 82 documents the UI proof rounds have read, 40 were
+checked: 33 whose sheet graph was cached under the current code, and 7 more
+a census rebuilt before it was stopped for time.
+- 16 have a schedule sheet that read no table, 32 sheets in all. 13 of
+  them, on 7 documents, are pictures and are named: 07_MO's M-601 to
+  M-603, E-601 and E-602 (50-59%), 25_WA's E0.03 to E0.05 (19-59%), 15_IA's
+  E2 (59%), 017_MD's page 14 (44%), 046_MI's E-8 (28%), 043_FL's page 33
+  (20%) and 029_ME's ME601 (17%).
+- The other 19 carry 0-3% pictures and are not named. Five checked by eye
+  schedule no equipment: 053_VA's MH103 and 25_WA's ME4.05 are duct plans,
+  030_NY's P-701 is a controls symbol legend, 019_FL's M8.5 an air
+  handler's control diagram and points list, and 013_MO's E-300 electrical
+  one-lines with conduit and feeder schedules. The sheet graph's schedule
+  role alone would name noise, so only a sheet the raster policy calls
+  pictures is named.
+- Four named sheets were checked by eye, and each is pictures: 07_MO's
+  M-601 (a VAV box schedule of 29 units), 029_ME's ME601 (its boilers and
+  pumps), 017_MD's page 14 (six ventilation schedules pasted as
+  spreadsheet screenshots) and 043_FL's page 33 (electrical panelboard
+  schedules, not HVAC units). Eight named sheets are electrical by their
+  numbers, and a picture sheet may schedule no equipment at all, so the
+  notice says any unit a sheet schedules is missing, never that equipment
+  is.
+- 01_NY (162 sheets) ran out of memory rebuilding its graph, a known
+  ceiling of this container.
+
+**Tests:**
+- assembliesApply.test.mjs, on test/fixtures/raster-schedule.pdf (a plan
+  sheet and a schedule sheet whose table is a picture, 62.5% of the page):
+  the report names page 2 only, with its share and why, and 0 units. The
+  project the panel reads carries the same sheets, and the browser's report
+  of that project names them alike. federal-mech (PARITY) names none.
+- report.test.ts: the report carries each sheet with why, the label is the
+  printed sheet number and the page, the field is absent with none, and
+  nothing else changes. reportPdf.test.ts: the PDF lists them, and none
+  without them. panelSections.test.ts: the panel's notice, one sheet and
+  two, and nothing with none.
+- Disabling the session's check fails the MCP test; disabling the report's
+  field fails the report and PDF tests.
+- The Assemblies UI proof passes on 07_MO (6 checks: its five sheets named
+  on screen, the parity checks with apply_assemblies) and 017_MD (12
+  checks, its one sheet named).

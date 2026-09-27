@@ -1870,6 +1870,8 @@ export const applyAssembliesOutput = {
     }).nullable().describe("The partner's own cost and labor fields, extended; null when the library carries none"),
     exceptions: z.array(z.record(z.string(), z.unknown())),
     line_errors: z.array(z.record(z.string(), z.unknown())).describe("Lines whose quantity cannot stand, each with its unit, rule and why: an expression that fails, a negative quantity, or a point or device count that is not whole. No total counts them; report them with the exceptions"),
+    schedules_unread: z.array(z.object({ sheet: z.string(), sheet_number: z.string().optional(), picture_share: z.number(), why: z.string() })).optional()
+      .describe("The schedule sheets whose tables are pictures (pasted images or a scan): no table could be read from them, so any unit they schedule is missing from this report, however complete it looks. Each with its printed sheet number when the title block has one, the share of the sheet the pictures cover (0 to 1) and why. Absent when there is none"),
     families: z.array(z.record(z.string(), z.unknown())),
     units: z.array(z.record(z.string(), z.unknown())).optional(),
   }),
