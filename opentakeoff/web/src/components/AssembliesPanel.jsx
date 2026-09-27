@@ -252,6 +252,44 @@ export function UnreadSchedulesView({ schedules }) {
   );
 }
 
+/** What changed in the drawing set since the schedules were read (AS-58):
+ * the files added, removed, or revised (the same name at a new revision), or
+ * a file replaced that the canvas counts by its epoch alone. null while it is
+ * the set they were read from, and before any read.
+ * @param {{ epoch: number, files: Array<{ name: string, rev?: number | null }> } | null | undefined} read
+ * @param {{ epoch: number, files: Array<{ name: string, rev?: number | null }> } | null | undefined} now */
+export function drawingSetChange(read, now) {
+  if (!read || !now) return null;
+  const was = new Map(read.files.map((f) => [f.name, f.rev ?? null]));
+  const is = new Map(now.files.map((f) => [f.name, f.rev ?? null]));
+  const added = [...is.keys()].filter((n) => !was.has(n));
+  const removed = [...was.keys()].filter((n) => !is.has(n));
+  const revised = [...is.keys()].filter((n) => was.has(n) && was.get(n) !== is.get(n));
+  const replaced = !added.length && !removed.length && !revised.length && read.epoch !== now.epoch;
+  return added.length || removed.length || revised.length || replaced ? { added, removed, revised, replaced } : null;
+}
+
+/** The units and lines on screen are an earlier drawing set's: say what
+ * changed, and offer to read the schedules again (AS-58). */
+export function StaleProjectView({ change, onReload, loading = false }) {
+  if (!change) return null;
+  const what = [
+    change.added.length ? `added ${change.added.join(", ")}` : null,
+    change.removed.length ? `removed ${change.removed.join(", ")}` : null,
+    change.revised.length ? `revised ${change.revised.join(", ")}` : null,
+    change.replaced ? "a file was replaced" : null,
+  ].filter(Boolean).join("; ");
+  return (
+    <div role="alert" data-assemblies-stale={change.added.length + change.removed.length + change.revised.length + (change.replaced ? 1 : 0)}
+      style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, margin: "4px 0 12px", padding: "8px 10px", border: "1px solid var(--c-danger)", borderRadius: "var(--r-1)", fontSize: "var(--fs-s)" }}>
+      <span style={{ flex: "1 1 320px" }}>
+        <strong style={{ color: "var(--c-danger)" }}>The drawing set changed since these schedules were read</strong> ({what}). The units, lines and exports below are still the earlier set's.
+      </span>
+      {onReload && <button type="button" style={btn} onClick={() => onReload()} disabled={loading} data-assemblies-stale-reread>{loading ? "Reading…" : "Re-read schedules"}</button>}
+    </div>
+  );
+}
+
 /** A typed setting: blank is unset; true/yes, false/no, a number, or text. */
 function parseSetting(text) {
   const t = String(text ?? "").trim();
@@ -569,7 +607,7 @@ function LibraryView({ starter, partner, onSavePartner, library, rejected, updat
   );
 }
 
-export default function AssembliesPanel({ project, projectStatus = {}, onLoadProject, starter = [], partner = [], onSavePartner, state, onStateChange, onOpenCitation, projectName = "", onReport }) {
+export default function AssembliesPanel({ project, projectStatus = {}, onLoadProject, projectSource = null, drawingSet = null, starter = [], partner = [], onSavePartner, state, onStateChange, onOpenCitation, projectName = "", onReport }) {
   const [view, setView] = useState("units");
   const [family, setFamily] = useState("");
   const [filter, setFilter] = useState("");
@@ -791,6 +829,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
         </div>
       ) : (
         <>
+          <StaleProjectView change={drawingSetChange(projectSource, drawingSet)} onReload={onLoadProject} loading={!!projectStatus.loading} />
           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 16px", ...mono, fontSize: "var(--fs-s)", color: "var(--ink-muted)", margin: "4px 0 12px" }} data-assemblies-totals
             data-units={report.totals.units} data-unresolved={report.totals.by_status.unresolved} data-lines={report.totals.lines}>
             <span><strong style={{ color: "var(--ink)" }}>{report.totals.units}</strong> units</span>

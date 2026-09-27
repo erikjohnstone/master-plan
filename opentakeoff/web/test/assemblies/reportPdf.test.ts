@@ -77,7 +77,7 @@ test("the schedule sheets whose tables are pictures are listed after the totals 
   const named = assembliesReport(applied.instances, applied.applications, applied.lines, unread);
   const text = drawnText(await assembliesPdfBytes(named));
   assert.match(text, /Schedule sheets read as pictures: 1 \(any unit they schedule is missing here\)/);
-  assert.match(text, /M-601 \(page 21\)/);
+  assert.match(text, /M-601 \(page 21 of m\.pdf\)/);
   assert.match(text, /59%/);
   assert.doesNotMatch(drawnText(await assembliesPdfBytes(report)), /read as pictures/, "a report with none shows none");
 });

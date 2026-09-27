@@ -459,6 +459,9 @@ export default function TakeoffCanvas() {
   // profile's (store), beside the read-only starter.
   const [assembliesState, setAssembliesState] = useState(null);
   const [assembliesProject, setAssembliesProject] = useState(null);
+  // The drawing set the project was read from (files, revisions, epoch): the
+  // panel names what changed since (AS-58).
+  const [assembliesSource, setAssembliesSource] = useState(null);
   const [assembliesStatus, setAssembliesStatus] = useState({});
   const [starterAssemblies, setStarterAssemblies] = useState([]);
   const [partnerAssemblies, setPartnerAssemblies] = useState([]);
@@ -1438,6 +1441,7 @@ export default function TakeoffCanvas() {
   // the merged snap/mask geometry and member placement.
   const [docEpoch, setDocEpoch] = useState(0);
   basSourceSignatureRef.current = JSON.stringify([docEpoch, sheets.map(s => s.name).sort()]);
+  const assembliesDrawingSet = useMemo(() => ({ epoch: docEpoch, files: sheets.map((s) => ({ name: s.name, rev: s.rev ?? null })) }), [docEpoch, sheets]);
   const groupSig = JSON.stringify(groupKeys) + "@" + docEpoch + "|" + stitchLayoutSig(groupKeys, stitches);
   let _px = 0;
   const panels = groupKeys.map((key) => {
@@ -2024,6 +2028,7 @@ export default function TakeoffCanvas() {
     const loadedAssemblies = sanitizeAssembliesState(a.assemblies);
     setAssembliesState(loadedAssemblies.state);
     setAssembliesProject(null);
+    setAssembliesSource(null);
     setAssembliesStatus({});
     if (loadedAssemblies.dropped.length) setCommitMsg(`Assemblies: ${loadedAssemblies.dropped.length} saved item(s) could not be read — ${loadedAssemblies.dropped[0]}`);
     setAlignPt(null);
@@ -7945,9 +7950,13 @@ export default function TakeoffCanvas() {
   }
 
   async function loadAssembliesProject() {
+    // The set this request reads (the same sheets it sends): a change while
+    // it is read, or after, shows as a change since (AS-58).
+    const source = assembliesDrawingSet;
     setAssembliesStatus({ loading: true });
     try {
       setAssembliesProject(await fetchProductionAssembliesProject());
+      setAssembliesSource(source);
       setAssembliesStatus({});
     } catch (e) {
       setAssembliesStatus({ error: `Couldn't read the schedules for assemblies: ${e?.message || e}` });
@@ -14304,6 +14313,7 @@ export default function TakeoffCanvas() {
         <TakeoffDataPanel
           assemblies={{
             project: assembliesProject, status: assembliesStatus, onLoad: loadAssembliesProject,
+            source: assembliesSource, drawingSet: assembliesDrawingSet,
             starter: starterAssemblies, partner: partnerAssemblies, onSavePartner: savePartnerAssemblies,
             state: assembliesState, onStateChange: setAssembliesState,
           }}

@@ -137,7 +137,10 @@ test("the schedule sheets whose tables are pictures ride the report, each with w
     { ...unread[0], why: "no table could be read from it: 59% of the sheet is pictures (pasted images or a scan), so any unit it schedules is missing from these assemblies" },
     { ...unread[1], why: "no table could be read from it: 17% of the sheet is pictures (pasted images or a scan), so any unit it schedules is missing from these assemblies" },
   ]);
-  assert.deepEqual(unread.map(unreadScheduleLabel), ["M-601 (page 21)", "page 1"], "the printed sheet number when there is one, and the page");
+  assert.deepEqual(unread.map(unreadScheduleLabel), ["M-601 (page 21 of m.pdf)", "page 1 of m.pdf"], "the printed sheet number when there is one, the page and its file");
+  // A set opened as several files has a page 3 in each (AS-57).
+  assert.deepEqual([{ sheet: "mech.pdf#3", picture_share: 0.6 }, { sheet: "elec.pdf#3", sheet_number: "E-601", picture_share: 0.6 }].map(unreadScheduleLabel),
+    ["page 3 of mech.pdf", "E-601 (page 3 of elec.pdf)"]);
   assert.equal("schedules_unread" in assembliesReport(r.instances, r.applications, r.lines), false, "absent when there is none");
   const { schedules_unread: _named, ...rest } = report;
   assert.deepEqual(rest, assembliesReport(r.instances, r.applications, r.lines), "nothing else in the report changes");

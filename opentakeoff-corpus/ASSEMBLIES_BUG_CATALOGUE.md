@@ -3383,3 +3383,94 @@ a read-only script with a negative control that fails.
   without it: every count is the card's. The 793 answers of questions never
   shown change nothing. With PQ1's yes and no swapped in the journal path,
   all 128 PQ1 answers fail.
+
+## AS-57 — the same PDF opened under two names broke every production read; a set as several PDFs had never been proven (FIXED — this goal)
+
+**Found:** 2026-09-27, by a metamorphic test. Every corpus set is one PDF, so
+no proof had opened a set as several files, though both surfaces take them:
+the panel sends every open PDF, and `apply_assemblies` reads a Session that
+`load_plan` merges.
+- **Split sets (no defect in the assemblies).** Nine dev documents were split
+  into two or three PDFs (PyMuPDF, whole pages), with the cut chosen to put
+  the schedules and the control drawings in different files, and for 096_IN,
+  bldg5406 and the ITD District 1 lab to put schedule sheets in two files:
+  federal-mech after page 17, 096_IN after 21 and 30, bldg5406-hvac-demo after
+  6 and 12, itd-d1-lab after 14 and 18, 16_NV after 3, 004_MO after 35 and 39,
+  094_FL after 7, 069_ID after 5, 14_OR after 2 and 10. Over MCP (the hook-up
+  defaults, the CSV set, `project_questions`), with each part's sheet keys
+  mapped back to the whole file's: the records, lines, control readings,
+  report units, project questions and all 8 CSV files are the whole file's
+  on all nine. federal-mech's 169 control readings (15 applied) cite control
+  drawings in the other file than their units' schedules. The PDF report
+  differed in one line: 16_NV's picture schedule sheet (AS-54) was labeled
+  "E0.2 (page 28)", its page in the second file, since the label named a page
+  and not its file. Each PDF of a set has its own page 28.
+- **The same PDF under two names (a defect).** The production routes spool
+  each upload by its sha256, so "set.pdf" and "set (1).pdf" with the same
+  bytes reached the CLI as one path twice, and `Session.loadPlan` refuses to
+  merge a name already loaded. The CLI threw, and every production read of
+  that canvas (sheet graph, compiles, sweeps, Takeoff → Assemblies) answered
+  HTTP 500 with a stack trace: "ce0c2bb9….pdf is already loaded — merge adds
+  NEW documents. To reload it, call load_plan without merge", a hash and an
+  instruction meant for an agent. Reproduced on 069_ID against the dev server.
+  Over MCP a copy under another name loads as a second document (a tool test
+  merges a fixture that way on purpose, for the ambiguity refusals), and
+  `apply_assemblies` over 069_ID and its copy gives 069_ID's records, lines,
+  readings, questions and CSV set (the compile keeps a tag's first row).
+
+**Fix:**
+- **`onePathPerDocument`** (`web/vite.corpusTakeoffApi.js`, every production
+  route): identical bytes are one document, read once, under the last name
+  sent, as the browser's sha → name map names it (`buildProductionFormData`),
+  or, for a symbol sweep, under the swept file's name, its file index
+  following the path. Distinct files pass untouched. This is the browser's
+  upload transport; MCP takes paths and reads what the agent loads.
+- **`unreadScheduleLabel`** names the page and its file, as every other cite
+  does: "E0.2 (page 28 of mech-2.pdf)". The PDF's column is wider for it.
+- **The UI proof takes several PDFs** (`OT_UI_PDF`, separated as PATH is; the
+  canvas sends them in name order, so the MCP result is of the same files in
+  that order).
+
+**Measured:** the duplicate request answers HTTP 200 with 069_ID's 11 items,
+where it answered 500. UI proof: 069_ID opened as A.pdf and B.pdf (the same
+bytes) against `apply_assemblies` on B.pdf alone, 15 checks, byte for byte;
+federal-mech as its two parts against `apply_assemblies` on the two parts, 16
+checks (control readings and project-question quotes cite the second file);
+069_ID 15 and 086_CA 7 as one file.
+
+**Tests:** productionUploads.test.ts: distinct files pass untouched; the same
+path twice is one, under the last name; a symbol sweep keeps its file's name
+and its index follows the path, and an index the request lacks is left for
+the CLI to refuse. With the de-duplication removed, 2 of its 3 tests fail.
+report.test.ts, panelSections.test.ts, reportPdf.test.ts: the label names the
+file, and a set's two page 3s are told apart.
+
+## AS-58 — the panel kept assemblies read from a drawing set that had since changed, without a word (FIXED — this goal)
+
+**Found:** 2026-09-27, opening split sets in the panel (AS-57). The
+assemblies project is read from the PDFs open when **Apply assemblies** is
+pressed, and only loading a project file cleared it. Adding the controls
+drawings, removing a PDF, or re-dropping a revised set (other bytes under the
+same name are a revision, CO-1) left the units, the lines and every export on
+the earlier set, and nothing said so. A change while the schedules were being
+read was applied the same way. MCP is not affected: `apply_assemblies` reads
+the Session's current plans on every call.
+
+**Fix (the panel's; nothing shared changes):** TakeoffCanvas keeps the set
+each read came from (its files and revisions, and the document epoch that
+counts revisions), taken when the read starts, so a change during the read
+shows too. `drawingSetChange` (AssembliesPanel.jsx) names the files added,
+removed or revised since, or says a file was replaced where a store keeps no
+revision numbers and only the epoch moved. **StaleProjectView** shows it in
+red above the totals, over units and lines it says are the earlier set's,
+with **Re-read schedules**. The exports stay available.
+
+**Measured:** the UI proof now adds a one-page PDF after the checks and finds
+the notice naming it, with its button: 069_ID, 086_CA, the duplicate and the
+split set of AS-57.
+
+**Tests:** panelSections.test.ts: the same files in any order are no change,
+nor is a set before any read; files added, removed or revised are named, a
+revision by its rev and the epoch, and the epoch alone says a file was
+replaced; the notice names them all, its button reads the schedules again,
+and it is disabled while they are read.

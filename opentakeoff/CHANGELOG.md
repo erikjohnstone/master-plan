@@ -1,5 +1,33 @@
 # Changelog
 
+- **Assemblies: the panel names a drawing set changed since its schedules
+  were read.** The assemblies project is read from the PDFs open when
+  **Apply assemblies** is pressed, and nothing cleared or flagged it after:
+  adding the controls drawings, removing a PDF, or re-dropping a revised
+  mechanical set left units and lines, and their exports, from the earlier set
+  without a word. The canvas now keeps the set each read came from (files,
+  revisions, epoch), and the panel names what changed since in red (files
+  added, removed or revised), with **Re-read schedules**; a change while the
+  schedules are being read shows the same way. The notice is the panel's; MCP's
+  `apply_assemblies` reads the Session's current plans on every call
+  (`drawingSetChange`, `StaleProjectView` in `AssembliesPanel.jsx`,
+  ASSEMBLIES_BUG_CATALOGUE AS-58).
+
+- **Production reads: the same PDF opened twice is read once.** The production
+  routes spool each upload by its sha256, so a plan set opened under two names
+  ("set.pdf" and "set (1).pdf") reached the CLI as one path twice, and a
+  Session cannot load a path twice: the sheet graph, the compiles, the sweeps
+  and Takeoff → Assemblies all failed with a stack trace naming a hash. Identical
+  bytes are now one document (`onePathPerDocument`, `web/vite.corpusTakeoffApi.js`),
+  under the last name sent (the browser's sha → name map), or for a symbol sweep
+  the name of the file swept. A set that comes as several PDFs is read as one
+  project on both surfaces: nine corpus documents split into two or three PDFs
+  apply to the same records, lines, control readings, project questions and
+  export set as the whole file, and the UI proof now takes several PDFs
+  (`OT_UI_PDF`, separated as PATH is). A picture schedule sheet's label names
+  its file as well as its page, since each PDF of a set has its own page 3
+  (ASSEMBLIES_BUG_CATALOGUE AS-57).
+
 - **Assemblies: a unit's details offer another typical.** The Takeoff panel
   offered a typical only for a unit that waits, among the exceptions: a
   unit's details held its options and Exclude alone. So a rule's pick could

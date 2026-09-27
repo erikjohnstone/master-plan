@@ -9,6 +9,7 @@
 import type { AppliedInstance, DerivedAttribute, PrintedPointRow, UnreadSchedule } from "./apply";
 import { partnerSummary, type PartnerSummary } from "./partner";
 import type { ApplicationRecord, Cite, ExpandedLine } from "./schema";
+import { parseSheetKey } from "../sheetKey";
 
 type RecordStatus = ApplicationRecord["status"];
 type LineStatus = ExpandedLine["status"];
@@ -246,11 +247,12 @@ export function familiesLeftOut(instances: readonly Pick<AppliedInstance, "tag" 
 
 /** A schedule sheet whose tables are pictures, as the panel, the PDF and
  * apply_assemblies name it (AS-54): its printed sheet number when the title
- * block has one, and its page. */
+ * block has one, its page, and the file the page is in, as every other cite
+ * names it: a set opened as several files has a page 3 in each (AS-57). */
 export function unreadScheduleLabel(u: UnreadSchedule): string {
-  const hash = u.sheet.lastIndexOf("#");
-  const page = `page ${hash >= 0 ? u.sheet.slice(hash + 1) : "1"}`;
-  return u.sheet_number ? `${u.sheet_number} (${page})` : page;
+  const { file, page } = parseSheetKey(u.sheet);
+  const where = `page ${page} of ${file}`;
+  return u.sheet_number ? `${u.sheet_number} (${where})` : where;
 }
 
 /** Why such a sheet's units are not in the assemblies (AS-54). */

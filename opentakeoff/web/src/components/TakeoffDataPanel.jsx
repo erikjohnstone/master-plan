@@ -688,7 +688,7 @@ export default function TakeoffDataPanel({
 
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px", ...(tab === 'review' ? { display: 'flex', flexDirection: 'column', minHeight: 0 } : {}) }}>
           {tab !== 'review' && basViewState?.projectReview?.returnFromDomain && <button type="button" onClick={() => setTab('review')}>← Return to issue review</button>}
-          {tab === 'assemblies' && assemblies ? <AssembliesPanel project={assemblies.project} projectStatus={assemblies.status} onLoadProject={assemblies.onLoad}
+          {tab === 'assemblies' && assemblies ? <AssembliesPanel project={assemblies.project} projectStatus={assemblies.status} onLoadProject={assemblies.onLoad} projectSource={assemblies.source} drawingSet={assemblies.drawingSet}
               starter={assemblies.starter} partner={assemblies.partner} onSavePartner={assemblies.onSavePartner}
               state={assemblies.state} onStateChange={assemblies.onStateChange} onOpenCitation={onOpenCitation} projectName={projectName} onReport={setAssembliesReport} />
             : tab === 'overview' && completeBasRun ? <BasTakeoffOverview corpusMeta={corpusMeta} citedFieldCount={rows.length} onNavigate={navigateOverview} />

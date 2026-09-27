@@ -90,7 +90,7 @@ export async function drawAssembliesSection(doc: PDFDocument, report: Assemblies
   const unread = report.schedules_unread ?? [];
   if (unread.length) {
     text(c, `Schedule sheets read as pictures: ${unread.length} (any unit they schedule is missing here)`, 10, true);
-    table(c, ["Schedule sheet", "Pictures", "Why"], [0.18, 0.08, 0.74],
+    table(c, ["Schedule sheet", "Pictures", "Why"], [0.3, 0.08, 0.62],
       unread.map((u) => [unreadScheduleLabel(u), `${Math.round(u.picture_share * 100)}%`, u.why]));
   }
 

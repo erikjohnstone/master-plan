@@ -25,18 +25,23 @@
 //     settings { hookup_defaults, responsibility_preset } and export_scope
 //     (OT_MCP_EXPORT_DIR_SCOPED); cleared again before the override checks;
 //   · another typical chosen from a unit's details, with a reason, and the
-//     same choice for every row of a schedule like one unit (AS-55).
+//     same choice for every row of a schedule like one unit (AS-55);
+//   · a sheet added after the schedules were read, named over the earlier
+//     set's units (AS-58).
 //
 //   OT_UI_PDF=plan.pdf OT_ASM_OUT=dir OT_MCP_APPLY=result.json OT_MCP_EXPORT_DIR=dir \
 //     OT_MCP_EXPORT_DIR_SCOPED=dir2 node scripts/playwright-assemblies.mjs
 // OT_UI_URL defaults to http://127.0.0.1:5173. OT_ASM_SMOKE=1 skips from the
 // parity checks to the typical choice (a document with no typical-bearing unit
-// has no option or group to override).
+// has no option or group to override). OT_UI_PDF may name several PDFs,
+// separated as PATH is (a set opened as several files, read as one project);
+// the canvas sends them in name order, so OT_MCP_APPLY is apply_assemblies over
+// the same files in that order.
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { unzipSync, strFromU8 } from 'fflate';
-import { resolve } from 'node:path';
+import { delimiter, resolve } from 'node:path';
 import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { waitForAsync } from './fixtures/wait-for-async.mjs';
 
@@ -47,6 +52,7 @@ mkdirSync(out, { recursive: true });
 const url = process.env.OT_UI_URL || 'http://127.0.0.1:5173';
 const smoke = process.env.OT_ASM_SMOKE === '1';
 const mcp = JSON.parse(readFileSync(resolve(process.env.OT_MCP_APPLY), 'utf8'));
+const pdfs = process.env.OT_UI_PDF.split(delimiter).filter(Boolean).map((p) => resolve(p));
 const REASON = "UI proof: the estimator's own choice";
 const GROUP_REASON = "UI proof: one answer for the schedule's rows";
 const GROUP_EXCLUDE_REASON = "UI proof: these rows are no units";
@@ -160,7 +166,7 @@ async function annotations() {
 try {
   let t0 = t();
   await page.goto(url, { waitUntil: 'domcontentloaded' });
-  await page.locator('input[name="sheet-file"]').first().setInputFiles(resolve(process.env.OT_UI_PDF));
+  await page.locator('input[name="sheet-file"]').first().setInputFiles(pdfs);
   await page.waitForFunction(() => ['ready', 'error'].includes(window.__opentakeoff?.graphPrewarm()?.phase), null, { timeout: 1800000 });
   assert.equal(await page.evaluate(() => window.__opentakeoff.graphPrewarm().phase), 'ready');
   timings.index_s = Math.round((t() - t0) / 1000);
@@ -528,8 +534,28 @@ try {
     assert.equal(await panel.locator('[data-assemblies-override-unmatched]').count(), 0, 'the choices apply to their units');
   }
 
+  {
+    // A sheet added after the schedules were read (AS-58): the panel names
+    // the change, over units and lines that are still the earlier set's.
+    const { PDFDocument } = await import('pdf-lib');
+    const extra = await PDFDocument.create();
+    extra.addPage([612, 792]);
+    const name = 'ui-proof-added-sheet.pdf';
+    assert.equal(await panel.locator('[data-assemblies-stale]').count(), 0, 'the set the schedules were read from: nothing named');
+    await page.locator('input[name="sheet-file"]').first().setInputFiles({ name, mimeType: 'application/pdf', buffer: Buffer.from(await extra.save()) });
+    // The Takeoff dialog stays open over the canvas the new sheet opens in.
+    if (!(await panel.isVisible())) panel = await openAssemblies();
+    const stale = panel.locator('[data-assemblies-stale]');
+    await stale.waitFor({ state: 'visible', timeout: 60000 });
+    await stale.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: `${out}/stale.png` });
+    assert.match(await stale.innerText(), new RegExp(`changed since these schedules were read \\(added ${name.replace(/\./g, '\\.')}\\)`));
+    assert.equal(await panel.locator('[data-assemblies-stale-reread]').count(), 1, 'with a button to read them again');
+    checks.push(`a sheet added after the schedules were read is named over the earlier set's units (AS-58)`);
+  }
+
   assert.deepEqual(errors, []);
-  writeFileSync(`${out}/checks.json`, JSON.stringify({ ok: true, source: process.env.OT_UI_PDF, smoke, timings,
+  writeFileSync(`${out}/checks.json`, JSON.stringify({ ok: true, source: pdfs.length === 1 ? pdfs[0] : pdfs, smoke, timings,
     totals: mcp.report.totals, exceptions: mcp.report.exceptions.length, checks, errors }, null, 2));
   console.log(`Assemblies UI proof passed (${checks.length} checks): ${checks.join('; ')}`);
 } catch (error) {

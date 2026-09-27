@@ -1,11 +1,11 @@
 // The Takeoff panel's sections that name what cannot stand (AS-50, AS-53, AS-54),
-// and a unit's choice of another typical (AS-55), rendered as the panel
-// renders them.
+// a unit's choice of another typical (AS-55), and a drawing set changed since
+// its schedules were read (AS-58), rendered as the panel renders them.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { LineErrorsView, ProjectSettingsView, TypicalChoiceView, UnreadSchedulesView } from "../../src/components/AssembliesPanel.jsx";
+import { drawingSetChange, LineErrorsView, ProjectSettingsView, StaleProjectView, TypicalChoiceView, UnreadSchedulesView } from "../../src/components/AssembliesPanel.jsx";
 
 test("the lines that cannot be counted are listed, each with its unit, rule and why (AS-53)", () => {
   const cites = [{ sheet: "m.pdf#3", table_title: "COOLING TOWER SCHEDULE", header: "MARK", bbox: [0, 0, 1, 1] }];
@@ -31,7 +31,7 @@ test("the schedule sheets whose tables are pictures are named above the rest, ea
   const html = renderToStaticMarkup(createElement(UnreadSchedulesView, { schedules: two }));
   assert.match(html, /data-assemblies-schedules-unread="2"/);
   assert.match(html, /role="note"/);
-  assert.match(html, /2 schedule sheets are pictures \(pasted images or a scan\): no table could be read from them, so any unit they schedule is missing here: M-601 \(page 21\), 59% pictures; page 22, 58% pictures\./);
+  assert.match(html, /2 schedule sheets are pictures \(pasted images or a scan\): no table could be read from them, so any unit they schedule is missing here: M-601 \(page 21 of m\.pdf\), 59% pictures; page 22 of m\.pdf, 58% pictures\./);
   assert.match(renderToStaticMarkup(createElement(UnreadSchedulesView, { schedules: two.slice(0, 1) })), /A schedule sheet is pictures .* from it, so any unit it schedules is missing here/);
   assert.equal(renderToStaticMarkup(createElement(UnreadSchedulesView, { schedules: [] })), "", "none: nothing shown");
 });
@@ -73,4 +73,36 @@ test("a unit's details offer the other typicals of its family, else the layer's 
   assert.deepEqual(all, [[{ assembly: { id: "vav-cooling-only", version: "1" } }, "choosing vav-cooling-only for the 7 VAV units of VAV BOX SCHEDULE with vav-reheat-hw@1"]]);
   // One row alone has no second list.
   assert.doesNotMatch(renderToStaticMarkup(createElement(TypicalChoiceView, { ...props, like: { ...props.like, count: 1 } })), /choose-typical-all/);
+});
+
+test("a drawing set changed since its schedules were read is named: files added, removed, revised or replaced (AS-58)", () => {
+  const read = { epoch: 0, files: [{ name: "mech.pdf", rev: 1 }, { name: "elec.pdf", rev: 1 }] };
+  assert.equal(drawingSetChange(read, { epoch: 0, files: [{ name: "elec.pdf", rev: 1 }, { name: "mech.pdf", rev: 1 }] }), null, "the same files, in any order");
+  assert.equal(drawingSetChange(null, read), null, "nothing read yet");
+  assert.equal(drawingSetChange(read, null), null);
+  assert.deepEqual(drawingSetChange(read, { epoch: 0, files: [...read.files, { name: "controls.pdf", rev: 1 }] }),
+    { added: ["controls.pdf"], removed: [], revised: [], replaced: false });
+  assert.deepEqual(drawingSetChange(read, { epoch: 0, files: [read.files[0]] }), { added: [], removed: ["elec.pdf"], revised: [], replaced: false });
+  // A re-drop with other bytes is a revision (CO-1): its rev and the epoch move.
+  assert.deepEqual(drawingSetChange(read, { epoch: 1, files: [{ name: "mech.pdf", rev: 2 }, read.files[1]] }),
+    { added: [], removed: [], revised: ["mech.pdf"], replaced: false });
+  // A store that keeps no revision numbers: the epoch alone says a file was replaced.
+  const bare = { epoch: 3, files: [{ name: "mech.pdf" }] };
+  assert.equal(drawingSetChange(bare, { epoch: 3, files: [{ name: "mech.pdf" }] }), null);
+  assert.deepEqual(drawingSetChange(bare, { epoch: 4, files: [{ name: "mech.pdf" }] }), { added: [], removed: [], revised: [], replaced: true });
+
+  const change = drawingSetChange(read, { epoch: 1, files: [{ name: "mech.pdf", rev: 2 }, { name: "controls.pdf", rev: 1 }] });
+  const html = renderToStaticMarkup(createElement(StaleProjectView, { change, onReload: () => {} }));
+  assert.match(html, /data-assemblies-stale="3"/);
+  assert.match(html, /role="alert"/);
+  assert.match(html, /The drawing set changed since these schedules were read<\/strong> \(added controls\.pdf; removed elec\.pdf; revised mech\.pdf\)\. The units, lines and exports below are still the earlier set&#x27;s\./);
+  assert.match(html, /data-assemblies-stale-reread/);
+  assert.match(renderToStaticMarkup(createElement(StaleProjectView, { change, onReload: () => {}, loading: true })), /disabled="".*Reading…/);
+  assert.equal(renderToStaticMarkup(createElement(StaleProjectView, { change: null, onReload: () => {} })), "", "unchanged: nothing shown");
+  // Its button reads the schedules again.
+  let reads = 0;
+  const view = StaleProjectView({ change, onReload: () => { reads++; } }) as any;
+  const button = [view.props.children].flat().find((c: any) => c?.props?.["data-assemblies-stale-reread"]);
+  button.props.onClick();
+  assert.equal(reads, 1);
 });

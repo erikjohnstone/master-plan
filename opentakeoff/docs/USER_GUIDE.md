@@ -547,14 +547,22 @@ available from **⋯ → Measurement report**, not a primary navigation tab.
 **Takeoff → Assemblies** turns the set's scheduled HVAC equipment into a controls
 estimate. Press **Apply assemblies**. The same Session+ODL path MCP uses reads the
 equipment schedules and the notes printed with them, and your assembly library
-then gives each unit its controls typical and its mechanical hook-up. A schedule
-printed in two tables, the second titled as its continuation ("… (CONT.)"), is
-read as one: the unit's row in the continuation adds its columns, and each value
-cites the table it is printed in.
+then gives each unit its controls typical and its mechanical hook-up:
 - its options and variables, each with its source (the schedule, a project
   setting, a partner default, the library default, or you);
 - its lines (points, devices, labor hooks) with quantities, each citing the
   schedule row and the library rule.
+
+A schedule printed in two tables, the second titled as its continuation
+("… (CONT.)"), is read as one: the unit's row in the continuation adds its
+columns, and each value cites the table it is printed in. A set that comes as
+several PDFs (the mechanical drawings in one, the controls in another) is read
+as one project: open them all before pressing **Apply assemblies**. Each cite
+names its file and page, and the same PDF opened twice under two names is read
+once. If you add, remove or revise a PDF after the schedules are read, the panel
+says so in red, naming each file, above units and lines that are still the
+earlier set's: press **Re-read schedules** to apply the assemblies to the set
+you have open.
 
 **Exceptions come first.** A unit the drawings do not decide is *unresolved*, and it
 says what it waits for: an attribute the schedule does not print, a project
@@ -583,8 +591,9 @@ quantity cannot stand, such as a fan command counted from -2 cells the schedule
 reading got wrong, is listed under **Lines that cannot be counted**, with why: no
 total counts it, so check the unit's schedule row. A schedule sheet whose tables
 are pictures (pasted images or a scan) gives the takeoff no table to read, so any
-unit it schedules is missing here: the panel names each such sheet in red above
-the settings, with the share of it the pictures cover, and the PDF section lists
+unit it schedules is missing here: the panel names each such sheet (its sheet
+number, page and file) in red above the settings, with the share of it the
+pictures cover, and the PDF section lists
 them after the totals. Check each sheet: if it schedules equipment, the estimate
 is missing that equipment. Below the exceptions sit a table per family (units, typicals,
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its

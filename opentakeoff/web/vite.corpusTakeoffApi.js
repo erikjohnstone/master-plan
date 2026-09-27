@@ -345,7 +345,45 @@ async function resolvePdfs(req) {
     }
     fileNames = pdfPaths.map((p) => p.split(/[\\/]/).at(-1));
   }
+  ({ pdfPaths, fileNames, symbol } = onePathPerDocument(pdfPaths, fileNames, symbol));
   return { kind, service, basMathOptions, pdfPaths, fileNames, tmpDir, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol };
+}
+
+/**
+ * One path per document. The spool names an upload by its sha256, so a plan
+ * set opened twice under two names ("set.pdf" and "set (1).pdf") arrives as
+ * one path twice, and a Session cannot load a path twice: the CLI threw, and
+ * every production read of that canvas (sheet graph, compiles, sweeps,
+ * assemblies) failed with a stack trace naming a hash. Identical bytes are
+ * one document, read once. It keeps the last name sent, as the browser's
+ * sha → name map does (TakeoffCanvas buildProductionFormData), or, for a
+ * symbol sweep, the name of the file swept, so its results land on the
+ * sheet the estimator is on; the sweep's file index follows the path.
+ * @template {{ pdfIndex?: number }} T
+ * @param {string[]} pdfPaths
+ * @param {string[]} fileNames
+ * @param {T | null} [symbol]
+ * @returns {{ pdfPaths: string[], fileNames: string[], symbol: T | null }}
+ */
+export function onePathPerDocument(pdfPaths, fileNames, symbol = null) {
+  const at = new Map();
+  const paths = [];
+  const names = [];
+  const index = [];
+  pdfPaths.forEach((p, i) => {
+    if (!at.has(p)) {
+      at.set(p, paths.length);
+      paths.push(p);
+      names.push(fileNames[i]);
+    } else {
+      names[at.get(p)] = fileNames[i];
+    }
+    index.push(at.get(p));
+  });
+  const swept = symbol?.pdfIndex;
+  if (!Number.isInteger(swept) || swept < 0 || swept >= index.length) return { pdfPaths: paths, fileNames: names, symbol };
+  names[index[swept]] = fileNames[swept];
+  return { pdfPaths: paths, fileNames: names, symbol: { ...symbol, pdfIndex: index[swept] } };
 }
 
 function restoreUploadedSheetKeys(result, pdfPaths, fileNames) {
