@@ -57,6 +57,9 @@ export interface TableContext {
   legend?: Readonly<Record<string, string>>;
   /** The units a drive schedule's row names as its load (vfdDrivenTags). */
   driven?: ReadonlyMap<string, DriveLoad>;
+  /** The families the compile gave the units this table schedules, by
+   * canonical tag (withProject): what a row's other unit is. */
+  families?: ReadonlyMap<string, ReadonlySet<string>>;
   /** The tables that continue this one ("… (CONT.)"), with their rows. */
   continuation?: ReadonlyArray<{ title: string; headers: readonly string[]; rows: ReadonlyArray<{ key: string; cells: Readonly<Record<string, string>> }> }>;
 }
@@ -524,12 +527,32 @@ function airAgrees(ctx: RowContext, s: Service, water: number): boolean {
  * condensing unit's) is not this unit's. */
 const SPLIT_INDOOR = new Set(["FCU", "FURNACE", "VRF_INDOOR"]);
 const SPLIT_OUTDOOR = new Set(["CONDENSING_UNIT", "VRF_OUTDOOR"]);
+// Units that move a space's air. A heat pump scheduled on one row with one of
+// them ("AHU-1, HP-1", "ERU-1 / HP-4") is its outdoor half; a packaged heat
+// pump, on a row of its own, keeps its fan.
+const MOVES_AIR = new Set(["AHU", "DOAS", "DOAH_UNIT", "DOAH_HANDLING", "OUTDOOR_AIR_UNIT", "RTU", "ERV", "FCU", "FURNACE", "VRF_INDOOR"]);
 // A HEAT PUMP UNIT group beside an indoor unit's own ("AIR HANDLER" | "HEAT
 // PUMP UNIT" in a VRF schedule) is the outdoor heat pump it runs on.
 const OUTDOOR_WORDS = /\bOUTDOOR\s+UNITS?\b|\bCONDENSING\s+UNITS?\b|\bODU\b|\bCONDENSER\b(?!\s+WATER)|\bHEAT\s+PUMP\s+UNITS?\b/;
 const INDOOR_WORDS = /\bINDOOR\s+UNITS?\b|\bIDU\b|\bSUPPLY\s+FAN\b|\bEVAPORATOR\b|\bFURNACE\b|\bGAS\s+HEAT(?:ING)?\b/;
-function otherHalf(h: string, family: string, paired: boolean): boolean {
-  if (SPLIT_INDOOR.has(family)) {
+// On a row scheduling both halves, the fans that move the space's air and its
+// electric heat are the indoor unit's too ("EXHAUST FAN HP" in an energy
+// recovery unit's row with its heat pump).
+const INDOOR_PARTS = /\b(?:SUPPLY|RETURN|RELIEF|EXHAUST)\s+(?:AIR\s+)?FANS?\b|\bELEC(?:TRIC)?\s+(?:HEAT(?:ER|ING)?|DUCT\s+HEATER)\b/;
+type Half = "indoor" | "outdoor" | null;
+
+/** Which half of a split system this unit is: by its family, or, for a heat
+ * pump, by the unit its row schedules beside it (as the compile read that
+ * unit). */
+function splitHalf(family: string, partners: readonly string[], table: TableContext | null): Half {
+  if (SPLIT_INDOOR.has(family)) return "indoor";
+  if (SPLIT_OUTDOOR.has(family)) return "outdoor";
+  if (family === "HEAT_PUMP" && partners.some((p) => [...(table?.families?.get(p) ?? [])].some((f) => MOVES_AIR.has(f)))) return "outdoor";
+  return null;
+}
+
+function otherHalf(h: string, half: Half, paired: boolean): boolean {
+  if (half === "indoor") {
     if (OUTDOOR_WORDS.test(h) && !INDOOR_WORDS.test(h)) return true;
     // One row scheduling both halves ("ACCU-1 / AC-1"): the power connection
     // it prints without naming a half is the outdoor unit's, which feeds the
@@ -537,21 +560,24 @@ function otherHalf(h: string, family: string, paired: boolean): boolean {
     const power = quantitiesOf(h).some((q) => q === "volts" || q === "phase" || q === "vph");
     return paired && power && !INDOOR_WORDS.test(h);
   }
-  if (SPLIT_OUTDOOR.has(family)) return INDOOR_WORDS.test(h) && !OUTDOOR_WORDS.test(h);
+  if (half === "outdoor") return (INDOOR_WORDS.test(h) || (paired && INDOOR_PARTS.test(h))) && !OUTDOOR_WORDS.test(h);
   return false;
 }
 
-/** Whether the table's row for this unit names a unit of another kind
- * beside it ("ACCU-1 / AC-1", "F-1 , CU-1"): one row scheduling both halves of
- * a split system. Two units of one kind on a row ("FCU-1/FCU-2") are no pair. */
-function pairedRow(item: CompileItem, table: TableContext | null): boolean {
+/** The units the table's row for this unit names beside it ("ACCU-1 / AC-1",
+ * "F-1 , CU-1"), by canonical tag: one row scheduling both halves of a split
+ * system. Two units of one kind on a row ("FCU-1/FCU-2") are no pair. */
+function rowPartners(item: CompileItem, table: TableContext | null): string[] {
   const own = canonKey(item.tag);
   const tagLike = /^([A-Z]{1,6})-?\d{1,3}[A-Z]?(?:\([A-Z]\))?$/;
-  return (table?.rows ?? []).some((r) => Object.values(r.cells).some((text) => {
+  const partners = new Set<string>();
+  for (const r of table?.rows ?? []) for (const text of Object.values(r.cells)) {
     const parts = String(text ?? "").toUpperCase().split(/\s*[\/,&]\s*|\s+AND\s+/).map(canonKey).filter(Boolean);
-    if (parts.length < 2 || !parts.includes(own) || !parts.every((p) => tagLike.test(p))) return false;
-    return new Set(parts.map((p) => p.match(tagLike)![1])).size >= 2;
-  }));
+    if (parts.length < 2 || !parts.includes(own) || !parts.every((p) => tagLike.test(p))) continue;
+    if (new Set(parts.map((p) => p.match(tagLike)![1])).size < 2) continue;
+    for (const p of parts) if (p !== own) partners.add(p);
+  }
+  return [...partners];
 }
 
 /** The water service a column belongs to, from its own block words, else
@@ -631,6 +657,8 @@ interface RowContext {
   legend: Readonly<Record<string, string>>;
   /** The row schedules both halves of a split system ("ACCU-1 / AC-1"). */
   paired: boolean;
+  /** Which half of a split system the unit is (splitHalf). */
+  half: Half;
   /** The table prints an indoor unit's columns (dropped from `cols` as the
    * other half's for an outdoor unit). */
   indoorColumns: boolean;
@@ -1012,7 +1040,7 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         // a split system's table is the indoor unit's. A table of outdoor
         // units alone (no indoor half in its columns, row or title) prints
         // the unit's own.
-        if (SPLIT_OUTDOOR.has(ctx.family) && !OUTDOOR_WORDS.test(h)
+        if (ctx.half === "outdoor" && !OUTDOOR_WORDS.test(h)
           && (ctx.paired || ctx.indoorColumns || /\bSPLIT\b|\bINDOOR\b|\bFAN\s+COILS?\b|\bAIR\s+HANDL/.test(headerText(ctx.title)))) break;
         num(pick(ctx, "cfm", "supply_cfm"), q, "airflow.unit", airRank());
         break;
@@ -2268,6 +2296,25 @@ export function vfdDrivenTags(items: ReadonlyArray<{ family: string; tag: string
   return driven;
 }
 
+/** What the rest of the project adds to a row's table context: the units its
+ * drive schedules name as their loads (vfdDrivenTags), and the families the
+ * compile gave the units of the row's table, by canonical tag (what a paired
+ * row's other unit is). The apply and the attribute eval both read rows
+ * through it. */
+export function withProject(items: ReadonlyArray<CompileItem & { family: string }>): (item: CompileItem, table: TableContext | null) => TableContext | null {
+  const driven = vfdDrivenTags(items);
+  const tableOf = (it: CompileItem) => `${it.sheet_id ?? ""}\u0000${it.table_title ?? ""}`;
+  const families = new Map<string, Map<string, Set<string>>>();
+  for (const it of items) {
+    let byTag = families.get(tableOf(it));
+    if (!byTag) families.set(tableOf(it), byTag = new Map());
+    let fams = byTag.get(canonKey(it.tag));
+    if (!fams) byTag.set(canonKey(it.tag), fams = new Set());
+    fams.add(it.family);
+  }
+  return (item, table) => table && { ...table, ...(driven.size ? { driven } : {}), families: families.get(tableOf(item)) ?? new Map() };
+}
+
 /** Canonical attributes for one compiled row of `family`. */
 export function normalizeCompileItem(item: CompileItem, family: string, table: TableContext | null = null): NormalizedItem {
   const result: NormalizedItem = { family, tag: item.tag, attributes: {}, unknown: {} };
@@ -2277,7 +2324,9 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
   } catch {
     return result;
   }
-  const paired = pairedRow(item, table);
+  const partners = rowPartners(item, table);
+  const paired = partners.length > 0;
+  const half = splitHalf(family, partners, table);
   const all = columnsOf(item, table);
   // A schedule continued in a second table ("… (CONT.)"): the unit's one row
   // there prints the rest of its columns (its supply fan, its final filter),
@@ -2293,7 +2342,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
       all.push({ header, h, cell: text ? { text, bbox: null } : null, order: all.length, table: cont.title });
     }
   }
-  const cols = all.filter((c) => !otherHalf(c.h, family, paired));
+  const cols = all.filter((c) => !otherHalf(c.h, half, paired));
   // ELECTRICAL DATA printed over unlabeled sub-columns ("ELECTRICAL DATA",
   // "… 2", "… 3" = "208", "1", "60"): one electrical tuple, read by value.
   const group = cols.filter((c) => /^(?:ELECTRICAL|ELEC|POWER)(?:\s+DATA)?(?:\s+\d)?$/.test(c.h));
@@ -2302,7 +2351,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
     if (parseElectricalCell(tuple)?.volts) cols.push({ header: group[0].header, h: "ELECTRICAL V/PH/HZ", cell: { text: tuple, bbox: group[0].cell!.bbox }, order: group[0].order });
   }
   const ctx: RowContext = {
-    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null, codes: table?.codes ?? {}, legend: table?.legend ?? {}, paired,
+    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null, codes: table?.codes ?? {}, legend: table?.legend ?? {}, paired, half,
     indoorColumns: all.some((c) => INDOOR_WORDS.test(c.h)),
     hasWaterSide: cols.some((c) => quantitiesOf(c.h).some((q) => q === "waterflow" || q === "ewt" || q === "lwt" || q === "ewt_lwt")),
   };

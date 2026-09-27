@@ -2087,3 +2087,85 @@ as before (dev 1965/2053, dev 2 1259/1451, dev 3 1269/1377, dev 4
 1020/1421, dev 5 503/561); the invariant sweep, the first metamorphic sweep
 and control intent's replays are unchanged. Test: normalize.test.ts,
 "metamorphic sweep, round 2".
+
+## AS-35 — a heat pump scheduled on one row with the unit it serves read that unit's fans, airflow and electric heat (FIXED — this goal)
+
+**Found:** 2026-09-27, by a column census of documents no census had read
+(scratch census3/fresh-columns.mjs: per table, each column's header and what
+the normalizer reads from it). 18_OR (unseen; sheet M5.1) prints "AIR HANDLER
+HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT)" with one row per system ("AHU-1,
+HP-1" … "AHU-3, HP-3"), its columns grouped AIR HANDLER INDOOR UNIT (filters,
+DX cooling coil, heating coil, electric heat, supply fan, VFD) and HEAT PUMP
+OUTDOOR UNIT (nominal tons, cooling and heating capacity, electrical), and
+"ENERGY RECOVERY UNIT SCHEDULE (WITH HEAT PUMP)" with "ERU-1, HP-4" on one
+row, the heat pump's capacities marked "(HEAT PUMP)". The compile makes two
+units of each row (an AHU or ERV, and a HEAT_PUMP). The heat pump read as its
+own: HP-1 … HP-3 the air handler's electric heat (100, 100, 90 kW), HP-3 the
+air handler's supply airflow (10,000 CFM), HP-4 the ERU's supply fan (1.63
+HP); its capacities and power were cited to the air handler's columns.
+
+**Why:** the split-system rule knew a system's two halves by family alone:
+fan coils, furnaces and VRF indoor units are indoor halves, condensing units
+and VRF outdoor units outdoor ones. A heat pump is neither, since a packaged
+heat pump owns its fan.
+
+**Fix (shared path: normalize.ts, the one normalizer the panel and
+apply_assemblies run):** a heat pump whose row names, beside it, a unit the
+compile read as one that moves the air (AHU, DOAS, outdoor air unit, RTU,
+ERV, FCU, furnace, VRF indoor unit) is that unit's outdoor half. Like a
+condensing unit's, its columns are those that do not name the indoor unit;
+and on a row scheduling both halves, the fans that move the space's air
+(supply, return, relief, exhaust) and its electric heat are the indoor
+unit's too. The row partner's family is the compile's, handed to the
+normalizer with the row's table by withProject, which the apply and the
+attribute eval both read rows through (it replaces the two copies of the
+drive-schedule context they each built).
+
+**Census (scratch census3/paired-rows.mjs, 99 documents: every dev tier, the
+unseen snapshots, the sweep):** 10 rows make units of two families. 5 are a
+fan coil or furnace with its condensing unit (the rule as it was), 3 an AHU
+with its heat pump and 1 an ERU with its heat pump (18_OR), and 089_FL's HP-2
+is compiled under two families from one row with one tag, which is the compile's
+question, not this rule's.
+
+**Measured:** on every cached document, 5 values change, all in 18_OR, all
+removals (the three electric heats, the 10,000 CFM, the 1.63 HP). The values
+the heat pumps keep (cooling 343 / 343 / 274 MBH, heating 241 / 241 / 181 MBH,
+460/3) now cite the HEAT PUMP OUTDOOR UNIT columns; HP-4 keeps 68.9 and 57.5
+MBH from its "(HEAT PUMP)" columns and 460/3 from the row's one V/Ø. Read
+against a render of M5.1: each removed value is printed under AIR HANDLER
+INDOOR UNIT or the ERU's SUPPLY FAN, and each kept value in the heat pump's
+own group. The air handlers and the ERU read exactly what they read before.
+Every dev tier's line outcomes are identical (dev through dev 5). The heat
+pump's NOMINAL TONS ("10 (X3)", three modules) stays unread, as before. Not
+ruled, for want of a row that prints it: a heat pump beside a condensing unit
+(the heat pump then the indoor half). Test: normalize.test.ts, "a heat pump on
+one row with the unit it serves is its outdoor half", on 18_OR's cells, with
+two negative controls (a packaged heat pump on its own row, a heat pump
+beside another heat pump); disabling the rule fails it. The attribute eval's
+context test (assembliesAttrEval.test.mjs) now pins the families beside the
+headers and notes.
+
+## AS-36 — the Takeoff panel on eight more documents: units that share a tag shared one accessible name (FIXED — this goal)
+
+**Found:** 2026-09-27, running the UI proof (AS-34's: a real PDF through the
+dev server into Takeoff → Assemblies, byte for byte against apply_assemblies
+over MCP, control drawings read by printed phrases on both surfaces) on eight
+documents it had not run on: 083_MA, 071_ME (dev 3), 03_FL, 21_VA, 16_NV
+(dev 2), and 077_MT, 014_MT, 061_IA (unseen). Seven passed all 10 checks
+on the first run. 16_NV stopped before the override check: it opened the
+wrong unit's details. Its schedules print each mark bare under a symbol that
+carries the prefix (AS-11: "B1" is a furnace, a condensing unit and an outdoor
+air unit, right per table), and the panel named every one of their Details
+buttons and detail regions "B1 controls details". A screen reader could not
+tell the three apart, and neither could the proof.
+
+**Fix (the panel only; accessible names are not the shared path):** a unit's
+Details button and its detail region are named by tag, family and layer ("B1
+FURNACE controls details"); the proof finds a unit the same way.
+
+**Measured:** 16_NV passes all 10 checks, and 083_MA, re-run as a control,
+passes as before. Across the eight documents, 347 units, 598 records and
+7,438 lines match MCP byte for byte in the panel, along with the CSV set and
+the mechanical-scope set, settings, keyboard, override, library, themes at
+three widths, autosave and reload.

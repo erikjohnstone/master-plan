@@ -51,7 +51,7 @@ import { spawn } from "node:child_process";
 import { childStdoutText } from "./childText.mjs";
 import { createHash } from "node:crypto";
 import { attributeSpec, canonicalAttributeFor, keyValueToCanonical } from "../../web/src/lib/assemblies/attributes.ts";
-import { vfdDrivenTags } from "../../web/src/lib/assemblies/normalize.ts";
+import { withProject } from "../../web/src/lib/assemblies/normalize.ts";
 import { compileTableTitle, compiledProjectOf, sheetPage, tableContextOf } from "../../web/src/lib/assemblies/apply.ts";
 
 export const KEY_COLUMNS = ["sheet", "table_title", "tag", "family", "attribute", "value", "unit", "source_header", "note"];
@@ -185,13 +185,11 @@ export function scoreSet({ setId, key, snapshot, normalize }) {
   }
   const memo = new Map();
   const read = new WeakMap();
-  // The units the project's drive schedules name as their loads.
-  const driven = vfdDrivenTags(snapshot.items);
+  // What the rest of the project adds to a row's table: the units its drive
+  // schedules name as their loads, and a paired row's other unit.
+  const context = withProject(snapshot.items);
   const norm = (it) => {
-    if (!memo.has(it)) {
-      const table = tableContextOf(it, snapshot.tables, snapshot.pages, read);
-      memo.set(it, normalize(it, it.family, table && driven.size ? { ...table, driven } : table));
-    }
+    if (!memo.has(it)) memo.set(it, normalize(it, it.family, context(it, tableContextOf(it, snapshot.tables, snapshot.pages, read))));
     return memo.get(it);
   };
   const outcomes = [];

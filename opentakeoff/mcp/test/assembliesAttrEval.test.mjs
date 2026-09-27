@@ -165,14 +165,14 @@ test("two compile items with the key's tag: the one of the key's family is score
   assert.deepEqual(r.outOfScopeItems.map((i) => i.family), ["CONDENSING_UNIT"]);
 });
 
-test("the normalizer gets the item's family and its table's headers and notes", () => {
+test("the normalizer gets the item's family, its table's headers and notes, and the families of its table's units", () => {
   const key = parseAttrKeyCsv(csv([line({ tag: "P-1", attribute: "gpm", value: "120", unit: "gpm" })]));
   let seen = null;
   const notes = [{ id: "1", text: "PROVIDE VFD." }];
   scoreSet({ setId: "s", key,
     snapshot: { items: [item({ tag: "P-1" })], tables: [{ sheet: "a.pdf#2", title: "PUMP SCHEDULE", headers: ["MARK", "GPM"], notes }, { sheet: "a.pdf#9", title: "PUMP SCHEDULE", headers: ["X"], notes: [] }] },
     normalize: (it, family, table) => { seen = { family, table }; return { family, tag: it.tag, attributes: {}, unknown: {} }; } });
-  assert.deepEqual(seen, { family: "PUMP", table: { headers: ["MARK", "GPM"], notes, rows: [], codes: {}, legend: {} } });
+  assert.deepEqual(seen, { family: "PUMP", table: { headers: ["MARK", "GPM"], notes, rows: [], codes: {}, legend: {}, families: new Map([["P-1", new Set(["PUMP"])]]) } });
 });
 
 test("slices and the gate", () => {

@@ -176,10 +176,10 @@ try {
     // A unit with a typical and options: its details open from the keyboard.
     const unit = mcp.report.units.find((u) => u.assembly && Object.keys(u.options).length);
     assert.ok(unit, 'the document has a unit with a typical and options');
-    const toggle = panel.getByRole('button', { name: `${unit.tag} ${unit.layer} details`, exact: true }).first();
+    const toggle = panel.getByRole('button', { name: `${unit.tag} ${unit.family} ${unit.layer} details`, exact: true }).first();
     await toggle.focus();
     await page.keyboard.press('Enter');
-    const detail = panel.getByRole('region', { name: `${unit.tag} ${unit.layer} details`, exact: true }).first();
+    const detail = panel.getByRole('region', { name: `${unit.tag} ${unit.family} ${unit.layer} details`, exact: true }).first();
     await detail.waitFor({ state: 'visible' });
     assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
     checks.push(`keyboard: ${unit.tag} (${unit.layer}) details`);

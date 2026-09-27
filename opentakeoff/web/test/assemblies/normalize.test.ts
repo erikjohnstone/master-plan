@@ -4,7 +4,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  headerText, normalizeCompileItem, parseElectricalCell, parseNumberCell, parseSizeCell, quantitiesOf, vfdDrivenTags,
+  headerText, normalizeCompileItem, parseElectricalCell, parseNumberCell, parseSizeCell, quantitiesOf, vfdDrivenTags, withProject,
   type CompileItem,
 } from "../../src/lib/assemblies/normalize.ts";
 
@@ -337,6 +337,66 @@ test("split systems: a column naming the other half is not this unit's; a pair's
   assert.deepEqual([accu.volts, accu.phase, accu.cfm], [208, 1, undefined]);
   const ac = values(normalizeCompileItem(row("AC-1", "SPLIT SYSTEM AIR CONDITIONING UNITS", pair), "FCU", pairTable));
   assert.deepEqual([ac.volts, ac.phase, ac.cfm], [undefined, undefined, 530]);
+});
+
+// 18_OR's sheet M5.1 (an unseen document): "AIR HANDLER HEAT PUMP SCHEDULE (WITH
+// ELECTRIC HEAT)" schedules "AHU-3, HP-3" on one row, its columns grouped AIR
+// HANDLER INDOOR UNIT and HEAT PUMP OUTDOOR UNIT; "ENERGY RECOVERY UNIT SCHEDULE
+// (WITH HEAT PUMP)" schedules "ERU-1, HP-4", the heat pump's capacities marked
+// (HEAT PUMP). The heat pump read the air handler's 10,000 CFM and 90 KW, and
+// the ERU's supply fan HP as its own. Cells as printed.
+test("a heat pump on one row with the unit it serves is its outdoor half: that unit's fans, airflow and electric heat are not the heat pump's", () => {
+  const ahuCells = {
+    "AREA SERVED": "GYM",
+    "AIR HANDLER INDOOR UNIT DX COOLING COIL CAPACITY TOTAL MBH": "274",
+    "AIR HANDLER INDOOR UNIT HEATING COIL CAPACITY TOTAL MBH": "181",
+    "AIR HANDLER INDOOR UNIT ELECTRIC HEAT KW": "90",
+    "AIR HANDLER INDOOR UNIT ELECTRIC HEAT V/Ø": "460/3",
+    "AIR HANDLER INDOOR UNIT SUPPLY FAN CFM": "10,000",
+    "AIR HANDLER INDOOR UNIT SUPPLY FAN BHP": "7.84",
+    "AIR HANDLER INDOOR UNIT SUPPLY FAN V/Ø": "460/3",
+    "HEAT PUMP OUTDOOR UNIT COOLING CAPACITY 95° OSA, 80° EDB, 62° EWB TOTAL MBH": "274",
+    "HEAT PUMP OUTDOOR UNIT HEATING CAPACITY AT 0°F OSA MBH": "181",
+    "HEAT PUMP OUTDOOR UNIT ELECTRICAL FOR HEAT PUMP V/Ø": "460/3",
+    "OSA CFM": "3900",
+  };
+  const ahuTitle = "AIR HANDLER HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT)";
+  const ahuTable = { headers: ["SYMBOL", ...Object.keys(ahuCells)], rows: [{ key: "AHU-3HP-3", cells: { SYMBOL: "AHU-3, HP-3", ...ahuCells } }] };
+  const ahuItems = [{ ...row("AHU-3", ahuTitle, ahuCells), family: "AHU" }, { ...row("HP-3", ahuTitle, ahuCells), family: "HEAT_PUMP" }];
+  const ahuContext = withProject(ahuItems);
+  const hp3 = normalizeCompileItem(ahuItems[1], "HEAT_PUMP", ahuContext(ahuItems[1], ahuTable));
+  assert.deepEqual([values(hp3).cfm, values(hp3).eh_kw], [undefined, undefined]);
+  assert.deepEqual([values(hp3).cooling_mbh, values(hp3).heating_mbh, values(hp3).volts, values(hp3).phase], [274, 181, 460, 3]);
+  assert.match(hp3.attributes.cooling_mbh.cite.header, /^HEAT PUMP OUTDOOR UNIT COOLING/);
+  assert.match(hp3.attributes.heating_mbh.cite.header, /^HEAT PUMP OUTDOOR UNIT HEATING/);
+  assert.equal(hp3.attributes.volts.cite.header, "HEAT PUMP OUTDOOR UNIT ELECTRICAL FOR HEAT PUMP V/Ø");
+  const ahu3 = values(normalizeCompileItem(ahuItems[0], "AHU", ahuContext(ahuItems[0], ahuTable)));
+  assert.deepEqual([ahu3.supply_cfm, ahu3.eh_kw, ahu3.cooling_mbh, ahu3.heating_mbh], [10000, 90, 274, 181], "the air handler keeps its own");
+
+  const eruCells = {
+    "AREA SERVED": "BOYS & GIRLS LOCKER ROOMS", "SUPPLY FAN CFM": "2200", "SUPPLY FAN HP": "1.63", "EXHAUST FAN CFM": "2800", "EXHAUST FAN HP": "2.17",
+    "COOLING CAPACITY 96° OSA, 75° EDB, 66° EWB (HEAT PUMP) TOTAL MBH": "68.9", "HEATING CAPACITY (HEAT PUMP) MBH": "57.5",
+    "ELECTRICAL MCA": "8.79 (ERU), 12.3 (HP)", "ELECTRICAL V/Ø": "460/3",
+  };
+  const eruTitle = "ENERGY RECOVERY UNIT SCHEDULE (WITH HEAT PUMP)";
+  const eruTable = { headers: ["SYMBOL", ...Object.keys(eruCells)], rows: [{ key: "ERU-1HP-4", cells: { SYMBOL: "ERU-1, HP-4", ...eruCells } }] };
+  const eruItems = [{ ...row("ERU-1", eruTitle, eruCells), family: "ERV" }, { ...row("HP-4", eruTitle, eruCells), family: "HEAT_PUMP" }];
+  const eruContext = withProject(eruItems);
+  const hp4 = values(normalizeCompileItem(eruItems[1], "HEAT_PUMP", eruContext(eruItems[1], eruTable)));
+  assert.deepEqual([hp4.motor_hp, hp4.cfm], [undefined, undefined], "neither the supply fan's HP nor the exhaust fan's");
+  assert.deepEqual([hp4.cooling_mbh, hp4.heating_mbh, hp4.volts, hp4.phase], [68.9, 57.5, 460, 3]);
+  const eru = values(normalizeCompileItem(eruItems[0], "ERV", eruContext(eruItems[0], eruTable)));
+  assert.deepEqual([eru.supply_fan_hp, eru.exhaust_fan_hp, eru.volts], [1.63, 2.17, 460], "the ERU keeps its own");
+
+  // Negative controls: a packaged heat pump on a row of its own keeps its fan
+  // and its heat; so does one whose row partner is no unit that moves the air.
+  const packaged = { "SUPPLY FAN CFM": "1,200", "SUPPLY FAN HP": "0.5", "ELECTRIC HEAT KW": "5" };
+  const alone = values(normalizeCompileItem(row("HP-1", "PACKAGED HEAT PUMP SCHEDULE", packaged), "HEAT_PUMP"));
+  assert.deepEqual([alone.cfm, alone.motor_hp, alone.eh_kw], [1200, 0.5, 5]);
+  const hpPair = { headers: ["SYMBOL", ...Object.keys(packaged)], rows: [{ key: "HP-1HPC-1", cells: { SYMBOL: "HP-1, HPC-1", ...packaged } }] };
+  const hpItems = [{ ...row("HP-1", "HEAT PUMP SCHEDULE", packaged), family: "HEAT_PUMP" }, { ...row("HPC-1", "HEAT PUMP SCHEDULE", packaged), family: "HEAT_PUMP" }];
+  const self = values(normalizeCompileItem(hpItems[0], "HEAT_PUMP", withProject(hpItems)(hpItems[0], hpPair)));
+  assert.deepEqual([self.cfm, self.motor_hp, self.eh_kw], [1200, 0.5, 5]);
 });
 
 // 12_MT's CABINET UNIT HEATER SCHEDULE prints the coil's water under AIR SIDE

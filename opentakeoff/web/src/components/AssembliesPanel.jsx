@@ -106,7 +106,7 @@ function ControlReadings({ unit, readings, onOverride, onOpenCitation }) {
 function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
   const derived = Object.entries(unit.derived || {});
   return (
-    <div style={{ padding: "8px 12px 14px 28px", background: "var(--paper)" }} data-assembly-unit-detail={unit.tag} role="region" aria-label={`${unit.tag} ${unit.layer} details`}>
+    <div style={{ padding: "8px 12px 14px 28px", background: "var(--paper)" }} data-assembly-unit-detail={unit.tag} role="region" aria-label={`${unit.tag} ${unit.family} ${unit.layer} details`}>
       {unit.reason && <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginBottom: 6 }}>Rule: <span style={mono}>{unit.reason}</span></div>}
       {unit.printed_points && (
         <div style={{ marginBottom: 8, fontSize: "var(--fs-s)" }}>
@@ -713,7 +713,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                         {u.printed_points ? `${u.printed_points.rows} (${["AI", "AO", "BI", "BO"].map((io) => `${io} ${u.printed_points.by_io[io]}`).join(" ")})` : "—"}
                       </td>
                       <td style={td}>
-                        <button type="button" style={btn} aria-expanded={open === k} aria-label={`${u.tag} ${u.layer} details`}
+                        <button type="button" style={btn} aria-expanded={open === k} aria-label={`${u.tag} ${u.family} ${u.layer} details`}
                           onClick={(ev) => { ev.stopPropagation(); setOpen(open === k ? null : k); }}>{open === k ? "Hide" : "Details"}</button>
                       </td>
                     </tr>,

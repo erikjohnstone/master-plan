@@ -35,7 +35,7 @@
 //   5. the library is applied (select.ts) and expanded (expand.ts).
 import type { Value } from "./expr";
 import { expandAll, type DrawingEvidence } from "./expand";
-import { normalizeCompileItem, vfdDrivenTags, type CompileItem, type NormalizedItem, type TableContext } from "./normalize";
+import { normalizeCompileItem, withProject, type CompileItem, type NormalizedItem, type TableContext } from "./normalize";
 import { citedCodeLegend, scheduleLegend, scheduleNotes, type Box, type NoteSpan, type ScheduleNote } from "./scheduleNotes";
 import type { ApplicationRecord, AssemblyDefinition, Cite, ExpandedLine } from "./schema";
 import type { Instance, Override, ProjectSettings } from "./select";
@@ -324,11 +324,8 @@ export function tableContextOf(
  * in the order of `project.items`. */
 export function normalizeProject(project: CompiledProject): NormalizedItem[] {
   const cache = new WeakMap<CompiledTable, ReadTable>();
-  const driven = vfdDrivenTags(project.items);
-  return project.items.map((it) => {
-    const table = tableContextOf(it, project.tables ?? [], project.pages ?? {}, cache);
-    return normalizeCompileItem(it, it.family, table && driven.size ? { ...table, driven } : table);
-  });
+  const context = withProject(project.items);
+  return project.items.map((it) => normalizeCompileItem(it, it.family, context(it, tableContextOf(it, project.tables ?? [], project.pages ?? {}, cache))));
 }
 
 // ── Links between rows ──────────────────────────────────────────────────────

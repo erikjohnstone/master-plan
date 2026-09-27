@@ -1,5 +1,28 @@
 # Changelog
 
+- **A heat pump scheduled on one row with its air handler keeps only its own
+  columns.** A schedule that prints "AHU-1, HP-1" on one row, with columns
+  grouped AIR HANDLER INDOOR UNIT and HEAT PUMP OUTDOOR UNIT, compiles to an
+  air handler and a heat pump. The heat pump read the air handler's supply
+  airflow and electric heat, and an energy recovery unit's supply fan
+  horsepower, as its own. The shared normalizer
+  (`web/src/lib/assemblies/normalize.ts`) now treats a heat pump whose row
+  partner moves the air (an air handler, ERU, fan coil or furnace) as that
+  unit's outdoor half, as it already did for a condensing unit: the fans, the
+  airflow and the electric heat are the indoor unit's, and the heat pump's
+  capacities and power cite its own column group. A packaged heat pump on a
+  row of its own keeps its fan. Found by a column census of documents no
+  census had read. Five values change across every cached document, all
+  removals verified against the printed sheet, and every dev tier scores as
+  before (ASSEMBLIES_BUG_CATALOGUE AS-35).
+
+- **Units that share a tag get distinct Details buttons.** When a project
+  schedules a condensing unit, a furnace and an outdoor air unit all as "B1",
+  the Assemblies panel gave all three the same accessible name ("B1 controls
+  details"), so a screen reader could not tell them apart. The name now
+  includes the family ("B1 FURNACE controls details") (ASSEMBLIES_BUG_CATALOGUE
+  AS-36).
+
 - **Assemblies read a schedule's abbreviations as the words they stand for.**
   The shared normalizer (`web/src/lib/assemblies/normalize.ts`) now reads
   "CAP." as CAPACITY, "ENT." and "LVG." as ENTERING and LEAVING, "(DEG F)" as
