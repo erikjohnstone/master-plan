@@ -2206,9 +2206,14 @@ choice of typical still wins. Two shapes, each from its own evidence:
   All three must hold.
 
 **Measured:** across the 106 cached documents (every dev tier, the unseen
-snapshots, the sweep), 6 of 2,371 records change, each the intended one:
-14_OR's HP-01 and HP-02 and 18_OR's HP-1 to HP-4 drop heat-pump@1 (11 lines
-each, 66 lines) and apply as condensing units. Every dev tier's line outcomes
+snapshots, the sweep), 12 of 3,489 records change, with the production
+library (the typicals and the hook-ups), each the intended one: 14_OR's
+HP-01 and HP-02 and 18_OR's HP-1 to HP-4 drop heat-pump@1 (11 lines each) and
+hookup-heat-pump@1 (one note line each: its hose kit needs a source-water
+flow, which an air-to-air unit does not have), 72 lines in all, and apply as
+condensing units. (The commit that made the change counted the controls
+layer only, "6 of 2,371 records"; the scratch A/B loaded only the typicals.
+It now loads what mcp/src/assemblies.ts STARTER_FILES loads.) Every dev tier's line outcomes
 are identical, except that 14_OR's two heat pumps give a different reason for
 the airflow they leave unknown (still correctly unknown): "no printed column
 answers it", as a condensing unit in a split table already does. The
@@ -2216,7 +2221,10 @@ invariant sweep is unchanged except its line total, which falls by exactly
 those 22 lines of 14_OR. Tests: apply.test.ts, on 18_OR's and 14_OR's own
 cells, with three negative controls (a packaged heat pump, a table that is
 no split system's, a heat pump row that prints its own airflow); disabling
-either shape fails its test.
+either shape fails its test. The UI proof passes all 10 checks on both
+documents with the rule in place: 14_OR (96 records, 1,702 lines) and 18_OR
+(35 records, 293 lines) byte-identical to apply_assemblies, the panel
+showing each heat pump as "CONDENSING_UNIT (from HEAT_PUMP)" with its basis.
 
 **Considered, not done:** a row that stacks its two tags with no separator
 ("AHU-1 HP-1" rather than "AHU-1, HP-1") would not pair, since the pairing
@@ -2246,3 +2254,49 @@ census3/ws-pairs.mjs), so the separators stay as they are.
   have no heating-mode line, and erv no DX line. A heat pump heating mode on
   those typicals, and how a unit heated by a heat pump with electric
   supplemental heat reads its heating_type, are the owner's calls.
+
+## AS-38 — an air handler's own fans, scheduled apart, each took a fan typical beside the air handler's (FIXED — this goal)
+
+**Found:** 2026-09-27, by a census of units another unit's row names as its
+component (scratch census3/components.mjs, 106 cached documents, 31
+mentions). Most are no double count: coils and condensing units a parent row
+names carry no typical, humidifiers with their own control panel are keyed
+with their own typical (itd-d1-lab HUM-1, humidifier), and interlocks name
+separate systems. One shape is: 096_IN (dev 3) schedules AHU-4's fan arrays
+in an AHU SUPPLY FAN SCHEDULE and an AHU RETURN/EXHAUST FAN SCHEDULE, each
+row's LOCATION the air handler it sits in (SF-4A "LOCATION: AHU-4"), and
+AHU-4's own row names them ("SF-4A/B", "RF-4A/B"). SF-4A, SF-4B, RF-4A and
+RF-4B each took fan-variable@1 (7 lines) beside AHU-4's own fan points. The
+dev typical key reads such fans the other way: 031_MO's WHSE-SF1 and WHSE-RF1,
+"supply fan array of WHSE-AHU-1 … its points are the air handler's, so no
+separate fan typical".
+
+**Why:** the row reader's component_of rule (control intent, R0) took a fan
+as part of an air handler only when its SERVICE or SYSTEM cell names one;
+the binder already read a LOCATION cell naming a scheduled unit as "puts it
+in" that unit.
+
+**Fix (shared path: rowReader.ts, which every surface applies through
+applyAssemblies):** the rule also reads the fan's location column, with the
+binder's own definition (LOCATION_HEADER, now exported from binding.ts): a
+LOCATION, MOUNTED or INSTALLED cell that is exactly a scheduled air handler's
+tag. The record is not_in_scope, "the fan is located in AHU-4: its points are
+the air handler's", cited to the LOCATION cell, as the SERVICE form already
+was. A user's own choice of typical still wins.
+
+**Measured:** 4 of 3,489 records change across the 106 cached documents
+(typicals and hook-ups), each the intended one (28 lines fewer; a fan takes
+no hook-up). 096_IN's SF-1A through SF-3 name DOAS-1 …
+DOAS-3, which the set's compile does not schedule, so they keep their
+typicals: they are the only place those units' fans are counted. The
+control-intent replays of every dev set are unchanged. Test: rowReader.test.ts,
+on 096_IN's cells, with four look-alikes that must not fire (a fan on the
+roof, a location that only mentions the air handler, a location naming
+equipment the set does not schedule, an exhaust fan interlocked with the air
+handler); removing the location column from the rule fails it. One full web
+check run alongside the scratch censuses failed a fourth test,
+basSyncRestore's "adoption callback and atomic checkpoint settle before a
+queued restore starts", which waits a bounded 1,000 event-loop turns for a
+queued Web Lock. That test passes 5 of 5 on its own and in an uncontended
+full run (3,822 of 3,838, the three AS-1 failures only). It exercises the BAS
+sync store, which this change does not touch.

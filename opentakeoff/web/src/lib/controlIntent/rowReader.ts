@@ -13,7 +13,8 @@
 //                       variable ("CONSTANT", "CV", "VARIABLE") → vfd
 //   row.not_used        a cell that reads exactly "NOT USED" → no unit
 //   row.component_of    a fan whose SERVICE / SYSTEM names a scheduled air
-//                       handler: its points are the air handler's
+//                       handler, or whose LOCATION puts it in one: its
+//                       points are the air handler's
 //   row.standalone      a note or remark: "STANDALONE", "NOT CONTROLLED BY
 //                       (THE) DDC / BAS / BMS …" → outside the BAS scope
 //   row.modulating_valve a unit heater note: a modulating (control) valve
@@ -24,6 +25,7 @@
 import type { Value } from "../assemblies/expr";
 import type { Cite } from "../assemblies/schema";
 import type { ScheduleNote } from "../assemblies/scheduleNotes";
+import { LOCATION_HEADER } from "./binding";
 import type { AnswerUnit } from "./catalogue";
 import type { IntentFact, UnitIntent } from "./intent";
 
@@ -65,13 +67,17 @@ export function rowIntents(units: readonly RowUnit[]): Map<number, UnitIntent> {
         break;
       }
     }
-    // row.component_of: a fan scheduled as part of an air handler.
+    // row.component_of: a fan scheduled as part of an air handler: its
+    // SERVICE or SYSTEM names the air handler, or its location puts it in one
+    // ("LOCATION: AHU-4", as the binder reads a location).
     if (!it.out_of_scope && u.family === "FAN") {
-      const service = [clean(u.attributes.service?.value), ...Object.entries(u.cells).filter(([h]) => /\bSERVICE\b|\bSYSTEM\b/i.test(h)).map(([, v]) => clean(v))];
+      const service = [clean(u.attributes.service?.value), ...Object.entries(u.cells).filter(([h]) => /\bSERVICE\b|\bSYSTEM\b/i.test(h) || LOCATION_HEADER.test(h)).map(([, v]) => clean(v))];
       for (const s of service) {
         const owner = airHandlers.get(canonTag(s));
         if (owner && canonTag(owner) !== canonTag(u.tag)) {
-          it.out_of_scope = drawingFact(true as const, "drawing_read:row.component_of", `the fan is scheduled for ${owner}: its points are the air handler's`, cellCite(u, Object.entries(u.cells).find(([, v]) => clean(v) === s)?.[0] ?? "SERVICE"));
+          const header = Object.entries(u.cells).find(([, v]) => clean(v) === s)?.[0] ?? "SERVICE";
+          const where = LOCATION_HEADER.test(header) ? `is located in ${owner}` : `is scheduled for ${owner}`;
+          it.out_of_scope = drawingFact(true as const, "drawing_read:row.component_of", `the fan ${where}: its points are the air handler's`, cellCite(u, header));
           break;
         }
       }

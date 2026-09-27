@@ -1,5 +1,18 @@
 # Changelog
 
+- **An air handler's own fans, scheduled in a fan schedule, no longer take a
+  fan typical of their own.** A schedule of an air handler's supply and
+  return fans whose LOCATION column names the air handler ("SF-4A, LOCATION:
+  AHU-4") gave each fan the variable-speed fan typical beside the air
+  handler's own fan points. The control-intent row reader
+  (`web/src/lib/controlIntent/rowReader.ts`) already took a fan whose
+  SERVICE or SYSTEM names a scheduled air handler as part of it; it now reads
+  the fan's location the same way, as the binder already did. A fan whose
+  location is a room, or equipment the set does not schedule, keeps its
+  typical. Across every cached document, 4 of 3,489 records change (096_IN's
+  SF-4A/B and RF-4A/B), and the control-intent replays are unchanged
+  (ASSEMBLIES_BUG_CATALOGUE AS-38).
+
 - **A split system's outdoor heat pump no longer double-counts its indoor
   unit's control points.** A heat pump that is a split system's outdoor
   half, scheduled on one row with its air handler ("AHU-1, HP-1") or listed
@@ -10,9 +23,11 @@
   it as the system's outdoor unit (`CONDENSING_UNIT`, derived from
   `HEAT_PUMP`, rule `derive.family.split_outdoor`), which carries no typical
   of its own, as the answer keys read every condensing unit. A packaged heat
-  pump keeps its typical. Across every cached document, 6 of 2,371 records
-  change (14_OR's HP-01 and HP-02, 18_OR's HP-1 to HP-4), and every dev tier
-  scores as before (ASSEMBLIES_BUG_CATALOGUE AS-37).
+  pump keeps its typical. Across every cached document, 12 of 3,489 records
+  change: 14_OR's HP-01 and HP-02 and 18_OR's HP-1 to HP-4 each drop the
+  heat-pump typical and the heat-pump hook-up, whose hose kit needs a
+  source-water flow an air-to-air unit does not have (it held one note line).
+  Every dev tier scores as before (ASSEMBLIES_BUG_CATALOGUE AS-37).
 
 - **A heat pump scheduled on one row with its air handler keeps only its own
   columns.** A schedule that prints "AHU-1, HP-1" on one row, with columns

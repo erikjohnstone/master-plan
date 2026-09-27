@@ -1018,8 +1018,8 @@ function hostFamilyOf(u: RowUnit, byTag: ReadonlyMap<string, readonly RowUnit[]>
   return null;
 }
 
-/** A column that says where a unit is. */
-const LOCATION_HEADER = /\b(?:LOCATION|MOUNTED|INSTALLED)\b/i;
+/** A column that says where a unit is (the row reader reads it too). */
+export const LOCATION_HEADER = /\b(?:LOCATION|MOUNTED|INSTALLED)\b/i;
 
 /** Whether a unit's own schedule row (its title, headers or cells) prints
  * the title's whole subject, qualifiers included. */

@@ -39,6 +39,32 @@ test("row.not_used, row.component_of: no unit, and a fan that is part of a sched
   assert.deepEqual([1, 3, 4].map((i) => m.has(i)), [false, false, false], "a pump serving an air handler is its own unit");
 });
 
+// 096_IN (dev 3): AHU SUPPLY FAN SCHEDULE and AHU RETURN/EXHAUST FAN SCHEDULE
+// list the air handlers' fans, each row's LOCATION the air handler it sits in
+// (SF-4A "LOCATION: AHU-4"); AHU-4's own row names them (SF-4A/B, RF-4A/B).
+// 031_MO's typical key reads such fans: "its points are the air handler's, so
+// no separate fan typical".
+test("row.component_of: a fan whose location is a scheduled air handler is part of it", () => {
+  const m = rowIntents([
+    unit(0, "AHU-4", "AHU"),
+    unit(1, "SF-4A", "FAN", { cells: { LOCATION: "AHU-4", "FAN RPM": "4243" } }),
+    unit(2, "RF-4A", "FAN", { cells: { LOCATION: "AHU-4" } }),
+    // Look-alikes: a fan in a room, a location that only mentions the unit,
+    // a location naming equipment the set does not schedule, and an exhaust
+    // fan interlocked with the air handler (its own unit, keyed with its own
+    // typical in bldg5406 and federal-mech).
+    unit(3, "EF-1", "FAN", { cells: { LOCATION: "ROOF" } }),
+    unit(4, "EF-2", "FAN", { cells: { LOCATION: "MECH ROOM NEAR AHU-4" } }),
+    unit(5, "SF-1A", "FAN", { cells: { LOCATION: "DOAS-1" } }),
+    unit(6, "EF-3", "FAN", { cells: { INTERLOCK: "AHU-4", LOCATION: "ROOF" } }),
+  ]);
+  assert.equal(m.get(1)!.out_of_scope!.rule, "drawing_read:row.component_of");
+  assert.match(m.get(1)!.out_of_scope!.basis, /located in AHU-4/);
+  assert.equal(m.get(1)!.out_of_scope!.cites[0].header, "LOCATION");
+  assert.equal(m.get(2)!.out_of_scope!.rule, "drawing_read:row.component_of");
+  assert.deepEqual([3, 4, 5, 6].map((i) => m.get(i)?.out_of_scope), [undefined, undefined, undefined, undefined]);
+});
+
 test("row.standalone: a statement about the unit or its controls, never a standalone disconnect", () => {
   const note = (id: string, text: string) => ({ id, text });
   const m = rowIntents([
