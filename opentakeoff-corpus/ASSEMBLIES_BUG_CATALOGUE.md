@@ -1859,10 +1859,11 @@ halves (apply.test.ts, normalize.test.ts), with negative controls: a row the
 claimed table lacks, a title sharing no words, another sheet.
 
 **Measured:**
-- Dev 5: 503 of 561 exact (89.7%), 0 wrong, 58 missed, 0 invented (cached
-  snapshots; 061_IA re-snapshotted through the new path: its items, pages,
-  points lists and control packets are byte-identical, and one table is
-  added).
+- Dev 5: 503 of 561 exact (89.7%), 0 wrong, 58 missed, 0 invented, on the
+  cached snapshots (061_IA re-snapshotted through the new path: its items,
+  pages, points lists and control packets are byte-identical, and one table
+  is added) and in the official report at 8658a24 (02-attr-eval-dev5.md,
+  every set compiled afresh).
 - Of the 86 cached documents only 061_IA prints a continuation the rule
   keeps; 004_MO's KITCHEN HOOD SCHEDULE (CONT.) continues a table the compile
   does not claim, and is left out. The five changed values (AHU-A's volts 460
@@ -1885,3 +1886,11 @@ flows each match the print, and no dev tier changes. The disagreeing
 columns left on those documents are genuine: a heat pump's cooling and
 heating modes enter at different temperatures, and a condensing unit's
 compressor and condenser fan motors are two motors.
+
+**GATE 2 at the freeze after dev 5 (8658a24; aggregates only, nothing tuned
+on them):** held-out 897 of 1,008 exact (89.0%), 0 wrong, 2 invented;
+held-out 2 334 of 472 exact (70.8%), 1 wrong (0.2%), 2 invented. Both are
+exactly the dev-4 freeze's numbers, in every column the reports print; they
+differ from its reports only in their date and code hash. Both still fail
+on exact and invented. No rule was taken from either's rows, and only these
+aggregates were read.
