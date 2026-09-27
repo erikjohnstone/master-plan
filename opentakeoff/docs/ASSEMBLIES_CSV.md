@@ -246,6 +246,14 @@ skipped on import, and a changed one is refused with the reason. Every row of
 your own is checked by the same gate as a profile's library, and every problem
 is reported by row and column. A record with any problem is not imported.
 
+The export is UTF-8 with a byte-order mark, so a spreadsheet opens it as
+UTF-8. The import reads UTF-8, with or without the mark, and a file that is not
+UTF-8 as Windows-1252, the encoding of a spreadsheet's plain "CSV (Comma
+delimited)" on Windows; the import says when it did. A cell a spreadsheet
+rewrote as `TRUE` or `FALSE` in `default`, `when`, `selector`, `auto`, `qty` or
+`from` reads as `true` or `false`; text columns keep what they say. A file whose
+columns are separated by semicolons is refused with that reason.
+
 Every row names its record with `row_type`, `assembly_id` and
 `assembly_version`. `row_type` is one of:
 

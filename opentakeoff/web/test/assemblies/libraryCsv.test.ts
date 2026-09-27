@@ -5,7 +5,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { LIBRARY_CSV_COLUMNS, importLibraryCsv, libraryFromCsv, libraryToCsv } from "../../src/lib/assemblies/libraryCsv.ts";
+import { LIBRARY_CSV_COLUMNS, decodeCsvBytes, importLibraryCsv, libraryFromCsv, libraryToCsv } from "../../src/lib/assemblies/libraryCsv.ts";
+import { parseCsvRows } from "../../src/lib/csv.js";
 import { cloneForEdit } from "../../src/lib/assemblies/libraryEdit.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
@@ -101,4 +102,66 @@ test("import beside the starter: a whole-library export reads back unchanged; a 
   const refused = importLibraryCsv(libraryToCsv([starterEdit, myFcu]), STARTER, []);
   assert.ok(refused.errors.some((e) => e.record === `${STARTER[0].id}@1` && /read-only: clone it/.test(e.message)), JSON.stringify(refused.errors));
   assert.deepEqual(refused.added, [`${myFcu.id}@${myFcu.version}`]);
+});
+
+// AS-60: through a spreadsheet, as Excel on Windows saves a CSV.
+const CP1252 = new Map([[0x2013, 0x96], [0x2014, 0x97], [0x2018, 0x91], [0x2019, 0x92], [0x201C, 0x93], [0x201D, 0x94], [0x2022, 0x95], [0x2026, 0x85]]);
+const toCp1252 = (s: string) => Uint8Array.from([...s].map((ch) => {
+  const c = ch.codePointAt(0)!;
+  if (c < 0x80 || (c >= 0xA0 && c <= 0xFF)) return c;
+  const b = CP1252.get(c);
+  if (b === undefined) throw new Error(`not in Windows-1252: ${ch}`);
+  return b;
+}));
+/** What a spreadsheet writes back: each cell it read as a boolean in capitals. */
+const spreadsheet = (text: string) => parseCsvRows(text).map((r, i) => (i === 0 ? r : r.map((v) => (/^(true|false)$/i.test(v) ? v.toUpperCase() : v))))
+  .map((r) => r.map((v) => (/[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v)).join(",")).join("\r\n") + "\r\n";
+
+test("the library survives a spreadsheet: its plain CSV's Windows-1252 and its TRUE and FALSE (AS-60)", () => {
+  const mine = { ...cloneForEdit(STARTER.find((a) => a.id === "fan-constant")!, STARTER) };
+  mine.lines = mine.lines.map((l, i) => (i === 0 ? { ...l, label: "Fan start/stop (55°F lockout) – per §3.1" } : l));
+  const csv = libraryToCsv([...STARTER, mine]);
+  assert.ok(csv.includes("§"), "the starter cites its standards with §, so no export of it is ASCII");
+  assert.ok(/,false,|,true,/.test(csv), "and it has true and false cells");
+  const edited = spreadsheet(csv);
+  for (const [how, bytes] of [["CSV UTF-8", new TextEncoder().encode(`﻿${edited}`)], ["plain CSV", toCp1252(edited)]] as const) {
+    const { text, encoding } = decodeCsvBytes(bytes);
+    assert.equal(encoding, how === "plain CSV" ? "windows-1252" : "utf-8");
+    const r = importLibraryCsv(text, STARTER, []);
+    assert.deepEqual(r.errors, [], how);
+    assert.equal(r.unchanged.length, STARTER.length, `${how}: every starter record reads as the starter`);
+    assert.deepEqual(r.added, [`${mine.id}@${mine.version}`]);
+    assert.deepEqual(r.partner, [mine], `${how}: the partner's record is the one exported, "°", "–" and "§" and all`);
+  }
+  // Read as UTF-8 alone, the plain CSV turns every non-ASCII character into U+FFFD.
+  assert.match(new TextDecoder("utf-8").decode(toCp1252(edited)), /�/);
+});
+
+test("the CSV's bytes: UTF-8 with or without a byte-order mark, else Windows-1252 (AS-60)", () => {
+  assert.deepEqual(decodeCsvBytes(new TextEncoder().encode("﻿row_type,§")), { text: "row_type,§", encoding: "utf-8" });
+  assert.deepEqual(decodeCsvBytes(new TextEncoder().encode("row_type,°")), { text: "row_type,°", encoding: "utf-8" });
+  assert.deepEqual(decodeCsvBytes(Uint8Array.from([0x41, 0xA7, 0x20, 0xB0, 0x46, 0x20, 0x96])), { text: "A§ °F –", encoding: "windows-1252" });
+});
+
+test("a spreadsheet's TRUE and FALSE are read as true and false where the columns take them, and nowhere else (AS-60)", () => {
+  const fcu = STARTER.find((a) => a.id === "fcu")!;
+  const rows = parseCsvRows(libraryToCsv([fcu]));
+  const col = (c: string) => rows[0].indexOf(c);
+  const opt = rows.findIndex((r) => r[0] === "option" && r[col("default")] === "false");
+  assert.ok(opt > 0);
+  rows[opt][col("default")] = "FALSE";
+  const titleRow = rows.findIndex((r) => r[0] === "assembly");
+  rows[titleRow][col("title")] = "TRUE";
+  const text = rows.map((r) => r.map((v) => (/[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v)).join(",")).join("\r\n") + "\r\n";
+  const { library, errors } = libraryFromCsv(text);
+  assert.deepEqual(errors, []);
+  assert.equal(library[0].options.find((o) => o.id === rows[opt][col("item_id")])!.default, false);
+  assert.equal(library[0].title, "TRUE", "a title is text: it keeps what it says");
+});
+
+test("a CSV separated by semicolons is named as such, not as missing columns (AS-60)", () => {
+  const semi = libraryToCsv([STARTER[0]]).replace(/,/g, ";");
+  const { errors } = libraryFromCsv(semi);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0].message, /separated by semicolons/);
 });

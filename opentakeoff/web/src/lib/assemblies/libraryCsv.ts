@@ -94,6 +94,24 @@ function csvText(s: string): string {
  * would be part of the value. */
 const parseCsv = (text: string): string[][] => parseCsvRows(text);
 
+/** A library CSV's text from its bytes (AS-60): UTF-8, with or without a
+ * byte-order mark, or, where the bytes are not UTF-8, Windows-1252, which a
+ * spreadsheet's plain "CSV (Comma delimited)" writes on Windows. The starter
+ * cites its standards with "§" (U+00A7), so a library saved that way is never
+ * UTF-8; read as UTF-8 every starter row came back changed. */
+export function decodeCsvBytes(bytes: Uint8Array): { text: string; encoding: "utf-8" | "windows-1252" } {
+  try {
+    return { text: new TextDecoder("utf-8", { fatal: true }).decode(bytes), encoding: "utf-8" };
+  } catch {
+    return { text: new TextDecoder("windows-1252").decode(bytes), encoding: "windows-1252" };
+  }
+}
+
+/** Where a spreadsheet writes a cell it read as a boolean in capitals (TRUE,
+ * FALSE): an option's default, a variable's default, and the expressions, in
+ * which true and false are the same words (AS-60). */
+const BOOLEAN_WORD_COLUMNS: ReadonlySet<string> = new Set(["default", "when", "selector", "auto", "qty", "from"]);
+
 export interface LibraryCsvError {
   /** 1-based CSV record (the header is row 1; a quoted cell may span lines). */
   row: number | null;
@@ -112,6 +130,9 @@ function parseLibraryCsv(text: string): { records: ParsedRecord[]; errors: Libra
   const all = parseCsv(text);
   if (!all.length) return { records: [], errors: [{ row: null, column: null, record: null, message: "empty file" }] };
   const header = all[0].map((h) => h.trim());
+  if (header.length === 1 && header[0].split(";").length >= LIBRARY_CSV_COLUMNS.length / 2) {
+    return { records: [], errors: [{ row: 1, column: null, record: null, message: "the columns are separated by semicolons, as a spreadsheet set to a locale with decimal commas saves CSV; save it with commas (CSV UTF-8)" }] };
+  }
   const missing = LIBRARY_CSV_COLUMNS.filter((c) => !header.includes(c));
   const unknown = header.filter((h) => !(LIBRARY_CSV_COLUMNS as readonly string[]).includes(h));
   if (missing.length) errors.push({ row: 1, column: null, record: null, message: `missing column(s): ${missing.join(", ")}` });
@@ -129,7 +150,10 @@ function parseLibraryCsv(text: string): { records: ParsedRecord[]; errors: Libra
   all.slice(1).forEach((cells, i) => {
     const rowNo = i + 2;
     if (cells.every((c) => !c.trim())) return; // a blank row
-    const cell = (c: Col) => (cells[header.indexOf(c)] ?? "").trim();
+    const cell = (c: Col) => {
+      const v = (cells[header.indexOf(c)] ?? "").trim();
+      return BOOLEAN_WORD_COLUMNS.has(c) && /^(true|false)$/i.test(v) ? v.toLowerCase() : v;
+    };
     const opt = (c: Col) => cell(c) || undefined;
     const fail = (column: Col | null, message: string, rec: { bad: boolean } | null, name: string | null) => {
       errors.push({ row: rowNo, column, record: name, message });

@@ -17,7 +17,7 @@ import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../../web/src/lib/assemblies/expand.ts";
 import { assembliesReport, familiesLeftOut, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
 import { assembliesCsvSet, type ExportFile } from "../../web/src/lib/assemblies/exportSet.ts";
-import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
+import { decodeCsvBytes, libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
 import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
 import { PROJECT_INSTANCE, typicalChoices, type Override, type ProjectSettings } from "../../web/src/lib/assemblies/select.ts";
@@ -81,9 +81,11 @@ export async function loadAssemblyLibrary(path?: string): Promise<{ library: Ass
     return { library: gate(raw, "starter"), source: `starter (${STARTER_FILES.join(", ")})` };
   }
   if (/\.csv$/i.test(path)) {
-    let text: string;
+    // From its bytes, as the panel reads it: UTF-8, or a spreadsheet's plain
+    // CSV's Windows-1252 (AS-60).
+    let text: string, encoding: string;
     try {
-      text = await readFile(path, "utf8");
+      ({ text, encoding } = decodeCsvBytes(await readFile(path)));
     } catch (e) {
       throw new UserError(`library_path ${path}: ${e instanceof Error ? e.message : String(e)}`);
     }
@@ -93,7 +95,7 @@ export async function loadAssemblyLibrary(path?: string): Promise<{ library: Ass
       throw new UserError(`${path}: the library CSV has ${errors.length} problem${errors.length === 1 ? "" : "s"}: `
         + errors.slice(0, 5).map((e) => `${e.row ? `row ${e.row}` : e.record ?? "file"}${e.column ? ` ${e.column}` : ""}: ${e.message}`).join(" | "));
     }
-    return { library, source: `${path} (library CSV)` };
+    return { library, source: `${path} (library CSV${encoding === "windows-1252" ? ", read as Windows-1252" : ""})` };
   }
   let parsed: unknown;
   try {

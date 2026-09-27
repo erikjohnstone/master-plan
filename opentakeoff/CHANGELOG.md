@@ -1,5 +1,20 @@
 # Changelog
 
+- **Assemblies: the library CSV survives a spreadsheet.** The Library view's
+  Export CSV is meant to be edited in a spreadsheet and imported back, and the
+  starter cites its standards with "§" in every record. Excel on Windows opens
+  a UTF-8 CSV without a byte-order mark as Windows-1252, writes its plain CSV
+  in Windows-1252, and writes every true or false cell as TRUE or FALSE. So an
+  export edited in Excel came back with every starter record refused as
+  changed (107 to 126 errors), and the partner's own record refused or its "°"
+  read as "�" or "Â°". The export now carries a byte-order mark; the import
+  (the panel's, and MCP's `library_path`) reads UTF-8 or, where the bytes are
+  not UTF-8, Windows-1252, and says so; a whole-cell TRUE or FALSE in a value
+  or expression column reads as true or false; a semicolon-separated file is
+  named as such. Through both of Excel's saves the library now reads back
+  whole: 0 errors, the 47 starter records unchanged, the partner's record as
+  exported (`decodeCsvBytes`, `libraryCsv.ts`, ASSEMBLIES_BUG_CATALOGUE AS-60).
+
 - **Assemblies: a group decision is one row under Your overrides.** "Use …
   for all N", "Exclude all N", an option for all N and "…for all N like it"
   write an override on each unit, and "Your overrides" listed each with its

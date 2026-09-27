@@ -79,6 +79,18 @@ test("library load: the starter by default, an assemblies file, a profile, a lib
   const fromCsv = await loadAssemblyLibrary(join(dir, "library.csv"));
   assert.match(fromCsv.source, /library CSV/);
   assert.equal(JSON.stringify(fromCsv.library), JSON.stringify(starter.library), "the library CSV is lossless");
+  // Saved by a spreadsheet as plain CSV (AS-60): Windows-1252 bytes (the
+  // starter's "§" is 0xA7) and TRUE/FALSE for true/false. Read as UTF-8, no
+  // starter record survived.
+  const cp1252 = Buffer.from([...csv.replace(/(^|,)(true|false)(?=,|\r)/gm, (m, a, b) => a + b.toUpperCase())].map((ch) => {
+    const c = ch.codePointAt(0);
+    if (c < 0x80 || (c >= 0xA0 && c <= 0xFF)) return c;
+    throw new Error(`not in Windows-1252: ${ch}`);
+  }));
+  await writeFile(join(dir, "excel.csv"), cp1252);
+  const fromExcel = await loadAssemblyLibrary(join(dir, "excel.csv"));
+  assert.match(fromExcel.source, /excel\.csv \(library CSV, read as Windows-1252\)/);
+  assert.equal(JSON.stringify(fromExcel.library), JSON.stringify(starter.library), "a spreadsheet's plain CSV of the library is the library");
   const [head, ...rows] = csv.split("\r\n");
   const rowTypeAt = head.split(",").indexOf("row_type");
   const broken = rows.map((r, i) => (i === 3 ? r.split(",").map((c, j) => (j === rowTypeAt ? "widget" : c)).join(",") : r));

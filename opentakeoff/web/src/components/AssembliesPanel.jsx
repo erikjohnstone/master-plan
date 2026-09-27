@@ -20,7 +20,7 @@ import { applyAssemblies } from "../lib/assemblies/apply";
 import { ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../lib/assemblies/expand";
 import { PROJECT_INSTANCE, typicalChoices } from "../lib/assemblies/select";
 import { assembliesCsvSet } from "../lib/assemblies/exportSet";
-import { importLibraryCsv, libraryToCsv } from "../lib/assemblies/libraryCsv";
+import { decodeCsvBytes, importLibraryCsv, libraryToCsv } from "../lib/assemblies/libraryCsv";
 import { downloadText } from "../lib/totals";
 import { cloneForEdit, combinedLibrary, overridesOf, validateEdit } from "../lib/assemblies/libraryEdit";
 import { activeResponsibilityPresets, HOOKUP_SWITCHES, HOOKUP_VARIABLES, hookupProfileDefaults, RESPONSIBILITY_PRESETS, withResponsibilityPreset } from "../lib/assemblies/presets";
@@ -565,18 +565,19 @@ function LibraryView({ starter, partner, onSavePartner, library, rejected, updat
   };
   // The library as CSV, one row per item (libraryCsv.ts): export all of it;
   // import through the same gate as a profile, the starter kept read-only.
+  // Read from its bytes: a spreadsheet's plain CSV is Windows-1252 (AS-60).
   const importCsv = async (file) => {
     if (!file) return;
-    const text = await file.text();
+    const { text, encoding } = decodeCsvBytes(new Uint8Array(await file.arrayBuffer()));
     const r = importLibraryCsv(text, starter, partner);
     if (r.added.length || r.replaced.length) onSavePartner(r.partner);
-    setImported({ file: file.name, ...r });
+    setImported({ file: file.name, encoding, ...r });
   };
   return (
     <div style={{ display: "grid", gridTemplateColumns: "minmax(220px, 340px) minmax(0, 1fr)", gap: 16, padding: "12px 8px" }} data-assemblies-library role="region" aria-label="Assembly library">
       <div>
         <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-          <button type="button" style={btn} onClick={() => downloadText("assemblies-library.csv", libraryToCsv(library), "text/csv")} data-assemblies-library-export>Export CSV</button>
+          <button type="button" style={btn} onClick={() => downloadText("assemblies-library.csv", `\uFEFF${libraryToCsv(library)}`, "text/csv")} data-assemblies-library-export>Export CSV</button>
           <label style={{ ...btn, display: "inline-block" }}>
             Import CSV…
             <input type="file" accept=".csv,text/csv" style={{ display: "none" }} aria-label="Import a library CSV" data-assemblies-library-import
@@ -586,6 +587,7 @@ function LibraryView({ starter, partner, onSavePartner, library, rejected, updat
         {imported && (
           <div role="status" style={{ fontSize: "var(--fs-s)", marginBottom: 8 }} data-assemblies-import={imported.errors.length ? "errors" : "ok"}>
             {imported.file}: {imported.added.length} added, {imported.replaced.length} replaced, {imported.unchanged.length} unchanged
+            {imported.encoding === "windows-1252" && <span data-assemblies-import-encoding="windows-1252"> (read as Windows-1252, a spreadsheet's plain CSV: save as CSV UTF-8 to keep characters it lacks)</span>}
             {imported.errors.length > 0 && (
               <ul style={{ color: "var(--c-danger)", margin: "4px 0 0", paddingLeft: 18 }}>
                 {imported.errors.slice(0, 12).map((e, i) => <li key={i}>{e.row ? `Row ${e.row}` : e.record}{e.column ? `, ${e.column}` : ""}: {e.message}</li>)}

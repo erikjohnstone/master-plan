@@ -3512,3 +3512,62 @@ single override and from the same note on another layer; one left of a group
 is its own row; the row counts overrides, names what every unit shares, keeps
 each unit's mark on its line and opens when one is marked; Remove all N
 removes the group's overrides, and a unit's own Remove its own.
+
+## AS-60 — the library CSV did not survive a spreadsheet (FIXED — this goal)
+
+**Found:** 2026-09-27, following the Library view's workflow as the USER_GUIDE
+tells it: **Export CSV** "saves the whole library as one spreadsheet", and
+**Import CSV…** "reads your edited copy back". The starter cites its
+standards with "§" (U+00A7) in all 47 records (700 times), and 110 of its
+cells are true or false (an option's default, three `when`s, one
+`selector`). Excel on Windows does three things to such a file: it opens a
+UTF-8 CSV without a byte-order mark as Windows-1252 (every "§" shows as "Â§"),
+its plain "CSV (Comma delimited)" writes Windows-1252, and it writes every
+cell it read as a boolean as TRUE or FALSE. Simulated on the starter plus a
+partner's clone of fan-constant whose line reads "55°F":
+- exported and read back untouched: 0 errors, 47 unchanged, the clone added;
+- saved as CSV UTF-8 after Excel's Windows-1252 view: **126 errors**, 0
+  starter records unchanged, the clone not imported;
+- saved as plain CSV (Windows-1252): **107 errors**, 19 unchanged, the clone
+  not imported; with the booleans left alone, all 47 starter records were
+  refused as changed and the clone's "°" came back as "�" (or "Â°" through
+  CSV UTF-8), accepted without a word.
+Both surfaces decoded the file as UTF-8 only (the panel's `file.text()`,
+MCP's `readFile(path, "utf8")`), and an option's default took only lower-case
+true and false.
+
+**Fix (the reader is the shared path's; the export's mark is the panel's):**
+- **`decodeCsvBytes`** (libraryCsv.ts): UTF-8, with or without a byte-order
+  mark, or, where the bytes are not UTF-8, Windows-1252. The panel's import
+  and MCP's `library_path` read the file's bytes through it; the panel says
+  "read as Windows-1252", and MCP's `source` does.
+- **A spreadsheet's TRUE and FALSE:** a whole cell of either, in any case, in
+  `default`, `when`, `selector`, `auto`, `qty` or `from` reads as true or
+  false (the expressions already read those words in any case). Text columns
+  keep what they say.
+- **A semicolon-separated file** (a spreadsheet in a locale with decimal
+  commas) is refused with that reason, where it listed every column as
+  missing.
+- **Export CSV** writes a UTF-8 byte-order mark, so a spreadsheet opens it as
+  UTF-8. The reader already dropped one.
+- Not done: a file saved from a spreadsheet's Windows-1252 view as CSV UTF-8
+  (its "§" now "Â§" in UTF-8) is not repaired; with the mark on the export,
+  Excel opens the file as UTF-8 and never shows that view. Excel's other
+  rewrites (leading zeros, long numbers, dates) touch no starter cell; a
+  partner's part number typed with a leading zero is the spreadsheet's to
+  keep as text.
+
+**Measured:** through both of Excel's saves (CSV UTF-8, plain CSV) the
+library reads back whole: 0 errors, the 47 starter records unchanged, the
+clone as exported with its "°", "–" and "§". Over MCP, a spreadsheet's plain
+CSV of the starter loads as the starter, read as Windows-1252. In the browser
+(the UI proof, 069_ID, 17 checks), Export CSV starts with the byte-order mark,
+and its plain Windows-1252 copy with TRUE and FALSE imports with no problem,
+the 47 records unchanged, nothing added, and the import names the encoding.
+
+**Tests:** libraryCsv.test.ts: the round trip through both saves; the
+decoder on UTF-8 with and without the mark and on Windows-1252 bytes; TRUE
+and FALSE read as booleans in a default and kept in a title; the semicolon
+file named. With Windows-1252 decoding removed, 2 of the new tests fail; with
+the booleans left as written, 2 fail. assembliesApply.test.mjs: MCP's
+`library_path` reads a Windows-1252 CSV with TRUE and FALSE as the starter.

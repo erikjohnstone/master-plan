@@ -28,6 +28,8 @@
 //     same choice for every row of a schedule like one unit (AS-55);
 //   · the overrides of that choice for all as one row, removed in one step
 //     (AS-59);
+//   · the library CSV exported and read back from a spreadsheet's plain
+//     Windows-1252 CSV with TRUE and FALSE, unchanged (AS-60);
 //   · a sheet added after the schedules were read, named over the earlier
 //     set's units (AS-58).
 //
@@ -355,6 +357,31 @@ try {
     await lib.locator('[data-assemblies-updates]').waitFor({ state: 'detached' });
     assert.equal((await page.evaluate(async () => (await (await import('/src/lib/store.js')).localStore.loadEquipmentAssemblies()).length)), 0);
     checks.push(`library: clone ${target}, live validation, update offered not applied (A5), delete withdraws it`);
+    {
+      // Export CSV through a spreadsheet's plain CSV and back (AS-60): the
+      // export carries a byte-order mark, and the file Excel writes on
+      // Windows (Windows-1252, TRUE and FALSE) reads back as the library.
+      const csvDownload = page.waitForEvent('download');
+      await lib.locator('[data-assemblies-library-export]').click();
+      const csvPath = `${out}/assemblies-library.csv`;
+      await (await csvDownload).saveAs(csvPath);
+      const bytes = readFileSync(csvPath);
+      assert.deepEqual([...bytes.subarray(0, 3)], [0xEF, 0xBB, 0xBF], 'the export opens in a spreadsheet as UTF-8');
+      const excel = bytes.toString('utf8').replace(/^\uFEFF/, '').replace(/(^|,)(true|false)(?=,|\r)/gm, (_, a, b) => a + b.toUpperCase());
+      const cp1252 = Buffer.from([...excel].map((ch) => {
+        const c = ch.codePointAt(0);
+        if (c < 0x80 || (c >= 0xA0 && c <= 0xFF)) return c;
+        throw new Error(`not in Windows-1252: ${ch}`);
+      }));
+      await lib.locator('[data-assemblies-library-import]').setInputFiles({ name: 'library-excel.csv', mimeType: 'text/csv', buffer: cp1252 });
+      const status = lib.locator('[data-assemblies-import]');
+      await status.waitFor({ state: 'visible' });
+      assert.equal(await status.getAttribute('data-assemblies-import'), 'ok', await status.innerText());
+      assert.match(await status.innerText(), /0 added, 0 replaced, \d+ unchanged/);
+      assert.equal(await lib.locator('[data-assemblies-import-encoding="windows-1252"]').count(), 1, 'the import says how it read the file');
+      assert.equal((await page.evaluate(async () => (await (await import('/src/lib/store.js')).localStore.loadEquipmentAssemblies()).length)), 0, 'nothing is added');
+      checks.push(`library CSV through a spreadsheet: exported with a byte-order mark, a plain Windows-1252 CSV with TRUE and FALSE reads back unchanged (${(await status.innerText()).match(/(\d+) unchanged/)[1]} records) (AS-60)`);
+    }
     await panel.getByRole('button', { name: 'Units', exact: true }).click();
 
     for (const theme of ['light', 'dark']) {

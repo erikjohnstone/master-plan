@@ -702,7 +702,12 @@ the families' attributes, device references, and sub-assembly references. What
 your version changes from the starter is tinted amber. **Export CSV** saves the
 whole library as one spreadsheet, a row per option, variable, line and record, and
 **Import CSV…** reads your edited copy back through the same checks, listing any
-problem by row and column. The columns are in [ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md#the-library-as-csv-assemblies-librarycsv).
+problem by row and column. The export is UTF-8 with a byte-order mark, so a
+spreadsheet opens it with its characters (the starter cites its standards with
+"§"). Save it as CSV UTF-8 or as plain CSV: a plain CSV is read as Windows-1252,
+as a spreadsheet on Windows writes it, and the import says so; a spreadsheet's
+TRUE and FALSE read as true and false. A spreadsheet that separates the
+columns with semicolons is named as such; save the file with commas. The columns are in [ASSEMBLIES_CSV.md](ASSEMBLIES_CSV.md#the-library-as-csv-assemblies-librarycsv).
 A family the starter has no typical for (control dampers, flow meters, lab air
 valves) can have yours: clone a typical and give the copy its own `id` (a copy
 that keeps the id is that typical's next version, which replaces it for its own
