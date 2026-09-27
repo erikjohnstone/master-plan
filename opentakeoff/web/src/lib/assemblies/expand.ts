@@ -118,7 +118,11 @@ export function expandApplication(
         try { r = run(p, env); } catch { r = null; }
         params[name] = r && r.known ? { value: r.value, source: sourceOf(p, env.sources) } : { value: null, source: null };
       }
-      const usedDefault = [...env.sources.values()].includes("partner_default");
+      // What a known quantity rests on (docs/ASSEMBLIES_CSV.md, qty_basis): a
+      // default that stands in, the partner's before the starter's, or else
+      // the drawings and the project.
+      const read = [...env.sources.values()];
+      const basis = read.includes("partner_default") ? "partner_default" : read.includes("starter_default") ? "starter_default" : "evidence";
       out.push({
         tag: instance.tag,
         family: instance.family,
@@ -141,7 +145,7 @@ export function expandApplication(
         labor_task: line.labor_task ?? null,
         status,
         missing: error ? [error] : [...new Set(missing)],
-        qty_source: known ? (usedDefault ? "partner_default" : "evidence") : null,
+        qty_source: known ? basis : null,
         cites: instance.cites,
         source: line.source,
         ...(line.partner && Object.keys(line.partner).length ? { partner: { ...line.partner } } : {}),

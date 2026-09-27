@@ -78,6 +78,30 @@ test("exception groups: one schedule's rows that wait for the same things with t
   assert.deepEqual(exceptionGroups(r.exceptions.filter((e) => e.tag === "EF-1")), [], "a group of one is no group");
 });
 
+test("exception groups: rows under one typical whose same options wait are one group, one answer each (AS-48)", () => {
+  // Fan coils whose row prints no motor type: fcu's variable_speed_fan reads attr.ecm.
+  const items = [row("FCU", "FCU-1", 0), row("FCU", "FCU-2", 1), row("FCU", "FCU-3", 2)];
+  const normalized = [norm(items[0]), norm(items[1]), norm(items[2], { ecm: "yes" })];
+  const run = (overrides: NonNullable<Parameters<typeof applyAssemblies>[0]["overrides"]> = []) => {
+    const r = applyAssemblies({ project: { items }, library: LIB, normalized, overrides });
+    return exceptionGroups(assembliesReport(r.instances, r.applications, r.lines).exceptions);
+  };
+  const [g] = run();
+  assert.deepEqual([g.family, g.assembly, g.options, g.candidates, g.waits_for, g.units.map((u) => u.tag)],
+    ["FCU", "fcu@1", ["variable_speed_fan"], [], ["attr.ecm"], ["FCU-1", "FCU-2"]], "FCU-3 prints its motor");
+  // One answer for the group: an option override on each unit, and no group is left.
+  assert.deepEqual(run(g.units.map((u) => ({ tag: u.tag, family: u.family, layer: u.layer, reason: "ECM per spec 23 82 19", options: { variable_speed_fan: true } }))), []);
+  // A typical the estimator chose for a schedule's rows that still waits
+  // forms one too (AS-47): AHU-1 and AHU-2 under ahu-constant-volume wait
+  // for the economizer it reads.
+  const ahus = [row("AHU", "AHU-1", 3), row("AHU", "AHU-2", 4)];
+  const r = applyAssemblies({ project: { items: ahus }, library: LIB, normalized: ahus.map((it) => norm(it)),
+    overrides: ahus.map((it) => ({ tag: it.tag, family: "AHU", layer: "controls", reason: "constant volume per the sequence", assembly: { id: "ahu-constant-volume" } })) });
+  const chosen = exceptionGroups(assembliesReport(r.instances, r.applications, r.lines).exceptions).find((x) => x.assembly?.startsWith("ahu-constant-volume@"));
+  assert.ok(chosen, "the chosen typical's rows wait together");
+  assert.deepEqual([chosen.options, chosen.units.map((u) => [u.tag, u.selected_by])], [["economizer"], [["AHU-1", "user"], ["AHU-2", "user"]]]);
+});
+
 test("exception groups: the rows of a table that prints no title are one untitled schedule", () => {
   // 26_CA's and 061_IA's shape: the compile keeps the table, its title "".
   const untitled = (tag: string, i: number): CompiledItem => ({ ...row("FAN", tag, i), sheet_id: "s.pdf#4", table_title: "" });

@@ -138,10 +138,12 @@ export function assembliesReport(
 
 /** Exceptions one answer resolves together: unresolved records of one
  * schedule (its sheet and title), family and layer that wait for the same
- * things with the same candidates ("EF-1 … EF-9 of the EXHAUST FAN SCHEDULE
- * wait for attr.vfd"). The estimator's choice is still an override on each
- * unit with its reason; a group only saves making it once per row. Groups of
- * one are left out. */
+ * things, either with the same candidates ("EF-1 … EF-9 of the EXHAUST FAN
+ * SCHEDULE wait for attr.vfd") or under the same typical with the same
+ * options undecided (FCU-1 … FCU-7 under fcu@1 wait for attr.ecm, which
+ * decides variable_speed_fan; AS-48). The estimator's choice is still an
+ * override on each unit with its reason; a group only saves making it once
+ * per row. Groups of one are left out. */
 export interface ExceptionGroup {
   family: string;
   layer: string;
@@ -151,19 +153,30 @@ export interface ExceptionGroup {
   schedule: string | null;
   waits_for: string[];
   candidates: string[];
+  /** The typical the rows share when they wait on its options ("id@version");
+   * null for rows that wait for a typical. */
+  assembly: string | null;
+  /** The typical's options undecided in every row, for one answer each. */
+  options: string[];
   units: UnitRow[];
 }
+
+const undecided = (u: UnitRow) => Object.entries(u.options).filter(([, o]) => o.value === null).map(([id]) => id).sort();
 
 export function exceptionGroups(exceptions: readonly UnitRow[]): ExceptionGroup[] {
   const groups = new Map<string, ExceptionGroup>();
   for (const u of exceptions) {
-    if (u.status !== "unresolved" || !u.candidates.length) continue;
+    if (u.status !== "unresolved") continue;
+    // Rows that wait for a typical, or rows under one whose options wait.
+    const options = u.candidates.length ? [] : undecided(u);
+    if (!u.candidates.length && !(u.assembly && options.length)) continue;
     const cite = u.cites[0];
     const title = cite?.table_title || null;
     const waits = [...u.waits_for].sort();
-    const k = JSON.stringify([u.family, u.layer, cite?.sheet ?? null, title, waits, u.candidates]);
+    const assembly = u.candidates.length ? null : u.assembly;
+    const k = JSON.stringify([u.family, u.layer, cite?.sheet ?? null, title, waits, u.candidates, assembly, options]);
     let g = groups.get(k);
-    if (!g) groups.set(k, g = { family: u.family, layer: u.layer, sheet: cite?.sheet ?? null, schedule: title, waits_for: waits, candidates: [...u.candidates], units: [] });
+    if (!g) groups.set(k, g = { family: u.family, layer: u.layer, sheet: cite?.sheet ?? null, schedule: title, waits_for: waits, candidates: [...u.candidates], assembly, options, units: [] });
     g.units.push(u);
   }
   return [...groups.values()].filter((g) => g.units.length > 1);

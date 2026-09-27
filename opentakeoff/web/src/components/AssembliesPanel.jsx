@@ -613,7 +613,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     const entries = units.map((u) => {
       if (patch.exclude) return { tag: u.tag, family: u.family, reason: note, exclude: true };
       const prior = priorOf(u);
-      return { tag: u.tag, family: u.family, layer: u.layer, reason: note, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
+      return { tag: u.tag, family: u.family, layer: u.layer, reason: note, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}), ...(patch.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
     });
     onStateChange?.({ ...base, overrides: [...others, ...entries] });
   };
@@ -722,8 +722,14 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                         <strong>{group.units.length} {group.family} units</strong> of {scheduleOf(group)} {group.waits_for.length
                           ? <>wait for <span style={mono}>{group.waits_for.join(", ")}</span></>
                           : `tie between ${group.candidates.length} typicals`}
+                        {group.assembly && <> under <span style={mono}>{group.assembly}</span>, which decides <span style={mono}>{group.options.join(", ")}</span></>}
                       </td>
                       <td style={td}>
+                        {group.options.flatMap((opt) => [true, false].map((value) => (
+                          <button key={`${opt}-${value}`} type="button" style={{ ...btn, marginRight: 4 }} data-assemblies-group-option={opt} data-assemblies-group-value={String(value)}
+                            aria-label={`${opt} ${value ? "yes" : "no"} for all ${group.units.length} ${group.family} units of ${scheduleOf(group)} under ${group.assembly}`}
+                            onClick={() => overrideMany(group)({ options: { [opt]: value } }, `setting ${opt} to ${value ? "yes" : "no"} for the ${group.units.length} ${group.family} units of ${scheduleOf(group)}`)}>{opt}: {value ? "yes" : "no"} for all {group.units.length}</button>
+                        )))}
                         {group.candidates.map((c) => {
                           const [id, version] = c.split("@");
                           const label = `Use ${id} for all ${group.units.length} ${group.family} units of ${scheduleOf(group)} waiting for ${waitingFor(group)}`;

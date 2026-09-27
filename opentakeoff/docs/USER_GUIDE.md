@@ -565,7 +565,11 @@ the unit. Every override asks for a reason and is kept on the record under
 same candidates, sit together under one header: **Use … for all N** gives them one
 typical, and **Exclude all N** takes out rows that are no units (a notes table
 read as equipment). You give one reason, and each unit still gets its own
-override, naming the group it was decided with. An override is its own unit's:
+override, naming the group it was decided with. A typical you choose can still
+wait for a value its options read, such as an air handler's economizer: the
+unit then stays among the exceptions until you set it. Rows under one typical
+whose same options wait sit together too (fan coils whose schedule prints no
+motor type, say), with a yes and a no for all N for each option. An override is its own unit's:
 where units of two families share a tag, overriding or excluding one leaves the
 other alone. Excluding a unit keeps the choices you made for it, and removing the
 exclusion under **Your overrides** brings them back. The project's own records (a

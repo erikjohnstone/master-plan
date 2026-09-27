@@ -91,7 +91,7 @@ One row per record: each scheduled unit, once per layer.
 | unit key block | See above. |
 | `schedule_family` | The family of the schedule the unit was read from. |
 | `selected_by` | `rule` (the library's selector) or `user` (an override). |
-| `status` | `ok`, `unresolved`, `no_assembly` (no typical for the family), `excluded` or `overridden`. |
+| `status` | `ok`, `unresolved`, `no_assembly` (no typical for the family), `excluded` or `overridden`. A record whose typical you chose is `overridden` once nothing it reads is missing, and `unresolved` (with `waits_for`) until then. |
 | `waits_for` | What an unresolved record waits for. |
 | `candidates` | Typicals the record could not choose between. |
 | `excluded_reason` | The reason an estimator gave for excluding the unit. |
@@ -114,7 +114,7 @@ Every expanded line: the flat bill of materials, one row per line per unit.
 | `device_role` | For a point, the device line it belongs to. |
 | `waste_pct` | The line's waste. |
 | `round` | The order rounding applied in the roll-up (`ceil`, or `increment n`). |
-| `qty_basis` | `evidence` when a known quantity rests on the drawings and project, `partner_default` when a partner default stands in. |
+| `qty_basis` | What a known quantity rests on: `evidence` (the drawings and the project), `partner_default` (a partner default stands in) or `starter_default` (a default of the starter library stands in, and no partner default does). Blank when the quantity is not known. |
 | `size_in`, `size_in_source` | A component's or device's size, in inches (the connection or line size). |
 | `end_type`, `end_type_source` | A component's end connection (for example `threaded`, `flanged`). |
 | `params`, `param_sources` | Every parameter as `name=value`, and where each came from. |

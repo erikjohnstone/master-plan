@@ -241,7 +241,10 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
       ...Object.values(options).flatMap((o) => o.missing ?? []),
       ...Object.values(variables).flatMap((v) => v.missing ?? []),
     ])];
-    const status: ApplicationRecord["status"] = selectedBy === "user" ? "overridden" : missing.length ? "unresolved" : "ok";
+    // A typical the estimator chose still waits for what its options and
+    // variables read (AS-47): the record stays unresolved, and an exception,
+    // until nothing is missing.
+    const status: ApplicationRecord["status"] = missing.length ? "unresolved" : selectedBy === "user" ? "overridden" : "ok";
     return {
       ...base,
       assembly: { id: def.id, version: def.version },

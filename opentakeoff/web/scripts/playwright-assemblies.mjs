@@ -77,7 +77,7 @@ async function applyInPage() {
     const applied = applyAssemblies({ project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
     const report = assembliesReport(applied.instances, applied.applications, applied.lines);
     return { applications: JSON.stringify(applied.applications), lines: JSON.stringify(applied.lines), report: JSON.stringify(report),
-      groups: JSON.stringify(exceptionGroups(report.exceptions).map((g) => g.units.map((u) => [u.tag, u.family]))) };
+      groups: JSON.stringify(exceptionGroups(report.exceptions).map((g) => ({ units: g.units.map((u) => [u.tag, u.family, u.layer]), options: g.options, candidates: g.candidates }))) };
   });
 }
 
@@ -187,9 +187,13 @@ try {
     // A document whose resolved records carry no options (hook-ups only, as
     // 26_CA's) still has a unit with a typical to open.
     // A unit's own record: the project's (tag "(project)") follow the settings.
+    // A document whose units all wait (02_UT's one fan waits for its drive)
+    // opens a waiting unit, and the library step clones the typical chosen
+    // for it below.
     const unit = mcp.report.units.find((u) => u.tag !== '(project)' && u.assembly && Object.keys(u.options).length)
-      ?? mcp.report.units.find((u) => u.tag !== '(project)' && u.assembly);
-    assert.ok(unit, 'the document has a unit with a typical');
+      ?? mcp.report.units.find((u) => u.tag !== '(project)' && u.assembly)
+      ?? mcp.report.units.find((u) => u.tag !== '(project)' && u.status === 'unresolved' && u.candidates.length);
+    assert.ok(unit, 'the document has a unit with a typical, or one waiting for one');
     const toggle = panel.getByRole('button', { name: `${unit.tag} ${unit.family} ${unit.layer} details`, exact: true }).first();
     await toggle.focus();
     await page.keyboard.press('Enter');
@@ -201,7 +205,9 @@ try {
     // An override asks for a reason and is kept on the record: one of the
     // unit's options, or, where no typical carries an option, a typical
     // chosen for a unit that waits.
-    if (Object.keys(unit.options).length) {
+    let target = unit.assembly?.split('@')[0] ?? null;
+    let targetVersion = unit.assembly?.split('@')[1] ?? null;
+    if (unit.assembly && Object.keys(unit.options).length) {
       const [optionId, option] = Object.entries(unit.options)[0];
       const optionRow = () => detail.getByRole('table', { name: `${unit.tag} options` }).getByRole('row')
         .filter({ has: page.getByRole('cell', { name: optionId, exact: true }) });
@@ -230,6 +236,7 @@ try {
       const chosen = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === ex.tag && a.layer === ex.layer);
       assert.ok(chosen.length && chosen.every((a) => a.selected_by === 'user' && a.assembly?.id === id), `${ex.tag} takes ${id} by override`);
       checks.push(`override: ${ex.tag} (${ex.layer}) takes ${id} with a reason`);
+      if (!target) [target, targetVersion] = [id, chosen[0].assembly.version];
     }
     await page.screenshot({ path: `${out}/override.png` });
 
@@ -238,7 +245,6 @@ try {
     await panel.getByRole('button', { name: /^Library/ }).click();
     const lib = page.getByRole('region', { name: 'Assembly library', exact: true });
     await lib.waitFor({ state: 'visible' });
-    const target = unit.assembly.split('@')[0];
     await lib.locator(`[data-assembly-id="${target}"]`).click();
     await lib.getByRole('button', { name: 'Clone to edit', exact: true }).click();
     const editor = lib.getByRole('textbox', { name: 'Assembly definition (JSON)' });
@@ -254,7 +260,7 @@ try {
     await lib.getByRole('button', { name: 'Save to my library', exact: true }).click();
     await lib.locator(`[data-assemblies-updates]`).waitFor({ state: 'visible' });
     assert.ok(await lib.getByRole('button', { name: `Adopt ${target}@${clone.version}`, exact: true }).isVisible(), 'the pinned project is offered the update, not given it');
-    assert.equal((await annotations())?.pinned?.find((a) => a.id === target)?.version, unit.assembly.split('@')[1], 'the project still pins the version it applied');
+    assert.equal((await annotations())?.pinned?.find((a) => a.id === target)?.version, targetVersion, 'the project still pins the version it applied');
     await page.screenshot({ path: `${out}/library-update.png` });
     await lib.getByRole('button', { name: 'Delete my version', exact: true }).click();
     await lib.locator('[data-assemblies-updates]').waitFor({ state: 'detached' });
@@ -293,7 +299,7 @@ try {
     // One schedule's rows that wait for the same things resolve together: one
     // choice and one reason, an override on each unit (report.ts
     // exceptionGroups). Each record then takes the chosen typical.
-    const groupRow = panel.locator('[data-assemblies-group]').first();
+    const groupRow = panel.locator('[data-assemblies-group]').filter({ has: page.locator('[data-assemblies-group-use]') }).first();
     if (await groupRow.count()) {
       const n = Number(await groupRow.getAttribute('data-assemblies-group'));
       const use = groupRow.locator('[data-assemblies-group-use]').first();
@@ -307,19 +313,49 @@ try {
       timings.group_s = Math.round((t() - tg) / 1000);
       const exceptionsAfter = (await panel.locator('[data-assemblies-exceptions]').count())
         ? Number(await panel.locator('[data-assemblies-exceptions]').getAttribute('data-assemblies-exceptions')) : 0;
-      assert.equal(exceptionsAfter, exceptionsBefore - n, `the group's ${n} units leave the exceptions`);
       const chosenByUser = JSON.parse((await applyInPage()).applications).filter((a) => a.selected_by === 'user' && a.assembly?.id === chosen && String(a.reason).startsWith(GROUP_REASON));
       assert.ok(chosenByUser.length >= n, `${n} records take ${chosen}, each with the reason (${chosenByUser.length})`);
-      checks.push(`${n} waiting units of one schedule resolved together with ${chosen}, an override each`);
+      // A unit whose chosen typical still waits for a value (an economizer,
+      // say) stays among the exceptions (AS-47).
+      const stillWaiting = chosenByUser.filter((a) => a.status === 'unresolved');
+      assert.ok(stillWaiting.every((a) => a.unresolved.missing.length), 'a chosen typical is unresolved only while it waits for something');
+      assert.equal(exceptionsAfter, exceptionsBefore - n + stillWaiting.length, `the group's ${n} units leave the exceptions, but the ${stillWaiting.length} whose ${chosen} still waits`);
+      checks.push(`${n} waiting units of one schedule resolved together with ${chosen}, an override each${stillWaiting.length ? `; ${stillWaiting.length} still wait for ${[...new Set(stillWaiting.flatMap((a) => a.unresolved.missing))].join(', ')} and stay among the exceptions` : ''}`);
 
       // Rows that are no units (a transposed schedule's attribute rows, a
       // notes table read as equipment) leave together: "Exclude all N", one
       // reason, every layer of each unit excluded.
+      // The typical just chosen may still wait for an option's attribute
+      // (AS-47): its units then form an option group, decided together
+      // (AS-48). So may rows whose own typical waits.
+      const optionRow = panel.locator('[data-assemblies-group]').filter({ has: page.locator('[data-assemblies-group-option]') }).first();
+      if (await optionRow.count()) {
+        const yes = optionRow.locator('[data-assemblies-group-option][data-assemblies-group-value="true"]').first();
+        const opt = await yes.getAttribute('data-assemblies-group-option');
+        const k = Number(await optionRow.getAttribute('data-assemblies-group'));
+        const group = JSON.parse((await applyInPage()).groups).find((g) => g.options.includes(opt) && g.units.length === k);
+        assert.ok(group, `the option group on screen is the report's (${opt}, ${k} units)`);
+        const to = t();
+        page.once('dialog', (d) => d.accept(GROUP_REASON));
+        await yes.click({ timeout: 180000 });
+        const decided = await waitForAsync(async () => {
+          const all = JSON.parse((await applyInPage()).applications);
+          const mine = all.filter((a) => group.units.some(([tag, family, layer]) => a.instance.tag === tag && a.instance.family === family && a.layer === layer));
+          return mine.length >= k && mine.every((a) => a.options[opt]?.value === true && a.options[opt]?.source === 'user') ? mine : null;
+        }, { timeout: 180000, label: `${opt} decided for the group` });
+        timings.option_s = Math.round((t() - to) / 1000);
+        const still = decided.filter((a) => a.status === 'unresolved');
+        assert.ok(still.every((a) => a.unresolved.missing.length), 'a unit stays an exception only while it waits for something else');
+        const left = JSON.parse((await applyInPage()).groups).filter((g) => g.options.includes(opt) && g.units.some(([tag, family]) => group.units.some(([t2, f2]) => t2 === tag && f2 === family)));
+        assert.equal(left.length, 0, `no unit of the group still waits for ${opt}`);
+        checks.push(`${k} units under one typical: ${opt} decided together for all, an override each${still.length ? ` (${still.length} still wait for something else)` : ''}`);
+      }
+
       const next = panel.locator('[data-assemblies-group]').first();
       if (await next.count()) {
         // Each unit is its tag and family: a tag another family shares is
         // not that family's unit (AS-43).
-        const [units] = JSON.parse((await applyInPage()).groups);
+        const [{ units }] = JSON.parse((await applyInPage()).groups);
         const m = Number(await next.getAttribute('data-assemblies-group'));
         assert.equal(units.length, m, "the first group on screen is the report's first group");
         const before = await shownOverrides(panel);

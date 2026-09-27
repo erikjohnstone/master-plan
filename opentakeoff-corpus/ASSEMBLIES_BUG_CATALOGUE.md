@@ -2731,3 +2731,156 @@ it):**
 - assembliesApply.test.mjs sends apply_assemblies three unmatched overrides
   beside one that applies. Only the three are named, each with its reason,
   and a call whose overrides all apply carries no overrides_unmatched.
+
+## AS-46 — 1,618 lines named "evidence" as their quantity's basis where a default of the starter library stood in (FIXED — this goal)
+
+**Found:** 2026-09-27, by the library census below. A partner's copy of the
+whole starter, applied to a cached document, must give the starter's records
+and lines except for the version it names and its defaults being the
+partner's. On federal-mech 146 lines differed in qty_source alone:
+"partner_default" under the copy, "evidence" under the starter.
+
+**Cause:** expand.ts named a known quantity's basis "partner_default" when a
+partner default was read for its line (its condition, quantity or
+parameters) and "evidence" otherwise, so a default of the starter library
+read the same way came out as evidence. docs/ASSEMBLIES_CSV.md defines
+evidence as a quantity that rests on the drawings and the project, and
+equipment.csv already labels those options and variables "starter_default";
+lines.csv's qty_basis alone hid them. Over the 98 cached documents, 1,618 of
+31,769 lines (5.1%) did so. On federal-mech they are the 58 reheat VAV
+boxes' wall-module zone sensors and setpoint-adjustment points, the fan
+coils' likewise, the unit heaters' space sensors and heating valves, and an
+air handler's minimum outdoor air damper, outdoor airflow station and
+freezestat point, among others: each there because a default of its typical
+says so, and each reported as though the drawings showed it.
+
+**Fix (expand.ts, the shared path; lines.csv, the panel and MCP all read
+it):** a known quantity's basis is "partner_default" when a partner default
+is read for its line, else "starter_default" when a starter default is,
+else "evidence". ExpandedLine.qty_source takes the new value, and
+docs/ASSEMBLIES_CSV.md names it.
+
+**Measured (A/B over the 98 cached documents, printed-phrase readings):**
+- 1,618 lines change qty_source, every one "evidence" → "starter_default".
+  Nothing else in any record or line changes.
+- The project questions are the same on the 64 documents that show any:
+  the same questions in the same order, with the same records counts and
+  zero-effect lists. A question already counted the records whose option a
+  default decided; its lines count now also counts their lines.
+
+**Tests:** engine.test.ts: a quantity that reads a starter default is
+"starter_default"; a partner default for the same variable stands in before
+it ("partner_default"); a literal quantity and the estimator's own value are
+"evidence". The test fails before the fix (the starter's line reads
+"evidence").
+
+**The censuses that found it** (scratch scripts; no key read, over the 98
+cached documents):
+- **Groups:** every waiting group of report.exceptions (45 on 98 documents)
+  resolved as the panel does: "Use <typical> for all N" for each candidate,
+  "Exclude all N", and both in either order. 324 actions, 0 failures: each
+  changes exactly its group, an exclusion wins in either order, no
+  override applies to nothing, and the overrides and the pins they lead to
+  come back whole through the project file's gate (sanitizeAssembliesState)
+  and apply the same. With the family left off the exclusions (the
+  behaviour before AS-43), 16_NV fails 5 checks; with a field the gate does
+  not know, the gate names it.
+- **Exports:** every document under the six settings the panel offers (none;
+  the starter's hook-up defaults; each of the four responsibility presets
+  over them). 588 runs, 0 failures: the CSV set and each of the eight
+  parties' scoped sets pass csvSetProblems, each scoped lines.csv holds
+  exactly the lines inScope() gives that party, the PDF builds, and every
+  known quantity is finite and not negative. A line corrupted to NaN is
+  caught.
+- **Library:** a partner's copy of every starter record, through
+  libraryToCsv and importLibraryCsv, joins the starter with nothing rejected
+  and applies as the starter does; each record copied alone does too; a
+  pinned project keeps its pins when a newer copy arrives, is offered each
+  as an update and takes each when adopted. On HEAD it fails on the qty_source
+  above, and with the fix 0 failures on 98 documents. Gated alone, as the
+  store did before AS-41, 6 of the 47 single copies are rejected (AS-41's
+  six hook-ups).
+
+## AS-47 — a typical the estimator chose left the exceptions while it still waited for a value (FIXED — this goal)
+
+**Found:** 2026-09-27, by a census of the exceptions' waits over the 98
+cached documents. After "Use <typical> for all N" (AS-40's group
+resolution) and its candidates, the group census checked that no unit of
+the group still waited in a group. It did not check whether the chosen
+typical itself still waited. A typical's options read attributes too: for
+an air handler, ahu-constant-volume reads attr.economizer, and
+ahu-multizone-vav and ahu-single-zone read attr.cooling_type and
+attr.dx_stages. selectAssembly marked every record whose typical the
+estimator chose "overridden", whatever it still waited for. The report
+lists only "unresolved" records as exceptions, so those records left the
+list, and the panel's header counted them as decided.
+
+**Measured (every waiting group of the 98 cached documents, each
+candidate, deterministic readings):** 15 of the 93 group choices left 197
+records overridden but still waiting, with 3,439 unresolved lines, on four
+documents: 26_CA's air handlers (11 and 6), 071_ME's transposed rooftop-unit
+rows (42), 16_NV's rooftop units (4 and 4) and 10_MO's air handlers (2),
+waiting for attr.economizer or for attr.cooling_type and attr.dx_stages.
+Before any choice, no overridden record waits. 26_CA's browser proof in
+rounds 6 and 7 chose ahu-constant-volume for 10 of those air handlers and
+passed: it checked only that the group's units left the exceptions.
+
+**Fix (select.ts, the shared path):** a record's status is "unresolved"
+while anything it reads is missing, whoever chose its typical; a record
+the estimator chose is "overridden" once nothing is. selected_by stays
+"user", and the record lists what it waits for. It stays among the
+exceptions (with no candidates, so as a row of its own), and its Details
+set the option it waits for, which the same override keeps.
+
+**Measured after:** 0 of the 93 choices leave an overridden record waiting.
+With no override, nothing changes: over the 98 documents every record and
+line is identical but for AS-46's qty_source, and the project questions are
+the same. The evals apply no overrides, so no gate moves.
+
+**Tests:** engine.test.ts: a typical chosen for a unit whose attributes it
+cannot read is "unresolved" (selected_by "user", waiting for attr.cfm_max
+and attr.hw_conn_in); with its option and variable given by the same
+override it is "overridden"; a typical that reads nothing unknown is
+"overridden" at once. The first fails before the fix. The group census now
+checks each chosen record's status against what it waits for: 197
+failures before the fix, 0 after. The UI proof counts the chosen units that still
+wait among the exceptions after "Use … for all N".
+
+## AS-48 — rows whose typical's same options waited had no group: each unit was answered alone (FIXED — this goal)
+
+**Found:** 2026-09-27, with AS-47. The exceptions' group action (5d199ba)
+grouped rows that wait for a typical, by their candidates. Rows whose
+typical is chosen but whose options wait have no candidates, so each was
+its own row: over the 98 cached documents, 59 fan coils in 16 documents
+wait for attr.ecm, which decides fcu's variable_speed_fan, and after AS-47
+a schedule's rows keep waiting under a typical the estimator chose for them
+(26_CA's air handlers for the economizer ahu-constant-volume reads). Each
+needed its own Details and reason.
+
+**Fix (report.ts exceptionGroups, the shared path; the panel's group
+header):** rows of one schedule, family and layer under the same typical,
+with the same waits and the same options undecided, are one group too. The
+group names its typical and those options; its header offers, for each
+option, a yes and a no for all N. As for a typical, one reason is asked,
+and each unit gets its own override: its earlier override's typical and
+options kept, the option added (overrideMany now adds the new options, which
+it dropped). Groups by candidates are unchanged.
+
+**Measured (a census over the 98 cached documents):** 17 option groups
+before any choice and 15 after a group's choice of typical; deciding each
+option yes and no for all is 66 actions, 0 failures. Each unit takes the
+value from "user", a unit that waited on nothing else leaves the
+exceptions, nothing outside the group changes, every override matches a
+unit, and the project file keeps the overrides. Deciding the option while
+dropping the unit's earlier typical (a plausible slip in the group action)
+fails 394 checks. The group census runs "Exclude all N" on the option
+groups too: 62 groups, 341 actions, 0 failures; after "Use … for all N", no
+unit still waits for a typical, and those whose chosen typical waits for an
+option are in an option group.
+
+**Tests:** report.test.ts: two fan coils whose rows print no motor type are
+one group under fcu@1 deciding variable_speed_fan, and the one that prints
+it is not in it; one answer for the group leaves no group; two air handlers
+the estimator gave ahu-constant-volume are one group deciding economizer.
+The UI proof decides the first option group on screen for all its units
+(after its group Use, on 26_CA, the air handlers' economizer).

@@ -202,8 +202,10 @@ export interface ExpandedLine {
   status: "ok" | "unresolved" | "replaced" | "error";
   missing: string[];
   /** A known quantity rests on the drawing and project ("evidence"), or on a
-   * partner default standing in for something the drawing does not give. */
-  qty_source: "evidence" | "partner_default" | null;
+   * default standing in for something the drawing does not give: the
+   * partner's ("partner_default") or, where no partner default is read, the
+   * starter library's ("starter_default"). */
+  qty_source: "evidence" | "partner_default" | "starter_default" | null;
   /** The drawing evidence the line rests on (the instance's cites). */
   cites: Cite[];
   source: AssemblyLine["source"];

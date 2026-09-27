@@ -93,8 +93,14 @@ test("selection: the most specific true selector wins; an unknown one only makes
   assert.equal(unknown.assembly, null);
   assert.deepEqual(unknown.unresolved, { missing: ["attr.heat_type"], candidates: ["vav-cool@1", "vav-hw@1", "vav-any@1"] });
   assert.equal(selectAssembly({ ...vav("FCU-1", {}), family: "FCU" }, LIB).status, "no_assembly");
+  // A typical the estimator chose still waits for what it reads (AS-47): its
+  // record stays unresolved, an exception, until nothing is missing.
   const user = selectAssembly(vav("VAV-5", {}), LIB, {}, { tag: "VAV-5", reason: "per engineer's RFI 12", assembly: { id: "vav-hw" } });
-  assert.deepEqual([user.status, user.selected_by, user.reason, user.assembly?.id], ["overridden", "user", "per engineer's RFI 12", "vav-hw"]);
+  assert.deepEqual([user.status, user.selected_by, user.reason, user.assembly?.id], ["unresolved", "user", "per engineer's RFI 12", "vav-hw"]);
+  assert.deepEqual(user.unresolved.missing, ["attr.cfm_max", "attr.hw_conn_in"]);
+  const given = selectAssembly(vav("VAV-5", {}), LIB, {}, { tag: "VAV-5", reason: "per engineer's RFI 12", assembly: { id: "vav-hw" }, options: { co2: false }, variables: { valve_size: 0.75 } });
+  assert.deepEqual([given.status, given.unresolved.missing], ["overridden", []]);
+  assert.equal(selectAssembly(vav("VAV-5", {}), LIB, {}, { tag: "VAV-5", reason: "r", assembly: { id: "vav-cool" } }).status, "overridden", "a typical that reads nothing unknown");
   const out = selectAssembly(vav("VAV-6", { heat_type: "hw" }), LIB, {}, { tag: "VAV-6", reason: "existing to remain", exclude: true });
   assert.deepEqual([out.status, out.excluded_reason], ["excluded", "existing to remain"]);
   assert.equal(selectAssembly({ ...vav("X-1", {}), family: "ANY" }, LIB).status, "no_assembly", "a part is never chosen on its own");
@@ -137,6 +143,22 @@ test("unknown propagation: an unknown never yields a known quantity, unless a pa
   const co2d = withDefault.find((l) => l.rule.endsWith(":co2"))!;
   assert.deepEqual([co2d.status, co2d.qty_base, co2d.qty_source], ["ok", 1, "partner_default"]);
   assert.equal(withDefault.find((l) => l.rule.endsWith(":dat"))!.qty_source, "evidence");
+});
+
+test("a known quantity names the default that stands in: the partner's, else the starter's (AS-46)", () => {
+  const inst = vav("VAV-9", { heat_type: "hw", cfm_max: 500, hw_conn_in: 1 });
+  const wire = (lines: ExpandedLine[]) => lines.find((l) => l.rule.endsWith(":wire"))!;
+  const lines = expandApplication(selectAssembly(inst, LIB), inst, LIB, { profile: { cable_per_device: true } });
+  // "25 + var.spare", spare the starter's default 0: the drawing does not give it.
+  assert.deepEqual([wire(lines).status, wire(lines).qty_base, wire(lines).qty_source], ["ok", 25, "starter_default"]);
+  // A literal quantity rests on the unit the schedule prints.
+  assert.equal(lines.find((l) => l.rule.endsWith(":dat"))!.qty_source, "evidence");
+  // The partner's default for the same variable stands in before the starter's.
+  const partner = expandApplication(selectAssembly(inst, LIB, { partnerDefaults: { spare: 5 } }), inst, LIB, { partnerDefaults: { spare: 5 }, profile: { cable_per_device: true } });
+  assert.deepEqual([wire(partner).qty_base, wire(partner).qty_source], [30, "partner_default"]);
+  // The estimator's own value is no default.
+  const user = expandApplication(selectAssembly(inst, LIB, {}, { tag: "VAV-9", reason: "measured", variables: { spare: 10 } }), inst, LIB, { profile: { cable_per_device: true } });
+  assert.deepEqual([wire(user).qty_base, wire(user).qty_source], [35, "evidence"]);
 });
 
 test("drawing evidence replaces the typical's lines of the same role and never adds to them", () => {

@@ -1,5 +1,35 @@
 # Changelog
 
+- **Assemblies: rows whose typical's options wait resolve together.** The
+  exceptions grouped a schedule's rows only while they waited for a typical.
+  Rows under one typical whose same options wait (59 fan coils in 16 of the
+  98 cached documents print no motor type for fcu's variable-speed fan; air
+  handlers wait for the economizer of the typical you chose) were each their
+  own row. They are now one group, with a yes and a no for all N for each
+  option; each unit still gets its own override, keeping the typical you
+  chose for it (`web/src/lib/assemblies/report.ts` `exceptionGroups`,
+  ASSEMBLIES_BUG_CATALOGUE AS-48).
+
+- **Assemblies: a typical you chose that still waits stays an exception.**
+  Choosing a typical for a unit ("Use …", or "Use … for all N" for a
+  schedule's rows) marked its record overridden and took it off the
+  exceptions list, even when the typical's own options read values the
+  schedule does not print (an air handler's economizer, cooling type or DX
+  stages). Over the 98 cached documents, 15 of the 93 group choices left 197
+  such records, with 3,439 unresolved lines, out of sight. A chosen typical
+  now stays unresolved, and among the exceptions with what it waits for,
+  until an override or setting gives it; nothing changes where no override is
+  made (`web/src/lib/assemblies/select.ts`, ASSEMBLIES_BUG_CATALOGUE AS-47).
+
+- **Assemblies: a line's quantity basis names a starter default.**
+  `lines.csv`'s `qty_basis` said `evidence` for a quantity that rests on a
+  default of the starter library, such as the wall-module zone sensor and
+  setpoint adjustment a reheat VAV box's typical adds by default: 1,618 of
+  31,769 lines over the 98 cached documents. It now says `starter_default`
+  there, as it says `partner_default` where a partner default stands in. No
+  quantity, record or project question changes
+  (`web/src/lib/assemblies/expand.ts`, ASSEMBLIES_BUG_CATALOGUE AS-46).
+
 - **Assemblies: an override that applies to nothing is named.** The project's
   own rows (building meters, a plant's controls) offered "Use …", option and
   Exclude buttons whose overrides the engine never reads: they follow the
