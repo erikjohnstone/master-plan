@@ -2417,3 +2417,22 @@ documents and the copy, and the column census, which takes documents by
 name, refuses them. The censuses of AS-28 to AS-34 and both metamorphic
 sweeps read only the dev and unseen caches (86 documents), which do not hold
 these documents, so their counts stand.
+
+**Gates at the freeze after AS-35 to AS-38 and CI-34 (9a83964; aggregates
+only, nothing tuned on them):**
+- **GATE 2:** held-out 897 of 1,008 exact (89.0%), 0 wrong, 2 invented;
+  held-out 2 334 of 472 exact (70.8%), 1 wrong (0.2%), 2 invented. These are
+  the dev-5 freeze's numbers in every column. AS-35 to AS-38 move no
+  held-out value.
+- **GATE 5, the official configuration** (no project answers, no readings):
+  21 of 91 exact (23.1%), as before. Two records that waited now select a
+  typical, with options the keys read otherwise (unresolved 11 → 9, option
+  wrong 58 → 60). Unresolved records waiting for a value the key says is
+  printed went from 5 to 3. The report (05-typical-eval-heldout) is
+  rewritten, and it now counts the misses by reason, as counts only: 83
+  options with no readings to decide them, 9 records unresolved and 1 wrong
+  typical.
+- **GATE C, control intent's end to end** (the keys' project answers, the
+  recorded readings replayed): 35 of 91 exact, up from 33 at CI-31. Which two
+  instances moved is not read, since held-out gives aggregates only.
+- Every gate still fails. No rule is written from these numbers.
