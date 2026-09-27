@@ -20,8 +20,8 @@ test("header text: acronym dots, water-column and BTU/H spellings, phase glyphs,
   assert.equal(headerText("MAX PD FT.H2O"), "MAX PD FTWC");
   assert.equal(headerText("DISCHARGE HEAD FT.H20"), "DISCHARGE HEAD FTWC");
   assert.equal(headerText("AIRSIDE DATA EXTERNAL SP I.W.G"), "AIRSIDE DATA EXTERNAL SP INWC");
-  assert.equal(headerText("HYDRONIC REHEAT COIL DATA SENSIBLE CAPACITY (BTU/HR)"), "HYDRONIC REHEAT COIL DATA SENSIBLE CAPACITY ( BTUH )");
-  assert.equal(headerText("MOTOR V/Ø"), "MOTOR V/ PH");
+  assert.equal(headerText("HYDRONIC REHEAT COIL DATA SENSIBLE CAPACITY (BTU/HR)"), "HYDRONIC REHEAT COIL DATA SENSIBLE CAPACITY (BTUH)");
+  assert.equal(headerText("MOTOR V/Ø"), "MOTOR V/PH");
   assert.equal(headerText("ELECTRICAL (NOTE 1) VOLTAGE"), "ELECTRICAL VOLTAGE");
   assert.equal(headerText("MIN. O.S.A. CFM"), "MIN OSA CFM");
 });
@@ -1010,7 +1010,7 @@ test("dev 4: an exhaust terminal; the one floor a TYPICAL FLOORS cell names; an 
 });
 
 test("dev 5: LBS/H and a split PHAS E are one word each; feet of water on a cell; an ELECTRICAL POLES count", () => {
-  assert.equal(headerText("SHELL SIDE CAPACITY (LBS/H)"), "SHELL SIDE CAPACITY ( LBHR )");
+  assert.equal(headerText("SHELL SIDE CAPACITY (LBS/H)"), "SHELL SIDE CAPACITY (LBHR)");
   assert.equal(headerText("VOLTAGE/PHAS E"), "VOLTAGE/PHASE");
   assert.deepEqual(parseNumberCell("16.0 ftH2O"), { n: 16, unit: "ft", words: "FTWC" });
   // 06_MO SP-1: one pole at 120 V is single phase.
@@ -1191,4 +1191,16 @@ test("unseen census (AS-28's class): a group named WATER FLOW DATA does not make
   assert.deepEqual(quantitiesOf(headerText("WATER FLOW DATA WPD (FT)")), ["wpd"]);
   assert.ok(quantitiesOf(headerText("CHILLED WATER FLOW")).includes("waterflow"));
   assert.ok(!quantitiesOf(headerText("HOT WATER FLOW TEMP")).includes("waterflow"));
+});
+
+test("metamorphic sweep: spacing that changes no word changes no value (a slash, inside parentheses)", () => {
+  // 031_MO (dev) prints SYSTEM AND/OR SERVICE and 083_MA (unseen) FAN
+  // COIL(S) SERVED. A text layer that spaces the slash or the parentheses
+  // printed the same words; the sweep found both read as nothing.
+  for (const h of ["SYSTEM AND/OR SERVICE", "SYSTEM AND / OR SERVICE", "SYSTEM  AND /OR  SERVICE"]) assert.deepEqual(quantitiesOf(headerText(h)), ["service"], h);
+  for (const h of ["FAN COIL(S) SERVED", "FAN COIL( S ) SERVED", "FAN COIL (S) SERVED"]) assert.deepEqual(quantitiesOf(headerText(h)), ["area_served"], h);
+  assert.equal(headerText("POWER CONNECTION / VOLT / PH"), "POWER CONNECTION/VOLT/PH");
+  const fan = (service: string) => values(normalizeCompileItem(row("EF-1", "FAN SCHEDULE", { [service]: "TOILET EXHAUST", CFM: "450", "VOLT / PH": "120 / 1" }), "FAN"));
+  assert.deepEqual(fan("SYSTEM AND / OR SERVICE"), fan("SYSTEM AND/OR SERVICE"));
+  assert.equal(fan("SYSTEM AND / OR SERVICE").service, "TOILET EXHAUST");
 });

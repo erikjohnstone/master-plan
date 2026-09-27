@@ -135,6 +135,9 @@ export function headerText(header: string): string {
   // Mode abbreviations ("CLNG CAP. MBH", "HTNG CAP. MBH") and a total
   // capacity's TMBH ("COOLING MIN. TMBH").
   s = s.replace(/\bCLNG\b/g, "COOLING").replace(/\bHTNG\b/g, "HEATING").replace(/\bTMBH\b/g, "TOTAL MBH");
+  // Spacing that changes no word: around a slash ("AND / OR", "VOLT / PH")
+  // and just inside parentheses ("COIL( S )").
+  s = s.replace(/\s*\/\s*/g, "/").replace(/\(\s+/g, "(").replace(/\s+\)/g, ")");
   s = s.replace(/\s+/g, " ").trim();
   return s;
 }
@@ -424,7 +427,7 @@ export function quantitiesOf(h: string): Quantity[] {
   if (/\bLBHR\b/.test(h) && !(/\bTRAP\b/.test(h) && /\bCAPACITY\b|\bRAT(?:ED|ING)\b|\bSIZE\b/.test(h))) q.push("lbhr");
   if (/\bPSIG?\b/.test(h)) q.push("psig");
   if ((/\bAREA\b.*\bSERV(?:ED|ICED)\b|^SERVES(?:\s+(?:ROOMS?|AREAS?|SPACES?)(?:\s*#|\s+NO)?)?$|^AREA$/.test(h)
-    || /\sSERVES$/.test(h) || /\b(?:LOCATION|SPACES?|ROOMS?|UNITS?|ZONES?|FAN\s+COIL(?:\(S\)|S)?)\s+SERVED$/.test(h)) && !/\bSERVED\s+BY\b/.test(h)) q.push("area_served");
+    || /\sSERVES$/.test(h) || /\b(?:LOCATION|SPACES?|ROOMS?|UNITS?|ZONES?|FAN\s+COIL(?:\s?\(S\)|S)?)\s+SERVED$/.test(h)) && !/\bSERVED\s+BY\b/.test(h)) q.push("area_served");
   // SERVICE / SERVING, alone or under a unit-data group ("UNIT GENERAL DATA
   // SERVICE"); SYSTEM (AND/OR SERVICE).
   else if (/^(?:SYSTEM|SYSTEM AND\/OR SERVICE|SYSTEM AND\/OR SEVICE|SYSTEM\s+SERVED)$/.test(h) || /^(?:(?:UNIT|GENERAL|DATA|EQUIPMENT|INFORMATION|INFO|BASIC|FAN|PUMP)\s+)*(?:SERVICE|SERVING)$/.test(h)) q.push("service");

@@ -1,5 +1,15 @@
 # Changelog
 
+- **Assemblies read a header the same however its slash or parentheses are
+  spaced.** A text layer that prints "SYSTEM AND / OR SERVICE" or "FAN COIL(
+  S ) SERVED" printed the same words as "SYSTEM AND/OR SERVICE" and "FAN
+  COIL(S) SERVED", but the shared normalizer
+  (`web/src/lib/assemblies/normalize.ts`) read the spaced spellings as no
+  column. Its one spelling of a header now closes the space around a slash
+  and just inside parentheses. Found by a metamorphic sweep that respells
+  every cached row's headers without changing a word; no value on any
+  cached document changes (ASSEMBLIES_BUG_CATALOGUE AS-32 addendum).
+
 - **A water flow group's pressure drop is no second flow.** In a schedule
   whose water columns sit under a group named for the flow ("WATER FLOW DATA
   / FLOW (GPM)" beside "WPD (FT)"), the pressure drop column was also read as

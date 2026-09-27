@@ -1894,3 +1894,21 @@ exactly the dev-4 freeze's numbers, in every column the reports print; they
 differ from its reports only in their date and code hash. Both still fail
 on exact and invented. No rule was taken from either's rows, and only these
 aggregates were read.
+
+**Addendum, a metamorphic sweep after the freeze (robustness; no key read):**
+every cached row (86 documents, 1,705 rows) normalized as printed, then
+with its headers respelled in ways that change no word (lower case,
+doubled spaces, a space around every slash, a slash closed up, a space just
+inside parentheses) and its cells with thousands separators dropped; any
+value that changed was a brittle rule. Two were: SERVICE under "SYSTEM AND
+/ OR SERVICE" (031_MO, dev, prints it closed up: 19 fans' and pumps'
+services lost when spaced), and AREA SERVED under "FAN COIL( S ) SERVED"
+(083_MA, unseen: 3 heat pumps). The header's one spelling now closes the
+space around a slash and just inside parentheses, and FAN COIL (S) SERVED
+reads with a space before the plural too; the sweep now changes nothing
+but one room list whose comma the cell variant itself removed (028_TX
+"116,117"). A plural "(S)" is not folded into the word: 096_IN's AHU prints
+FILTER(S) as a filter's tag (PF-4), not a MERV. No value on any cached
+document changes (dev through dev 5, the unseen corpus); the invariant
+sweep shows the same 12 flags; control intent replays identically. Test:
+normalize.test.ts, "metamorphic sweep".
