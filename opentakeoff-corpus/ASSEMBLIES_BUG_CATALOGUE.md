@@ -2003,6 +2003,42 @@ not make (none recoverable here); of dev 4's 474, 368 are units the compile
 does not make (tag spellings the compile and the key read differently:
 028_TX's FCC 1-1, 030_NY's 001-FCU-01-CG06A), which is extraction's.
 
+**Addendum, what the control drawings print about a drive (2026-09-27; no
+key read):** AS-33 left about 130 of these units to "the estimator's answer,
+or the control drawings". The readers are never asked about a drive: they
+answer a unit's role and its typical's options (CONTROL_INTENT decision C6),
+not the vfd attribute its typical selects on. A census of the 234 units
+waiting on attr.vfd across the 86 cached documents (scratch
+census3/vfd-packets.mjs: each unit's bound control packets, and the lines
+that print a drive term such as VFD, VARIABLE FREQUENCY DRIVE or SPEED
+CONTROL, or a constant-speed or starter term) sorts them:
+- **121 have no control packet bound at all.** Only the estimator can answer
+  these.
+- **6 have their own packet, by title, printing a drive.** itd-d1-lab AHU-1
+  ("SUPPLY FAN(S) VFD FREQUENCY"), 009_FL AHU-1 ("AHU-1 CONTROLS": VFD) and
+  EF-1 to EF-3 ("LAB EXHAUST FAN CONTROLS (EF-1, 2, & 3)": "THE VARIABLE
+  FREQUENCY DRIVE (VFD) IN THE AUTO POSITION"), and 096_IN AHU-4 ("SUPPLY FAN
+  SPEED CONTROL"). The two air handlers would still wait on terminals_served.
+- **1 has its own packet printing a constant-speed term, and that reading is
+  wrong.** 05_MO's AC-57 prints "EMERGENCY CONSTANT SPEED OPERATION … FANS
+  SHALL THEN BE OPERATED AT A CONSTANT SPEED", an emergency mode of a VAV air
+  handler, which has drives. A constant-speed phrase is no evidence of "no
+  VFD".
+- **32 are bound only to packets other units share that print a drive
+  somewhere,** and never on a line or clause with the unit's tag. Only a
+  reader of the drawing could say whose drive it is: 069_ID's vision runs
+  cited "VFD SPEED" for a boiler pump that has none (CI-34).
+- **74 are bound to packets that print nothing about a drive:** 14 are their
+  own packets and 60 are shared.
+
+A drive question for the readers would decide about 6 of the 234 on the
+deterministic reader's evidence. Its "no" side has no safe phrase, and a
+model's reading of a shared drawing is where CI-23 and CI-34's defenses
+already reject evidence about other units. Not built. It is proposed for a
+later batch, with the vision reader's proposed tiling of large drawings, which
+would let a model read whose drive a shared drawing shows. The waiting units keep asking the estimator,
+and the assemblies view shows each with what it waits on.
+
 ## AS-34 — the Takeoff panel on two more documents: packet ids kept the upload's hash name, and a model's copy of a glyph reached a cite (FIXED — this goal)
 
 **Found:** 2026-09-27, running the UI proof (web/scripts/playwright-assemblies.mjs:
