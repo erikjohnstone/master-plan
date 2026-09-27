@@ -94,13 +94,14 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box, others: r
   let label = labels.find((s) => s.box[0] <= ru0 + 0.2 * width)
     ?? labels.find((s) => /:/.test(s.str.split(/\s+(?=\d{1,2}[.)]|\(\d{1,2}\))/)[0]));
   // No label: a numbered list printed inside the table at its left edge ("1.
-  // AHU TO HAVE …", "2. MOUNT AHU …" between the title and the header band) is
-  // the table's notes. Its first two notes are prose on consecutive lines at
-  // one indent; the list reads as if a label sat just above note 1, and a
-  // wider gap than a wrapped line's ends it (the header band or the rows).
+  // AHU TO HAVE …", "2. MOUNT AHU …" between the title and the header band;
+  // "(1) PROVIDE WITH …" under its rows) is the table's notes. Its first two
+  // notes are prose on consecutive lines at one indent; the list reads as if
+  // a label sat just above note 1, and a wider gap than a wrapped line's ends
+  // it (the header band or the rows).
   let unlabeled = false;
   if (!label) {
-    const numbered = (s: Framed, id: string) => new RegExp(`^\\s*${id}\\s*[.)]\\s+\\S+(?:\\s+\\S+){2,}`).test(s.str);
+    const numbered = (s: Framed, id: string) => new RegExp(`^\\s*(?:\\(\\s*${id}\\s*\\)|${id}\\s*[.)])\\s+\\S+(?:\\s+\\S+){2,}`).test(s.str);
     const first = framed
       .filter((one) => numbered(one, "1") && one.box[0] >= ru0 - 3 * lineH && one.box[0] <= ru0 + 0.2 * width
         && one.box[1] >= rv0 && one.box[3] <= rv1 + 6 * lineH
@@ -255,11 +256,15 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box, others: r
         line.sort((a, b) => a.box[0] - b.box[0]);
         // An unlabeled list is prose at its left edge: a line that starts
         // away from it, or that is set in cells (a table's title, header or
-        // row beside or below the notes), ends it.
+        // row beside or below the notes), ends it. One above note 1 (the
+        // table's last row, printed a line over the notes) is no part of it.
         if (unlabeled) {
           const startsAway = line[0].box[0] > starts[c] + 3 * lineH || line[0].box[0] < starts[c] - lineH;
           const cells = line.some((s, i) => i > 0 && s.box[0] - line[i - 1].box[2] > 2.5 * lineH);
-          if (startsAway || cells) break;
+          if (startsAway || cells) {
+            if (!read.some(isMarker)) continue;
+            break;
+          }
         }
         let edge = starts[c] + 12 * lineH;
         for (const s of line) {
@@ -464,7 +469,9 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>, servi
   else if (/^N\s*\+\s*1\s+(?:REDUNDANT\s+)?PUMPS?$/.test(whole)) put("pump_arrangement", "duty_standby", "note.pump_n_plus_1");
   // The unit's humidifier ("REFER TO HUMIDIFIER SCHEDULE FOR AHU HUMIDIFIER",
   // "… HUMIDIFIER SECTION"), never one it lacks or may get later.
-  if (/\b(?:AHU|UNIT|RTU|DOAS)\s+HUMIDIFIERS?\b|\bHUMIDIFIERS?\s+SECTION\b|\bPROVIDE\b[^.;]*\bHUMIDIFIERS?\b|\bWITH\b[^.;]*\bHUMIDIFIERS?\b/.test(t)
+  // Its dispersion tubes or manifold ("FACTORY PROVIDED HUMIDIFIER
+  // DISPERSION TUBES") are the unit's humidifier too.
+  if (/\b(?:AHU|UNIT|RTU|DOAS)\s+HUMIDIFIERS?\b|\bHUMIDIFIERS?\s+SECTION\b|\bPROVIDE\b[^.;]*\bHUMIDIFIERS?\b|\bWITH\b[^.;]*\bHUMIDIFIERS?\b|\bPROVIDED\s+HUMIDIFIERS?\b|\bHUMIDIFIERS?\s+(?:DISPERSION|MANIFOLDS?|GRIDS?|TUBES?|DISTRIBUTORS?)\b/.test(t)
     && !negated("HUMIDIF") && !/\bFUTURE\b[^.;]*\bHUMIDIF|\bHUMIDIF[^.;]*\bFUTURE\b|\bPROVISIONS?\s+FOR\b[^.;]*\bHUMIDIF/.test(t)) put("humidifier", "yes", "note.humidifier");
   // "UNIT SHALL CONTAIN TWO SUPPLY FANS": the supply fans in the unit.
   const supplyFans = t.match(/\b(\d|TWO|THREE|FOUR|FIVE|SIX)\s+SUPPLY\s+FANS\b/);
@@ -481,6 +488,15 @@ export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>, servi
     put("phase", Number(vph[0][3]), "note.unit_power");
     break;
   }
+  // "CAPACITY BASED ON 42 DEG. F. ENTERING WATER TEMPERATURE": a coil's
+  // entering water, chilled at 60 °F or below, heating at 100 °F or above
+  // (between them, a condenser or source loop's, which neither is); one
+  // temperature of each.
+  const entering = [...t.matchAll(/\b(\d{2,3}(?:\.\d)?)\s*(?:°\s*F?\.?|DEG(?:REES?)?\.?\s*F?\.?|F\.?)\s+(?:ENTERING\s+WATER(?:\s+TEMP(?:ERATURE)?)?|EWT)\b/g)].map((m) => Number(m[1]));
+  const chwEwt = [...new Set(entering.filter((v) => v >= 35 && v <= 60))];
+  const hwEwt = [...new Set(entering.filter((v) => v >= 100 && v <= 250))];
+  if (chwEwt.length === 1) put("chw_ewt_f", chwEwt[0], "note.entering_water");
+  if (hwEwt.length === 1) put("hw_ewt_f", hwEwt[0], "note.entering_water");
   // "PROVIDE MINIMUM 8-ROW COOLING COILS AND 1-ROW HEATING COILS": a coil's
   // rows (the normalizer keeps them where the row prints that coil's water).
   for (const m of t.matchAll(/\b(\d{1,2})\s*-?\s*ROWS?\s+(COOLING|CHILLED\s+WATER|CHW|HEATING|HOT\s+WATER|HW|PREHEAT|REHEAT)\s+COILS?\b/g)) {

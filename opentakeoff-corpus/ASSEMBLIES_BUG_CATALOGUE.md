@@ -1710,3 +1710,126 @@ differs from the last freeze's only in its date and code hashes), 0 wrong,
 2 invented; held-out 2 334 of 472 exact (70.8%, from 64.0%), 1 wrong
 (0.2%), 2 invented. Both still fail on exact and invented. No rule was taken
 from either's rows, and only these aggregates were read.
+
+## AS-31 — the fifth dev tier's misses: rules its drafters taught, and the ceilings they show (FIXED for the shapes below; OPEN for the ceilings — this goal)
+
+**Found:** 2026-09-27, measuring the frozen normalizer cold on dev 5
+(tier5/01-split.json, seed 20260929: 11 documents, 38 drawn tables, 86
+instances, 561 printed values), keyed from renders before the pipeline ran
+on any of its sheets (b407614). Cold (02-attr-eval-dev5-cold.md): 412 of
+561 exact (73.4%), 1 wrong (0.2%), 148 missed, 2 invented; 78 of the 86 key
+instances have a compile item. Two drawn tables are not their stratum's
+family, keyed "rows: none" and scored for inventions only: 016_NY's PP-4
+panelboard (E-602, claimed as FCU) and 23_GA's architectural SPECIALTY
+EQUIPMENT SCHEDULE (A1-2, claimed as ERV).
+
+**Fixed (each from a dev-5 miss, with a unit test on its own shape):**
+
+The notes reader (scheduleNotes.ts):
+- An unlabeled list numbered "(1)", "(2)" is a list as "1." is, and a line
+  above its note 1 (the table's last row, printed a line over the notes) is
+  no part of it and no longer ends it (016_NY: the air handler's notes 1-3,
+  the condensing unit's 1-4 and the fin tube's 1-2, none read before).
+- Formulaic notes: a humidifier's dispersion tubes or manifold ("FACTORY
+  PROVIDED HUMIDIFIER DISPERSION TUBES", 061_IA's AHU-A); a coil's entering
+  water ("CAPACITY BASED ON 42 DEG. F. ENTERING WATER TEMPERATURE", 061_IA's
+  fan coil): chilled at 60 °F or below, heating at 100 °F or above, one of
+  each, read only where the row prints that coil's water.
+- A note the row's REMARKS cite that provides the unit's starter and nothing
+  else, a disconnect beside it or not ("PROVIDE WITH UNIT MOUNTED STARTER AND
+  DISCONNECT."), starts the unit across the line, on no VFD (016_NY's
+  AHU-1): the REMARKS-prose rule of 03_FL, for a note the row cites. A table
+  note no row cites may be another motor's, and stays unread for it.
+
+The columns (normalize.ts):
+- LBS/H is LB/HR; a text layer's "PHAS E" is PHASE; a cell printing feet of
+  water with H2O ("16.0 ftH2O") is one number in feet (06_MO's sink pump).
+- A POWER CONNECTION's MCA, MOCP, FLA or volts is electrical, never a pipe
+  (28_WA's heat pump: 1 invented gone); a QUANTITY under a section, blender,
+  louver or damper counts that part, never the units (061_IA's AIR BLENDER
+  SECTION: 1 invented gone).
+- A louver's airflow (an air handler's ECONOMIZER, RELIEF or MINIMUM
+  VENTILATION LOUVER) is the louver's rating, never the unit's supply,
+  outdoor or return airflow (061_IA's AHU-A); an economizer louver, damper
+  or airflow scheduled with a size is an airside economizer; a HEAT RECOVERY
+  COIL (a coil loop's, never a refrigerant circuit's) is a runaround loop.
+- OUTDOOR AIRFLOW is outdoor air for a unit with an outdoor air minimum; a
+  HEATING TYPE (SOURCE, MEDIUM) column naming the heat ("NAT. GAS") is the
+  unit's heat; a packaged rooftop unit printing a cooling capacity and no
+  water at all cools by DX (06_MO's ACU-6).
+- A cooling coil's water flow alone (COOLING COIL GPM) is a chilled-water
+  coil's, never an evaporative cooler's (009_FL's AHUs).
+- A kW or W capacity in a table of electric heaters (an electric heater's
+  row, or a title naming electric heat: ELECTRIC DUCT HEATER, ELECTRIC
+  RADIANT CEILING PANEL) is its electric heat (06_MO's EDH-1, 24_IA's
+  ECP-1), as heat in watts is ("AUXILIARY HEAT (WATT)", 28_WA's heat pump).
+- A terminal's DESCRIPTION naming its type; a single-duct terminal's size
+  number ("04") is its nominal inlet diameter (never a fan-powered box's
+  cabinet size); a table's one airflow column is the box's design maximum;
+  "24" under a terminal's VOLTAGE is its controls' 24 V; its electric heat
+  printed N/A, with no water or other heat printed, is no reheat (06_MO's
+  nine VAV boxes).
+- An ELECTRICAL (breaker) POLES count is the supply's phase, one or two
+  poles single phase and three three-phase, below a PHASE column and never a
+  motor's poles (06_MO's sink pump).
+- A shell and tube exchanger whose one side's FLUID is STEAM: that side is
+  its primary, the other its secondary; steam heating plain WATER that
+  leaves warmer is heating hot water, never where the table names domestic
+  water (061_IA's HX-A-1 and HX-A-2: 12 values).
+- A motor type printed where its size goes ("PSC" under MOTOR (HP), 061_IA's
+  fan coil) or with a speed word ("MODULATING ECM", 24_IA's fan coils) says
+  whether it is an EC motor.
+- A DISCONNECT (SWITCH, FUSE) column naming the drive ("VFD", "VFD 60A3P
+  LOCAL …", "BREAKER IN VFD", "VFD WITH INTEGRAL DISCONNECT") is a VFD
+  (061_IA's ten supply and return fans; 043_FL's pumps, whose rows reach
+  the compile as HWP1-2 and CWP9-10).
+- An INTERLOCK WITH column is how the unit is controlled ("INTERLOCK WITH
+  MOTORIZED DAMPER", 28_WA's fans); WATER at a temperature ("WATER @ 120°F")
+  is plain water (061_IA's pumps); a water's SUPPLY/RETURN in inches is its
+  pipe size (24_IA's fan coils).
+- An EC MOTOR box left blank in an ACCESSORIES group whose other boxes the
+  row checks is no EC motor (009_FL's new fans; the existing fans, which
+  check nothing, stay unknown). It is the one value read from a blank: the
+  box is printed, every mark the row prints in the group is a check mark,
+  and the value's printed text is empty by design.
+
+**Measured:**
+- Dev 5: 499 of 561 exact (88.9%), 1 wrong (0.2%), 61 missed, 0 invented,
+  scored on the cached compile snapshots (the extraction is unchanged).
+- Dev, dev 2, dev 3 and dev 4: unchanged, value for value.
+- Outside dev 5, 12 values change over the 86 cached documents, each read
+  against its print: 05_MO's twelve ATU-6 single-duct terminals (dev 2,
+  unkeyed), whose SIZE prints 6" or 8", now their inlet sizes.
+- The notes reader changes 3 of the 397 cached tables, each read against
+  the page: 016_NY's three lists above.
+- The control-intent readings of the dev documents replay identically,
+  decision by decision; the unseen audit's replay is identical to the
+  baseline's, line for line.
+- The key-free sweeps over the 86 cached documents: the same 12 flags as at
+  dev 4; 100 more values and 158 more expanded lines.
+
+**The ceilings (OPEN; every remaining dev-5 miss is outside the
+normalizer's rules):**
+- 8 key instances have no compile item (40 values): 032_PA's pumps P-A and
+  P-B reach the compile as "NP A" and "NP B"; 043_FL prints two pumps to a
+  row as HWP1-2 and CWP9-10; 061_IA's EF-2 and EF-3 on E601's EQUIPMENT
+  SCHEDULE are not compiled. The rows are the compile's loop's.
+- 23_GA's fan coil schedule's headers reach the compile garbled ("OA
+  MODEL", "OA SUPPLY", "AUX. HTG."): 7 values.
+- 061_IA's air handler continues in a second table ("… (CONT.)") that the
+  compile does not claim: its supply fan's HP and quantity and its final
+  filter (3 missed), and 1 wrong, the return fan's 460 V read as the unit's
+  where the continuation prints the supply fan's 480 V.
+- 28_WA's STARTER BY E.C. checks are drawn marks the text layer does not
+  carry: 3 values.
+- Readings the row does not state: 06_MO's VRF ceiling cassettes cool by DX
+  and heat as heat pumps by their basis of design (6 values); 097_UT's unit
+  heaters' DUTY names the chemical room they serve (2 values).
+
+**Process note (AS-26's kind, disclosed):** on 2026-09-26, while looking up
+the schedule-parts transcription format, a grep over keys/*.csv and
+key-work/*.transcription.txt printed four header lines of two held-out keys
+(018_GA's and navfac's schedule-part render lines: titles, row counts and
+crops; no attribute value). No rule uses them; the format was taken from
+the eval script's own parser. Key-work lookups now name the dev files
+explicitly.

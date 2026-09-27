@@ -706,3 +706,55 @@ test("dev 4: notes that state a fan coil's piping, a pump's role, an air handler
   assert.deepEqual(v("UNIT SHALL BE 460V/3PH OR 208V/3PH.", ["volts", "phase"]), [], "two powers: not one");
   assert.deepEqual(v("PROVIDE UNIT AT 460V/3PH. PROVIDE 120V/1PH RECEPTACLE AT UNIT.", ["volts", "phase"]), ["volts=460", "phase=3"], "the receptacle's sentence is another device's");
 });
+
+test("dev 5: an unlabeled (1) list under the table's last row; the row above it is no note", () => {
+  // 016_NY page 18: AIR HANDLING UNIT SCHEDULE's row AHU-1, then its notes
+  // (1)-(3) inside the table's frame, no label.
+  const spans: NoteSpan[] = [
+    { str: "AIR HANDLING UNIT SCHEDULE", x0: 2144, y0: 142, x1: 2665, y1: 180 },
+    { str: "UNIT", x0: 663, y0: 219, x1: 726, y1: 247 },
+    { str: "REMARKS", x0: 4894, y0: 219, x1: 5005, y1: 247 },
+    { str: "AHU-1", x0: 663.6, y0: 285.7, x1: 726.8, y1: 313.8 },
+    { str: "MECH ROOM 005", x0: 787.7, y0: 285.7, x1: 938.7, y1: 313.8 },
+    { str: "SEE PLANS", x0: 965, y0: 285.7, x1: 1066.4, y1: 313.8 },
+    { str: "3,450", x0: 1104.1, y0: 285.7, x1: 1149.8, y1: 313.8 },
+    { str: "1,2,3", x0: 4930, y0: 285.7, x1: 4990, y1: 313.8 },
+    { str: "(1) PROVIDE WITH DUCT SMOKE DETECTOR.", x0: 632.3, y0: 329.5, x1: 1129.1, y1: 357.6 },
+    { str: "(2) PROVIDE WITH UNIT MOUNTED STARTER AND DISCONNECT.", x0: 632.3, y0: 359.9, x1: 1341.3, y1: 388 },
+    { str: "(3) PROVIDE WITH SINGLE POINT POWER CONNECTION.", x0: 632.3, y0: 390.2, x1: 1255.2, y1: 418.3 },
+  ];
+  const notes = scheduleNotes(spans, [622.68, 121.68, 5028.72, 432.72]);
+  assert.deepEqual(notes, [
+    { id: "1", text: "PROVIDE WITH DUCT SMOKE DETECTOR." },
+    { id: "2", text: "PROVIDE WITH UNIT MOUNTED STARTER AND DISCONNECT." },
+    { id: "3", text: "PROVIDE WITH SINGLE POINT POWER CONNECTION." },
+  ]);
+  // A single "(1)" line is no list.
+  assert.deepEqual(scheduleNotes(spans.slice(0, 9), [622.68, 121.68, 5028.72, 432.72]), []);
+});
+
+test("dev 5: a cited note that only provides the unit's starter; humidifier dispersion tubes; a coil's entering water", () => {
+  const notes = [
+    { id: "1", text: "PROVIDE WITH DUCT SMOKE DETECTOR." },
+    { id: "2", text: "PROVIDE WITH UNIT MOUNTED STARTER AND DISCONNECT." },
+    { id: "3", text: "PROVIDE WITH STARTER FOR THE ENERGY WHEEL MOTOR." },
+  ];
+  const ahu = (remarks: string) => normalizeCompileItem(row("AHU-1", "AIR HANDLING UNIT SCHEDULE", { "SUPPLY CFM": "3,450", REMARKS: remarks }), "AHU",
+    { headers: ["UNIT NO.", "SUPPLY CFM", "REMARKS"], notes, rows: [{ key: "AHU-1", cells: { REMARKS: remarks } }] }).attributes.vfd?.value;
+  assert.equal(ahu("1,2"), "no"); // 016_NY AHU-1
+  assert.equal(ahu("1"), undefined, "a note the row does not cite");
+  assert.equal(ahu("1,3"), undefined, "another motor's starter");
+  const v = (text: string, attrs: string[]) => noteValues({ id: "5", text }, new Set(attrs)).map((x) => `${x.attr}=${x.value}`);
+  // 061_IA AHU-A note 5; FCU note 2.
+  assert.deepEqual(v("FACTORY PROVIDED HUMIDIFIER DISPERSION TUBES USING CONTRACTOR PROVIDED STEAM-TO-STEAM GENERATOR.", ["humidifier"]), ["humidifier=yes"]);
+  assert.deepEqual(v("UNIT SHALL NOT BE PROVIDED WITH HUMIDIFIER DISPERSION TUBES.", ["humidifier"]), []);
+  const ewt = ["chw_ewt_f", "hw_ewt_f"];
+  assert.deepEqual(v("CAPACITY BASED ON 42 DEG. F. ENTERING WATER TEMPERATURE AND 80 DEG. F. D.B./67 DEG. F. W.B. ENTERING AIR CONDITIONS.", ewt), ["chw_ewt_f=42"]);
+  assert.deepEqual(v("HEATING CAPACITY BASED ON 180°F EWT.", ewt), ["hw_ewt_f=180"]);
+  assert.deepEqual(v("CAPACITY BASED ON 85°F ENTERING WATER.", ewt), [], "a condenser loop's, neither coil's");
+  // The note's entering water speaks only where the row prints that coil's water.
+  const fcu = (cells: Record<string, string>) => normalizeCompileItem(row("FCU-A", "FAN COIL UNIT SCHEDULE", cells), "FCU",
+    { headers: Object.keys(cells), notes: [{ id: "2", text: "CAPACITY BASED ON 42 DEG. F. ENTERING WATER TEMPERATURE." }] }).attributes.chw_ewt_f?.value;
+  assert.equal(fcu({ "COOLING COIL FLOW RATE (GPM)": "2.5", "COOLING COIL L.W.T. (°F)": "60.0" }), 42);
+  assert.equal(fcu({ "COOLING CAP.": "11,400 Btu/h" }), undefined);
+});

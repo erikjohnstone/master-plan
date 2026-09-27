@@ -1,5 +1,31 @@
 # Changelog
 
+- **Assemblies read a fifth tier of drafters' schedules.** Eleven more
+  documents, drawn by seed and keyed from renders before the pipeline ran,
+  taught the shared normalizer and notes reader
+  (`web/src/lib/assemblies/normalize.ts`, `scheduleNotes.ts`) these
+  readings, each with a test on the document's own shape. Notes numbered
+  "(1)", "(2)" with no label are read, and the table's last row above them
+  no longer ends the list; a note the row cites that only provides the
+  unit's starter means no VFD; notes state a humidifier's dispersion tubes
+  and a coil's entering water. A power connection's MCA is no pipe, and a
+  blender section's QUANTITY counts no units (both were invented values); a
+  louver's airflow is the louver's; OUTDOOR AIRFLOW, HEATING TYPE, a
+  packaged rooftop unit's DX cooling, a cooling coil's lone GPM, a kW or W
+  capacity in an electric heater's table, a single-duct box's DESCRIPTION,
+  size number, one airflow, 24 V controls and "N/A" electric heat, breaker
+  POLES, a shell and tube exchanger's steam side and the hot water it heats,
+  "PSC" under MOTOR (HP) and "MODULATING ECM", a DISCONNECT that is the VFD,
+  INTERLOCK WITH, "WATER @ 120°F", a water's SUPPLY/RETURN pipe size, a heat
+  recovery coil, and an EC MOTOR box left blank among checked accessories
+  are read. On the fifth tier, 88.9% of printed values are now exact (from
+  73.4%) with 0.2% wrong and none invented; every remaining miss is a
+  compile or extraction issue, or a reading the row does not print, which
+  the catalogue records. Dev through dev 4 read exactly as before, the 12
+  changes elsewhere on the corpus were checked against the printed cell,
+  and the control-intent readings are unchanged (ASSEMBLIES_BUG_CATALOGUE
+  AS-31).
+
 - **Assemblies read a fourth tier of drafters' schedules, and schedule
   notes stay with their own table.** Ten more documents, drawn by seed and
   keyed from renders before the pipeline ran, taught the shared normalizer
