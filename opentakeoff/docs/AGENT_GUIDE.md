@@ -208,8 +208,9 @@ Report it, or pass the partner's value in `settings` or an override with a reaso
 pick a typical or an option the drawing does not decide. Where units of two families share a tag,
 give the override the unit's `family`. An override's `assembly` may name any typical of the
 layer: another of the unit's family's, or, for a family no typical lists (lab air valves, say),
-another family's, as the Takeoff panel's Use another typical… offers; name one only on the
-estimator's word. A typical you choose by override can still wait for a value its options read (an economizer, say); the record stays unresolved until an override or setting gives it. An override listed in `overrides_unmatched` applied nothing:
+another family's, as the Takeoff panel's Use another typical… offers. With `detail` `units` or
+`lines`, `typical_choices` lists them (`by_family`, then `by_layer`): offer the estimator those,
+and name one only on the estimator's word. A typical you choose by override can still wait for a value its options read (an economizer, say); the record stays unresolved until an override or setting gives it. An override listed in `overrides_unmatched` applied nothing:
 correct its tag, or set a project record's value in `settings`, before you report it as applied.
 One listed in `overrides_ignored` applied in part: the options and variables it names are not the
 unit's typical's (check the ids against the record's own), or wait for a typical, or another

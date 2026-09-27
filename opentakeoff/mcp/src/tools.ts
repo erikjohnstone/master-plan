@@ -1099,6 +1099,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       control: want === "summary" ? controlCounts : full.control,
       report: want === "summary" ? summary : { ...summary, units },
       ...(want === "lines" ? { applications: full.applications, lines: full.lines } : {}),
+      ...(want === "summary" ? {} : { typical_choices: full.typical_choices }),
       ...(full.overrides_unmatched ? { overrides_unmatched: full.overrides_unmatched } : {}),
       ...(full.overrides_ignored ? { overrides_ignored: full.overrides_ignored } : {}),
       ...(full.settings_unread ? { settings_unread: full.settings_unread } : {}),

@@ -1877,6 +1877,10 @@ export const applyAssembliesOutput = {
   }),
   applications: z.array(z.record(z.string(), z.unknown())).optional(),
   lines: z.array(z.record(z.string(), z.unknown())).optional(),
+  typical_choices: z.object({
+    by_family: z.array(z.object({ family: z.string(), layer: z.string(), typicals: z.array(z.string()) })),
+    by_layer: z.record(z.string(), z.array(z.string())),
+  }).optional().describe("With detail units or lines: the typicals an override's assembly may name (id@version). by_family holds each of the reply's families' own per layer, the list the rules choose among (a typical such as lab-airflow, which the rules never pick, among them); by_layer holds each layer's whole list, which a family with none of its own may take. The Takeoff panel's Use another typical… offers the same lists. Name one only on the estimator's word"),
   overrides_unmatched: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), why: z.string() })).optional()
     .describe("Overrides that no unit takes, each with why (a tag no unit has, a family or layer its units have not, a typical the layer does not offer, or the project's own records, which follow the project settings). They applied nothing"),
   overrides_ignored: z.array(z.object({ tag: z.string(), family: z.string().optional(), layer: z.string().optional(), options: z.array(z.string()), variables: z.array(z.string()), why: z.string() })).optional()

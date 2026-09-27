@@ -20,7 +20,7 @@ import { assembliesCsvSet, type ExportFile } from "../../web/src/lib/assemblies/
 import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
 import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
-import type { Override, ProjectSettings } from "../../web/src/lib/assemblies/select.ts";
+import { PROJECT_INSTANCE, typicalChoices, type Override, type ProjectSettings } from "../../web/src/lib/assemblies/select.ts";
 import { readControlIntent, type ControlReadings } from "../../web/src/lib/controlIntent/record.ts";
 import { sheetNumberOf } from "../../web/src/lib/controlIntent/evidence.ts";
 import { answerSettings, appendAnswer, replayAnswers } from "../../web/src/lib/controlIntent/journal.ts";
@@ -240,6 +240,9 @@ export interface ApplyAssembliesResult {
   /** The families the reply was narrowed to that leave units out, each
    * with why (AS-51); absent when none does. */
   families_left_out?: Array<{ family: string; why: string }>;
+  /** The typicals an override may give a unit (AS-55): each family's own,
+   * per layer, and each layer's whole list (id@version). */
+  typical_choices: { by_family: Array<{ family: string; layer: string; typicals: string[] }>; by_layer: Record<string, string[]> };
 }
 
 // ── Project questions (Track A): the Session's answer journal ──────────────
@@ -367,10 +370,22 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   } catch (e) {
     throw new UserError(e instanceof Error ? e.message : String(e));
   }
+  // The typicals an override may give a unit (AS-55): each of the reply's
+  // families' own, per layer, and each layer's whole list, which a family no
+  // typical lists may take. The Takeoff panel's Use another typical… offers
+  // the same lists (select.ts typicalChoices).
+  const key = (d: AssemblyDefinition) => `${d.id}@${d.version}`;
+  const slots = [...new Map(apps.filter((a) => a.instance.tag !== PROJECT_INSTANCE.tag).map((a) => [`${a.instance.family}\u0000${a.layer}`, [a.instance.family, a.layer] as const])).values()]
+    .sort(([f1, l1], [f2, l2]) => f1.localeCompare(f2) || l1.localeCompare(l2));
+  const typical_choices = {
+    by_family: slots.map(([family, layer]) => ({ family, layer, typicals: typicalChoices(family, library, layer).family.map(key).sort() })),
+    by_layer: Object.fromEntries([...new Set(slots.map(([, layer]) => layer))].sort().map((layer) => [layer, typicalChoices("", library, layer).other.map(key).sort()])),
+  };
   return {
     project,
     control: controlSummary(readings, mode, detail, want),
     library: { source, assemblies: library.length },
+    typical_choices,
     report: detail === "summary" ? summary : report,
     ...(detail === "lines" ? { applications: apps, lines: lns } : {}),
     ...(csv ? { csv, csvReport: whole } : {}),

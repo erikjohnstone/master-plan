@@ -13,8 +13,10 @@
   it** makes the same choice for every row of the unit's schedule with the same
   typical, one reason and an override each (`unitsLike`, `report.ts`). The list is
   `typicalChoices` (`web/src/lib/assemblies/select.ts`), the same list the
-  rules choose among; no record changes without a choice
-  (ASSEMBLIES_BUG_CATALOGUE AS-55).
+  rules choose among; no record changes without a choice. `apply_assemblies`
+  lists the same choices with `detail` `units` or `lines` (`typical_choices`:
+  each family's own per layer, and each layer's whole list), so an agent can
+  offer them too (ASSEMBLIES_BUG_CATALOGUE AS-55).
 
 - **Assemblies: a schedule sheet whose tables are pictures is named.** A
   schedule sheet whose tables are pasted images or a scan gives the compile no

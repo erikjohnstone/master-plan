@@ -3300,8 +3300,15 @@ was the panel's.
   rows of its schedule (sheet and title) of its family and layer with its
   typical, or none, never an excluded row or the project's own. One reason,
   an override each, as the exceptions' groups ("Use … for all N", 5d199ba).
-- **MCP:** unchanged; the README and AGENT_GUIDE say an override's `assembly`
-  may name any typical of the layer (on the estimator's word, for an agent).
+- **MCP:** an override's `assembly` already named any typical of the layer.
+  **Addendum:** with `detail` `units` or `lines`, `apply_assemblies` now lists
+  the choices as the panel offers them (`typical_choices`: `by_family`, each of
+  the reply's families' own per layer, from `typicalChoices`, and `by_layer`,
+  each layer's whole list), so an agent can offer the estimator the same
+  choices; the README and AGENT_GUIDE say to name one only on the
+  estimator's word. The PARITY test holds every family's list to
+  `typicalChoices` on federal-mech (`lab-airflow@1` among the VAV typicals),
+  and a summary reply carries none.
 - **Unchanged:** no record or line without a choice. A typical whose lines
   read values the unit's row does not print leaves the unit among the
   exceptions, waiting for them (AS-47): a lab air valve given

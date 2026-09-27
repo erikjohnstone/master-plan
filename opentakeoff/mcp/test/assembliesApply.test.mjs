@@ -28,6 +28,7 @@ import { loadAssemblyLibrary, sessionAssembliesProject, sessionControlReadings, 
 process.env.OPENTAKEOFF_CONTROL_READINGS = "deterministic";
 import { applyAssemblies } from "../../web/src/lib/assemblies/apply.ts";
 import { assembliesReport } from "../../web/src/lib/assemblies/report.ts";
+import { typicalChoices } from "../../web/src/lib/assemblies/select.ts";
 import { assembliesCsvSet } from "../../web/src/lib/assemblies/exportSet.ts";
 import { libraryToCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
 import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
@@ -109,6 +110,16 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   assert.equal(r.data.control.mode, "deterministic");
   assert.equal(r.data.control.units_read, control_readings.units.length, "the tool read the same units");
   assert.equal(r.data.report.schedules_unread, undefined, "every schedule sheet here has its tables in text: none is named (AS-54)");
+  // The typicals an override may give a unit, the lists the Takeoff panel's
+  // Use another typical… offers (AS-55): each family's own per layer, and
+  // each layer's whole list.
+  const choices = r.data.typical_choices;
+  const slots = [...new Set(ui.applications.filter((a) => a.instance.tag !== "(project)").map((a) => `${a.instance.family}|${a.layer}`))].sort();
+  assert.deepEqual(choices.by_family.map((c) => `${c.family}|${c.layer}`).sort(), slots, "every family and layer of the reply's units");
+  for (const c of choices.by_family) assert.deepEqual(c.typicals, typicalChoices(c.family, library, c.layer).family.map((d) => `${d.id}@${d.version}`).sort(), `${c.family} ${c.layer}: the rules' own list`);
+  assert.ok(choices.by_family.find((c) => c.family === "VAV" && c.layer === "controls").typicals.includes("lab-airflow@1"), "a typical the rules never pick is offered");
+  assert.deepEqual(Object.keys(choices.by_layer).sort(), [...new Set(slots.map((s) => s.split("|")[1]))].sort());
+  assert.deepEqual(choices.by_layer.controls, typicalChoices("", library, "controls").other.map((d) => `${d.id}@${d.version}`).sort(), "the layer's whole list");
   assert.equal(JSON.stringify(r.data.lines), JSON.stringify(ui.lines), "ExpandedLines byte-identical");
   assert.equal(JSON.stringify(r.data.applications), JSON.stringify(ui.applications), "records byte-identical");
   assert.deepEqual(r.structured.lines.length, ui.lines.length, "structuredContent carries the same lines");
@@ -138,6 +149,7 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   const dir = await mkdtemp(join(tmpdir(), "ot-asm-csv-"));
   const exported = await call(client, "apply_assemblies", { export_dir: dir, families: ["AHU"] });
   assert.equal(exported.isError, false, JSON.stringify(exported.data).slice(0, 300));
+  assert.equal(exported.data.typical_choices, undefined, "a summary reply carries no typical choices (AS-55)");
   const expected = assembliesCsvSet({ ...ui, report: assembliesReport(ui.instances, ui.applications, ui.lines) });
   assert.deepEqual([...exported.data.export_dir.files].sort(), [...Object.keys(expected), "assemblies.pdf"].sort());
   for (const [name, text] of Object.entries(expected)) assert.equal(await readFile(join(dir, name), "utf8"), text, `${name}: the browser builder's bytes`);
