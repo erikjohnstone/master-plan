@@ -298,8 +298,13 @@ export function validateAssembly(raw: unknown): { ok: true; def: AssemblyDefinit
 /** The library load gate: the records with a `kind` (records without one are
  * linear assemblies, left to linear/assemblyLibrary.ts). Keeps the valid ones,
  * the first of each id@version, and refuses the rest with their reasons, then
- * refuses any whose sub-assembly reference does not resolve or cycles. */
-export function sanitizeAssemblyDefinitions(raw: unknown): { assemblies: AssemblyDefinition[]; rejected: Rejected[] } {
+ * refuses any whose sub-assembly reference does not resolve or cycles.
+ * `resolveRefs: false` checks each record on its own: a stored partner
+ * library references the starter's sub-assemblies, which it does not hold,
+ * so its references resolve where the whole library is known
+ * (libraryEdit.ts combinedLibrary), which refuses and reports one that does
+ * not (AS-41). */
+export function sanitizeAssemblyDefinitions(raw: unknown, opts: { resolveRefs?: boolean } = {}): { assemblies: AssemblyDefinition[]; rejected: Rejected[] } {
   const assemblies: AssemblyDefinition[] = [];
   const rejected: Rejected[] = [];
   if (!Array.isArray(raw)) return { assemblies, rejected };
@@ -313,6 +318,7 @@ export function sanitizeAssemblyDefinitions(raw: unknown): { assemblies: Assembl
     seen.add(key);
     assemblies.push(v.def);
   }
+  if (opts.resolveRefs === false) return { assemblies, rejected };
   // Sub-assembly references resolve to a loaded assembly and never cycle.
   const byId = (idv: string, version?: string) => assemblies.find((a) => a.id === idv && (!version || a.version === version));
   const bad = new Map<string, string>();

@@ -62,3 +62,34 @@ test("the store's two halves: replacing one kind keeps the other, and with no eq
   const cleared = withEquipmentAssemblies(relinear, []);
   assert.equal(JSON.stringify(cleared), JSON.stringify(sanitizeAssemblyLibrary([SEED_ASSEMBLIES[0]])));
 });
+
+test("the store keeps a partner's record that references the starter's sub-assemblies; the whole library resolves it (AS-41)", async () => {
+  // 26_CA through the Takeoff panel (the UI proof): a clone of
+  // hookup-air-handler, whose coil lines reference the starter's coil
+  // hook-ups, was saved and read back as nothing. The store's gate resolved
+  // its references among the partner's own records alone.
+  const { join } = await import("node:path");
+  const { STARTER_DIR } = await import("../../scripts/assemblies-starter/build.mts");
+  const { withEquipmentAssemblies, equipmentAssembliesOf } = await import("../../src/lib/assemblies/library.ts");
+  const { cloneForEdit, combinedLibrary } = await import("../../src/lib/assemblies/libraryEdit.ts");
+  const { emptyAssembliesState, libraryUpdates } = await import("../../src/lib/assemblies/projectState.ts");
+  const starter = sanitizeAssemblyDefinitions(["us-typicals-v1.json", "us-hookups-v1.json"]
+    .flatMap((f) => JSON.parse(readFileSync(join(STARTER_DIR, f), "utf8")).assemblies)).assemblies;
+  const hookup = starter.find((a) => a.id === "hookup-air-handler")!;
+  assert.ok(hookup.lines.some((l) => l.kind === "assembly" && l.ref), "the hook-up references a sub-assembly");
+  const clone = cloneForEdit(hookup, starter);
+  const back = equipmentAssembliesOf(JSON.parse(JSON.stringify(withEquipmentAssemblies([], [clone]))));
+  assert.deepEqual(back.map((a) => `${a.id}@${a.version}`), [`hookup-air-handler@${clone.version}`]);
+  const { library, rejected } = combinedLibrary(starter, back);
+  assert.deepEqual(rejected, []);
+  const pinned = { ...emptyAssembliesState(), pinned: [hookup] };
+  assert.deepEqual(libraryUpdates(pinned, library).map((u) => `${u.id} ${u.from}->${u.to}`), [`hookup-air-handler 1->${clone.version}`]);
+  // A reference nothing holds is kept as saved, and refused, with its
+  // reason, where the whole library is known.
+  const broken = { ...clone, version: "1.2", lines: clone.lines.map((l) => (l.kind === "assembly" ? { ...l, ref: { id: "no-such-hookup" } } : l)) };
+  const kept = equipmentAssembliesOf(withEquipmentAssemblies([], [broken]));
+  assert.equal(kept.length, 1);
+  assert.match(combinedLibrary(starter, kept).rejected[0].errors[0], /no assembly "no-such-hookup"/);
+  // The gate everywhere else still resolves references among what it is given.
+  assert.match(sanitizeAssemblyDefinitions([broken]).rejected[0].errors[0], /no assembly "no-such-hookup"/);
+});

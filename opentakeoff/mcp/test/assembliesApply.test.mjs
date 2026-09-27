@@ -61,6 +61,15 @@ test("library load: the starter by default, an assemblies file, a profile, a lib
   assert.deepEqual((await loadAssemblyLibrary(join(dir, "lib.json"))).library.map((a) => a.id), ["fcu"]);
   assert.deepEqual((await loadAssemblyLibrary(join(dir, "array.json"))).library.map((a) => a.id), ["fcu"]);
   assert.deepEqual((await loadAssemblyLibrary(join(dir, "profile.otprofile"))).library.map((a) => a.id), ["fcu"], "the linear record is not this library's");
+  // The file is the library: a partner's hook-up whose coil hook-up the
+  // profile does not hold fails with the gate's reason, and loads once it
+  // does (AS-41: the browser's store keeps it, for its whole library).
+  const clone = { ...starter.library.find((a) => a.id === "hookup-vav"), version: "1.1" };
+  const coil = starter.library.find((a) => a.id === "hw-coil-hookup");
+  await writeFile(join(dir, "partner.otprofile"), JSON.stringify({ schema: "opentakeoff.profile.v1", assembly_library: [clone] }));
+  await writeFile(join(dir, "whole.otprofile"), JSON.stringify({ schema: "opentakeoff.profile.v1", assembly_library: [clone, coil] }));
+  await assert.rejects(loadAssemblyLibrary(join(dir, "partner.otprofile")), /\(profile\): the library gate rejected 1 assembly: hookup-vav: lines\.hw-coil\.ref: no assembly "hw-coil-hookup" in the library/);
+  assert.deepEqual((await loadAssemblyLibrary(join(dir, "whole.otprofile"))).library.map((a) => `${a.id}@${a.version}`), ["hookup-vav@1.1", "hw-coil-hookup@1"]);
   await assert.rejects(loadAssemblyLibrary(join(dir, "bad.json")), /library gate rejected 1 assembly/);
   await assert.rejects(loadAssemblyLibrary(join(dir, "missing.json")), /library_path/);
   // The panel's Library → Export CSV reads back as the same library; its problems by row and column.

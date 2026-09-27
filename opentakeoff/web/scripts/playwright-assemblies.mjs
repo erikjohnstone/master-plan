@@ -286,9 +286,11 @@ try {
       const [chosen] = String(await use.getAttribute('data-assemblies-group-use')).split('@');
       const exceptionsBefore = Number(await panel.locator('[data-assemblies-exceptions]').getAttribute('data-assemblies-exceptions'));
       const overridesBefore = (await annotations())?.overrides?.length ?? 0;
+      const tg = t();
       page.once('dialog', (d) => d.accept(GROUP_REASON));
-      await use.click();
-      await panel.locator(`[data-assemblies-overrides="${overridesBefore + n}"]`).waitFor({ state: 'visible', timeout: 120000 });
+      await use.click({ timeout: 180000 });
+      await panel.locator(`[data-assemblies-overrides="${overridesBefore + n}"]`).waitFor({ state: 'visible', timeout: 180000 });
+      timings.group_s = Math.round((t() - tg) / 1000);
       const exceptionsAfter = (await panel.locator('[data-assemblies-exceptions]').count())
         ? Number(await panel.locator('[data-assemblies-exceptions]').getAttribute('data-assemblies-exceptions')) : 0;
       assert.equal(exceptionsAfter, exceptionsBefore - n, `the group's ${n} units leave the exceptions`);

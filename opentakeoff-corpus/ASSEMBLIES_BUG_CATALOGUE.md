@@ -2436,3 +2436,42 @@ only, nothing tuned on them):**
   recorded readings replayed): 35 of 91 exact, up from 33 at CI-31. Which two
   instances moved is not read, since held-out gives aggregates only.
 - Every gate still fails. No rule is written from these numbers.
+
+## AS-41 — a partner's copy of a hook-up that names another hook-up vanished when saved (FIXED — this goal)
+
+**Found:** 2026-09-27, by the UI proof on 26_CA. Its only resolved records
+are hook-ups, so the library step cloned hookup-air-handler, which live
+validation called valid, and saved it. The store read it back as nothing, so
+no update was offered.
+
+**Why:** the browser store keeps the partner's own records, and the panel
+joins them to the starter where it applies them (libraryEdit.ts
+combinedLibrary), resolving every sub-assembly reference against both. The
+store's own gate (library.ts, through schema.ts
+sanitizeAssemblyDefinitions) also resolved references, but among the
+partner's records alone. Six of the starter's 16 hook-ups name another
+hook-up: the VAV, fan coil, air handler, unit heater, pump and heat
+exchanger hook-ups name a coil, pump or terminal heater hook-up. A partner's
+copy of any of them failed that check and was dropped without a word, when
+saved from the editor, imported from a library CSV (whose receipt had
+counted it added) or imported with a profile.
+
+**Fix (schema.ts and library.ts, the shared library gate; the panel and MCP
+both read it):** sanitizeAssemblyDefinitions takes `resolveRefs: false`, and
+the store checks each record on its own. The whole library resolves the
+references where it is known (combinedLibrary), and the Library view names a
+record it refuses, with the reason, as it already did. The two other gates
+keep resolving within what they hold. A project file's pins are complete,
+since pinUsed pins every sub-assembly a used record names. Over MCP the file
+is the library: its profile path read through the store's gate and compared
+counts, so it would now have kept a dangling reference. It uses the load gate
+that fails with each rejection's reason instead.
+
+**Tests:** assemblyLibraryKind.test.ts: the store keeps the clone, the whole
+library resolves it and offers hookup-air-handler 1 → 1.1, a reference
+nothing holds is kept and then refused with its reason, and the plain gate
+still refuses it. It fails without the fix. assembliesApply.test.mjs: a
+profile holding a partner's VAV hook-up without the coil hook-up it names
+fails with the gate's reason, and loads once it holds both. Through the
+store's gate and the old count check, that profile loads with the dangling
+reference.

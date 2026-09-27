@@ -1,5 +1,17 @@
 # Changelog
 
+- **Assemblies: a partner's copy of a hook-up is kept when saved.** Copying
+  the VAV, fan coil, air handler, unit heater, pump or heat exchanger hook-up
+  into the partner library, and saving it, validated and then vanished: the
+  browser store checked its reference to a coil or pump hook-up among the
+  partner's own records, where the starter's are not. The same happened on a
+  library CSV or profile import. The store now keeps each valid record, and
+  the whole library (starter and partner) resolves the references, naming any
+  it refuses in the Library view. Over MCP a profile given as library_path is
+  still the whole library, and a reference it cannot resolve fails the call
+  with the reason (`web/src/lib/assemblies/library.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-41).
+
 - **Control intent: a pump is named on a shared control drawing by what its own
   schedule row calls it.** A model's answer drawn from a drawing that several
   units share counts for a unit only where its evidence names that unit. A

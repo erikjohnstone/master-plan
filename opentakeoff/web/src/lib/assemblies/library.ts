@@ -10,20 +10,27 @@
 import { sanitizeAssemblyLibrary } from "../linear/assemblyLibrary";
 import { sanitizeAssemblyDefinitions, type AssemblyDefinition } from "./schema";
 
+/** A stored library holds the partner's own records, which may reference the
+ * starter's sub-assemblies (a hook-up's coil hook-up): each record is checked
+ * alone here, and its references where the whole library is known
+ * (libraryEdit.ts combinedLibrary). Resolving them among the partner's own
+ * records dropped every such record on save (AS-41). */
+const STORED = { resolveRefs: false } as const;
+
 /** The stored library with its linear records replaced by `linear`'s; its
  * assemblies with a `kind` stay. With no such assemblies stored, this is
  * exactly `sanitizeAssemblyLibrary(linear)`. */
 export function withLinearRecords(stored: unknown, linear: unknown): unknown[] {
-  return [...sanitizeAssemblyLibrary(linear), ...sanitizeAssemblyDefinitions(stored).assemblies];
+  return [...sanitizeAssemblyLibrary(linear), ...sanitizeAssemblyDefinitions(stored, STORED).assemblies];
 }
 
 /** The stored library with its assemblies that have a `kind` replaced by
  * `defs` (each through the load gate); its linear records stay. */
 export function withEquipmentAssemblies(stored: unknown, defs: unknown): unknown[] {
-  return [...sanitizeAssemblyLibrary(stored), ...sanitizeAssemblyDefinitions(defs).assemblies];
+  return [...sanitizeAssemblyLibrary(stored), ...sanitizeAssemblyDefinitions(defs, STORED).assemblies];
 }
 
 /** The assemblies with a `kind` in a stored library. */
 export function equipmentAssembliesOf(stored: unknown): AssemblyDefinition[] {
-  return sanitizeAssemblyDefinitions(stored).assemblies;
+  return sanitizeAssemblyDefinitions(stored, STORED).assemblies;
 }

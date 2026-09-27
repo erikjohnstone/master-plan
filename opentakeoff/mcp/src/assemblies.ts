@@ -16,7 +16,6 @@ import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type Compile
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { assembliesReport, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
 import { assembliesCsvSet, type ExportFile } from "../../web/src/lib/assemblies/exportSet.ts";
-import { equipmentAssembliesOf } from "../../web/src/lib/assemblies/library.ts";
 import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
 import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
 import { sanitizeAssemblyDefinitions, type ApplicationRecord, type AssemblyDefinition, type ExpandedLine } from "../../web/src/lib/assemblies/schema.ts";
@@ -92,12 +91,10 @@ export async function loadAssemblyLibrary(path?: string): Promise<{ library: Ass
   const obj = parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : {};
   if (Array.isArray(parsed)) return { library: gate(parsed, path), source: path };
   if (Array.isArray(obj.assemblies)) return { library: gate(obj.assemblies, path), source: path };
-  if (Array.isArray(obj.assembly_library)) {
-    const library = equipmentAssembliesOf(obj.assembly_library);
-    const withKind = obj.assembly_library.filter((a) => a && typeof a === "object" && "kind" in (a as object)).length;
-    if (library.length !== withKind) throw new UserError(`${path}: the profile's assembly_library has ${withKind} equipment records; the library gate kept ${library.length}`);
-    return { library, source: `${path} (profile)` };
-  }
+  // Only the records with a `kind` are this library's. The file is the
+  // library, so their sub-assembly references resolve within it (the
+  // browser's store leaves them to its whole library; AS-41).
+  if (Array.isArray(obj.assembly_library)) return { library: gate(obj.assembly_library, `${path} (profile)`), source: `${path} (profile)` };
   throw new UserError(`library_path ${path}: not an assemblies file ({ assemblies: [...] }, an array) or a profile ({ assembly_library: [...] })`);
 }
 
