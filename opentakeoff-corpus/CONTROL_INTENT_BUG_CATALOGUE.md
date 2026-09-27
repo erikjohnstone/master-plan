@@ -946,6 +946,71 @@ low-resolution render of one sheet. A firm printed only as an image has no text 
 - At the audit's next run the record withdraws 015_VA, 021_XX, 023_US, 038_NC and 010_US: 425 applied decisions
   become 412, all right; 90 eligible sets become 85.
 
+## CI-33: the served vision model scales every image to a 1,536-px edge, so R2 reads large drawings below C7's 200 dpi; tiling them was measured and not adopted (MEASURED; NOT ADOPTED)
+
+**Found:** 2026-09-27, sizing the proposal to tile large drawings for R2 from the recorded runs. R2's prompt tokens
+barely grow with the crop: about 2,400 at 1-2 MP and 2,700 at 7-8 MP, text included. A probe of the endpoint settled
+why (seven calls, one blank image of each size, `usage.prompt_tokens_details.image_tokens`):
+
+| Image sent | Image tokens |
+|---|---|
+| 512 × 512 | 256 |
+| 1,024 × 1,024 | 1,024 |
+| 1,600 × 1,600 | 2,304 |
+| 2,048 × 2,048 | 2,304 |
+| 3,200 × 2,133 | 1,457 |
+| 3,200 × 3,200 | 2,304 |
+
+The served qwen-3.8-27b takes at most 2,304 image tokens of 32 px, so a larger image is scaled down to a 1,536-px long
+edge before the model sees it. R2 sends crops of up to 3,200 px (`MAX_LONG_EDGE`), so:
+- a region longer than 7.7 inches reaches the model below 200 dpi, whatever its crop's dpi says. A 16-inch packet sent
+  at "200 dpi" is read at about 96 dpi, a 36-inch sheet at about 43;
+- runs a (200 dpi) and b (250 dpi) of such a region are the same image to the model: one look, twice;
+- C9's lowRes flag (a crop below 200 dpi) marks only the regions over 16 inches.
+
+On the 56 drawing packets bound on dev, the model sees a median of about 118 dpi; 19 are below 100 dpi and 14 at 200.
+
+**Legibility, measured (dev packets, no key read):** the model was asked to transcribe every printed text, once from
+the crop R2 sends and once from 1,536-px tiles at 200 dpi (6% overlap), and each was scored by word against the
+packet's text layer.
+- Whole crops read 2,748 of 3,374 printed words (81.4%). 4 of the 56 replies failed outright (cut off or empty, all
+  large packets); without those, 96%.
+- Tiles read 3,300 (97.8%).
+- The gap is the packets the model sees below about 90 dpi: federal-mech's 20#p1 (48 dpi) 77% against 97%, and
+  itd-d1-lab's 19#p2 (51 dpi) 68% against 97%.
+
+**Tiling, measured (the dev reading eval, live: 654 new tile calls):** each drawing larger than one 1,536-px image at
+the run's dpi was read in overlapping tiles, at most 16 a run. Each tile was asked the same questions about its part,
+and the tiles were joined into the drawing's answer: a verified value holds unless another tile's differs, absent
+needs every tile to say so, and an unverified tile is a doubt only against a different value.
+- R2 alone reads far more: run a right 314 → 405 (abstained 280 → 181), run b right 322 → 412 (abstained 272 → 178).
+- It also misreads more: wrong 5 → 20 (a) and 2 → 21 (b), 40 new wrong answers over both runs and 6 fixed.
+  - 30 of the 40 are 15 federal-mech VAV boxes read at full resolution, both runs, as drawing no CO2 sensor. Their
+    control detail does not draw it; the zone plan does. The combiner casts no vote for an absence read through a
+    family detail, so every one of those decisions stays applied and right.
+  - 8 are context lost at a tile's edge: a tile showing "AHU-1 BALANCING DIAGRAM (NON-ECONOMIZER)" read as no
+    economizer (enthalpy and differential, both runs), a relief fan and damper read from the text beside them (3),
+    and a smoke detector cited to label fragments cut at the edge ("SMOK", "DETE").
+  - 2 are itd-d1-lab HUM-1's space humidity sensor read as absent from its drawing (both runs); the decision stays
+    a proposal.
+- Decisions barely move. 294 applied, 0 wrong, before and after; 48 absence decisions, 0 wrong, before and after.
+  Three applied decisions are gained (two roles, a freezestat) and three right ones lost: AHU-1's enthalpy economizer
+  becomes unresolved on the tile's "no", and two isolation valves become proposals. Proposals wrong 6 → 5, unresolved
+  9 → 7.
+
+**Why not adopted:**
+- On dev, the answers tiling adds rarely meet an R0 or R1 answer they could confirm, so the decisions are the same.
+  Meanwhile each large drawing costs about five times the vision calls (654 new on dev, against 126 before).
+- The upside elsewhere is bounded by the same count. Across the 38 non-held sets with recorded runs, only 18 questions
+  have a verified R1 answer that a lowRes R2 crop failed to confirm (30 at any resolution), and dev converted none of
+  its share.
+- The unseen pool's large gap runs the other way: 299 proposals R2 alone reads, where the reader missing is R0 or R1.
+  Tiling cannot close it.
+
+**What stays true:** R2's crops reach the model at the resolution above. C7's "at 200 dpi" holds only for regions up to
+7.7 inches, and two runs of a larger region are one look. R2's absence decisions rest first on R0 finding no term for
+the device in the text layer: 48 on dev and all those audited on the unseen sets, 0 wrong.
+
 ## CI-34: a shared drawing's label named a boiler pump by its kind, and the check read it as naming no part of it (FIXED, next commit)
 
 **Found:** 2026-09-27, reading the dev typical misses left after AS-38 (instrument 3 with the keys' project answers
