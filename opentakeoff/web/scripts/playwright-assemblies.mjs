@@ -214,7 +214,7 @@ try {
       page.once('dialog', (d) => d.accept(REASON));
       await optionRow().getByRole('button').click();
       await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
-      assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
+      assert.ok(await panel.getByText(REASON, { exact: false }).first().isVisible(), 'the reason is shown with the override');
       const cells = optionRow().getByRole('cell');
       assert.equal((await cells.nth(1).innerText()).trim(), String(!(option.value === true)), 'the value is the one chosen');
       assert.equal((await cells.nth(2).innerText()).trim(), 'user', 'the option now comes from the user');
@@ -232,7 +232,7 @@ try {
       page.once('dialog', (d) => d.accept(REASON));
       await exRow.getByRole('button', { name: `Use ${id}`, exact: true }).click();
       await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
-      assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
+      assert.ok(await panel.getByText(REASON, { exact: false }).first().isVisible(), 'the reason is shown with the override');
       const chosen = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === ex.tag && a.layer === ex.layer);
       assert.ok(chosen.length && chosen.every((a) => a.selected_by === 'user' && a.assembly?.id === id), `${ex.tag} takes ${id} by override`);
       checks.push(`override: ${ex.tag} (${ex.layer}) takes ${id} with a reason`);

@@ -2833,6 +2833,13 @@ exceptions (with no candidates, so as a row of its own), and its Details
 set the option it waits for, which the same override keeps.
 
 **Measured after:** 0 of the 93 choices leave an overridden record waiting.
+A seeded random walk of the panel's actions ("Use for all", option
+decisions, "Exclude all", single options, removals and settings; 30 steps a
+document, 2,940 in all) checks after every step that a record is
+unresolved exactly when it waits, that the exceptions are exactly those
+records, that no override applies to nothing, that the project file keeps
+the state, and that the same state applies to the same bytes: 0 failures.
+With this status rule reverted it fails 66 times on three documents.
 With no override, nothing changes: over the 98 documents every record and
 line is identical but for AS-46's qty_source, and the project questions are
 the same. The evals apply no overrides, so no gate moves.
