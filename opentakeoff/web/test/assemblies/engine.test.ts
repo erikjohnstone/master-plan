@@ -373,6 +373,30 @@ test("the settings no part of the library reads are named with why (AS-50)", () 
   assert.equal(bytes({ variables: { chw_plants: 1 }, partnerDefaults: { c02: true, "vav-cool.co2": true }, profile: { cable_per_devise: true }, responsibility: { NoSuchRole: { furnish: "controls" } } }), bytes({}));
 });
 
+test("a quantity is never negative, and a point or device is counted whole unless its line rounds it (AS-52)", () => {
+  const { assemblies: towerLib, rejected: bad } = sanitizeAssemblyDefinitions([{
+    id: "tower", version: "1", title: "Cooling tower, per cell", kind: "equipment", status: "starter",
+    applies_to: { family: "COOLING_TOWER", rank: 1 },
+    lines: [
+      line({ id: "fan-cmd", kind: "point", qty: "attr.cells", io: "BO", role: { vocab: "xeto", id: "fan-cmd" } }),
+      line({ id: "vibration", kind: "device", qty: "attr.cells / 2", round: { increment: 1 }, role: { vocab: "s223", id: "VibrationSwitch" } }),
+      line({ id: "wire", kind: "component", qty: "attr.cells * 12.5", unit: "ft", role: { vocab: "ot", id: "lv-cable" } }),
+    ],
+  }]);
+  assert.deepEqual(bad, []);
+  const tower = (cells: number, extra: Partial<Instance> = {}) => {
+    const lines = expandAll([{ ...vav("CT-1", { cells }), family: "COOLING_TOWER", ...extra }], towerLib).lines;
+    return Object.fromEntries(lines.map((l) => [l.rule.split(":")[1], [l.status, l.qty_base, l.missing.join()]]));
+  };
+  assert.deepEqual(tower(2), { "fan-cmd": ["ok", 2, ""], vibration: ["ok", 1, ""], wire: ["ok", 25, ""] });
+  // A misread 1.5 cells: half a fan command is no count, a rounded device
+  // and a length stand.
+  assert.deepEqual(tower(1.5), { "fan-cmd": ["error", null, "qty 1.5 is not a whole count of points"], vibration: ["ok", 0.75, ""], wire: ["ok", 18.75, ""] });
+  // A negative count, or a negative multiplier (the unit's printed QTY), is an error on every line.
+  assert.deepEqual(tower(-2), { "fan-cmd": ["error", null, "qty -2 is negative"], vibration: ["error", null, "qty -1 is negative"], wire: ["error", null, "qty -25 is negative"] });
+  assert.deepEqual(tower(2, { multiplier: { value: -1, basis: "a misread QTY" } }), { "fan-cmd": ["error", null, "qty -2 is negative"], vibration: ["error", null, "qty -1 is negative"], wire: ["error", null, "qty -25 is negative"] });
+});
+
 test("every selector false is no assembly, not unresolved", () => {
   const onlyHw = LIB.filter((a) => a.id === "vav-hw");
   assert.equal(selectAssembly(vav("VAV-1", { heat_type: "none" }), onlyHw).status, "no_assembly");

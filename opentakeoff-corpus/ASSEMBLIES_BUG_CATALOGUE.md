@@ -3066,3 +3066,48 @@ DOAS (004_MO). `families: ["AHU"]` on 009_FL left out AHU-2.
 - assembliesApply.test.mjs: narrowing to AHU and "AHUS" names "AHUS" alone,
   with federal-mech's families. The call narrowed to AHU alone carries no
   families_left_out.
+
+## AS-52 — a misread count made "ok" lines with negative or fractional quantities (FIXED — this goal)
+
+**Found:** 2026-09-27, by a fuzz census of the starter library. Every
+equipment typical and hook-up, for every family it serves, expanded 60
+times over attributes drawn with edge values (0, fractions, negatives,
+huge values) and random hook-up settings: 3,180 expansions. The engine
+already made a line an error when its quantity was not a finite number. A
+finite negative, or a fractional count, passed as `ok`: 40 kinds of line.
+A cooling tower with `cells` -20 had -20 fan commands, fan statuses and
+overflow drains. A terminal with `eh_stages` -20 had -20 heat stage points.
+Half a cell gave half a fan start and half a fan command. A unit's printed
+QTY (its multiplier), or a sub-assembly's count, carried the same way. The
+starter's property test drew values from 0 to 10 and checked only that no
+line errored.
+
+**Fix (expand.ts, the shared path):**
+- A line whose quantity, times its multiplier, is negative is an `error`,
+  and so is a point or device count that is not a whole number: "qty -2 is
+  negative", "qty 1.5 is not a whole count of points".
+- The reason is in the line's `waits_for`, in the unit's details and in
+  lines.csv.
+- A line with a `round` rule may still compute a fraction, since export
+  rounds it. Components and labor (a length, hours) may be fractional.
+- No starter point or device line divides, rounds or uses a fraction.
+
+**Measured:**
+- **The fuzz census:** 0 `ok` lines with a bad quantity, against 40 kinds
+  before. 187 lines are errors with these reasons: 85 negative, 76
+  fractional point counts, 26 fractional device counts. No other error.
+- **Real data:** over the 98 cached documents, with and without the
+  starter's hook-up defaults (60,361 lines), no line has a negative or
+  fractional point or device quantity, a negative multiplier, or an error.
+- **A/B:** main and this change apply 2,058 seeded states (6,304
+  overrides) to
+  byte-identical records and lines.
+
+**Tests:** engine.test.ts, with a tower typical per cell: 2 cells are
+whole. 1.5 cells make the fan command an error, while a rounded device and
+a length stand. -2 cells, or a -1 multiplier (a misread QTY), make every
+line an error with its negative quantity. starter.test.ts's property test
+drew counts in quarters (9.75 electric heat stages), which this now flags:
+it draws a dimensionless number (cells, stages, rows, fans) whole, and
+asserts that every known quantity over its 400-odd expansions is not
+negative and every point or device count is whole.

@@ -1,5 +1,15 @@
 # Changelog
 
+- **Assemblies: a quantity is never negative, and a point or device is
+  counted whole.** A count the schedule reading got wrong (a cooling
+  tower's -1 cells, 1.5 electric heat stages, a unit's QTY misread) went
+  straight into its lines, which were `ok` with -20 fan commands or half a
+  fan start. Such a line is now an `error` naming its quantity ("qty -2 is
+  negative", "qty 1.5 is not a whole count of points"); a line with a
+  `round` rule may still compute a fraction for its rounding. Over the 98
+  cached documents no line changes: none has such a quantity today
+  (`web/src/lib/assemblies/expand.ts`, ASSEMBLIES_BUG_CATALOGUE AS-52).
+
 - **Assemblies: a narrowed reply names the families that leave units out.**
   `apply_assemblies` narrows its reply to the families units apply as.
   A family no unit applies as (a typo such as `AHUS`) returned an empty

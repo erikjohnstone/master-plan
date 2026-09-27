@@ -72,7 +72,7 @@ Every row of `lines.csv`, `valves.csv`, `damper_actuators.csv` and
 | `qty` | The quantity for this unit: the line's quantity × the unit's multiplier. Blank when unresolved. |
 | `qty_with_waste` | `qty` with the line's waste. Rounding happens in `lines_rollup.csv`. |
 | `qty_unit` | The unit of `qty` (for example `ea`, `ft`). |
-| `status` | `ok`; `unresolved` (it waits for `waits_for`); `replaced` (drawing evidence stands instead); or `error`. |
+| `status` | `ok`; `unresolved` (it waits for `waits_for`); `replaced` (drawing evidence stands instead); or `error`: an expression that fails, a quantity that would be negative, or a point or device count that is not whole (a line with a `round` rule may compute a fraction), each named in `waits_for`. |
 | `waits_for` | What an unresolved line or record waits for, `;`-separated (for example `attr.vfd`). |
 
 The provenance block ends the line files:

@@ -95,12 +95,19 @@ export function expandApplication(
         walk(sub, `${rule}/`, factor !== null && n !== null ? factor * n : null, [...missing, ...(q && !q.known ? q.missing : [])], depth + 1, sv, so);
         continue;
       }
-      // 3. The quantity.
+      // 3. The quantity. It is never negative, and a point or device is
+      // counted whole unless the line rounds it: either would rest on a
+      // misread value, a count of -1 cells or 1.5 stages (AS-52).
       const q = evalOr(line.qty);
       let qtyBase: number | null = null;
       if (q && q.known) {
         if (typeof q.value !== "number" || !Number.isFinite(q.value)) error = `qty is ${JSON.stringify(q.value)}, not a number`;
-        else if (factor !== null && !missing.length) qtyBase = round12(q.value * factor);
+        else if (factor !== null && !missing.length) {
+          const n = round12(q.value * factor);
+          if (n < 0) error = `qty ${n} is negative`;
+          else if ((line.kind === "point" || line.kind === "device") && !line.round && !Number.isInteger(n)) error = `qty ${n} is not a whole count of ${line.kind}s`;
+          else qtyBase = n;
+        }
       } else if (q) missing.push(...q.missing);
       if (error) status = "error";
       else if (missing.length || qtyBase === null) status = "unresolved";

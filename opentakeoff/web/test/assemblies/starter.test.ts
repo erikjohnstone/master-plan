@@ -333,7 +333,9 @@ test("property: every typical and hook-up expands without an error over random a
         for (const a of attrs) {
           if (rnd() < 0.3) continue;
           const spec = ATTRIBUTES[a];
-          values[a] = spec.kind === "enum" ? pick(spec.values!) : spec.kind === "text" ? "BACNET" : Math.round(rnd() * 40) / 4;
+          // A dimensionless number is a count (cells, stages, rows, fans):
+          // whole. A measured one may be fractional.
+          values[a] = spec.kind === "enum" ? pick(spec.values!) : spec.kind === "text" ? "BACNET" : spec.unit === "" ? Math.round(rnd() * 10) : Math.round(rnd() * 40) / 4;
         }
         const settings = {
           profile: Object.fromEntries(Object.keys(HOOKUP_PROFILE.switches).map((k) => [k, rnd() < 0.5])),
@@ -342,6 +344,9 @@ test("property: every typical and hook-up expands without an error over random a
         const { lines } = expandAll([unit(`X-${i}`, family, values)], LIB, settings);
         const errors = lines.filter((l) => l.status === "error");
         assert.deepEqual(errors.map((l) => `${l.rule}: ${l.missing.join()}`), [], `${def.id} on ${family}`);
+        // A known quantity is never negative, and a point or device is whole (AS-52).
+        const bad = lines.filter((l) => l.status === "ok" && (!(l.qty_base! >= 0) || ((l.kind === "point" || l.kind === "device") && !l.round && !Number.isInteger(l.qty_base))));
+        assert.deepEqual(bad.map((l) => `${l.rule}: ${l.qty_base}`), [], `${def.id} on ${family}`);
         expanded++;
       }
     }
