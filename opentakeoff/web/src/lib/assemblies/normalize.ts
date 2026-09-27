@@ -109,6 +109,10 @@ export interface NormalizedItem {
    * / NOTES cell cites, or every one when it cites none); absent when the
    * table prints none. The control-intent row reader reads them. */
   notes?: ScheduleNote[];
+  /** A heat pump that is a split system's outdoor half: the indoor units that
+   * say so, by canonical tag (the one its row schedules beside it, or the ones
+   * its split system's table lists on rows of their own), and why. */
+  split?: { half: "outdoor"; indoor: string[]; basis: string };
 }
 
 // ── 1. Header text ──────────────────────────────────────────────────────────
@@ -542,13 +546,32 @@ const INDOOR_PARTS = /\b(?:SUPPLY|RETURN|RELIEF|EXHAUST)\s+(?:AIR\s+)?FANS?\b|\b
 type Half = "indoor" | "outdoor" | null;
 
 /** Which half of a split system this unit is: by its family, or, for a heat
- * pump, by the unit its row schedules beside it (as the compile read that
- * unit). */
-function splitHalf(family: string, partners: readonly string[], table: TableContext | null): Half {
+ * pump, by the indoor units it is the outdoor half of (heatPumpIndoor). */
+function splitHalf(family: string, indoor: readonly string[]): Half {
   if (SPLIT_INDOOR.has(family)) return "indoor";
   if (SPLIT_OUTDOOR.has(family)) return "outdoor";
-  if (family === "HEAT_PUMP" && partners.some((p) => [...(table?.families?.get(p) ?? [])].some((f) => MOVES_AIR.has(f)))) return "outdoor";
+  if (family === "HEAT_PUMP" && indoor.length) return "outdoor";
   return null;
+}
+
+/** Whether the compile read a unit of the table (canonical tag) as one that
+ * moves the air. */
+const movesAir = (tag: string, table: TableContext | null) => [...(table?.families?.get(tag) ?? [])].some((f) => MOVES_AIR.has(f));
+
+/** The indoor units a heat pump is the outdoor half of (canonical tags): the
+ * ones its row schedules beside it ("AHU-1, HP-1"), or, in a split system's
+ * table that lists each half on a row of its own (14_OR's SPLIT SYSTEM HEAT
+ * PUMPS: HP-01 prints "CFM -", FC-01 "389"), the indoor units whose rows print
+ * the airflow its own row does not. */
+function heatPumpIndoor(item: CompileItem, table: TableContext | null, partners: readonly string[]): string[] {
+  if (partners.length) return partners.filter((p) => movesAir(p, table));
+  if (!/\bSPLIT\b/.test(headerText(item.table_title ?? ""))) return [];
+  const rows = table?.rows ?? [];
+  const air = (table?.headers ?? []).filter((h) => quantitiesOf(headerText(h)).includes("airflow"));
+  const own = rows.filter((r) => canonKey(r.key) === canonKey(item.tag));
+  const moves = (r: { cells: Readonly<Record<string, string>> }) => air.some((h) => parseNumberCell(String(r.cells[h] ?? "")) !== null);
+  if (!air.length || own.length !== 1 || moves(own[0])) return [];
+  return rows.filter((r) => moves(r) && movesAir(canonKey(r.key), table)).map((r) => canonKey(r.key));
 }
 
 function otherHalf(h: string, half: Half, paired: boolean): boolean {
@@ -2326,7 +2349,8 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
   }
   const partners = rowPartners(item, table);
   const paired = partners.length > 0;
-  const half = splitHalf(family, partners, table);
+  const indoor = family === "HEAT_PUMP" ? heatPumpIndoor(item, table, partners) : [];
+  const half = splitHalf(family, indoor);
   const all = columnsOf(item, table);
   // A schedule continued in a second table ("… (CONT.)"): the unit's one row
   // there prints the rest of its columns (its supply fan, its final filter),
@@ -2455,5 +2479,12 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
   }
   const notes = notesForRow(item, ctx, table?.notes ?? [], table?.rows);
   if (notes.length) result.notes = notes;
+  if (indoor.length) {
+    // The table shape says which units are indoor, not which one this heat
+    // pump serves: the basis claims no more.
+    result.split = { half: "outdoor", indoor, basis: paired
+      ? `its row schedules ${indoor.join(", ")} beside it: the split system's outdoor unit, whose points are ${indoor.join(", ")}'s`
+      : `its split system table lists indoor units on rows of their own (${indoor.join(", ")}), which print the airflow its row does not: a split system's outdoor unit, whose points are its indoor unit's` };
+  }
   return result;
 }

@@ -419,7 +419,12 @@ const CENTRAL_AIR_HANDLER_FAMILIES: ReadonlySet<string> = new Set(["AHU", "RTU"]
  *  · an air handler whose minimum outdoor air is 100% of its supply airflow
  *    (printed as a percent, or as equal airflows) supplies only outdoor air,
  *    which is what a dedicated outdoor air unit is;
- *  · a fan coil row with gas heat has a burner, so it is a furnace.
+ *  · a fan coil row with gas heat has a burner, so it is a furnace;
+ *  · a heat pump that is a split system's outdoor half (its row schedules the
+ *    indoor unit beside it, "AHU-1, HP-1", or its split system table lists
+ *    the indoor units on rows of their own) is that system's outdoor unit,
+ *    as a condensing unit is: the indoor unit's typical carries the
+ *    system's points.
  * Null when the row is its schedule's family. */
 export function appliedFamily(family: string, n: NormalizedItem): DerivedAttribute | null {
   const num = (a: string) => (typeof n.attributes[a]?.value === "number" ? (n.attributes[a].value as number) : null);
@@ -434,6 +439,9 @@ export function appliedFamily(family: string, n: NormalizedItem): DerivedAttribu
   }
   if (family === "FCU" && n.attributes.heating_type?.value === "gas") {
     return { value: "FURNACE", rule: "derive.family.gas_heat", basis: `a fan coil row with gas heat ("${n.attributes.heating_type.cite.header}"): a furnace` };
+  }
+  if (family === "HEAT_PUMP" && n.split) {
+    return { value: "CONDENSING_UNIT", rule: "derive.family.split_outdoor", basis: n.split.basis };
   }
   return null;
 }

@@ -93,6 +93,55 @@ test("terminals_served is derived from the links, 0 only when the terminal sched
   assert.match(co[0].unknown.terminals_served.reason, /duct-mounted coils but no terminal unit/);
 });
 
+// 18_OR's sheet M5.1 (an unseen document): "AHU-3, HP-3" on one row of the AIR
+// HANDLER HEAT PUMP SCHEDULE, the heat pump's columns grouped HEAT PUMP
+// OUTDOOR UNIT. The heat pump took the heat-pump typical (a unit controller,
+// a zone sensor, a fan command) beside the air handler's own.
+test("the family the library applies: a heat pump on one row with its air handler is the split system's outdoor unit", () => {
+  const title = "AIR HANDLER HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT)";
+  const cells = {
+    "AREA SERVED": "GYM", "AIR HANDLER INDOOR UNIT SUPPLY FAN CFM": "10,000", "AIR HANDLER INDOOR UNIT ELECTRIC HEAT KW": "90",
+    "HEAT PUMP OUTDOOR UNIT COOLING CAPACITY 95° OSA, 80° EDB, 62° EWB TOTAL MBH": "274", "HEAT PUMP OUTDOOR UNIT ELECTRICAL FOR HEAT PUMP V/Ø": "460/3",
+  };
+  const items = [row("AHU", "AHU-3", title, cells), row("HEAT_PUMP", "HP-3", title, cells), row("HEAT_PUMP", "HP-9", "HEAT PUMP SCHEDULE", { "SUPPLY FAN CFM": "1,200" })];
+  const tables = [
+    { sheet: "set.pdf#3", title, headers: ["SYMBOL", ...Object.keys(cells)], rows: [{ key: "AHU-3HP-3", cells: { SYMBOL: "AHU-3, HP-3", ...cells } }] },
+    { sheet: "set.pdf#3", title: "HEAT PUMP SCHEDULE", headers: ["MARK", "SUPPLY FAN CFM"], rows: [{ key: "HP-9", cells: { MARK: "HP-9", "SUPPLY FAN CFM": "1,200" } }] },
+  ];
+  const { instances, applications } = applyAssemblies({ project: { items, tables }, library: LIB });
+  assert.deepEqual(instances.map((i) => i.family), ["AHU", "CONDENSING_UNIT", "HEAT_PUMP"]);
+  assert.equal(instances[1].compiled_family, "HEAT_PUMP");
+  assert.equal(instances[1].derived.family.rule, "derive.family.split_outdoor");
+  assert.match(instances[1].derived.family.basis, /its row schedules AHU-3 beside it/);
+  const byTag = new Map(applications.filter((a) => a.layer === "controls").map((a) => [a.instance.tag, a]));
+  assert.equal(byTag.get("HP-3")!.status, "no_assembly", "the air handler's typical carries the system's points");
+  assert.equal(byTag.get("HP-9")!.assembly!.id, "heat-pump", "a packaged heat pump keeps its typical");
+  assert.notEqual(byTag.get("AHU-3")!.status, "no_assembly");
+});
+
+// 14_OR's sheet M003 (dev 2): SPLIT SYSTEM HEAT PUMPS lists each half on a row
+// of its own, HP-01 then FC-01; the key reads HP-01 and HP-02 as the outdoor
+// units. The heat pump's row prints "CFM -", the fan coil's "389".
+test("the family the library applies: a heat pump that moves no air in a split system table is its indoor units' outdoor unit", () => {
+  const title = "SPLIT SYSTEM HEAT PUMPS";
+  const hp = { SERVING: "MDF", "COOL MBH TC": "30", CFM: "-", "ELECTRICAL DATA V/PH": "208/1" };
+  const fc = { SERVING: "MDF", "COOL MBH TC": "30", CFM: "389", "ELECTRICAL DATA V/PH": "-" };
+  const project = (t: string, hpCells: Record<string, string>) => ({
+    items: [row("HEAT_PUMP", "HP-01", t, hpCells), row("FCU", "FC-01", t, fc)],
+    tables: [{ sheet: "set.pdf#3", title: t, headers: ["MARK", ...Object.keys(hp)], rows: [{ key: "HP-01", cells: { MARK: "HP-01", ...hpCells } }, { key: "FC-01", cells: { MARK: "FC-01", ...fc } }] }],
+  });
+  const split = applyAssemblies({ project: project(title, hp), library: LIB });
+  assert.deepEqual(split.instances.map((i) => i.family), ["CONDENSING_UNIT", "FCU"]);
+  assert.match(split.instances[0].derived.family.basis, /lists indoor units on rows of their own \(FC-01\)/);
+  assert.equal(split.applications.find((a) => a.layer === "controls" && a.instance.tag === "HP-01")!.status, "no_assembly");
+  // Negative controls: a table that is no split system's, and a heat pump row
+  // that prints its own airflow, keep the heat pump and its typical.
+  assert.equal(applyAssemblies({ project: project("HEAT PUMP AND FAN COIL SCHEDULE", hp), library: LIB }).instances[0].family, "HEAT_PUMP");
+  const own = applyAssemblies({ project: project(title, { ...hp, CFM: "800" }), library: LIB });
+  assert.equal(own.instances[0].family, "HEAT_PUMP");
+  assert.equal(own.applications.find((a) => a.layer === "controls" && a.instance.tag === "HP-01")!.assembly!.id, "heat-pump");
+});
+
 test("the family the library applies: a 100% outdoor-air air handler is a DOAS, a gas-fired fan coil a furnace", () => {
   const items = [
     row("AHU", "AHU-7", "AIR HANDLING UNIT SCHEDULE"),

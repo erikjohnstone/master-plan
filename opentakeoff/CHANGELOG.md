@@ -1,5 +1,19 @@
 # Changelog
 
+- **A split system's outdoor heat pump no longer double-counts its indoor
+  unit's control points.** A heat pump that is a split system's outdoor
+  half, scheduled on one row with its air handler ("AHU-1, HP-1") or listed
+  on its own row in a split-system table beside the fan coils whose airflow
+  it does not print, took the heat-pump typical: a second unit controller,
+  zone sensor, fan command and programming labor beside the indoor unit's
+  own. The shared apply path (`web/src/lib/assemblies/apply.ts`) now applies
+  it as the system's outdoor unit (`CONDENSING_UNIT`, derived from
+  `HEAT_PUMP`, rule `derive.family.split_outdoor`), which carries no typical
+  of its own, as the answer keys read every condensing unit. A packaged heat
+  pump keeps its typical. Across every cached document, 6 of 2,371 records
+  change (14_OR's HP-01 and HP-02, 18_OR's HP-1 to HP-4), and every dev tier
+  scores as before (ASSEMBLIES_BUG_CATALOGUE AS-37).
+
 - **A heat pump scheduled on one row with its air handler keeps only its own
   columns.** A schedule that prints "AHU-1, HP-1" on one row, with columns
   grouped AIR HANDLER INDOOR UNIT and HEAT PUMP OUTDOOR UNIT, compiles to an

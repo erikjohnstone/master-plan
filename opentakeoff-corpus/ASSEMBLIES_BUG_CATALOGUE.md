@@ -2169,3 +2169,80 @@ passes as before. Across the eight documents, 347 units, 598 records and
 7,438 lines match MCP byte for byte in the panel, along with the CSV set and
 the mechanical-scope set, settings, keyboard, override, library, themes at
 three widths, autosave and reload.
+
+## AS-37 — a split system's outdoor heat pump took the heat-pump typical beside its indoor unit's (FIXED for two shapes — this goal; OPEN for the rest)
+
+**Found:** 2026-09-27, following AS-35 to the typicals (scratch
+census3/paired-apply.mjs, census3/hp-apply.mjs: every HEAT_PUMP unit, the
+typical it gets, and what its table says of it). Every heat pump took
+heat-pump@1, the zone heat pump typical: a field-installed unit controller, a
+zone temperature sensor, a fan command and status, a compressor stage, a
+heating mode, programming and verification labor. For a split system's
+outdoor half that is a second controller, sensor and fan beside the indoor
+unit's own typical. The dev typical keys read every split system's outdoor
+unit the other way: "its BAS points are AC-1's" (bldg5406 ACCU-1), "its
+compressor enable and status are F-1's points" (itd-d1-lab CU-1), a
+"split-system heat pump outdoor unit for FCU-1" keyed with no typical
+(baker-county-eoc CU-1, CU-2).
+
+**Fix (shared path: normalize.ts and apply.ts, which the panel and
+apply_assemblies both run):** the normalizer records which indoor units a heat
+pump is the outdoor half of (NormalizedItem.split, with its basis), and the
+apply path applies it as that system's outdoor unit: CONDENSING_UNIT,
+derived from HEAT_PUMP (rule derive.family.split_outdoor, beside the existing
+derive.family.gas_heat and derive.family.outdoor_air_*). v1 has no
+CONDENSING_UNIT typical, so the record is no_assembly, "no typical for the
+family" as the CSV defines it, and equipment.csv shows unit_family
+CONDENSING_UNIT, schedule_family HEAT_PUMP and the derivation. A user's own
+choice of typical still wins. Two shapes, each from its own evidence:
+
+- **The row schedules the indoor unit beside it** ("AHU-1, HP-1", "ERU-1,
+  HP-4"; 18_OR, unseen, AS-35): the row partner the compile read as a unit
+  that moves the air.
+- **A split system's table lists each half on a row of its own** (14_OR's
+  SPLIT SYSTEM HEAT PUMPS, dev 2, whose key reads HP-01 and HP-02 as the
+  outdoor units): the title names a split system, the heat pump's row prints
+  no airflow ("CFM -"), and the indoor units' rows print theirs (FC-01 389).
+  All three must hold.
+
+**Measured:** across the 106 cached documents (every dev tier, the unseen
+snapshots, the sweep), 6 of 2,371 records change, each the intended one:
+14_OR's HP-01 and HP-02 and 18_OR's HP-1 to HP-4 drop heat-pump@1 (11 lines
+each, 66 lines) and apply as condensing units. Every dev tier's line outcomes
+are identical, except that 14_OR's two heat pumps give a different reason for
+the airflow they leave unknown (still correctly unknown): "no printed column
+answers it", as a condensing unit in a split table already does. The
+invariant sweep is unchanged except its line total, which falls by exactly
+those 22 lines of 14_OR. Tests: apply.test.ts, on 18_OR's and 14_OR's own
+cells, with three negative controls (a packaged heat pump, a table that is
+no split system's, a heat pump row that prints its own airflow); disabling
+either shape fails its test.
+
+**Considered, not done:** a row that stacks its two tags with no separator
+("AHU-1 HP-1" rather than "AHU-1, HP-1") would not pair, since the pairing
+splits on "/", ",", "&" and "AND". No cell in the 106 cached documents prints
+two kinds of tag with only whitespace between them (scratch
+census3/ws-pairs.mjs), so the separators stay as they are.
+
+**OPEN:**
+- **Separately scheduled outdoor units the rule does not reach.** 09_ME's
+  MULTI-SPLIT HEAT PUMP OUTDOOR UNIT schedule (SCU-1) beside its INDOOR UNIT
+  schedule (SAC-1), 25_WA's VRF OUTDOOR HEAT PUMP schedule (HP-30) beside its
+  VRF INDOOR HEAT PUMP schedule, and 015_VA's GATEHOUSE HEAT PUMP (an OUTDOOR
+  group) still take heat-pump@1. Linking them to their indoor units needs a
+  printed link (a SYSTEM or SERVED BY column, a title pair), and VRF indoor
+  units compiled as HEAT_PUMP take a heat pump's compressor and heating mode
+  that a VRF indoor unit does not have. Both are library-scope decisions
+  with no key to measure them yet.
+- **Library content (INPUT 4):** the indoor unit's typical is now the only
+  place a split heat pump's points can be. Each system now counts one
+  controller, zone sensor, fan command and set of labor where it counted two
+  (11 lines less per outdoor heat pump), but its reversing valve is counted
+  only where the indoor typical is ahu-constant-volume, the one typical with
+  a heat pump's heating mode (hp-mode, when heating_type is heat_pump).
+  ahu-single-zone (18_OR's AHU-1 … AHU-3, which read heating_type electric
+  from their ELECTRIC HEAT column and wait on dx_stages), fcu (14_OR's FC-01
+  and FC-02, heating_type heat_pump) and erv (ERU-1, whose heat pump is HP-4)
+  have no heating-mode line, and erv no DX line. A heat pump heating mode on
+  those typicals, and how a unit heated by a heat pump with electric
+  supplemental heat reads its heating_type, are the owner's calls.
