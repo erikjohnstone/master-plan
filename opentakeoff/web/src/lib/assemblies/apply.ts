@@ -328,6 +328,18 @@ export function normalizeProject(project: CompiledProject): NormalizedItem[] {
   return project.items.map((it) => normalizeCompileItem(it, it.family, context(it, tableContextOf(it, project.tables ?? [], project.pages ?? {}, cache))));
 }
 
+/** normalizeProject, kept per project: the Takeoff panel applies the same
+ * project again on every change, and projectQuestions once per choice. A
+ * compiled project is not changed, and a normalization is only read
+ * (instancesOf copies what it takes). */
+const NORMALIZED = new WeakMap<CompiledProject, readonly NormalizedItem[]>();
+
+export function projectNormalization(project: CompiledProject): readonly NormalizedItem[] {
+  let normalized = NORMALIZED.get(project);
+  if (!normalized) NORMALIZED.set(project, normalized = normalizeProject(project));
+  return normalized;
+}
+
 // ── Links between rows ──────────────────────────────────────────────────────
 
 /** Families that serve terminal units, and the terminal families. */
@@ -627,14 +639,14 @@ export function applyAssemblies(input: {
    * readControlIntent), when read: their applied decisions become facts. */
   readings?: { units: ReadonlyArray<{ item: number; decisions: readonly Decision[] }> } | null;
 }): { instances: AppliedInstance[]; applications: ApplicationRecord[]; lines: ExpandedLine[]; control: ControlEvidenceMap } {
-  const normalized = input.normalized ?? normalizeProject(input.project);
+  const normalized = input.normalized ?? projectNormalization(input.project);
   const instances = instancesOf(input.project, normalized);
   // Control intent: what the unit's own row prints (the row reader), what the
   // control drawings bound to it say (`intents`, from the readers), and the
   // project's answers.
   const units = answerUnitsOf(input.project, instances, normalized);
   const fromRows = rowIntents(units);
-  const control = controlEvidenceMap(input.project, units, fromRows);
+  const control = controlMapOf(input.project, normalized, () => controlEvidenceMap(input.project, units, fromRows));
   const answers = sanitizeAnswers(input.settings?.answers);
   const fromAnswers = Object.keys(answers).length ? answerIntents(units, answers, input.library, input.settings?.answer_events) : new Map<number, UnitIntent>();
   const fromReadings = readingIntents(input.readings);
@@ -667,6 +679,21 @@ export interface ControlEvidenceMap {
   version: string | null;
   packets: readonly Packet[];
   bindings: Record<number, Binding[]>;
+}
+
+/** The control-evidence map binds the project's control pages to the units
+ * its rows make before any intent is attached, so it depends on the project
+ * and its normalization alone, never on the library, settings, overrides or
+ * readings. The binder is most of an apply's time, so each project keeps its
+ * map per normalization; a map is only read. */
+const CONTROL_MAPS = new WeakMap<CompiledProject, WeakMap<readonly NormalizedItem[], ControlEvidenceMap>>();
+
+function controlMapOf(project: CompiledProject, normalized: readonly NormalizedItem[], build: () => ControlEvidenceMap): ControlEvidenceMap {
+  let maps = CONTROL_MAPS.get(project);
+  if (!maps) CONTROL_MAPS.set(project, maps = new WeakMap());
+  let map = maps.get(normalized);
+  if (!map) maps.set(normalized, map = build());
+  return map;
 }
 
 export function controlEvidenceMap(project: CompiledProject, units: readonly RowUnit[], fromRows: ReadonlyMap<number, UnitIntent> = rowIntents(units)): ControlEvidenceMap {

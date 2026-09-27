@@ -1,5 +1,45 @@
 # Changelog
 
+- **Takeoff panel: an override, setting or answer no longer freezes the page
+  while the panel recomputes.** After each change the Assemblies view applies
+  the library again and re-counts which project questions still change
+  anything, applying the library once per answer choice. Every one of those
+  applies rebuilt the control-evidence map, binding each control drawing to
+  the units, although the map depends on the project alone. On federal-mech
+  (128 units) that came to about 20 s of frozen page per change, and 34 s
+  from clicking "Use … for all 7" to the overrides on screen. A project now
+  keeps its normalization, its control map and the questions' text lines
+  (`web/src/lib/assemblies/apply.ts` `projectNormalization`,
+  `web/src/lib/controlIntent/questions.ts`). The panel also counts the
+  questions one apply at a time, so the page answers while it counts, and a
+  newer change stops a stale count. Across the 98 cached documents, the
+  records, lines, readings and questions are byte-identical. After a change,
+  the worst document's apply fell from 2.5 s to 0.17 s, and its questions
+  from 26.7 s to 1.1 s. MCP's apply_assemblies runs the same caches
+  (ASSEMBLIES_BUG_CATALOGUE AS-42).
+
+- **Assemblies: one choice resolves a schedule's waiting units together.** The
+  exceptions list in Takeoff → Assemblies names what each unresolved unit
+  waits for, and resolving meant choosing a typical row by row. Rows of one
+  schedule that wait for the same things with the same candidates (the nine
+  exhaust fans of a fan schedule waiting on a VFD answer) now appear together
+  under one header, with "Use fan-variable for all 9", and "Exclude all 9" for
+  rows that are no units at all. The choice asks for one reason and records an
+  override on each unit, each noting the group, so every record still says who
+  chose what and why. A table that prints no title is named "an untitled
+  schedule". On a schedule the compile reads transposed (071_ME's 42
+  rooftop-unit attribute rows), Exclude all takes them out in one step. The
+  grouping is the shared report's (`web/src/lib/assemblies/report.ts`
+  `exceptionGroups`).
+
+- **Takeoff panel: a zone plan's cites name the file, not the upload's hash.**
+  A VAV box whose CO2 sensor the zone-plan reader found cited its plan as
+  "(control packet <64-character hash>.pdf#2#zones)" in the panel, where
+  `apply_assemblies` cites "(control packet federal-attachment4-mechanical.pdf#2#zones)".
+  The browser's key remap (`web/src/lib/graphKeys.js`) knew a control packet's
+  id but not a zone plan's. The panel and MCP are byte-identical again on
+  federal-mech (ASSEMBLIES_BUG_CATALOGUE AS-40).
+
 - **Assemblies: a partner's copy of a hook-up is kept when saved.** Copying
   the VAV, fan coil, air handler, unit heater, pump or heat exchanger hook-up
   into the partner library, and saving it, validated and then vanished: the

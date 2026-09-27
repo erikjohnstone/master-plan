@@ -22,7 +22,7 @@
 import type { ApplicationRecord, AssemblyDefinition, ExpandedLine } from "../assemblies/schema";
 import type { Box, NoteSpan } from "../assemblies/scheduleNotes";
 import type { Override, ProjectSettings } from "../assemblies/select";
-import { answerUnitsOf, applyAssemblies, instancesOf, normalizeProject, type CompiledProject } from "../assemblies/apply";
+import { answerUnitsOf, applyAssemblies, instancesOf, projectNormalization, type CompiledProject } from "../assemblies/apply";
 import { CATALOGUE, CATALOGUE_VERSION, existingFlag, noSpeedColumn, plumbingService, sanitizeAnswers, type ProjectAnswers, type QuestionId } from "./catalogue";
 import type { Decision } from "./combine";
 import { pageLines } from "./evidence";
@@ -170,9 +170,14 @@ interface TextLine { sheet: string; text: string; norm: string; box: Box }
 
 const inside = (b: Box, r: Box) => { const cx = (b[0] + b[2]) / 2, cy = (b[1] + b[3]) / 2; return cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3]; };
 
+const LINES = new WeakMap<CompiledProject, readonly TextLine[]>();
+
 /** The project's printed lines outside its schedule tables: its schedule
- * pages and its control packets, each line once. */
-function projectLines(project: CompiledProject): TextLine[] {
+ * pages and its control packets, each line once. Kept per project, since
+ * the Takeoff panel asks again on every change. */
+function projectLines(project: CompiledProject): readonly TextLine[] {
+  const kept = LINES.get(project);
+  if (kept) return kept;
   const out: TextLine[] = [];
   const seen = new Set<string>();
   const tables = (project.tables ?? []).filter((t) => t.region);
@@ -187,6 +192,7 @@ function projectLines(project: CompiledProject): TextLine[] {
   };
   for (const [sheet, spans] of Object.entries(project.pages ?? {})) add(sheet, spans);
   for (const p of project.control?.packets ?? []) add(p.sheet, p.spans);
+  LINES.set(project, out);
   return out;
 }
 
@@ -250,28 +256,55 @@ function prefillFor(q: QuestionId, lines: readonly TextLine[], units: readonly U
 
 // ── selection ───────────────────────────────────────────────────────────────
 
-/** The questions to show a project (see the header). */
-export function projectQuestions(input: {
+interface QuestionsInput {
   project: CompiledProject;
   library: readonly AssemblyDefinition[];
   settings?: ProjectSettings;
   overrides?: readonly Override[];
   readings?: { units: ReadonlyArray<{ item: number; decisions: readonly Decision[] }> } | null;
-}, opts: { cap?: number; terms?: ProjectTerms } = {}): ProjectQuestions {
+}
+interface QuestionsOptions { cap?: number; terms?: ProjectTerms }
+
+/** The questions to show a project (see the header). */
+export function projectQuestions(input: QuestionsInput, opts: QuestionsOptions = {}): ProjectQuestions {
+  const steps = questionSteps(input, opts);
+  for (;;) {
+    const r = steps.next();
+    if (r.done) return r.value;
+  }
+}
+
+/** projectQuestions in steps, one apply of the library each, awaiting
+ * `pause` before each (a page yields to its user between them); null once
+ * `cancelled` says the answer is no longer wanted. The same steps, so the
+ * same questions. */
+export async function projectQuestionsPaced(input: QuestionsInput, opts: QuestionsOptions & { pause: () => Promise<void>; cancelled?: () => boolean }): Promise<ProjectQuestions | null> {
+  const steps = questionSteps(input, opts);
+  for (;;) {
+    await opts.pause();
+    if (opts.cancelled?.()) return null;
+    const r = steps.next();
+    if (r.done) return r.value;
+  }
+}
+
+function* questionSteps(input: QuestionsInput, opts: QuestionsOptions): Generator<void, ProjectQuestions, void> {
   const terms = opts.terms ?? PROJECT_TERMS_V1;
-  const normalized = normalizeProject(input.project);
+  const normalized = projectNormalization(input.project);
   const answers = sanitizeAnswers(input.settings?.answers);
   const cache = new Map<string, { lines: ExpandedLine[]; applications: ApplicationRecord[] }>();
-  const under = (a: ProjectAnswers) => {
+  // The library applied under a set of answers; a step ends after each apply.
+  function* under(a: ProjectAnswers): Generator<void, { lines: ExpandedLine[]; applications: ApplicationRecord[] }, void> {
     const k = JSON.stringify(Object.entries(a).sort());
     let r = cache.get(k);
     if (!r) {
       const applied = applyAssemblies({ project: input.project, library: input.library, settings: { ...(input.settings ?? {}), answers: a }, overrides: input.overrides, readings: input.readings, normalized });
       r = { lines: applied.lines, applications: applied.applications };
       cache.set(k, r);
+      yield;
     }
     return r;
-  };
+  }
   const units = answerUnitsOf(input.project, instancesOf(input.project, normalized), normalized);
   const text = projectLines(input.project);
   const shown: ProjectQuestion[] = [];
@@ -279,12 +312,13 @@ export function projectQuestions(input: {
   for (const q of CATALOGUE) {
     const without: ProjectAnswers = { ...answers };
     delete without[q.id];
-    const base = under(without);
-    const choices = q.choices.map((c) => {
-      if (c.value === "unknown") return { value: c.value, label: c.label, lines_changed: 0, records_changed: 0 };
-      const next = under({ ...without, [q.id]: c.value });
-      return { value: c.value, label: c.label, lines_changed: linesChanged(base.lines, next.lines), records_changed: recordsChanged(base.applications, next.applications) };
-    });
+    const base = yield* under(without);
+    const choices: ProjectQuestion["choices"] = [];
+    for (const c of q.choices) {
+      if (c.value === "unknown") { choices.push({ value: c.value, label: c.label, lines_changed: 0, records_changed: 0 }); continue; }
+      const next = yield* under({ ...without, [q.id]: c.value });
+      choices.push({ value: c.value, label: c.label, lines_changed: linesChanged(base.lines, next.lines), records_changed: recordsChanged(base.applications, next.applications) });
+    }
     const lines = Math.max(0, ...choices.map((c) => c.lines_changed));
     const records = Math.max(0, ...choices.map((c) => c.records_changed));
     if (!lines && !records) { zero.push(q.id); continue; }

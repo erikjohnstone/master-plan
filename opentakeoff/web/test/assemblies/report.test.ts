@@ -77,3 +77,12 @@ test("exception groups: one schedule's rows that wait for the same things with t
   assert.deepEqual([...groups[0].candidates].sort(), ["fan-constant@1", "fan-variable@1"]);
   assert.deepEqual(exceptionGroups(r.exceptions.filter((e) => e.tag === "EF-1")), [], "a group of one is no group");
 });
+
+test("exception groups: the rows of a table that prints no title are one untitled schedule", () => {
+  // 26_CA's and 061_IA's shape: the compile keeps the table, its title "".
+  const untitled = (tag: string, i: number): CompiledItem => ({ ...row("FAN", tag, i), sheet_id: "s.pdf#4", table_title: "" });
+  const items = [untitled("SF1", 0), untitled("SF2", 1)];
+  const { instances, applications, lines } = applyAssemblies({ project: { items }, library: LIB, normalized: items.map((it) => norm(it)) });
+  const groups = exceptionGroups(assembliesReport(instances, applications, lines).exceptions);
+  assert.deepEqual(groups.map((g) => [g.schedule, g.sheet, g.units.map((u) => u.tag)]), [[null, "s.pdf#4", ["SF1", "SF2"]]]);
+});

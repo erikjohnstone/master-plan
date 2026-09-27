@@ -2437,6 +2437,74 @@ only, nothing tuned on them):**
   instances moved is not read, since held-out gives aggregates only.
 - Every gate still fails. No rule is written from these numbers.
 
+
+## AS-40 — the Takeoff panel on thirteen more documents: a zone plan's cites kept the upload's hash name (FIXED — this goal)
+
+**Found:** 2026-09-27, by the UI proof sweep (each document's PDF through
+/__ot/assemblies-project into Takeoff → Assemblies, byte for byte against
+apply_assemblies over MCP, deterministic readings) on thirteen documents it
+had not run on. Ten pass all 10 checks: itd-d1-lab, 031_MO, 088_AZ, 028_TX,
+044_NY, 012_MO, 05_MO, 06_MO, 089_FL and 009_FL. Three do not:
+- **federal-mech (a bug):** 15 of its 214 records differ, the VAV boxes
+  whose CO2 sensor the zone-plan reader decided
+  (rp.co2_sensor.symbol_in_zone). In the browser their cites read "(control
+  packet <sha>.pdf#2#zones)"; over MCP, "(control packet
+  federal-attachment4-mechanical.pdf#2#zones)". Nothing else differs, in the
+  records or the 3,274 lines.
+- **01_NY (a ceiling of this container):** the browser builds the sheet
+  graph of an upload itself, and 01_NY's 162 sheets were still "schedules
+  indexing…" when the proof's 30-minute wait ended (MCP reads the cached
+  graph in 60 s). Its compile needed 682 s and 12.8 GB in the eval harness
+  too. Nothing here is the assemblies path's.
+- **26_CA (the proof's own precondition):** the proof overrides an option of
+  a unit with a typical, and 26_CA has none. Its 24 resolved records are
+  hook-ups, which carry no options, its 17 air handlers wait on attr.vfd
+  and attr.terminals_served, and its seven SINGLE DUCT CAV EXHAUST TERMINAL
+  boxes have no typical in v1 (a library item for INPUT 4, disclosed as
+  no_assembly). Every check before the override passed.
+
+**Why:** AS-34 taught the browser's key remap (graphKeys.js) a control
+packet's id, "<sha>.pdf#36#p8". A zone plan's readings cite its plan as
+"<sheet>#zones" (controlIntent/record.ts), which that pattern did not
+match, so the upload's hash name stayed. Only federal-mech and its near copy
+019_FL carry a zone plan among the 98 cached documents.
+
+**Fix (graphKeys.js, the browser's entry point; extraction and the readings
+are unchanged):** the packet-id pattern also takes a zone plan's "#zones".
+Test: graphKeys.test.ts, with two look-alikes ("#zonesX", a bare sheet key);
+it fails without the fix. The proof now takes a document whose typicals carry
+no options: it opens a unit with any typical, and overrides by choosing a
+typical for a unit that waits.
+
+**Measured:** rerun with the fix (round 6, the deterministic dev server),
+each with the new group check (11 checks where a group exists):
+- **federal-mech passes all 11 checks:** 214 records and 3,274 lines
+  byte-identical to apply_assemblies, the zone plan's cites included; seven
+  waiting pumps of one schedule resolved together with pump-constant.
+- **26_CA passes all 11:** the override takes the fallback (AHU 24-2's
+  controls take ahu-constant-volume with a reason), and ten waiting units
+  resolve together. The run before had stopped at its library step, which
+  found AS-41; with that fixed, the copy of hookup-air-handler is kept and
+  its update offered.
+- **071_ME passes all 11** (proven in AS-36, rerun here for its group):
+  129 records and 2,407 lines. Its one group is 42 rows of the rooftop unit
+  schedule the compile reads transposed (AS-33: "105.7", "24%", "CURB"
+  are attribute rows, not units). The proof chose the first typical for
+  them mechanically; an estimator takes them out in one step with Exclude
+  all 42, which the proof now checks on the next group where a document has
+  two.
+Twelve of the thirteen documents pass every check; 01_NY remains the
+container's ceiling above. federal-mech's group took 34 s from the click to
+the overrides on screen, which is AS-42.
+
+**Found on the way, in the group header (5d199ba):** a table that prints no
+title (26_CA's air handlers, 061_IA's fans and pumps; groups on 4 of the 24
+documents the sweep has run) made the header, its buttons' names and each override's
+note read "units of  wait for". report.ts exceptionGroups now gives such a
+group no title, the panel names it "an untitled schedule", and a group that
+waits only for a choice between tied typicals says so. Test:
+report.test.ts, an untitled table's rows (fails without the fix).
+
 ## AS-41 — a partner's copy of a hook-up that names another hook-up vanished when saved (FIXED — this goal)
 
 **Found:** 2026-09-27, by the UI proof on 26_CA. Its only resolved records
@@ -2475,3 +2543,73 @@ profile holding a partner's VAV hook-up without the coil hook-up it names
 fails with the gate's reason, and loads once it holds both. Through the
 store's gate and the old count check, that profile loads with the dangling
 reference.
+
+## AS-42 — every change in the Takeoff panel froze the page for seconds: each apply re-ran the binder (FIXED — this goal)
+
+**Found:** 2026-09-27, by the UI proof's group check on federal-mech. Choosing
+one typical for seven waiting pumps took 34 s from the click to the overrides
+on screen, and round 5's click gave up after 30 s. Nothing was wrong with the
+records: the time went to recomputing.
+
+**Why:** the panel applies the library again after every change (an
+override, a setting, an answer), and then asks projectQuestions which
+questions still change the project. That applies the library once per answer
+choice, 12 times on federal-mech, synchronously. Each apply built the
+control-evidence map, binding every control page to the units, and the
+binder was 88% of an apply (1.6 of 1.7 s on federal-mech), though the map
+depends on the project alone and is not read by the records or lines. So
+each change cost about 20 s in Node (19.5 s of questions and 1.7 s of apply),
+more in the browser, with the page frozen throughout.
+
+**Fix (apply.ts and questions.ts, the shared path the panel and MCP both
+run):** a project keeps what depends on it alone, in WeakMaps keyed by the
+project object: its normalization (projectNormalization), its control map
+per normalization, and the questions' text lines. A compiled project is not
+changed after it is built, and these are only read. instancesOf copies what
+it takes from the normalization, and nothing rewrites a cite in place. The
+map stays at the same point in apply: computing it lazily would have bound
+units whose attributes the readings had already filled in.
+projectQuestions is now one generator of steps, one apply each. MCP runs it
+straight through, and the panel runs it paced (projectQuestionsPaced): it
+yields to the page after each apply, and a newer change stops a stale
+count. The card keeps its questions, saying it is working, until the new
+count is in.
+
+**Measured:**
+- **Byte for byte, on the 98 cached documents** (the dev tiers and the
+  unseen corpus; no held-out or held-out drafter's document), six steps
+  each:
+  1. the printed-phrase readings (readControlIntent, whose first apply
+     builds the map);
+  2. apply;
+  3. the questions;
+  4. apply with an override pair (a waiting unit takes its first
+     candidate, a resolved one is excluded) and the first question
+     answered;
+  5. the questions with them, through the panel's paced count;
+  6. apply without them again.
+
+  The code before the fix takes a freshly parsed project at every step;
+  the fix takes one project object through all six, as the panel and MCP
+  do. All 588 steps are identical. A planted bug, one control map shared
+  by every project, is caught: federal-mech's readings and applies differ.
+- **Time after a change** (Node, the same steps; before → after):
+
+  | Step | Median | 90th percentile | Worst |
+  |---|---|---|---|
+  | Apply | 46 → 2 ms | 474 → 19 ms | 2,545 → 172 ms |
+  | Questions | 516 → 18 ms | 5.3 → 0.21 s | 26.7 → 1.1 s |
+
+  federal-mech's questions went from 26.7 to 1.0 s, 019_FL's from 20.7 to
+  1.1 s, and 096_IN's from 15.7 to 1.1 s.
+- **In the browser** (the UI proof, the deterministic dev server, round 7):
+  - federal-mech's seven pumps took 1 s from the click to the overrides on
+    screen, where round 6 took 34 s, and its single override took under
+    1 s. It still passes all 11 checks, byte-identical to MCP.
+  - 26_CA's group of ten, and "Exclude all" on its group of six, each took
+    under 1 s (12 checks).
+- **Tests:** readers.test.ts, two tests. The first keeps the map across
+  changes, gives a fresh copy's records, keys a caller's own normalization
+  apart, and never shares between projects. The second checks that the
+  paced count equals projectQuestions, pauses before each apply, and stops
+  when cancelled. Both fail without the fix.

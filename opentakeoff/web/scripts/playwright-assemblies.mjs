@@ -40,6 +40,7 @@ const smoke = process.env.OT_ASM_SMOKE === '1';
 const mcp = JSON.parse(readFileSync(resolve(process.env.OT_MCP_APPLY), 'utf8'));
 const REASON = "UI proof: the estimator's own choice";
 const GROUP_REASON = "UI proof: one answer for the schedule's rows";
+const GROUP_EXCLUDE_REASON = "UI proof: these rows are no units";
 const PRESET = 'valve-shipped-to-kit-maker';
 
 const browser = await chromium.launch({ executablePath: process.env.OT_BROWSER_PATH || undefined });
@@ -65,7 +66,7 @@ async function applyInPage() {
     const { applyAssemblies } = await import('/src/lib/assemblies/apply.ts');
     const { combinedLibrary } = await import('/src/lib/assemblies/libraryEdit.ts');
     const { projectLibrary } = await import('/src/lib/assemblies/projectState.ts');
-    const { assembliesReport } = await import('/src/lib/assemblies/report.ts');
+    const { assembliesReport, exceptionGroups } = await import('/src/lib/assemblies/report.ts');
     const { loadStarterLibrary } = await import('/src/lib/assemblies/starterLibrary.ts');
     const { localStore } = await import('/src/lib/store.js');
     const project = window.__opentakeoff.probe.assembliesProject();
@@ -75,7 +76,8 @@ async function applyInPage() {
     // (AssembliesPanel: project.control_readings), as apply_assemblies does.
     const applied = applyAssemblies({ project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
     const report = assembliesReport(applied.instances, applied.applications, applied.lines);
-    return { applications: JSON.stringify(applied.applications), lines: JSON.stringify(applied.lines), report: JSON.stringify(report) };
+    return { applications: JSON.stringify(applied.applications), lines: JSON.stringify(applied.lines), report: JSON.stringify(report),
+      groups: JSON.stringify(exceptionGroups(report.exceptions).map((g) => g.units.map((u) => u.tag))) };
   });
 }
 
@@ -301,6 +303,26 @@ try {
       const chosenByUser = JSON.parse((await applyInPage()).applications).filter((a) => a.selected_by === 'user' && a.assembly?.id === chosen && String(a.reason).startsWith(GROUP_REASON));
       assert.ok(chosenByUser.length >= n, `${n} records take ${chosen}, each with the reason (${chosenByUser.length})`);
       checks.push(`${n} waiting units of one schedule resolved together with ${chosen}, an override each`);
+
+      // Rows that are no units (a transposed schedule's attribute rows, a
+      // notes table read as equipment) leave together: "Exclude all N", one
+      // reason, every layer of each unit excluded.
+      const next = panel.locator('[data-assemblies-group]').first();
+      if (await next.count()) {
+        const [tags] = JSON.parse((await applyInPage()).groups);
+        const m = Number(await next.getAttribute('data-assemblies-group'));
+        assert.equal(tags.length, m, "the first group on screen is the report's first group");
+        const before = (await annotations())?.overrides?.length ?? 0;
+        const te = t();
+        page.once('dialog', (d) => d.accept(GROUP_EXCLUDE_REASON));
+        await next.locator('[data-assemblies-group-exclude]').click({ timeout: 180000 });
+        await panel.locator(`[data-assemblies-overrides="${before + new Set(tags).size}"]`).waitFor({ state: 'visible', timeout: 180000 });
+        timings.exclude_s = Math.round((t() - te) / 1000);
+        const records = JSON.parse((await applyInPage()).applications).filter((a) => tags.includes(a.instance.tag));
+        assert.ok(records.length >= m && records.every((a) => a.status === 'excluded' && String(a.reason).startsWith(GROUP_EXCLUDE_REASON)),
+          `every record of the ${m} units is excluded with the reason: ${records.filter((a) => a.status !== 'excluded').map((a) => `${a.instance.tag} ${a.layer} ${a.status}`).slice(0, 5).join('; ')}`);
+        checks.push(`${m} rows of another schedule excluded together (${records.length} records, every layer), an override each`);
+      }
     }
   }
 

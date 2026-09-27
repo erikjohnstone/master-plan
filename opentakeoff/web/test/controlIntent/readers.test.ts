@@ -17,7 +17,8 @@ import { cropSpec, cutOff, joinRun, r2PacketAnswers, R2_MAX_TOKENS, R2_RETRIES, 
 import { combineUnit, decisionIntent } from "../../src/lib/controlIntent/combine.ts";
 import { memoryRunStore, recordedCall, requestHash, type ModelRequest, type Transport } from "../../src/lib/controlIntent/runs.ts";
 import { readControlIntent } from "../../src/lib/controlIntent/record.ts";
-import { applyAssemblies, type CompiledItem, type CompiledProject } from "../../src/lib/assemblies/apply.ts";
+import { applyAssemblies, normalizeProject, projectNormalization, type CompiledItem, type CompiledProject } from "../../src/lib/assemblies/apply.ts";
+import { projectQuestions, projectQuestionsPaced } from "../../src/lib/controlIntent/questions.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { RENDER_SCALE } from "../../src/lib/sheets.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
@@ -694,4 +695,53 @@ test("record: a vision reply the token limit cut off before any answer is asked 
   const replay = await readControlIntent({ project, library: LIB }, { store: memoryRunStore(store.all()) });
   assert.deepEqual(replay.units, readings.units);
   assert.deepEqual([replay.calls.r2.replayed, replay.calls.r2.not_recorded], [4, 0]);
+});
+
+test("apply: a project keeps its normalization and control map, so applying it again after a change reads as a fresh copy does (AS-42)", () => {
+  // The Takeoff panel applies the same project on every change, and
+  // projectQuestions once per choice; the binder was most of each apply.
+  const items = [row("FAN", "EF-1", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "CONSTANT" }), row("FAN", "EF-2", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "VARIABLE" })];
+  const spans = [
+    sp("MOTORIZED DAMPER", 700, 300), sp("BO - FAN START/STOP", 700, 400), sp("BI - FAN STATUS", 700, 500),
+    sp("1", 651, 1020, 50), sp("EXHAUST FAN EF-1 CONTROL DIAGRAM", 734, 1000, 50), sp("SCALE: NONE", 734, 1060, 25),
+  ];
+  const project: CompiledProject = { items, control: { version: "control_evidence_v1", packets: findPackets("set.pdf#5", spans), sheet_numbers: {} } };
+  const copy = (): CompiledProject => JSON.parse(JSON.stringify(project));
+  const first = applyAssemblies({ project, library: LIB });
+  assert.ok(first.control.bindings[0]?.length, "the diagram binds EF-1");
+  assert.equal(projectNormalization(project), projectNormalization(project));
+  // A change between applies (an override, an answer): the same map, and
+  // the records and lines a fresh copy of the project gives.
+  const overrides = [{ tag: "EF-2", reason: "not ours", exclude: true }];
+  const settings = { answers: { PQ1: "yes" } };
+  const again = applyAssemblies({ project, library: LIB, overrides, settings });
+  assert.equal(again.control, first.control, "the map is kept");
+  assert.deepEqual(again, applyAssemblies({ project: copy(), library: LIB, overrides, settings }));
+  assert.deepEqual(applyAssemblies({ project, library: LIB }), first);
+  assert.deepEqual(projectQuestions({ project, library: LIB, overrides }), projectQuestions({ project: copy(), library: LIB, overrides }));
+  // A normalization the caller passes is its own key, never the project's.
+  const own = normalizeProject(project);
+  const withOwn = applyAssemblies({ project, library: LIB, normalized: own });
+  assert.notEqual(withOwn.control, first.control);
+  assert.deepEqual(withOwn.control, first.control);
+  assert.equal(applyAssemblies({ project, library: LIB, normalized: own }).control, withOwn.control);
+  // Another project never reads this one's.
+  const other = copy();
+  assert.notEqual(applyAssemblies({ project: other, library: LIB }).control, first.control);
+});
+
+test("questions: the panel's paced count gives exactly projectQuestions' questions, and a change stops a stale one (AS-42)", async () => {
+  const items = [row("FAN", "EF-1", "EXHAUST FAN SCHEDULE", {}), row("FAN", "EF-2", "EXHAUST FAN SCHEDULE", { "SPEED CONTROL": "VARIABLE" })];
+  const project: CompiledProject = { items };
+  const want = projectQuestions({ project, library: LIB });
+  assert.ok(want.shown.length, "the project has a question to count");
+  let pauses = 0;
+  const got = await projectQuestionsPaced({ project: JSON.parse(JSON.stringify(project)), library: LIB }, { pause: async () => { pauses++; } });
+  assert.deepEqual(got, want);
+  assert.ok(pauses > 2, `a pause before each apply (${pauses})`);
+  let live = true;
+  let applies = 0;
+  const stopped = await projectQuestionsPaced({ project, library: LIB }, { pause: async () => { if (++applies === 2) live = false; }, cancelled: () => !live });
+  assert.equal(stopped, null);
+  assert.equal(applies, 2, "nothing runs once cancelled");
 });

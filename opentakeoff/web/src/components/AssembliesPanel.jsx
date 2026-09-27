@@ -26,7 +26,7 @@ import { adoptUpdate, emptyAssembliesState, libraryUpdates, pinUsed, projectLibr
 import { assembliesReport, exceptionGroups } from "../lib/assemblies/report";
 import { PARTIES } from "../lib/assemblies/schema";
 import { answerSettings, appendAnswer, replayAnswers } from "../lib/controlIntent/journal";
-import { projectQuestions } from "../lib/controlIntent/questions";
+import { projectQuestionsPaced } from "../lib/controlIntent/questions";
 import { downloadArchive } from "../lib/projectArchive";
 
 const btn = {
@@ -503,19 +503,18 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
   }) : null), [project, library, state, readings, settings]);
   // Which questions change this set: every choice applied against none
   // (questions.ts). It re-applies the library per choice, so it runs after
-  // the panel has painted.
+  // the panel has painted, one apply per task, and a change stops the count
+  // it makes stale.
   const [questions, setQuestions] = useState({ value: null, busy: false });
   useEffect(() => {
     if (!project) { setQuestions({ value: null, busy: false }); return undefined; }
+    let live = true;
     setQuestions((q) => ({ ...q, busy: true }));
-    const t = setTimeout(() => {
-      try {
-        setQuestions({ value: projectQuestions({ project, library: projectLibrary(state, library), settings, overrides: state?.overrides ?? [], readings }), busy: false });
-      } catch (e) {
-        setQuestions({ value: null, busy: false, error: e?.message || String(e) });
-      }
-    }, 0);
-    return () => clearTimeout(t);
+    projectQuestionsPaced({ project, library: projectLibrary(state, library), settings, overrides: state?.overrides ?? [], readings },
+      { pause: () => new Promise((resolve) => setTimeout(resolve, 0)), cancelled: () => !live })
+      .then((value) => { if (live && value) setQuestions({ value, busy: false }); })
+      .catch((e) => { if (live) setQuestions({ value: null, busy: false, error: e?.message || String(e) }); });
+    return () => { live = false; };
   }, [project, library, state, readings, settings]);
   const answer = async (q, value) => {
     const proposal = q.prefill && q.prefill.value === value ? ` (the drawings' proposal: ${q.prefill.evidence.map((e) => `"${e.text}"`).join("; ")})` : "";
@@ -552,6 +551,11 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     if (key(next) !== key(state)) onStateChange?.(next);
   }, [applied]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // A group's schedule and what it waits for, in its header, its buttons'
+  // names and each override's note: a table may print no title, and tied
+  // typicals wait for nothing but a choice.
+  const scheduleOf = (group) => group.schedule ?? "an untitled schedule";
+  const waitingFor = (group) => (group.waits_for.length ? group.waits_for.join(", ") : "a choice between typicals");
   const override = (unit) => (patch, what) => {
     const reason = askReason(what);
     if (!reason) return;
@@ -568,7 +572,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     const reason = askReason(what);
     if (!reason) return;
     const base = state ?? emptyAssembliesState();
-    const note = `${reason} (one of ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"}, decided together)`;
+    const note = `${reason} (one of ${group.units.length} ${group.family} units of ${scheduleOf(group)}, decided together)`;
     // Each unit as override() keys it: its tag and layer, or its tag alone
     // when it is excluded.
     const layerOf = (u) => (patch.exclude ? null : u.layer);
@@ -683,16 +687,18 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
                   {exceptionRows.map(({ group, e, i }) => group ? (
                     <tr key={`group-${i}`} data-assemblies-group={group.units.length} style={{ background: "color-mix(in srgb, var(--ink-faint) 22%, transparent)" }}>
                       <td style={td} colSpan={5}>
-                        <strong>{group.units.length} {group.family} units</strong> of {group.schedule ?? "one schedule"} wait for <span style={mono}>{group.waits_for.join(", ")}</span>
+                        <strong>{group.units.length} {group.family} units</strong> of {scheduleOf(group)} {group.waits_for.length
+                          ? <>wait for <span style={mono}>{group.waits_for.join(", ")}</span></>
+                          : `tie between ${group.candidates.length} typicals`}
                       </td>
                       <td style={td}>
                         {group.candidates.map((c) => {
                           const [id, version] = c.split("@");
-                          const label = `Use ${id} for all ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"} waiting for ${group.waits_for.join(", ")}`;
-                          return <button key={c} type="button" style={{ ...btn, marginRight: 4 }} data-assemblies-group-use={c} aria-label={label} onClick={() => overrideMany(group)({ assembly: { id, version } }, `choosing ${c} for the ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"}`)}>Use {id} for all {group.units.length}</button>;
+                          const label = `Use ${id} for all ${group.units.length} ${group.family} units of ${scheduleOf(group)} waiting for ${waitingFor(group)}`;
+                          return <button key={c} type="button" style={{ ...btn, marginRight: 4 }} data-assemblies-group-use={c} aria-label={label} onClick={() => overrideMany(group)({ assembly: { id, version } }, `choosing ${c} for the ${group.units.length} ${group.family} units of ${scheduleOf(group)}`)}>Use {id} for all {group.units.length}</button>;
                         })}
-                        <button type="button" style={btn} data-assemblies-group-exclude aria-label={`Exclude all ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"} waiting for ${group.waits_for.join(", ")}`}
-                          onClick={() => overrideMany(group)({ exclude: true }, `excluding the ${group.units.length} ${group.family} units of ${group.schedule ?? "one schedule"}`)}>Exclude all {group.units.length}…</button>
+                        <button type="button" style={btn} data-assemblies-group-exclude aria-label={`Exclude all ${group.units.length} ${group.family} units of ${scheduleOf(group)} waiting for ${waitingFor(group)}`}
+                          onClick={() => overrideMany(group)({ exclude: true }, `excluding the ${group.units.length} ${group.family} units of ${scheduleOf(group)}`)}>Exclude all {group.units.length}…</button>
                       </td>
                     </tr>
                   ) : (

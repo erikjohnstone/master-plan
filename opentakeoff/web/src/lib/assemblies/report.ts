@@ -146,7 +146,8 @@ export interface ExceptionGroup {
   family: string;
   layer: string;
   sheet: string | null;
-  /** The schedule's title, as its rows' cites print it. */
+  /** The schedule's title, as its rows' cites print it; null for a table
+   * that prints none. */
   schedule: string | null;
   waits_for: string[];
   candidates: string[];
@@ -158,10 +159,11 @@ export function exceptionGroups(exceptions: readonly UnitRow[]): ExceptionGroup[
   for (const u of exceptions) {
     if (u.status !== "unresolved" || !u.candidates.length) continue;
     const cite = u.cites[0];
+    const title = cite?.table_title || null;
     const waits = [...u.waits_for].sort();
-    const k = JSON.stringify([u.family, u.layer, cite?.sheet ?? null, cite?.table_title ?? null, waits, u.candidates]);
+    const k = JSON.stringify([u.family, u.layer, cite?.sheet ?? null, title, waits, u.candidates]);
     let g = groups.get(k);
-    if (!g) groups.set(k, g = { family: u.family, layer: u.layer, sheet: cite?.sheet ?? null, schedule: cite?.table_title ?? null, waits_for: waits, candidates: [...u.candidates], units: [] });
+    if (!g) groups.set(k, g = { family: u.family, layer: u.layer, sheet: cite?.sheet ?? null, schedule: title, waits_for: waits, candidates: [...u.candidates], units: [] });
     g.units.push(u);
   }
   return [...groups.values()].filter((g) => g.units.length > 1);
