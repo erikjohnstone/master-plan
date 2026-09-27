@@ -547,7 +547,10 @@ available from **⋯ → Measurement report**, not a primary navigation tab.
 **Takeoff → Assemblies** turns the set's scheduled HVAC equipment into a controls
 estimate. Press **Apply assemblies**. The same Session+ODL path MCP uses reads the
 equipment schedules and the notes printed with them, and your assembly library
-then gives each unit its controls typical and its mechanical hook-up:
+then gives each unit its controls typical and its mechanical hook-up. A schedule
+printed in two tables, the second titled as its continuation ("… (CONT.)"), is
+read as one: the unit's row in the continuation adds its columns, and each value
+cites the table it is printed in.
 - its options and variables, each with its source (the schedule, a project
   setting, a partner default, the library default, or you);
 - its lines (points, devices, labor hooks) with quantities, each citing the

@@ -61,6 +61,8 @@ export interface CompiledTable {
   /** Notes already read, when there are no page spans to read them from. */
   notes?: readonly ScheduleNote[];
   spans?: readonly NoteSpan[];
+  /** The claimed table this one continues ("… (CONT.)"): its title. */
+  continues?: string;
 }
 
 /** One row of a printed points list, with the unit the BAS points compile
@@ -139,6 +141,23 @@ export function printedPointRows(bas: BasPointsCompile | null | undefined): Prin
  * a trailing "N OF M" part suffix is dropped). */
 export const compileTableTitle = (title: unknown): string => String(title || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
 
+/** A title marked as another table's continuation ("… (CONT.)", "…
+ * (CONTINUED)", "… CONT'D"): its words without the mark; else null. */
+export function continuedTitle(title: unknown): string | null {
+  const m = String(title ?? "").toUpperCase().replace(/\s+/g, " ").trim()
+    .match(/^(.*?\S)\s*(?:\(\s*CONT(?:INUED|['’]D|\.)?\s*\)|[-–—:]\s*CONT(?:INUED|['’]D|\.)?|\bCONTINUED|\bCONT['’]D|\bCONT\.)$/);
+  return m ? m[1].replace(/\s*[-–—:]$/, "") : null;
+}
+
+/** A title's words that name the equipment: never SCHEDULE, a number or a
+ * joining word. */
+const titleWords = (title: string) => new Set(String(title ?? "").toUpperCase().split(/[^A-Z0-9]+/)
+  .filter((w) => w && !/^(?:SCHEDULES?|THE|OF|AND|FOR|\d+)$/.test(w)));
+const rowKey = (key: string) => String(key ?? "").toUpperCase().replace(/\s+/g, "");
+/** A graph table's rows, each cell as its text. */
+const textRows = (t: NonNullable<GraphTables["tables"]>[number]) =>
+  (t.rows ?? []).map((r) => ({ key: r.key, cells: Object.fromEntries(Object.entries(r.cells ?? {}).map(([h, c]) => [h, c?.text ?? ""])) }));
+
 /** A sheet id's file and page: "set.pdf#14" → { file: "set.pdf", page: 14 };
  * a bare file name is its first page. Null when the page is not a number. */
 export function sheetPage(sheet: string): { file: string; page: number } | null {
@@ -179,8 +198,25 @@ export function compiledRowsAndTables(compiled: HvacCompile, graph: GraphTables)
   for (const t of graph.tables ?? []) {
     const title = compileTableTitle(t.title?.text);
     if (!wanted.has(`${t.sheet}|${title}`)) continue;
-    tables.push({ sheet: t.sheet, title, headers: t.headers ?? [], region: t.region ?? null,
-      rows: (t.rows ?? []).map((r) => ({ key: r.key, cells: Object.fromEntries(Object.entries(r.cells ?? {}).map(([h, c]) => [h, c?.text ?? ""])) })) });
+    tables.push({ sheet: t.sheet, title, headers: t.headers ?? [], region: t.region ?? null, rows: textRows(t) });
+  }
+  // A schedule printed in two tables, the second titled as its continuation
+  // ("CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)" under "CUSTOM OUTDOOR AIR
+  // HANDLING UNIT SCHEDULE"): the compile claims the first only. The second
+  // is kept for the units it continues when its title, less the mark, shares
+  // its words with exactly one claimed table on the sheet whose rows hold
+  // every row it prints.
+  const claimed = [...tables];
+  for (const t of graph.tables ?? []) {
+    const title = compileTableTitle(t.title?.text);
+    const base = wanted.has(`${t.sheet}|${title}`) ? null : continuedTitle(title);
+    const keys = (t.rows ?? []).map((r) => rowKey(r.key)).filter(Boolean);
+    if (!base || !keys.length) continue;
+    const words = [...titleWords(base)];
+    const firsts = claimed.filter((c) => c.sheet === t.sheet && words.length > 0 && words.every((w) => titleWords(c.title).has(w))
+      && keys.every((k) => (c.rows ?? []).some((r) => rowKey(r.key) === k)));
+    if (firsts.length !== 1) continue;
+    tables.push({ sheet: t.sheet, title, headers: t.headers ?? [], region: t.region ?? null, continues: firsts[0].title, rows: textRows(t) });
   }
   return { items, tables };
 }
@@ -256,16 +292,21 @@ export function tableContextOf(
   const rows: Array<{ key: string; cells: Readonly<Record<string, string>> }> = [];
   const codes: Record<string, Record<string, string>> = {};
   const legend: Record<string, string> = {};
+  const continuation: Array<{ title: string; headers: readonly string[]; rows: ReadonlyArray<{ key: string; cells: Readonly<Record<string, string>> }> }> = [];
   for (const table of tables) {
+    if (table.sheet === item.sheet_id && table.continues === item.table_title) {
+      continuation.push({ title: table.title, headers: table.headers, rows: table.rows ?? [] });
+      continue;
+    }
     if (table.sheet !== item.sheet_id || table.title !== item.table_title) continue;
     let t = cache.get(table);
     if (!t) cache.set(table, t = { ...table });
     for (const h of t.headers) if (!headers.includes(h)) headers.push(h);
     const spans = pages[t.sheet] ?? t.spans;
     // The sheet's other tables bound the notes block (their text is never
-    // this table's notes).
+    // this table's notes); a table's continuation is no other table.
     t.readNotes ??= spans && t.region
-      ? scheduleNotes(spans, t.region, tables.filter((o) => o !== table && o.sheet === t!.sheet && o.region).map((o) => o.region!))
+      ? scheduleNotes(spans, t.region, tables.filter((o) => o !== table && o.sheet === t!.sheet && o.region && !o.continues).map((o) => o.region!))
       : (t.notes ?? []);
     for (const n of t.readNotes) if (!notes.some((x) => x.id === n.id)) notes.push(n);
     for (const r of t.rows ?? []) rows.push(r);
@@ -276,7 +317,7 @@ export function tableContextOf(
       Object.assign(legend, t.readLegend);
     }
   }
-  return headers.length || notes.length || rows.length ? { headers, notes, rows, codes, legend } : null;
+  return headers.length || notes.length || rows.length ? { headers, notes, rows, codes, legend, ...(continuation.length ? { continuation } : {}) } : null;
 }
 
 /** Every row of the project normalized with its table's context (step 1),

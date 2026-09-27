@@ -1,5 +1,18 @@
 # Changelog
 
+- **Assemblies read a schedule continued in a second table.** When a
+  schedule runs on in a second table titled as its continuation ("CUSTOM AIR
+  HANDLING UNIT SCHEDULE (CONT.)" under "CUSTOM OUTDOOR AIR HANDLING UNIT
+  SCHEDULE"), the shared apply path (`web/src/lib/assemblies/apply.ts`) now
+  keeps it for the units it continues, and the normalizer reads a unit's row
+  there as the rest of its columns, each value citing the table it is printed
+  in. The continuation is kept only when its title, less the mark, shares its
+  words with exactly one claimed table on the sheet whose rows hold every row
+  it prints; extraction is unchanged. On the fifth dev tier, an air handler's
+  supply fans, final filter and service voltage are now read (89.7% of
+  printed values exact, from 88.9%, and 0 wrong) (ASSEMBLIES_BUG_CATALOGUE
+  AS-32).
+
 - **Assemblies read a fifth tier of drafters' schedules.** Eleven more
   documents, drawn by seed and keyed from renders before the pipeline ran,
   taught the shared normalizer and notes reader

@@ -57,6 +57,8 @@ export interface TableContext {
   legend?: Readonly<Record<string, string>>;
   /** The units a drive schedule's row names as its load (vfdDrivenTags). */
   driven?: ReadonlyMap<string, DriveLoad>;
+  /** The tables that continue this one ("… (CONT.)"), with their rows. */
+  continuation?: ReadonlyArray<{ title: string; headers: readonly string[]; rows: ReadonlyArray<{ key: string; cells: Readonly<Record<string, string>> }> }>;
 }
 
 /** A drive schedule's row naming a unit as its load: where the unit's VFD
@@ -261,6 +263,9 @@ interface Column {
   h: string;
   cell: { text: string; bbox: number[] | null } | null;
   order: number;
+  /** The table the column is printed in, when not the row's own (the
+   * schedule's continuation). */
+  table?: string;
 }
 
 /** A header printing an SI unit: the same quantity as its US twin, in a
@@ -2257,6 +2262,20 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
   }
   const paired = pairedRow(item, table);
   const all = columnsOf(item, table);
+  // A schedule continued in a second table ("… (CONT.)"): the unit's one row
+  // there prints the rest of its columns (its supply fan, its final filter),
+  // read as the row's own and cited to that table. A header the first table
+  // prints too is the first table's.
+  for (const cont of table?.continuation ?? []) {
+    const lines = cont.rows.filter((r) => canonKey(r.key) === canonKey(item.tag));
+    if (lines.length !== 1) continue;
+    for (const header of cont.headers.length ? cont.headers : Object.keys(lines[0].cells)) {
+      const h = headerText(header);
+      if (all.some((c) => c.header === header) || SI_UNIT.test(h) || SI_BRACKET.test(header)) continue;
+      const text = String(lines[0].cells[header] ?? "").trim();
+      all.push({ header, h, cell: text ? { text, bbox: null } : null, order: all.length, table: cont.title });
+    }
+  }
   const cols = all.filter((c) => !otherHalf(c.h, family, paired));
   // ELECTRICAL DATA printed over unlabeled sub-columns ("ELECTRICAL DATA",
   // "… 2", "… 3" = "208", "1", "60"): one electrical tuple, read by value.
@@ -2360,7 +2379,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
       value: c.value,
       printed: c.printed,
       cite: attr === "vfd" && c.rule === "cross.drive_schedule_load" && driveCite ? driveCite
-        : { sheet: item.sheet_id, table_title: item.table_title, header: c.col.header, bbox: c.col.cell?.bbox ?? null },
+        : { sheet: item.sheet_id, table_title: c.col.table ?? item.table_title, header: c.col.header, bbox: c.col.cell?.bbox ?? null },
       rule: c.rule,
     };
   }

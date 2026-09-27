@@ -1156,3 +1156,25 @@ test("dev 5: a cooling coil's water flow alone is a chilled-water coil's; an EC 
   assert.equal(ef({}), undefined, "no box of the group checked: nothing filled in");
   assert.equal(ef({ "ACCESSORIES ROOF CURB": "14 IN" }), undefined, "not a checkbox group");
 });
+
+test("dev 5: a unit's row in the table that continues its schedule prints the rest of its columns, cited there", () => {
+  // 061_IA AHU-A: the return fan prints in the first table, the supply fan
+  // and the final filter in CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.).
+  const item = row("AHU-A", "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE", {
+    DESIGNATION: "AHU-A", "TOTAL AIRFLOW (CFM)": "60,000", "RETURN FAN QUANTITY": "4", "RETURN FAN VOLTS/Ø": "460/3", "RETURN FAN MOTOR NOMINAL HP(EACH)": "15",
+  });
+  const cont = (rows: Array<{ key: string; cells: Record<string, string> }>) => ({
+    headers: Object.keys(item.cells),
+    continuation: [{ title: "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)", headers: ["DESIGNATION", "SUPPLY FAN QUANTITY", "SUPPLY FAN VOLTS/Ø", "SUPPLY FAN MOTOR NOMINAL HP(EACH)", "FINAL FILTER ASHRAE MERV RATING"], rows }],
+  });
+  const line = { key: "AHU-A", cells: { DESIGNATION: "AHU-A", "SUPPLY FAN QUANTITY": "6", "SUPPLY FAN VOLTS/Ø": "480/3", "SUPPLY FAN MOTOR NOMINAL HP(EACH)": "20", "FINAL FILTER ASHRAE MERV RATING": "13" } };
+  const n = normalizeCompileItem(item, "AHU", cont([line]));
+  const v = values(n);
+  assert.deepEqual([v.supply_fan_qty, v.supply_fan_hp, v.filter_merv, v.volts, v.return_fan_hp], [6, 20, 13, 480, 15]);
+  assert.equal(n.attributes.supply_fan_hp.cite.table_title, "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)");
+  assert.equal(n.attributes.return_fan_hp.cite.table_title, "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE");
+  // Two lines for the unit, or none: nothing is read from the continuation.
+  assert.equal(values(normalizeCompileItem(item, "AHU", cont([line, { ...line, cells: { ...line.cells, "SUPPLY FAN QUANTITY": "4" } }]))).supply_fan_hp, undefined);
+  assert.equal(values(normalizeCompileItem(item, "AHU", cont([{ ...line, key: "AHU-B" }]))).supply_fan_hp, undefined);
+  assert.equal(values(normalizeCompileItem(item, "AHU", cont([]))).volts, 460);
+});

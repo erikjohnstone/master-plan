@@ -4,7 +4,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { applyAssemblies, instancesOf, printedPointRows, servingAirHandlers, tableContextOf, type CompiledItem, type CompiledProject } from "../../src/lib/assemblies/apply.ts";
+import { applyAssemblies, compiledRowsAndTables, continuedTitle, instancesOf, printedPointRows, servingAirHandlers, tableContextOf, type CompiledItem, type CompiledProject } from "../../src/lib/assemblies/apply.ts";
 import { assembliesReport } from "../../src/lib/assemblies/report.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
@@ -186,6 +186,35 @@ test("the table context is read once per table and joins every part the compile 
   assert.deepEqual(ctx?.notes, [{ id: "1", text: "PROVIDE WITH VFD." }]);
   assert.equal(ctx?.rows?.length, 1);
   assert.equal(tableContextOf({ sheet_id: "s#9", table_title: "FAN SCHEDULE" }, tables), null);
+});
+
+test("dev 5: a schedule continued in a second table (\"… (CONT.)\") is kept for the unit rows it continues", () => {
+  // 061_IA page 58: the compile claims CUSTOM OUTDOOR AIR HANDLING UNIT
+  // SCHEDULE; AHU-A's supply fan and final filter print in CUSTOM AIR
+  // HANDLING UNIT SCHEDULE (CONT.) below it, which it does not claim.
+  const cells = (o: Record<string, string>) => Object.fromEntries(Object.entries(o).map(([h, text]) => [h, { text }]));
+  const graph = { tables: [
+    { sheet: "s#58", title: { text: "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE" }, headers: ["DESIGNATION", "RETURN FAN VOLTS/Ø"], region: [0, 0, 100, 40] as [number, number, number, number],
+      rows: [{ key: "AHU-A", cells: cells({ DESIGNATION: "AHU-A", "RETURN FAN VOLTS/Ø": "460/3" }) }] },
+    { sheet: "s#58", title: { text: "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)" }, headers: ["DESIGNATION", "SUPPLY FAN VOLTS/Ø"], region: [0, 50, 60, 90] as [number, number, number, number],
+      rows: [{ key: "AHU-A", cells: cells({ DESIGNATION: "AHU-A", "SUPPLY FAN VOLTS/Ø": "480/3" }) }] },
+    // Not a continuation: its row is no row of the claimed table, or its title shares no words.
+    { sheet: "s#58", title: { text: "HUMIDIFIER SCHEDULE (CONT.)" }, headers: ["TAG"], rows: [{ key: "AHU-A", cells: cells({ TAG: "AHU-A" }) }] },
+    { sheet: "s#58", title: { text: "AIR HANDLING UNIT SCHEDULE (CONTINUED)" }, headers: ["TAG"], rows: [{ key: "AHU-B", cells: cells({ TAG: "AHU-B" }) }] },
+    { sheet: "s#59", title: { text: "AIR HANDLING UNIT SCHEDULE (CONT.)" }, headers: ["TAG"], rows: [{ key: "AHU-A", cells: cells({ TAG: "AHU-A" }) }] },
+  ] };
+  const compiled = { categories: { AHU: { items: [{ tag: "AHU-A", sheet_id: "s#58", table_title: "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE", cells: { "RETURN FAN VOLTS/Ø": { text: "460/3", bbox: null } } }] } } };
+  const { tables } = compiledRowsAndTables(compiled, graph);
+  assert.deepEqual(tables.map((t) => [t.title, t.continues ?? null]), [
+    ["CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE", null],
+    ["CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)", "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE"],
+  ]);
+  const ctx = tableContextOf({ sheet_id: "s#58", table_title: "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE" }, tables);
+  assert.equal(ctx?.continuation?.[0]?.title, "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)");
+  assert.deepEqual(ctx?.headers, ["DESIGNATION", "RETURN FAN VOLTS/Ø"], "the continuation's headers are its own");
+  for (const [title, base] of [["AHU SCHEDULE (CONT.)", "AHU SCHEDULE"], ["FAN SCHEDULE CONT'D", "FAN SCHEDULE"], ["PUMP SCHEDULE - CONTINUED", "PUMP SCHEDULE"], ["PUMP SCHEDULE", null], ["CONTROL SCHEDULE", null]] as const) {
+    assert.equal(continuedTitle(title), base, title);
+  }
 });
 
 test("D6: a printed points list the BAS points compile maps to a unit replaces its typical's point lines, and the report says so", () => {

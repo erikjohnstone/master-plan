@@ -1819,7 +1819,7 @@ normalizer's rules):**
 - 061_IA's air handler continues in a second table ("… (CONT.)") that the
   compile does not claim: its supply fan's HP and quantity and its final
   filter (3 missed), and 1 wrong, the return fan's 460 V read as the unit's
-  where the continuation prints the supply fan's 480 V.
+  where the continuation prints the supply fan's 480 V. (FIXED by AS-32.)
 - 28_WA's STARTER BY E.C. checks are drawn marks the text layer does not
   carry: 3 values.
 - Readings the row does not state: 06_MO's VRF ceiling cassettes cool by DX
@@ -1833,3 +1833,41 @@ key-work/*.transcription.txt printed four header lines of two held-out keys
 crops; no attribute value). No rule uses them; the format was taken from
 the eval script's own parser. Key-work lookups now name the dev files
 explicitly.
+
+## AS-32 — a schedule continued in a second table loses the unit's other columns (FIXED — this goal, the apply path)
+
+**Found:** 2026-09-27, reading dev 5's misses (AS-31). 061_IA prints its air
+handler's schedule in two tables on M601 (page 58): CUSTOM OUTDOOR AIR
+HANDLING UNIT SCHEDULE, and below it CUSTOM AIR HANDLING UNIT SCHEDULE
+(CONT.), which prints AHU-A's supply fans and final filter. The sheet graph
+extracts both tables; the compile claims the first only, so the normalizer
+never read the second: 3 missed values and 1 wrong (the return fan's 460 V
+read as the unit's, where the continuation prints the supply fan's 480 V).
+The key keys the continuation as the schedule's part 2 under its printed
+title, which the scorer already scopes.
+
+**Fixed (apply.ts, normalize.ts; extraction untouched):** a graph table
+titled as a continuation ("… (CONT.)", "(CONTINUED)", "CONT'D", "-
+CONTINUED") that the compile does not claim is kept when its title, less the
+mark, shares its words with exactly one claimed table on the same sheet whose
+rows hold every row it prints. The table context carries it, and the
+normalizer reads the unit's one row there as its own columns, each value
+cited to the continuation's title; a header the first table prints too stays
+the first table's, and two lines for the unit, or none, add nothing. A
+continuation is no "other table" for the first table's notes. Tests on both
+halves (apply.test.ts, normalize.test.ts), with negative controls: a row the
+claimed table lacks, a title sharing no words, another sheet.
+
+**Measured:**
+- Dev 5: 503 of 561 exact (89.7%), 0 wrong, 58 missed, 0 invented (cached
+  snapshots; 061_IA re-snapshotted through the new path: its items, pages,
+  points lists and control packets are byte-identical, and one table is
+  added).
+- Of the 86 cached documents only 061_IA prints a continuation the rule
+  keeps; 004_MO's KITCHEN HOOD SCHEDULE (CONT.) continues a table the compile
+  does not claim, and is left out. The five changed values (AHU-A's volts 460
+  → 480 and its phase's cite, six supply fans of 20 hp, a MERV 13 final
+  filter) each match the print, and no row's notes change.
+- Dev through dev 4 unchanged; control intent replays identically (its dev
+  documents and the unseen audit); the key-free sweeps show the same 12
+  flags and 3 more values.
