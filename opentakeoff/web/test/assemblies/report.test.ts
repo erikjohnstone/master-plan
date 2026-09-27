@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies, type CompiledItem } from "../../src/lib/assemblies/apply.ts";
 import type { NormalizedItem } from "../../src/lib/assemblies/normalize.ts";
-import { assembliesReport, exceptionGroups } from "../../src/lib/assemblies/report.ts";
+import { assembliesReport, exceptionGroups, familiesLeftOut } from "../../src/lib/assemblies/report.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
 
@@ -100,6 +100,19 @@ test("exception groups: rows under one typical whose same options wait are one g
   const chosen = exceptionGroups(assembliesReport(r.instances, r.applications, r.lines).exceptions).find((x) => x.assembly?.startsWith("ahu-constant-volume@"));
   assert.ok(chosen, "the chosen typical's rows wait together");
   assert.deepEqual([chosen.options, chosen.units.map((u) => [u.tag, u.selected_by])], [["economizer"], [["AHU-1", "user"], ["AHU-2", "user"]]]);
+});
+
+test("a narrowed reply names the families that leave units out (AS-51)", () => {
+  // AHU-7 is scheduled as an air handler and applies as DOAS (100% outdoor air).
+  const items = [row("AHU", "AHU-1", 0), row("AHU", "AHU-7", 1), row("PUMP", "P-1", 2)];
+  const normalized = [norm(items[0], { supply_cfm: 9000, oa_cfm_min: 1500 }),
+    norm(items[1], { supply_cfm: 9000, oa_cfm_min: 9000, energy_recovery: "none", cooling_type: "chw" }), norm(items[2])];
+  const { instances } = applyAssemblies({ project: { items }, library: LIB, normalized });
+  assert.deepEqual(instances.map((i) => [i.tag, i.compiled_family, i.family]).sort(), [["AHU-1", "AHU", "AHU"], ["AHU-7", "AHU", "DOAS"], ["P-1", "PUMP", "PUMP"]]);
+  assert.deepEqual(familiesLeftOut(instances, ["AHU"]), [{ family: "AHU", why: "1 unit scheduled as AHU applies as DOAS (AHU-7); name DOAS too to see it" }]);
+  assert.deepEqual(familiesLeftOut(instances, ["AHU", "DOAS"]), []);
+  assert.deepEqual(familiesLeftOut(instances, ["PUMPS"]), [{ family: "PUMPS", why: "no unit applies as PUMPS (the families here: AHU, DOAS, PUMP)" }]);
+  assert.deepEqual(familiesLeftOut(instances, ["PUMP", "DOAS"]), [], "DOAS is asked for by its applied family");
 });
 
 test("exception groups: the rows of a table that prints no title are one untitled schedule", () => {

@@ -1076,7 +1076,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       library_path: z.string().optional().describe(libraryPathDesc),
       settings: assembliesSettings,
       overrides: assembliesOverrides,
-      families: z.array(z.string()).optional().describe("Only these (applied) families in the reply, e.g. ['VAV','AHU']"),
+      families: z.array(z.string()).optional().describe("Only these (applied) families in the reply, e.g. ['VAV','AHU']; one that leaves units out (no unit applies as it, or units scheduled as it apply as another family, as a 100% outdoor-air AHU applies as DOAS) comes back in families_left_out"),
       detail: z.enum(["summary", "units", "lines"]).optional().describe("summary (default), units, or lines"),
       path: z.string().optional().describe("Optional JSON file for the full result"),
       export_dir: z.string().optional().describe("Optional directory for the CSV set (eight CSV files and assemblies.pdf, the whole project's)"),
@@ -1102,6 +1102,7 @@ No approval, installed count or complete requirement discovery. Changes stay in 
       ...(full.overrides_unmatched ? { overrides_unmatched: full.overrides_unmatched } : {}),
       ...(full.overrides_ignored ? { overrides_ignored: full.overrides_ignored } : {}),
       ...(full.settings_unread ? { settings_unread: full.settings_unread } : {}),
+      ...(full.families_left_out ? { families_left_out: full.families_left_out } : {}),
     };
     const { mkdir, writeFile } = await import("node:fs/promises");
     let exported: { dir: string; files: string[] } | undefined;

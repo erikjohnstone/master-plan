@@ -193,7 +193,7 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   // An override with a reason is a user choice on the record. One no unit
   // takes is named with why, never kept silently (AS-45), and so is what one
   // sets that the unit's typical has not (AS-49).
-  const o = await call(client, "apply_assemblies", { detail: "units", families: ["AHU"], overrides: [
+  const o = await call(client, "apply_assemblies", { detail: "units", families: ["AHU", "AHUS"], overrides: [
     { tag: "AHU-1", layer: "controls", reason: "test", options: { ufc_minimum_points: true, economiser: true }, variables: { no_such_variable: 3 } },
     { tag: "AHU-99", reason: "a typo", exclude: true },
     { tag: "AHU-1", family: "PUMP", reason: "another family", exclude: true },
@@ -210,5 +210,9 @@ test("PARITY: apply_assemblies over MCP and the browser's apply of the wire proj
   assert.deepEqual(o.data.overrides_ignored.map((x) => [x.tag, x.layer, x.options, x.variables]), [["AHU-1", "controls", ["economiser"], ["no_such_variable"]]]);
   assert.equal(o.data.overrides_ignored[0].why, `${oa.assembly} has no option economiser, variable no_such_variable`);
   assert.equal(only.data.overrides_ignored, undefined, "absent when every part applies");
+  // A family the reply is narrowed to that no unit applies as is named (AS-51).
+  assert.deepEqual(o.data.families_left_out.map((f) => f.family), ["AHUS"]);
+  assert.match(o.data.families_left_out[0].why, /^no unit applies as AHUS \(the families here: .*\bAHU\b/);
+  assert.equal(only.data.families_left_out, undefined, "absent when every family asked for has its units");
   await client.close();
 });

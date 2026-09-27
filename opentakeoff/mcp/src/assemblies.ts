@@ -15,7 +15,7 @@ import starterHookups from "../../web/src/lib/assemblies/starter/us-hookups-v1.j
 import { applyAssemblies, compiledProjectOf, type BasPointsCompile, type CompiledProject, type HvacCompile } from "../../web/src/lib/assemblies/apply.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { ignoredOverrideParts, unmatchedOverrides, unreadSettings } from "../../web/src/lib/assemblies/expand.ts";
-import { assembliesReport, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
+import { assembliesReport, familiesLeftOut, type AssembliesReport } from "../../web/src/lib/assemblies/report.ts";
 import { assembliesCsvSet, type ExportFile } from "../../web/src/lib/assemblies/exportSet.ts";
 import { libraryFromCsv } from "../../web/src/lib/assemblies/libraryCsv.ts";
 import { settingsWithPresets } from "../../web/src/lib/assemblies/presets.ts";
@@ -225,6 +225,9 @@ export interface ApplyAssembliesResult {
   /** The settings no part of the library reads, each with why (AS-50);
    * absent when every one is read. */
   settings_unread?: Array<{ key: string; why: string }>;
+  /** The families the reply was narrowed to that leave units out, each
+   * with why (AS-51); absent when none does. */
+  families_left_out?: Array<{ family: string; why: string }>;
 }
 
 // ── Project questions (Track A): the Session's answer journal ──────────────
@@ -334,6 +337,8 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
   // And a setting no part of the library reads (AS-50).
   const unread = unreadSettings(library, settings);
   const want = opts.families?.length ? new Set(opts.families) : null;
+  // A family the reply is narrowed to that leaves units out is named (AS-51).
+  const leftOut = want ? familiesLeftOut(instances, [...want]) : [];
   const inst = want ? instances.filter((i) => want.has(i.family)) : instances;
   const apps = want ? applications.filter((a) => want.has(a.instance.family)) : applications;
   const lns = want ? lines.filter((l) => want.has(l.family)) : lines;
@@ -359,5 +364,6 @@ export async function applyAssembliesToSession(session: Session, opts: ApplyAsse
     ...(unmatched.length ? { overrides_unmatched: unmatched } : {}),
     ...(ignored.length ? { overrides_ignored: ignored } : {}),
     ...(unread.length ? { settings_unread: unread } : {}),
+    ...(leftOut.length ? { families_left_out: leftOut } : {}),
   };
 }

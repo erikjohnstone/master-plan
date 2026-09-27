@@ -1,5 +1,16 @@
 # Changelog
 
+- **Assemblies: a narrowed reply names the families that leave units out.**
+  `apply_assemblies` narrows its reply to the families units apply as.
+  A family no unit applies as (a typo such as `AHUS`) returned an empty
+  reply, and units scheduled as one family that apply as another were
+  left out without a word: over the 98 cached documents, 12 units on 8
+  documents (split heat pumps apply as condensing units, 100% outdoor-air
+  air handlers and a rooftop unit as DOAS, gas-fired fan coils as
+  furnaces). Such families now come back under `families_left_out`, each
+  with why and the units it leaves out (`web/src/lib/assemblies/report.ts`
+  `familiesLeftOut`, ASSEMBLIES_BUG_CATALOGUE AS-51).
+
 - **Assemblies: a setting no part of the library reads is named.** Settings are
   read by id: a project variable by the typicals that take it from the
   project, a partner default by an option or variable of that id, a hook-up

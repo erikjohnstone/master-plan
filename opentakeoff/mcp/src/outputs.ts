@@ -1880,6 +1880,8 @@ export const applyAssembliesOutput = {
     .describe("What overrides that fit a unit set and no record takes, each with why: the options and variables its typical has not (a typo; a typical chosen without them), any while the unit has no typical (none chosen yet, or out of scope), or an override another for the same unit and layer decides (options and variables then list all of it). The rest of each override applied; one an exclusion sets aside is not listed"),
   settings_unread: z.array(z.object({ key: z.string(), why: z.string() })).optional()
     .describe("The settings no part of the library reads, each with why: a project variable no typical takes from the project, a partner default for an id no typical has (or not true or false, for an option), a hook-up switch no line names, or a responsibility edit for a role no line has or an activity or party the matrix does not know. They changed nothing"),
+  families_left_out: z.array(z.object({ family: z.string(), why: z.string() })).optional()
+    .describe("The families the reply was narrowed to that leave units out, each with why: one no unit applies as, or units scheduled as one that apply as a family not named (a 100% outdoor-air AHU applies as DOAS). Only the reply was narrowed; the application is whole"),
   path: z.string().optional(),
   export_dir: z.object({ dir: z.string(), files: z.array(z.string()), scope: z.string().optional() }).optional(),
   answers: z.object({

@@ -181,3 +181,26 @@ export function exceptionGroups(exceptions: readonly UnitRow[]): ExceptionGroup[
   }
   return [...groups.values()].filter((g) => g.units.length > 1);
 }
+
+/** The families a reply is narrowed to that leave units out, each with why,
+ * so a narrowed reply never drops them without a word (AS-51): one no unit
+ * applies as (a typo, or a family the set has none of), and units scheduled
+ * as one that apply as a family the narrowing does not name (a 100%
+ * outdoor-air air handler applies as DOAS). */
+export function familiesLeftOut(instances: readonly Pick<AppliedInstance, "tag" | "family" | "compiled_family">[], families: readonly string[]): Array<{ family: string; why: string }> {
+  const asked = new Set(families);
+  const here = [...new Set(instances.map((i) => i.family))].sort();
+  const out: Array<{ family: string; why: string }> = [];
+  for (const f of asked) {
+    const moved = instances.filter((i) => i.compiled_family === f && !asked.has(i.family));
+    if (!moved.length) {
+      if (!instances.some((i) => i.family === f)) out.push({ family: f, why: here.length ? `no unit applies as ${f} (the families here: ${here.join(", ")})` : `no unit applies as ${f}: the set has none` });
+      continue;
+    }
+    const as = [...new Set(moved.map((i) => i.family))].sort();
+    const tags = moved.map((i) => i.tag);
+    const one = moved.length === 1;
+    out.push({ family: f, why: `${one ? "1 unit" : `${moved.length} units`} scheduled as ${f} ${one ? "applies" : "apply"} as ${as.join(", ")} (${tags.slice(0, 6).join(", ")}${tags.length > 6 ? ", …" : ""}); name ${as.join(" and ")} too to see ${one ? "it" : "them"}` });
+  }
+  return out;
+}

@@ -207,7 +207,10 @@ One listed in `overrides_ignored` applied in part: the options and variables it 
 unit's typical's (check the ids against the record's own), or wait for a typical, or another
 override for the unit decides. Correct them before you report them as applied.
 A key listed in `settings_unread` changed nothing: no part of the library reads it. Correct it
-(a unit's record names its typical's options and variables) before you report it as applied. `control_readings` reads the control
+(a unit's record names its typical's options and variables) before you report it as applied.
+`families` narrows the reply to the families units apply as. A family in `families_left_out` left
+units out: no unit applies as it, or units scheduled as it apply as another (a 100% outdoor-air
+air handler as DOAS). Name that family too before you report a count. `control_readings` reads the control
 drawings bound to each unit (sequences, schematics, points lists): a reading applies only where two
 readers agree or on a phrase that states it outright (a unit printed standalone); one reader alone
 is a proposal, and readers that disagree leave the option unresolved. A zone plan (a sheet whose

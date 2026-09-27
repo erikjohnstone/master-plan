@@ -3028,3 +3028,38 @@ it):**
 - assembliesApply.test.mjs: a call with a typo'd partner default and switch
   names both and keeps the report's totals, and the call with the starter's
   hook-up defaults and the kit-maker preset carries no settings_unread.
+
+## AS-51 — a reply narrowed by family left units out without a word: a typo'd family, units that apply as another (FIXED — this goal)
+
+**Found:** 2026-09-27, following AS-45, AS-49 and AS-50 to apply_assemblies'
+own inputs. `families` narrows the reply to units by the family they apply
+as, which the engine may derive. A family no unit applies as (an agent's
+"AHUS" for "AHU") returned a report with no units and no word. Units
+scheduled as one family that apply as another were left out of a reply
+narrowed to their schedule's family, also without a word. Over the 98
+cached documents, 12 units on 8 documents apply as another family than
+their schedule's: 6 split heat pumps as condensing units (14_OR, 18_OR),
+3 air handlers with 100% outdoor air as DOAS (009_FL, 01_NY, 094_FL), 2
+gas-fired fan coils as furnaces (062_ID, itd-d1-lab) and a rooftop unit as
+DOAS (004_MO). `families: ["AHU"]` on 009_FL left out AHU-2.
+
+**Fix (report.ts, the shared path; MCP renders it):**
+- **The shared check:** familiesLeftOut names each family the reply is
+  narrowed to that leaves units out, with why: "no unit applies as AHUS
+  (the families here: …)", or "1 unit scheduled as AHU applies as DOAS
+  (AHU-2); name DOAS too to see it". A family asked for alongside the one
+  its units apply as is not named.
+- **MCP:** apply_assemblies returns these under families_left_out. The
+  field is absent when every family asked for has its units, and the
+  `families` description names it.
+- **Unchanged:** the application, which is whole whatever the reply shows,
+  and every record and line. The panel has no family narrowing.
+
+**Tests:**
+- report.test.ts: an air handler with 100% outdoor air applies as DOAS.
+  Narrowing to AHU names it; narrowing to AHU and DOAS does not; a typo'd
+  family is named with the families present; a family and the DOAS
+  family asked for by their applied names are not named.
+- assembliesApply.test.mjs: narrowing to AHU and "AHUS" names "AHUS" alone,
+  with federal-mech's families. The call narrowed to AHU alone carries no
+  families_left_out.
