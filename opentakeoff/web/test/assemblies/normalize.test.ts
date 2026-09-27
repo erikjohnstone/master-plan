@@ -1178,3 +1178,17 @@ test("dev 5: a unit's row in the table that continues its schedule prints the re
   assert.equal(values(normalizeCompileItem(item, "AHU", cont([{ ...line, key: "AHU-B" }]))).supply_fan_hp, undefined);
   assert.equal(values(normalizeCompileItem(item, "AHU", cont([]))).volts, 460);
 });
+
+test("unseen census (AS-28's class): a group named WATER FLOW DATA does not make its WPD a flow", () => {
+  // 077_MT HP-1A, a water-to-air heat pump (unseen): FLOW (GPM) and WPD (FT)
+  // under WATER FLOW DATA. The WPD read as a second flow left the flow unknown.
+  const hp = values(normalizeCompileItem(row("HP-1A", "WATER-TO-AIR HEAT PUMP SCHEDULE", {
+    "AIRFLOW DATA AIRFLOW (CFM)": "941", "WATER FLOW DATA FLOW (GPM)": "7.5", "WATER FLOW DATA WPD (FT)": "4.6",
+    "COOLING EWT / LWT (°F)": "85.0 / 95.7", "HEATING EWT / LWT (°F)": "65.0 / 56.9",
+  }), "HEAT_PUMP"));
+  assert.deepEqual([hp.source_gpm, hp.source_wpd_ft], [7.5, 4.6]);
+  assert.equal(hp.source_ewt_f, undefined, "cooling and heating modes enter at different temperatures: not one value");
+  assert.deepEqual(quantitiesOf(headerText("WATER FLOW DATA WPD (FT)")), ["wpd"]);
+  assert.ok(quantitiesOf(headerText("CHILLED WATER FLOW")).includes("waterflow"));
+  assert.ok(!quantitiesOf(headerText("HOT WATER FLOW TEMP")).includes("waterflow"));
+});

@@ -376,7 +376,10 @@ export function quantitiesOf(h: string): Quantity[] {
   // pressure), a minimum outside air.
   const primaryAir = /\bPRIMARY\s+AIR\b/.test(h) && !/\bSIZE\b|\bDIA|\bINLET\b|\bTEMP|\bS\.?P\b|\bPRESS|\bVELOCITY\b|\bDUCT\b/.test(h);
   if ((/\bCFM\b|\bAIR\s?FLOWS?\b|\bAIR\s+QUANTIT(?:Y|IES)\b|\bDESIGN\s+QUANTITIES\b/.test(h) || primaryAir || /\bMIN(?:IMUM)?\s+(?:OA|OSA|OUTSIDE\s+AIR|OUTDOOR\s+AIR)$/.test(h)) && !/\bDIRECTION\b/.test(h)) q.push("airflow");
-  if (/\bGPM\b|\bGPH\b/.test(h) || (/\bFLOW\b/.test(h) && !/\bAIR\s?FLOW|CFM|LBHR|CFH|STEAM\b/.test(h) && /\b(?:WATER|FLUID|HW|CHW|COIL|HEATING|COOLING|PUMP|BOILER|CAPACITY|CIRCULATING|EVAPORATOR|CONDENSER)\b|^FLOW$/.test(h))) q.push("waterflow");
+  // FLOW in a group's name ("WATER FLOW DATA WPD (FT)") is no flow where the
+  // header names another quantity of that water.
+  if (/\bGPM\b|\bGPH\b/.test(h) || (/\bFLOW\b/.test(h) && !/\bAIR\s?FLOW|CFM|LBHR|CFH|STEAM\b/.test(h) && /\b(?:WATER|FLUID|HW|CHW|COIL|HEATING|COOLING|PUMP|BOILER|CAPACITY|CIRCULATING|EVAPORATOR|CONDENSER)\b|^FLOW$/.test(h)
+    && !/\bW?PD\b|\bP\s?D\b|\bPRESS(?:URE)?\b|\bDROP\b|\bHEAD\b|\bSIZE\b|\bTEMP|\bEWT\b|\bLWT\b|\bVELOCITY\b|\bFTWC\b|\bINWC\b/.test(h))) q.push("waterflow");
   const water = /\b(?:WATER|WTR)\b/.test(h);
   // A water side's INLET / OUTLET TEMP ("HOT SIDE INLET TEMP (ºF)").
   const waterSide = water || /\b(?:HOT|COLD|PRIMARY|SECONDARY|SHELL|TUBE)\s+SIDE\b|\bFLUID\b/.test(h);

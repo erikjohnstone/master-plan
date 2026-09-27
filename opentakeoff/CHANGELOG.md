@@ -1,5 +1,16 @@
 # Changelog
 
+- **A water flow group's pressure drop is no second flow.** In a schedule
+  whose water columns sit under a group named for the flow ("WATER FLOW DATA
+  / FLOW (GPM)" beside "WPD (FT)"), the pressure drop column was also read as
+  a flow, so the two disagreed and the unit's flow stayed unknown. The shared
+  normalizer (`web/src/lib/assemblies/normalize.ts`) now reads FLOW in a
+  group's name as no flow where the header names a pressure drop, head,
+  temperature or size. Found by a census of the unseen corpus's unread
+  columns; the eight changed values are water-to-air heat pumps' source
+  flows, each checked against the print (ASSEMBLIES_BUG_CATALOGUE AS-32
+  addendum).
+
 - **Assemblies read a schedule continued in a second table.** When a
   schedule runs on in a second table titled as its continuation ("CUSTOM AIR
   HANDLING UNIT SCHEDULE (CONT.)" under "CUSTOM OUTDOOR AIR HANDLING UNIT

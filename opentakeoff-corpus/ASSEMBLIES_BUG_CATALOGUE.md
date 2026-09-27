@@ -1871,3 +1871,17 @@ claimed table lacks, a title sharing no words, another sheet.
 - Dev through dev 4 unchanged; control intent replays identically (its dev
   documents and the unseen audit); the key-free sweeps show the same 12
   flags and 3 more values.
+
+**Addendum, an unseen census after AS-32 (AS-28's evidence class):** a
+fresh census of the columns the normalizer leaves unread on the 31 eligible
+unseen documents with a snapshot (the unseen audit's eligibility: 139 rows,
+2,065 non-empty cells, 1,659 unread, nearly all manufacturers, models,
+grilles, louvers and compressors, which the schema does not keep) found one
+misread. A group named WATER FLOW DATA made its WPD (FT) column a second
+water flow, so 077_MT's eight water-to-air heat pumps left their source
+flow unknown. FLOW in a group's name is now no flow where the header names
+a pressure drop, head, temperature or size of that water; the 8 source
+flows each match the print, and no dev tier changes. The disagreeing
+columns left on those documents are genuine: a heat pump's cooling and
+heating modes enter at different temperatures, and a condensing unit's
+compressor and condenser fan motors are two motors.
