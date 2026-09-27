@@ -1,5 +1,16 @@
 # Changelog
 
+- **Process note: the counts behind the last four assemblies fixes are
+  recounted without the held-out drafters' documents.** The censuses and A/Bs
+  of AS-35 to AS-38 read a scratch snapshot cache that also holds the seven
+  documents corpus hygiene withholds because a held-out firm drew them, and
+  they counted a copy of one unseen set twice. They printed a few lines from
+  three of those documents (tags, typicals, table titles). No rule, test or
+  key came from them, and one example taken from one is struck. Recounted on
+  98 documents and 3,163 records, the same 12 and 4 records change. Every
+  census now filters those documents
+  (ASSEMBLIES_BUG_CATALOGUE AS-39).
+
 - **An air handler's own fans, scheduled in a fan schedule, no longer take a
   fan typical of their own.** A schedule of an air handler's supply and
   return fans whose LOCATION column names the air handler ("SF-4A, LOCATION:
@@ -9,7 +20,7 @@
   SERVICE or SYSTEM names a scheduled air handler as part of it; it now reads
   the fan's location the same way, as the binder already did. A fan whose
   location is a room, or equipment the set does not schedule, keeps its
-  typical. Across every cached document, 4 of 3,489 records change (096_IN's
+  typical. Across the 98 cached documents, 4 of 3,163 records change (096_IN's
   SF-4A/B and RF-4A/B), and the control-intent replays are unchanged
   (ASSEMBLIES_BUG_CATALOGUE AS-38).
 
@@ -23,7 +34,7 @@
   it as the system's outdoor unit (`CONDENSING_UNIT`, derived from
   `HEAT_PUMP`, rule `derive.family.split_outdoor`), which carries no typical
   of its own, as the answer keys read every condensing unit. A packaged heat
-  pump keeps its typical. Across every cached document, 12 of 3,489 records
+  pump keeps its typical. Across the 98 cached documents, 12 of 3,163 records
   change: 14_OR's HP-01 and HP-02 and 18_OR's HP-1 to HP-4 each drop the
   heat-pump typical and the heat-pump hook-up, whose hose kit needs a
   source-water flow an air-to-air unit does not have (it held one note line).

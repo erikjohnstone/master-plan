@@ -2121,12 +2121,14 @@ normalizer with the row's table by withProject, which the apply and the
 attribute eval both read rows through (it replaces the two copies of the
 drive-schedule context they each built).
 
-**Census (scratch census3/paired-rows.mjs, 99 documents: every dev tier, the
-unseen snapshots, the sweep):** 10 rows make units of two families. 5 are a
-fan coil or furnace with its condensing unit (the rule as it was), 3 an AHU
-with its heat pump and 1 an ERU with its heat pump (18_OR), and 089_FL's HP-2
-is compiled under two families from one row with one tag, which is the compile's
-question, not this rule's.
+**Census (scratch census3/paired-rows.mjs, 98 documents: every dev tier, the
+unseen snapshots and the sweep, without the held-out drafters' documents;
+AS-39):** 10 rows make units of two families, 8 once 062_ID, a dev twin of
+itd-d1-lab, is not counted again. 3 are a fan coil or furnace with its
+condensing unit (the rule as it was), 3 an AHU with its heat pump and 1 an
+ERU with its heat pump (18_OR), and 089_FL's HP-2 is compiled under two
+families from one row with one tag, which is the compile's question, not this
+rule's.
 
 **Measured:** on every cached document, 5 values change, all in 18_OR, all
 removals (the three electric heats, the 10,000 CFM, the 1.63 HP). The values
@@ -2205,8 +2207,9 @@ choice of typical still wins. Two shapes, each from its own evidence:
   no airflow ("CFM -"), and the indoor units' rows print theirs (FC-01 389).
   All three must hold.
 
-**Measured:** across the 106 cached documents (every dev tier, the unseen
-snapshots, the sweep), 12 of 3,489 records change, with the production
+**Measured:** across 98 cached documents (every dev tier, the unseen
+snapshots and the sweep, without the held-out drafters' documents; AS-39),
+12 of 3,163 records change, with the production
 library (the typicals and the hook-ups), each the intended one: 14_OR's
 HP-01 and HP-02 and 18_OR's HP-1 to HP-4 drop heat-pump@1 (11 lines each) and
 hookup-heat-pump@1 (one note line each: its hose kit needs a source-water
@@ -2228,16 +2231,17 @@ showing each heat pump as "CONDENSING_UNIT (from HEAT_PUMP)" with its basis.
 
 **Considered, not done:** a row that stacks its two tags with no separator
 ("AHU-1 HP-1" rather than "AHU-1, HP-1") would not pair, since the pairing
-splits on "/", ",", "&" and "AND". No cell in the 106 cached documents prints
+splits on "/", ",", "&" and "AND". No cell in the 98 cached documents prints
 two kinds of tag with only whitespace between them (scratch
 census3/ws-pairs.mjs), so the separators stay as they are.
 
 **OPEN:**
 - **Separately scheduled outdoor units the rule does not reach.** 09_ME's
   MULTI-SPLIT HEAT PUMP OUTDOOR UNIT schedule (SCU-1) beside its INDOOR UNIT
-  schedule (SAC-1), 25_WA's VRF OUTDOOR HEAT PUMP schedule (HP-30) beside its
-  VRF INDOOR HEAT PUMP schedule, and 015_VA's GATEHOUSE HEAT PUMP (an OUTDOOR
-  group) still take heat-pump@1. Linking them to their indoor units needs a
+  schedule (SAC-1) and 25_WA's VRF OUTDOOR HEAT PUMP schedule (HP-30) beside
+  its VRF INDOOR HEAT PUMP schedule still take heat-pump@1. (A third example
+  first listed here came from a held-out drafter's document and is struck;
+  AS-39.) Linking them to their indoor units needs a
   printed link (a SYSTEM or SERVED BY column, a title pair), and VRF indoor
   units compiled as HEAT_PUMP take a heat pump's compressor and heating mode
   that a VRF indoor unit does not have. Both are library-scope decisions
@@ -2258,8 +2262,9 @@ census3/ws-pairs.mjs), so the separators stay as they are.
 ## AS-38 — an air handler's own fans, scheduled apart, each took a fan typical beside the air handler's (FIXED — this goal)
 
 **Found:** 2026-09-27, by a census of units another unit's row names as its
-component (scratch census3/components.mjs, 106 cached documents, 31
-mentions). Most are no double count: coils and condensing units a parent row
+component (scratch census3/components.mjs; 26 mentions on 98 cached
+documents, first counted as 31 on 106 with the held-out drafters' documents,
+AS-39). Most are no double count: coils and condensing units a parent row
 names carry no typical, humidifiers with their own control panel are keyed
 with their own typical (itd-d1-lab HUM-1, humidifier), and interlocks name
 separate systems. One shape is: 096_IN (dev 3) schedules AHU-4's fan arrays
@@ -2284,8 +2289,9 @@ tag. The record is not_in_scope, "the fan is located in AHU-4: its points are
 the air handler's", cited to the LOCATION cell, as the SERVICE form already
 was. A user's own choice of typical still wins.
 
-**Measured:** 4 of 3,489 records change across the 106 cached documents
-(typicals and hook-ups), each the intended one (28 lines fewer; a fan takes
+**Measured:** 4 of 3,163 records change across the 98 cached documents
+(typicals and hook-ups; first counted on 106 with the held-out drafters'
+documents, AS-39), each the intended one (28 lines fewer; a fan takes
 no hook-up). 096_IN's SF-1A through SF-3 name DOAS-1 …
 DOAS-3, which the set's compile does not schedule, so they keep their
 typicals: they are the only place those units' fans are counted. The
@@ -2311,7 +2317,67 @@ way: a paired cell joined by "/", "&", "AND" or a bare comma, in either
 order, and a split table titled SPLIT-SYSTEM, MINI-SPLIT or DUCTLESS SPLIT
 whose heat pump row leaves its airflow "-", "--", "N/A" or blank, each read
 as the printed spelling does (normalize.test.ts, apply.test.ts,
-rowReader.test.ts). No record changes on the 106 cached documents, and
+rowReader.test.ts). No record changes on the 98 cached documents, and
 the control-intent dev replays are identical. The UI proof on 096_IN passes
 all 10 checks with the fan rule: 243 records and 3,224 lines byte-identical
 to apply_assemblies, 28 lines fewer than AS-34's run, the four fans' own.
+
+## AS-39 — the censuses of AS-35 to AS-38 read the held-out drafters' documents (PROCESS NOTE; FIXED — this goal)
+
+**Found:** 2026-09-27, while re-reading the corpus hygiene report before a
+control-intent write-up. Corpus hygiene withholds seven documents because a
+held-out firm drew them ("held-out drafter (never tuned on)" in
+reports/control-intent/00-corpus-hygiene.md: 015_VA, 021_XX, 023_US, 034_NC,
+038_NC, 075_MT and 27_WA; CI-16, CI-32). The dev tiers' snapshot cache does
+not hold them, and neither does the unseen one, which is built from the
+unseen audit's eligible sets. The scratch sweep cache, which snapshots every
+corpus set, does. The censuses of AS-35 to AS-38 added that
+cache to widen their reach, and their filter named the held-out sets,
+held-out 2 and its withheld groupmates, but not these seven. (AS-35's
+paired-row census named six of them, all but 075_MT.) 010_US, a copy of an
+unseen set, was counted a second time.
+
+**What was read:** every tool output of this goal, after each document was
+withheld, that names one of them (a search of the session's transcript):
+- The heat pump census (AS-37) printed one line each for 015_VA, 075_MT and
+  27_WA: a heat pump's tag, its typical and its table's title. AS-37's open
+  list named 015_VA's heat pump among the separately scheduled outdoor
+  units. That example is struck.
+- The component census (AS-38) printed five lines. Three were from 075_MT:
+  two heat pumps and an energy recovery unit named by other rows. Two were
+  from 27_WA: a condensing unit named by a fan coil's row.
+- AS-35's column census ran on 075_MT with three other documents. Its lines
+  for 075_MT went to a scratch file and were never displayed; only 18_OR's
+  were read.
+- Every other census and A/B printed only the records that changed, and none
+  of those was in these documents. Their records were counted in the totals.
+
+**What depends on them:** nothing. The rules, tests and cited evidence of
+AS-35 to AS-38 come from 18_OR, 14_OR, 096_IN and 031_MO, with the dev keys
+of bldg5406, itd-d1-lab, baker-county-eoc and 031_MO. AS-37's open item names
+"a SYSTEM or SERVED BY column" as the kind of printed link a separately
+scheduled outdoor unit would need. That item was committed (03:45) before the
+component census displayed 075_MT's rows (03:48). A later rule for a unit
+whose row names its outdoor heat pump needs its own example from a dev or
+eligible unseen document. 075_MT's rows are not one, and no test may use
+them.
+
+**Recounted without them, and without 010_US's second count:** 98 documents
+and 3,163 records (first counted as 106 and 3,489).
+- AS-37: 12 records change, the same twelve (14_OR's HP-01 and HP-02, 18_OR's
+  HP-1 to HP-4).
+- AS-38: 4 records change, the same four (096_IN's SF-4A/B, RF-4A/B).
+- The spellings addendum: no record changes (HEAD against AS-38).
+- AS-38's component census: 26 mentions (first 31; the five above).
+- AS-35's paired-row census: the same 10 rows on 98 documents (first 99).
+  That is 8 distinct printed rows, since 062_ID, a dev twin of itd-d1-lab,
+  repeats two of them.
+- AS-37's whitespace census: no cell, as before.
+AS-35 to AS-38 and the CHANGELOG now give these counts. The pushed commit
+messages of AS-37 and AS-38 keep the first ones.
+
+**Fix:** every scratch census's filter now names the held-out drafters'
+documents and the copy, and the column census, which takes documents by
+name, refuses them. The censuses of AS-28 to AS-34 and both metamorphic
+sweeps read only the dev and unseen caches (86 documents), which do not hold
+these documents, so their counts stand.
