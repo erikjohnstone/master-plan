@@ -174,7 +174,14 @@ export function expandAll(
   const lines: ExpandedLine[] = [];
   for (const inst of sorted) {
     for (const layer of layersFor(inst.family, library)) {
-      const override = overrides.find((o) => o.tag === inst.tag && (o.layer ?? layer) === layer && (!o.assembly || library.some((a) => a.id === o.assembly!.id && (a.applies_to.layer ?? "controls") === layer)));
+      // The unit's override: one naming its family before one naming none
+      // (AS-43), and of those, an exclusion before a choice, wherever each
+      // sits: an excluded unit stays excluded until its exclusion is removed,
+      // its earlier choices kept (AS-44). Otherwise the first, as before.
+      const fits = (o: Override) => o.tag === inst.tag && (!o.family || o.family === inst.family) && (o.layer ?? layer) === layer
+        && (!o.assembly || library.some((a) => a.id === o.assembly!.id && (a.applies_to.layer ?? "controls") === layer));
+      const rank = (o: Override) => (o.family === inst.family ? 0 : 2) + (o.exclude ? 0 : 1);
+      const override = overrides.filter(fits).reduce<Override | undefined>((best, o) => (!best || rank(o) < rank(best) ? o : best), undefined);
       const app = selectAssembly(inst, library, settings, override, layer);
       applications.push(app);
       lines.push(...expandApplication(app, inst, library, settings, evidence[inst.tag]));

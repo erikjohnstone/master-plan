@@ -60,10 +60,14 @@ export interface ProjectSettings {
 }
 
 /** A user's choice for one unit, always with a reason; for one layer, or
- * (with no layer) for every layer an exclusion covers. */
+ * (with no layer) for every layer an exclusion covers. `family` makes it
+ * one unit's where units of two families share the tag (16_NV's furnace,
+ * condensing unit and outdoor air unit are all "B1"); without it, it is
+ * every unit's with the tag. */
 export interface Override {
   tag: string;
   reason: string;
+  family?: string;
   layer?: string;
   exclude?: boolean;
   assembly?: { id: string; version?: string };

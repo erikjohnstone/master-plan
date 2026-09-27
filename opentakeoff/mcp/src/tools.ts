@@ -1061,8 +1061,9 @@ No approval, installed count or complete requirement discovery. Changes stay in 
   const assembliesOverrides = z.array(z.object({
     tag: z.string(),
     reason: z.string().min(1).describe("Why: kept on the record"),
+    family: z.string().optional().describe("The unit's family, as the report names it: where units of two families share the tag, the override is that unit's alone. Omit to cover every unit with the tag"),
     layer: z.string().optional().describe("controls or hookup; omit to cover every layer (an exclusion) or the controls layer"),
-    exclude: z.boolean().optional(),
+    exclude: z.boolean().optional().describe("Take the unit out (the layer given, or every layer). An exclusion wins over the unit's other overrides, which apply again once it is removed"),
     assembly: z.object({ id: z.string(), version: z.string().optional() }).optional(),
     options: z.record(z.string(), z.boolean()).optional(),
     variables: z.record(z.string(), assemblyValue).optional(),

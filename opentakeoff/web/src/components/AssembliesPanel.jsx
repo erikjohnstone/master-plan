@@ -551,6 +551,20 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     if (key(next) !== key(state)) onStateChange?.(next);
   }, [applied]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Tags units of two families share (16_NV's "B1" furnace and condensing
+  // unit): an override names its unit's family, so it is that unit's alone
+  // (AS-43). An override that names no family, from before, covers every
+  // unit with the tag; a unit's own override replaces it only where no other
+  // family shares the tag.
+  const sharedTags = useMemo(() => {
+    const families = new Map();
+    for (const i of applied?.instances ?? []) (families.get(i.tag) ?? families.set(i.tag, new Set()).get(i.tag)).add(i.family);
+    return new Set([...families].filter(([, f]) => f.size > 1).map(([t]) => t));
+  }, [applied]);
+  const sameSlot = (o, unit, layer) => o.tag === unit.tag && (o.layer ?? null) === layer;
+  const replaces = (o, unit, layer) => sameSlot(o, unit, layer) && (o.family === unit.family || (!o.family && !sharedTags.has(unit.tag)));
+  const priorOf = (unit) => (state?.overrides ?? []).find((o) => sameSlot(o, unit, unit.layer) && o.family === unit.family)
+    ?? (state?.overrides ?? []).find((o) => sameSlot(o, unit, unit.layer) && !o.family);
   // A group's schedule and what it waits for, in its header, its buttons'
   // names and each override's note: a table may print no title, and tied
   // typicals wait for nothing but a choice.
@@ -560,10 +574,10 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     const reason = askReason(what);
     if (!reason) return;
     const base = state ?? emptyAssembliesState();
-    const others = base.overrides.filter((o) => !(o.tag === unit.tag && (o.layer ?? null) === (patch.exclude ? null : unit.layer)));
-    const prior = base.overrides.find((o) => o.tag === unit.tag && o.layer === unit.layer);
-    const entry = patch.exclude ? { tag: unit.tag, reason, exclude: true }
-      : { tag: unit.tag, layer: unit.layer, reason, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}), ...(patch.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
+    const others = base.overrides.filter((o) => !replaces(o, unit, patch.exclude ? null : unit.layer));
+    const prior = priorOf(unit);
+    const entry = patch.exclude ? { tag: unit.tag, family: unit.family, reason, exclude: true }
+      : { tag: unit.tag, family: unit.family, layer: unit.layer, reason, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}), ...(patch.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
     onStateChange?.({ ...base, overrides: [...others, entry] });
   };
   // One schedule's rows that wait for the same things (report.ts
@@ -576,12 +590,12 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
     // Each unit as override() keys it: its tag and layer, or its tag alone
     // when it is excluded.
     const layerOf = (u) => (patch.exclude ? null : u.layer);
-    const units = [...new Map(group.units.map((u) => [JSON.stringify([u.tag, layerOf(u)]), u])).values()];
-    const others = base.overrides.filter((o) => !units.some((u) => o.tag === u.tag && (o.layer ?? null) === layerOf(u)));
+    const units = [...new Map(group.units.map((u) => [JSON.stringify([u.tag, u.family, layerOf(u)]), u])).values()];
+    const others = base.overrides.filter((o) => !units.some((u) => replaces(o, u, layerOf(u))));
     const entries = units.map((u) => {
-      if (patch.exclude) return { tag: u.tag, reason: note, exclude: true };
-      const prior = base.overrides.find((o) => o.tag === u.tag && o.layer === u.layer);
-      return { tag: u.tag, layer: u.layer, reason: note, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
+      if (patch.exclude) return { tag: u.tag, family: u.family, reason: note, exclude: true };
+      const prior = priorOf(u);
+      return { tag: u.tag, family: u.family, layer: u.layer, reason: note, ...(prior?.assembly ? { assembly: prior.assembly } : {}), options: { ...(prior?.options ?? {}) }, ...(patch.assembly ? { assembly: patch.assembly } : {}) };
     });
     onStateChange?.({ ...base, overrides: [...others, ...entries] });
   };
@@ -787,7 +801,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
               <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>Your overrides</h3>
               {state.overrides.map((o, i) => (
                 <div key={i} style={{ fontSize: "var(--fs-s)", marginBottom: 4 }}>
-                  <span style={mono}>{o.tag}</span>{o.layer ? ` (${o.layer})` : ""}: {o.exclude ? "excluded" : [o.assembly ? `typical ${o.assembly.id}` : "", ...Object.entries(o.options ?? {}).map(([k, v]) => `${k}=${v}`)].filter(Boolean).join(", ")}
+                  <span style={mono}>{o.tag}</span>{sharedTags.has(o.tag) ? ` ${o.family ?? "(every unit with the tag)"}` : ""}{o.layer ? ` (${o.layer})` : ""}: {o.exclude ? "excluded" : [o.assembly ? `typical ${o.assembly.id}` : "", ...Object.entries(o.options ?? {}).map(([k, v]) => `${k}=${v}`)].filter(Boolean).join(", ")}
                   <span style={{ color: "var(--ink-muted)" }}> — {o.reason}</span>
                   <button type="button" style={{ ...btn, marginLeft: 8, padding: "1px 6px" }} onClick={() => removeOverride(i)}>Remove</button>
                 </div>

@@ -1,5 +1,22 @@
 # Changelog
 
+- **Assemblies: an override is its own unit's, and an exclusion is final.**
+  Two fixes to how a unit finds its override
+  (`web/src/lib/assemblies/expand.ts`), on the shared path the panel and
+  `apply_assemblies` both run:
+  - **Shared tags.** On a set where units of two families share a tag (as
+    the compile reads 16_NV's furnace, condensing unit and outdoor air unit,
+    all "B1"), overriding or excluding one changed the others, since an
+    override was found by tag alone. An override may now name its unit's
+    family, the panel names it on every override it makes, and MCP's
+    overrides take it. An override naming no family covers every unit with
+    the tag, as before. 4 of the 98 cached documents have such tags
+    (ASSEMBLIES_BUG_CATALOGUE AS-43).
+  - **Exclusion.** Excluding a unit whose layer already carried a choice
+    (an option or a typical) left that layer in the estimate, because the
+    earlier choice was found first. An exclusion now wins wherever it sits,
+    and removing it gives the choice back (AS-44).
+
 - **Takeoff panel: an override, setting or answer no longer freezes the page
   while the panel recomputes.** After each change the Assemblies view applies
   the library again and re-counts which project questions still change

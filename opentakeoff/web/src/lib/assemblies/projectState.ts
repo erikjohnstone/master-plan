@@ -43,6 +43,7 @@ const settingsSchema = z.object({
 const overrideSchema = z.object({
   tag: z.string().min(1),
   reason: z.string().trim().min(1),
+  family: z.string().min(1).optional(),
   layer: z.string().min(1).optional(),
   exclude: z.boolean().optional(),
   assembly: z.object({ id: z.string().min(1), version: z.string().min(1).optional() }).strict().optional(),

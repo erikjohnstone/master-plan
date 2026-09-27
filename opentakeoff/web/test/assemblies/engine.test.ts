@@ -250,6 +250,36 @@ test("layers: a unit gets one assembly per layer, each chosen by its own selecto
   assert.deepEqual(excluded.map((a) => [a.layer, a.status]), [["controls", "ok"], ["hookup", "excluded"]]);
 });
 
+test("an override names its unit's family where units of two families share the tag; one naming none covers each (AS-43)", () => {
+  // 16_NV's shape: a furnace, a condensing unit and an outdoor air unit all
+  // compiled as "B1". Excluding one must not exclude the others.
+  const box = vav("B1", { heat_type: "hw" });
+  const coil = { ...vav("B1", {}), family: "FCU" };
+  const statuses = (overrides: Parameters<typeof expandAll>[3]) => expandAll([box, coil], LIB, {}, overrides).applications.map((a) => [a.instance.family, a.status, a.assembly?.id ?? null]);
+  assert.deepEqual(statuses([{ tag: "B1", family: "VAV", reason: "existing to remain", exclude: true }]), [["FCU", "no_assembly", null], ["VAV", "excluded", null]]);
+  assert.deepEqual(statuses([{ tag: "B1", family: "FCU", reason: "existing to remain", exclude: true }]), [["FCU", "excluded", null], ["VAV", "unresolved", "vav-hw"]], "the box keeps its typical, waiting on its variables");
+  // An override from before names no family: it still covers every unit with the tag.
+  assert.deepEqual(statuses([{ tag: "B1", reason: "existing to remain", exclude: true }]), [["FCU", "excluded", null], ["VAV", "excluded", null]]);
+  // The unit's own override wins over one naming none, wherever it sits.
+  assert.deepEqual(statuses([{ tag: "B1", reason: "all of them", exclude: true }, { tag: "B1", family: "VAV", layer: "controls", reason: "per RFI 12", assembly: { id: "vav-cool" } }]),
+    [["FCU", "excluded", null], ["VAV", "overridden", "vav-cool"]]);
+});
+
+test("an exclusion wins over the unit's other overrides, wherever it sits; removing it gives them back (AS-44)", () => {
+  // The panel appends: a unit given an option or a typical, then excluded,
+  // kept that layer in the estimate because the earlier override came first.
+  const box = vav("VAV-7", { heat_type: "hw" });
+  const choice = { tag: "VAV-7", layer: "controls", reason: "per RFI 3", assembly: { id: "vav-cool" } };
+  const exclusion = { tag: "VAV-7", reason: "existing to remain", exclude: true };
+  const status = (overrides: Parameters<typeof expandAll>[3]) => expandAll([box], LIB, {}, overrides).applications.map((a) => [a.layer, a.status, a.assembly?.id ?? null]);
+  assert.deepEqual(status([choice, exclusion]), [["controls", "excluded", null]]);
+  assert.deepEqual(status([exclusion, choice]), [["controls", "excluded", null]]);
+  assert.deepEqual(status([choice]), [["controls", "overridden", "vav-cool"]], "the choice is kept for when the exclusion goes");
+  // Only a layer's own exclusion covers the layer; one naming another family never does.
+  assert.deepEqual(status([choice, { ...exclusion, layer: "hookup" }]), [["controls", "overridden", "vav-cool"]]);
+  assert.deepEqual(status([choice, { ...exclusion, family: "FCU" }]), [["controls", "overridden", "vav-cool"]]);
+});
+
 test("every selector false is no assembly, not unresolved", () => {
   const onlyHw = LIB.filter((a) => a.id === "vav-hw");
   assert.equal(selectAssembly(vav("VAV-1", { heat_type: "none" }), onlyHw).status, "no_assembly");

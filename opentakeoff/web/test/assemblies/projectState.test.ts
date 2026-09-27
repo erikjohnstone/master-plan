@@ -41,7 +41,9 @@ function bumped(def: AssemblyDefinition): AssemblyDefinition {
 
 test("the project file's block round-trips; the gate names everything it drops", () => {
   const state = { ...emptyAssembliesState(), pinned: [byId("pump-vfd")], settings: { partnerDefaults: { ecm: "no" }, variables: { spare_pct: 10 } },
-    overrides: [{ tag: "P-1", reason: "owner standard", options: { ufc_minimum_points: true } }] };
+    overrides: [{ tag: "P-1", reason: "owner standard", options: { ufc_minimum_points: true } },
+      // A unit whose tag another family shares names its family (AS-43).
+      { tag: "B1", family: "FURNACE", reason: "existing to remain", exclude: true }] };
   const wire = JSON.parse(JSON.stringify(state));
   const back = sanitizeAssembliesState(wire);
   assert.deepEqual(back.dropped, []);

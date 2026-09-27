@@ -77,8 +77,15 @@ async function applyInPage() {
     const applied = applyAssemblies({ project, library: projectLibrary(state, library), settings: state?.settings ?? {}, overrides: state?.overrides ?? [], readings: project?.control_readings ?? null });
     const report = assembliesReport(applied.instances, applied.applications, applied.lines);
     return { applications: JSON.stringify(applied.applications), lines: JSON.stringify(applied.lines), report: JSON.stringify(report),
-      groups: JSON.stringify(exceptionGroups(report.exceptions).map((g) => g.units.map((u) => u.tag))) };
+      groups: JSON.stringify(exceptionGroups(report.exceptions).map((g) => g.units.map((u) => [u.tag, u.family]))) };
   });
+}
+
+/** The overrides the panel shows: its own state. IndexedDB's autosave can
+ * lag a change just made. */
+async function shownOverrides(panel) {
+  const el = panel.locator('[data-assemblies-overrides]');
+  return (await el.count()) ? Number(await el.getAttribute('data-assemblies-overrides')) : 0;
 }
 
 async function annotations() {
@@ -197,11 +204,9 @@ try {
       const [optionId, option] = Object.entries(unit.options)[0];
       const optionRow = () => detail.getByRole('table', { name: `${unit.tag} options` }).getByRole('row')
         .filter({ has: page.getByRole('cell', { name: optionId, exact: true }) });
-      const to = t();
       page.once('dialog', (d) => d.accept(REASON));
       await optionRow().getByRole('button').click();
       await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
-      timings.override_s = Math.round((t() - to) / 1000);
       assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
       const cells = optionRow().getByRole('cell');
       assert.equal((await cells.nth(1).innerText()).trim(), String(!(option.value === true)), 'the value is the one chosen');
@@ -213,11 +218,9 @@ try {
       const [id] = ex.candidates[0].split('@');
       const exRow = panel.getByRole('table', { name: 'Records that wait for something' }).getByRole('row')
         .filter({ has: page.getByRole('button', { name: ex.tag, exact: true }) }).first();
-      const to = t();
       page.once('dialog', (d) => d.accept(REASON));
       await exRow.getByRole('button', { name: `Use ${id}`, exact: true }).click();
       await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
-      timings.override_s = Math.round((t() - to) / 1000);
       assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
       const chosen = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === ex.tag && a.layer === ex.layer);
       assert.ok(chosen.length && chosen.every((a) => a.selected_by === 'user' && a.assembly?.id === id), `${ex.tag} takes ${id} by override`);
@@ -291,7 +294,7 @@ try {
       const use = groupRow.locator('[data-assemblies-group-use]').first();
       const [chosen] = String(await use.getAttribute('data-assemblies-group-use')).split('@');
       const exceptionsBefore = Number(await panel.locator('[data-assemblies-exceptions]').getAttribute('data-assemblies-exceptions'));
-      const overridesBefore = (await annotations())?.overrides?.length ?? 0;
+      const overridesBefore = await shownOverrides(panel);
       const tg = t();
       page.once('dialog', (d) => d.accept(GROUP_REASON));
       await use.click({ timeout: 180000 });
@@ -309,19 +312,25 @@ try {
       // reason, every layer of each unit excluded.
       const next = panel.locator('[data-assemblies-group]').first();
       if (await next.count()) {
-        const [tags] = JSON.parse((await applyInPage()).groups);
+        // Each unit is its tag and family: a tag another family shares is
+        // not that family's unit (AS-43).
+        const [units] = JSON.parse((await applyInPage()).groups);
         const m = Number(await next.getAttribute('data-assemblies-group'));
-        assert.equal(tags.length, m, "the first group on screen is the report's first group");
-        const before = (await annotations())?.overrides?.length ?? 0;
+        assert.equal(units.length, m, "the first group on screen is the report's first group");
+        const before = await shownOverrides(panel);
         const te = t();
         page.once('dialog', (d) => d.accept(GROUP_EXCLUDE_REASON));
         await next.locator('[data-assemblies-group-exclude]').click({ timeout: 180000 });
-        await panel.locator(`[data-assemblies-overrides="${before + new Set(tags).size}"]`).waitFor({ state: 'visible', timeout: 180000 });
+        await panel.locator(`[data-assemblies-overrides="${before + new Set(units.map((u) => JSON.stringify(u))).size}"]`).waitFor({ state: 'visible', timeout: 180000 });
         timings.exclude_s = Math.round((t() - te) / 1000);
-        const records = JSON.parse((await applyInPage()).applications).filter((a) => tags.includes(a.instance.tag));
+        const all = JSON.parse((await applyInPage()).applications);
+        const records = all.filter((a) => units.some(([tag, family]) => a.instance.tag === tag && a.instance.family === family));
         assert.ok(records.length >= m && records.every((a) => a.status === 'excluded' && String(a.reason).startsWith(GROUP_EXCLUDE_REASON)),
           `every record of the ${m} units is excluded with the reason: ${records.filter((a) => a.status !== 'excluded').map((a) => `${a.instance.tag} ${a.layer} ${a.status}`).slice(0, 5).join('; ')}`);
-        checks.push(`${m} rows of another schedule excluded together (${records.length} records, every layer), an override each`);
+        // Units of another family under the same tags are not these (AS-43).
+        const beside = all.filter((a) => units.some(([tag, family]) => a.instance.tag === tag && a.instance.family !== family));
+        assert.ok(beside.every((a) => !String(a.reason ?? '').startsWith(GROUP_EXCLUDE_REASON)), `units sharing their tags keep their records: ${beside.map((a) => `${a.instance.tag} ${a.instance.family} ${a.status}`).slice(0, 5).join('; ')}`);
+        checks.push(`${m} rows of another schedule excluded together (${records.length} records, every layer), an override each${beside.length ? `; ${beside.length} records of other families under the same tags untouched` : ''}`);
       }
     }
   }

@@ -2613,3 +2613,80 @@ count is in.
   apart, and never shares between projects. The second checks that the
   paced count equals projectQuestions, pauses before each apply, and stops
   when cancelled. Both fail without the fix.
+
+## AS-43 — an override on one unit changed every unit of another family that shares its tag (FIXED — this goal)
+
+**Found:** 2026-09-27, checking that the panel's "Exclude all" leaves other
+units alone. Of the 98 cached documents, 4 have a tag that units of two
+families share (27 tags):
+- 16_NV's "B1" to "B5": a furnace, a condensing unit, an outdoor air unit
+  and a rooftop unit each, as the compile reads its marks (AS-36).
+- 047_NC's CH-1 and CH-2, each an air-cooled chiller and a heat recovery
+  chiller.
+- 089_FL's HP-2, a condensing unit and a heat pump.
+- 21_VA's transposed rows ("MODEL NUMBER", "PHASE"), each a condensing unit
+  and a pump (AS-33).
+
+**Why:** expand.ts found a unit's override by its tag and layer alone. The
+panel lists these units apart (AS-36 gave them distinct names), yet
+excluding 16_NV's outdoor air unit B1 excluded its furnace and condensing
+unit B1 as well. Choosing a typical for one would have given that typical
+to the others in the same layer.
+
+**Fix (select.ts, expand.ts, projectState.ts and MCP's apply_assemblies
+schema, the shared path):**
+- **Overrides:** an override may name its unit's family. A unit takes the
+  override that names its family, else one that names none. An override
+  made before this names none, so it covers every unit with the tag, as it
+  did.
+- **The project file:** its gate keeps the family. Its strict schema would
+  have dropped such an override on reload.
+- **MCP:** apply_assemblies' overrides take the family, documented.
+- **The panel:** it names the family on every override it makes, for one
+  unit or a group. An earlier override that names no family is replaced
+  only where no other family shares the tag, and "Your overrides" says
+  whose an override is where the tag is shared.
+
+**Measured:** on the four documents, excluding one unit with its family
+named excludes that unit's records only:
+- 16_NV's outdoor air unit B1 alone, where before its furnace and
+  condensing unit went too;
+- 047_NC's CH-1 air-cooled chiller;
+- 089_FL's HP-2 condensing unit;
+- 21_VA's "MODEL NUMBER" condensing unit.
+
+Without a family named, each excludes every unit with the tag, as before.
+An override that names no family matches exactly as before by
+construction: the first lookup cannot match it, and the second is the old
+test.
+
+**Tests:**
+- engine.test.ts: a VAV box and a fan coil both tagged "B1". Each family's
+  exclusion is its own, one naming none covers both, and a unit's own
+  override wins over one naming none wherever it sits.
+- projectState.test.ts: the family survives the project file.
+
+Both fail without the fix.
+
+## AS-44 — excluding a unit left in the estimate a layer it already had an override for (FIXED — this goal)
+
+**Found:** 2026-09-27, reading the override lookup while fixing AS-43. A
+unit took the first override in the list that fitted its tag and layer.
+The panel adds a new override after the others, so a unit whose controls
+layer already carried a choice (an option or a typical) kept that layer
+when it was then excluded. The choice was found first, and the unit's
+controls points and devices stayed in the estimate under "overridden". MCP
+behaved the same for a call that passed both.
+
+**Fix (expand.ts, the shared path):** of the overrides that fit a unit, one
+naming its family comes before one naming none (AS-43). Of those, an
+exclusion comes before a choice, wherever it sits in the list. Otherwise
+the first still wins, as before. The earlier choice is kept: removing the
+exclusion under "Your overrides" gives it back. An exclusion for one layer
+covers that layer only, and one naming another family never covers the
+unit. MCP's apply_assemblies describes the rule on `exclude`.
+
+**Tests:** engine.test.ts. A choice then an exclusion, and an exclusion then
+a choice, both exclude. The choice alone still applies, and neither another
+layer's exclusion nor another family's excludes the unit. It fails without
+the fix.
