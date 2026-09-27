@@ -7,6 +7,7 @@
 //
 //   node --import tsx scripts/assemblies-apply.mjs <plan.pdf> [more.pdf …] --out result.json
 //        [--library lib.json] [--export-dir dir] [--call '{"export_dir": …, "export_scope": …, "settings": {…}}' …]
+//        [--cached-graph]
 //
 // The output is the tool's full result (its `path` argument): the report,
 // every record and every expanded line. --export-dir also writes the CSV set
@@ -32,6 +33,23 @@ const { Session } = await import("../src/session.ts");
 const { buildServer } = await import("../server.ts");
 const session = new Session();
 for (let i = 0; i < pdfs.length; i++) await session.loadPlan(resolve(pdfs[i]), { merge: i > 0 });
+// --cached-graph: seed the Session from the content-addressed sheet-graph
+// cache, as production-graph-cli (the Takeoff panel's path) does, so a large
+// set's graph is built once for both surfaces.
+if (argv.includes("--cached-graph")) {
+  const { cachedSheetGraph } = await import("./sheetGraphCache.mjs");
+  const { createHash } = await import("node:crypto");
+  const { readFileSync } = await import("node:fs");
+  const { basename } = await import("node:path");
+  const shaOf = (p) => createHash("sha256").update(readFileSync(resolve(p))).digest("hex");
+  const graph = await cachedSheetGraph(resolve(pdfs[0]), {
+    expectedSha256: shaOf(pdfs[0]),
+    identity: pdfs.slice(1).map(shaOf),
+    names: pdfs.slice(1).map((p) => basename(p)),
+    compute: () => session.graphForPipeline(),
+  });
+  session.seedPipelineGraph?.(graph);
+}
 const [ct, st] = InMemoryTransport.createLinkedPair();
 await buildServer(session).connect(st);
 const client = new Client({ name: "assemblies-apply", version: "0.0.0" });

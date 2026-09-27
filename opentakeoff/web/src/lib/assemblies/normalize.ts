@@ -135,6 +135,16 @@ export function headerText(header: string): string {
   // Mode abbreviations ("CLNG CAP. MBH", "HTNG CAP. MBH") and a total
   // capacity's TMBH ("COOLING MIN. TMBH").
   s = s.replace(/\bCLNG\b/g, "COOLING").replace(/\bHTNG\b/g, "HEATING").replace(/\bTMBH\b/g, "TOTAL MBH");
+  // Abbreviations with one meaning in a schedule header: CAP. is capacity
+  // ("TANK CAP. (GAL)", "KW CAP."), ENT. and LVG. entering and leaving, DEG F
+  // the degree sign, HORSEPOWER HP (BRAKE HORSEPOWER BHP).
+  s = s.replace(/\bCAP\b/g, "CAPACITY").replace(/\bENT\b/g, "ENTERING").replace(/\bLVG\b/g, "LEAVING");
+  s = s.replace(/(?<![A-Z])DEG(?:REES?)?\s*F\b/g, "F");
+  s = s.replace(/\bBRAKE\s+HORSEPOWER\b/g, "BHP").replace(/\bHORSEPOWER\b/g, "HP");
+  // A US unit in square brackets is the printed value's own unit ("SUPPLY/
+  // RETURN [IN]", "HP [BHP]"); brackets around an SI unit mark an SI twin and
+  // stay (SI_BRACKET reads the printed header).
+  s = s.replace(/\[\s*(MBH|BTUH|CFM|GPM|IN|FT|FTWC|INWC|HP|BHP|F|PSIG?|TONS?|RPM|LBHR|GAL|LBS)\s*\]/g, "($1)");
   // Spacing that changes no word: around a slash ("AND / OR", "VOLT / PH")
   // and just inside parentheses ("COIL( S )").
   s = s.replace(/\s*\/\s*/g, "/").replace(/\(\s+/g, "(").replace(/\s+\)/g, ")");

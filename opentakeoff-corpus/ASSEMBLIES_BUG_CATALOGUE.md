@@ -2056,3 +2056,34 @@ panel.
 run held a label with a NUL, one count ran over every control-intent runs
 file, held-out ones included. It printed only the total (0); no run's
 content was displayed. Later checks name dev and unseen files only.
+
+**Addendum, a second metamorphic sweep (robustness; no key read):** the same
+86 documents' 1,705 rows respelled the ways drafters actually vary a header,
+a title or a cell without changing its meaning: HW / HOT WATER, CHW /
+CHILLED WATER, TEMP. / TEMPERATURE, CAP. / CAPACITY, ENT. / ENTERING and
+LVG. / LEAVING, a unit in parentheses, in square brackets or bare, °F / DEG F,
+& / AND, HP / HORSEPOWER, VOLTS / VOLTAGE, a title with or without SCHEDULE,
+208/3/60 / 208V/3PH/60HZ / 208-3-60, N/A / NA, - / --, 1/2 / 0.5 (scratch
+census2/metamorphic2.mjs). 36 kinds of value changed. Each abbreviation below
+is printed somewhere in the corpus with that one meaning (every CAP is a
+capacity, "TANK CAP. (GAL)" and "KW CAP." included; every ENT, LVG and DEG F
+is entering, leaving and Fahrenheit), so the header's one spelling now reads
+CAP. as CAPACITY, ENT. and LVG. as ENTERING and LEAVING, DEG F (after a
+digit too: "47DEG F") as F, HORSEPOWER as HP and BRAKE HORSEPOWER as BHP, and
+a US unit in square brackets ("[IN]", "[BHP]", "[MBH]") as in parentheses.
+Square brackets around an SI unit stay: they mark an SI twin ("[L/S]",
+"[KW]", "[°C]") and SI_BRACKET reads the printed header. What the sweep had
+found: VRF indoor units', heat pumps', chillers' and towers' capacities lost
+under "CAP."; coils' and chillers' water temperatures lost under "ENT." /
+"LVG." and "(DEG F)"; pipe sizes and a fan's horsepower lost, and a
+furnace's two stages swapped, under "[IN]", "[BHP]" and "[MBH]"; and an
+exclusion that went quiet: "TRAP CAP. LBS/HR" read as the exchanger's steam
+flow, since the trap rule looked for CAPACITY. Left, as not what drafters
+print: "&/OR" for "AND/OR", and units stripped of their parentheses ("SUPPLY/
+RETURN IN"). On the documents as printed, 3 values change: 06_MO's (dev 5)
+three DX fan coils read COOLING CAP. "11,400 Btu/h" as 11.4 MBH (22, 40), an
+extension its key does not score ("COOLING CAP. => -"). Every tier scores
+as before (dev 1965/2053, dev 2 1259/1451, dev 3 1269/1377, dev 4
+1020/1421, dev 5 503/561); the invariant sweep, the first metamorphic sweep
+and control intent's replays are unchanged. Test: normalize.test.ts,
+"metamorphic sweep, round 2".

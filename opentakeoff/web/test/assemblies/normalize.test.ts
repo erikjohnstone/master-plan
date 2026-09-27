@@ -819,8 +819,8 @@ test("dev 3 A/B: a CONTROL cell citing notes names no control", () => {
 });
 
 test("dev 4: CLNG, HTNG and TMBH spell out; a coil's TOTAL COOLING CAPACITY in TMBH is its cooling", () => {
-  assert.equal(headerText("CLNG CAP. MBH"), "COOLING CAP MBH");
-  assert.equal(headerText("HTNG CAP. MBH"), "HEATING CAP MBH");
+  assert.equal(headerText("CLNG CAP. MBH"), "COOLING CAPACITY MBH");
+  assert.equal(headerText("HTNG CAP. MBH"), "HEATING CAPACITY MBH");
   assert.equal(headerText("COOLING COIL MIN. TMBH"), "COOLING COIL MIN TOTAL MBH");
   // 089_FL HP-2: an outdoor heat pump's cooling and heating capacities.
   const hp = values(normalizeCompileItem(row("HP-2", "OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE", {
@@ -1217,4 +1217,37 @@ test("a control column that names the drive: VFD printed is a VFD, for a family 
   assert.equal(fan("VARIABLE").attributes.vfd, undefined);
   assert.equal(fan("CONSTANT").attributes.vfd, undefined);
   assert.equal(fan("VFD / ECM").attributes.vfd, undefined);
+});
+
+test("metamorphic sweep, round 2: CAP., ENT., LVG., DEG F and HORSEPOWER read as the words they stand for", () => {
+  // Each spelling is printed in the corpus: 06_MO's "COOLING CAP." (dev 5),
+  // 094_FL's "WATER TEMP. ENT." / "LVG." (dev 1), 03_FL's "(DEG. F)" (dev 2),
+  // federal-mech's "FAN DATA HORSEPOWER" (dev 1), 031_MO's "TRAP CAPACITY".
+  assert.equal(headerText("TANK CAP. (GAL)"), "TANK CAPACITY (GAL)");
+  assert.equal(headerText("WATER TEMP. ENT."), "WATER TEMP ENTERING");
+  assert.equal(headerText("COOLING CAPACITY LVG DB (°F)"), "COOLING CAPACITY LEAVING DB (F)");
+  assert.equal(headerText("CHILLED WATER COIL DATA WATER SIDE EWT (DEG. F)"), "CHILLED WATER COIL DATA WATER SIDE EWT (F)");
+  assert.equal(headerText("TEMPERATURE RISE (DEGREES F)"), "TEMPERATURE RISE (F)");
+  assert.equal(headerText("FAN DATA HORSEPOWER"), "FAN DATA HP");
+  assert.equal(headerText("FAN BRAKE HORSEPOWER"), "FAN BHP");
+  // 06_MO FCU-1: a DX fan coil's COOLING CAP. printed in Btu/h.
+  const fcu = values(normalizeCompileItem(row("FCU-1", "FAN COIL UNT SCHEDULE", { "COOLING CAP.": "11,400 Btu/h", CFM: "400" }), "FCU"));
+  assert.equal(fcu.cooling_mbh, 11.4);
+  // An abbreviation reaches the exclusions too: a trap's CAP. is its rating, never the unit's steam flow.
+  const hx = values(normalizeCompileItem(row("HX-1", "STEAM TO HOT WATER HEAT EXCHANGER SCHEDULE", { "TRAP CAP. LBS/HR": "2500" }), "HEAT_EXCHANGER"));
+  assert.equal(hx.primary_steam_lb_hr, undefined);
+  // A coil's entering and leaving water, spelled out or abbreviated, read alike.
+  const coil = (ent: string, lvg: string) => values(normalizeCompileItem(row("CC-1", "CHILLED WATER COOLING COIL SCHEDULE", { "CIRCULATING FLUID GPM": "20", [ent]: "40", [lvg]: "55" }), "DUCT_MOUNTED_COIL"));
+  const abbreviated = coil("CIRCULATING FLUID ENT. (DEG F)", "CIRCULATING FLUID LVG. (DEG F)");
+  assert.deepEqual([abbreviated.chw_ewt_f, abbreviated.chw_lwt_f], [40, 55]);
+  assert.deepEqual(abbreviated, coil("CIRCULATING FLUID ENTERING (°F)", "CIRCULATING FLUID LEAVING (°F)"));
+  // A US unit in square brackets reads as in parentheses; an SI twin's brackets stay.
+  assert.equal(headerText("CHILLED WATER SUPPLY/RETURN [IN]"), "CHILLED WATER SUPPLY/RETURN (IN)");
+  assert.equal(headerText("SUPPLY FAN DATA HP [BHP]"), "SUPPLY FAN DATA HP (BHP)");
+  assert.equal(headerText("AIR FLOW SUPPLY [L/S]"), "AIR FLOW SUPPLY [L/S]");
+  assert.equal(headerText("MOTOR ELECTRICAL NOMINAL POWER [KW]"), "MOTOR ELECTRICAL NOMINAL POWER [KW]");
+  const pipes = values(normalizeCompileItem(row("FCU-04", "FAN COIL UNIT SCHEDULE - PROJECT 4", { "CHILLED WATER SUPPLY/RETURN [IN]": "3/4", "HEATING WATER SUPPLY/RETRUN [IN]": "3/4" }), "FCU"));
+  assert.deepEqual([pipes.chw_conn_in, pipes.hw_conn_in], [0.75, 0.75]);
+  // "AT 47DEG F", the degree sign's letters run into the number, is still the rating point.
+  assert.equal(headerText("HEATING CAPACITY MAX MBH AT 47DEG F"), "HEATING CAPACITY MAX MBH AT 47F");
 });

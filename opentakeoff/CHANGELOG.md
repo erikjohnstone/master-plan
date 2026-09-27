@@ -1,5 +1,16 @@
 # Changelog
 
+- **Assemblies read a schedule's abbreviations as the words they stand for.**
+  The shared normalizer (`web/src/lib/assemblies/normalize.ts`) now reads
+  "CAP." as CAPACITY, "ENT." and "LVG." as ENTERING and LEAVING, "(DEG F)" as
+  "(°F)", HORSEPOWER as HP, and a US unit in square brackets ("[IN]", "[MBH]")
+  as in parentheses (brackets around an SI unit still mark an SI twin).
+  Before, a drafter who abbreviated lost capacities, water temperatures and
+  pipe sizes, and "TRAP CAP." slipped past the rule that a trap's capacity is
+  never the unit's steam flow. Found by a second metamorphic sweep that
+  respells every cached row the ways drafters vary them; every dev tier
+  scores as before (ASSEMBLIES_BUG_CATALOGUE AS-34 addendum).
+
 - **The Takeoff panel names control packets by the file, and never quotes a
   model's garbled glyph.** A PDF opened in the browser is spooled under its
   content hash; the panel restored the file's name on every sheet key but not
