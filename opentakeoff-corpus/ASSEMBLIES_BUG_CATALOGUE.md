@@ -3028,6 +3028,9 @@ it):**
 - assembliesApply.test.mjs: a call with a typo'd partner default and switch
   names both and keeps the report's totals, and the call with the starter's
   hook-up defaults and the kit-maker preset carries no settings_unread.
+- The Assemblies UI proof writes a hook-up switch no line names into the
+  saved settings beside AS-49's option, reloads, and checks that Project
+  settings lists it with its reason (09_ME, 11 checks; federal-mech, 13).
 
 ## AS-51 — a reply narrowed by family left units out without a word: a typo'd family, units that apply as another (FIXED — this goal)
 
