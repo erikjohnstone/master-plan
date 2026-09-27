@@ -946,3 +946,53 @@ low-resolution render of one sheet. A firm printed only as an image has no text 
 - At the audit's next run the record withdraws 015_VA, 021_XX, 023_US, 038_NC and 010_US: 425 applied decisions
   become 412, all right; 90 eligible sets become 85.
 
+## CI-34: a shared drawing's label named a boiler pump by its kind, and the check read it as naming no part of it (FIXED, next commit)
+
+**Found:** 2026-09-27, reading the dev typical misses left after AS-38 (instrument 3 with the keys' project answers
+and the recorded readings replayed: 227 of 244). Four are boiler pumps, 069_ID's and itd-d1-lab's BP-1 and BP-2,
+each keyed with no typical of its own. 069_ID: "New boiler pump started by its boiler: schematic 'BOILER
+INTERLOCK(N)', sequence 'EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING'. No BAS point on the
+pump". itd-d1-lab: "each boiler enables its own pump ('BOILER PUMP INTERLOCK'); the BAS reads the pump status through
+a current sensing relay … never commands it". Each takes the pump typical, because its role question ends "not
+shown". Replayed, the readers answered:
+- **069_ID:** R1 "commands", quoting the heating water pumps' clause ("SEND AN ENABLE COMMAND TO THE LEAD HEATING
+  WATER PUMP"). R2, both runs, "commands", citing the schematic's START/STOP, ENABLE/DISABLE and VFD SPEED labels.
+  All were unverified, because the evidence comes from drawings the pumps share with the heating water pumps and
+  names no part of them. That is right: every one of these readings is about the other pumps.
+- **itd-d1-lab:** R2, both runs, "monitors only", citing "CONNECTION TO BUILDING AUTOMATION SYSTEM (BAS)" and
+  "BOILER PUMP INTERLOCK". That is the key's reading, and it was unverified the same way. The check (record.ts
+  `attributed`, the family of CI-23's defenses) accepts a cite that prints the unit's tag, its family's noun where a
+  system has one kind of it, or what its tag's letters stand for ("HOT WATER PUMP" for HWP). BP is in no such list,
+  though each pump's own row prints "AREA SERVED: BOILER PUMP (B-1)".
+
+**Fix (shared path: readers/r0.ts and record.ts, which every surface reads through):** what a unit's own schedule row
+calls its kind names it too.
+- `rowKindWords` reads a cell that says what the unit serves or is for: SERVICE, SERVED, SYSTEM, DESCRIPTION,
+  APPLICATION or FUNCTION. It never reads TYPE, which prints how a pump is built, or LOCATION.
+- It takes the family's noun and up to three words before it. It stops at a word that names no kind: a duty
+  (STANDBY, LEAD), how the pump is built (INLINE, BASE MOUNTED), a small word, or what is left of a tag. "BOILER PUMP
+  (B-1)" gives "BOILER PUMP". The noun alone ("PUMP") gives nothing, since it names every pump. The noun must head
+  the phrase: "BOILER PUMP ROOM" is a room and gives nothing.
+- It applies to pumps only for now, the family that a system holds several kinds of and where the misses are.
+- The row's words count wherever the tag's words already count: in a cite of a packet that other units share. They
+  never count in a packet titled for other units of the family, where only the tag does.
+- R0's own reading does not use them. R0 reads "EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP" as it did,
+  with no BAS command read into it (CI-28's actor question).
+- `R0_VERSION` is now control_r0_v7.
+
+**Measured (replay; no model call):**
+- The eleven dev documents: two decisions change, both itd-d1-lab's. BP-2's role becomes a proposal, "monitors only"
+  (R2 alone, both runs, cited to BOILER PUMP INTERLOCK). BP-1's becomes unresolved and is shown with both sides:
+  R2's verified "monitors only" against R1's unverified "commands". 069_ID's stay "not shown", since no reading of
+  them names them.
+- The 36 eligible unseen sets with recorded runs and a cached snapshot: all 1,504 decisions are identical (176
+  applied).
+- GATE D, the replayed items: negative controls pass. The adversarial swaps apply nothing through a swapped packet
+  (56 of 56 and 26 of 26 answers fail verification, as before). Model-off applies 19 decisions, 0 wrong, and replay
+  is byte-identical on 11 of 11 documents.
+- The typical eval is unchanged at 227 of 244. The four pumps remain typical misses, because an applied role needs
+  two readers to agree and R1 read neither set's boiler pumps. For 069_ID's to be right, the readers would have to
+  read that the boiler, not the BAS, enables the pump, and that the schematic draws no point at it.
+- Tests (readers.test.ts): "namesUnit: a shared packet names a pump by what its own row calls its kind", on the two
+  sets' cells with eleven look-alikes, and "record: a shared drawing's label speaks for the pump whose own row calls
+  it by that kind, not for the pump beside it". Disabling the rule fails the second.

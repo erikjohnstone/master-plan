@@ -1,5 +1,18 @@
 # Changelog
 
+- **Control intent: a pump is named on a shared control drawing by what its own
+  schedule row calls it.** A model's answer drawn from a drawing that several
+  units share counts for a unit only where its evidence names that unit. A
+  boiler pump scheduled "AREA SERVED: BOILER PUMP (B-1)" was not named by its
+  own schematic's "BOILER PUMP INTERLOCK", because only the tag, the family's
+  noun and the tag's letters counted. The readers now also accept the words a
+  pump's own service cell uses for its kind
+  (`web/src/lib/controlIntent/readers/r0.ts` `rowKindWords`). On one dev set,
+  a boiler pump's role is now a cited "monitors only" proposal and its twin's
+  is shown as unresolved, instead of "not shown". Nothing else changes on the
+  dev documents or the 36 unseen sets with recorded readings, and no decision
+  applies that did not before (CONTROL_INTENT_BUG_CATALOGUE CI-34).
+
 - **Process note: the counts behind the last four assemblies fixes are
   recounted without the held-out drafters' documents.** The censuses and A/Bs
   of AS-35 to AS-38 read a scratch snapshot cache that also holds the seven

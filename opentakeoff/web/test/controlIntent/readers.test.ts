@@ -10,7 +10,7 @@ import { findPackets, type Packet } from "../../src/lib/controlIntent/evidence.t
 import type { Binding } from "../../src/lib/controlIntent/binding.ts";
 import { closeLetterSpacing, leadSubject, normText, packetText, printedIn } from "../../src/lib/controlIntent/readers/text.ts";
 import { compileTermList, TERM_LIST } from "../../src/lib/controlIntent/readers/terms.ts";
-import { aboutOthers, headsOthers, readR0, namesUnit, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
+import { aboutOthers, headsOthers, readR0, namesUnit, rowKindWords, type BoundPacket, type ReaderAnswer } from "../../src/lib/controlIntent/readers/r0.ts";
 import type { ReadingQuestion } from "../../src/lib/controlIntent/readers/questions.ts";
 import { r1Answers, r1Request } from "../../src/lib/controlIntent/readers/r1.ts";
 import { cropSpec, cutOff, joinRun, r2PacketAnswers, R2_MAX_TOKENS, R2_RETRIES, SPAN_PX_PER_PT } from "../../src/lib/controlIntent/readers/r2.ts";
@@ -136,6 +136,39 @@ test("R0: in a packet titled for other units of its family, the family's noun is
   assert.equal(system.answer, "yes");
   assert.ok(!namesUnit("EXHAUST FAN SHALL OPEN THE DAMPER", { tag: "EF-3", family: "FAN" }, true));
   assert.ok(namesUnit("EF-3 SHALL RUN WHENEVER EF-1 RUNS", { tag: "EF-3", family: "FAN" }, true));
+});
+
+// itd-d1-lab and 069_ID (dev) schedule their boiler pumps "AREA SERVED:
+// BOILER PUMP (B-1)"; the heating water drawings they share with the heating
+// water pumps print "BOILER PUMP INTERLOCK" and "EACH BOILER SHALL ENABLE THE
+// RESPECTIVE BOILER PUMP BEFORE FIRING".
+test("namesUnit: a shared packet names a pump by what its own row calls its kind", () => {
+  const kind = rowKindWords({ "AREA SERVED": "BOILER PUMP ( B-1)", TYPE: "INLINE", "MOTOR HP": "0.5" }, "PUMP");
+  assert.equal(kind, "BOILER PUMP");
+  const bp = { tag: "BP-1", family: "PUMP", kind };
+  assert.ok(namesUnit("BOILER PUMP INTERLOCK", bp));
+  assert.ok(namesUnit("EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING.", bp));
+  assert.ok(namesUnit("THE BOILER PUMPS SHALL RUN", bp));
+  // Another pump's words, the boiler itself, the noun alone, and a packet
+  // titled for other pumps (only the tag speaks there).
+  assert.ok(!namesUnit("SEND AN ENABLE COMMAND TO THE LEAD HEATING WATER PUMP.", bp));
+  assert.ok(!namesUnit("BOILER ENABLE/DISABLE", bp));
+  assert.ok(!namesUnit("THE PUMPS SHALL RUN", bp));
+  assert.ok(!namesUnit("BOILER PUMP INTERLOCK", bp, true));
+  // What a kind is: the words before the family's noun in a cell that says
+  // what the unit serves.
+  assert.equal(rowKindWords({ SERVICE: "STANDBY BOILER PUMP" }, "PUMP"), "BOILER PUMP", "a duty is no kind");
+  assert.equal(rowKindWords({ SERVICE: "B-1 BOILER PUMP" }, "PUMP"), "BOILER PUMP", "a tag is no word of it");
+  assert.equal(rowKindWords({ SERVICE: "B1 BOILER PUMP" }, "PUMP"), "BOILER PUMP", "nor one printed without its dash");
+  assert.equal(rowKindWords({ "SYSTEM SERVED": "CONDENSER WATER PUMPS" }, "PUMP"), "CONDENSER WATER PUMP");
+  assert.equal(rowKindWords({ TYPE: "INLINE PUMP" }, "PUMP"), null, "how it is built is no kind");
+  assert.equal(rowKindWords({ SERVICE: "NEW INLINE PUMP" }, "PUMP"), null);
+  assert.equal(rowKindWords({ SERVICE: "PUMP" }, "PUMP"), null, "the noun alone names every pump");
+  assert.equal(rowKindWords({ "AREA SERVED": "MECH ROOM 101" }, "PUMP"), null);
+  assert.equal(rowKindWords({ LOCATION: "BOILER ROOM PUMP" }, "PUMP"), null, "where it is, not what it is");
+  assert.equal(rowKindWords({ "AREA SERVED": "BOILER PUMP ROOM" }, "PUMP"), null, "the noun must head the phrase");
+  assert.equal(rowKindWords({ SERVICE: "BOILER PUMP NO. 1" }, "PUMP"), "BOILER PUMP");
+  assert.equal(rowKindWords({ "AREA SERVED": "BOILER PUMP (B-1)" }, "FAN"), null, "only the family's own noun");
 });
 
 test("R0 + combine: a packet the print says is about other units is not the unit's own, however it is bound (CI-23)", () => {
@@ -594,6 +627,37 @@ test("record: a unit bound to another unit's titled packet reads nothing from it
   const models = ef2.answers.filter((a) => a.reader !== "r0" && a.cites.length);
   assert.ok(models.length > 0 && models.every((a) => a.note === "unverified"));
   assert.match(models[0].why!, /about other units \(its title names EF-1, not EF-2\), and does not print EF-2/);
+});
+
+test("record: a shared drawing's label speaks for the pump whose own row calls it by that kind, not for the pump beside it", async () => {
+  // itd-d1-lab's shape (dev): both pumps print on one heating water
+  // schematic; "BOILER PUMP INTERLOCK" is the boiler pump's.
+  const items = [
+    row("PUMP", "BP-1", "PUMP SCHEDULE", { "AREA SERVED": "BOILER PUMP (B-1)", TYPE: "INLINE" }),
+    row("PUMP", "HWP-1", "PUMP SCHEDULE", { "AREA SERVED": "HEATING WATER LOOP", TYPE: "INLINE" }),
+  ];
+  const spans = [
+    sp("BP-1", 700, 200), sp("BOILER PUMP INTERLOCK", 700, 260), sp("CURRENT SENSING RELAY", 700, 320),
+    sp("HWP-1", 1400, 200), sp("VFD SPEED", 1400, 260),
+    sp("1", 651, 1020, 50), sp("HEATING WATER SYSTEM CONTROL DIAGRAM", 734, 1000, 50), sp("SCALE: NONE", 734, 1060, 25),
+  ];
+  const project: CompiledProject = { items, control: { version: "control_evidence_v1", packets: findPackets("set.pdf#5", spans), sheet_numbers: {} } };
+  const vision: Transport = async (r) => {
+    const user = r.messages.find((m) => m.role === "user")!;
+    if (typeof user.content === "string") return { content: JSON.stringify({ answers: [] }) };
+    return { content: JSON.stringify({ answers: [{ question: "role", answer: "monitors_only", labels: ["BOILER PUMP INTERLOCK"] }] }) };
+  };
+  const readings = await readControlIntent({ project, library: LIB }, { store: memoryRunStore(), transport: vision, render: async () => "data:image/png;base64,AAAA" });
+  const roleOf = (tag: string) => {
+    const u = readings.units.find((x) => x.tag === tag)!;
+    return { decision: u.decisions.find((d) => d.question === "role")!, r2: u.answers.filter((a) => a.reader === "r2" && a.question === "role") };
+  };
+  const bp = roleOf("BP-1"), hwp = roleOf("HWP-1");
+  assert.ok(bp.r2.length === 2 && bp.r2.every((a) => !a.note), JSON.stringify(bp.r2.map((a) => [a.run, a.note, a.why])));
+  assert.deepEqual([bp.decision.outcome, bp.decision.value], ["proposal", "out"], "one reader alone proposes");
+  assert.ok(hwp.r2.length === 2 && hwp.r2.every((a) => a.note === "unverified"));
+  assert.match(hwp.r2[0].why!, /shares with other units, and names no part of it/);
+  assert.equal(hwp.decision.outcome, "none");
 });
 
 test("record: a vision reply the token limit cut off before any answer is asked again, with room to finish; a finished reply never is (CI-31)", async () => {

@@ -37,7 +37,7 @@ import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v6";
+export const R0_VERSION = "control_r0_v7";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
@@ -153,15 +153,57 @@ const FAMILY_NOUN: Readonly<Record<string, RegExp>> = {
 
 /** Whether a clause of a packet other units share speaks for the unit: it
  * prints the unit's tag, its family's name (a family a system has one kind
- * of), or what its tag's letters stand for ("HOT WATER PUMP" for HWP). In a
- * packet titled for other units of its family (`tagOnly`), only its tag. */
-export function namesUnit(text: string, unit: { tag: string; family?: string }, tagOnly = false): boolean {
+ * of), what its tag's letters stand for ("HOT WATER PUMP" for HWP), or what
+ * its own schedule row calls its kind (`kind`, rowKindWords). In a packet
+ * titled for other units of its family (`tagOnly`), only its tag. */
+export function namesUnit(text: string, unit: { tag: string; family?: string; kind?: string | null }, tagOnly = false): boolean {
   if (namesTag(text, unit.tag)) return true;
   if (tagOnly) return false;
   const noun = unit.family ? FAMILY_NOUN[unit.family] : undefined;
   if (noun?.test(text)) return true;
-  const words = PREFIX_WORDS[tagKey(unit.tag)?.prefix ?? ""];
-  return Boolean(words && new RegExp(`\\b${words.replace(/\s+/g, "\\s+")}S?\\b`).test(text));
+  const words = [PREFIX_WORDS[tagKey(unit.tag)?.prefix ?? ""], unit.kind].filter((w): w is string => Boolean(w));
+  return words.some((w) => new RegExp(`\\b${w.replace(/\s+/g, "\\s+")}S?\\b`).test(text));
+}
+
+/** A family whose systems hold several kinds of it, and its noun: its
+ * units are told apart by the words before the noun. */
+const KIND_NOUN: Readonly<Record<string, string>> = { PUMP: "PUMP" };
+/** A cell that says what a unit serves or is for; never its location or
+ * how it is built ("TYPE: INLINE"). */
+const SERVICE_HEADER = /\b(?:SERVICE|SERVES|SERVED|SERVING|SYSTEM|DESCRIPTION|APPLICATION|FUNCTION)\b/i;
+/** Words before the noun that name no kind: a sentence's small words, the
+ * duty a unit of the kind has, how it is built. */
+const NOT_KIND = new Set(["THE", "A", "AN", "AND", "OR", "OF", "TO", "FOR", "WITH", "W", "IN", "ON", "AT", "BY", "EACH", "ALL", "NEW", "EXISTING", "EXIST",
+  "LEAD", "LAG", "STANDBY", "DUTY", "SPARE", "BACKUP", "TYP", "TYPICAL", "UNIT", "UNITS",
+  "INLINE", "LINE", "BASE", "MOUNTED", "END", "SUCTION", "VERTICAL", "HORIZONTAL", "SPLIT", "CASE", "CLOSE", "COUPLED", "SUBMERSIBLE", "VARIABLE", "CONSTANT", "SPEED"]);
+
+/** Words that may follow the noun heading a kind ("BOILER PUMP NO. 1",
+ * "BOILER PUMP FOR B-1"). */
+const AFTER_NOUN = new Set(["AND", "OR", "OF", "TO", "FOR", "WITH", "W", "IN", "ON", "AT", "BY", "NO", "NUMBER"]);
+
+/** What a unit's own schedule row calls its kind: a service cell that
+ * prints the family's noun with the words before it ("AREA SERVED: BOILER
+ * PUMP (B-1)", itd-d1-lab's and 069_ID's boiler pumps, gives "BOILER
+ * PUMP"). A tag or a parenthesis in the cell is no word of it, and the noun
+ * alone names every unit of the family, so a kind needs a word before it. */
+export function rowKindWords(cells: Readonly<Record<string, string>>, family: string | undefined): string | null {
+  const noun = family ? KIND_NOUN[family] : undefined;
+  if (!noun) return null;
+  for (const [h, v] of Object.entries(cells)) {
+    if (!SERVICE_HEADER.test(h)) continue;
+    const t = String(v ?? "").toUpperCase().replace(/\([^)]*\)/g, " ").replace(TAG_IN_TEXT, " ").replace(/[^A-Z]+/g, " ").trim();
+    for (const m of t.matchAll(new RegExp(`\\b((?:[A-Z]+ ){1,3})${noun}S?\\b`, "g"))) {
+      // The noun heads the phrase: a word after it other than a small one
+      // makes it a modifier ("BOILER PUMP ROOM" is a room).
+      const next = t.slice((m.index ?? 0) + m[0].length).trim().split(" ")[0];
+      if (next && !AFTER_NOUN.has(next)) continue;
+      const kind: string[] = [];
+      // A one-letter word is what is left of a tag printed without its dash.
+      for (const w of m[1].trim().split(" ").reverse()) { if (NOT_KIND.has(w) || w.length < 2) break; kind.unshift(w); }
+      if (kind.length) return `${kind.join(" ")} ${noun}`;
+    }
+  }
+  return null;
 }
 
 /** A tag in one spelling: its letters and each number group as an integer,

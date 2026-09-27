@@ -29,7 +29,7 @@ import { sha256Hex } from "../graphKeys.js";
 import { COMBINE_VERSION, combineUnit, type Decision } from "./combine";
 import { memoryRunStore, PENDING_IMAGE, recordedCall, RUNS_VERSION, type ModelRequest, type RunStore, type Transport } from "./runs";
 import { QUESTIONS_VERSION, unitQuestions, type ReadingQuestion } from "./readers/questions";
-import { aboutOthers, headsOthers, namesUnit, ownPacket, R0_VERSION, readR0, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
+import { aboutOthers, headsOthers, namesUnit, ownPacket, R0_VERSION, readR0, rowKindWords, TITLE_KINDS, type BoundPacket, type ReaderAnswer } from "./readers/r0";
 import { R1_MODEL, R1_PROMPT_VERSION, r1Answers, r1Request, type ReadUnit } from "./readers/r1";
 import { cropSpec, cutOff, joinRun, R2_MODEL, R2_PROMPT_VERSION, R2_RETRIES, r2PacketAnswers, r2Request, type CropRenderer } from "./readers/r2";
 import { TERM_LIST, type TermList } from "./readers/terms";
@@ -121,7 +121,7 @@ export async function readControlIntent(input: {
   const scheduled = first.instances.map((i) => ({ tag: i.tag, family: i.family }));
   const texts = new Map<string, PacketText>();
   const textOf = (p: Packet) => texts.get(p.id) ?? texts.set(p.id, packetText(p)).get(p.id)!;
-  type Unit = { reading: UnitReading; bound: BoundPacket[]; read: ReadUnit };
+  type Unit = { reading: UnitReading; bound: BoundPacket[]; read: ReadUnit; kind: string | null };
   const units: Unit[] = [];
   // The zones each scheduled tag labels on the set's zone plans.
   const zonesByTag = new Map<string, Array<{ plan: ZonePlan; zone: Zone }>>();
@@ -160,6 +160,7 @@ export async function readControlIntent(input: {
       reading: { item: inst.item, tag: inst.tag, family: inst.family, questions, answers, decisions: [] },
       bound,
       read: { tags: [inst.tag], family: inst.family, schedule: item?.table_title ?? "", ...(description ? { description: description.slice(0, 200) } : {}) },
+      kind: rowKindWords(row.cells, inst.family),
     });
   }
   // 2. Groups: units that share every bound packet and question read once;
@@ -236,10 +237,11 @@ export async function readControlIntent(input: {
   }
   // A model's evidence from drawings the unit shares with other units (a
   // system schematic its tag is printed in) speaks for it only where it
-  // names it: its tag, its family's noun or its tag's words, or the heading
-  // of the section it is in. Evidence that names no part of the unit is
-  // about another one ("… TO THE LEAD HEATING WATER PUMP" read for a boiler
-  // pump): UNVERIFIED for this unit.
+  // names it: its tag, its family's noun, its tag's words or what its own
+  // row calls its kind ("BOILER PUMP INTERLOCK" for a pump whose row serves
+  // "BOILER PUMP (B-1)"), or the heading of the section it is in. Evidence
+  // that names no part of the unit is about another one ("… TO THE LEAD
+  // HEATING WATER PUMP" read for a boiler pump): UNVERIFIED for this unit.
   function attributed(a: ReaderAnswer, m: Unit): ReaderAnswer {
     if (a.note || !a.cites.length) return a;
     const all = m.bound.filter((b) => !b.aboutOthers).map((b) => b.binding);
@@ -251,7 +253,7 @@ export async function readControlIntent(input: {
     if (theirs.length === a.cites.length) return { ...a, note: "unverified", why: `its evidence is from a section headed for other units ("${String(headingOf(theirs[0])).slice(0, 80)}")` };
     const own = a.cites.some((c) => { const b = bp(c.packet); return Boolean(b && !b.aboutOthers && ownPacket(b.binding, all)); });
     if (own) return a;
-    const unit = { tag: m.reading.tag, family: m.reading.family };
+    const unit = { tag: m.reading.tag, family: m.reading.family, kind: m.kind };
     const names = a.cites.some((c) => {
       const b = bp(c.packet);
       const tagOnly = Boolean(b?.othersTitled || b?.aboutOthers);
