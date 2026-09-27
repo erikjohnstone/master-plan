@@ -195,9 +195,11 @@ try {
       const [optionId, option] = Object.entries(unit.options)[0];
       const optionRow = () => detail.getByRole('table', { name: `${unit.tag} options` }).getByRole('row')
         .filter({ has: page.getByRole('cell', { name: optionId, exact: true }) });
+      const to = t();
       page.once('dialog', (d) => d.accept(REASON));
       await optionRow().getByRole('button').click();
       await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
+      timings.override_s = Math.round((t() - to) / 1000);
       assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
       const cells = optionRow().getByRole('cell');
       assert.equal((await cells.nth(1).innerText()).trim(), String(!(option.value === true)), 'the value is the one chosen');
@@ -209,9 +211,11 @@ try {
       const [id] = ex.candidates[0].split('@');
       const exRow = panel.getByRole('table', { name: 'Records that wait for something' }).getByRole('row')
         .filter({ has: page.getByRole('button', { name: ex.tag, exact: true }) }).first();
+      const to = t();
       page.once('dialog', (d) => d.accept(REASON));
       await exRow.getByRole('button', { name: `Use ${id}`, exact: true }).click();
       await panel.locator('[data-assemblies-overrides="1"]').waitFor({ state: 'visible' });
+      timings.override_s = Math.round((t() - to) / 1000);
       assert.ok(await panel.getByText(REASON, { exact: false }).isVisible(), 'the reason is shown with the override');
       const chosen = JSON.parse((await applyInPage()).applications).filter((a) => a.instance.tag === ex.tag && a.layer === ex.layer);
       assert.ok(chosen.length && chosen.every((a) => a.selected_by === 'user' && a.assembly?.id === id), `${ex.tag} takes ${id} by override`);

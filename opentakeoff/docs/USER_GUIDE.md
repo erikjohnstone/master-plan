@@ -561,7 +561,11 @@ says what it waits for: an attribute the schedule does not print, a project
 setting, or two typicals that tie. Nothing is guessed. Resolve one with **Use …**,
 which picks a candidate typical, or open **Details** to set an option or exclude
 the unit. Every override asks for a reason and is kept on the record under
-**Your overrides**. Below the exceptions sit a table per family (units, typicals,
+**Your overrides**. Rows of one schedule that wait for the same things, with the
+same candidates, sit together under one header: **Use … for all N** gives them one
+typical, and **Exclude all N** takes out rows that are no units (a notes table
+read as equipment). You give one reason, and each unit still gets its own
+override, naming the group it was decided with. Below the exceptions sit a table per family (units, typicals,
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its
 **Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.
