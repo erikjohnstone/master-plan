@@ -60,3 +60,14 @@ test("the takeoff PDF carries the section after its tables when assemblies were 
   const withSection = await PDFDocument.load(await buildTakeoffPdfBytes([], { title: "Takeoff", assembliesReport: report }));
   assert.ok(withSection.getPageCount() > without.getPageCount());
 });
+
+test("lines that cannot be counted are listed after the exceptions (AS-53)", async () => {
+  const towers = [item("COOLING_TOWER", "CT-1", 0)];
+  const bad = applyAssemblies({ project: { items: towers }, library: LIB, normalized: [{ family: "COOLING_TOWER", tag: "CT-1", unknown: {}, attributes: { cells: { value: -2, printed: "-2", rule: "test", cite: { sheet: "m.pdf#3", table_title: "COOLING_TOWER SCHEDULE", header: "CELLS", bbox: null } } } }] });
+  const r = assembliesReport(bad.instances, bad.applications, bad.lines);
+  assert.ok(r.line_errors.length > 0);
+  const text = drawnText(await assembliesPdfBytes(r));
+  assert.match(text, /Lines that cannot be counted: \d+ \(no total counts them\)/);
+  assert.match(text, /qty -2 is negative/);
+  assert.doesNotMatch(drawnText(await assembliesPdfBytes(report)), /Lines that cannot be counted/, "a report with none shows none");
+});

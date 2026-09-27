@@ -197,7 +197,9 @@ report alone" discipline as the standard finish above.
 **A controls (BAS) estimate of that equipment** continues with `apply_assemblies`. It applies an
 assembly library to every scheduled unit: its controls typical and its mechanical hook-up, with
 the options, variables and expanded lines, each citing the schedule row and the library rule.
-Read `report.exceptions` first. An unresolved unit names what it waits for: an attribute the
+Read `report.exceptions` first, and `report.line_errors`: a line there has no quantity (a
+negative one, or a point count that is not whole, from a misread value), so report it with its
+why. An unresolved unit names what it waits for: an attribute the
 schedule does not print, a project setting, or two typicals that tie. That is the answer, not a
 failure. Report it, or pass the partner's value in `settings` or an override with a reason. Never
 pick a typical or an option the drawing does not decide. Where units of two families share a tag,

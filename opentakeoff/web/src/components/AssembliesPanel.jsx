@@ -169,6 +169,34 @@ function UnitDetail({ unit, lines, onOverride, readings, onOpenCitation }) {
   );
 }
 
+/** The lines whose quantity cannot stand, beside the exceptions (AS-53):
+ * each rests on a misread value or a failing expression, and no total
+ * counts it.
+ * @param {{ lineErrors: import("../lib/assemblies/report").LineError[], onOpenCitation?: (cite: unknown) => void }} props */
+export function LineErrorsView({ lineErrors, onOpenCitation }) {
+  if (!lineErrors.length) return null;
+  return (
+    <section data-assemblies-line-errors={lineErrors.length} style={{ marginBottom: 16 }} aria-label="Lines that cannot be counted">
+      <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)", color: "var(--c-danger)" }}>{lineErrors.length} line{lineErrors.length === 1 ? "" : "s"} cannot be counted</h3>
+      <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-secondary)", marginBottom: 6 }}>Each rests on a value the schedule reading got wrong, or a library expression that fails, and no total counts it. Check the unit's schedule row.</div>
+      <div style={{ overflowX: "auto" }}><table style={{ borderCollapse: "collapse", width: "100%" }} aria-label="Lines that cannot be counted">
+        <thead><tr><th style={th}>Unit</th><th style={th}>Family</th><th style={th}>Layer</th><th style={th}>Line</th><th style={th}>Why</th></tr></thead>
+        <tbody>
+          {lineErrors.map((l, i) => (
+            <tr key={`${l.tag}-${l.rule}-${i}`}>
+              <td style={td}><button type="button" style={{ ...btn, border: "none", padding: 0, textDecoration: "underline", background: "transparent" }} onClick={() => onOpenCitation?.(citeRow(l.cites[0], l.tag))}>{l.tag}</button></td>
+              <td style={td}>{l.family}</td>
+              <td style={td}>{l.layer}</td>
+              <td style={{ ...td, ...mono, fontSize: "var(--fs-xs)" }}>{l.rule}</td>
+              <td style={{ ...td, color: "var(--c-danger)" }}>{l.why}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table></div>
+    </section>
+  );
+}
+
 /** A typed setting: blank is unset; true/yes, false/no, a number, or text. */
 function parseSetting(text) {
   const t = String(text ?? "").trim();
@@ -185,8 +213,9 @@ const input = { padding: "4px 6px", border: "1px solid var(--ink-faint)", border
 
 /** The project's settings the library reads: the hook-up profile's switches
  * and variables, and who does what (a responsibility preset, or the edits it
- * leaves). Each change is saved with the project and re-applies at once. */
-function ProjectSettingsView({ settings, onChange, unread = [] }) {
+ * leaves). Each change is saved with the project and re-applies at once.
+ * @param {{ settings: import("../lib/assemblies/select").ProjectSettings, onChange: (next: import("../lib/assemblies/select").ProjectSettings) => void, unread?: Array<{ key: string, why: string }> }} props */
+export function ProjectSettingsView({ settings, onChange, unread = [] }) {
   const profile = settings.profile ?? {};
   const variables = settings.variables ?? {};
   const active = activeResponsibilityPresets(settings);
@@ -704,7 +733,7 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
             <span><strong style={{ color: "var(--ink)" }}>{report.totals.by_status.ok + report.totals.by_status.overridden}</strong> records decided</span>
             <span style={{ color: report.totals.by_status.unresolved ? "var(--c-danger)" : undefined }}><strong>{report.totals.by_status.unresolved}</strong> unresolved</span>
             <span><strong style={{ color: "var(--ink)" }}>{report.totals.by_status.no_assembly}</strong> without a typical</span>
-            <span><strong style={{ color: "var(--ink)" }}>{report.totals.lines}</strong> lines ({report.totals.lines_by_status.ok} ok, {report.totals.lines_by_status.unresolved} unresolved, {report.totals.lines_by_status.replaced} replaced by drawing evidence)</span>
+            <span><strong style={{ color: "var(--ink)" }}>{report.totals.lines}</strong> lines ({report.totals.lines_by_status.ok} ok, {report.totals.lines_by_status.unresolved} unresolved, {report.totals.lines_by_status.replaced} replaced by drawing evidence{report.totals.lines_by_status.error > 0 && <span style={{ color: "var(--c-danger)" }}>, {report.totals.lines_by_status.error} that cannot be counted</span>})</span>
             {report.partner && (
               <span data-assemblies-partner title="Partner-entered: your library's own figures, extended by each line's quantity. OpenTakeoff ships no prices, rates or hours.">
                 partner-entered: {report.partner.extended_cost ?? "no"} extended cost{report.partner.hours.length ? ` · ${report.partner.hours.map((h) => `${h.extended_hours} h ${h.labor_category || "(no category)"}`).join(", ")}` : ""}
@@ -775,6 +804,8 @@ export default function AssembliesPanel({ project, projectStatus = {}, onLoadPro
               </table></div>
             </section>
           )}
+
+          <LineErrorsView lineErrors={report.line_errors} onOpenCitation={onOpenCitation} />
 
           <section style={{ marginBottom: 16 }} data-assemblies-families={report.families.length} aria-label="By family">
             <h3 style={{ margin: "4px 0 6px", fontSize: "var(--fs-m)" }}>By family</h3>

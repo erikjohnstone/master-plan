@@ -91,6 +91,12 @@ export async function drawAssembliesSection(doc: PDFDocument, report: Assemblies
       report.exceptions.map((e) => [e.tag, e.family, e.layer, e.waits_for.join(", ") || "—", e.candidates.join(", ") || "—", cite(e)]));
   }
 
+  if (report.line_errors.length) {
+    text(c, `Lines that cannot be counted: ${report.line_errors.length} (no total counts them)`, 10, true);
+    table(c, ["Unit", "Family", "Layer", "Line", "Why", "Schedule row"], [0.1, 0.1, 0.07, 0.27, 0.22, 0.24],
+      report.line_errors.map((l) => [l.tag, l.family, l.layer, l.rule, l.why, cite(l)]));
+  }
+
   text(c, "By family", 10, true);
   table(c, ["Family", "Units", "Typicals", "Unresolved", "No typical", "Lines"], [0.16, 0.07, 0.47, 0.1, 0.1, 0.1],
     report.families.map((f) => [f.family, f.units, Object.entries(f.assemblies).map(([a, n]) => `${a} ×${n}`).join(", ") || "—",

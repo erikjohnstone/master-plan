@@ -48,6 +48,20 @@ export interface FamilyRow {
   lines: Record<LineStatus, number>;
 }
 
+/** A line whose quantity cannot stand, with why (AS-53): an expression
+ * that fails, a negative quantity, or a point or device count that is not
+ * whole (AS-52). No total counts it. */
+export interface LineError {
+  tag: string;
+  family: string;
+  layer: string;
+  /** The library rule that made it ("<typical>@<version>:<line id>"). */
+  rule: string;
+  kind: ExpandedLine["kind"];
+  why: string;
+  cites: Cite[];
+}
+
 export interface AssembliesReport {
   schema: "opentakeoff.assemblies_report.v1";
   totals: { units: number; records: number; by_status: Record<RecordStatus, number>; lines: number; lines_by_status: Record<LineStatus, number> };
@@ -56,6 +70,9 @@ export interface AssembliesReport {
   partner: PartnerSummary | null;
   /** Records that wait for something, first: each names what it waits for. */
   exceptions: UnitRow[];
+  /** Lines whose quantity cannot stand, beside the exceptions, each with
+   * why: no total counts them, and none is left out quietly. */
+  line_errors: LineError[];
   families: FamilyRow[];
   units: UnitRow[];
 }
@@ -126,11 +143,15 @@ export function assembliesReport(
   const families = [...byFamily.values()].sort((a, b) => b.units - a.units || a.family.localeCompare(b.family));
   const exceptions = units.filter((u) => u.status === "unresolved")
     .sort((a, b) => a.family.localeCompare(b.family) || a.tag.localeCompare(b.tag) || a.layer.localeCompare(b.layer));
+  const lineErrors: LineError[] = lines.filter((l) => l.status === "error")
+    .map((l) => ({ tag: l.tag, family: l.family, layer: l.layer, rule: l.rule, kind: l.kind, why: l.missing.join("; "), cites: l.cites }))
+    .sort((a, b) => a.family.localeCompare(b.family) || a.tag.localeCompare(b.tag) || a.layer.localeCompare(b.layer) || a.rule.localeCompare(b.rule));
   return {
     schema: "opentakeoff.assemblies_report.v1",
     totals: { units: instances.length, records: applications.length, by_status: byStatus, lines: lines.length, lines_by_status: linesByStatus },
     partner: partnerSummary(lines),
     exceptions,
+    line_errors: lineErrors,
     families,
     units,
   };

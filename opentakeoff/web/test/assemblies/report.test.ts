@@ -115,6 +115,19 @@ test("a narrowed reply names the families that leave units out (AS-51)", () => {
   assert.deepEqual(familiesLeftOut(instances, ["PUMP", "DOAS"]), [], "DOAS is asked for by its applied family");
 });
 
+test("lines whose quantity cannot stand are listed beside the exceptions, each with why (AS-53)", () => {
+  // A cooling tower whose cell count was misread as -2, beside one read right.
+  const items = [row("COOLING_TOWER", "CT-1", 0), row("COOLING_TOWER", "CT-2", 1)];
+  const r = applyAssemblies({ project: { items }, library: LIB, normalized: [norm(items[0], { cells: -2 }), norm(items[1], { cells: 2 })] });
+  const report = assembliesReport(r.instances, r.applications, r.lines);
+  assert.ok(report.line_errors.length > 0);
+  assert.equal(report.line_errors.length, report.totals.lines_by_status.error, "every error line is listed");
+  assert.ok(report.line_errors.every((l) => l.tag === "CT-1" && /^qty -\d+ is negative$/.test(l.why) && l.cites.length), JSON.stringify(report.line_errors[0]));
+  assert.ok(report.line_errors.some((l) => l.rule.startsWith("cooling-tower@1:")), "the tower's own points");
+  const clean = applyAssemblies({ project: { items: [items[1]] }, library: LIB, normalized: [norm(items[1], { cells: 2 })] });
+  assert.deepEqual(assembliesReport(clean.instances, clean.applications, clean.lines).line_errors, []);
+});
+
 test("exception groups: the rows of a table that prints no title are one untitled schedule", () => {
   // 26_CA's and 061_IA's shape: the compile keeps the table, its title "".
   const untitled = (tag: string, i: number): CompiledItem => ({ ...row("FAN", tag, i), sheet_id: "s.pdf#4", table_title: "" });

@@ -3111,3 +3111,42 @@ drew counts in quarters (9.75 electric heat stages), which this now flags:
 it draws a dimensionless number (cells, stages, rows, fans) whole, and
 asserts that every known quantity over its 400-odd expansions is not
 negative and every point or device count is whole.
+
+## AS-53 — a line that could not be counted was left out of every total without a word (FIXED — this goal)
+
+**Found:** 2026-09-27, following AS-52 to where its error lines go. A line
+whose quantity cannot stand has no quantity, so no total and no roll-up
+counts it. Such a line is AS-52's negative quantity or fractional point
+or device count, or an expression that fails. Nothing surfaced them:
+- the panel's totals line counted ok, unresolved and replaced lines and
+  left errors out;
+- the report's exceptions list only records that wait, and a record with
+  an error line need not wait (its typical is chosen);
+- over MCP, `report.exceptions` said nothing of them.
+An estimate could miss a cooling tower's fan commands, and only the
+unit's own Details, or the PDF's total, showed why.
+
+**Fix (report.ts, the shared path; the panel, the PDF and MCP render it):**
+- **The report:** `line_errors` lists every line whose quantity cannot
+  stand, beside the exceptions: its unit, family, layer, rule, kind, why
+  and cites.
+- **The panel:** "Lines that cannot be counted" lists them after the
+  exceptions, each unit's tag opening its schedule row. The totals line
+  counts them.
+- **The PDF section** lists them after the exceptions.
+- **MCP:** the report carries `line_errors` in every detail (an empty list
+  when there are none), and its schema describes it.
+- **Unchanged:** no record or line. No cached document has an error line
+  (AS-52's census).
+
+**Tests:**
+- report.test.ts: a cooling tower whose cells were misread as -2 lists
+  its lines, each "qty -2 is negative" with its cites, and they number
+  exactly the report's error lines; one read right lists none.
+- reportPdf.test.ts: the PDF draws the section for them, and none without
+  them.
+- panelSections.test.ts renders the panel's own sections: the lines
+  listed with their unit, rule and why, nothing when there are none, and
+  Project settings' unread-settings notice (AS-50).
+- The Assemblies UI proof passes on 09_ME (11 checks) with the section in
+  place.

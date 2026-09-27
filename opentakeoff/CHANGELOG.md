@@ -1,5 +1,16 @@
 # Changelog
 
+- **Assemblies: the lines that cannot be counted are listed.** A line whose
+  quantity cannot stand (AS-52's negative or fractional counts, or an
+  expression that fails) had no quantity, and no total counted it. The
+  panel's totals left error lines out, and the report listed only the
+  records that wait: an estimate could miss its fan commands without a
+  word. The report now carries `line_errors`, each with its unit, rule and
+  why. The panel shows them under **Lines that cannot be counted** and
+  counts them in its totals, and the PDF section lists them after the
+  exceptions. No document in the corpus has one today
+  (`web/src/lib/assemblies/report.ts`, ASSEMBLIES_BUG_CATALOGUE AS-53).
+
 - **Assemblies: a quantity is never negative, and a point or device is
   counted whole.** A count the schedule reading got wrong (a cooling
   tower's -1 cells, 1.5 electric heat stages, a unit's QTY misread) went

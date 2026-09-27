@@ -1869,6 +1869,7 @@ export const applyAssembliesOutput = {
       hours: z.array(z.object({ labor_category: z.string(), extended_hours: z.number(), lines: z.number().int() })), not_extended: z.number().int(),
     }).nullable().describe("The partner's own cost and labor fields, extended; null when the library carries none"),
     exceptions: z.array(z.record(z.string(), z.unknown())),
+    line_errors: z.array(z.record(z.string(), z.unknown())).describe("Lines whose quantity cannot stand, each with its unit, rule and why: an expression that fails, a negative quantity, or a point or device count that is not whole. No total counts them; report them with the exceptions"),
     families: z.array(z.record(z.string(), z.unknown())),
     units: z.array(z.record(z.string(), z.unknown())).optional(),
   }),
