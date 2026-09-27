@@ -17,7 +17,7 @@
 
 import { z } from "zod";
 import { ASSEMBLY_FAMILIES, familyAttributes } from "./attributes";
-import { checkExpr, ExprError, type Scope } from "./expr";
+import { checkExpr, evaluate, ExprError, refsOf, type Scope } from "./expr";
 
 // ── Vocabularies ────────────────────────────────────────────────────────────
 
@@ -283,9 +283,23 @@ export function validateAssembly(raw: unknown): { ok: true; def: AssemblyDefinit
     if (v.from?.startsWith("attr.") && !scope.attrs.has(v.from.slice(5))) errors.push(`variables.${v.id}.from: "${v.from}" is not an attribute of ${familiesOf(def).join(" and ")}`);
   }
   const deviceRoles = new Set(def.lines.filter((l) => l.kind === "device").map((l) => l.role.id));
+  // A quantity with nothing to read is known now, and it is checked now as
+  // expansion would: never negative, and a point or device whole unless the
+  // line rounds it (AS-52).
+  const fixed = (src: string) => {
+    try {
+      const node = checkExpr(src, scope);
+      if (refsOf(node).length) return undefined;
+      const r = evaluate(node, { attr: () => undefined, var: () => undefined, opt: () => undefined }, src);
+      return r.known && typeof r.value === "number" ? r.value : undefined;
+    } catch { return undefined; }
+  };
   for (const l of def.lines) {
     check(`lines.${l.id}.when`, l.when);
     check(`lines.${l.id}.qty`, l.qty);
+    const n = fixed(l.qty);
+    if (n !== undefined && n < 0) errors.push(`lines.${l.id}.qty: ${n} is negative`);
+    else if (n !== undefined && (l.kind === "point" || l.kind === "device") && !l.round && !Number.isInteger(n)) errors.push(`lines.${l.id}.qty: ${n} is not a whole count of ${l.kind}s`);
     for (const [name, p] of Object.entries(l.params ?? {})) {
       if (typeof p === "string" && p !== SELECTION) check(`lines.${l.id}.params.${name}`, p);
     }

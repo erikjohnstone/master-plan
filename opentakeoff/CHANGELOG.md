@@ -17,9 +17,13 @@
   straight into its lines, which were `ok` with -20 fan commands or half a
   fan start. Such a line is now an `error` naming its quantity ("qty -2 is
   negative", "qty 1.5 is not a whole count of points"); a line with a
-  `round` rule may still compute a fraction for its rounding. Over the 98
-  cached documents no line changes: none has such a quantity today
-  (`web/src/lib/assemblies/expand.ts`, ASSEMBLIES_BUG_CATALOGUE AS-52).
+  `round` rule may still compute a fraction for its rounding. The library
+  gate checks a quantity that reads nothing the same way, so a partner's
+  library that fixes one (a quantity of "2 - 3", or half a device) is
+  refused, with its reason, when it is loaded or edited. Over the 98 cached
+  documents no line changes: none has such a quantity today
+  (`web/src/lib/assemblies/expand.ts`, `schema.ts`, ASSEMBLIES_BUG_CATALOGUE
+  AS-52).
 
 - **Assemblies: a narrowed reply names the families that leave units out.**
   `apply_assemblies` narrows its reply to the families units apply as.

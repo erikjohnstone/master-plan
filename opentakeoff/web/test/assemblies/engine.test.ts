@@ -73,6 +73,11 @@ test("the gate refuses a record with the offending token, field by field", () =>
   assert.match(String(errs({ lines: [line({ id: "p", kind: "point", qty: "1", io: "AI", role: { vocab: "xeto", id: "x" }, device_role_ref: "Valve" })] })), /no device line of role "Valve"/);
   assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "1", role: { vocab: "s223", id: "X" } }), line({ id: "a", kind: "device", qty: "2", role: { vocab: "s223", id: "Y" } })] })), /line "a" appears twice/);
   assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "1 +", role: { vocab: "s223", id: "X" } })] })), /lines\.a\.qty: unexpected end of expression/);
+  // A quantity with nothing to read is checked as expansion checks it (AS-52).
+  assert.match(String(errs({ lines: [line({ id: "a", kind: "component", qty: "2 - 3", unit: "ft", role: { vocab: "ot", id: "X" } })] })), /lines\.a\.qty: -1 is negative/);
+  assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "0.5", role: { vocab: "s223", id: "X" } })] })), /lines\.a\.qty: 0\.5 is not a whole count of devices/);
+  assert.deepEqual(errs({ lines: [line({ id: "a", kind: "device", qty: "0.5", round: { increment: 1 }, role: { vocab: "s223", id: "X" } })] }), [], "a line that rounds may compute a fraction");
+  assert.deepEqual(errs({ lines: [line({ id: "a", kind: "component", qty: "12.5", unit: "ft", role: { vocab: "ot", id: "X" } })] }), [], "a length may be fractional");
   assert.match(String(errs({ version: "v1" })), /version: a version is 1, 1\.2 or 1\.2\.3/);
   assert.match(String(errs({ lines: [line({ id: "a", kind: "device", qty: "1", role: { vocab: "s223", id: "X" }, price: 5 })] })), /Unrecognized key/);
   const cyc = sanitizeAssemblyDefinitions([

@@ -3112,6 +3112,15 @@ it draws a dimensionless number (cells, stages, rows, fans) whole, and
 asserts that every known quantity over its 400-odd expansions is not
 negative and every point or device count is whole.
 
+**At the gate (addendum):** a quantity with nothing to read (no attribute,
+variable or option) is known when the library loads, so the gate checks it
+by the same rule. A line fixed at "2 - 3", or a device at "0.5" with no
+`round` rule, is refused with its reason ("lines.a.qty: -1 is negative"),
+as the library editor's live validation, the CSV import and a profile
+import all run the gate. A rounding device and a fractional length pass.
+The whole starter library passes. engine.test.ts's gate test covers these
+four cases.
+
 ## AS-53 — a line that could not be counted was left out of every total without a word (FIXED — this goal)
 
 **Found:** 2026-09-27, following AS-52 to where its error lines go. A line
