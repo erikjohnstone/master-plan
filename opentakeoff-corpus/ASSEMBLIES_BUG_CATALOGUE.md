@@ -3247,3 +3247,12 @@ a census rebuilt before it was stopped for time.
 - The Assemblies UI proof passes on 07_MO (6 checks: its five sheets named
   on screen, the parity checks with apply_assemblies) and 017_MD (12
   checks, its one sheet named).
+
+**Addendum, the share past the sheet (found by round 11's fourth batch):**
+the UI proof named 082_OR's M002 and M003, two scanned schedule sheets, as
+"101% of the sheet is pictures". Placed images are summed (oneclick.ts), so
+a scan that overhangs its page, or overlaps another image, sums past the
+sheet. `pictureScheduleSheets` now gives at most the whole sheet (1, "100%"),
+as the output schema's "0 to 1" says. A test stretches the fixture's picture
+past the page's edges (117% summed) and expects 1; without the clamp it
+reads 1.17 and fails. `sheet_graph`'s own note is unchanged.

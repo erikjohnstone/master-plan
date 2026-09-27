@@ -246,3 +246,28 @@ test("apply_assemblies: a schedule sheet whose tables are pictures is named in t
   assert.deepEqual(assembliesReport(ui.instances, ui.applications, ui.lines, wire.unread_schedules).schedules_unread, named);
   await client.close();
 });
+
+test("apply_assemblies: a picture that overhangs its sheet is the whole sheet, never more (AS-54)", { timeout: 10 * 60 * 1000 }, async () => {
+  // 082_OR's two scanned schedule sheets summed their placed images past the
+  // page ("101% of the sheet"). The fixture's picture, stretched past the
+  // page's edges (640 x 440 on 600 x 400; the same byte length, so the PDF's
+  // offsets hold), sums to 117%.
+  const src = await readFile(resolve(HERE, "fixtures/raster-schedule.pdf"), "latin1");
+  assert.ok(src.includes("500 0 0 300 50 50 cm"));
+  const dir = await mkdtemp(join(tmpdir(), "ot-as54-"));
+  const pdf = join(dir, "raster-overhang.pdf");
+  await writeFile(pdf, src.replace("500 0 0 300 50 50 cm", "640 0 0 440 -9 -9 cm"), "latin1");
+  const { Session } = await import("../src/session.ts");
+  const session = new Session();
+  const [ct, st] = InMemoryTransport.createLinkedPair();
+  await buildServer(session).connect(st);
+  const client = new Client({ name: "as54-overhang", version: "0.0.0" });
+  await client.connect(ct);
+  assert.equal((await call(client, "load_plan", { path: pdf })).isError, false);
+  const r = await call(client, "apply_assemblies", {});
+  assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 500));
+  const named = r.data.report.schedules_unread;
+  assert.deepEqual(named.map((u) => [u.sheet, u.picture_share]), [["raster-overhang.pdf#2", 1]]);
+  assert.match(named[0].why, /^no table could be read from it: 100% of the sheet is pictures/);
+  await client.close();
+});

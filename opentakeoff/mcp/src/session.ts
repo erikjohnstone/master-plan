@@ -7982,9 +7982,11 @@ export class Session {
   /** The schedule sheets whose tables are pictures: rasterScheduleNotes'
    * first case as data (a schedule-role sheet that extracted no table while
    * enough of it is embedded raster image for the raster policy), with the
-   * share of the sheet the images cover. The assemblies project carries
-   * them, so apply_assemblies and the Takeoff panel say which schedules
-   * their units cannot come from (AS-54). Best effort, as the notes are. */
+   * share of the sheet the images cover, at most the whole sheet (placed
+   * images are summed, so a scan that overhangs the page or overlaps another
+   * sums past it). The assemblies project carries them, so apply_assemblies
+   * and the Takeoff panel say which schedules their units cannot come from
+   * (AS-54). Best effort, as the notes are. */
   async pictureScheduleSheets(): Promise<Array<{ sheet: string; picture_share: number }>> {
     const g = await this.ensureGraph();
     const out: Array<{ sheet: string; picture_share: number }> = [];
@@ -7994,7 +7996,7 @@ export class Session {
         const sheetState = this.sheet(s.key);
         const geo = await this.ensureGeometry(sheetState);
         const sheetArea = sheetState.widthPx * sheetState.heightPx;
-        if (sheetArea > 0 && this.rasterPolicy(sheetState, geo).rasterEligible) out.push({ sheet: s.key, picture_share: Math.round((geo.imageArea / sheetArea) * 100) / 100 });
+        if (sheetArea > 0 && this.rasterPolicy(sheetState, geo).rasterEligible) out.push({ sheet: s.key, picture_share: Math.min(1, Math.round((geo.imageArea / sheetArea) * 100) / 100) });
       } catch { /* diagnostic only */ }
     }
     return out;
