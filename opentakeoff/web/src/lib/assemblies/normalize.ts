@@ -1418,10 +1418,11 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         // "3-SPEED", or a SPEED CONTROL's "3-STAGE": the fan's speeds.
         const speeds = t.match(/^(\d)\s*-?\s*SPEED$/) ?? (/\bSPEED\s+CONTROL\b/.test(h) ? t.match(/^(\d)\s*-?\s*STAGE$/) : null);
         if (speeds && ctx.attrs.has("fan_speeds")) { found.push({ attr: "fan_speeds", col, value: Number(speeds[1]), printed: text, rule: "count.fan_speeds", rank: 0 }); break; }
-        if (ctx.attrs.has("control")) { found.push({ attr: "control", col, value: text.trim(), printed: text, rule: "text.control", rank: 0 }); break; }
-        // A family with no control attribute (a pump) keeps only what the cell
-        // says about a drive: "VFD" printed is a VFD.
+        // A cell that names the drive ("VFD" under VARIABLE CONTROL TYPE or
+        // SPEED CONTROL) says the motor runs on one, whether or not the family
+        // keeps the control as text too; a pump keeps only that.
         if (ctx.attrs.has("vfd") && /^(?:VFD|VSD|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVE)$/.test(t)) found.push({ attr: "vfd", col, value: "yes", printed: text, rule: "enum.vfd_speed_control", rank: 1 });
+        if (ctx.attrs.has("control")) found.push({ attr: "control", col, value: text.trim(), printed: text, rule: "text.control", rank: 0 });
         break;
       }
       case "economizer": {

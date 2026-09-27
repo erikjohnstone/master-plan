@@ -1204,3 +1204,17 @@ test("metamorphic sweep: spacing that changes no word changes no value (a slash,
   assert.deepEqual(fan("SYSTEM AND / OR SERVICE"), fan("SYSTEM AND/OR SERVICE"));
   assert.equal(fan("SYSTEM AND / OR SERVICE").service, "TOILET EXHAUST");
 });
+
+test("a control column that names the drive: VFD printed is a VFD, for a family that keeps its control too", () => {
+  // 096_IN's AHU SUPPLY FAN SCHEDULE (dev 3, a table its key did not draw):
+  // VARIABLE CONTROL TYPE prints "VFD" on every fan.
+  const fan = (cell: string) => normalizeCompileItem(row("SF-4A", "AHU SUPPLY FAN SCHEDULE", { CFM: "4000", "VARIABLE CONTROL TYPE": cell, "MOTOR HP/KW": "5", "MOTOR VOLT": "460", "MOTOR PH": "3" }), "FAN");
+  const vfd = fan("VFD");
+  assert.equal(vfd.attributes.vfd?.value, "yes");
+  assert.equal(vfd.attributes.vfd?.cite.header, "VARIABLE CONTROL TYPE");
+  assert.equal(vfd.attributes.control?.value, "VFD");
+  // Negative controls: a speed that is only "VARIABLE", or constant, names no drive.
+  assert.equal(fan("VARIABLE").attributes.vfd, undefined);
+  assert.equal(fan("CONSTANT").attributes.vfd, undefined);
+  assert.equal(fan("VFD / ECM").attributes.vfd, undefined);
+});

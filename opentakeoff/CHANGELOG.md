@@ -1,5 +1,15 @@
 # Changelog
 
+- **A fan whose control column prints "VFD" runs on a VFD.** A schedule
+  that prints the drive under a control heading ("VARIABLE CONTROL TYPE:
+  VFD") gave the fan's control text but not its VFD, so the shared
+  normalizer (`web/src/lib/assemblies/normalize.ts`) left the fan's
+  controls typical waiting on a VFD answer. The cell now also reads as a
+  VFD; "VARIABLE" or "CONSTANT" alone still names no drive. Found by a
+  census of the 247 fans and pumps waiting on a VFD answer across the
+  cached corpus, which also records the ones only the compile or the
+  estimator can settle (ASSEMBLIES_BUG_CATALOGUE AS-33).
+
 - **Assemblies read a header the same however its slash or parentheses are
   spaced.** A text layer that prints "SYSTEM AND / OR SERVICE" or "FAN COIL(
   S ) SERVED" printed the same words as "SYSTEM AND/OR SERVICE" and "FAN

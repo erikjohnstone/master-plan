@@ -1903,7 +1903,8 @@ inside parentheses) and its cells with thousands separators dropped; any
 value that changed was a brittle rule. Two were: SERVICE under "SYSTEM AND
 / OR SERVICE" (031_MO, dev, prints it closed up: 19 fans' and pumps'
 services lost when spaced), and AREA SERVED under "FAN COIL( S ) SERVED"
-(083_MA, unseen: 3 heat pumps). The header's one spelling now closes the
+(083_MA, dev 3, a keyed table: 3 heat pumps; its commit, 75f2121, called
+083_MA unseen, which it is not). The header's one spelling now closes the
 space around a slash and just inside parentheses, and FAN COIL (S) SERVED
 reads with a space before the plural too; the sweep now changes nothing
 but one room list whose comma the cell variant itself removed (028_TX
@@ -1912,3 +1913,71 @@ FILTER(S) as a filter's tag (PF-4), not a MERV. No value on any cached
 document changes (dev through dev 5, the unseen corpus); the invariant
 sweep shows the same 12 flags; control intent replays identically. Test:
 normalize.test.ts, "metamorphic sweep".
+
+## AS-33 — 247 fans and pumps wait on a VFD answer: what the drawings print, and what they do not (FIXED for one shape; OPEN for the rest, with owners)
+
+**Found:** 2026-09-27, by the application census over the 86 cached
+documents (no key read): 1,963 controls applications, 700 resolved, 582
+waiting, 675 for families with no controls typical. The largest wait is
+attr.vfd (247 fans and pumps): the fan and pump typicals select on it alone
+(fan-constant / fan-variable, pump-constant / pump-vfd). A census of every
+waiting unit's own row, its cited notes, and every other table in the same
+document's cached sheet graph that prints its tag
+(scratch census3/vfd-evidence.mjs, vfd-notes.mjs) sorted them:
+
+- **A control column that names the drive (fixed).** 096_IN's AHU SUPPLY FAN
+  and AHU RETURN/EXHAUST FAN SCHEDULEs (dev 3, tables its key did not draw)
+  print "VFD" under VARIABLE CONTROL TYPE on all 13 fans. The normalizer
+  kept it as the fan's control text only; "VFD" there is a VFD whether or
+  not the family keeps a control value, as a pump's SPEED CONTROL "VFD"
+  already was (031_MO's key). Each of the 13 cells was read in the text
+  layer at the header's x (page 19). Test: normalize.test.ts, "a control
+  column that names the drive" (negative controls VARIABLE, CONSTANT, "VFD
+  / ECM").
+- **Not units (OPEN — owned by the compile; nothing changed here).** About
+  80 of the 247 are compiled rows that are no unit: transposed schedules
+  compiled one item per attribute row (071_ME's PACKAGED ROOF TOP UNIT
+  SCHEDULE prints UNIT NO. | RTU-G | RTU-1 (ALT#2) | RTU-2 across and its
+  attributes down: 42 items such as "2.25" and "COIL FACE VELOCITY FPM",
+  and no rooftop unit; 21_VA's PUMP, FAN and AIR COOLED CONDENSING UNIT
+  SCHEDULEs, whose units print as column heads "CHWP-1 AND CHWP-2" and
+  "EF-2, EF-5, EF-7, EF-9"), and untitled tables that are not schedules
+  (061_IA's structural SPECIAL INSPECTION notes SP1-SP5 as pumps and STEEL
+  FRAMING NOTES SF1-SF10 as fans; 08_ME's sheet index P 101-P 103 as
+  pumps; 19_CA's abbreviation legend SFD as a fan; 096_IN's grille sizes
+  EG2, EG3 as fans). The assemblies view shows each as a unit waiting on
+  answers no print gives, and a transposed schedule's real units get no
+  assembly at all. Reading a transposed schedule, or refusing a notes
+  table, is extraction's to decide (the shared compile), not the apply
+  path's.
+- **Printed, but not as a VFD yes or no (left unknown, on purpose).** A
+  SPEED CONTROL of "VARIABLE" (044_NY's feedwater pumps, 031_MO's fans) may
+  be a VFD or an EC motor; notes giving a fan a "SPEED CONTROLLER FOR AIR
+  FLOW BALANCING" or "SOLID STATE SPEED CONTROL" (03_FL, 033_MN, 014_MT,
+  bldg5406, 096_IN) describe a balancing controller, and the dev keys (03_FL,
+  044_NY) key no vfd from either. An EC motor printed only in a note (004_MO
+  EF-1) leaves vfd blank in its key too, and the library has no EC-motor
+  fan typical, so reading "EC motor, so no VFD" would pick the constant
+  fan's points for a fan that may take a speed signal: a question for the
+  library review (INPUT 4), not a rule. 14_OR's circulators print MOTOR
+  CONTROL "ECM" and cite a note "INTEGRATED VFD": a genuine conflict, left
+  unknown (its key marks it "?").
+- **In an electrical schedule (OPEN — proposed, not built).** Three real
+  units have a decisive cell only in the electrical engineer's equipment
+  schedule, which the compile does not claim: 033_MN AHU-6 (ELECTRICAL
+  POWER MECHANICAL EQUIPMENT SCHEDULE, STARTER TYPE "VFD"), 014_MT SEF-A1
+  (M.E.P. COORDINATION SCHEDULE, "VFD"; its other fans print "SC / MSS",
+  which needs the sheet's legend) and 03_FL EF-1 (MECHANICAL EQUIPMENT
+  ELECTRICAL SCHEDULE: "PROVIDE FVNR ENCLOSED MAGNETIC MOTOR STARTER").
+  A reader for these (the unit's tag in an unclaimed electrical schedule,
+  a starter or drive column, one row per tag) would decide 3 units here and
+  score none (no key draws vfd from them); it is proposed for when the
+  corpus shows more.
+- The other ~130 print nothing about a drive anywhere in the graphed
+  sheets: the estimator's answer, or the control drawings, decide them.
+
+**Measured:** the 13 vfd values are the only change on any cached document
+(dev through dev 5 and the unseen corpus, head vs working tree); no keyed
+value moves; control intent replays identically; the invariant sweep's 12
+flags are unchanged. The application census: 713 resolved (from 700), 569
+waiting (from 582), attr.vfd 234 (from 247).
