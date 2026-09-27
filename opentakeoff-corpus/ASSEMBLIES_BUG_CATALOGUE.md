@@ -2658,7 +2658,11 @@ named excludes that unit's records only:
 Without a family named, each excludes every unit with the tag, as before.
 An override that names no family matches exactly as before by
 construction: the first lookup cannot match it, and the second is the old
-test.
+test. Tag and family name one unit: in none of the 98 documents do two
+units of one family share a tag. In the browser (UI proof round 8),
+"Exclude all" on 16_NV's four bid-alternate rooftop units (B2 to B5, 8
+records) left the 10 records of the furnaces, condensing units and outdoor
+air unit under those tags untouched.
 
 **Tests:**
 - engine.test.ts: a VAV box and a fan coil both tagged "B1". Each family's
