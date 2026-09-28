@@ -303,11 +303,23 @@ export function scheduleNotes(spans: readonly NoteSpan[], region: Box, others: r
   return notes;
 }
 
+/** A cell's or a note's text as the rules read it: every dash glyph a hyphen
+ * ("460–3–60", "1–1/2", "NOTES 1–14"), the degree sign's look-alikes (º, ˚)
+ * the degree sign, any space one space, and letters written with periods one
+ * word ("V.F.D.", "N.A."). A value's cite keeps the printed text. */
+export function readText(text: string): string {
+  return String(text ?? "")
+    .replace(/[‐-―−﹘﹣－]/g, "-")
+    .replace(/[º˚]/g, "°")
+    .replace(/[\u00a0\u2000-\u200a\u202f\u205f\u3000]/g, " ")
+    .replace(/(?<![A-Za-z.])(?:[A-Za-z]\.){2,}(?![A-Za-z])/g, (m) => m.replace(/\./g, ""));
+}
+
 /** The notes a row's own REMARKS / NOTES cell cites: named numbers ("SEE
  * NOTES 1, 2", "2,4", "1-3"), every note ("SEE NOTES", "ALL"), or null
  * when the cell cites none. */
 export function citedNoteIds(text: string): { all: boolean; ids: string[] } | null {
-  const t = String(text ?? "").toUpperCase().replace(/\s+/g, " ").trim();
+  const t = readText(text).toUpperCase().replace(/\s+/g, " ").trim();
   if (!t) return null;
   if (/^ALL(?:\s+NOTES)?$/.test(t)) return { all: true, ids: [] };
   const m = t.match(/\bNOTES?\s+((?:\d{1,2}|[A-Z])(?:\s*(?:,|&|AND|-|THRU|THROUGH)\s*(?:\d{1,2}|[A-Z]))*)\b/) ?? t.match(/^((?:\d{1,2})(?:\s*(?:,|&|-)\s*\d{1,2})*)$/);
@@ -353,14 +365,14 @@ const DRIVE_RATED_ALL = new RegExp(DRIVE_RATED.source, "g");
  * VARIABLE FREQUENCY DRIVE RATED MOTOR", "INVERTER DUTY MOTOR"): built to run
  * on a VFD, which alone does not say one runs it. */
 export function motorRatedForDrive(text: string): boolean {
-  return DRIVE_RATED.test(String(text ?? "").toUpperCase().replace(/\s+/g, " "));
+  return DRIVE_RATED.test(readText(text).toUpperCase().replace(/\s+/g, " "));
 }
 
 /** Whether a note calls the unit's fan or pump variable speed ("VARIABLE
  * SPEED, DIRECT DRIVE SUPPLY FAN"): not a compressor, and not a drive's own
  * name. */
 export function variableSpeed(text: string): boolean {
-  return String(text ?? "").toUpperCase().replace(/\s+/g, " ").split(/[.;]/)
+  return readText(text).toUpperCase().replace(/\s+/g, " ").split(/[.;]/)
     .some((s) => /\bVARIABLE\s*-?\s*SPEED\b(?!\s+(?:DRIVES?|COMPRESSORS?|SCROLL)\b)/.test(s) && !/\bCOMPRESSORS?\b/.test(s));
 }
 
@@ -368,7 +380,7 @@ export function variableSpeed(text: string): boolean {
  * FANS WITH EC MOTORS (MOTOR MOUNTED) OR VARIABLE FREQUENCY DRIVES"): each
  * unit has one or the other, so it states neither for a unit. */
 export function ecmOrDrive(sentence: string): boolean {
-  const s = String(sentence ?? "").toUpperCase().replace(/\s+/g, " ");
+  const s = readText(sentence).toUpperCase().replace(/\s+/g, " ");
   const ec = s.search(EC_MOTOR);
   const drive = s.search(DRIVE_WORDS);
   if (ec < 0 || drive < 0) return false;
@@ -381,7 +393,7 @@ export function ecmOrDrive(sentence: string): boolean {
  * sentence that opens with a water system speaks for rows of that system
  * only. */
 export function noteValues(note: ScheduleNote, attrs: ReadonlySet<string>, service: string | null = null): NoteValue[] {
-  const t = note.text.toUpperCase().replace(/\s+/g, " ");
+  const t = readText(note.text).toUpperCase().replace(/\s+/g, " ");
   const out: NoteValue[] = [];
   const put = (attr: string, value: string | number, rule: string) => { if (attrs.has(attr)) out.push({ attr, value, noteId: note.id, rule }); };
   const negated = (word: string) => new RegExp(`\\b(?:NO|WITHOUT|NOT|NON)\\b[^.;]*${word}`).test(t);

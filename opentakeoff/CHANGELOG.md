@@ -1,5 +1,25 @@
 # Changelog
 
+- **Assemblies: a schedule's values read the same however another drafter
+  spells them.** A sweep that respelled every cached schedule's headers,
+  titles and cells without changing their meaning found values lost, and on
+  one document leaked, under spellings other drafters print. A header's one
+  spelling now reads MBTUH, MBTU/HR, KBTU/H and "BTUH X 1000" as MBH (read as
+  BTU/H, a capacity was a thousand times small), "ºF" and "˚F" as °F, CLG. and
+  HTG. as COOLING and HEATING, SUP. (before an airstream, a fan or a valve),
+  RET., EXH. and MTR. as the words, and ELECTRICAL HEAT as ELECTRIC HEAT. A
+  cell's and a note's text reads every dash glyph as a hyphen ("460–3–60",
+  "1–1/2", NOTES "1–14"), "º" as "°", letters with periods as one word
+  ("V.F.D.", "N.A."), and a cite still quotes the print; "N.A." and "0 GPM"
+  are a coil's none, "NAT. GAS" a fuel, an "ELEC." heater title electric
+  heat, OA an air-to-air exchanger's outdoor side, ".95" a brake HP, and a
+  humidifier's kind comes from whichever TYPE column names it. Two
+  readings as printed change: 22_GA's heat pumps, each scheduled on one row
+  with its fan coil ("FCU-1 / HP-1"), no longer take the fan coil's
+  AUXILIARY ELECTRICAL HEAT, as they never took an ELECTRIC HEAT; and 14_OR's
+  kitchen exhaust fan KEF-1, printing "1.5" under MOTOR WATTS/HP, is 1.5 HP
+  and no longer also 1.5 W, as under HP/W (`normalize.ts`,
+  `scheduleNotes.ts`, ASSEMBLIES_BUG_CATALOGUE AS-72).
 - **Assemblies: a reheat coil printed "N/A" with a zero flow is no reheat.**
   A heating block printed "-" or "N/A" throughout was already read as no
   heat. 061_IA's cooling-only terminal units VAV-J and VAV-K print "N/A" in

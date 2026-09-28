@@ -5048,3 +5048,91 @@ mutations fails it: a zero is not none, zeros alone are none, the cite on the bl
 - **UI proof** (the dev server started on the change): 061_IA (16 checks) is byte-identical to apply_assemblies over
   MCP with its CSV set (39 units, 66 records, 853 lines; VAV-J and VAV-K take vav-cooling-only, VAV-I keeps
   vav-reheat-hw), and 069_ID, unchanged, passes its 17.
+
+## AS-72 — values lost, and on one row leaked, under spellings other drafters print (metamorphic sweep, round 3) (FIXED — guarded by the evals)
+
+**Found:** 2026-09-28, by a third metamorphic sweep over fresh snapshots of the 98 eligible documents (2,598 rows;
+held-out excluded; scratch meta3/metamorphic3.mjs). Each project's headers, titles or cells were respelled one way at
+a time, in 98 ways that change no meaning, and normalized again through `normalizeProject` (continuations, transposed
+views and notes included); any attribute whose value or presence changed was a brittle rule, unless the variant itself
+changed the value (a printed text the attribute echoes, respelled). 228 kinds of value changed. Each was sorted into
+what a drafter prints and what the variant alone did:
+- **Headers:** "MBTUH", "MBTU/HR", "KBTU/H" and "BTUH X 1000" lost every capacity (665 values), and "BTUH X 1000"
+  was read as BTU/H: 061_IA's exchanger's 3,093 MBH as 3.093, a wrong value. "(ºF)" and "(˚F)" lost temperatures
+  (26_CA, 14_OR and 05_MO print "ºF"; their columns are read by other words). "CLG." and "HTG." lost VAV heating
+  and fan airflows (218 and 46 values) and heat types; "SUP.", "RET." and "EXH." lost air handlers', DOAS', ERVs'
+  and rooftop units' airflows and fan HP; "MTR." a motor's volts, drive and ECM; "ELEC. HEAT" for "ELECTRICAL HEAT"
+  a heat pump's auxiliary heat; "OA" for "OUTSIDE AIR" an air-to-air exchanger's media.
+- **Exclusions leaked:** 062_ID's CU-1, a condensing unit on its furnace's row, took the furnace's 78 MBH gas heat
+  under "GAS HTG." and its 1 HP blower under "SUP. FAN HP": the split-system rule (AS-35) knew the words spelled out.
+- **Cells:** a dash glyph ("460–3–60", "1–1/4", "STEAM–TO–STEAM", "MXTD3–PF–FF…", NOTES "1–14") lost volts and
+  phase, pipe sizes, a humidifier's type (and read its controls' 0.65 kW as heat), a legend's sections and a row's
+  notes; "º" lost coil water temperatures; "V.F.D." and "E.C.M." lost drives and motors in cells and remarks; "N.A."
+  a coil's none; "NAT. GAS" a boiler's fuel; ".95" an "HP (BHP)" pair; a title's "ELEC." an electric heater.
+- **The variant's own doing, not a rule's (29 kinds left):** "1/3" as "0.33" changes the value; ".0" added to a note
+  number or a floor; an inch mark added under a MOTOR SIZE (HP); "ELEC" as "ELECTRIC" makes an electrical column a
+  heater's; "13 MERV", "TSP/EXTERNAL STATIC PRESSURE" and "WATTS 0.0", which no drafter prints.
+
+Two readings on the documents as printed were wrong, and the sweep led to both:
+- **22_GA** (unseen): its SPLIT SYSTEM AIR HANDLER UNIT SCHEDULE prints each fan coil and its heat pump on one row
+  ("FCU-1 / HP-1" … "FCU-8 / HP-8"), and MIN. AUXILIARY ELECTRICAL HEAT (KW) under the air handler's HEATING
+  (checked on a render of sheet 64). AS-35's rule gives a paired row's electric heat to its indoor unit, but read
+  ELEC(TRIC) only, so each heat pump also took its fan coil's 6.0 or 6.8 kW.
+- **14_OR's KEF-1**, a kitchen grease hood's exhaust fan at 2,150 CFM and 1.0" ESP, prints "1.5" under MOTOR
+  WATTS/HP, read as 1.5 HP and as 1.5 W; its air alone takes about 0.34 HP, so 1.5 is horsepower. HP/W already read a
+  bare number as HP; the reversed order did not (the other five such columns print W or HP in the cell).
+
+**Fix (the shared path: `normalize.ts` and `scheduleNotes.ts`, which the apply path every surface uses reads):**
+- `headerText`: "º" and "˚" before F or C as the degree sign; MBTUH, MBTU/HR, KBTU/H and a BTUH (or BTU/HR) "X 1000"
+  in its spellings as MBH; CLG. and HTG. as COOLING and HEATING; SUP. before AIR, FAN, CFM, WATER, DUCT, TEMP, FLOW or
+  VALVE as SUPPLY (before anything else it may be supplemental heat, and stays); RET., EXH. and MTR.; HP/QUANTITY as
+  HP/QTY; ELECTRICAL HEAT as ELECTRIC HEAT.
+- `readText` (scheduleNotes.ts, re-exported by normalize.ts): a cell's or a note's text as the rules read it, every
+  dash glyph a hyphen, "º" and "˚" the degree sign, any space one space, letters with periods one word. The column
+  readers, the parsers, the humidifier's TYPE, a components legend, the remarks, the notes and their citations read
+  through it; every cite keeps the printed text.
+- NONE_MARK takes every dash glyph and "N.A."; AS-71's zero may print its unit ("0 GPM"); NAT. GAS is gas; a title's
+  ELEC. before a heater word (never ELEC. DATA) is electric heat; OA is an air-to-air exchanger's outdoor side; a brake
+  HP may print ".95"; a column printing HP or watts reads a bare number as HP in either order. MBTU and KBTU fold only
+  with a rate (a KBTU alone is energy), and SUPP. only before an airstream word.
+- A humidifier's kind is read from the first of its TYPE columns that names one: 061_IA's HUM-A prints GENERATOR
+  TYPE "STEAM TO STEAM" before GENERATOR WATER TYPE "DI", and with the two columns the other way round it read none.
+
+**Measured:**
+- **The 98 documents as printed** (an A/B on the fresh snapshots: every attribute with its rule, cite and printed
+  text; every application; each document's lines): 2 documents change, 9 values, no record and no line. 14_OR's KEF-1
+  loses the 1.5 W (its 1.5 HP stays, by the HP-or-watts rule); 22_GA's HP-1 to HP-8 lose their fan coils' 6.0 and 6.8
+  kW (FCU-1 to FCU-8 keep theirs; the heat pumps apply as their systems' condensing units, AS-37). Every other cite's
+  printed text is unchanged. No corpus cell, key or title prints a dash glyph, so that fold changes nothing as printed.
+- **The sweep again:** 228 kinds → 29, each the variant's own doing (above).
+- **Order invariance** (checks on the side; scratch as72/order.mjs, colorder.mjs): each project's items, tables and
+  rows shuffled by seed, normalized and applied again, changes none of the 72 documents with units. Each table's
+  columns reversed or shuffled changes what printed order means by design (044_NY's dual-fuel boilers: the fuel
+  printed first is the primary one) and 044_NY's ACCU-1, whose ELECTRICAL DATA prints three unlabeled columns
+  (208 | 1 | 60) that only their order names; and it found HUM-A's (above).
+- **Evals:** the five tiers' attribute evals, the typical eval (130/244), GATE C dev (227/244) and the binding,
+  question and reading evals are identical to AS-71's, line for line but timings; neither changed document's values
+  is keyed. The unseen audit replays as recorded: "model calls: replayed 61, live 0, not recorded 0, failed 0";
+  applied 56, audited 56, right 56; 0 new, 0 gone.
+- **Held-out** (aggregates only; nothing tuned on them): GATE 2 held-out 902/1,008 exact (from 897; 89.0% → 89.5%),
+  0 wrong, 2 invented, the first gain since the dev-3 freeze; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91;
+  GATE C 35/91. No rule came from a held-out row, and only these lines were read.
+
+**Tests:** normalize.test.ts (AS-72) and scheduleNotes.test.ts: each respelling beside its plain spelling on its
+document's own cells (061_IA's exchanger and VAV-J, 01_NY's VAV-1, 062_ID's CU-1, 22_GA's paired row, 04_NV's pump,
+25_WA's remark, 053_VA's box, 017_MD's humidifier, 062_ID's boiler, 096_IN's plate exchanger, 01_NY's RF-1, 14_OR's
+KEF-1, 061_IA's HUM-A), with negative controls (a plain BTUH is BTU/H; a KBTU with no rate is energy; SUPP. HEAT and
+SUPP. (KW) stay; ELEC. DATA is no heater; a flow beside N.A. is a coil; a W in the cell is watts). 33 mutations, one
+per fold or rule: 31 fail a test, and the two that did not (`numberFor`'s and `parseSizeCell`'s own folds, which the
+parser beneath already makes) are removed.
+- **Not changed, for extraction's owner:** a mark printed with a dash glyph ("AHU–1"; none in the corpus) is no unit
+  in the compile, and the plan's tag reader (equiptags.ts, part of the sheet-graph build) would not read it either;
+  folding it on one side alone would split the schedule-to-plan reconcile.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,931 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite (every file but the WP1 test) 377 of 380
+  pass and 1 skips, its two failures as on AS-71.
+- **UI proof** (the dev server started on the change): 22_GA (18 checks), 14_OR (18) and 069_ID (17) are
+  byte-identical to apply_assemblies over MCP with their CSV sets, and each CSV set is byte-identical to the e91ae9e
+  sweep's (the PDF differs in its generation time only, as 069_ID's, which AS-72 does not change, does).
+- **The regression sweep at e91ae9e** (before this change; the UI proof on all 97 eligible documents): all 97 pass,
+  1,304 checks, 32 of them (no unit to open) on the parity checks only.

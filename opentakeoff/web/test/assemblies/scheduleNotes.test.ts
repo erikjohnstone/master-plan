@@ -54,6 +54,8 @@ test("an upright table: the label may carry the first note; continuation lines j
 test("citations: numbered, ranged, every note, none", () => {
   assert.deepEqual(citedNoteIds("SEE NOTES 1, 2, 4"), { all: false, ids: ["1", "2", "4"] });
   assert.deepEqual(citedNoteIds("NOTE 3"), { all: false, ids: ["3"] });
+  // A range printed with an en dash (AS-72).
+  assert.deepEqual(citedNoteIds("1–4, 16"), { all: false, ids: ["1", "2", "3", "4", "16"] });
   assert.deepEqual(citedNoteIds("1-3"), { all: false, ids: ["1", "2", "3"] });
   assert.deepEqual(citedNoteIds("SEE NOTES"), { all: true, ids: [] });
   assert.deepEqual(citedNoteIds("ALL"), { all: true, ids: [] });
