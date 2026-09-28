@@ -4982,3 +4982,69 @@ commit.
 **Fix:** the file is 9e59346's (the header and AS-1 to AS-67, 4,691 lines), then the AS-68 and AS-69 entries as
 committed, each byte for byte, then this entry. Before each commit, `git diff --cached --numstat` is now read for a
 document that loses lines no edit of it meant to remove.
+
+## AS-71 — a cooling-only box printing "0" GPM beside "N/A" in every other reheat column waited for its heat (FIXED — guarded by the evals)
+
+**Found:** 2026-09-28, in a census at 8ad2553 over fresh snapshots of the 98 eligible documents (cached sheet graphs;
+held-out excluded; 058_CA's snapshot runs out of memory here, as before). The census lists every unit that waits, by
+what it waits for, with what its own row prints; the columns no attribute is read from; and the key-free invariant and
+physics sweeps, on the units AS-62 to AS-69 added among the rest.
+
+Most of what waits is what no print says (below). One group was the normalizer's. 061_IA's VARIABLE VOLUME SUPPLY
+TERMINAL UNIT SCHEDULE (read since AS-68) prints VAV-J and VAV-K, cooling-only boxes, with "N/A" in every reheat coil
+column (capacity, rows, E.A.T./L.A.T., E.W.T./L.W.T., W.P.D., A.P.D.) and "0" under FLOW RATE (GPM). Their remarks (1
+and 2: the NC basis, a liner and an access door) name no heat. The rule that reads a heating block printed "-" or "N/A"
+throughout as no heat (`heatingBlockNone`, 21_VA's) failed on the "0", so each box waited among vav-cooling-only,
+vav-reheat-electric and vav-reheat-hw.
+
+**Fix (the shared path: `normalize.ts`, which the apply path every surface uses reads):**
+- In that rule a zero ("0", "0.0") counts as none where the row prints at least one explicit none ("-", "N/A", "NONE")
+  in the block. The attribute cites that explicit none, never the zero.
+- Zeros alone say nothing more than they did, and a zero beside a printed value leaves the coil printed.
+
+**Measured:**
+- **The 98 eligible documents** (an A/B on the fresh snapshots, every unit's attributes and every application): only
+  061_IA changes. VAV-J and VAV-K read heat_type none and take vav-cooling-only (835 → 853 lines). Nothing else
+  changes.
+- **Evals:** the five tiers' attribute evals, the typical eval (130/244), GATE C dev (227/244) and the
+  binding, question and reading evals are identical to AS-69's, line for line but timings. 061_IA's dev-5 key
+  does not cover its terminal units (keyed before AS-68 read them), so no score moves. The unseen audit replays as
+  recorded at 8ad2553: 61 calls, none unrecorded; 56 applied, 56 right, 0 new, 0 gone.
+- **Held-out** (aggregates only): GATE 2 held-out 897/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472, 1 wrong,
+  2 invented; GATE 5 21/91; GATE C 35/91. Each is as with AS-69.
+
+**The census (nothing changed on it; recorded for the owner):**
+- **Waiting units** over the 98 documents:
+  - the project questions (plants 196; buildings, gas and steam service 98 each), as designed;
+  - VFD for 162 fans on 29 documents, 76 pumps on 24 and 43 air handlers and rooftop units. The rows print a drive
+    only where the VFD census (AS-34) already reads it;
+  - ECM for 150 fan coils on 23 documents, none of whose rows prints its fan's motor. federal-mech's "4 SPEED" and
+    "CV" do not say, and 036_LA's DC INVERTER is its outdoor unit's compressor; 24_IA's "MODULATING ECM" is read
+    where it is printed;
+  - 039_TX's 186 terminal units on their heat. The schedule prints no heat. Key note 4 and detail 2/MH113 replace
+    each pneumatic dual-duct box with two single-duct retrofit boxes, "ONE FOR COLD DUCT AND ONE FOR HOT DUCT" (TU-nC
+    and TU-nH), so neither has a coil. The drawing says it, not the row; the exceptions list decides the 186 in one
+    choice;
+  - 26_CA's 73 fan-powered boxes for series or parallel (AS-69).
+- **An air handler named in a terminal table's title with a space:** 03_FL's only terminal table is titled "AIR
+  TERMINAL UNIT SCHEDULE (AHU 2)", which the terminals_served link does not read. Not changed: the set's other air
+  handler, AHU-1, a variable-volume replacement unit, would then serve no terminal (the rule counts 0 for an air
+  handler no terminal row names), which the drawing does not say; it likely serves boxes this renovation does not
+  schedule. Waiting is the honest answer.
+- **Unread columns:** none that a typical reads (pump TYPE "INLINE", grille finishes, remarks' note numbers, locations,
+  manufacturers and models).
+- **The invariant sweep** flags the 12 fan coil rows printing FAN DATA WATTS "0", read as printed, and 6 values read
+  across tables by design (a drive schedule's load, a V/PH/HZ tuple). **The physics sweep** flags chillers'
+  evaporators (entering above leaving, as they are), and rows whose printed capacity and flow disagree on the print
+  itself: 028_TX's FCC 1-2 prints 13.0 MBH with 3.1 GPM at 180/160 °F, and 14_OR's DOAS-1 83.2 MBH with 11 GPM at
+  46/50.9 °F.
+
+**Tests:** normalize.test.ts (AS-71): VAV-J's row as printed; the zero first, where the cite stays on an explicit none;
+"0.0"; zeros alone; a zero beside a printed capacity; a flow beside N/A; and a block of "-" throughout. Each of three
+mutations fails it: a zero is not none, zeros alone are none, the cite on the block's first column.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,930 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite (every file but the WP1 test) 377 of 380
+  pass and 1 skips, its two failures as on AS-69.
+- **UI proof** (the dev server started on the change): 061_IA (16 checks) is byte-identical to apply_assemblies over
+  MCP with its CSV set (39 units, 66 records, 853 lines; VAV-J and VAV-K take vav-cooling-only, VAV-I keeps
+  vav-reheat-hw), and 069_ID, unchanged, passes its 17.

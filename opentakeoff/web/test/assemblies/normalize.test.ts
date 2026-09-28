@@ -1433,3 +1433,32 @@ test("a fan-powered box's sections: the primary air valve's airflows and size ar
   const pump = values(normalizeCompileItem(row("P-1", "PUMP SCHEDULE", { "PRIMARY AIR VALVE SIZE (IN)": "2", "GPM": "40" }), "PUMP"));
   assert.equal(pump.conn_in, undefined);
 });
+
+test("a reheat coil printed N/A with a zero flow is no heat; zeros alone, or a zero beside a printed coil, are not (AS-71)", () => {
+  // 061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE: VAV-J and VAV-K,
+  // cooling-only boxes, print N/A in every reheat coil column and 0 GPM.
+  const title = "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE";
+  const cells = (over: Record<string, string> = {}) => ({
+    MANUFACTURER: "PRICE", MODEL: "SDV", "INLET DIA.": "6", "MAX. COOL AIRFLOW (CFM)": "150", "MAX. HEAT AIRFLOW (CFM)": "150", "MIN. AIRFLOW (CFM)": "75",
+    "REHEAT COIL DATA CAPACITY (MBH)": "N/A", "REHEAT COIL DATA ROWS": "N/A", "REHEAT COIL DATA E.A.T./L.A.T. (°F/°F)": "N/A", "REHEAT COIL DATA E.W.T./L.W.T. (°F/°F)": "N/A",
+    "REHEAT COIL DATA FLOW RATE (GPM)": "0", "REHEAT COIL DATA W.P.D. (FT. H2O)": "N/A", "REHEAT COIL DATA A.P.D (IN. WG.)": "N/A", "DISCHARGE NC": "21", REMARKS: "1,2",
+    ...over,
+  });
+  const vavJ = normalizeCompileItem(row("VAV-J", title, cells()), "VAV");
+  assert.equal(vavJ.attributes.heat_type?.value, "none");
+  assert.equal(vavJ.attributes.heat_type?.rule, "derived.heating_block_none");
+  assert.equal(vavJ.attributes.heat_type?.cite.header, "REHEAT COIL DATA CAPACITY (MBH)");
+  const flow = "REHEAT COIL DATA FLOW RATE (GPM)";
+  const flowFirst = normalizeCompileItem(row("VAV-J", title, Object.fromEntries([[flow, "0"], ...Object.entries(cells()).filter(([h]) => h !== flow)])), "VAV");
+  assert.equal(flowFirst.attributes.heat_type?.cite.header, "REHEAT COIL DATA CAPACITY (MBH)", "it cites an explicit none, never the zero");
+  assert.equal(values(normalizeCompileItem(row("VAV-J", title, cells({ "REHEAT COIL DATA FLOW RATE (GPM)": "0.0" })), "VAV")).heat_type, "none");
+  // Zeros alone say nothing more than they did.
+  const zeros = Object.fromEntries(Object.keys(cells()).filter((h) => h.startsWith("REHEAT COIL DATA")).map((h) => [h, "0"]));
+  assert.notEqual(values(normalizeCompileItem(row("VAV-J", title, cells(zeros)), "VAV")).heat_type, "none");
+  // A zero beside a printed capacity, or a flow beside N/A: the coil is printed.
+  assert.notEqual(values(normalizeCompileItem(row("VAV-J", title, cells({ "REHEAT COIL DATA CAPACITY (MBH)": "5.5" })), "VAV")).heat_type, "none");
+  assert.notEqual(values(normalizeCompileItem(row("VAV-J", title, cells({ "REHEAT COIL DATA FLOW RATE (GPM)": "0.5" })), "VAV")).heat_type, "none");
+  // The rule's other side as before: every column an explicit none (21_VA).
+  const dashes = Object.fromEntries(Object.keys(cells()).filter((h) => h.startsWith("REHEAT COIL DATA")).map((h) => [h, "-"]));
+  assert.equal(values(normalizeCompileItem(row("VAV-J", title, cells(dashes)), "VAV")).heat_type, "none");
+});

@@ -2175,14 +2175,19 @@ function slashParts(col: Column): Column[] | null {
 /** The heating coil block a table prints (two or more of its water,
  * capacity, pressure-drop or row columns) when this row prints an explicit
  * none ("-", "N/A") in every one of them and the title names no other heat:
- * the unit has no heating coil. The block's first column, else null. */
+ * the unit has no heating coil. A zero ("0" GPM beside "N/A" everywhere
+ * else: 061_IA's cooling-only VAV-J) is none too, where the row prints at
+ * least one explicit none in the block; zeros alone say nothing more. The
+ * block's first column, else null. */
 function heatingBlockNone(ctx: RowContext): Column | null {
   const title = headerText(ctx.title);
   if (W.gas.test(title) || W.electricHeat.test(title) || W.steam.test(title) || /\bHEAT\s+PUMPS?\b/.test(title)) return null;
   const coilQ = new Set<Quantity>(["waterflow", "ewt", "lwt", "ewt_lwt", "capacity", "wpd", "rows", "rows_fins"]);
   const block = ctx.cols.filter((c) => W.hw.test(c.h) && !W.chw.test(c.h) && quantitiesOf(c.h).some((q) => coilQ.has(q)));
   if (block.length < 2) return null;
-  return block.every((c) => c.cell && NONE_MARK.test(c.cell.text.trim())) ? block[0] : null;
+  const text = (c: Column) => c.cell?.text.trim() ?? "";
+  const explicit = block.filter((c) => c.cell && NONE_MARK.test(text(c)));
+  return explicit.length && block.every((c) => c.cell && (NONE_MARK.test(text(c)) || /^0+(?:\.0+)?$/.test(text(c)))) ? explicit[0] : null;
 }
 
 /** A terminal's electric heat printed as none ("N/A" under ELECTRIC HEAT

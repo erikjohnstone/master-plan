@@ -1,5 +1,15 @@
 # Changelog
 
+- **Assemblies: a reheat coil printed "N/A" with a zero flow is no reheat.**
+  A heating block printed "-" or "N/A" throughout was already read as no
+  heat. 061_IA's cooling-only terminal units VAV-J and VAV-K print "N/A" in
+  every reheat coil column but "0" under FLOW RATE (GPM), so each waited among
+  the cooling-only, electric and hot-water reheat typicals. A zero in the
+  block now counts as none where the row prints at least one explicit none
+  there; zeros alone say nothing more, and a zero beside a printed coil value
+  leaves the coil printed. On the 98 eligible documents only those two boxes
+  change, each now taking vav-cooling-only (`normalize.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-71).
 - **Takeoff and assemblies: a fan-powered terminal unit is read, and waits
   for series or parallel.** A FAN POWERED TERMINAL UNIT SCHEDULE was no
   family's, so 26_CA's 73 fan-powered boxes (FPB-3-11 …) were missing without
