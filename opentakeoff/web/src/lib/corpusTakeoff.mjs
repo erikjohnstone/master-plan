@@ -455,6 +455,33 @@ const numberedMark = (s) => SHORT_EQUIP_MARK_RE.test(markCoreForKeyRe(markCanon(
 /** A unit a letter names beside its numbered siblings (071_ME's RTU-G). */
 const letteredMark = (s) => /^[A-Z]{2,8}-[A-Z]{1,2}$/.test(markCanon(s));
 
+/**
+ * A table no title vouches for (untitled, or a general MISCELLANEOUS,
+ * EQUIPMENT, SPECIALTY EQUIPMENT or HYDRONIC ACCESSORIES schedule) names a
+ * family's units only by the marks its rows print. One the sheet graph
+ * classes as a reference or room/finish table holds none: a notes list, a
+ * drawing index, a furnishings list, an occupant-load table. Read by mark
+ * alone, 061_IA's STEEL FRAMING NOTES (SF1 to SF10) and SPECIAL INSPECTION
+ * notes (SP1 to SP5) were fans and pumps, 08_ME's drawing index (P101 to
+ * P103) pumps, 23_GA's architectural SPECIALTY EQUIPMENT SCHEDULE (toilet
+ * accessories T1 to T24) ERVs, and 031_MO's JSN list (RF-2, a refrigerator)
+ * and occupant loads (WH 1ST FLR) a fan and a water heater (AS-66). A titled
+ * table is read as its title says, whatever its kind.
+ */
+export function unvouchedTableHoldsUnits(table) {
+  return !["reference", "room-finish", "finish"].includes(table?.kind);
+}
+
+/**
+ * In a table no title vouches for, a mark of letters alone is a word, not a
+ * unit: 02_UT's SPF and 19_CA's SFD, from abbreviation lists, were fans
+ * (AS-66). A unit's mark carries its number, a letter beside its family token
+ * (061_IA's WWHP-A) or a code (NAVFAC's CV-CHW-BP-A).
+ */
+export function unvouchedMarkNamesUnit(mark) {
+  return !/^[A-Z]+$/i.test(String(mark ?? "").trim());
+}
+
 /** The units a transposed schedule's column header names, as the row keys the
  * takeoff reads: one per mark of a list, of an AND pair or of a range ("UH-1
  * THRU UH-3"), and an indoor/outdoor "/" pair kept as one key, as a row
@@ -998,6 +1025,9 @@ function uniqueFamily(graph, {
   // the same letters may name something else (ACC is an air-cooled condenser
   // anywhere but under an AIR COOLED CHILLER title).
   titledKeyRe,
+  // Marks the family's keyRe reads that only a title vouches for (AS-66): in
+  // a table no title vouches for, the same letters name another thing.
+  titledOnlyRe,
   // Another family's schedules that list this family's own units (AS-63):
   // { titleRe, exclude, keyRe }. 096_IN's AIR HANDLING UNIT SYSTEM INDEX lists
   // DOAS-1 to DOAS-3; only host.keyRe's marks are read there, as this family's.
@@ -1051,6 +1081,8 @@ function uniqueFamily(graph, {
     const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
     const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
       && scheduleTitleMatches(title, host.titleRe, host.exclude);
+    // Read by its marks alone: no title vouches for the family here (AS-66).
+    const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAllSchedule);
     if (titleOk || altOk) {
       if (pass !== 1) continue;
     } else if (hostOk) {
@@ -1070,6 +1102,9 @@ function uniqueFamily(graph, {
       } else if (!(catchAllSchedule && keyGated)) {
         continue;
       }
+      // Notes, a drawing index or a furnishings list hold no unit (AS-66); an
+      // untitled grid of valve marks keeps the word of its header shape.
+      if (unvouched && !headerValveShape && !unvouchedTableHoldsUnits(table)) continue;
     }
     // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
     // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
@@ -1160,6 +1195,9 @@ function uniqueFamily(graph, {
           && !titledAlso.some((re) => markMatchesKeyRe(re, one, canon))) {
           continue;
         }
+        // Read by its mark alone, a mark is a word or another thing's (AS-66).
+        if (unvouched && ((!countKeyedIdentCol && !unvouchedMarkNamesUnit(one))
+          || markMatchesKeyRe(titledOnlyRe, one, canon))) continue;
         const printedBy = (re) => Boolean(re) && (re.test(canon) || re.test(one));
         const widened = hostOk || (catchAllFilter
           ? !(printedBy(blankKeyRe) || printedBy(keyRe))
@@ -1308,6 +1346,10 @@ export const HVAC_FAMILY_SPECS = {
     // fan coils (028_TX's CHILLED WATER FAN COIL UNIT SCHEDULE lists FCC1-1
     // beside FCU1-3; AS-64).
     titledKeyRe: /^(?:DAC|SS|FCC)[\s\-]?\d/i,
+    // A bare F-* is a fan coil under the family's title only: 016_NY's fans
+    // F-1 and F-2, in an untitled panel schedule, and 041_IL's F0535, a
+    // utility cart in an architectural list, were fan coils too (AS-66).
+    titledOnlyRe: /^F[\s\-]?\d/i,
     // A split system air handler schedule's indoor FCU-* (22_GA's
     // "FCU-1/HP-1" rows; its HP-* are HEAT_PUMP's).
     host: {
@@ -1337,6 +1379,9 @@ export const HVAC_FAMILY_SPECS = {
     // Blank: only ERU/ERV — letter+digit blank gates steal finish A1/B1 (Johnson).
     keyRe: /^(?:ERU|ERV)[\s\-]|^[A-Z]\d{1,3}$/i,
     blankKeyRe: /^(?:ERU|ERV)[\s\-]/i,
+    // A letter and a number are an ERV's mark under its title only: a general
+    // schedule's T1 is a toilet accessory (23_GA; AS-66).
+    titledOnlyRe: /^[A-Z]\d{1,3}$/i,
   },
   FURNACE: {
     titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i,
@@ -1417,6 +1462,10 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /HEAT RECOVERY CHILLER/i,
     // Require separator after CH so blank-title CHECK:/CHP-* junk is not stolen.
     keyRe: /^(?:CH[\s\-]|HRC)/i,
+    // CH-* is this family's under its own title only; read by its mark alone
+    // it is any chiller (047_NC's electrical EQUIPMENT SCHEDULE lists its
+    // air-cooled chillers CH-1 and CH-2; AS-66).
+    titledOnlyRe: /^CH[\s\-]/i,
     // HRC-* listed in a chiller schedule (096_IN's AIR COOLED CHILLER
     // SCHEDULE: HRC-1, HRC-2 beside CH-1, CH-2; AS-63).
     host: {
@@ -1489,6 +1538,9 @@ export const HVAC_FAMILY_SPECS = {
     // Under a FAN SCHEDULE title: E-A-* zone-lettered fans (017_MD's RETURN
     // FAN SCHEDULE), bare F-* (016_NY) and BF-* (096_IN; AS-63).
     titledKeyRe: /^(?:E-[A-Z]-|F|BF)[\s\-]?\d/i,
+    // Read by its mark alone, EG-* is an exhaust grille (096_IN's untitled
+    // diffuser and grille schedule lists EG2 and EG3; AS-66).
+    titledOnlyRe: /^EG[\s\-]?\d/i,
   },
   // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
   // — FAN titleRe already excludes CEILING FAN so these do not double-count.
@@ -2419,7 +2471,10 @@ function basPointTypeEvidence(row, tag) {
 export function isScheduleHeaderJunkMark(canon) {
   return /^(MODEL|TAG|MARK|TYPE|SYMBOL|DESCRIPTION|REMARKS?|NOTES?|SIZE|CAPACITY|MANUFACTURER|MANUF|QTY|QUANTITY|UNITS?|SERVICE|DESIGNATION|LOCATION|AREA|FLOOR|SHEET|HEADER|MIN\.?|MAX\.?)$/i.test(
     String(canon || ""),
-  );
+  )
+    // A legend's heading: 047_NC's "PIPING LEGEND", under a legend sheet's
+    // "-CONDENSING UNIT" read as a title, was a condensing unit (AS-66).
+    || /LEGEND$/i.test(String(canon || ""));
 }
 
 function sheetRecords(sessionOrSheets, graph) {

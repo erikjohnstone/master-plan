@@ -371,3 +371,93 @@ describe("AS-63 marks a schedule's title vouches for, and units listed in anothe
     assert.equal(markCoreForKeyRe("001-FCU-01-CG06A"), "FCU-01-CG06A");
   });
 });
+
+// AS-66: a table no title vouches for (untitled, or a general EQUIPMENT,
+// SPECIALTY EQUIPMENT or MISCELLANEOUS schedule) holds a family's units only
+// by the marks its rows print, so it must be an equipment table, and a mark
+// read there must be one.
+describe("AS-66 a table no title vouches for: notes, indexes and lists hold no unit, and some marks are another thing's", () => {
+  const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
+  const table = (sheet: string, title: string, keys: string[], kind = "equipment") => ({ kind, sheet, title: { text: title }, rows: keys.map(row) });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+
+  it("reads no unit in an untitled or general table the sheet graph classes as reference or room/finish", () => {
+    // 061_IA's steel framing notes (SF1) and special inspection notes (SP1),
+    // 08_ME's drawing index (P101), 23_GA's architectural specialty list (T1,
+    // a grab bar), 031_MO's JSN list (RF-2, a refrigerator) and occupant
+    // loads (WH 1ST FLR).
+    const tags = compile([
+      table("s.pdf#6", "", ["SF1", "SF2"], "reference"),
+      table("s.pdf#6", "", ["SP1", "SP2"], "reference"),
+      table("g.pdf#1", "", ["P101", "P102"], "reference"),
+      table("a.pdf#15", "SPECIALTY EQUIPMENT SCHEDULE", ["T1", "ERV-9"], "reference"),
+      table("a.pdf#33", "EQUIPMENT SCHEDULE", ["RF-2", "EF-9"], "reference"),
+      table("a.pdf#7", "", ["WH 1ST FLR", "WH-2"], "room-finish"),
+    ]);
+    for (const f of ["FAN", "PUMP", "ERV", "WATER_HEATER"]) assert.deepEqual(tags(f), [], f);
+    // An equipment table is read by its marks, and a titled table whatever
+    // its kind (22_GA's GRILLE SCHEDULE is a reference table).
+    const kept = compile([
+      table("m.pdf#18", "", ["CP-1", "SF-1"]),
+      table("m.pdf#71", "EQUIPMENT SCHEDULE", ["RF-1", "ERV-2"]),
+      table("m.pdf#64", "GRILLE SCHEDULE", ["A", "B"], "reference"),
+      table("m.pdf#2", "EXHAUST FAN SCHEDULE", ["EF-1"], "reference"),
+    ]);
+    assert.deepEqual(kept("PUMP"), ["CP-1"]);
+    assert.deepEqual(kept("FAN"), ["EF-1", "RF-1", "SF-1"]);
+    assert.deepEqual(kept("ERV"), ["ERV-2"]);
+    assert.deepEqual(kept("GRD"), ["A", "B"]);
+    // An untitled grid of valve marks keeps the word of its header shape.
+    const valves = compileHvacTakeoff(null, { tables: [{
+      kind: "reference", sheet: "m.pdf#9", title: { text: "" }, headers: ["TAG", "GPM", "SERVED"],
+      rows: [{ key: "CV-1", cells: { TAG: { text: "CV-1" }, GPM: { text: "12" }, SERVED: { text: "AHU-1" } } }],
+    }] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual(valves.CHW_CONTROL_VALVE.items.map((i) => i.tag), ["CV-1"]);
+  });
+
+  it("reads a mark of letters alone as a word where no title vouches for the family", () => {
+    // 02_UT's and 19_CA's abbreviation lists print SPF and SFD.
+    const tags = compile([table("m.pdf#3", "", ["SPF", "SFD", "EF-3"]), table("m.pdf#4", "MISCELLANEOUS SCHEDULE", ["SPF", "WWHP-A"])]);
+    assert.deepEqual(tags("FAN"), ["EF-3"]);
+    assert.deepEqual(tags("HEAT_PUMP"), ["WWHP-A"]);
+    // Under a fan title, the word is read as printed.
+    assert.deepEqual(compile([table("m.pdf#5", "FAN SCHEDULE", ["SPF"])])("FAN"), ["SPF"]);
+  });
+
+  it("reads the marks only a title vouches for under that title alone", () => {
+    // 096_IN's exhaust grilles EG2 and EG3, 016_NY's fans F-1 and F-2 in a
+    // panel schedule, 041_IL's F0535 (a utility cart), 047_NC's air-cooled
+    // chillers CH-1 and CH-2 in an electrical equipment list, 23_GA's T1.
+    const loose = compile([
+      table("m.pdf#22", "", ["EG2", "EG3", "F-1", "CH-1"]),
+      table("m.pdf#27", "EQUIPMENT SCHEDULE", ["F0535", "CH-2", "T1", "ERV-1"]),
+    ]);
+    assert.deepEqual(loose("FAN"), []);
+    assert.deepEqual(loose("FCU"), []);
+    assert.deepEqual(loose("HEAT_RECOVERY_CHILLER"), []);
+    assert.deepEqual(loose("AIR_COOLED_CHILLER"), ["CH-1", "CH-2"]);
+    assert.deepEqual(loose("ERV"), ["ERV-1"]);
+    // Under the family's own title each is its unit.
+    const titled = compile([
+      table("m.pdf#1", "EXHAUST FAN SCHEDULE", ["EG-1", "F-2"]),
+      table("m.pdf#2", "FAN COIL UNIT SCHEDULE", ["F-3"]),
+      table("m.pdf#3", "HEAT RECOVERY CHILLER SCHEDULE", ["CH-4"]),
+      table("m.pdf#4", "ENERGY RECOVERY VENTILATOR SCHEDULE", ["C1"]),
+    ]);
+    assert.deepEqual(titled("FAN"), ["EG-1", "F-2"]);
+    assert.deepEqual(titled("FCU"), ["F-3"]);
+    assert.deepEqual(titled("HEAT_RECOVERY_CHILLER"), ["CH-4"]);
+    assert.deepEqual(titled("ERV"), ["C1"]);
+  });
+
+  it("reads no legend heading as a unit", () => {
+    // 047_NC's legend sheet: "-CONDENSING UNIT" read as a title over "PIPING LEGEND".
+    assert.equal(isScheduleHeaderJunkMark("PIPINGLEGEND"), true);
+    assert.equal(isScheduleHeaderJunkMark("LEGEND"), true);
+    assert.equal(isScheduleHeaderJunkMark("CU-1"), false);
+    assert.deepEqual(compile([table("m.pdf#10", "-CONDENSING UNIT", ["PIPING LEGEND", "CU-1"])])("CONDENSING_UNIT"), ["CU-1"]);
+  });
+});

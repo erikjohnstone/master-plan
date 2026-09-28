@@ -6,7 +6,10 @@
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
-import { normalizeEquipMark, expandAmpersandEquipMarks, markMatchesKeyRe, scheduleTableView } from "./corpusTakeoff.mjs";
+import {
+  normalizeEquipMark, expandAmpersandEquipMarks, markMatchesKeyRe, scheduleTableView,
+  isScheduleHeaderJunkMark, isControlValveHeaderShape, unvouchedTableHoldsUnits, unvouchedMarkNamesUnit,
+} from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
 
@@ -798,6 +801,8 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   // for, and another family's schedules that list this family's units.
   const titledKeyRe = needle?.titledKeyRe || null;
   const host = needle?.host || null;
+  // AS-66, as the compile reads them: marks only a title vouches for.
+  const titledOnlyRe = needle?.titledOnlyRe || null;
   // Parity with compile uniqueFamily: a reading of the mark as printed ranks
   // above a widened one, so the scan first finds every unit a printed
   // reading holds.
@@ -811,9 +816,9 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     // per unit (AS-65).
     const table = scheduleTableView(printed);
     const title = String(table.title?.text || "");
-    // Parity with compile uniqueFamily: do not gate on table.kind.
-    // Title/keyRe already exclude finish/lighting/note tables; Valdosta
-    // GRILLE SCHEDULE extracts as reference-kind but is still schedule truth.
+    // Parity with compile uniqueFamily: a titled table is not gated on
+    // table.kind (Valdosta's GRILLE SCHEDULE extracts as reference-kind but is
+    // still schedule truth); one no title vouches for is (AS-66).
     // Match compile's uniqueFamily gate: titled soft-match OR blank title with
     // a family keyRe (Transbay/Macon Bibb blank-title RAH/FCU/EF tables).
     const titleOk = needle?.titleRe
@@ -828,6 +833,8 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
     const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
       && scheduleTitleMatches(title, host.titleRe, host.exclude);
+    // Parity with compile uniqueFamily: read by its marks alone (AS-66).
+    const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAllSchedule);
     // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
     // miscellaneous schedules only when the family has a keyRe/blankKeyRe.
     // titledOnly families skip blank/catch-all (FIN_TUBE vs filter FTR).
@@ -839,6 +846,9 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       if (pass !== 2) continue;
       if (needle?.titledOnly) continue;
       if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
+      // Parity with compile uniqueFamily: notes, a drawing index or a
+      // furnishings list hold no unit (AS-66).
+      if (unvouched && !(blankTitle && isControlValveHeaderShape(table)) && !unvouchedTableHoldsUnits(table)) continue;
     }
     const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
     const filterRe = hostOk ? host.keyRe : blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
@@ -859,6 +869,11 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       for (const tag of (tagList.length ? tagList : [rawTag])) {
         if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
         const canonTag = String(tag).toUpperCase().replace(/\s+/g, "");
+        // Parity with compile uniqueFamily: a header word or a legend's
+        // heading is no mark, and read by its mark alone a mark may be a word
+        // or another thing's (AS-66).
+        if (isScheduleHeaderJunkMark(canonTag)) continue;
+        if (unvouched && (!unvouchedMarkNamesUnit(tag) || markMatchesKeyRe(titledOnlyRe, tag, canonTag))) continue;
         // The compile's own mark rule (markMatchesKeyRe): a building prefix
         // (WHSE-ET-1, 1-VAV-1) or a building letter (FC-A-2) reads as the
         // family's mark here too, so every unit the takeoff counts has its row.

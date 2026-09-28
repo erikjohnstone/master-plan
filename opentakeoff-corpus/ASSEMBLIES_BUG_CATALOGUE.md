@@ -4444,3 +4444,151 @@ columns.
   test, emulated above) 377 of 380 pass and 1 skips; its two failures are as
   on AS-64 (AS-1's conformance test, and navfac's slow `sweep_schedule_row`
   test).
+
+
+## AS-66 — tables no title vouches for gave units: notes, a drawing index, abbreviation lists, furnishings lists, and marks only another family's title vouches for (FIXED — guarded by the evals)
+
+**Found:** after AS-65, a census of every compiled unit by how its table
+admitted it (scratch as66/phantoms.mjs and gates.mjs, 97 dev documents,
+held-out excluded): 2,139 units come from a table titled as their family,
+the rest from another family's schedule (a host, AS-63), a general schedule
+(MISCELLANEOUS, EQUIPMENT, SPECIALTY EQUIPMENT or HYDRONIC ACCESSORIES) or
+an untitled table. In the last two, nothing but the mark says what a row is,
+and each family read every row its mark rule reads. Read against each
+table's rows and the sheet graph's own class for it, 46 of them are no unit:
+- **Notes, an index, lists** (the sheet graph classes each as a reference or
+  room/finish table): 061_IA's STEEL FRAMING NOTES (SF1 to SF10, read as
+  fans) and SPECIAL INSPECTION notes (SP1 to SP5, pumps); 08_ME's drawing
+  index (P101 to P103, its plumbing sheets, pumps); 23_GA's architectural
+  SPECIALTY EQUIPMENT SCHEDULE (toilet accessories T1 to T24: grab bars,
+  soap and paper dispensers, 15 ERVs); 031_MO's VA furnishings list
+  (EQUIPMENT SCHEDULE with a JSN column: RF-2, a refrigerator, a fan) and
+  its code analysis occupant loads (WH 1ST FLR, the warehouse's first
+  floor, a water heater).
+- **Words from abbreviation lists:** 02_UT's SPF (STAIRWELL PRESSURIZATION
+  FAN, defined in a scope-of-work abbreviation list) and 19_CA's SFD (a
+  legend's smoke/fire damper), each a fan.
+- **Marks another family's title vouches for, read anywhere:**
+  - 096_IN's untitled diffuser and grille schedule (its title run into the
+    header row) lists exhaust grilles EG2 and EG3, read as fans: the FAN rule
+    reads EG-n for general exhaust fans. Their airflows were dev 3's only two
+    invented values (the dev-3 key: "sheet M603 prints diffuser, grille, VAV
+    terminal, slot diffuser and motorized damper schedules; no row is a fan").
+  - 016_NY's fans F-1 and F-2, read as fans from its FAN SCHEDULE, were fan
+    coils too, from an untitled panelboard schedule that lists them as loads;
+    041_IL's architectural Specialty Equipment Schedule (furniture codes)
+    gave F0535 (a utility cart) and F2010 (a waste basket) as fan coils. The
+    FCU rule reads a bare F-n for gas split indoor units.
+  - 047_NC's air-cooled chillers CH-1 and CH-2, read from their AIR COOLED
+    WATER CHILLER SCHEDULE, were heat recovery chillers too, from the
+    electrical EQUIPMENT SCHEDULE that lists them: the heat recovery
+    chiller's rule reads CH-n.
+  - The ERV rule reads a letter and a number (Carson's C1) in a general
+    schedule too: 23_GA's T1 to T24 (above).
+- **A legend's heading:** 047_NC's legend sheet, whose abbreviation
+  "CU -CONDENSING UNIT" the graph read as a table title, gave "PIPING LEGEND"
+  as a condensing unit.
+
+Each was a unit in the assemblies with a typical and its points (061_IA's
+notes alone, 45 estimated BAS points), and 016_NY's and 047_NC's counted
+their fans and chillers twice.
+
+**Fix (the shared path):** in `uniqueFamily` (corpusTakeoff.mjs) and, for
+parity, `reconcileScheduleFamilyFromGraph` (schedulePlanReconcile.mjs), a
+table no title vouches for (untitled, or a general schedule; not the
+family's own title, its alternate title or a host schedule's) is read by its
+marks alone, and so:
+- **It must be an equipment table** (`unvouchedTableHoldsUnits`): one the
+  sheet graph classes as a reference or room/finish table holds no unit. An
+  untitled grid of valve marks keeps the word of its header shape (a TAG
+  and a GPM or SERVED column over valve marks). A titled table is read as
+  before, whatever its kind
+  (Valdosta's GRILLE SCHEDULE is a reference table).
+- **A mark of letters alone is a word** (`unvouchedMarkNamesUnit`): SPF,
+  SFD. A unit's mark carries its number, a letter beside its family token
+  (061_IA's WWHP-A) or a code (NAVFAC's CV-CHW-BP-A).
+- **Marks only a title vouches for** (a new spec field, `titledOnlyRe`,
+  beside AS-63's `titledKeyRe`): FAN's EG-n, FCU's bare F-n, the heat
+  recovery chiller's CH-n and ERV's letter and number are read under the
+  family's own title only. The family's `keyRe` is unchanged, so every
+  other reader of it (the control-intent binder) reads as before.
+- **A legend's heading is no mark:** `isScheduleHeaderJunkMark` reads a mark
+  ending in LEGEND as a heading, and the reconcile scaffold now applies the
+  compile's header-word filter too (it had none: AS-65's parity census shows
+  its MANUFACTURER and MODEL rows).
+The sheet graph and its tables are untouched.
+
+**Not fixed, left disclosed:** 041_IL's P2000 (an eyewash station in the
+same architectural list, read as a pump) and 21_VA's RF1 and RF2 (antenna
+plates in an untitled audio-visual device table, read as return fans). Both
+tables are equipment tables to the sheet graph, and their marks read as
+units. Only a guess from header words could refuse them (the list prints
+MANUFACTURER and MODEL, as schedules do; the AV table POWER and DATA), and
+read by eye over the census's tables, such a guess also refuses real units
+in tables that print no performance column (26_CA's riser air handlers).
+
+**Measured** on all 97 eligible dev documents (held-out excluded), A/B
+against AS-65 (8c8a83b):
+- **Compile:** 11 documents change, no other. 46 units removed on 10:
+  061_IA 15, 23_GA 15, 08_ME 3, 047_NC 3, 016_NY 2, 031_MO 2, 041_IL 2,
+  096_IN 2, 02_UT 1, 19_CA 1, each one of those above. No unit is added or
+  changed, and every other part of each compile is the same.
+- **Reconcile:** the same 46 rows are gone, and 4 rows only the reconcile
+  held: 017_MD's airflow measuring stations (SFAFMS, RFAFMS, SFRFAFMS, in an
+  untitled table) and 031_MO's SD-1 (a soap dispenser in the furnishings
+  list). The parity census: compiled units without a reconcile row 53 = 53,
+  reconcile rows without a unit 9 → 5. Marks listed twice 28 → 22: the 6
+  gone are 061_IA's notes SF1 to SF6 beside its supply fans SF-1 to SF-6.
+- **Downstream compiles:** `bas_points` changes only the estimate-only
+  inventory of the ten (08_ME 9 → 0 estimated points, its only units having
+  been the drawing index's; 061_IA 137 → 92; 031_MO 119 → 116; 016_NY 67 →
+  51 …); `control_valves` only its page accounting. The notice of rows read
+  as no unit is identical (10 rows), and so are the silent rows (54).
+- **Evals,** the five tiers re-run against 8c8a83b: dev 1, dev 2, dev 4 and
+  dev 5 identical; dev 3 identical but its 2 invented values (096_IN's EG2
+  and EG3) gone: invented 2 → 0 (1,284 exact, 3 wrong, 90 missed as
+  before). The typical eval (no answers, no readings) is identical (130/244),
+  and so are the control-intent dev evals: GATE C's typicals with the keys'
+  answers and the recorded readings (227/244), the binding eval and the
+  reading eval. The question eval passes GATE A as before, with one question
+  fewer on 031_MO: PQ4 (a fan's or pump's unscheduled speed) was asked only
+  for RF-2, the refrigerator (27 questions shown; 28 at 8c8a83b). The unseen
+  audit, replayed, is the same decision for decision (26 applied, 26 right,
+  0 new, 0 gone): 041_IL has 17 units (19), and 02_UT, whose only unit was
+  SPF, is no longer read.
+- **WP1 compile acceptance** (93 cached dev sets, the reviewed overlay): 3
+  sets fail → pass, none pass → fail. 02_UT's, 08_ME's and 19_CA's keys
+  count none of SPF, P101 to P103 and SFD: 41 pass (38 at 8c8a83b).
+- **The reconcile tests on the changed documents** (reconcileWorkflow, not
+  in the suite run below; 8c8a83b against AS-66, 10 tests): the same 5 pass
+  and 5 fail, with the same messages but two. 061_IA's fan test counts 14
+  FAN rows where its key has 12 (24 at 8c8a83b, the notes SF1 to SF10
+  among them), and NIST 017's 15 where its key has 6 (18, the three airflow
+  stations among them). 23_GA's blank-title fan test fails as before (0 EF
+  rows where it asserts 3).
+- **Held-out** (aggregates only): GATE 2 held-out 897/1,008 exact, 0 wrong,
+  2 invented; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91; GATE C
+  35/91. Each is as with AS-65.
+- **UI proof** (the dev server started on the change; 150 checks): the ten
+  changed documents, each byte-identical to apply_assemblies over MCP, its
+  CSV set byte for byte: 061_IA 25 units (41 records; 16 checks), 23_GA 1
+  (6; 13), 047_NC 13 (22; 16), 016_NY 24 (33; 18), 096_IN 172 (264; 19),
+  031_MO 105 (131; 16), 041_IL 17 (28; 17); 08_ME, 02_UT and 19_CA, whose
+  only units were phantoms, none (4 records; the parity checks, 6 each).
+  069_ID, unchanged: its report and CSV set are byte-identical to its AS-65
+  run, and so is its PDF's text (17 checks).
+
+**Tests:** corpusTakeoffVol2Families.test.ts (AS-66, 4 tests: reference and
+room/finish tables, the valve grid, words, marks only a title vouches for
+and the legend heading, each with the titled negative control) and
+schedulePlanReconcile.test.ts (AS-66: the same rows, and each family's rows
+equal to the compile's units). 22 mutations each fail a test (the kind gate
+and its three kinds, the valve grid's word, which tables are read by their
+marks, words, each of the four title-only rules, the legend heading, and
+each of the reconcile's gates).
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the
+  web suite's 3,916 tests fail only AS-1's three base-red tests. MCP:
+  typecheck clean; `test:bas` 133/133; the suite (every file but the WP1
+  test, measured apart above) 377 of 380 pass and 1 skips; its two failures
+  are as on AS-65 (AS-1's conformance test, and navfac's slow
+  `sweep_schedule_row` test).

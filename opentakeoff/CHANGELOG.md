@@ -1,5 +1,25 @@
 # Changelog
 
+- **Takeoff: a table no title vouches for gives a unit only for a mark that
+  names one.** In an untitled table, or a general EQUIPMENT, SPECIALTY
+  EQUIPMENT, MISCELLANEOUS or HYDRONIC ACCESSORIES schedule, only its marks
+  say what a row is, and each family read every row its mark rule reads:
+  061_IA's steel framing and special inspection notes (SF1 to SF10, SP1 to
+  SP5) were fans and pumps, 08_ME's drawing index (P101 to P103) pumps,
+  23_GA's architectural specialty list (toilet accessories T1 to T24) ERVs,
+  abbreviation lists' SPF and SFD fans, 096_IN's exhaust grilles EG2 and EG3
+  fans, and 016_NY's fans and 047_NC's air-cooled chillers were counted a
+  second time, as fan coils and heat recovery chillers, from a panel schedule
+  and an electrical equipment list. Such a table is now read only when the
+  sheet graph classes it as an equipment table, not as notes, an index or a
+  list; a mark of letters alone is a word there; and FAN's EG-n, FCU's bare
+  F-n, the heat recovery chiller's CH-n and ERV's letter and number are read
+  under the family's own title only. A legend's heading ("PIPING LEGEND") is
+  no mark. The takeoff and the schedule↔plan reconciliation read them alike.
+  On all 97 eligible dev documents (held-out excluded) 46 phantom units on 10
+  documents are gone, and no unit is added or changed; dev 3's two invented
+  values, the phantom grilles' airflows, go with them (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-66).
 - **Takeoff: a schedule printed on its side, its units across the columns,
   is read one unit per column.** 21_VA prints eight family schedules so
   (DESIGNATION | AHU-1 | AHU-2; "EF-2, EF-5, EF-7, EF-9"; "CHWP-1 AND

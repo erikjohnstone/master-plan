@@ -614,7 +614,13 @@ named by its row's label, with the section printed on the section's first
 row before it (SUPPLY FAN, ELECTRICAL). Where the drawing does not say which
 section a row is in (a section label drawn down a merged cell, a heading
 printed across the unit columns) or prints a label twice, those attributes
-are left unread rather than guessed: read them on the sheet. So a row whose
+are left unread rather than guessed: read them on the sheet. A table no
+title names (an untitled table, or a general EQUIPMENT or MISCELLANEOUS
+schedule) gives units only by their marks, so notes, a drawing index or an
+architectural or furnishings list give none, a word such as an abbreviation
+list's SPF is no mark, and a few marks are read under their own family's
+title only: EG-1 is an exhaust fan under a fan title and an exhaust grille
+elsewhere, and a bare F-1 a fan coil under a fan coil title. So a row whose
 mark it still does not read as that family's (a temporary unit's
 1-AC-36TEMP, or 016-AC-01-16-12 with a room code of its own hyphen) is no
 unit either, and nor is an existing unit printed "(E)FC-1" in one schedule

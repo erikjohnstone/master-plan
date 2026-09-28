@@ -17,7 +17,7 @@ import {
   servedEquipmentTag,
   unscheduledTagsAndAliasCandidates,
 } from "../src/lib/schedulePlanReconcile.mjs";
-import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, compileHvacTakeoff } from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
@@ -854,6 +854,42 @@ test("reconcile scaffold reads a building and its floor or wing before the mark,
   assert.deepEqual(rowsOf("FCU"), ["01-1-DAC-1@m.pdf#63", "05-B-DAC-1@m.pdf#63", "FCC1-1@m.pdf#3", "FCU1-3@m.pdf#3"]);
   assert.deepEqual(rowsOf("AIR_COOLED_CHILLER"), ["ACCH-1@m.pdf#2"]);
   assert.deepEqual(rowsOf("HUMIDIFIER"), ["HUM-A@m.pdf#4"]);
+});
+
+test("reconcile scaffold holds no row where the compile reads no unit: notes, lists, words and marks only a title vouches for (AS-66)", () => {
+  // 061_IA's notes (SF1, SP1) and 23_GA's specialty list (T1) are reference
+  // tables; 02_UT's SPF is a word; 096_IN's EG2 a grille; 016_NY's F-1 a fan
+  // in a panel schedule; 047_NC's CH-1 an air-cooled chiller in an electrical
+  // list; "PIPING LEGEND" a legend's heading. Each family's rows are the
+  // compile's units.
+  const table = (sheet: string, title: string, keys: string[], kind = "equipment") => ({
+    kind, sheet, title: { text: title },
+    rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+  });
+  const graph = { tables: [
+    table("s.pdf#6", "", ["SF1", "SP1"], "reference"),
+    table("a.pdf#15", "SPECIALTY EQUIPMENT SCHEDULE", ["T1"], "reference"),
+    table("m.pdf#3", "", ["SPF", "EG2", "F-1", "CH-1", "EF-3"]),
+    table("m.pdf#10", "-CONDENSING UNIT", ["PIPING LEGEND", "CU-1"]),
+    table("m.pdf#18", "", ["CP-1"]),
+    // An untitled grid of valve marks keeps the word of its header shape.
+    { kind: "reference", sheet: "m.pdf#9", title: { text: "" }, headers: ["TAG", "GPM", "SERVED"],
+      rows: [{ key: "CV-1", cells: { TAG: { text: "CV-1" }, GPM: { text: "12" }, SERVED: { text: "AHU-1" } } }] },
+  ] };
+  const rowsOf = (family: string) => reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
+    .map((r: any) => r.tag).sort();
+  assert.deepEqual(rowsOf("FAN"), ["EF-3"]);
+  assert.deepEqual(rowsOf("CHW_CONTROL_VALVE"), ["CV-1"]);
+  assert.deepEqual(rowsOf("PUMP"), ["CP-1"]);
+  assert.deepEqual(rowsOf("ERV"), []);
+  assert.deepEqual(rowsOf("FCU"), []);
+  assert.deepEqual(rowsOf("HEAT_RECOVERY_CHILLER"), []);
+  assert.deepEqual(rowsOf("AIR_COOLED_CHILLER"), ["CH-1"]);
+  assert.deepEqual(rowsOf("CONDENSING_UNIT"), ["CU-1"]);
+  const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+  for (const f of ["FAN", "PUMP", "ERV", "FCU", "HEAT_RECOVERY_CHILLER", "AIR_COOLED_CHILLER", "CONDENSING_UNIT", "CHW_CONTROL_VALVE"]) {
+    assert.deepEqual(cats[f].items.map((i) => i.tag).sort(), rowsOf(f), f);
+  }
 });
 
 test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parity)", () => {
