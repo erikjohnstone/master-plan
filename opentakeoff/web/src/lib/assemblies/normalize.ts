@@ -422,7 +422,9 @@ export function quantitiesOf(h: string): Quantity[] {
   // A water pressure drop: WPD, PD, PRESSURE DROP, or a ΔP in feet of water
   // ("Δ P FT. H20"; the text layer may lose the Δ, leaving "P FTWC").
   if ((/\bW?PD\b|\bPRESS(?:URE)?\s+DROP\b|\bP\s?D\b|\bDELTA\s+P\b|(?:^|\s)(?:Δ\s?)?P\s+FTWC\b/.test(h)) && !/\bAIR\s+(?:P\s?D|PD|PRESSURE)\b|\bAIR\s+SIDE\b|\bAPD\b|\bINWC\b|\bOUTLET\b|\bINLET\s+SP\b/.test(h)) q.push("wpd");
-  if (/\bINLET\b/.test(h) && /\b(?:SIZE|DIA(?:METER)?|IN(?:CHES)?)\b/.test(h) && !/\bSP\b|\bTEMP|\bAIR\s+INLET\b|\bGAS\b|\bFLUE\b|\bVENT\b|\bCOMBUSTION\b/.test(h)) q.push("inlet_size");
+  // A terminal's PRIMARY AIR VALVE size is its inlet (26_CA's fan-powered
+  // boxes: PRIMARY AIR VALVE DATA AIR VALVE SIZE (IN); AS-69).
+  if ((/\bINLET\b/.test(h) && /\b(?:SIZE|DIA(?:METER)?|IN(?:CHES)?)\b/.test(h) || /\bPRIMARY\s+AIR\s+VALVE\b.*\bSIZE\b/.test(h)) && !/\bSP\b|\bTEMP|\bAIR\s+INLET\b|\bGAS\b|\bFLUE\b|\bVENT\b|\bCOMBUSTION\b/.test(h)) q.push("inlet_size");
   // A POWER CONNECTION (its MCA, MOCP, FLA or volts) is electrical, never a pipe.
   else if (/\bCONN\w*|\bRUNOUT\b|\bSUCT(?:ION)?\b|\bDISCH(?:ARGE)?\s+SIZE\b|\bPIPE\s+(?:SIZE|DIA(?:METER)?)\b/.test(h) && !/\bCONNECTED\b|\bDIFFUSER\b|\bVENT\b|\bFLUE\b|\bCOMBUSTION\b|\bDRAIN\b|\bCONDENSATE\b|\bDUCT\b|\bPOWER\b|\bELEC(?:TRICAL)?\b|\bMCA\b|\bMOC?P\b|\bFLA\b|\bAMPS?\b|\bVOLT/.test(h)) q.push("conn_size");
   // A water's SUPPLY/RETURN in inches ("CHILLED WATER SUPPLY/RETURN (IN)"):
@@ -1055,6 +1057,16 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         if (ctx.family === "VAV") {
           // A heating (hot deck) minimum is not the box's minimum.
           if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h) && W.min.test(h)) break;
+          // A fan-powered box prints its fan's airflows beside its primary
+          // air valve's (26_CA: FAN DATA MAXIMUM COOLING CFM 770, PRIMARY AIR
+          // VALVE DATA MAXIMUM PRIMARY CFM 680): the primary airflows are the
+          // box's, the fan's maximum is the fan's, and the fan's minimum is
+          // neither (AS-69).
+          if (W.fanWord.test(h) && !W.primary.test(h) && ctx.cols.some((c) => W.primary.test(c.h) && quantitiesOf(c.h).includes("airflow"))) {
+            if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h)) num(pick(ctx, "cfm_heat"), q, "airflow.terminal_heating");
+            else if (!W.min.test(h)) num(pick(ctx, "fan_cfm"), q, "airflow.terminal_fan_section");
+            break;
+          }
           if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h) && !W.min.test(h)) num(pick(ctx, "cfm_heat"), q, "airflow.terminal_heating");
           else if (W.min.test(h)) num(pick(ctx, "cfm_min"), q, "airflow.terminal_min");
           else if (W.max.test(h) || W.design.test(h) || /\bCOOLING\b|\bCOLD\b/.test(h)) num(pick(ctx, "cfm_max"), q, "airflow.terminal_max");
@@ -1122,6 +1134,10 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       }
       case "capacity": {
         if (W.perLength.test(h)) break;
+        // A zone's (a room's, a space's) design load is the space's, never a
+        // unit's capacity: 26_CA's fan-powered boxes print ZONE LOAD DATA
+        // HEATING (BTUH) beside their coil's CAPACITY (AS-69).
+        if (/\b(?:ZONES?|ROOMS?|SPACES?)\s+(?:(?:DESIGN|PEAK|HEATING|COOLING|SENSIBLE|TOTAL)\s+)?LOADS?\b/.test(h)) break;
         // "200 CFM @ 0.5" ESP" under CAPACITY: an air unit's rated airflow.
         const airCap = col.cell ? text.match(/^\s*(\d[\d,]*(?:\.\d+)?)\s*CFM\b/i) : null;
         if (airCap) {
@@ -1318,8 +1334,9 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       }
       case "inlet_size": {
         if (!ctx.attrs.has("inlet_size_in")) {
-          // A pump's (or any unit's) INLET SIZE is its suction connection.
-          if (!col.cell || !ctx.attrs.has("conn_in")) break;
+          // A pump's (or any unit's) INLET SIZE is its suction connection; an
+          // air valve's size is never a pipe's.
+          if (!col.cell || !ctx.attrs.has("conn_in") || /\bAIR\s+VALVE\b/.test(h)) break;
           const v = parseSizeCell(text);
           const n = v !== null && !v.includes("x") ? Number(v) : NaN;
           if (Number.isFinite(n) && n >= RANGE.in[0] && n <= 24) found.push({ attr: "conn_in", col, value: n, printed: text, rule: "size.connection", rank: 0 });

@@ -920,6 +920,25 @@ test("reconcile scaffold reads a table titled with the family's name in words, a
   }
 });
 
+test("reconcile scaffold reads a fan-powered terminal unit schedule's FPB rows as VAV, as the compile does (AS-69)", () => {
+  // 26_CA's FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00); an FPB row
+  // in an untitled table, or in an electrical list only ending in the boxes'
+  // name, is none.
+  const table = (sheet: string, title: string, keys: string[]) => ({
+    kind: "equipment", sheet, title: { text: title },
+    rows: keys.map((key) => ({ key, cells: { DESIGNATION: { text: key } } })),
+  });
+  const graph = { tables: [
+    table("m.pdf#10", "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)", ["FPB-3-11", "FPB-61-101"]),
+    table("m.pdf#12", "", ["FPB-4-11"]),
+    table("e.pdf#31", "EQUIPMENT CONNECTION SCHEDULE - FAN POWERED BOXES", ["FPB-5-11"]),
+  ] };
+  const rows = reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV")!).map((r: any) => r.tag).sort();
+  assert.deepEqual(rows, ["FPB-3-11", "FPB-61-101"]);
+  const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+  assert.deepEqual(cats.VAV.items.map((i) => i.tag).sort(), rows);
+});
+
 test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parity)", () => {
   const graph = {
     tables: [{

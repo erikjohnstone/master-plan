@@ -29,7 +29,7 @@
    ],
    "applies_to": {
     "family": "VAV",
-    "selector": "attr.heat_type = 'none' and (not known(attr.terminal_type) or attr.terminal_type = 'single_duct')",
+    "selector": "attr.heat_type = 'none' and ((known(attr.terminal_type) and attr.terminal_type = 'single_duct') or (not known(attr.terminal_type) and not known(attr.motor_hp) and not known(attr.fan_cfm)))",
     "rank": 20
    },
    "options": [
@@ -920,7 +920,7 @@
    ],
    "applies_to": {
     "family": "VAV",
-    "selector": "attr.heat_type = 'hw' and (not known(attr.terminal_type) or attr.terminal_type = 'single_duct')",
+    "selector": "attr.heat_type = 'hw' and ((known(attr.terminal_type) and attr.terminal_type = 'single_duct') or (not known(attr.terminal_type) and not known(attr.motor_hp) and not known(attr.fan_cfm)))",
     "rank": 20
    },
    "options": [
@@ -2110,7 +2110,7 @@
    ],
    "applies_to": {
     "family": "VAV",
-    "selector": "attr.heat_type = 'electric' and (not known(attr.terminal_type) or attr.terminal_type = 'single_duct')",
+    "selector": "attr.heat_type = 'electric' and ((known(attr.terminal_type) and attr.terminal_type = 'single_duct') or (not known(attr.terminal_type) and not known(attr.motor_hp) and not known(attr.fan_cfm)))",
     "rank": 20
    },
    "options": [
@@ -3145,7 +3145,7 @@
    ],
    "applies_to": {
     "family": "VAV",
-    "selector": "known(attr.terminal_type) and attr.terminal_type = 'fan_powered_series'",
+    "selector": "attr.terminal_type = 'fan_powered_series' and (known(attr.terminal_type) or known(attr.motor_hp) or known(attr.fan_cfm))",
     "rank": 30
    },
    "options": [
@@ -4508,7 +4508,7 @@
    ],
    "applies_to": {
     "family": "VAV",
-    "selector": "known(attr.terminal_type) and attr.terminal_type = 'fan_powered_parallel'",
+    "selector": "attr.terminal_type = 'fan_powered_parallel' and (known(attr.terminal_type) or known(attr.motor_hp) or known(attr.fan_cfm))",
     "rank": 30
    },
    "options": [

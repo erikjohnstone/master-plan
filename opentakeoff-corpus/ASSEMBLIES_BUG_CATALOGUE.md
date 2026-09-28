@@ -137,3 +137,143 @@ form dropping a wildcard's dot, or a quantifier's comma.
   web suite's 3,924 tests fail only AS-1's three base-red tests. MCP:
   typecheck clean; `test:bas` 133/133; the suite (every file but the WP1
   test) 377 of 380 pass and 1 skips; its two failures are as on AS-67.
+
+## AS-69 — a fan-powered terminal unit schedule was no family's, and a VAV box whose row prints a fan but not its arrangement would take a single-duct typical (FIXED — guarded by the evals)
+
+**Found:** AS-68 left 26_CA's FAN POWERED TERMINAL UNIT SCHEDULE (SECTION
+23 36 00) read by no family: its 73 fan-powered boxes (FPB-3-11 to
+FPB-61-208: 16 on level 3, 18 on level 4, 22 on level 5 and 17 on level 61,
+the marks of page 10's text layer; AS-68 said 75, counting two rows of the
+table's notes) were missing without a word. VAV's title rule named an AIR
+TERMINAL UNIT or a VAV BOX, never a fan-powered terminal, and FPB was no
+family's mark. A census of every cached dev document's titles and marks
+(fan-powered, series, parallel or induction words; FPB, FPTU, FPVAV, SFP and
+PFP marks; held-out excluded; scratch as69/fp.mjs) finds no other: 053_VA's
+SERIES FAN POWERED AIR TERMINAL UNIT SCHEDULE is read already (its TU26-73
+takes vav-series-fan), and the other FP marks are fire protection sheets in
+sheet indexes. Reading the boxes exposed three more gaps, each checked on a
+render of page 10:
+- **The typical:** the rows print a fan (FAN DATA … APPLICATION FAN HP, …
+  CFM) and nowhere say series or parallel (the set's abbreviations read "FPB
+  FAN POWERED BOX", its legend "FAN POWERED TERMINAL UNIT"; neither word is
+  in its text), so `terminal_type` is rightly unknown, and the starter's
+  single-duct VAV typicals read an unknown type as a single-duct box. Every
+  box would have waited for its heat among vav-cooling-only,
+  vav-reheat-electric and vav-reheat-hw, and any answer would have given a
+  box with a fan a typical with none: no fan start/stop, status or status
+  alarm. Of the 595 VAV units on the 97 cached dev documents only 053_VA's
+  printed a fan before, with its type (scratch as69/vavfan.mjs).
+- **The airflows:** the fan's (MAXIMUM COOLING CFM 770, MINIMUM CFM 385)
+  and the primary air valve's (MAXIMUM PRIMARY CFM 680, MINIMUM PRIMARY CFM
+  136) both read as the box's maximum and minimum, so each pair disagreed and
+  neither was read.
+- **The coil:** ZONE LOAD DATA HEATING (BTUH) 7,700 read as the coil's
+  capacity beside HOT WATER HEATING COIL DATA CAPACITY (BTUH) 9,900, so
+  neither was, and with its water flow alone the box's hot-water heat was not
+  read either; PRIMARY AIR VALVE DATA AIR VALVE SIZE (IN) was no inlet size.
+
+**Fix (the shared path: `HVAC_FAMILY_SPECS`, `normalize.ts` and the starter
+library, read by the compile, the reconcile scaffold, the notice, the apply
+path, the panel and MCP alike):**
+- **VAV** reads a title that begins with a fan-powered terminal, box or unit
+  (SERIES, PARALLEL, VAV, HOT WATER or ELECTRIC before it; FAN-POWERED), never
+  one naming its connections, electrical, wiring, controls, points,
+  sequences, diagrams or details, nor a list that only ends in the boxes'
+  name; under the family's own title a fan-powered box's mark (FPB, FPTU,
+  FPVAV, FP, SFP, PFP …-n) is a VAV unit (`titledKeyRe`; `keyRe`, which the
+  control-intent binder reads, is unchanged).
+- **The normalizer:** in a VAV table that prints a primary airflow, a fan
+  section's maximum is the fan's (`fan_cfm`), its heating airflow the box's
+  heating airflow as before, and its minimum neither; the primary columns stay
+  the box's maximum and minimum. A zone's, room's or space's design load is
+  never a unit's capacity. A terminal's PRIMARY AIR VALVE size is its inlet,
+  and an air valve's size is never a pipe connection.
+- **The starter's VAV selectors** (`web/scripts/assemblies-starter/terminals.mts`,
+  `us-typicals-v1.json` rebuilt): the single-duct typicals take a box whose
+  type is unprinted only where its row prints no fan (neither `motor_hp` nor
+  `fan_cfm`); vav-series-fan and vav-parallel-fan are possible for such a box,
+  so it waits for its arrangement between the two, as a fan waits for its
+  drive. A printed type decides as before. v1 is corrected in place: it has
+  not shipped (main has no assemblies starter), so no partner copy or saved
+  project pins it. For the library's owner: once it ships, a correction to a
+  starter typical cannot simply be its next version, since a partner's clone
+  of v1 takes 1.1 (`cloneForEdit`): a starter 1.1 would collide with the
+  clone, and a 2 would shadow it for new projects.
+
+**Measured** on the 97 eligible dev documents with a cached graph (held-out
+excluded), A/B against AS-68 (6510e8b):
+- **Compile and reconcile:** 26_CA gains its 73 boxes as VAV units, and no
+  unit is removed or changed on any document; the reconcile scaffold adds the
+  same 73 rows, its parity census's misses 53 = 53 and extras 5 = 5,
+  duplicate marks 22 = 22, and the notice of rows read as no unit is
+  identical. The silent-row census names one more row, 26_CA's "1" (the last
+  box's remark marker, extracted as a row of its own): no unit.
+- **Records:** every other unit on every document keeps its attributes and
+  its typical in every layer (0 attributes and 0 records changed; scratch
+  as69/ab69.mjs). The 73 each wait for `attr.terminal_type` between
+  vav-parallel-fan and vav-series-fan, and their hook-up applies; 26_CA's
+  lines 851 → 1,946.
+- **26_CA's readings,** checked cell by cell on a render of page 10: FPB-3-11
+  primary 680 / 136 CFM, fan 770 CFM at 1/8 HP, heating 480 CFM, a 10" air
+  valve, 9.9 MBH at 0.7 GPM (hot-water heat), 277 V single phase; FPB-61-108
+  and FPB-61-109 print no coil (their coil block blank), so their heat stays
+  unknown. The table's notes say the level 61 and level 3 to 5 boxes are bid
+  alternates M-17 and M-16.
+- **Downstream:** `bas_points` changes only 26_CA's estimate-only inventory
+  (497 → 862 estimated points over 132 units, never merged into printed
+  totals).
+- **WP1 compile acceptance** (93 cached dev sets): 42 pass and 51 fail, as
+  before; none flips (26_CA's key counts 10 units).
+- **Evals:** the five tiers' scores and the typical eval (130/244) identical,
+  each document's line but 26_CA's compile count (dev 4, 72 → 145). Control
+  intent: GATE C dev (227/244), the binding, question (GATE A PASS) and
+  reading evals identical; the unseen audit replay decides the same (26
+  applied, 26 right, 0 new, 0 gone).
+- **Held-out** (aggregates only): GATE 2 held-out 897/1,008 exact, 0 wrong,
+  2 invented; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91; GATE C
+  35/91. Each is as with AS-67 and AS-68.
+- **UI proof** (the dev server started on the change): 26_CA passes all 19
+  checks, byte-identical to apply_assemblies over MCP (145 units, 246
+  records, 1,946 lines) with its CSV set; 053_VA (its printed series box keeps
+  vav-series-fan, its 20 single-duct boxes vav-reheat-hw) passes 16, and
+  069_ID, unchanged, 17, byte-identical to its AS-68 run. A focused check on
+  26_CA (scratch uiproof/as69/fpbcheck) shows the 73 boxes as one row of the
+  exceptions, "73 VAV units of FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23
+  36 00) wait for attr.terminal_type", offering Use vav-parallel-fan and Use
+  vav-series-fan for all 73 and nothing single-duct; Use vav-series-fan for
+  all 73 gives each the series typical with the reason, an override each, and
+  its fan's start/stop, status and status alarm (the exceptions 129 → 56);
+  apply_assemblies over MCP with the same 73 overrides is byte-identical
+  (246 records; 4,582 lines).
+
+**Tests:** corpusTakeoffVol2Families.test.ts (AS-69, 2 tests: the
+fan-powered terminal, box and unit titles and their FPB, FPTU, FP and SFP
+marks; a box's control diagram, wiring detail and points list, an electrical
+list and a sequence that only name the boxes, an untitled FPB row and a
+sheet index's FP101 read as no VAV), schedulePlanReconcile.test.ts (the
+reconcile reads the same rows as the compile), normalize.test.ts (26_CA's
+FPB-3-11 as printed, a box printing no coil, a table printing no primary
+airflow, zone, room and space loads, a coil's heating load, an air valve's
+size under a pump), starter.test.ts (a box printing a fan and no type waits
+between the two fan-powered typicals, whatever its heat; a printed type
+decides; no fan and no type is a single-duct box, as before). 16 mutations
+each fail a named test: VAV without the fan-powered title, with it anywhere
+in a title, or with a box's controls and wiring; no FPB marks under the
+title, and FPB marks anywhere; the normalizer without the fan section, with
+it where no primary airflow is printed, with the fan's minimum as the box's;
+a zone's load as a capacity, and any load as none; no primary air valve
+inlet; an air valve's size as a pipe; the single-duct typicals taking a box
+that prints a fan; the fan-powered typicals only for a printed type, or only
+for a printed fan; the single-duct test without its known-type guard.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the
+  web suite's 3,929 tests fail only AS-1's three base-red tests. MCP:
+  typecheck clean; `test:bas` 133/133; the suite (every file but the WP1
+  test) 377 of 380 pass and 1 skips; its two failures are as on AS-68.
+
+**Left, disclosed:** whether 26_CA's boxes are series or parallel is the
+estimator's answer (the set prints neither; a series box's fan would run in
+cooling, and the schedule's cooling fan airflow above its primary airflow
+suggests one, but no rule reads an arrangement from airflows). The table's
+notes, read with its rows, say the level 3 to 5 boxes are bid alternate M-16
+and the level 61 boxes M-17. The compact title form still drops a "-" inside
+a character class (AS-68); no title rule has one.

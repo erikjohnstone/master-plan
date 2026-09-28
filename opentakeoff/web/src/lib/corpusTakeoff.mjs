@@ -1361,13 +1361,18 @@ export const HVAC_FAMILY_SPECS = {
   VAV: {
     // A VAV box or terminal schedule (009_FL's VAV TERMINAL SCHEDULE, 033_MN's
     // VAV BOX WITH HOT WATER REHEAT SCHEDULE) and a variable volume terminal
-    // (061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE; AS-68), never a
-    // box's connections, wiring, points or details.
-    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL/i,
+    // (061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE; AS-68), and a
+    // title that begins with a fan-powered terminal, box or unit (26_CA's FAN
+    // POWERED TERMINAL UNIT SCHEDULE; AS-69), never a box's connections,
+    // wiring, points or details.
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL|^\s*(?:(?:SERIES|PARALLEL|VAV|HOT\s+WATER|ELECTRIC)\s+){0,2}FAN[\s\-]*POWERED\s+(?:VAV\s+|AIR\s+)?(?:TERMINAL(?:\s+UNITS?)?|BOX(?:ES)?|UNITS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor;
     // TU-* terminal units numbered under an AIR TERMINAL UNIT title (AS-62).
     keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU|TU(?=[\s\-]?\d))/i,
+    // Under the family's own title, a fan-powered box (26_CA's FPB-3-11 under
+    // FAN POWERED TERMINAL UNIT SCHEDULE; AS-69).
+    titledKeyRe: /^(?:FPB|FPTU|FPVAV|FPV|FPU|FP|[SP]FPB|[SP]FP|[SP]FTU)(?=[\s\-]?\d)/i,
   },
   RTU: {
     // PACKAGED EQUIPMENT SCHEDULE (RTU) — common finish/replacement sheets.

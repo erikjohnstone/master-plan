@@ -531,3 +531,40 @@ describe("AS-68 a table titled with the family's name in words is the family's s
     assert.deepEqual(tags("AIR_SEPARATOR"), ["AS-A1", "AS-B"]);
   });
 });
+
+// AS-69: a fan-powered terminal's schedule is a VAV schedule, and under the
+// family's own title a fan-powered box's mark (FPB-n) is a VAV unit.
+describe("AS-69 a fan-powered terminal unit schedule is a VAV schedule", () => {
+  const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
+  const table = (sheet: string, title: string, keys: string[], kind = "equipment") => ({ kind, sheet, title: { text: title }, rows: keys.map(row) });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+
+  it("reads a fan-powered terminal or box title, and its FPB, FPTU and FP marks", () => {
+    // 26_CA's FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00), levels 3 and 61.
+    const tags = compile([
+      table("m.pdf#10", "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)", ["FPB-3-11", "FPB-61-101"]),
+      table("m.pdf#11", "SERIES FAN-POWERED BOX SCHEDULE", ["FPTU-1"]),
+      table("m.pdf#12", "PARALLEL FAN POWERED VAV BOX SCHEDULE", ["FP-2"]),
+      table("m.pdf#13", "Fan Powered Terminal Units", ["SFP-4"]),
+    ]);
+    assert.deepEqual(tags("VAV"), ["FP-2", "FPB-3-11", "FPB-61-101", "FPTU-1", "SFP-4"]);
+  });
+
+  it("reads no fan-powered box schedule in a box's controls, wiring, points or sequence, nor in a list that only ends in their name", () => {
+    const tags = compile([
+      table("m.pdf#20", "FAN POWERED BOX CONTROL DIAGRAM", ["FPB-1"]),
+      table("m.pdf#21", "FAN POWERED TERMINAL UNIT WIRING DETAIL", ["FPB-2"]),
+      table("m.pdf#22", "FAN POWERED BOX POINTS LIST", ["FPB-3"]),
+      table("e.pdf#30", "EQUIPMENT CONNECTION SCHEDULE - FAN POWERED BOXES", ["FPB-4"]),
+      table("m.pdf#23", "SEQUENCE OF OPERATION - FAN POWERED TERMINAL UNITS", ["FPB-5"]),
+    ]);
+    assert.deepEqual(tags("VAV"), []);
+    // FPB-* is a VAV unit under the family's own title only: never in an
+    // untitled table, and never a sheet index's fire protection sheet (FP101).
+    assert.deepEqual(compile([table("m.pdf#4", "", ["FPB-3-11", "VAV-1"])])("VAV"), ["VAV-1"]);
+    assert.deepEqual(compile([table("m.pdf#2", "SHEET INDEX", ["FP101", "M101"], "reference")])("VAV"), []);
+  });
+});

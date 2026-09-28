@@ -7,8 +7,16 @@ export const xeto = (id: string) => ({ vocab: "xeto" as const, id });
 export const ot = (id: string) => ({ vocab: "ot" as const, id });
 
 /** A terminal unit's single-duct test, which a type the schedule does not
- * print leaves open (an unprinted type is a single-duct box). */
-export const SINGLE_DUCT = "(not known(attr.terminal_type) or attr.terminal_type = 'single_duct')";
+ * print leaves open (an unprinted type is a single-duct box), unless the row
+ * prints a fan (its motor's HP or the fan's airflow): a box with a fan is
+ * fan-powered, series or parallel, whichever the schedule leaves unsaid
+ * (26_CA's FAN POWERED TERMINAL UNIT SCHEDULE; AS-69). */
+export const SINGLE_DUCT = "((known(attr.terminal_type) and attr.terminal_type = 'single_duct') or (not known(attr.terminal_type) and not known(attr.motor_hp) and not known(attr.fan_cfm)))";
+
+/** A fan-powered terminal of one arrangement: printed as that one, or, where
+ * the row prints a fan and no type, possible until the estimator says which
+ * (AS-69). */
+export const FAN_POWERED = (tt: string) => `attr.terminal_type = '${tt}' and (known(attr.terminal_type) or known(attr.motor_hp) or known(attr.fan_cfm))`;
 
 export const ZONE_OPTIONS = [
   { id: "co2_sensor", label: "Zone CO2 sensor (demand-controlled ventilation)", default: false, note: "UFC 3-410-01 §3-2.4.1 (401.1): Army and Air Force projects may not use CO2 sensors for ventilation control without approval." },
@@ -117,7 +125,7 @@ export function terminalTypicals() {
   ];
   const fanPowered = (id: string, title: string, tt: string, cvf: string, vvf: string, parallel: boolean) => ({
     ...common(id, title, [`MBL ${cvf} and ${vvf}`, `UFGS 23 09 93 §3.3.3`, `UFGS 23 09 00 §3.7.8.5.6`, "UFC 3-410-01 Table 3-1, VAV System"]),
-    applies_to: { family: "VAV", selector: `known(attr.terminal_type) and attr.terminal_type = '${tt}'`, rank: 30 },
+    applies_to: { family: "VAV", selector: FAN_POWERED(tt), rank: 30 },
     options: [
       ...ZONE_OPTIONS,
       { id: "variable_fan", label: "Variable-volume terminal fan (G36 VVF): the controller modulates the fan's airflow", default: false, note: "Off: a constant-volume fan (G36 CVF), started and stopped." },

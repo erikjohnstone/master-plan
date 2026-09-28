@@ -17,7 +17,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { familiesOf, sanitizeAssemblyDefinitions, type AssemblyDefinition, type ExpandedLine } from "../../src/lib/assemblies/schema.ts";
 import { expandAll } from "../../src/lib/assemblies/expand.ts";
-import { selectProjectAssemblies, type Instance } from "../../src/lib/assemblies/select.ts";
+import { selectAssembly, selectProjectAssemblies, type Instance } from "../../src/lib/assemblies/select.ts";
 import { ATTRIBUTES, familyAttributes } from "../../src/lib/assemblies/attributes.ts";
 import type { Value } from "../../src/lib/assemblies/expr.ts";
 import { buildStarter, HOOKUP_PROFILE, serialize, STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
@@ -357,4 +357,28 @@ test("property: every typical and hook-up expands without an error over random a
     assert.ok(Object.keys(vars).length === 0 || apps.length >= 4, "project assemblies apply once the project says how many");
   }
   assert.ok(expanded > 400, `${expanded} expansions`);
+});
+
+test("a VAV box whose row prints a fan and no terminal type waits for series or parallel, never a single-duct typical (AS-69)", () => {
+  const pick = (attrs: Record<string, Value>) => {
+    const r = selectAssembly(unit("FPB-3-11", "VAV", attrs), LIB);
+    return r.status === "unresolved" ? `waits ${r.unresolved.missing.join(",")}: ${r.unresolved.candidates.join(" ")}` : `${r.status} ${r.assembly?.id}`;
+  };
+  // 26_CA's fan-powered boxes print the fan's HP and airflow, and no type.
+  const both = "waits attr.terminal_type: vav-parallel-fan@1 vav-series-fan@1";
+  assert.equal(pick({ heat_type: "hw", motor_hp: 0.125 }), both);
+  assert.equal(pick({ heat_type: "hw", fan_cfm: 770 }), both);
+  assert.equal(pick({ heat_type: "none", motor_hp: 0.125, fan_cfm: 770 }), both);
+  assert.equal(pick({ heat_type: "electric", fan_cfm: 500 }), both);
+  // A box printing no coil: its heat unknown, still one of the two.
+  assert.equal(pick({ motor_hp: 1 / 3 }), both);
+  // A printed type decides, as before, whatever the row prints of a fan.
+  assert.equal(pick({ heat_type: "hw", motor_hp: 0.125, terminal_type: "fan_powered_series" }), "ok vav-series-fan");
+  assert.equal(pick({ heat_type: "hw", terminal_type: "fan_powered_parallel" }), "ok vav-parallel-fan");
+  assert.equal(pick({ heat_type: "hw", motor_hp: 0.125, terminal_type: "single_duct" }), "ok vav-reheat-hw");
+  // No fan and no type printed: a single-duct box, as before.
+  assert.equal(pick({ heat_type: "hw" }), "ok vav-reheat-hw");
+  assert.equal(pick({ heat_type: "none" }), "ok vav-cooling-only");
+  assert.equal(pick({ heat_type: "electric" }), "ok vav-reheat-electric");
+  assert.equal(pick({}), "waits attr.heat_type: vav-cooling-only@1 vav-reheat-electric@1 vav-reheat-hw@1");
 });

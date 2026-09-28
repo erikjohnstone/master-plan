@@ -566,7 +566,10 @@ you have open.
 
 **Exceptions come first.** A unit the drawings do not decide is *unresolved*, and it
 says what it waits for: an attribute the schedule does not print, a project
-setting, or two typicals that tie. Nothing is guessed. Resolve one with **Use …**,
+setting, or two typicals that tie. Nothing is guessed: a VAV box whose row
+prints a fan (its HP or airflow) but not whether it is series or parallel
+waits between the two fan-powered typicals, and never takes a single-duct one,
+which counts no fan. Resolve one with **Use …**,
 which picks a candidate typical, or open **Details** to set an option or exclude
 the unit. Every override asks for a reason and is kept on the record under
 **Your overrides**. Rows of one schedule that wait for the same things, with the
@@ -607,7 +610,9 @@ table titled with the family's own name in words, no SCHEDULE printed
 (EXHAUST FANS, SUPPLY FANS, VENTILATION FANS, VAV TERMINAL SCHEDULE,
 CONDENSATE PUMP, AIR/DIRT SEPARATOR SCHEDULE), is that family's schedule; one
 that only ends in the name (an electrical list headed "EQUIPMENT CONNECTION
-SCHEDULE - EXHAUST FANS") is not. It reads a family's units in
+SCHEDULE - EXHAUST FANS") is not. A fan-powered terminal unit schedule (FAN
+POWERED TERMINAL UNIT SCHEDULE) is a VAV schedule, and under its title a
+fan-powered box's mark (FPB-3-11) is a VAV unit. It reads a family's units in
 another family's schedule that lists them (DOAS-1 in an air handler index),
 and each unit once, from the listing that prints its mark. A schedule
 printed on its side, its units across the columns and their attributes down

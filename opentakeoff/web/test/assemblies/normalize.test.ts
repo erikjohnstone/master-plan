@@ -1375,3 +1375,61 @@ test("a heat pump rooftop unit's sections: the primary heat's kind and 47 °F ra
   assert.equal(pleated.attributes.filter_merv, undefined);
   assert.equal(pleated.unknown.filter_merv?.reason?.includes("PLEATED") ?? false, false);
 });
+
+test("a fan-powered box's sections: the primary air valve's airflows and size are the box's, the fan's maximum is the fan's, the coil's capacity is not the zone's load (AS-69)", () => {
+  // 26_CA's FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00), FPB-3-11 as printed.
+  const title = "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)";
+  const cells = {
+    "DESIGNATION": "FPB-3-11",
+    "ZONE LOAD DATA COOLING (BTUH)": "18,200",
+    "ZONE LOAD DATA HEATING (BTUH)": "7,700",
+    "FAN DATA MAXIMUM COOLING CFM": "770",
+    "FAN DATA MINIMUM CFM": "385",
+    "FAN DATA MAXIMUM HEATING CFM": "480",
+    "FAN DATA UNIT SIZE": "3",
+    "FAN DATA APPLICATION FAN HP": "1/8",
+    "MIXED AIR TEMPERATURES COOLING DAT AT MAX (ºF)": "51.00",
+    "MIXED AIR TEMPERATURES COOLING DAT AT MIN (ºF)": "65.46",
+    "PRIMARY AIR VALVE DATA MAXIMUM PRIMARY CFM": "680",
+    "PRIMARY AIR VALVE DATA MINIMUM PRIMARY CFM": "136",
+    "PRIMARY AIR VALVE DATA AIR VALVE SIZE (IN)": "10",
+    "HOT WATER HEATING COIL DATA CAPACITY (BTUH)": "9,900",
+    "HOT WATER HEATING COIL DATA ENTERING AIR TEMP (ºF)": "65.75",
+    "HOT WATER HEATING COIL DATA DISCHARGE AIR TEMP (ºF)": "84.85",
+    "HOT WATER HEATING COIL DATA WATER FLOW RATE (GPM)": "0.7",
+    "ELECTRICAL POWER DATA VOLTS / PHASE": "277/1",
+    "ELECTRICAL POWER DATA FLA": "3.1",
+    "ELECTRICAL POWER DATA MOP": "15",
+    "ELECTRICAL POWER DATA MCA": "3.9",
+    "REMARKS / NOTES": "1",
+  };
+  const fpb = values(normalizeCompileItem(row("FPB-3-11", title, cells), "VAV"));
+  assert.deepEqual(
+    { cfm_max: fpb.cfm_max, cfm_min: fpb.cfm_min, fan_cfm: fpb.fan_cfm, cfm_heat: fpb.cfm_heat, inlet_size_in: fpb.inlet_size_in, hw_mbh: fpb.hw_mbh, hw_gpm: fpb.hw_gpm, heat_type: fpb.heat_type, motor_hp: fpb.motor_hp, volts: fpb.volts, phase: fpb.phase },
+    { cfm_max: 680, cfm_min: 136, fan_cfm: 770, cfm_heat: 480, inlet_size_in: "10", hw_mbh: 9.9, hw_gpm: 0.7, heat_type: "hw", motor_hp: 0.125, volts: 277, phase: 1 },
+  );
+  // Fan powered, series or parallel: the schedule does not say which.
+  assert.equal(fpb.terminal_type, undefined);
+  // A box printing no coil (FPB-61-108): its heat stays unknown, its fan's still read.
+  const bare = values(normalizeCompileItem(row("FPB-61-108", title, {
+    "ZONE LOAD DATA COOLING (BTUH)": "30,000", "FAN DATA MAXIMUM COOLING CFM": "1,550", "FAN DATA MINIMUM CFM": "775", "FAN DATA UNIT SIZE": "5",
+    "FAN DATA APPLICATION FAN HP": "1/3", "PRIMARY AIR VALVE DATA MAXIMUM PRIMARY CFM": "1140", "PRIMARY AIR VALVE DATA MINIMUM PRIMARY CFM": "342",
+    "PRIMARY AIR VALVE DATA AIR VALVE SIZE (IN)": "12", "HOT WATER HEATING COIL DATA CAPACITY (BTUH)": "", "ELECTRICAL POWER DATA VOLTS / PHASE": "277/1",
+  }), "VAV"));
+  assert.deepEqual([bare.cfm_max, bare.cfm_min, bare.fan_cfm, bare.inlet_size_in, bare.heat_type, bare.hw_mbh], [1140, 342, 1550, "12", undefined, undefined]);
+  // No primary airflow printed: a MAX and MIN CFM are the box's and a FAN CFM the fan's, as before.
+  const plain = values(normalizeCompileItem(row("FP-1", "SERIES FAN POWERED TERMINAL UNIT SCHEDULE", { "MAX CFM": "800", "MIN CFM": "300", "FAN CFM": "900" }), "VAV"));
+  assert.deepEqual([plain.cfm_max, plain.cfm_min, plain.fan_cfm, plain.terminal_type], [800, 300, 900, "fan_powered_series"]);
+  const fanMax = values(normalizeCompileItem(row("FP-3", "SERIES FAN POWERED TERMINAL UNIT SCHEDULE", { "FAN MAX CFM": "900", "MIN CFM": "300" }), "VAV"));
+  assert.deepEqual([fanMax.cfm_max, fanMax.fan_cfm], [900, undefined]);
+  // A zone's, room's or space's load is never a capacity; a coil's heating load is.
+  for (const h of ["ZONE HEATING LOAD (MBH)", "ROOM SENSIBLE LOAD (MBH)", "SPACE LOAD HEATING (MBH)"]) {
+    const z = values(normalizeCompileItem(row("VAV-2", "VAV BOX SCHEDULE", { [h]: "8.0", "HW COIL GPM": "1.0", "HW COIL EWT (F)": "180" }), "VAV"));
+    assert.equal(z.hw_mbh, undefined, h);
+  }
+  const coil = values(normalizeCompileItem(row("VAV-1", "VAV BOX SCHEDULE", { "HEATING COIL REQUIREMENTS TOTAL HEATING LOAD (MBH)": "12.5", "HEATING COIL REQUIREMENTS GPM": "1.0" }), "VAV"));
+  assert.equal(coil.hw_mbh, 12.5);
+  // An air valve's size is a terminal's inlet, never a pipe connection.
+  const pump = values(normalizeCompileItem(row("P-1", "PUMP SCHEDULE", { "PRIMARY AIR VALVE SIZE (IN)": "2", "GPM": "40" }), "PUMP"));
+  assert.equal(pump.conn_in, undefined);
+});

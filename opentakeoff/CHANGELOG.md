@@ -1,5 +1,22 @@
 # Changelog
 
+- **Takeoff and assemblies: a fan-powered terminal unit is read, and waits
+  for series or parallel.** A FAN POWERED TERMINAL UNIT SCHEDULE was no
+  family's, so 26_CA's 73 fan-powered boxes (FPB-3-11 …) were missing without
+  a word. VAV now reads a title that begins with a fan-powered terminal, box
+  or unit (never its controls, wiring, points or sequence, nor a list that
+  only ends in the boxes' name), and under that title a fan-powered box's mark.
+  Such a table prints its fan's airflows beside its primary air valve's, and
+  its zone's loads beside its coil's capacity: the primary airflows are the
+  box's maximum and minimum, the fan's maximum is the fan's, a zone's load is
+  never a unit's capacity, and the primary air valve's size is the box's
+  inlet. A box whose row prints a fan but not whether it is series or parallel
+  no longer takes a single-duct typical, which counts no fan: it waits between
+  the two fan-powered typicals for the estimator's choice (the starter's VAV
+  selectors, corrected in v1, which has not shipped). On the 97 eligible dev
+  documents only 26_CA changes (`corpusTakeoff.mjs`, `normalize.ts`,
+  `web/scripts/assemblies-starter/terminals.mts`, ASSEMBLIES_BUG_CATALOGUE
+  AS-69).
 - **Takeoff: a table titled with its family's name in words is that family's
   schedule.** A family's title rule read "… FAN SCHEDULE", "VARIABLE AIR
   VOLUME …" or "PUMP SCHEDULE", so tables titled EXHAUST FANS, SUPPLY FANS,
