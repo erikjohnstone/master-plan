@@ -225,9 +225,103 @@ describe("AS-62 building tokens, building letters, qualified exhaust fans, TU te
     const tags = (f: string) => cats[f].items.map((i) => i.tag).sort();
     assert.deepEqual(tags("VAV"), ["1-TU-28-1", "ATU-6-1", "W05-TU-01"]);
     assert.deepEqual(tags("AHU"), ["1-AC-15", "40-AHU-2", "AC-57"]);
-    assert.deepEqual(tags("FAN"), ["JEF-1", "KEF-1", "PEF-1"]);
+    // BF-1 is no fan mark by FAN's rule, but a FAN SCHEDULE title vouches for it (AS-63).
+    assert.deepEqual(tags("FAN"), ["BF-1", "JEF-1", "KEF-1", "PEF-1"]);
     assert.deepEqual(tags("FCU"), ["FC-A-13-1", "FC-A-2"]);
     const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
-    for (const t of ["A", "1-AC-36TEMP", "BF-1", "1-1/2", "2-WAY", "460-3-60"]) assert.equal(all.includes(t), false, t);
+    for (const t of ["A", "1-AC-36TEMP", "1-1/2", "2-WAY", "460-3-60"]) assert.equal(all.includes(t), false, t);
+  });
+});
+
+describe("AS-63 marks a schedule's title vouches for, and units listed in another family's schedule", () => {
+  const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
+  const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+
+  it("reads under the family's own title what its untitled rule reads (CD-1 in a CONTROL DAMPER SCHEDULE)", () => {
+    const tags = compile([table("m.pdf#5", "CONTROL DAMPER SCHEDULE", ["CD-1", "MD-2", "OA-1", "SPARE"])]);
+    assert.deepEqual(tags("CONTROL_DAMPER"), ["CD-1", "MD-2", "OA-1"]);
+  });
+
+  it("reads the marks a family's title vouches for, and only under that title", () => {
+    const tags = compile([
+      table("m.pdf#1", "RETURN FAN SCHEDULE", ["E-A-1", "F-2", "BF-3"]),
+      table("m.pdf#2", "DISPOSABLE CYLINDER ELECTRIC HUMIDIFIER SCHEDULE", ["HF-4"]),
+      table("m.pdf#3", "ELECTRIC UNIT HEATER SCHEDULE", ["EWH-1", "SUH-2"]),
+      table("m.pdf#4", "DUCTLESS SPLIT SYSTEM SCHEDULE", ["DAC-1"]),
+      table("m.pdf#5", "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE", ["SS-1/SSCU-1"]),
+      table("m.pdf#6", "AIR COOLED CHILLER SCHEDULE", ["CH-1", "ACC-2"]),
+      table("m.pdf#7", "STEAM HEATING COIL SCHEDULE", ["1-RH-1", "1-SHC-28", "1-SHC-36TEMP"]),
+      table("m.pdf#8", "DIRECT EXPANSION COOLING COIL SCHEDULE", ["1-DXC-28"]),
+    ]);
+    assert.deepEqual(tags("FAN"), ["BF-3", "E-A-1", "F-2"]);
+    assert.deepEqual(tags("HUMIDIFIER"), ["HF-4"]);
+    assert.deepEqual(tags("UNIT_HEATER"), ["EWH-1", "SUH-2"]);
+    assert.deepEqual(tags("FCU"), ["DAC-1", "SS-1"]);
+    assert.deepEqual(tags("CONDENSING_UNIT"), ["SSCU-1"]);
+    assert.deepEqual(tags("AIR_COOLED_CHILLER"), ["ACC-2", "CH-1"]);
+    assert.deepEqual(tags("DUCT_MOUNTED_COIL"), ["1-DXC-28", "1-RH-1", "1-SHC-28"]);
+    // Nowhere else: an untitled or general table reads none of them as these
+    // families' (ACC-* there is an air-cooled condenser; EWH-* a water heater).
+    const loose = compile([
+      table("m.pdf#9", "", ["E-A-1", "BF-3", "HF-4", "SUH-2", "DAC-1", "RH-1", "SHC-28", "ACC-2"]),
+      table("m.pdf#10", "EQUIPMENT SCHEDULE", ["E-A-5", "HF-5", "DAC-2", "RH-2"]),
+      table("m.pdf#11", "GAS WATER HEATER SCHEDULE", ["EWH-3"]),
+    ]);
+    for (const f of ["FAN", "HUMIDIFIER", "UNIT_HEATER", "FCU", "DUCT_MOUNTED_COIL", "AIR_COOLED_CHILLER"]) assert.deepEqual(loose(f), [], f);
+    assert.deepEqual(loose("CONDENSING_UNIT"), ["ACC-2"]);
+    assert.deepEqual(loose("WATER_HEATER"), ["EWH-3"]);
+  });
+
+  it("reads a family's own units in another family's schedule, and no other row there", () => {
+    const tags = compile([
+      table("m.pdf#19", "AIR HANDLING UNIT SYSTEM INDEX SCHEDULE", ["DOAS-1", "DOAS-2", "AHU-4"]),
+      table("m.pdf#20", "AIR COOLED CHILLER SCHEDULE", ["CH-1", "CH-2", "HRC-1"]),
+      table("m.pdf#64", "SPLIT SYSTEM AIR HANDLER UNIT SCHEDULE", ["FCU-1/HP-1", "FCU-2/HP-2"]),
+    ]);
+    assert.deepEqual(tags("DOAS"), ["DOAS-1", "DOAS-2"]);
+    assert.deepEqual(tags("AHU"), ["AHU-4"]);
+    assert.deepEqual(tags("HEAT_RECOVERY_CHILLER"), ["HRC-1"]);
+    assert.deepEqual(tags("AIR_COOLED_CHILLER"), ["CH-1", "CH-2"]);
+    assert.deepEqual(tags("FCU"), ["FCU-1", "FCU-2"]);
+    assert.deepEqual(tags("HEAT_PUMP"), ["HP-1", "HP-2"]);
+    // A unit its own schedule defines is read once, citing that schedule.
+    const both = compileHvacTakeoff(null, { tables: [
+      table("m.pdf#19", "AIR HANDLING UNIT SCHEDULE", ["DOAS-1"]),
+      table("m.pdf#21", "DOAS UNIT SCHEDULE", ["DOAS-1"]),
+    ] }).categories as Record<string, { items: Array<{ tag: string; sheet_id: string }> }>;
+    assert.deepEqual(both.DOAS.items.map((i) => `${i.tag}@${i.sheet_id}`), ["DOAS-1@m.pdf#21"]);
+  });
+
+  it("adds only units no printed listing holds, and leaves each unit where its printed listing puts it", () => {
+    // CD-1 is printed-read in the untitled damper table (the family's untitled
+    // rule) and only vouched for under the CONTROL DAMPER title, read first;
+    // DOAS-1 is listed in the air handler index (a host) before an untitled
+    // table prints it. Each unit stays with its printed listing, counted once.
+    const damperTable = { kind: "equipment", sheet: "m.pdf#6", title: { text: "" },
+      rows: [{ key: "CD-1", cells: { MARK: { text: "CD-1" }, SIZE: { text: "12x12" } } }] };
+    const cats = compileHvacTakeoff(null, { tables: [
+      table("m.pdf#5", "CONTROL DAMPER SCHEDULE", ["CD-1", "MD-2"]),
+      table("m.pdf#19", "AIR HANDLING UNIT SYSTEM INDEX SCHEDULE", ["DOAS-1", "DOAS-2"]),
+      damperTable,
+      table("m.pdf#22", "", ["DOAS-1"]),
+    ] }).categories as Record<string, { count: number; items: Array<{ tag: string; sheet_id: string }> }>;
+    const cites = (f: string) => cats[f].items.map((i) => `${i.tag}@${i.sheet_id}`);
+    assert.deepEqual(cites("CONTROL_DAMPER"), ["CD-1@m.pdf#6", "MD-2@m.pdf#5"]);
+    assert.equal(cats.CONTROL_DAMPER.count, 2);
+    assert.deepEqual(cites("DOAS"), ["DOAS-1@m.pdf#22", "DOAS-2@m.pdf#19"]);
+    assert.equal(cats.DOAS.count, 2);
+  });
+
+  it("reads a room code of up to six letters and digits after the number, never a temporary unit", () => {
+    // The six-letter limit guards the building token's strip: a longer tail
+    // behind a building number leaves the mark as printed, read by no rule.
+    const tags = compile([table("m.pdf#30", "TWO-PIPE FAN COIL UNIT SCHEDULE", ["001-FCU-01-CG06A", "001-FCU-02-C106A", "001-FCU-03-ROOM101X"])]);
+    assert.deepEqual(tags("FCU"), ["001-FCU-01-CG06A", "001-FCU-02-C106A"]);
+    assert.equal(markCoreForKeyRe("1-AC-36TEMP"), "1-AC-36TEMP");
+    assert.equal(markCoreForKeyRe("001-FCU-01-CG06A"), "FCU-01-CG06A");
   });
 });

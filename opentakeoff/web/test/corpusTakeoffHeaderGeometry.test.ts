@@ -564,4 +564,34 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.equal(result.totals.coils_found, 2);
     assert.ok(result.totals.gaps < 2, "at least one coil should now be corroborated by the real scheduled valve");
   });
+
+  it("never corroborates a coil's valve with a damper that serves its unit (AS-63)", () => {
+    // 016_NY: a CONTROL DAMPER SCHEDULE lists CD-1 to CD-9, each serving
+    // AHU-1, whose heating coil still has no scheduled valve. A damper is in
+    // the valve takeoff, and it controls air, never the coil's water.
+    const ahu1Coil = {
+      sheet: "set.pdf#17", kind: "equipment", title: { text: "AIR HANDLING UNIT SCHEDULE" },
+      headers: ["SYMBOL", "HEATING COIL DATA GPM", "HEATING COIL DATA EWT °F", "HEATING COIL DATA LWT °F"],
+      rows: [{ key: "AHU-1", cells: {
+        SYMBOL: { text: "AHU-1" },
+        "HEATING COIL DATA GPM": { text: "15.5" },
+        "HEATING COIL DATA EWT °F": { text: "160" },
+        "HEATING COIL DATA LWT °F": { text: "140" },
+      } }],
+    };
+    const dampers = {
+      sheet: "set.pdf#18", kind: "equipment", title: { text: "CONTROL DAMPER SCHEDULE (CD)" },
+      headers: ["UNIT NO.", "SYSTEM SERVED", "AREA SERVED", "INLET SIZE"],
+      rows: ["CD-1", "CD-9"].map((mark) => ({ key: mark, cells: {
+        "UNIT NO.": { text: mark }, "SYSTEM SERVED": { text: "AHU-1" }, "AREA SERVED": { text: "LAB 004" }, "INLET SIZE": { text: "12" },
+      } })),
+    };
+    const graph = { sheets: [{ key: "set.pdf#17" }, { key: "set.pdf#18" }], tables: [dampers, ahu1Coil] };
+    const valves = compileControlValveTakeoff(null, graph);
+    assert.equal((valves.categories as FixtureCategories).CONTROL_DAMPER?.count, 2, "both dampers are in the valve takeoff");
+    const result = compileEmbeddedCoilGaps(null, graph);
+    assert.equal(result.totals.coils_found, 1);
+    assert.equal(result.totals.gaps, 1, "AHU-1's coil has no scheduled valve: its dampers do not stand in for one");
+    assert.equal(result.gaps[0].tag, "AHU-1");
+  });
 });

@@ -1,5 +1,33 @@
 # Changelog
 
+- **Takeoff: marks a schedule's own title vouches for, and a family's units
+  in another family's schedule, are read.** A family's mark rule reads the
+  same in every table, so letters another family owns elsewhere could not
+  join it, and a family schedule read only its own family's marks. 017_MD's
+  nine return fans (E-A-1 under a RETURN FAN SCHEDULE), 094_FL's four
+  humidifiers (HF-4 under a humidifier schedule), 096_IN's DOAS-1 to DOAS-3
+  (in its air handler index) and 22_GA's split system fan coils and heat
+  pumps (FCU-1/HP-1 rows) read as no unit. Each family now also reads the
+  marks its own schedule's title vouches for, and only under that title
+  (FAN: E-A-n, F-n, BF-n; UNIT_HEATER: EWH-n, SUH-n; HUMIDIFIER: HF-n; FCU:
+  DAC-n, SS-n; AIR_COOLED_CHILLER: ACC-n; DUCT_MOUNTED_COIL: RH-n, SHC-n,
+  DXC-n); a table titled as the family reads what its untitled rule reads (a
+  CONTROL DAMPER SCHEDULE's CD-n); DOAS, FCU, HEAT_PUMP and
+  HEAT_RECOVERY_CHILLER read their own marks in another family's schedule
+  that lists them; CONDENSING_UNIT reads SSCU-n; and a mark may end in a room
+  code of up to six letters and digits (030_NY's 001-FCU-01-CG06A). A mark
+  read as printed ranks above every widened reading, in the takeoff and the
+  schedule↔plan reconciliation alike: a widened reading adds a unit only
+  where no printed listing holds it, so each unit keeps its listing and its
+  single reconcile row, whatever the table order. On all 97 eligible dev
+  documents (held-out excluded) the takeoff counts 87 more units on 12 of
+  them and every unit it counted before is unchanged; the rows AS-61 names
+  fall from 53 in 21 schedules to 16 in 8. The embedded-coil check no longer
+  takes a damper that serves a unit for its coil's valve: 016_NY's newly read
+  dampers serve AHU-1, whose heating coil still has no scheduled valve
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-63).
+
 - **Takeoff: marks under a building number, code or letter, and more fan and
   terminal marks, are read.** The takeoff reads a family's schedule rows by
   their marks and drops a mark its rule for the family does not read, so

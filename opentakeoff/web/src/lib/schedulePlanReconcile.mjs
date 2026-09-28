@@ -792,6 +792,15 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   const blankKeyRe = needle?.blankKeyRe || null;
   const altTitleRe = needle?.altTitleRe || null;
   const altKeyRe = needle?.altKeyRe || null;
+  // AS-63, as the compile reads them: marks the family's own title vouches
+  // for, and another family's schedules that list this family's units.
+  const titledKeyRe = needle?.titledKeyRe || null;
+  const host = needle?.host || null;
+  // Parity with compile uniqueFamily: a reading of the mark as printed ranks
+  // above a widened one, so the scan first finds every unit a printed
+  // reading holds.
+  const printedCanons = new Set();
+  for (const mode of ["scan", "emit"]) {
   // Titled family schedules first (parity with compile uniqueFamily) so shared
   // marks cite the device definition, not a blank/catch-all accessory row.
   for (const pass of [1, 2]) {
@@ -812,18 +821,25 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
+    const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
+      && scheduleTitleMatches(title, host.titleRe, host.exclude);
     // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
     // miscellaneous schedules only when the family has a keyRe/blankKeyRe.
     // titledOnly families skip blank/catch-all (FIN_TUBE vs filter FTR).
     if (titleOk || altOk) {
       if (pass !== 1) continue;
+    } else if (hostOk) {
+      if (pass !== 2) continue;
     } else {
       if (pass !== 2) continue;
       if (needle?.titledOnly) continue;
       if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
     }
     const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
+    const filterRe = hostOk ? host.keyRe : blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
+    // Parity with compile uniqueFamily (AS-63): a titled table also reads the
+    // family's untitled marks and the marks its title vouches for.
+    const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
     for (const row of table.rows || []) {
       const rawTag = rowIdentityTag(row, needle?.identityHeaderRe || null);
       if (!rawTag) continue;
@@ -851,7 +867,11 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           if (!read) continue;
         } else if (filterRe) {
           read = reads(filterRe);
+          // Read only through AS-63's rules, or in another family's schedule:
+          // a new admission, which adds no second row for a unit held.
+          if (!read && titledAlso.some((re) => reads(re))) read = 1;
           if (!read) continue;
+          if (hostOk) read = 1;
         }
         // Parity with compile uniqueFamily — continuation / duplicate extracts
         // of the same MARK must not inflate reconcile rows (Douglas HP-20).
@@ -859,12 +879,18 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         const tableFamily = title.toUpperCase().replace(/[^A-Z0-9]/g, "") || table.kind || "(untitled)";
         const rowId = `${table.sheet}::${canon}`;
         const scopeIdentity = `${canon}\0${tableFamily}\0${table.drawing_group || "(unscoped)"}`;
-        if (!canon || seen.has(scopeIdentity)) continue;
+        if (!canon) continue;
+        if (mode === "scan") {
+          if (read === 2) printedCanons.add(canon);
+          continue;
+        }
+        if (seen.has(scopeIdentity)) continue;
         // A mark only one of its forms reads adds a row only for a unit the
         // scaffold holds none for yet, as the compile counts it once: a second
         // listing of 05_MO's 1-CP-1 in an untitled table, or of 061_IA's
-        // HWP-A-1 in a general EQUIPMENT SCHEDULE, is the same pump.
-        if (read === 1 && held.has(canon)) continue;
+        // HWP-A-1 in a general EQUIPMENT SCHEDULE, is the same pump. Nor for a
+        // unit a printed reading holds anywhere, in whichever table comes first.
+        if (read === 1 && (held.has(canon) || printedCanons.has(canon))) continue;
         seen.add(scopeIdentity);
         held.add(canon);
         const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);
@@ -960,6 +986,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     }
   }
   } // end titled-first / blank-fallback passes
+  } // end scan / emit
   return rows;
 }
 

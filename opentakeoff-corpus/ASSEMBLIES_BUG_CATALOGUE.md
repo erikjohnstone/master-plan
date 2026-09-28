@@ -3882,3 +3882,221 @@ the reconcile loop's owner:
 - 096_IN's served plan paint reads 236 BAS rows where 231 are keyed. Beyond
   that check, 2 of its 92 targets MATCH where the test asks for 50, with 60
   AMBIGUOUS: a gap of its own, recorded here and not investigated further.
+
+## AS-63 — marks a family's own schedule title vouches for, and a family's units listed in another family's schedule, read as no unit (FIXED — the owner asked; guarded by the evals)
+
+**Found:** the rows AS-62 left named, 2026-09-27. On the 63 dev documents
+cached then (held-out excluded), AS-61 named 50 rows in 19 schedules on 13
+documents. Most are units whose letters no family's rule can read
+everywhere, but whose own schedule's title settles them: 017_MD's E-A-1
+under a RETURN FAN SCHEDULE, 094_FL's HF-4 under a humidifier schedule,
+03_FL's ACC-2 under an AIR COOLED CHILLER SCHEDULE. Others are one family's
+units listed in another family's schedule: 096_IN's DOAS-1 to DOAS-3 in its
+AIR HANDLING UNIT SYSTEM INDEX, 22_GA's FCU-n/HP-n pairs under a SPLIT
+SYSTEM AIR HANDLER title. The owner's ask stands: widen the tag rules,
+guarded by the evals, every existing answer unchanged.
+
+**What:** a family's mark rule (keyRe) reads the same everywhere it reads,
+so letters that name another thing in an untitled or general table could
+not join it: E-A-1's one-letter token, EWH (a water heater), ACC (an
+air-cooled condenser). A family schedule read only its own family's marks,
+so an air handler index's DOAS rows, a split air handler schedule's heat
+pumps and a chiller schedule's heat recovery chillers read as no unit. A
+CONTROL DAMPER SCHEDULE's own CD-n were read in an untitled table but not
+under their own title. A trailing room code of more than four letters and
+digits (030_NY's 001-FCU-01-CG06A) failed the short-mark check.
+
+**Fix (the shared path):**
+- `titledKeyRe`: marks a family's own title vouches for, read only in a
+  table whose title is the family's (its titleRe; not an alternate title),
+  never in an untitled or general table:
+  - FAN: E-A-n zone-lettered fans, F-n and BF-n (017_MD, 016_NY, 096_IN).
+  - UNIT_HEATER: EWH-n electric wall heaters and SUH-n (baker-county-eoc,
+    033_MN).
+  - HUMIDIFIER: HF-n (094_FL).
+  - FCU: DAC-n ductless units and SS-n split systems (03_FL, 22_GA, 040_IL).
+  - AIR_COOLED_CHILLER: ACC-n (03_FL).
+  - DUCT_MOUNTED_COIL: RH-n, SHC-n and DXC-n (05_MO).
+- A table titled as the family also reads what the family's untitled rule
+  (blankKeyRe) reads: a CONTROL DAMPER SCHEDULE's CD-n (016_NY, 014_MT). A
+  title never reads less than no title.
+- `host`: another family's schedules that list this family's units, and the
+  marks read there as this family's, after the family's own schedules:
+  DOAS-n in an air handler schedule other than a dedicated outdoor air one
+  (096_IN), FCU-n and HP-n in a split system air handler schedule (22_GA),
+  HRC-n in a chiller schedule (096_IN).
+- CONDENSING_UNIT's split-system alternate reads SSCU-n (040_IL's
+  SS-1/SSCU-1: the indoor unit is an FCU, the outdoor unit a condensing unit).
+- `SHORT_EQUIP_MARK_RE` admits a trailing room code of up to six letters and
+  digits (001-FCU-01-CG06A); a temporary unit's 1-AC-36TEMP and 1-SHC-36TEMP
+  still read as no unit.
+- **A printed reading ranks above a widened one**, in the compile's
+  `uniqueFamily` and the reconcile scaffold alike. A scan first finds every
+  unit a table's rule reads as printed; a reading through a mark's form
+  (AS-62), a vouching title or a host then adds a unit only when no printed
+  reading holds it. A widened reading never takes a unit from its printed
+  listing, whatever the table order: a CONTROL DAMPER SCHEDULE's CD-1 read
+  before an untitled damper table prints CD-1 is one damper, cited where it
+  was. Before the scan, the unit test's CD-1 took the titled row's cite and
+  the reconcile listed it twice.
+- The reconcile scaffold reads what the compile reads (`familyNeedleFromSpecs`
+  passes `titledKeyRe` and `host`).
+- **A damper no longer stands in for a coil's valve.** `compileEmbeddedCoilGaps`
+  corroborated each coil against every row of the valve takeoff, by tag or
+  served equipment, its dampers included. 016_NY's nine newly read dampers
+  serve AHU-1, and hid its heating coil's missing valve. The air-side
+  families (CONTROL_DAMPER, FUME_HOOD_DAMPER, LAB_AIR_VALVE) no longer
+  corroborate: they control air, never a coil's water.
+
+**Measured** on all 97 eligible dev documents (held-out excluded; the
+regression sweep left every one with a cached graph), A/B against AS-62
+(71bca4f) and against 6dfd782:
+- **Compile:** 87 units added on 12 documents; 0 removed, 0 changed; every
+  other part of each compile the same. Each unit is a row of its schedule;
+  where a key disagreed or the valve takeoff grew (040_IL, 094_FL, 017_MD,
+  016_NY, 014_MT) the row was checked on the rendered page:
+  - 22_GA: 17 (DAC-1, FCU-1 to FCU-8, HP-1 to HP-8).
+  - 014_MT: 17 control dampers (CD-A1 to CD-A17; base scope, alternates and
+    existing, as the schedule prints them).
+  - 05_MO: 13 coils (1-RH-1 to 1-RH-9, 1-SHC-28, 1-SHC-36, 1-SHC-57,
+    1-DXC-28).
+  - 016_NY: 11 (fans F-1 and F-2; control dampers CD-1 to CD-9, each serving
+    AHU-1).
+  - 017_MD: 9 return fans (E-A-1 to E-A-8, E-A-13).
+  - 096_IN: 6 (DOAS-1 to DOAS-3, HRC-1, HRC-2, BF-1).
+  - 094_FL: 4 humidifiers (HF-4, HF-5, HF-6, HF-8, each in its air
+    handler's cabinet).
+  - 030_NY: 3 fan coils (001-FCU-01-CG06A, 001-FCU-02-C106A, 001-FCU-06-C403A).
+  - baker-county-eoc: EWH-1, EWH-2. 03_FL: DAC-1, ACC-2. 040_IL: SS-1,
+    SSCU-1. 033_MN: SUH-1.
+- **AS-62's census, completed.** AS-62's census ran on the 58 documents
+  cached then. Against 6dfd782 on all 97, AS-62 and AS-63 add 415 units on
+  20 documents, and remove or change none. AS-62's rules add 235 units on
+  five documents its census did not cover, each a row of a titled family
+  schedule:
+  - 039_TX: 186 terminal units, TU-101C to TU-241H, in its BLDG 109 AIR
+    TERMINAL UNIT SCHEDULE. Checked on the rendered page; the page's text
+    layer prints the same 186 marks.
+  - 053_VA: 21 (TU26-11 to TU26-73). 030_NY: 16 building-numbered,
+    room-coded units, which its dev-4 key lists. 072_CA: 11 fan coils
+    (FC-A-2 to FC-A-20-1, drafted as 074_CA). 050_IL: 1-VAV-01.
+- **Downstream compiles:** `bas_points` changes only in its estimate-only
+  inventory (family inventory, schedule-derived estimate, plan targets);
+  printed point rows are the same. `control_valves` adds 016_NY's 9 and
+  014_MT's 17 control dampers (0 before); elsewhere only its page accounting
+  lists the schedule titles the new units come from. Embedded coil gaps and
+  sequences are identical, the coil check's change included, against AS-62
+  and 6dfd782.
+- **Reconcile:** 87 rows added, one per unit; 0 removed, 0 changed, the order
+  the same. The 28 as-printed duplicate marks on the 97 documents are the
+  same 28, listing for listing. Compiled units with no reconcile row (53) and
+  reconcile rows with no compiled unit (16) are the same before and after.
+- **AS-61's notice:** 53 rows in 21 schedules on 15 documents, now 16 in 8
+  on 7.
+- **Evals** on the affected dev documents that have keys, before and after:
+  - Attributes dev 4 (030_NY, 033_MN, 22_GA): its key, authored from the
+    renders, lists 030_NY's three room-coded fan coils, now read. Key
+    instances matched 41/44 to 44/44; exact 82.2% to 93.1%; wrong 0.0% and
+    invented 0 before and after.
+  - Every other score is identical: attributes dev 1 (040_IL, 094_FL,
+    baker-county-eoc), dev 2 (03_FL), dev 3 (017_MD, 096_IN; 5 more compile
+    items outside its keyed rows) and dev 5 (016_NY); typicals, binding and
+    reading dev 1.
+  - Project questions dev 1 answer the same; their effects grow with the
+    units (040_IL PQ1 130 to 155 lines, 094_FL PQ1 213 to 253, baker PQ1 131
+    to 151).
+  - The takeoff eval on baker-county-eoc is byte-identical.
+- **WP1 compile acceptance** (the 93 dev sets on its list with a cached
+  graph): against the keys as they were, 040_IL and 094_FL fail their HVAC
+  totals with AS-63, and 039_TX with AS-62's rules; 017_MD's first failing
+  check moves from BAS to its HVAC total; everything else is the same. Each
+  key omits scheduled units, checked on the rendered page and recorded in
+  `ground_truth/hvac/cross-set-compile-reviewed-corrections.json`, the
+  overlay the WP1 test applies with each source's hash:
+  - 040_IL's SS-1/SSCU-1 (FCU 1, CONDENSING_UNIT 1; 31 items).
+  - 094_FL's HF-4 to HF-8 (HUMIDIFIER 4; 11 items).
+  - 017_MD's nine return fans (FAN 15; 28 items; its note had left them
+    unclaimed because they once extracted with CFM as the row key).
+  - 039_TX's 186 terminal units (VAV 186; its [ZERO] key predates AS-62's
+    TU rule).
+  With them, against 6dfd782: no set goes from pass to fail; 040_IL, 039_TX
+  and 094_FL pass; 017_MD fails first on BAS, as the base does. 016_NY's and
+  014_MT's keys count no valve row where the drawings schedule 9 and 17
+  control dampers; both fail first on their HVAC totals on the base too, and
+  are left to the keys' owner.
+- **Held-out** (aggregates only): GATE 2 held-out 897/1,008 exact, 0 wrong,
+  2 invented; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91; GATE C
+  35/91. Each is as with AS-62.
+- **UI proof** (the worktree's dev server, headless Chrome; each report
+  byte-identical to `apply_assemblies`): 13 documents, all passing, each
+  gaining exactly the units the census adds:
+  - 22_GA 37 units (20 at 6dfd782; 18 checks), 014_MT 59 (42; 17), 016_NY
+    26 (15; 19), 017_MD 28 (19; 18), 094_FL 11 (7; 16), 040_IL 31 (29; 16),
+    baker-county-eoc 15 (13; 16), 03_FL 29 (27; 18), 033_MN 18 (17; 17).
+  - 05_MO 90 (77 with AS-62; 20), 096_IN 174 (168 with AS-62; 19), 030_NY
+    43 (24 at 6dfd782, then 16 with AS-62 and 3 with AS-63; 20).
+  - 069_ID, which AS-63 does not change: its report and CSV set are
+    byte-identical to its AS-62 run, and so is its PDF's text (17 checks).
+- **MCP tests on the changed documents**, on AS-62 and AS-63:
+  `reconcileWorkflow` on the twelve documents (20 tests), 096_IN's served
+  plan paint, the valve plan paint, D05, and the T-HVAC-01, T-BAS-01 and
+  T-VALVE-01 regressions. The same passes and failures, with identical
+  messages (held-out ones compared by status only), but one: NIST 017's
+  fan test, red on the base because the reconcile reads three airflow
+  station rows (SFAFMS, RFAFMS, SFRFAFMS) the compile does not, now also
+  counts the nine return fans (18 rows where its key has 6; 9 before).
+  On origin/main (5ab7ca8), with only the reconcile tests' harness fix, the
+  same tests fail with the same messages, 096_IN's plan paint included:
+  those failures are main's, not this branch's. St Louis's VAV test passes
+  there in its form before AS-62, which changed it by design.
+
+**What is still named (16 rows), each for a reason:**
+- 05_MO's temporary units: 1-AC-36TEMP, 1-EF-36TEMPA to C, 1-SF-36TEMP.
+- 036_LA's 05-B-DAC-1 and 06-B-DAC-1 to 4: a building number and a wing
+  letter before the family's letters.
+- 041_IL's 40-HM-140-HM-2: two marks the graph ran together.
+- 030_NY's 016-AC-01-16-12: a room code with its own hyphen.
+- 25_WA's BC-1 under a VRF indoor unit title: a branch controller, not an
+  indoor unit.
+- 087_US's ACCH-1 under an AIR-COOLED CHILLER title, and 088_AZ's EFC-1 and
+  EFC-2 under an existing fan coil title: marks no family's rule or title
+  reads yet, on documents cached after the rules were written. Left for a
+  later change, with their own census.
+
+**096_IN's served plan paint (AS-62's open note), traced:** 2 of its 92
+targets MATCH where the Pillar C test asks for 50, and 60 are AMBIGUOUS
+where it allows none, on the base as with AS-62 and AS-63. The 60 are units
+whose exact plan tag text is found but whose symbol geometry is not
+verified. `classifyBasServedSweepOutcome` calls those AMBIGUOUS since main's
+#94 (13dea24, "Harden end-to-end BAS Agent takeoff review"): tag text alone
+is no installed unit. The test's floor predates that rule. It is the test's
+owner's to restate, not this branch's.
+
+**Rejected:**
+- Reading E-A-n, F-n, EWH-n or ACC-n in untitled or general tables: there
+  EWH-n is the water heater family's mark and ACC-n the condensing unit's,
+  and a one-letter E- or F- prefix is too loose to read as a fan anywhere but
+  under a fan title.
+
+**Tests:**
+- corpusTakeoffVol2Families.test.ts: CD-1 under its own title; vouched marks
+  under their titles and nowhere else; host tables and nothing else there;
+  room codes and the temporary unit; a printed listing keeps its unit and its
+  cite, in either table order.
+- schedulePlanReconcile.test.ts: the scaffold reads what the compile reads,
+  one row per unit, the printed listing's row kept when a host lists the unit
+  first.
+- corpusTakeoffHeaderGeometry.test.ts: dampers serving AHU-1 leave its coil's
+  gap open.
+- Mutations: the tests fail for each of these twelve changes: no titled
+  reading of the untitled rule's marks; no vouched marks; the titled reading
+  in every table; no host tables; a host table read for every mark; a room
+  code of four; the compile without the printed-first rule; the reconcile
+  without it; the reconcile without the titled reading; the reconcile
+  without hosts; dampers corroborating a coil's valve; CONDENSING_UNIT
+  without SSCU.
+- **Guard:** web typecheck clean, lint 0 errors; the web suite's 3,896 tests
+  fail only AS-1's three base-red tests. MCP: `test:bas` 133/133; the suite
+  (every file but the WP1 test, emulated above) 377 of 380 pass and 1 skips;
+  its two failures fail the same on AS-62 (AS-1's conformance test, and
+  navfac's slow `sweep_schedule_row` test, compared by status).

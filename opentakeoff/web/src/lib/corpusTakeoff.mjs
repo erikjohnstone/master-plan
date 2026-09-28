@@ -362,9 +362,10 @@ export function normalizeEquipMark(raw) {
  */
 
 /** A short equipment mark: a family token, optional lettered segments, a
- * number of at most four digits and one short trailing segment (ET-1, SH1,
- * CC-15-6, S-A-1, TU-28-1, AHU-3001) — never a catalog model. */
-const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,4})?$/;
+ * number of at most four digits and one short trailing segment of up to six
+ * letters and digits, such as a room code (ET-1, SH1, CC-15-6, S-A-1,
+ * TU-28-1, AHU-3001, 030_NY's FCU-01-CG06A; AS-63) — never a catalog model. */
+const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,6})?$/;
 
 /**
  * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1), including
@@ -786,9 +787,25 @@ function uniqueFamily(graph, {
   // (e.g. SPLIT SYSTEM SYMBOL "F-1 , CU-1" → only CU-* for CONDENSING_UNIT,
   // while titled CONDENSING UNIT SCHEDULE keeps set-local B1/B2 with no keyRe).
   altTitleRe, altKeyRe,
+  // Marks the family's own schedule title vouches for (AS-63): read only in a
+  // table titled as the family, never in an untitled or general one, where
+  // the same letters may name something else (ACC is an air-cooled condenser
+  // anywhere but under an AIR COOLED CHILLER title).
+  titledKeyRe,
+  // Another family's schedules that list this family's own units (AS-63):
+  // { titleRe, exclude, keyRe }. 096_IN's AIR HANDLING UNIT SYSTEM INDEX lists
+  // DOAS-1 to DOAS-3; only host.keyRe's marks are read there, as this family's.
+  host,
 }) {
   const keys = new Set();
   const items = [];
+  // A reading of the mark as printed, by the rule that gates its table, ranks
+  // above a widened one: through one of the mark's forms (AS-62), a title that
+  // vouches for it or another family's schedule (AS-63). The scan finds every
+  // unit a printed reading holds, so a widened reading only adds units, and
+  // never takes a unit's row from its printed listing, whatever the table order.
+  const printedCanons = new Set();
+  for (const mode of ["scan", "emit"]) {
   // Two passes: titled family schedules first, then blank/catch-all fallbacks.
   // Same mark on a blank seismic summary and a titled ERV schedule (Colville)
   // must cite the titled device definition — blank-first walk poisoned
@@ -824,8 +841,13 @@ function uniqueFamily(graph, {
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
     const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
+    const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
+      && scheduleTitleMatches(title, host.titleRe, host.exclude);
     if (titleOk || altOk) {
       if (pass !== 1) continue;
+    } else if (hostOk) {
+      // After the family's own schedules, so a unit they define cites them.
+      if (pass !== 2) continue;
     } else {
       if (pass !== 2) continue;
       if (titledOnly) continue;
@@ -851,7 +873,12 @@ function uniqueFamily(graph, {
     // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
     // because altOk is false there.
     const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-    const filterRe = (blankTitle || genericValveTitle) ? blankGate : catchAllSchedule ? null : titledFilter;
+    const filterRe = hostOk ? host.keyRe
+      : (blankTitle || genericValveTitle) ? blankGate : catchAllSchedule ? null : titledFilter;
+    // In a table titled as the family, a mark its untitled rule reads
+    // (blankKeyRe: a CONTROL DAMPER SCHEDULE's CD-1) or its title vouches for
+    // (titledKeyRe) is read too (AS-63): a title never reads less than none.
+    const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
     const catchAllFilter = catchAllSchedule;
     // B-3: when the key column is a COUNT column, identify rows by the
     // highest-cardinality column instead, and never dedupe on the count —
@@ -921,9 +948,19 @@ function uniqueFamily(graph, {
           const okBlank = blankKeyRe && markMatchesKeyRe(blankKeyRe, one, canon);
           const okKey = keyRe && markMatchesKeyRe(keyRe, one, canon);
           if (!(okBlank || okKey)) continue;
-        } else if (filterRe && !markMatchesKeyRe(filterRe, one, canon)) {
+        } else if (filterRe && !markMatchesKeyRe(filterRe, one, canon)
+          && !titledAlso.some((re) => markMatchesKeyRe(re, one, canon))) {
           continue;
         }
+        const printedBy = (re) => Boolean(re) && (re.test(canon) || re.test(one));
+        const widened = hostOk || (catchAllFilter
+          ? !(printedBy(blankKeyRe) || printedBy(keyRe))
+          : Boolean(filterRe) && !printedBy(filterRe));
+        if (mode === "scan") {
+          if (!widened && !countKeyedIdentCol) printedCanons.add(canon);
+          continue;
+        }
+        if (widened && printedCanons.has(canon)) continue;
         // B-3: a count-keyed table emits one line per PHYSICAL ROW. Its rows
         // are not tag-identified, so cross-row dedupe would collapse real,
         // distinct pieces of equipment (16 real silencers -> 2). Ordinary
@@ -992,6 +1029,7 @@ function uniqueFamily(graph, {
     }
   }
   } // end titled-first / blank-fallback passes
+  } // end scan / emit
   const building = { other: 0 };
   for (const item of items) {
     const code = item.building || buildingLetter(item.tag);
@@ -1034,6 +1072,13 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /DOAS\s+UNIT|\bDOAS\b|DEDICATED\s+OUTDOORS?\s+AIR\s+SYSTEM|DEDICATED\s+OUTSIDE\s+AIR\s+SYSTEM/i,
     exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR\s+HANDLING|DEDICATED\s+OUTDOOR\s+AIR\s+UNIT/i,
     keyRe: /^DOAS/i,
+    // A DOAS listed in an air handling unit schedule is a DOAS (096_IN's
+    // AIR HANDLING UNIT SYSTEM INDEX SCHEDULE: DOAS-1 to DOAS-3, AHU-4).
+    host: {
+      titleRe: /AIR HANDLING UNIT|AIR\s+HANDLER/i,
+      exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR/i,
+      keyRe: /^DOAS[\s\-]?\d/i,
+    },
   },
   // Common US school / light-commercial phrasing (not always "DOAH").
   OUTDOOR_AIR_UNIT: {
@@ -1050,6 +1095,16 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|DUCTLESS\s+SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
+    // Under a split or ductless title: DAC-* ductless units, SS-* split
+    // systems (03_FL, 22_GA, 040_IL; AS-63).
+    titledKeyRe: /^(?:DAC|SS)[\s\-]?\d/i,
+    // A split system air handler schedule's indoor FCU-* (22_GA's
+    // "FCU-1/HP-1" rows; its HP-* are HEAT_PUMP's).
+    host: {
+      titleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+HANDLER/i,
+      exclude: /POINTS\s*LIST|DDC/i,
+      keyRe: /^FCU[\s\-]?\d/i,
+    },
   },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,
@@ -1086,7 +1141,8 @@ export const HVAC_FAMILY_SPECS = {
     // Split indoor/outdoor SYMBOL columns ("F-1 , CU-1" / "DFC-1 , DCU-1"):
     // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
     altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
-    altKeyRe: /^(?:CU|DCU|ACCU)[\s\-]/i,
+    // SSCU-* split system condensing units (040_IL's "SS-1/SSCU-1"; AS-63).
+    altKeyRe: /^(?:CU|DCU|ACCU|SSCU)[\s\-]/i,
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
@@ -1097,6 +1153,12 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /(?<![C])HP|^(?:SCU|SAC|CC|AH)[\s\-]/i,
     // Blank-title: only strong HP-* marks (Colville blank WSHP-1 is a chiller nameplate).
     blankKeyRe: /^HP[\s\-]/i,
+    // A split system air handler schedule's outdoor HP-* (22_GA; AS-63).
+    host: {
+      titleRe: /SPLIT[\s\-]*SYSTEM\s+AIR\s+HANDLER/i,
+      exclude: /POINTS\s*LIST|DDC/i,
+      keyRe: /^HP[\s\-]?\d/i,
+    },
   },
   // Return / exhaust air handlers often titled RAH / without "AIR HANDLING UNIT".
   // VRF split indoor/outdoor unit schedules (IDU-*/ODU-* / IU-*/OU-*).
@@ -1137,11 +1199,20 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /HEAT RECOVERY/i,
     // CH-/PAC- only — ACC-* is air-cooled condenser (CONDENSING_UNIT blankKeyRe).
     keyRe: /^(?:CH|PAC)[\s\-]/i,
+    // Under an AIR COOLED CHILLER title, ACC-* is the chiller (03_FL; AS-63).
+    titledKeyRe: /^ACC[\s\-]?\d/i,
   },
   HEAT_RECOVERY_CHILLER: {
     titleRe: /HEAT RECOVERY CHILLER/i,
     // Require separator after CH so blank-title CHECK:/CHP-* junk is not stolen.
     keyRe: /^(?:CH[\s\-]|HRC)/i,
+    // HRC-* listed in a chiller schedule (096_IN's AIR COOLED CHILLER
+    // SCHEDULE: HRC-1, HRC-2 beside CH-1, CH-2; AS-63).
+    host: {
+      titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
+      exclude: /POINTS\s*LIST|DDC/i,
+      keyRe: /^HRC[\s\-]?\d/i,
+    },
   },
   // Prefer boiler equipment captions over bare /BOILER/ so "BOILER PLANT ·
   // ISOLATION VALVE SCHEDULE" and pump boards do not claim B-* / "B GV-*"
@@ -1204,6 +1275,9 @@ export const HVAC_FAMILY_SPECS = {
     // number (the KEF/GEF/TEF/LEF/SEF convention: 096_IN's pod and jail
     // exhaust fans PEF-1, JEF-1; AS-62).
     keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-|[A-Z]{1,2}EF(?=[\s\-]?\d))[\s\-]?/i,
+    // Under a FAN SCHEDULE title: E-A-* zone-lettered fans (017_MD's RETURN
+    // FAN SCHEDULE), bare F-* (016_NY) and BF-* (096_IN; AS-63).
+    titledKeyRe: /^(?:E-[A-Z]-|F|BF)[\s\-]?\d/i,
   },
   // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
   // — FAN titleRe already excludes CEILING FAN so these do not double-count.
@@ -1221,6 +1295,9 @@ export const HVAC_FAMILY_SPECS = {
     // UH/CUH/EH room heaters; EDH-* duct-mounted electric; ECUH-* electric
     // cabinet/unit; HWUH-* hot-water; GUH/NUH-* gas/natural unit heaters.
     keyRe: /^(?:UH|CUH|EH|EDH|ECUH|HWUH|HUH|EUH|GUH|NUH)[\s\-]?/i,
+    // Under a unit heater title: EWH-* electric wall heaters (baker-county-eoc;
+    // a water heater anywhere else) and SUH-* suspended (033_MN; AS-63).
+    titledKeyRe: /^(?:EWH|SUH)[\s\-]?\d/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {
@@ -1258,6 +1335,8 @@ export const HVAC_FAMILY_SPECS = {
     // "SHT. NO." never match. Bare H-* still requires hyphen (H-A-3) so
     // HC-/HP-/HWC-* coils are not stolen. WHSE-SH1 works via markCoreForKeyRe.
     keyRe: /^(?:(?:HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
+    // HF-* under a humidifier title (094_FL; AS-63).
+    titledKeyRe: /^HF[\s\-]?\d/i,
     altTitleRe: /ELECTRIC\s+HUMIDIFI?ER/i,
     altKeyRe: /^(?:(?:EH|HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
   },
@@ -1299,6 +1378,9 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE|DUCT\s+HEATER/i,
     // CC/HC/RC coils; HWC-* hot-water; PHC/RHC preheat/reheat; DH-* electric duct coil.
     keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC|DH)[\s\-]?/i,
+    // Under a coil schedule title: RH-* reheat, SHC-* steam heating and DXC-*
+    // direct expansion coils (05_MO; AS-63).
+    titledKeyRe: /^(?:RH|SHC|DXC)[\s\-]?\d/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,
@@ -2423,6 +2505,9 @@ export const CONTROL_VALVE_FAMILIES = [
   "LAB_AIR_VALVE",
 ];
 
+/** The valve takeoff's air-side families: they control air, never a coil's water. */
+const AIR_SIDE_VALVE_FAMILIES = new Set(["CONTROL_DAMPER", "FUME_HOOD_DAMPER", "LAB_AIR_VALVE"]);
+
 /**
  * Contractor-facing valve row fields from a schedule row's cells.
  * One Cv / size / GPM / served unit per valve — never invent dual CHW+HHW Cv
@@ -2718,7 +2803,11 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
 export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
   const valveCompile = compileControlValveTakeoff(sessionOrSheets, graph);
   const scheduledValveText = new Set();
-  for (const cat of Object.values(valveCompile.categories || {})) {
+  for (const [family, cat] of Object.entries(valveCompile.categories || {})) {
+    // A damper or air valve that serves a unit never controls its coil's
+    // water (AS-63): 016_NY's CONTROL DAMPER SCHEDULE lists CD rows serving
+    // AHU-1, whose heating coil still has no scheduled valve.
+    if (AIR_SIDE_VALVE_FAMILIES.has(family)) continue;
     for (const item of cat.items || []) {
       if (item.tag) scheduledValveText.add(String(item.tag).toUpperCase());
       const served = item.cells?.["Served equipment"]?.text || item.description || "";

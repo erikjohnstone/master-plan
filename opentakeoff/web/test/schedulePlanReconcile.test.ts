@@ -797,6 +797,42 @@ test("reconcile scaffold reads marks under a building token or letter, one row p
   assert.deepEqual(rowsOf("FAN"), ["EF-2@m.pdf#4", "1-EF-36@m.pdf#4", "EF-2@e.pdf#10"]);
 });
 
+test("reconcile scaffold reads what the compile reads under a title and in a host schedule (AS-63)", () => {
+  // A CONTROL DAMPER SCHEDULE's OA-1, a FAN SCHEDULE's E-A-1 (a mark its
+  // title vouches for) and 096_IN-style DOAS-1 in an air handler index (a host
+  // schedule) each get their row, as the compile counts them. Read so, a mark
+  // adds no row for a unit a printed listing holds: CD-1 is printed in the
+  // untitled table, so its titled copy adds nothing and its row stays there.
+  const table = (sheet: string, title: string, keys: string[]) => ({
+    kind: "equipment", sheet, title: { text: title },
+    rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+  });
+  const graph = { tables: [
+    table("m.pdf#5", "CONTROL DAMPER SCHEDULE", ["CD-1", "OA-1"]),
+    table("m.pdf#6", "", ["CD-1", "CD-2"]),
+    table("m.pdf#1", "RETURN FAN SCHEDULE", ["E-A-1", "EF-1"]),
+    table("m.pdf#19", "AIR HANDLING UNIT SYSTEM INDEX SCHEDULE", ["DOAS-1", "AHU-4"]),
+    table("m.pdf#21", "DOAS UNIT SCHEDULE", ["DOAS-2"]),
+  ] };
+  const rowsOf = (family: string) => reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
+    .map((r: any) => `${r.tag}@${r.row_id.split("::")[0]}`);
+  assert.deepEqual(rowsOf("CONTROL_DAMPER"), ["OA-1@m.pdf#5", "CD-1@m.pdf#6", "CD-2@m.pdf#6"]);
+  assert.deepEqual(rowsOf("FAN"), ["E-A-1@m.pdf#1", "EF-1@m.pdf#1"]);
+  assert.deepEqual(rowsOf("DOAS"), ["DOAS-2@m.pdf#21", "DOAS-1@m.pdf#19"]);
+  assert.deepEqual(rowsOf("AHU"), ["AHU-4@m.pdf#19"]);
+  // The host listing comes first in the same pass: the unit's row is still
+  // its printed listing's, and there is one.
+  const hostFirst = { tables: [
+    table("m.pdf#19", "AIR HANDLING UNIT SYSTEM INDEX SCHEDULE", ["DOAS-1"]),
+    table("m.pdf#22", "", ["DOAS-1"]),
+  ] };
+  assert.deepEqual(
+    reconcileScheduleFamilyFromGraph(hostFirst, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "DOAS")!)
+      .map((r: any) => `${r.tag}@${r.row_id.split("::")[0]}`),
+    ["DOAS-1@m.pdf#22"],
+  );
+});
+
 test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parity)", () => {
   const graph = {
     tables: [{
