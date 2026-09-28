@@ -1,5 +1,24 @@
 # Changelog
 
+- **Assemblies: a unit's heat, heating capacity, electric heat, filter
+  rating and phase are read where its schedule prints them by section.**
+  071_ME's rooftop units, read one unit per column (AS-65), print PRIMARY
+  HEAT TYPE HEAT PUMP beside SECONDARY HEAT TYPE ELECTRIC, a heating
+  capacity at 47 °F and 17 °F as "105.7 / 60.0", SECONDARY HEAT KW,
+  FILTERS (SUPPLY) TYPE "MERV8" and ELECTRICAL VOLTAGE "208/230-3-60", and
+  none was read. The normalizer now reads a secondary (supplemental,
+  auxiliary, backup or emergency) heat's kind below the primary's, a
+  heating capacity rated at 47 °F and a colder point as its 47 °F rating
+  (the larger, printed first), a heat section's KW as electric heat where the
+  section's TYPE prints ELECTRIC (a heat pump section's KW is its input), a
+  FILTER TYPE column naming one MERV rating (below a MERV or final filter
+  column), and the phase, and the voltage where it prints one, of the unit's
+  own VOLTAGE column's whole V/PH/HZ cell (a fan motor's cell is not the
+  unit's, and a cell printing no phase, such as a wye system's "120/208", is
+  none). Over every cached dev document, 15 values change, all on 071_ME's
+  three rooftop units, each the value its key records; dev 3 reads 1,294 of
+  its 1,377 keyed values exactly (1,284 before), and every other tier is
+  unchanged (`normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-67).
 - **Takeoff: a table no title vouches for gives a unit only for a mark that
   names one.** In an untitled table, or a general EQUIPMENT, SPECIALTY
   EQUIPMENT, MISCELLANEOUS or HYDRONIC ACCESSORIES schedule, only its marks

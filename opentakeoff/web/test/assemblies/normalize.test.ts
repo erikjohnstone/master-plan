@@ -1324,3 +1324,54 @@ test("metamorphic sweep, round 2: CAP., ENT., LVG., DEG F and HORSEPOWER read as
   // "AT 47DEG F", the degree sign's letters run into the number, is still the rating point.
   assert.equal(headerText("HEATING CAPACITY MAX MBH AT 47DEG F"), "HEATING CAPACITY MAX MBH AT 47F");
 });
+
+test("a heat pump rooftop unit's sections: the primary heat's kind and 47 °F rating, the electric secondary heat's kW, the filters' MERV and the voltage cell's phase (AS-67)", () => {
+  // 071_ME's PACKAGED ROOF TOP UNIT SCHEDULE, read one unit per column (AS-65):
+  // each label carries its section.
+  const rtu = values(normalizeCompileItem(row("RTU-G", "PACKAGED ROOF TOP UNIT SCHEDULE", {
+    "ELECTRICAL VOLTAGE": "208/230-3-60",
+    "EXHAUST FAN VOLTAGE": "208-1-60",
+    "PRIMARY HEAT TYPE": "HEAT PUMP",
+    "PRIMARY HEAT TOTAL CAPACITY, MBH @ 47°F...": "105.7 / 60.0",
+    "PRIMARY HEAT KW": "6.59",
+    "PRIMARY HEAT COP @ 47°F / 17°F": "3.5 / 2.25",
+    "SECONDARY HEAT TYPE": "ELECTRIC",
+    "SECONDARY HEAT KW": "36",
+    "SECONDARY HEAT STAGES": "2",
+    "FILTERS (SUPPLY) TYPE": "MERV8",
+  }), "RTU"));
+  assert.equal(rtu.heating_type, "heat_pump");
+  assert.equal(rtu.heating_mbh, 105.7);
+  assert.equal(rtu.eh_kw, 36);
+  assert.equal(rtu.filter_merv, 8);
+  assert.equal(rtu.phase, 3);
+  // 208/230 is no one voltage, and the exhaust fan's 208 is its motor's.
+  assert.equal(rtu.volts, undefined);
+  // The unit's own V/PH/HZ cell gives its voltage too.
+  const whole = values(normalizeCompileItem(row("RTU-5", "PACKAGED ROOF TOP UNIT SCHEDULE", { "ELECTRICAL VOLTAGE": "460-3-60" }), "RTU"));
+  assert.equal(whole.volts, 460);
+  assert.equal(whole.phase, 3);
+  // A cell printing no phase is no V/PH/HZ cell: "120/208" is a wye
+  // system's two voltages, not 120 V.
+  const wye = values(normalizeCompileItem(row("RTU-6", "PACKAGED ROOF TOP UNIT SCHEDULE", { "ELECTRICAL VOLTAGE": "120/208" }), "RTU"));
+  assert.equal(wye.volts, undefined);
+  assert.equal(wye.phase, undefined);
+  // A secondary heat alone still names the unit's heat; a heat section's KW
+  // under another kind is no heater; a pair whose 47 °F rating is not the
+  // larger is not read.
+  const second = values(normalizeCompileItem(row("RTU-3", "PACKAGED ROOF TOP UNIT SCHEDULE", { "SECONDARY HEAT TYPE": "ELECTRIC", "SECONDARY HEAT KW": "20" }), "RTU"));
+  assert.equal(second.heating_type, "electric");
+  assert.equal(second.eh_kw, 20);
+  const gas = values(normalizeCompileItem(row("RTU-4", "PACKAGED ROOF TOP UNIT SCHEDULE", {
+    "PRIMARY HEAT TYPE": "GAS", "PRIMARY HEAT KW": "5", "PRIMARY HEAT TOTAL CAPACITY, MBH @ 47°F...": "60.0 / 105.7",
+  }), "RTU"));
+  assert.equal(gas.eh_kw, undefined);
+  assert.equal(gas.heating_mbh, undefined);
+  // A MERV or final filter column outranks a FILTER TYPE; a type naming no
+  // MERV is no rating.
+  const ahu = values(normalizeCompileItem(row("AHU-9", "AIR HANDLING UNIT SCHEDULE", { "FILTERS TYPE": "MERV 8", "FINAL FILTER MERV": "14" }), "AHU"));
+  assert.equal(ahu.filter_merv, 14);
+  const pleated = normalizeCompileItem(row("AHU-8", "AIR HANDLING UNIT SCHEDULE", { "FILTER TYPE": "PLEATED" }), "AHU");
+  assert.equal(pleated.attributes.filter_merv, undefined);
+  assert.equal(pleated.unknown.filter_merv?.reason?.includes("PLEATED") ?? false, false);
+});

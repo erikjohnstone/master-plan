@@ -430,7 +430,9 @@ export function quantitiesOf(h: string): Quantity[] {
   else if (/\b(?:WATER|CHW|H?HW)\s+SUPPLY\s*\/\s*RET(?:URN|RUN|RN)?\b/.test(h) && /\(\s*IN(?:CHES)?\s*\)|\bSIZE\b|\bPIPE\b/.test(h) && !/\bTEMP|\(\s*F\s*\)|\bGPM\b/.test(h)) q.push("conn_size");
   if (/\bTONS?\b|\bTONNAGE\b/.test(h)) q.push("tons");
   // An AFTER FILTER is the final filter (after the prefilters).
-  if (/\bMERV\b|\b(?:FINAL|AFTER)[-\s]?FILTERS?\b|\bFILTERS?$/.test(h) && !/\bDEPTH\b|\bPD\b|\bFACE\b|\bQTY\b|\bPRE-?\s?FILTER\b/.test(h)) q.push("merv");
+  // A FILTER TYPE column counts where its cell names one MERV rating
+  // (071_ME's FILTERS (SUPPLY) TYPE printing "MERV8"; AS-67).
+  if (/\bMERV\b|\b(?:FINAL|AFTER)[-\s]?FILTERS?\b|\bFILTERS?$|\bFILTERS?\b(?:\s*\([^)]*\))?\s+TYPE$/.test(h) && !/\bDEPTH\b|\bPD\b|\bFACE\b|\bQTY\b|\bPRE-?\s?FILTER\b/.test(h)) q.push("merv");
   if (/(?:\b(?:NO|NUMBER)|#)\s+OF\s+CELLS\b|^CELLS$/.test(h)) q.push("cells");
   // An exchanger's plate count ("DESIGN PLATES (QTY)") counts its plates,
   // never the units under the mark.
@@ -994,7 +996,19 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         // A terminal unit with no heater of its own runs on its controls' 24 V
         // ("24" under ELECTRICAL VOLTAGE).
         else if (ctx.family === "VAV" && /^\s*24\s*$/.test(text)) found.push({ attr: "volts", col, value: 24, printed: text, rule: "electrical.terminal_control_volts", rank: electricalRank(h, ctx) });
-        else failed.push({ attr: "volts", reason: `cell "${text}" is not a standard voltage` });
+        else {
+          // The unit's own VOLTAGE column printing a whole V/PH/HZ cell
+          // ("208/230-3-60", "460-3-60"): its phase, and its voltage where it
+          // prints one (071_ME; AS-67). A range is no one voltage, and a fan
+          // motor's cell (EXHAUST FAN VOLTAGE, "208-1-60") is not the unit's.
+          // A cell that prints no phase is no such cell: "120/208" is a wye
+          // system's two voltages, not 120 V.
+          const parsed = electricalRank(h, ctx) < 2 ? parseElectricalCell(text) : null;
+          const e = parsed && parsed.phase !== null ? { volts: parsed.volts, phase: parsed.phase } : null;
+          if (e && ctx.attrs.has("phase")) found.push({ attr: "phase", col, value: e.phase, printed: text, rule: "electrical.volts_v_ph_cell", rank: electricalRank(h, ctx) });
+          if (e && e.volts !== null) found.push({ attr: "volts", col, value: e.volts, printed: text, rule: "electrical.volts_v_ph_cell", rank: electricalRank(h, ctx) });
+          else failed.push({ attr: "volts", reason: `cell "${text}" is not a standard voltage` });
+        }
         break;
       }
       case "phase": {
@@ -1173,7 +1187,18 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         } else if (heating && !cooling) {
           const coil = ctx.family === "VAV" || ctx.family === "FCU";
           if (coil && !ctx.hasWaterSide) break;
-          num(coil ? pick(ctx, "hw_mbh", "heating_mbh") : pick(ctx, "heating_mbh"), q, "capacity.heating", (cap.output ? 0 : 1) + stage);
+          const attr = coil ? pick(ctx, "hw_mbh", "heating_mbh") : pick(ctx, "heating_mbh");
+          // Rated at 47 °F and at a colder point ("MBH @ 47°F / 17°F" printing
+          // "105.7 / 60.0"): the rating at 47 °F, printed first, where the
+          // colder rating is the smaller (071_ME's heat pumps; AS-67).
+          const pair = col.cell && RATED_47F.test(h) ? text.match(/^\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)\s*$/) : null;
+          if (pair && attr && Number(pair[1]) > Number(pair[2])) {
+            const r = numberFor(attr, { ...col, cell: { text: pair[1], bbox: col.cell!.bbox } }, headerUnit(h, q));
+            if ("reason" in r) failed.push({ attr, reason: r.reason });
+            else found.push({ attr, col, value: r.value, printed: text, rule: "capacity.heating_rated_47f", rank: (cap.output ? 0 : 1) + stage });
+            break;
+          }
+          num(attr, q, "capacity.heating", (cap.output ? 0 : 1) + stage);
         } else if (!cooling && !heating) {
           const s = ctx.defaultWater;
           // A terminal's or fan coil's own coil capacity is a hot-water coil's
@@ -1243,6 +1268,16 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       }
       case "kw": {
         if (W.motor.test(h) || W.fanWord.test(h)) break;
+        // A heat section's KW ("SECONDARY HEAT KW") is the section's own
+        // TYPE's: electric heat where it prints ELECTRIC, and no heater where
+        // it prints another (a PRIMARY HEAT KW under HEAT PUMP is the heat
+        // pump's input; 071_ME; AS-67).
+        const section = h.match(/^(.*\bHEAT(?:ING)?)\s+KW$/)?.[1];
+        const sectionType = section ? ctx.cols.find((c) => c.cell && c.h === `${section} TYPE`) : undefined;
+        if (sectionType) {
+          if (ctx.attrs.has("eh_kw") && heatKindOf(sectionType.cell!.text) === "electric") num("eh_kw", q, "power.electric_heat_section");
+          break;
+        }
         // A humidifier fed with steam or fired by gas has no element: its KW is
         // its controls'.
         if (ctx.family === "HUMIDIFIER" && ctx.cols.some((c) => c.cell && /\bTYPE\b/.test(c.h) && /\bSTEAM[-\s]+TO[-\s]+STEAM\b|\bGAS[-\s]+FIRED\b/i.test(c.cell.text))) break;
@@ -1320,8 +1355,10 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         const mervs = [...t.matchAll(/\bMERV\s*-?\s*(\d{1,2})\b/g)];
         const bare = /\bMERV\b/.test(h) ? t.match(/^(?:MERV\s*-?\s*)?(\d{1,2})$/) : null;
         const m = bare ?? (mervs.length === 1 && !/\bPRE-?\s?FILTER/.test(t) ? mervs[0] : null);
-        if (m && Number(m[1]) >= 1 && Number(m[1]) <= 20) found.push({ attr: "filter_merv", col, value: Number(m[1]), printed: text, rule: "filter.merv", rank: 0 });
-        else failed.push({ attr: "filter_merv", reason: `cell "${text}" is not one MERV rating` });
+        // A FILTER TYPE column (AS-67) ranks below a MERV or final filter one.
+        const typeCol = /\bTYPE$/.test(h) && !/\bMERV\b|\b(?:FINAL|AFTER)[-\s]?FILTERS?\b/.test(h);
+        if (m && Number(m[1]) >= 1 && Number(m[1]) <= 20) found.push({ attr: "filter_merv", col, value: Number(m[1]), printed: text, rule: typeCol ? "filter.merv_type" : "filter.merv", rank: typeCol ? 1 : 0 });
+        else if (!typeCol || mervs.length) failed.push({ attr: "filter_merv", reason: `cell "${text}" is not one MERV rating` });
         break;
       }
       case "qty": {
@@ -1674,7 +1711,11 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         const attr = ctx.attrs.has("heating_type") ? "heating_type"
           : ctx.attrs.has("heat_type") && ["hw", "electric", "steam", "none"].includes(kind) ? "heat_type"
           : ctx.attrs.has("heating_medium") && ["hw", "steam", "electric", "gas"].includes(kind) ? "heating_medium" : null;
-        if (attr) found.push({ attr, col, value: kind, printed: text, rule: "enum.heating_type_named", rank: 0 });
+        // A secondary heat's kind (071_ME's SECONDARY HEAT TYPE, ELECTRIC,
+        // beside its PRIMARY HEAT TYPE, HEAT PUMP) is not what heats the unit
+        // first: it ranks below the primary's (AS-67).
+        const second = SECONDARY_HEAT.test(h);
+        if (attr) found.push({ attr, col, value: kind, printed: text, rule: second ? "enum.heating_type_secondary" : "enum.heating_type_named", rank: second ? 1 : 0 });
         break;
       }
       case "description": {
@@ -1771,6 +1812,12 @@ function electricalRank(h: string, ctx: RowContext): number {
   }
   return indoor ? 0 : outdoor ? 3 : 1;
 }
+
+/** A heat that backs up or adds to the unit's first heat. */
+const SECONDARY_HEAT = /\b(?:SECONDARY|SUPPLEMENT(?:AL|ARY)|AUX(?:ILIARY)?|BACK[-\s]?UP|EMERGENCY)\s+HEAT/;
+
+/** A heat pump's rating point, 47 °F outdoor ("MAX MBH AT 47°F"). */
+const RATED_47F = /(?:\bAT\s*|@\s*)47\s*F?\b/;
 
 /** The heat a HEATING TYPE cell names, in heating_type's words; null for a
  * cell naming none of them. */
@@ -1990,7 +2037,7 @@ function derived(item: CompileItem, ctx: RowContext, values: Map<string, Candida
       // A heating capacity rated at 47 °F outdoor (the heat pump's rating
       // point, "MAX MBH AT 47°F") is a heat pump's.
       const rated47 = ctx.cols.find((c) => c.cell && quantitiesOf(c.h).includes("capacity") && /\bHEAT(?:ING)?\b/.test(c.h)
-        && /(?:\bAT\s*|@\s*)47\s*F?\b/.test(c.h) && parseNumberCell(c.cell.text) !== null);
+        && RATED_47F.test(c.h) && parseNumberCell(c.cell.text) !== null);
       // A unit its type or title calls COOLING ONLY has no heat.
       const only = [titleCol, ...ctx.cols.filter((c) => c.cell && quantitiesOf(c.h).includes("type"))]
         .find((c) => /\bCOOLING\s+ONLY\b/i.test(c === titleCol ? item.table_title : c.cell!.text));

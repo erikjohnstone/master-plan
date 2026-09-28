@@ -4592,3 +4592,100 @@ each of the reconcile's gates).
   test, measured apart above) 377 of 380 pass and 1 skips; its two failures
   are as on AS-65 (AS-1's conformance test, and navfac's slow
   `sweep_schedule_row` test).
+
+## AS-67 — a transposed schedule's sections: the secondary heat's kind, a 47 °F rating pair, a heat section's kW, a filter type's MERV and a voltage cell's phase went unread (FIXED)
+
+**Found:** AS-65 reads 071_ME's PACKAGED ROOF TOP UNIT SCHEDULE one unit per
+column, each attribute named by its section and its row's label. Of dev 3's
+misses on 071_ME, ten (five on RTU-G, five on RTU-2; RTU-1's five are keyed
+"RTU-1 (ALT#2)") are cells the normalizer read no rule for:
+- **heating_type:** PRIMARY HEAT TYPE prints HEAT PUMP and SECONDARY HEAT
+  TYPE ELECTRIC: two columns answered heating_type differently, so it was
+  refused. A secondary heat backs the first up; the unit's heat is the
+  primary's.
+- **heating_mbh:** PRIMARY HEAT TOTAL CAPACITY, MBH @ 47°F... prints
+  "105.7 / 60.0", a heat pump's heating at 47 °F and at its colder rating
+  point: not one number.
+- **eh_kw:** SECONDARY HEAT KW (36) under SECONDARY HEAT TYPE ELECTRIC; no
+  rule read a heat section's kW. PRIMARY HEAT KW (6.59) under HEAT PUMP is
+  the heat pump's input, never electric heat.
+- **filter_merv:** FILTERS (SUPPLY) TYPE prints "MERV8"; the filter rule read
+  a MERV or final filter column, or a FILTER column, not a FILTER TYPE.
+- **phase:** ELECTRICAL VOLTAGE prints "208/230-3-60", a whole V/PH/HZ
+  cell; the VOLTAGE rule read one number only. The key's volts is blank (a
+  range is no one voltage) and its phase 3.
+
+**Fix (normalize.ts, the assemblies path the panel, the PDF and MCP share):**
+- A secondary, supplemental, auxiliary, backup or emergency heat's kind
+  ranks below the primary's (`SECONDARY_HEAT`); alone, it still names the
+  unit's heat, as it did before.
+- A heating capacity whose header rates it at 47 °F, printing two numbers
+  with the first the larger, is the 47 °F rating (`RATED_47F`, the rule the
+  heat-pump derivation already used). A pair whose first number is not the
+  larger is not read.
+- A heat section's KW is its own TYPE's: electric heat where the section's
+  TYPE prints ELECTRIC, and nothing where it prints another kind. A KW
+  column with no section TYPE beside it is read as before.
+- A FILTER TYPE column counts where its cell names one MERV rating, below a
+  MERV or final filter column; a type naming no MERV ("PLEATED") is no
+  failure.
+- The unit's own VOLTAGE column printing a whole V/PH/HZ cell gives its
+  phase, and its voltage where it prints one ("460-3-60"; a range none). A
+  fan motor's cell (EXHAUST FAN VOLTAGE, "208-1-60") is not the unit's: the
+  first census read its 208 as each rooftop unit's volts, and the rule reads
+  only the unit's own column (`electricalRank` below 2). A cell that prints
+  no phase is no such cell: read by eye before the commit, "120/208" (a wye
+  system's two voltages) would have been read as 120 V, so the rule reads
+  only a cell that prints a phase.
+
+**Measured:**
+- **The normalizer A/B** over every cached dev document (97, held-out
+  excluded; scratch as67/abnorm67.mjs, graph only, run again after the
+  phase guard): 15 values change, all on 071_ME's three rooftop units, each
+  the value its key records (heating_type heat_pump ×3; heating_mbh 105.7,
+  218, 278; eh_kw 36, 75, 75; filter_merv 8 ×3; phase 3 ×3). No other
+  document's values change.
+- **Evals,** the five tiers and the typical eval against AS-66 (cffe251):
+  dev 3 1,284 → 1,294/1,377 exact (93.2% → 94.0%), its 3 wrong and 0
+  invented as before; 071_ME 224 → 234 of 247, its RTU values 15 → 25 of 38.
+  Dev 1 (1,965/2,053), dev 2 (1,265/1,451), dev 4 (1,380/1,421), dev 5
+  (503/561) and the typical eval (130/244) are identical, line for line but
+  timings. RTU-1's five values are now right too, but its key's tag "RTU-1
+  (ALT#2)" pairs with no compile item (AS-27's kind of tag difference), so
+  they stay scored as missed.
+- **Control intent** (071_ME is not among their documents): GATE C dev's
+  typicals, the binding, question and reading evals are identical to AS-66,
+  and so is the unseen audit replay (26 applied, 26 right, 0 new, 0 gone;
+  071_ME was withdrawn from it when it became a dev-3 document).
+- **Held-out** (aggregates only): GATE 2 held-out 897/1,008 exact, 0 wrong,
+  2 invented; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91; GATE C
+  35/91. Each is as with AS-66.
+- **UI proof** (the dev server started on the change): 071_ME 25 units, 53
+  records (18 checks) and 069_ID (17 checks), each byte-identical to
+  apply_assemblies over MCP with its CSV set; 069_ID's report and CSV set
+  are byte-identical to its AS-66 run. On 071_ME the approved lines are the
+  same (569) and 78 pending lines are gone (731 → 653 lines): each rooftop
+  unit's hook-up had listed its hot-water and steam coil hook-ups (26 lines)
+  as waiting on its heating type, which it now reads as a heat pump with
+  electric backup, so no coil hook-up applies.
+
+**Tests:** normalize.test.ts (AS-67): 071_ME's rooftop unit row (the
+primary heat's kind and 47 °F rating, the secondary heat's kW, the filters'
+MERV, the voltage cell's phase and no voltage from a range, the exhaust
+fan's cell ignored); a whole cell's voltage; a cell printing no phase
+("120/208"); a secondary heat alone; a gas section's KW; a pair whose first
+number is the smaller; a MERV column over a FILTER TYPE; a type naming no
+MERV. 13 mutations each fail that test on its own assertion: a secondary
+heat ranked with the primary; SECONDARY not read as secondary; no 47 °F
+pair; the pair read whichever is larger; no heat section kW; any section's
+kW as electric heat; no FILTER TYPE column; a FILTER TYPE ranked with a
+MERV column; a FILTER TYPE naming no MERV failing; no V/PH/HZ cell under
+VOLTAGE; a fan motor's cell read as the unit's; a cell printing no phase
+giving its voltage; no voltage from the cell. The mutation harness ran
+the tests with `--test-force-exit`; under load that cut the test child's
+report short (the file failing with exit code 1, the test not named), so
+the runs were repeated without it, and each names the AS-67 test.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the
+  web suite's 3,917 tests fail only AS-1's three base-red tests. MCP:
+  typecheck clean; `test:bas` 133/133; the suite (every file but the WP1
+  test) 377 of 380 pass and 1 skips; its two failures are as on AS-66.
