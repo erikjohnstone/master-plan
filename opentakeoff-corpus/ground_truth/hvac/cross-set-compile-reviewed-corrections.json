@@ -51,18 +51,20 @@
       "source_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
       "page": 47,
       "review": {
-        "change": "AS-63",
-        "method": "Visual review of the rendered schedule (PyMuPDF crop of the printed table), cross-checked with the sheet graph's extracted rows. The frozen key predates the mark rules that read these rows."
+        "change": "AS-63, AS-65",
+        "method": "Visual review of the rendered schedules (PyMuPDF crops of the printed tables), cross-checked with the sheet graph's extracted rows. The frozen key predates the mark rules that read the split system's rows (AS-63) and the reading of a schedule whose units run across its columns (AS-65)."
       },
       "evidence": [
-        "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE has one authored row, SYMBOL SS-1/SSCU-1 (service IT ROOM, 24 MBH cooling, R-410A): the split system's indoor unit SS-1 and its outdoor condensing unit SSCU-1."
+        "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE has one authored row, SYMBOL SS-1/SSCU-1 (service IT ROOM, 24 MBH cooling, R-410A): the split system's indoor unit SS-1 and its outdoor condensing unit SSCU-1.",
+        "AIR HANDLING UNIT SCHEDULE prints its one unit across its column: SYMBOL AHU-15, SERVICE NEW SPS (the sterile processing service the project expands), supply fan 26,000 CFM (21,500 connected) at 3.00 in. ESP, outside air 26,000 CFM design and 21,500 minimum, 480-3, VENTROL CUSTOM. The key's note (UH/FAN/PUMP/GRD/louver + PRV) lists the schedules read before a transposed schedule was read (AS-65)."
       ],
       "totals": {
-        "items": 31
+        "items": 32
       },
       "categories": {
         "FCU": 1,
-        "CONDENSING_UNIT": 1
+        "CONDENSING_UNIT": 1,
+        "AHU": 1
       }
     },
     {

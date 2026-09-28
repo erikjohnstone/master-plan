@@ -605,7 +605,16 @@ vouches for (E-A-1 under a return fan title, HF-4 under a humidifier title,
 FCC1-1 under a fan coil title, ACCH-1 under an air-cooled chiller title). It
 reads a family's units in
 another family's schedule that lists them (DOAS-1 in an air handler index),
-and each unit once, from the listing that prints its mark. So a row whose
+and each unit once, from the listing that prints its mark. A schedule
+printed on its side, its units across the columns and their attributes down
+the rows (DESIGNATION | AHU-1 | AHU-2, or UNIT NO. | RTU-G | RTU-1 (ALT#2)),
+is read one unit per column: a column that names several units (EF-2, EF-5;
+CHWP-1 AND CHWP-2; UH-1 THRU UH-3) is each of them, and each attribute is
+named by its row's label, with the section printed on the section's first
+row before it (SUPPLY FAN, ELECTRICAL). Where the drawing does not say which
+section a row is in (a section label drawn down a merged cell, a heading
+printed across the unit columns) or prints a label twice, those attributes
+are left unread rather than guessed: read them on the sheet. So a row whose
 mark it still does not read as that family's (a temporary unit's
 1-AC-36TEMP, or 016-AC-01-16-12 with a room code of its own hyphen) is no
 unit either, and nor is an existing unit printed "(E)FC-1" in one schedule

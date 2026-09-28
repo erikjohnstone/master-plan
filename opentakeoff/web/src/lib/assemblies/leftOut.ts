@@ -9,7 +9,7 @@
 // from, so the Takeoff panel, apply_assemblies and the report's PDF name
 // them alike rather than price fewer units without a word. It changes no
 // unit, count or line.
-import { HVAC_FAMILY_SPECS, isBasPointsListTable, isBasPointsListTitle, isScheduleHeaderJunkMark, normalizeEquipMark } from "../corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, isBasPointsListTable, isBasPointsListTitle, isScheduleHeaderJunkMark, normalizeEquipMark, scheduleTableView } from "../corpusTakeoff.mjs";
 import { isEquipTag } from "../equiptags";
 import { familiesOf, type AssemblyDefinition } from "./schema";
 
@@ -95,7 +95,10 @@ export function scheduleRowsLeftOut(
   const items = Object.values(compiled.categories ?? {}).flatMap((c) => c.items ?? []);
   const carried = new Set(items.map((it) => markId(it.tag)).filter(Boolean));
   const out: RowsLeftOut[] = [];
-  for (const t of graph.tables ?? []) {
+  for (const printed of graph.tables ?? []) {
+    // A transposed schedule's rows are one per unit, as the compile reads it
+    // (AS-65).
+    const t = scheduleTableView(printed) as TableLike;
     const title = String(t.title?.text ?? "").trim();
     if (!title || isBasPointsListTitle(title) || isBasPointsListTable(t)) continue;
     const families = titleFamilies(title);

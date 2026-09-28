@@ -6,7 +6,7 @@
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
-import { normalizeEquipMark, expandAmpersandEquipMarks, markMatchesKeyRe } from "./corpusTakeoff.mjs";
+import { normalizeEquipMark, expandAmpersandEquipMarks, markMatchesKeyRe, scheduleTableView } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
 
@@ -454,7 +454,9 @@ function letterEditDistanceOne(a, b) {
  */
 export function unscheduledTagsAndAliasCandidates(graph) {
   const rowKeys = new Set();
-  for (const table of graph?.tables || []) {
+  for (const printed of graph?.tables || []) {
+    // A transposed schedule's units are its column headers (AS-65).
+    const table = scheduleTableView(printed);
     for (const row of table.rows || []) {
       for (const raw of [row?.key, rowIdentityTag(row)]) {
         if (!raw) continue;
@@ -804,7 +806,10 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   // Titled family schedules first (parity with compile uniqueFamily) so shared
   // marks cite the device definition, not a blank/catch-all accessory row.
   for (const pass of [1, 2]) {
-  for (const table of graph?.tables || []) {
+  for (const printed of graph?.tables || []) {
+    // Parity with compile uniqueFamily: a transposed schedule is read one row
+    // per unit (AS-65).
+    const table = scheduleTableView(printed);
     const title = String(table.title?.text || "");
     // Parity with compile uniqueFamily: do not gate on table.kind.
     // Title/keyRe already exclude finish/lighting/note tables; Valdosta

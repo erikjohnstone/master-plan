@@ -1030,9 +1030,11 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
             num(pick(ctx, "supply_cfm"), q, "airflow.dedicated_outdoor_air", 1);
             break;
           }
-          // The design minimum: never a MAXIMUM, and an occupied or unnamed
-          // mode over a smoke, purge or unoccupied one.
-          if (W.max.test(h)) break;
+          // The design minimum: never a MAXIMUM or a PEAK (071_ME's rooftop
+          // units print SUPPLY FAN PEAK OUTSIDE AIRFLOW, the most they take),
+          // and an occupied or unnamed mode over a smoke, purge or
+          // unoccupied one.
+          if (W.max.test(h) || /\bPEAK\b/.test(h)) break;
           num(pick(ctx, "oa_cfm_min"), q, "airflow.outdoor_air", W.altMode.test(h) ? 5 : 0);
           break;
         }

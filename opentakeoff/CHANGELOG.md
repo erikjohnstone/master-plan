@@ -1,5 +1,29 @@
 # Changelog
 
+- **Takeoff: a schedule printed on its side, its units across the columns,
+  is read one unit per column.** 21_VA prints eight family schedules so
+  (DESIGNATION | AHU-1 | AHU-2; "EF-2, EF-5, EF-7, EF-9"; "CHWP-1 AND
+  CHWP-2"; "UH-1 THRU UH-3"), 071_ME its rooftop units (UNIT NO. | RTU-G |
+  RTU-1 (ALT#2) | RTU-2) and ductless split, 040_IL its air handler (SYMBOL
+  | AHU-15). Read row by row, their attribute names were units (071_ME's 42
+  "rooftop units" such as "24%" and "COIL FACE VELOCITY FPM", 21_VA's 26
+  pumps, fans and condensing units such as "MODEL NUMBER") and none of their
+  32 real units was read. The takeoff, the schedule↔plan reconciliation, the
+  scheduled-tag check, the plan-paint schedule hint and the notice of rows
+  read as no unit now read such a table through one view
+  (`scheduleTableView`): one row per unit, a column naming several units
+  (a list, an AND or & pair, a range) read as each, and each attribute named
+  by its row's label, with its section when the section is printed on its
+  first row (071_ME's SUPPLY FAN, ELECTRICAL). Where the drawing does not
+  say which section a row is in (a section drawn down a merged cell, a
+  heading printed across the unit columns) or prints a label twice, the
+  attribute is left unread, never guessed. The assemblies normalizer reads
+  a PEAK outdoor airflow (071_ME's SUPPLY FAN PEAK OUTSIDE AIRFLOW) as no
+  minimum outdoor air, as it reads a MAXIMUM. On all 97 eligible dev
+  documents (held-out excluded) three change: 68 phantom units are gone and
+  31 real ones read (21_VA 26, 071_ME 4, 040_IL 1); every other unit and
+  document is unchanged (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  `leftOut.ts`, `normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-65).
 - **Takeoff: a mark behind a building and its floor or wing, and fan coils,
   chillers and humidifiers their own schedule's title vouches for, are
   read.** A family's mark rule read a mark behind one building token

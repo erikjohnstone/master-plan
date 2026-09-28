@@ -434,6 +434,203 @@ export function markMatchesKeyRe(re, one, canon) {
 }
 
 /**
+ * A transposed schedule runs its units across the columns and its attributes
+ * down the rows. Its corner prints the label of the header row of marks
+ * (21_VA's DESIGNATION, 071_ME's UNIT and UNIT NO., 040_IL's SYMBOL); each
+ * later header names a unit (AHU-1, "EF-2, EF-5, EF-7, EF-9", "CHWP-1 AND
+ * CHWP-2", "ACU-1 / ACCU-3") and each row is one attribute. Read row by row,
+ * its attribute names were units (21_VA's "MANUFACTURER" as a condensing unit,
+ * 071_ME's "24%" as a rooftop unit) and its units none (AS-65).
+ */
+const MARK_ROW_LABEL_RE = /^(?:DESIGNATION\b.*|SYMBOL|MARK|TAG|UNIT(?:\s*(?:NO\.?|NUMBER|TAG|MARK|ID))?|EQUIP(?:MENT)?(?:\s*(?:NO\.?|TAG|MARK|ID))?|ITEM(?:\s*NO\.?)?)$/i;
+
+/** A row label that names an identity, not an attribute: the row of marks
+ * printed again, or a column a reader takes a unit's mark from. Read as a
+ * unit's attribute, it would stand beside, or for, the unit's own mark. */
+const IDENTITY_LABEL_RE = /^(?:VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|ID|KEY)$/i;
+
+const markCanon = (s) => String(s || "").toUpperCase().replace(/\s+/g, "");
+/** A mark with a number, in any form the family rules read (AHU-1, 1-VAV-1). */
+const numberedMark = (s) => SHORT_EQUIP_MARK_RE.test(markCoreForKeyRe(markCanon(s)));
+/** A unit a letter names beside its numbered siblings (071_ME's RTU-G). */
+const letteredMark = (s) => /^[A-Z]{2,8}-[A-Z]{1,2}$/.test(markCanon(s));
+
+/** The units a transposed schedule's column header names, as the row keys the
+ * takeoff reads: one per mark of a list, of an AND pair or of a range ("UH-1
+ * THRU UH-3"), and an indoor/outdoor "/" pair kept as one key, as a row
+ * printing it is read. Trailing words after a mark (071_ME's "RTU-1 (ALT#2)",
+ * a chiller's model or a unit heater's ratings run into its header) are
+ * dropped by the compile's own normalization. Null when any part is no mark. */
+function transposedHeaderKeys(header) {
+  let s = String(header || "").toUpperCase().replace(/\s+/g, " ").trim();
+  if (!s) return null;
+  s = s.replace(/\b([A-Z]{1,8})([\s\-]?)(\d{1,4})\s+(?:THRU|THROUGH|TO)\s+(?:\1[\s\-]?)?(\d{1,4})\b/g, (m, p, sep, a, b) => {
+    const lo = Number(a), hi = Number(b);
+    if (!(hi > lo && hi - lo <= 50)) return m;
+    return Array.from({ length: hi - lo + 1 }, (_, i) => `${p}${sep || "-"}${lo + i}`).join(" & ");
+  });
+  const keys = [];
+  for (const group of s.split(/\s*(?:,|&|\bAND\b)\s*/).filter(Boolean)) {
+    // A range the expansion above did not read (too long, backwards, dashed,
+    // between two families' marks) would read as its first mark alone.
+    if (/^\S+\s+(?:[-\u2013\u2014]|THRU|THROUGH|TO)\s+(?:[A-Z]{1,8}[\s\-]?)?\d/.test(group)) return null;
+    // The words after a mark first, so a rating run into the header (21_VA's
+    // "UH-1 THRU UH-3 ... 1/20 115/1 DIRECT") is no pair.
+    const pair = normalizeEquipMark(group).split(/\s*\/\s*/).filter(Boolean).map((p) => normalizeEquipMark(p).trim());
+    if (!pair.length || !pair.every((p) => numberedMark(p) || letteredMark(p))) return null;
+    keys.push(pair.join(" / "));
+  }
+  return keys.length ? keys : null;
+}
+
+/** The box a column's cells share, without a cell the extraction placed off
+ * its column. */
+function columnBox(boxes) {
+  const ok = boxes.filter((b) => Array.isArray(b) && b.length === 4);
+  if (!ok.length) return null;
+  const mid = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
+  const cx = mid(ok.map((b) => (b[0] + b[2]) / 2));
+  const w = mid(ok.map((b) => b[2] - b[0]));
+  const inCol = ok.filter((b) => Math.abs((b[0] + b[2]) / 2 - cx) <= Math.max(w, 1));
+  const use = inCol.length ? inCol : ok;
+  return [Math.min(...use.map((b) => b[0])), Math.min(...use.map((b) => b[1])), Math.max(...use.map((b) => b[2])), Math.max(...use.map((b) => b[3]))];
+}
+
+/**
+ * A transposed family schedule read as one row per unit (AS-65), or null
+ * when the table is no such schedule. It is one when its title names a family
+ * the takeoff reads, a column's header labels the header row as marks
+ * (MARK_ROW_LABEL_RE) and every later header names units, and its rows are
+ * attributes, not marks. Each unit's row carries the unit's mark (MARK) and
+ * one cell per attribute, named by the attribute's printed label; the columns
+ * before the label column name sections ("SUPPLY FAN", "SECONDARY HEAT"),
+ * joined to the labels they cover where each sits on its section's first row
+ * (071_ME). Where a section label is drawn down a merged cell beside its rows
+ * (21_VA's air handlers) no row says which section it is in, so only the rows
+ * whose own label spans the section column are read. A label printed twice
+ * (a supply and a return fan's CFM) is ambiguous and read for neither.
+ */
+function transposedScheduleView(table) {
+  const headers = (table?.headers || []).map((h) => String(h ?? ""));
+  const rows = table?.rows || [];
+  if (headers.length < 2 || !rows.length) return null;
+  const title = String(table.title?.text || "");
+  if (!Object.values(HVAC_FAMILY_SPECS).some((s) => s.titleRe?.test(title) && !s.exclude?.test(title))) return null;
+  // A points list is never a schedule of units, however it is laid out.
+  if (isBasPointsListTitle(title) || isBasPointsListTable(table)) return null;
+  let L = -1;
+  for (let i = 0; i < headers.length - 1; i++) if (MARK_ROW_LABEL_RE.test(headers[i].trim())) L = i;
+  if (L < 0) return null;
+  const unitHeaders = headers.slice(L + 1);
+  const unitKeys = unitHeaders.map(transposedHeaderKeys);
+  if (unitKeys.some((k) => !k) || !unitKeys.flat().some((k) => k.split(" / ").some(numberedMark))) return null;
+  const labelHeader = headers[L];
+  const labelOf = (row) => String(row.cells?.[labelHeader]?.text ?? row.key ?? "").replace(/\s+/g, " ").trim();
+  const labels = rows.map(labelOf).filter(Boolean);
+  if (!labels.length || labels.filter((l) => numberedMark(normalizeEquipMark(l))).length > 0.3 * labels.length) return null;
+
+  const sectionHeaders = headers.slice(0, L);
+  const top = (row) => {
+    const b = row.cells?.[labelHeader]?.bbox;
+    return Array.isArray(b) ? b[1] : Math.min(...Object.values(row.cells || {}).map((c) => (Array.isArray(c?.bbox) ? c.bbox[1] : Infinity)));
+  };
+  const ordered = rows.map((row, i) => ({ row, i, y: top(row) })).sort((a, b) => a.y - b.y || a.i - b.i);
+  const sectionCells = (row) => sectionHeaders.map((h) => row.cells?.[h]).filter((c) => String(c?.text ?? "").trim());
+  // Sections sit on their first row (071_ME) or are drawn down merged cells
+  // (21_VA): a section cell no taller than its row and level with its label.
+  let firstRow = true;
+  for (const { row } of ordered) {
+    const label = row.cells?.[labelHeader];
+    const lb = label?.bbox;
+    for (const c of sectionCells(row)) {
+      if (String(c.text).trim() === labelOf(row)) continue;
+      const cb = c.bbox;
+      const lh = Array.isArray(lb) ? lb[3] - lb[1] : 0;
+      if (!(Array.isArray(cb) && lh > 0 && cb[3] - cb[1] <= 1.5 * lh && Math.abs(cb[1] - lb[1]) <= 0.3 * lh)) firstRow = false;
+    }
+  }
+  // A heading printed across the unit columns with no value names a section
+  // whose end is not drawn (040_IL's air handler prints SUPPLY FAN so, its
+  // fan's rows indented under it and OUTSIDE AIR CFM after them): the rows
+  // after it are read for no unit.
+  const unitX0 = Math.min(...unitHeaders.map((h) => columnBox(ordered.map(({ row }) => row.cells?.[h]?.bbox))?.[0] ?? Infinity));
+  const heading = (row) => {
+    const b = row.cells?.[labelHeader]?.bbox;
+    return Array.isArray(b) && b[2] > unitX0 + 1 && unitHeaders.every((h) => !String(row.cells?.[h]?.text ?? "").trim());
+  };
+  const composed = [];
+  let section = "";
+  let unbounded = false;
+  for (const { row } of ordered) {
+    const label = labelOf(row);
+    if (!label) continue;
+    if (unbounded || heading(row)) { unbounded = true; continue; }
+    const texts = sectionCells(row).map((c) => String(c.text).replace(/\s+/g, " ").trim());
+    const spans = texts.length > 0 && texts.every((t) => t === label);
+    const named = texts.find((t) => t !== label);
+    if (!sectionHeaders.length) composed.push({ row, label });
+    else if (firstRow) {
+      if (spans) section = "";
+      else if (named) section = named;
+      composed.push({ row, label: section ? `${section} ${label}` : label });
+    } else if (spans) composed.push({ row, label });
+  }
+  const seen = new Map();
+  for (const c of composed) seen.set(c.label, (seen.get(c.label) || 0) + 1);
+  const usable = composed.filter((c) => seen.get(c.label) === 1 && !MARK_ROW_LABEL_RE.test(c.label) && !IDENTITY_LABEL_RE.test(c.label));
+  const usableRows = new Set(usable.map((u) => u.row));
+
+  const out = [];
+  unitHeaders.forEach((h, j) => {
+    const cells = {};
+    const boxes = [];
+    for (const { row } of ordered) if (Array.isArray(row.cells?.[h]?.bbox)) boxes.push(row.cells[h].bbox);
+    for (const { row, label } of usable) {
+      const c = row.cells?.[h];
+      const text = String(c?.text ?? "").trim();
+      if (text) cells[label] = { text, bbox: Array.isArray(c?.bbox) ? c.bbox : null };
+    }
+    const box = columnBox(boxes);
+    for (const key of unitKeys[j]) {
+      out.push({ key, cells: { MARK: { text: key, bbox: box }, ...cells }, identity: { text: key, bbox: box }, transposed: true });
+    }
+  });
+  return {
+    ...table,
+    headers: ["MARK", ...usable.map((u) => u.label)],
+    rows: out,
+    transposed: {
+      label_header: labelHeader,
+      unit_headers: unitHeaders,
+      sections: !sectionHeaders.length ? "none" : firstRow ? "first_row" : "merged",
+      // The labels read for no unit: one printed twice, one a merged section
+      // cell covers, one under a heading whose section's end is not drawn,
+      // or one naming an identity.
+      unread_labels: [...new Set(ordered.filter(({ row }) => labelOf(row) && !usableRows.has(row)).map(({ row }) => labelOf(row)))],
+    },
+  };
+}
+
+const scheduleViews = new WeakMap();
+/**
+ * The table the takeoff, the reconcile scaffold and the notice of rows read
+ * as no unit all read: a transposed family schedule as one row per unit
+ * (transposedScheduleView), any other table as extracted. One view for every
+ * reader, so a unit the takeoff counts has its reconcile row and its notice
+ * line (AS-65). A table is not edited once the sheet graph holds it, so its
+ * view is made once.
+ */
+export function scheduleTableView(table) {
+  if (!table || typeof table !== "object") return table;
+  let view = scheduleViews.get(table);
+  if (!view) {
+    view = transposedScheduleView(table) || table;
+    scheduleViews.set(table, view);
+  }
+  return view;
+}
+
+/**
  * L5 geometry: concatenate column headers from table.headers and row-0 cell keys.
  * Used to classify untitled schedule grids by header shape — not title regex alone.
  */
@@ -820,7 +1017,9 @@ function uniqueFamily(graph, {
   // must cite the titled device definition — blank-first walk poisoned
   // prefer-schedule sweeps.
   for (const pass of [1, 2]) {
-  for (const table of graph.tables || []) {
+  for (const printed of graph.tables || []) {
+    // A transposed schedule is read one row per unit (AS-65).
+    const table = scheduleTableView(printed);
     const title = String(table.title?.text || "");
     // A points-list caption can legitimately name its served equipment family
     // (for example CRAH DDC POINTS LIST). It is still an I/O inventory, never
@@ -1653,7 +1852,8 @@ function preferScheduleHintForEquipmentTag(graph, tag, fallbackTitle = null) {
   const want = String(tag || "").trim().toUpperCase();
   if (!want || !graph?.tables?.length) return { title: null, sheet_id: null };
   let generic = null;
-  for (const table of graph.tables) {
+  for (const printed of graph.tables) {
+    const table = scheduleTableView(printed);
     const title = String(table.title?.text || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
     if (!title || isBasPointsListTitle(title)) continue;
     for (const row of table.rows || []) {

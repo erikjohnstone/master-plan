@@ -4248,3 +4248,199 @@ against AS-63 (6253cd3):
   133/133; the suite (every file but the WP1 test, emulated above) 377 of 380
   pass and 1 skips; its two failures are as on AS-63 (AS-1's conformance
   test, and navfac's slow `sweep_schedule_row` test).
+
+## AS-65 — a schedule printed on its side, its units across the columns, compiled its attribute names as units and its units as none (FIXED — the owner asked; guarded by the evals)
+
+**Found:** AS-33 (2026-09-27) left it with the compile: "transposed schedules
+compiled one item per attribute row". AS-64's census of the rows no unit
+carries and the notice does not name found 189 such rows, most of them the
+attribute names of these schedules. A census of every table whose header row
+is a mark label followed by marks (scratch as65/transposed.mjs, 97 dev
+documents) found 11 family schedules on 3 documents printed so (12 tables:
+071_ME's ductless split schedule is extracted twice):
+- 21_VA prints eight: AIR HANDLING UNIT (DESIGNATION | AHU-1 | AHU-2), FAN
+  (EF-1, "EF-2, EF-5, EF-7, EF-9", EF-3, …), AIR COOLED CONDENSING UNIT
+  ("ACCU-1 AND ACCU-2"), DUCTLESS SPLIT SYSTEM UNIT ("ACU-1 / ACCU-3"),
+  PUMP ("CHWP-1 AND CHWP-2", "HWP-1 AND HWP-2"), BOILER ("B-1 AND B-2"),
+  AIR COOLED CHILLER ("CH-1 AND CH-2", the model run into the header) and
+  UNIT HEATER ("UH-1 THRU UH-3", its ratings run into the header).
+- 071_ME prints its PACKAGED ROOF TOP UNIT SCHEDULE (UNIT NO. | RTU-G |
+  RTU-1 (ALT#2) | RTU-2, with sections SUPPLY FAN, EXHAUST FAN, COOLING COIL,
+  PRIMARY HEAT and SECONDARY HEAT) and its DUCTLESS SPLIT SCHEDULE
+  (UNIT | AC-1) so.
+- 040_IL prints its AIR HANDLING UNIT SCHEDULE (SYMBOL | AHU-15) so.
+
+Read row by row, a family whose title reads every row (RTU, PUMP, FAN,
+CONDENSING_UNIT) compiled each attribute name as a unit: 071_ME's 42 rooftop
+units ("24%", "2.25", "COIL FACE VELOCITY FPM"…) and 21_VA's 26 pumps, fans
+and condensing units ("MANUFACTURER", "MODEL NUMBER", "APPROX EFFICIENCY -
+PERCENT"…). None of the 32 real units on the 11 schedules was read, so the
+assemblies counted 68 phantom units, and their points, in their place.
+
+**Fix (the shared path):** `scheduleTableView(table)` in corpusTakeoff.mjs
+reads a transposed family schedule as one row per unit, and the compile
+(`uniqueFamily`), the reconcile scaffold (`reconcileScheduleFamilyFromGraph`),
+the scheduled-tag check (`unscheduledTagsAndAliasCandidates`), the plan-paint
+schedule hint and the notice of rows read as no unit (`scheduleRowsLeftOut`)
+all read tables through it, so a unit the takeoff counts has its reconcile row
+and its notice line. The sheet graph is untouched; the view is the table the
+readers read.
+- **When a table is one:** its title names a family the takeoff reads (and is
+  no points list); a header labels the header row as marks (DESIGNATION,
+  SYMBOL, MARK, TAG, UNIT, UNIT NO., EQUIPMENT NO., ITEM NO.) and every
+  header after it names units; and its rows are attributes (at most 30% of
+  their labels read as marks). A unit is a numbered mark, or a lettered one
+  (RTU-G) beside a numbered one.
+- **A column naming several units** is each: a list ("EF-2, EF-5"), an AND or
+  & pair, a range ("UH-1 THRU UH-3", at most 50). Words after a mark are
+  dropped as the compile's own normalization drops them ("RTU-1 (ALT#2)",
+  "CH-2 TRANE CGAM 40", a unit heater's "… 1/20 115/1 DIRECT"). An indoor /
+  outdoor pair ("ACU-1 / ACCU-3") is one key, read as a row printing it is.
+  A range the reader cannot expand (too long, backwards, dashed, between two
+  families' marks) leaves the table as extracted: it would read as its first
+  mark alone.
+- **Attributes:** each unit's row carries one cell per attribute, named by
+  the row's printed label. Sections in a column before the labels are joined
+  to the labels they cover where each sits on its section's first row
+  (071_ME: "SUPPLY FAN % OA", "ELECTRICAL VOLTAGE"), until the next section
+  or a label printed across the section column. Where a section label is
+  drawn down a merged cell (21_VA's air handler, chiller and unit heater), no
+  row says which section it is in: only the rows whose label spans the
+  section column are read. A label printed twice (071_ME's indoor and
+  outdoor MCA), a label naming an identity (MARK, UNIT MARK), and every row
+  after a heading printed across the unit columns (040_IL's render prints
+  SUPPLY FAN so, with the fan's rows indented under it and OUTSIDE AIR CFM
+  after them) are read for no unit. The view lists them
+  (`transposed.unread_labels`): missed, never guessed.
+- A unit's mark cites its column (the box of the column's cells, a cell the
+  extraction placed off its column left out), and so do its row and
+  attributes.
+
+**Measured** on all 97 eligible dev documents (held-out excluded), A/B
+against AS-64 (c533a24):
+- **Compile:** 3 documents change, no other. 21_VA: 26 phantom units removed
+  (CONDENSING_UNIT 9, FAN 2, PUMP 15), 26 units added (AHU-1, AHU-2, CH-1,
+  CH-2, B-1, B-2, ACCU-1 to ACCU-3, EF-1 to EF-10, CHWP-1, CHWP-2, HWP-1,
+  HWP-2, UH-1 to UH-3); 071_ME: 42 phantom rooftop units removed, RTU-G,
+  RTU-1, RTU-2 and AC-1 added; 040_IL: AHU-15 added. No unit that was a
+  unit is removed or changed, and every other part of each compile is the
+  same.
+- **Downstream compiles:** `bas_points` changes only the estimate-only
+  inventory of the three: 071_ME 63 → 25 units and 733 → 156 estimated
+  points (630 of the 733 were the phantom rooftop units'), 21_VA 77 → 78 units
+  and 345 → 396 points, 040_IL 9 → 10 units and 32 → 53 points; printed point
+  rows are the same. `control_valves` changes only their page accounting
+  (the titles the new units come from).
+- **Reconcile:** a row per unit added (31), the phantoms' rows removed; the
+  28 duplicate marks are identical. The parity listing keeps its 53 missed
+  and loses 7 of its 16 extras, all phantoms (21_VA's two "MANUFACTURER",
+  071_ME's five "SERVICE", "LOCATION"…); units 2,454 → 2,417.
+- **The notice:** the same 10 rows in 6 schedules on 5 documents. Silent
+  rows (neither a unit's nor named): 189 → 54 in 9 schedules; none is a
+  transposed schedule's.
+- **Evals** on the affected keyed documents, before (c533a24) and after
+  (every other dev document compiles identically, so scores the same; the
+  five tiers re-run below):
+  - Attributes dev 2 on 21_VA (its key draws the condensing unit and VAV
+    tables): key instances matched 31/33 → 33/33; exact 300 → 306 of 306
+    printed values (98.0% → 100.0%); wrong 0 and invented 0 before and after.
+    The six are ACCU-1's and ACCU-2's capacity, volts and phase. Items in
+    the keyed tables that no key instance names: 36 → 27 (the 9 phantom
+    condensing units).
+  - Attributes dev 3 on 071_ME: matched 21/24 → 23/24; exact 209 → 224 of
+    247 (84.6% → 90.7%); wrong 0 and invented 0. The phantoms in its keyed
+    table: 42 → 1 (RTU-1, below). The first run read two invented values:
+    the SUPPLY FAN PEAK OUTSIDE AIRFLOW of RTU-G and RTU-2 as their minimum
+    outdoor air, which the key records as not printed. The normalizer's
+    outdoor-air rule already refused a MAXIMUM; it now refuses a PEAK (the
+    most the unit takes), the one PEAK outdoor airflow in the dev corpus.
+    RTU-G's EXHAUST FAN EXHAUST AIRFLOW (4,235 cfm) is read and not keyed
+    (an unscored extension).
+  - The dev 3 key names 071_ME's second unit "RTU-1 (ALT#2)", as printed;
+    the compile reads it RTU-1, as it reads a row printing the same, so its
+    13 keyed values are missed before and after. The 23 values missed are
+    those 13 and five each of RTU-G and RTU-2 the normalizer does not read
+    from a composed label:
+    heating type (PRIMARY HEAT TYPE and SECONDARY HEAT TYPE answer it
+    differently), the 47 F heating capacity of a "105.7 / 60.0" cell, the
+    electric heat kW (SECONDARY HEAT KW), the filter MERV (FILTERS (SUPPLY)
+    TYPE = MERV8) and the phase of ELECTRICAL VOLTAGE = 208/230-3-60 (a
+    VOLTAGE column reads no phase). Missed, never wrong; left for a
+    normalizer change with its own A/B.
+  - Attributes dev on 040_IL (AHU-15's table is not keyed) and the typical
+    eval on 040_IL (6 of 14 exact) are identical before and after.
+  - **The five tiers re-run** (c533a24 against AS-65, every dev document):
+    dev 1,965/2,053 (95.7%) identical; dev 2 1,259 → 1,265/1,451 (86.8% →
+    87.2%); dev 3 1,269 → 1,284/1,377 (92.2% → 93.2%), its 3 wrong and 2
+    invented (096_IN's, as before) the same; dev 4 1,380/1,421 (97.1%) and
+    dev 5 503/561 (89.7%) identical. Every document's row is identical but
+    21_VA's and 071_ME's; wrong and invented move nowhere.
+- **The reconcile tests on the three documents** (reconcileWorkflow, not in
+  the suite run below; c533a24 against AS-65): the same 3 pass and 4 fail,
+  with the same messages but one. The booster-pump test asserts 21_VA's
+  PUMP rows equal its WP1 key's PUMP 1; it counted 17 (BP-1 and 16 phantom
+  attribute rows) and counts 5 (BP-1, CHWP-1, CHWP-2, HWP-1, HWP-2). 071_ME's
+  VAV test fails as before (0 of 20 MATCH).
+- **WP1 compile acceptance** (93 cached dev sets): 040_IL's key counts 29
+  items with a reviewed correction to 31 (AS-63's split system); reading
+  AHU-15 turned it from pass to fail. AHU-15 is checked on the rendered page
+  (AIR HANDLING UNIT SCHEDULE, SYMBOL AHU-15, SERVICE NEW SPS, 26,000 CFM,
+  480-3, VENTROL CUSTOM) and added to the same correction (items 32, AHU 1)
+  with the evidence and the source's hash. With it, the same 38 sets pass
+  and 55 fail as at c533a24; none changes.
+- **Held-out** (aggregates only): GATE 2 held-out 897/1,008 exact, 0 wrong,
+  2 invented; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91; GATE C
+  35/91. Each is as with AS-64.
+- **UI proof** (the dev server restarted on the change): 21_VA 87 units, as
+  at 6dfd782, now its 26 real units for its 26 phantoms (164 → 162 records;
+  18 checks); 071_ME 25 (63; 129 → 53 records; 18 checks); 040_IL 32 (31 at
+  AS-63; 16 checks); each byte-identical to apply_assemblies. 069_ID,
+  unchanged, is byte-identical to its AS-64 run (17 checks).
+
+**Found, not fixed:**
+- **ACU-1, the indoor half of 21_VA's split system.** "ACU-1 / ACCU-3" reads
+  as a row printing it reads: the condensing unit ACCU-3 (CONDENSING_UNIT's
+  mark under a split system title), not ACU-1, which no FCU rule reads.
+  Whether ACU-n under a ductless split title is a fan coil is a mark rule
+  (AS-63's kind) for its own change and census.
+- **Attributes the extraction merged into the header row.** 21_VA's chiller
+  and unit heater schedules print their first attribute rows (MANUFACTURER,
+  MODEL NUMBER, TYPE…) inside the header row the sheet graph extracted, so
+  the units are read and those attributes are not. Splitting a header row is
+  extraction's (vectorGrid), which this change does not touch.
+- **Pre-existing WP1 failures:** 21_VA's and 071_ME's compile-acceptance keys
+  fail on their totals before and after. 071_ME's key (VAV 20, FAN 1) omits
+  the four units now read; 21_VA's counts 32 of its 57 VAV terminals and
+  none of the transposed units. Left to the keys' owner, as AS-64 left its
+  own.
+
+**Tests:** transposedSchedule.test.ts: 21_VA's fan schedule read one row per
+unit (a column of two units, a blank value, a stray cell, one view per
+table); the compile reads it as it reads the same units printed one per row;
+071_ME's sections on their first row and a label across the section column
+ending one; 21_VA's merged sections; lists, AND and & pairs, ranges, words
+and ratings after a mark, an indoor/outdoor pair read as a printed row; a
+label printed twice or naming an identity; a heading across the unit
+columns; what stays as extracted (units by row, a panel schedule, a title of
+no family, a later header that is no mark, lettered units alone, a
+cross-reference of marks, a points list, no title, ranges read whole or not
+at all, a pair run into ratings); the reconcile's row per unit, the scheduled
+tags and the notice; the plan-paint hint for a points list's served unit.
+normalize.test.ts: a PEAK outdoor airflow is no minimum outdoor air.
+Mutations: the tests fail for each of these 25 changes: the normalizer
+reading a PEAK outdoor airflow as the minimum; the compile, the
+reconcile, the scheduled tags, the notice or the plan-paint scan reading the
+table as extracted; no range expansion; no AND split; no unread-range guard;
+the pair split before the words after a mark; no lettered units; any header
+a unit; no title gate; no points-list guard; rows of marks read as
+attributes; merged sections read as unsectioned, or as first-row; a label
+printed twice read; identity labels read; a spanning label keeping the
+section; a section naming only its own row; a stray cell stretching the
+column; no memo; no heading guard; a heading without spanning the unit
+columns.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the
+  web suite's 3,911 tests fail only AS-1's three base-red tests. MCP:
+  typecheck clean; `test:bas` 133/133; the suite (every file but the WP1
+  test, emulated above) 377 of 380 pass and 1 skips; its two failures are as
+  on AS-64 (AS-1's conformance test, and navfac's slow `sweep_schedule_row`
+  test).

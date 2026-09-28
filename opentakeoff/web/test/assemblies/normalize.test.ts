@@ -241,6 +241,13 @@ test("design airflows only: not a coil's face airflow, a smoke-mode or a maximum
   assert.equal(ahu.supply_cfm, 4200);
   assert.equal(ahu.oa_cfm_min, 800);
   assert.equal(values(normalizeCompileItem(row("DOAS-1", "DOAS SCHEDULE", { "MAX OUTSIDE AIR CFM": "2000" }), "DOAS")).oa_cfm_min, undefined);
+  // 071_ME's rooftop units, read across their schedule's columns (AS-65): a
+  // PEAK outdoor airflow is the most the unit takes, never its minimum.
+  const rtu = values(normalizeCompileItem(row("RTU-G", "PACKAGED ROOF TOP UNIT SCHEDULE", {
+    "SUPPLY FAN SUPPLY AIRFLOW, CFM": "4,235", "SUPPLY FAN PEAK OUTSIDE AIRFLOW, cfm": "1,000", "SUPPLY FAN % OA": "24%",
+  }), "RTU"));
+  assert.equal(rtu.supply_cfm, 4235);
+  assert.equal(rtu.oa_cfm_min, undefined);
   const uh = values(normalizeCompileItem(row("EUH-2", "ELECTRIC UNIT HEATER SCHEDULE", { "AIR FLOW L/S": "165", "AIR FLOW CFM": "350" }), "UNIT_HEATER"));
   assert.equal(uh.cfm, 350);
 });
