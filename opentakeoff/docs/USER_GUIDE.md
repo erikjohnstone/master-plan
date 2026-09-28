@@ -602,8 +602,12 @@ marks, a mark under a building number or code (1-VAV-1, 40-AHU-2, W05-TU-01),
 under a building and its floor or wing (01-1-DAC-1, 05-B-DAC-1) or with a
 building letter (FC-A-2) included, and a mark the schedule's own title
 vouches for (E-A-1 under a return fan title, HF-4 under a humidifier title,
-FCC1-1 under a fan coil title, ACCH-1 under an air-cooled chiller title). It
-reads a family's units in
+FCC1-1 under a fan coil title, ACCH-1 under an air-cooled chiller title). A
+table titled with the family's own name in words, no SCHEDULE printed
+(EXHAUST FANS, SUPPLY FANS, VENTILATION FANS, VAV TERMINAL SCHEDULE,
+CONDENSATE PUMP, AIR/DIRT SEPARATOR SCHEDULE), is that family's schedule; one
+that only ends in the name (an electrical list headed "EQUIPMENT CONNECTION
+SCHEDULE - EXHAUST FANS") is not. It reads a family's units in
 another family's schedule that lists them (DOAS-1 in an air handler index),
 and each unit once, from the listing that prints its mark. A schedule
 printed on its side, its units across the columns and their attributes down

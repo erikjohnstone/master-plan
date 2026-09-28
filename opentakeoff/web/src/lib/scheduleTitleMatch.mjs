@@ -25,12 +25,18 @@ export function compactScheduleTitle(s) {
 export function compactScheduleTitleRe(re) {
   const flags = re.flags.includes("i") ? re.flags : `${re.flags}i`;
   // Drop spacing and light punctuation so /GRILLE,\s*REGISTER/ still hits
-  // "GRILLE,REGISTERANDDIFFUSERSCHEDULE" after alphanumeric compaction.
+  // "GRILLE,REGISTERANDDIFFUSERSCHEDULE" after alphanumeric compaction. A
+  // "." before a quantifier is the rule's wildcard, and a quantifier's comma
+  // ({0,40}) the rule's own, not punctuation; both stay (AS-68). Dropped,
+  // /\bRAH\b.*SCHEDULE/ became the invalid /\bRAH\b*SCHEDULE/, so the family's
+  // soft match never ran, and .{0,40} became {040}, exactly forty.
   const src = re.source
+    .replace(/\{(\d*),(\d*)\}/g, "{$1\u0000$2}")
     .replace(/\\s[\*\+]?/g, "")
     .replace(/ /g, "")
     .replace(/\\[,.\-_/]/g, "")
-    .replace(/[,.\-_/]/g, "");
+    .replace(/[,\-_/]|\.(?![*+?{])/g, "")
+    .replace(/\u0000/g, ",");
   return new RegExp(src, flags);
 }
 

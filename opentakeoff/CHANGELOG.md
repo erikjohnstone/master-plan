@@ -1,5 +1,27 @@
 # Changelog
 
+- **Takeoff: a table titled with its family's name in words is that family's
+  schedule.** A family's title rule read "… FAN SCHEDULE", "VARIABLE AIR
+  VOLUME …" or "PUMP SCHEDULE", so tables titled EXHAUST FANS, SUPPLY FANS,
+  VENTILATION FANS, "FANS (SPECIFICATION SECTION 23 34 00)", VAV TERMINAL
+  SCHEDULE, VAV BOX WITH HOT WATER REHEAT SCHEDULE, VARIABLE VOLUME SUPPLY
+  TERMINAL UNIT SCHEDULE, CONDENSATE PUMP or AIR/DIRT SEPARATOR SCHEDULE were
+  no family's, and their units were missing without a word (the notice names
+  rows left out of a family's own schedule, and these were no family's). They
+  are read now: a fan title must name the fans from its first word to its
+  last, so an electrical list ending "- EXHAUST FANS" stays unread; a VAV box
+  or terminal title never names its connections, wiring, controls or points;
+  EXF-n and transfer fans TF-n are fans under a fan title, and a separator
+  lettered for its system (AS-A) under a separator title. The soft title
+  match, which also reads titles printed without spaces, dropped a rule's "."
+  wildcard and a quantifier's comma as punctuation: three families' rules
+  (RAH, WFU, GLYCOL_MAKEUP) became invalid and their soft match never ran,
+  and the valve titles' "up to forty characters" became exactly forty; both
+  now keep their meaning. On all 97 eligible dev documents with a cached
+  sheet graph (held-out excluded) 107 units on 11 documents are added and
+  none removed or changed, and 01_NY gains its return fans RF-1 and RF-2
+  (`corpusTakeoff.mjs`, `scheduleTitleMatch.mjs`, ASSEMBLIES_BUG_CATALOGUE
+  AS-68).
 - **Assemblies: a unit's heat, heating capacity, electric heat, filter
   rating and phase are read where its schedule prints them by section.**
   071_ME's rooftop units, read one unit per column (AS-65), print PRIMARY

@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   compactScheduleTitle,
+  compactScheduleTitleRe,
   queryTitleMatchesNeedle,
   scheduleTitleMatches,
 } from "../src/lib/scheduleTitleMatch.mjs";
@@ -1590,4 +1591,35 @@ test("HVAC page accounting follows contributed equipment rather than unrelated t
     "has_hvac_equipment_schedule",
   ]);
   assert.deepEqual(hvac.page_accounting.pages[2].titles, ["COMPUTER ROOM AIR HANDLER SCHEDULE"]);
+});
+
+test("every family's title rules keep their meaning in the soft form: a wildcard and a quantifier are the rule's (AS-68)", () => {
+  // The soft form drops spacing and light punctuation. It dropped a rule's
+  // "." wildcard and a quantifier's comma too, so /\bRAH\b.*SCHEDULE/ became
+  // an invalid rule (the family's soft match never ran) and .{0,40} exactly
+  // forty characters.
+  for (const [family, spec] of Object.entries(HVAC_FAMILY_SPECS) as Array<[string, any]>) {
+    for (const re of [spec.titleRe, spec.altTitleRe, spec.exclude, spec.host?.titleRe, spec.host?.exclude]) {
+      if (re) assert.doesNotThrow(() => compactScheduleTitleRe(re), `${family} ${re}`);
+    }
+  }
+  assert.equal(compactScheduleTitleRe(/\bRAH\b.*SCHEDULE/i).source, "\\bRAH\\b.*SCHEDULE");
+  assert.equal(compactScheduleTitleRe(/CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i).source, "CONTROLVALVE.{0,40}(?:CHW|CHILLEDWATER)");
+  // Punctuation and spacing still go.
+  assert.equal(compactScheduleTitleRe(/GRILLE,\s*REGISTER\/DIFFUSER\.?/i).source, "GRILLEREGISTERDIFFUSER?");
+  const { RAH, CHW_CONTROL_VALVE } = HVAC_FAMILY_SPECS as Record<string, any>;
+  assert.equal(scheduleTitleMatches("RETURNAIRHANDLERSCHEDULE", RAH.titleRe, RAH.exclude), true);
+  assert.equal(scheduleTitleMatches("CONTROLVALVESCHEDULE(CHILLEDWATER)", CHW_CONTROL_VALVE.titleRe, CHW_CONTROL_VALVE.exclude), true);
+});
+
+test("a title naming a family in words matches it, run together or spaced, and a list only ending in the name does not (AS-68)", () => {
+  const { FAN, VAV, PUMP, AIR_SEPARATOR } = HVAC_FAMILY_SPECS as Record<string, any>;
+  const is = (title: string, spec: any) => scheduleTitleMatches(title, spec.titleRe, spec.exclude);
+  for (const t of ["EXHAUST FANS", "SUPPLY FANS", "VENTILATION FANS", "EXHAUSTFANS", "FANS (SPECIFICATION SECTION 23 34 00)", "TOILET EXHAUST FANS"]) assert.equal(is(t, FAN), true, t);
+  for (const t of ["EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS", "EQUIPMENTCONNECTIONSCHEDULE-EXHAUSTFANS", "CEILING FANS", "AIR HANDLING UNIT FANS", "EXHAUST FAN POINTS", "FAN POWERED TERMINAL UNIT SCHEDULE"]) assert.equal(is(t, FAN), false, t);
+  for (const t of ["VAV TERMINAL SCHEDULE", "VAV BOX WITH HOT WATER REHEAT SCHEDULE", "VAV BOX SCHEDULE", "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE"]) assert.equal(is(t, VAV), true, t);
+  for (const t of ["VAV BOX CONNECTION SCHEDULE", "VAVBOXCONNECTIONSCHEDULE", "VAV BOX CONTROL DIAGRAM", "BMS POINT FUNCTION SCHEDULE - VAV"]) assert.equal(is(t, VAV), false, t);
+  assert.equal(is("CONDENSATE PUMP", PUMP), true);
+  assert.equal(is("CONDENSATE PUMP TRAP PACKAGED SCHEDULE", PUMP), false);
+  assert.equal(is("AIR/DIRT SEPARATOR SCHEDULE", AIR_SEPARATOR), true);
 });

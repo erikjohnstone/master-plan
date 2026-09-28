@@ -1359,7 +1359,11 @@ export const HVAC_FAMILY_SPECS = {
     },
   },
   VAV: {
-    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,
+    // A VAV box or terminal schedule (009_FL's VAV TERMINAL SCHEDULE, 033_MN's
+    // VAV BOX WITH HOT WATER REHEAT SCHEDULE) and a variable volume terminal
+    // (061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE; AS-68), never a
+    // box's connections, wiring, points or details.
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor;
     // TU-* terminal units numbered under an AIR TERMINAL UNIT title (AS-62).
@@ -1488,7 +1492,9 @@ export const HVAC_FAMILY_SPECS = {
   // without filtering titled PUMP SCHEDULE rows. PUPSCHEDULE = common OCR miss.
   PUMP: {
     // Also match untitled-suffix hydronic pump boards (HEATING HOT WATER PUMP).
-    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP/i,
+    // Or a condensate pump's own title, no SCHEDULE printed (044_NY's
+    // CONDENSATE PUMP; AS-68).
+    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP|^\s*(?:STEAM\s+)?CONDENSATE\s+(?:RETURN\s+)?PUMPS?(?:\s+SCHEDULE)?\s*$/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i,
     // BS-* = packaged booster pump systems on EQUIPMENT catch-all lists.
     blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
@@ -1525,7 +1531,12 @@ export const HVAC_FAMILY_SPECS = {
     titledOnly: true,
   },
   FAN: {
-    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+|KITCHEN\s+EXHAUST\s+)?FAN SCHEDULE/i,
+    // Or a title that is the fans' own name, no SCHEDULE printed: 23_GA's and
+    // 14_OR's EXHAUST FANS, 072_CA's and 074_CA's SUPPLY FANS, 097_UT's
+    // VENTILATION FANS, 26_CA's "FANS (SPECIFICATION SECTION 23 34 00)"
+    // (AS-68). The whole title names them, from its first word to its last, so
+    // an electrical list ending "- EXHAUST FANS" is not theirs.
+    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+|KITCHEN\s+EXHAUST\s+)?FAN SCHEDULE|^\s*(?:(?:EXHAUST|SUPPLY|RETURN|RELIEF|VENTILATION|VENTILATING|TRANSFER|TOILET|KITCHEN|ROOF|INLINE|UTILITY|GENERAL|SMOKE|STAIR|STAIRWELL|GARAGE|LAB|LABORATORY|PROPELLER|CENTRIFUGAL)\s+){0,3}FANS?(?:\s*\([^)]*\))?\s*$/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE|CEILING\s+FAN/i,
     // REF-* = relief; TEF-* toilet/transfer; GX-* general exhaust (lab);
     // KEF-* kitchen exhaust (blank-title hydronic/exhaust summaries — Klamath).
@@ -1536,8 +1547,9 @@ export const HVAC_FAMILY_SPECS = {
     // exhaust fans PEF-1, JEF-1; AS-62).
     keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-|[A-Z]{1,2}EF(?=[\s\-]?\d))[\s\-]?/i,
     // Under a FAN SCHEDULE title: E-A-* zone-lettered fans (017_MD's RETURN
-    // FAN SCHEDULE), bare F-* (016_NY) and BF-* (096_IN; AS-63).
-    titledKeyRe: /^(?:E-[A-Z]-|F|BF)[\s\-]?\d/i,
+    // FAN SCHEDULE), bare F-* (016_NY) and BF-* (096_IN; AS-63); EXF-* (097_UT's
+    // VENTILATION FANS) and transfer fans TF-* (26_CA's TF-P2-1; AS-68).
+    titledKeyRe: /^(?:(?:E-[A-Z]-|F|BF|EXF)[\s\-]?\d|TF[\s\-])/i,
     // Read by its mark alone, EG-* is an exhaust grille (096_IN's untitled
     // diffuser and grille schedule lists EG2 and EG3; AS-66).
     titledOnlyRe: /^EG[\s\-]?\d/i,
@@ -1607,9 +1619,14 @@ export const HVAC_FAMILY_SPECS = {
   },
   AIR_SEPARATOR: {
     // Hydraulic separators (HS-*); "AIR SEPARATORS" boards without SCHEDULE.
-    titleRe: /AIR\s+SEPARATORS?(?:\s+SCHEDULE)?|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?/i,
+    // An air and dirt separator (014_MT's and 061_IA's AIR/DIRT SEPARATOR
+    // SCHEDULE; AS-68) or a dirt separator.
+    titleRe: /AIR\s+SEPARATORS?(?:\s+SCHEDULE)?|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?|\bAIR\s*(?:\/|&|AND)\s*DIRT\s+SEPARATORS?|\bDIRT\s+SEPARATORS?\b/i,
     // AS-/IAS-/HS- — digit required (not prose); optional zone letter.
     keyRe: /^(?:I?AS|HS)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
+    // Under its own title, a separator lettered for its system (061_IA's
+    // AS-A to AS-C; AS-68).
+    titledKeyRe: /^(?:I?AS|HS)[\s\-]?[A-Z]$/i,
   },
   EXPANSION_TANK: {
     // OCR: EPANSIONANDCOPRESSIONTANKSCHEDULE (bldg5406) — expansion + compression.

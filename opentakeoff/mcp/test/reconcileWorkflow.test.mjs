@@ -721,10 +721,11 @@ test("Vol2 main boilers 044: plant schedules honest SCHEDULE_ONLY", async (t) =>
       schedule_only: key.categories[family],
     });
   }
-  // Reconcile scaffold omits one pump row vs compile (8/9) — honest SO on rows found.
+  // Every pump the key counts has its row since AS-68 reads the CONDENSATE
+  // PUMP table (CP-1), the one row the scaffold had omitted (8/9) — honest SO.
   await assertFamilyStatusCounts(session, graph, key, "PUMP", {
-    schedule_only: 8,
-  }, { rows: 8 });
+    schedule_only: key.categories.PUMP,
+  }, { rows: key.categories.PUMP });
   // Gate / isolation valves + steam PSVs are schedule-only (plant marks not plan text).
   await assertFamilyStatusCounts(session, graph, key, "ISOLATION_VALVE", {
     schedule_only: key.categories.ISOLATION_VALVE,

@@ -461,3 +461,73 @@ describe("AS-66 a table no title vouches for: notes, indexes and lists hold no u
     assert.deepEqual(compile([table("m.pdf#10", "-CONDENSING UNIT", ["PIPING LEGEND", "CU-1"])])("CONDENSING_UNIT"), ["CU-1"]);
   });
 });
+
+// AS-68: a table titled with the family's own name in words, no SCHEDULE
+// printed, is the family's schedule. The title names the family from its
+// first word to its last, so a list only ending in the family's name, or a
+// box's connections, is not.
+describe("AS-68 a table titled with the family's name in words is the family's schedule", () => {
+  const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
+  const table = (sheet: string, title: string, keys: string[], kind = "equipment") => ({ kind, sheet, title: { text: title }, rows: keys.map(row) });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+
+  it("reads EXHAUST FANS, SUPPLY FANS, VENTILATION FANS and FANS (SPECIFICATION …) as fan schedules", () => {
+    // 23_GA's EXHAUST FANS, 072_CA's SUPPLY FANS, 097_UT's VENTILATION FANS
+    // (EF-4 and EXF-1), 26_CA's FANS (SPECIFICATION SECTION 23 34 00) with its
+    // transfer fan TF-P2-1, and a title of one fan (14_OR's KEF-1).
+    const tags = compile([
+      table("m.pdf#35", "EXHAUST FANS", ["EF-1", "EF-2"]),
+      table("m.pdf#26", "SUPPLY FANS", ["SF-A-1"]),
+      table("m.pdf#2", "VENTILATION FANS", ["EF-4", "EXF-1"]),
+      table("m.pdf#10", "FANS (SPECIFICATION SECTION 23 34 00)", ["SF-P3-12", "TF-P2-1"]),
+      table("m.pdf#3", "Exhaust Fan", ["KEF-1"]),
+    ]);
+    assert.deepEqual(tags("FAN"), ["EF-1", "EF-2", "EF-4", "EXF-1", "KEF-1", "SF-A-1", "SF-P3-12", "TF-P2-1"]);
+  });
+
+  it("reads no fan schedule in a title that only ends in the fans' name, nor an air handler's fans, fan coils, ceiling fans or points", () => {
+    // 009_FL's electrical EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS, also
+    // printed without spaces; an air handler's own fans (AS-38).
+    const tags = compile([
+      table("e.pdf#31", "EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS", ["EF-1", "EXF-2", "TF-3"]),
+      table("e.pdf#32", "EQUIPMENTCONNECTIONSCHEDULE-EXHAUSTFANS", ["EF-7"]),
+      table("m.pdf#14", "AIR HANDLING UNIT FANS", ["SF-1"]),
+      table("m.pdf#15", "FAN COIL UNITS", ["FC-1"]),
+      table("m.pdf#16", "CEILING FANS", ["CF-1"]),
+      table("m.pdf#17", "EXHAUST FAN POINTS", ["EF-9"]),
+    ]);
+    assert.deepEqual(tags("FAN"), []);
+    // EXF-* and TF-* are fans under a fan title only.
+    assert.deepEqual(compile([table("m.pdf#4", "", ["EXF-3", "TF-4", "EF-5"])])("FAN"), ["EF-5"]);
+  });
+
+  it("reads VAV box and terminal schedules and variable volume terminals, never a box's connections or controls", () => {
+    // 009_FL's VAV TERMINAL SCHEDULE, 033_MN's VAV BOX WITH HOT WATER REHEAT
+    // SCHEDULE, 061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE.
+    const tags = compile([
+      table("m.pdf#18", "VAV TERMINAL SCHEDULE", ["VAV-1-1"]),
+      table("m.pdf#68", "VAV BOX WITH HOT WATER REHEAT SCHEDULE", ["VAV-C2"]),
+      table("m.pdf#58", "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE", ["VAV-A"]),
+      table("e.pdf#47", "VAV BOX CONNECTION SCHEDULE", ["VAV-9"]),
+      table("m.pdf#23", "VAV BOX CONTROL DIAGRAM", ["VAV-8"]),
+    ]);
+    assert.deepEqual(tags("VAV"), ["VAV-1-1", "VAV-A", "VAV-C2"]);
+  });
+
+  it("reads a condensate pump's own title and an air/dirt separator's, its lettered marks under that title only", () => {
+    // 044_NY's CONDENSATE PUMP; 014_MT's and 061_IA's AIR/DIRT SEPARATOR
+    // SCHEDULE (AS-A1; AS-A to AS-C); 040_IL's pump trap package is no pump
+    // schedule.
+    const tags = compile([
+      table("m.pdf#24", "CONDENSATE PUMP", ["CP-1"]),
+      table("m.pdf#47", "CONDENSATE PUMP TRAP PACKAGED SCHEDULE", ["PT-1"]),
+      table("m.pdf#4", "AIR/DIRT SEPARATOR SCHEDULE", ["AS-A1", "AS-B"]),
+      table("m.pdf#5", "", ["AS-C"]),
+    ]);
+    assert.deepEqual(tags("PUMP"), ["CP-1"]);
+    assert.deepEqual(tags("AIR_SEPARATOR"), ["AS-A1", "AS-B"]);
+  });
+});

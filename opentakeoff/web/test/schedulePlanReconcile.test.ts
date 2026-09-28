@@ -892,6 +892,34 @@ test("reconcile scaffold holds no row where the compile reads no unit: notes, li
   }
 });
 
+test("reconcile scaffold reads a table titled with the family's name in words, as the compile does (AS-68)", () => {
+  // 23_GA's EXHAUST FANS, 097_UT's EXF-1 under VENTILATION FANS, 009_FL's VAV
+  // TERMINAL SCHEDULE, 044_NY's CONDENSATE PUMP, 061_IA's lettered AIR/DIRT
+  // SEPARATOR marks; an electrical list only ending in EXHAUST FANS is none.
+  const table = (sheet: string, title: string, keys: string[]) => ({
+    kind: "equipment", sheet, title: { text: title },
+    rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+  });
+  const graph = { tables: [
+    table("m.pdf#35", "EXHAUST FANS", ["EF-1", "EF-2"]),
+    table("m.pdf#2", "VENTILATION FANS", ["EXF-1"]),
+    table("m.pdf#18", "VAV TERMINAL SCHEDULE", ["VAV-1-1"]),
+    table("m.pdf#24", "CONDENSATE PUMP", ["CP-1"]),
+    table("m.pdf#58", "AIR/DIRT SEPARATOR SCHEDULE", ["AS-B"]),
+    table("e.pdf#31", "EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS", ["EF-9"]),
+  ] };
+  const rowsOf = (family: string) => reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
+    .map((r: any) => r.tag).sort();
+  assert.deepEqual(rowsOf("FAN"), ["EF-1", "EF-2", "EXF-1"]);
+  assert.deepEqual(rowsOf("VAV"), ["VAV-1-1"]);
+  assert.deepEqual(rowsOf("PUMP"), ["CP-1"]);
+  assert.deepEqual(rowsOf("AIR_SEPARATOR"), ["AS-B"]);
+  const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+  for (const f of ["FAN", "VAV", "PUMP", "AIR_SEPARATOR"]) {
+    assert.deepEqual(cats[f].items.map((i) => i.tag).sort(), rowsOf(f), f);
+  }
+});
+
 test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parity)", () => {
   const graph = {
     tables: [{
