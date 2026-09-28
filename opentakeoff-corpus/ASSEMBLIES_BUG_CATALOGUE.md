@@ -4100,3 +4100,151 @@ owner's to restate, not this branch's.
   (every file but the WP1 test, emulated above) 377 of 380 pass and 1 skips;
   its two failures fail the same on AS-62 (AS-1's conformance test, and
   navfac's slow `sweep_schedule_row` test, compared by status).
+
+## AS-64 — marks behind a building and its floor or wing, and fan coils, chillers and humidifiers their own title vouches for, read as no unit; the notice named 5 of 46 (FIXED — the owner asked; guarded by the evals)
+
+**Found:** AS-63's census of the rows still left out, 2026-09-28, and a
+census of the rows the notice could not see.
+- 036_LA's DUCTLESS SPLIT SYSTEM SCHEDULE (sheet 63) was named with 5 of its
+  34 rows (05-B-DAC-1, 06-B-DAC-1 to 4), but the compile read none of the
+  34: its whole compile was two condensing units. The other 29 (01-1-DAC-1
+  to 171-1-DAC-1) were left out without a word.
+- 087_US, a chiller replacement, compiled no unit: its AIR-COOLED CHILLER
+  SCHEDULE's one row is ACCH-1.
+- The rows of a family's titled schedule that no unit carries and the notice
+  does not name: 202 in 20 schedules over the 97 dev documents. Nearly all
+  are no unit's (attribute names of transposed schedules, abbreviations
+  lists, points lists, size letters), but three schedules hold units:
+  028_TX's CHILLED WATER FAN COIL UNIT SCHEDULE lists FCC1-1 to FCC2-12 (12
+  fan coils) beside FCU1-3 (read), 061_IA's HUMIDIFIER SCHEDULE lists HUM-A
+  (a steam humidifier AS-61 gave up), and 12_MT's SPLIT SYSTEM HEAT PUMP
+  SCHEDULE keys its five rows by the manufacturer (below).
+
+**What:**
+- AS-62 strips one building token before a mark (1-VAV-1 → VAV-1).
+  036_LA prints a building and then its floor or wing (01-1-DAC-1,
+  05-B-DAC-1, 07-A-CU-1), so no form of the mark reached the family's rule.
+- FCU's rule reads FCU and FC-n, not FCC; HUMIDIFIER's asks for a digit, so
+  HUM-A reads as none; AIR_COOLED_CHILLER read ACC-n under its own title
+  (AS-63), not ACCH-n.
+- The notice's check (readsAsMark) stripped one token only when a letter
+  followed, and read no floor number printed against a mark's letters: it
+  named 05-B-DAC-1 (B-DAC-1 reads as a tag), not 01-1-DAC-1 or FCC1-1.
+
+**Fix (the shared path):**
+- `markCoreForKeyRe`: when no one-token building strip applies, a numbered or
+  coded building followed by its floor (a number of at most two digits) or
+  wing (one letter) is stripped, if the rest is a short equipment mark:
+  01-1-DAC-1, 05-B-DAC-1 and 136-1-DAC-1 read as DAC-1, 07-A-CU-1 as CU-1.
+  A lettered first token is a unit's own mark, never a building (AHU-1-SF-1
+  and CH-1-CHWP-1 keep their readings); three location tokens, a floor of
+  three digits, a wing of two letters and a temporary unit (01-1-AC-36TEMP)
+  are left alone; one kind of strip applies per mark. The compile and the
+  reconcile scaffold both read marks through it (`markMatchesKeyRe`), and a
+  mark read so is a widened reading: it adds a unit only where no printed
+  listing holds it (AS-63).
+- Marks a family's own title vouches for (titledKeyRe, read only under that
+  title): FCU's FCC-n, AIR_COOLED_CHILLER's ACCH-n and HUMIDIFIER's HUM with
+  one letter (HUM-A).
+- `readsAsMark` (the notice) reads a mark behind up to three leading
+  building, floor or area tokens, and a floor number printed against its
+  letters when a unit number follows (FCC1-1, VAV2-14). It reads more than
+  the compile's rule, so a mark the rule cannot read is named, not dropped.
+
+**Measured** on all 97 eligible dev documents (held-out excluded), A/B
+against AS-63 (6253cd3):
+- **Compile:** 48 units added on 4 documents: 036_LA's 34 ductless split
+  units (FCU), 028_TX's 12 FCC fan coils, 087_US's ACCH-1 and 061_IA's
+  HUM-A; 0 removed, 0 changed, every other part of each compile the same.
+  With the base compile, the new notice names all 34 of 036_LA's rows (5
+  before) and nothing new elsewhere.
+- **Downstream compiles:** `bas_points` changes only the estimate-only
+  inventory of 036_LA (34 units, 272 estimated points; its equipment
+  inventory gate open where it refused) and 028_TX (18 → 30 units, 169 → 265
+  estimated points); printed point rows are the same. `control_valves`
+  changes only the page accounting of 036_LA, 087_US and 061_IA (the titles
+  the new units come from).
+- **Reconcile:** 48 rows added, one per unit; 0 removed, 0 changed, order the
+  same. The 28 duplicate marks and the parity listing are identical (53
+  missed, 16 extra; 2,406 → 2,454 units).
+- **The notice:** 16 rows in 8 schedules on 7 documents, now 10 in 6 on 5.
+  Silent rows (neither a unit's nor named): 202 → 189. None is a unit's row
+  but 12_MT's five: the rest are abbreviations, points lists, size letters
+  and the attribute names of transposed schedules, whose units run across
+  the columns and are extraction's to read (AS-33).
+- **Evals** on the affected keyed documents, before and after (every other
+  dev document compiles identically, so scores the same):
+  - Attributes dev 4 on 028_TX: key instances matched 21/33 → 33/33; exact
+    283 → 487 of 487 printed values (58.1% → 100.0%); wrong 0 and invented
+    0 before and after. These are the 204 values dev 4's freeze recorded as
+    missed on "028_TX's FCC fan coils (rows the compile does not produce)".
+  - Attributes dev 2 on 036_LA (its key covers the condensing unit table)
+    and dev 5 on 061_IA (HUM-A is not a keyed instance) are identical: 100.0%
+    and 95.5%. 061_IA's two unmatched instances are EF-2 and EF-3, cited from
+    the first of their two listings (the duplicates owner decision).
+- **WP1 compile acceptance** (93 cached dev sets): 087_US's key is a [ZERO]
+  key ("no extractable HVAC schedule tables"), so reading its chiller turned
+  it from pass to fail. The chiller is checked on the rendered page and
+  recorded in `ground_truth/hvac/cross-set-compile-reviewed-corrections.json`
+  with the source's hash (AIR_COOLED_CHILLER 1; 1 item). With it, the same 38
+  sets pass and 55 fail as at 6253cd3 with the keys before; none changes.
+  036_LA's [ZERO] key ("no HVAC equipment schedules"), 028_TX's and
+  061_IA's fail on their HVAC totals before AS-64 and after, and are left to
+  the keys' owner.
+- **Held-out** (aggregates only): GATE 2 held-out 897/1,008 exact, 0 wrong,
+  2 invented; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91; GATE C
+  35/91. Each is as with AS-63.
+- **UI proof** (the dev server restarted on the change): 036_LA 36 units (2
+  at 6dfd782; 14 checks), 028_TX 55 (43; 19), 087_US 1 (0; 13) and 061_IA 40
+  (39; 18), each byte-identical to apply_assemblies; 069_ID, unchanged, is
+  byte-identical to its AS-63 run (17 checks).
+
+**Found, not fixed:**
+- **An existing unit printed "(E)FC-1" beside a new FC-1.** 088_AZ's FAN
+  COIL UNIT SCHEDULE (EXISTING TO BE REUSED) prints (E)FC-1 and (E)FC-2; its
+  DX FAN COIL SCHEDULE prints new units FC-1 to FC-5. The compile reads the
+  MARK cell, drops the status mark ("(E)FC-1" → FC-1, the rule AS-27
+  concerns) and keeps one unit per mark and family, so the two existing
+  units fold into the new FC-1 and FC-2: two distinct units counted once
+  each. The notice names them (EFC-1, EFC-2, the rows' keys), and the
+  reconcile lists both listings (088_AZ's FCU entry among the 28 duplicate
+  marks). Of the 28 status-marked rows in family-titled schedules over the
+  97 documents, 25 carry a unit; this is the only collision, and the third
+  row left is a filter, which no assembly prices. Keeping "(E)FC-1" apart
+  changes what identifies a unit in the takeoff and the reconcile, which is
+  AS-27's owner decision; it is left there.
+- **A split system keyed by its manufacturer.** 12_MT's SPLIT SYSTEM HEAT
+  PUMP SCHEDULE keys each row "DAIKIN"; its marks are in two PLAN CODE
+  columns, the outdoor unit's (HP-1, HP-2) and the indoor unit's (FC-1A to
+  FC-1C, FC-4A, FC-4B). The compile takes a MARK, SYMBOL, TAG or DESIGNATION
+  cell for a row's mark, and no rule reads a PLAN CODE, so the five indoor
+  and two outdoor units are no unit, and the notice cannot name a row whose
+  key is a word. Reading them means choosing which of two mark columns a row
+  is, for the takeoff and the reconcile alike; left for its own change and
+  census.
+
+**Rejected:**
+- EFC-n under a fan coil title (for 088_AZ): the compile never sees
+  "EFC-1" (it reads the MARK cell, "(E)FC-1"), so the rule changed nothing
+  and was taken out.
+
+**Tests:**
+- corpusTakeoffVol2Families.test.ts: building and floor or wing stripped, and
+  what is left alone; the ductless rows compile under FCU; FCC-n, ACCH-n and
+  HUM-A under their own titles and nowhere else; a building and floor before
+  an untitled table's CU-1; a temporary unit stays no unit.
+- schedulePlanReconcile.test.ts: one row per unit, none for an untitled copy.
+- assemblies/leftOut.test.ts: readsAsMark reads up to three location tokens
+  and a floor against the letters, and numbers, sizes, ratings and HUM-A stay
+  no mark to it; 036_LA's rows are named when the compile reads none.
+- Mutations: the tests fail for each of these fourteen changes: no building
+  and floor; a floor of three digits; a wing of two letters; a lettered
+  building before a floor; both strips one after the other; no ACCH; ACCH
+  read everywhere; the notice without location tokens; the notice with two
+  tokens at most; no FCC; FCC read everywhere; no HUM with a letter; HUM with
+  a letter read everywhere; the notice without a floor against the letters.
+- **Guard:** web typecheck clean, lint 0 errors; the web suite's 3,901 tests
+  fail only AS-1's three base-red tests. MCP: typecheck clean; `test:bas`
+  133/133; the suite (every file but the WP1 test, emulated above) 377 of 380
+  pass and 1 skips; its two failures are as on AS-63 (AS-1's conformance
+  test, and navfac's slow `sweep_schedule_row` test).

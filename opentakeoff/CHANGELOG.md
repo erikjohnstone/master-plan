@@ -1,5 +1,25 @@
 # Changelog
 
+- **Takeoff: a mark behind a building and its floor or wing, and fan coils,
+  chillers and humidifiers their own schedule's title vouches for, are
+  read.** A family's mark rule read a mark behind one building token
+  (1-VAV-1), so 036_LA's DUCTLESS SPLIT SYSTEM SCHEDULE, which prints each of
+  its 34 units behind a building and a floor or wing (01-1-DAC-1,
+  05-B-DAC-1), gave no unit at all, and the notice of rows read as no unit
+  named only the five with a wing letter. The rule now also reads a mark
+  behind a numbered or coded building followed by its floor (a number of at
+  most two digits) or wing (one letter), when what follows is a short
+  equipment mark; a lettered first token is a unit's own mark, never a
+  building (AHU-1-SF-1 keeps its reading). Under the family's own title only,
+  FCC-n is a fan coil (028_TX's FCC1-1 beside FCU1-3), ACCH-n an air-cooled
+  chiller (087_US's only chiller) and HUM with one letter a humidifier
+  (061_IA's HUM-A). The notice reads a mark behind up to three location
+  tokens, or with a floor number printed against its letters (FCC1-1), so a
+  mark the rule cannot read is named, not dropped. On all 97 eligible dev
+  documents (held-out excluded) the takeoff counts 48 more units on 4 of them
+  (036_LA 34, 028_TX 12, 087_US 1, 061_IA 1) and every unit it counted before
+  is unchanged; the schedule↔plan reconciliation gains one row per unit
+  (`corpusTakeoff.mjs`, `leftOut.ts`, ASSEMBLIES_BUG_CATALOGUE AS-64).
 - **Takeoff: marks a schedule's own title vouches for, and a family's units
   in another family's schedule, are read.** A family's mark rule reads the
   same in every table, so letters another family owns elsewhere could not

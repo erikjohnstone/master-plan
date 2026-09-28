@@ -37,6 +37,24 @@ test("a mark reads as one as printed, or after a building or area token; a word,
   }
 });
 
+test("a mark reads as one after a building and its floor or wing, up to three location tokens, or with its floor against its letters (036_LA, 028_TX; AS-64)", () => {
+  // 036_LA's 34 ductless split rows (01-1-DAC-1) were named only where a
+  // wing letter followed the building (05-B-DAC-1), and 028_TX's FCC1-1 not
+  // at all: those rows were left out without a word.
+  for (const k of ["01-1-DAC-1", "05-B-DAC-1", "136-1-DAC-1", "07-A-CU-1", "12-3-4-AHU-1", "FCC1-1", "FCC2-10", "VAV2-14"]) assert.equal(readsAsMark(k), true, k);
+  // Numbers, sizes and ratings stay no mark however their parts are joined,
+  // and a floor needs a unit number after it.
+  for (const k of ["460-3-60", "1-1/2", "12-3-4", "2-12", "1-2-3-A", "10-20-30-FT", "R410A-1", "SEER16-X", "HUM-A"]) assert.equal(readsAsMark(k), false, k);
+});
+
+test("036_LA's ductless split rows are named when the compile reads none of them (AS-64)", () => {
+  const keys = ["01-1-DAC-1", "05-B-DAC-1", "136-1-DAC-1"];
+  const graph = { tables: [table("s.pdf#63", "DUCTLESS SPLIT SYSTEM SCHEDULE", keys)] };
+  assert.deepEqual(scheduleRowsLeftOut({ categories: {} }, graph), [
+    { sheet: "s.pdf#63", title: "DUCTLESS SPLIT SYSTEM SCHEDULE", families: ["FCU"], rows: 3, marks: keys },
+  ]);
+});
+
 test("a family schedule's rows no compiled row carries are named, with the rows that carry a mark (05_MO)", () => {
   const graph = { tables: [table("s.pdf#40", "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE", ["ATU-6-1", "1-TU-28-1", "1-TU-28-2", "MODEL"])] };
   const compiled = { categories: { VAV: { items: [item("ATU-6-1", "s.pdf#40", 100)] } } };

@@ -233,6 +233,52 @@ describe("AS-62 building tokens, building letters, qualified exhaust fans, TU te
   });
 });
 
+// AS-64: a numbered or coded building followed by its floor or wing before
+// the family's mark (036_LA's DUCTLESS SPLIT SYSTEM SCHEDULE prints all 34 of
+// its units so: 01-1-DAC-1, 05-B-DAC-1, 136-1-DAC-1), and marks a family's
+// own title vouches for: an air-cooled chiller's ACCH-1 (087_US), fan coils
+// FCC1-1 beside FCU1-3 (028_TX) and a humidifier HUM-A (061_IA).
+describe("AS-64 a building and its floor or wing before the mark; ACCH, FCC and HUM-A under their titles", () => {
+  it("strips a building and its floor or wing when the rest is a short equipment mark", () => {
+    for (const [mark, core] of [["01-1-DAC-1", "DAC-1"], ["05-B-DAC-1", "DAC-1"], ["136-1-DAC-1", "DAC-1"], ["07-A-CU-1", "CU-1"], ["A1-2-AHU-1", "AHU-1"], ["2-12-VAV-3", "VAV-3"]]) {
+      assert.equal(markCoreForKeyRe(mark), core, mark);
+    }
+    // A unit's own mark before another's is no building (AHU-1-SF-1,
+    // CH-1-CHWP-1); three location tokens, a floor of three digits, a wing of
+    // two letters, a temporary unit and numbers are left alone, as is AS-62's
+    // building token beside a building letter. One prefix is read at a time:
+    // an area token, then a building and floor, is left alone.
+    for (const mark of ["AHU-1-SF-1", "CH-1-CHWP-1", "12-3-4-AHU-1", "1-100-AHU-1", "1-AB-AHU-1", "01-1-AC-36TEMP", "460-3-60", "1-2-3", "1-FC-B-4", "WHSE-AB1-2-AHU-1"]) {
+      assert.equal(markCoreForKeyRe(mark), mark, mark);
+    }
+  });
+
+  it("compiles those rows under their schedule's family, each mark as printed, and ACCH, FCC and HUM-A only under their titles", () => {
+    const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
+    const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });
+    const cats = compileHvacTakeoff(null, { tables: [
+      table("m.pdf#63", "DUCTLESS SPLIT SYSTEM SCHEDULE", ["01-1-DAC-1", "05-B-DAC-1", "136-1-DAC-1", "01-1-DAC-36TEMP"]),
+      table("m.pdf#2", "AIR-COOLED CHILLER SCHEDULE", ["ACCH-1"]),
+      table("m.pdf#3", "CHILLED WATER FAN COIL UNIT SCHEDULE", ["FCC1-1", "FCU1-3", "FCC2-10"]),
+      table("m.pdf#4", "HUMIDIFIER SCHEDULE", ["HUM-A"]),
+      table("m.pdf#9", "", ["ACCH-2", "02-1-DAC-1", "03-1-CU-1", "FCC1-5", "HUM-B"]),
+      table("m.pdf#11", "EQUIPMENT SCHEDULE", ["ACCH-4", "04-1-DAC-1", "FCC1-6", "HUM-C"]),
+      table("m.pdf#12", "EXHAUST FAN SCHEDULE", ["FCC1-7", "HUM-D"]),
+    ] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    const tags = (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+    assert.deepEqual(tags("FCU"), ["01-1-DAC-1", "05-B-DAC-1", "136-1-DAC-1", "FCC1-1", "FCC2-10", "FCU1-3"]);
+    assert.deepEqual(tags("AIR_COOLED_CHILLER"), ["ACCH-1"]);
+    assert.deepEqual(tags("HUMIDIFIER"), ["HUM-A"]);
+    // An untitled table reads a building and floor before the family's own
+    // untitled rule, as it reads AS-62's building token (1-CU-28).
+    assert.deepEqual(tags("CONDENSING_UNIT"), ["03-1-CU-1"]);
+    // Nowhere else: DAC-*, ACCH-*, FCC-* and HUM with a letter are read only
+    // under their own titles, and a temporary unit stays no unit.
+    const all = Object.values(cats).flatMap((c) => c.items.map((i) => i.tag));
+    for (const t of ["ACCH-2", "ACCH-4", "02-1-DAC-1", "04-1-DAC-1", "01-1-DAC-36TEMP", "FCC1-5", "FCC1-6", "FCC1-7", "HUM-B", "HUM-C", "HUM-D"]) assert.equal(all.includes(t), false, t);
+  });
+});
+
 describe("AS-63 marks a schedule's title vouches for, and units listed in another family's schedule", () => {
   const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
   const table = (sheet: string, title: string, keys: string[]) => ({ kind: "equipment", sheet, title: { text: title }, rows: keys.map(row) });

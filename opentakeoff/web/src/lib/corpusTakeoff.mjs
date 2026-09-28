@@ -370,9 +370,12 @@ const SHORT_EQUIP_MARK_RE = /^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,
 /**
  * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1), including
  * a numbered or coded building or area (1-VAV-1, 40-AHU-2, W05-TU-01,
- * B950-AHU-3001: 05_MO, 041_IL, 031_MO and 067_CA print their marks so, AS-62).
- * Strip one leading TOKEN- when the remainder still looks like an equipment
- * mark so family keyRe stays set-agnostic across multi-building schedules.
+ * B950-AHU-3001: 05_MO, 041_IL, 031_MO and 067_CA print their marks so, AS-62),
+ * and a numbered or coded building followed by its floor or wing (01-1-DAC-1,
+ * 05-B-DAC-1, 07-A-CU-1: 036_LA prints its marks so, AS-64).
+ * Strip the leading TOKEN- (or building and floor) when the remainder still
+ * looks like an equipment mark so family keyRe stays set-agnostic across
+ * multi-building schedules.
  */
 export function markCoreForKeyRe(tag) {
   const canon = String(tag || "").toUpperCase().replace(/\s+/g, "");
@@ -381,7 +384,13 @@ export function markCoreForKeyRe(tag) {
   // The token is letters, a number of at most three digits, or a short code
   // of letters and digits. Remainder must start with a ≥2-letter family
   // token so steam-trap ST-H-3 is NOT stripped to H-3 (false humidifier).
-  const stripped = canon.replace(/^(?:[A-Z]{2,8}|\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  // A numbered or coded building may be followed by its floor (a number of
+  // at most two digits) or wing (one letter): 01-1-DAC-1 → DAC-1,
+  // 05-B-DAC-1 → DAC-1 (AS-64). A lettered token is never a building there,
+  // so a unit's own mark (AHU-1-SF-1) keeps the reading it had.
+  const building = canon.replace(/^(?:[A-Z]{2,8}|\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  const stripped = building !== canon ? building
+    : canon.replace(/^(?:\d{1,3}|[A-Z]{1,3}\d{1,4}[A-Z]?)-(?:\d{1,2}|[A-Z])-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
   if (stripped === canon) return canon;
   // Only accept building-prefix strip when the remainder is a short equip mark
   // (ET-1, SH1, CC-15-6, S-A-1) — not catalog models (TPLFY-EP15NEM4 → EP15NEM4
@@ -1096,8 +1105,10 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
     // Under a split or ductless title: DAC-* ductless units, SS-* split
-    // systems (03_FL, 22_GA, 040_IL; AS-63).
-    titledKeyRe: /^(?:DAC|SS)[\s\-]?\d/i,
+    // systems (03_FL, 22_GA, 040_IL; AS-63). Under a fan coil title, FCC-*
+    // fan coils (028_TX's CHILLED WATER FAN COIL UNIT SCHEDULE lists FCC1-1
+    // beside FCU1-3; AS-64).
+    titledKeyRe: /^(?:DAC|SS|FCC)[\s\-]?\d/i,
     // A split system air handler schedule's indoor FCU-* (22_GA's
     // "FCU-1/HP-1" rows; its HP-* are HEAT_PUMP's).
     host: {
@@ -1199,8 +1210,9 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /HEAT RECOVERY/i,
     // CH-/PAC- only — ACC-* is air-cooled condenser (CONDENSING_UNIT blankKeyRe).
     keyRe: /^(?:CH|PAC)[\s\-]/i,
-    // Under an AIR COOLED CHILLER title, ACC-* is the chiller (03_FL; AS-63).
-    titledKeyRe: /^ACC[\s\-]?\d/i,
+    // Under an AIR COOLED CHILLER title, ACC-* and ACCH-* are the chiller
+    // (03_FL, AS-63; 087_US, AS-64).
+    titledKeyRe: /^ACCH?[\s\-]?\d/i,
   },
   HEAT_RECOVERY_CHILLER: {
     titleRe: /HEAT RECOVERY CHILLER/i,
@@ -1335,8 +1347,10 @@ export const HVAC_FAMILY_SPECS = {
     // "SHT. NO." never match. Bare H-* still requires hyphen (H-A-3) so
     // HC-/HP-/HWC-* coils are not stolen. WHSE-SH1 works via markCoreForKeyRe.
     keyRe: /^(?:(?:HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
-    // HF-* under a humidifier title (094_FL; AS-63).
-    titledKeyRe: /^HF[\s\-]?\d/i,
+    // HF-* under a humidifier title (094_FL; AS-63), and HUM with one
+    // letter for its number (061_IA's HUM-A; AS-64): the digit keyRe asks for
+    // keeps sheet headers out, which a humidifier title already does.
+    titledKeyRe: /^(?:HF[\s\-]?\d|HUM[\s\-]?[A-Z]$)/i,
     altTitleRe: /ELECTRIC\s+HUMIDIFI?ER/i,
     altKeyRe: /^(?:(?:EH|HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
   },

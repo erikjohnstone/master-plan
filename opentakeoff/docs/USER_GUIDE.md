@@ -598,17 +598,22 @@ number, page and file) in red above the settings, with the share of it the
 pictures cover, and the PDF section lists
 them after the totals. Check each sheet: if it schedules equipment, the estimate
 is missing that equipment. The takeoff reads a family's schedule rows by their
-marks, a mark under a building number or code (1-VAV-1, 40-AHU-2, W05-TU-01)
-or with a building letter (FC-A-2) included, and a mark the schedule's own
-title vouches for (E-A-1 under a return fan title, HF-4 under a humidifier
-title). It reads a family's units in another family's schedule that lists
-them (DOAS-1 in an air handler index), and each unit once, from the listing
-that prints its mark. So a row whose mark it still does not read as that
-family's (a temporary unit's 1-AC-36TEMP, or 05-B-DAC-1 behind a building
-number and a wing letter) is no unit either: the
-panel names each such schedule in red (its title, sheet, page and file, the
-family, and every mark left out), and the PDF section lists them after the
-totals. Those units are not in the estimate: count them by hand. Below the exceptions sit a table per family (units, typicals,
+marks, a mark under a building number or code (1-VAV-1, 40-AHU-2, W05-TU-01),
+under a building and its floor or wing (01-1-DAC-1, 05-B-DAC-1) or with a
+building letter (FC-A-2) included, and a mark the schedule's own title
+vouches for (E-A-1 under a return fan title, HF-4 under a humidifier title,
+FCC1-1 under a fan coil title, ACCH-1 under an air-cooled chiller title). It
+reads a family's units in
+another family's schedule that lists them (DOAS-1 in an air handler index),
+and each unit once, from the listing that prints its mark. So a row whose
+mark it still does not read as that family's (a temporary unit's
+1-AC-36TEMP, or 016-AC-01-16-12 with a room code of its own hyphen) is no
+unit either, and nor is an existing unit printed "(E)FC-1" in one schedule
+while a new FC-1 is printed in another: the takeoff drops the "(E)" and
+reads the two as one. The panel names each such schedule in red (its title,
+sheet, page and file, the family, and every mark left out), and the PDF
+section lists them after the totals. Those units are not in the estimate:
+count them by hand. Below the exceptions sit a table per family (units, typicals,
 unresolved, without a typical, lines) and one row per unit. Click a unit, or its
 **Details** button, for its options, derived facts (for example, a 100% outdoor-air unit that takes the DOAS
 typical, or the terminal count behind an air handler's typical), and lines.

@@ -46,14 +46,20 @@ interface TableLike {
 const markId = (s: unknown): string => String(normalizeEquipMark(String(s ?? ""))).toUpperCase().replace(/[^A-Z0-9]/g, "");
 
 /** A row key that reads as an equipment tag (equiptags.ts isEquipTag), as
- * printed or after one leading building or area token ("1-VAV-1",
- * "40-AHU-2", "W05-TU-01"), for any part of a "/" pair ("SS-1/SSCU-1"). A
+ * printed, after up to three leading building, floor or area tokens
+ * ("1-VAV-1", "40-AHU-2", "W05-TU-01", 036_LA's "01-1-DAC-1" and
+ * "05-B-DAC-1"), or with a floor number printed against its letters
+ * (028_TX's "FCC1-1"; AS-64), for any part of a "/" pair ("SS-1/SSCU-1"). A
  * word, a phrase or a lone letter is not one: an abbreviations list, or a
  * transposed schedule's column of attribute names, read as a table under a
- * family's title has rows, but no unit's mark among them. */
+ * family's title has rows, but no unit's mark among them. The notice reads
+ * more shapes than the compile's rule (markCoreForKeyRe), so a mark the rule
+ * cannot read is named, not dropped. */
 export function readsAsMark(key: string): boolean {
   return String(key ?? "").split("/").map((p) => p.trim())
-    .some((p) => isEquipTag(p) || isEquipTag(p.replace(/^[A-Z0-9]{1,6}[-.](?=[A-Z])/i, "")));
+    .some((p) => isEquipTag(p) || isEquipTag(p.replace(/^[A-Z0-9]{1,6}[-.](?=[A-Z])/i, ""))
+      || isEquipTag(p.replace(/^(?:[A-Z0-9]{1,6}[-.]){1,3}(?=[A-Z])/i, ""))
+      || isEquipTag(p.replace(/^([A-Z]{2,8})(\d{1,3})(?=[-.]\d)/i, "$1-$2")));
 }
 
 /** The families a schedule's title names, as the compile reads titles. */

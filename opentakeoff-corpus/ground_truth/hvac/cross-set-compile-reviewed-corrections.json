@@ -121,6 +121,25 @@
       "categories": {
         "VAV": 186
       }
+    },
+    {
+      "set_id": "087_US_Contra_Costa_College_Chiller_Replacement",
+      "source_pdf": "bulk/HVAC_BAS_Plan_Sets_Vol2/087_US_Contra_Costa_College_Chiller_Replacement.pdf",
+      "source_sha256": "f47838bdff2ba4c329ccdb35731219eea37e8831a29b1d9121e692d6a7268c39",
+      "page": 1,
+      "review": {
+        "change": "AS-64",
+        "method": "Visual review of the rendered schedule (PyMuPDF crop of the printed table), cross-checked with the sheet graph's extracted row. The frozen key predates the mark rule that reads ACCH-n under an air-cooled chiller's own title."
+      },
+      "evidence": [
+        "AIR-COOLED CHILLER SCHEDULE prints one row: TAG ACCH-1, CARRIER 30RB120, location GRADE, service (E) AHU'S, 120.1 nominal tons, 287 GPM entering at 54 F and leaving at 44 F, 460/3. It is the chiller the project replaces. The key's [ZERO] note (no extractable HVAC schedule tables) predates the ACCH rule (AS-64)."
+      ],
+      "totals": {
+        "items": 1
+      },
+      "categories": {
+        "AIR_COOLED_CHILLER": 1
+      }
     }
   ]
 }
