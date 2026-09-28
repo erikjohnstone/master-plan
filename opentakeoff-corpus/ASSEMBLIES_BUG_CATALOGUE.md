@@ -5228,3 +5228,65 @@ document prints that, and it now asserts the maximum, with a second plain airflo
   all 380.
 - **UI proof** (the dev server started on the change): 053_VA (16 checks), 069_ID (17) and 031_MO (16) are
   byte-identical to apply_assemblies over MCP with their CSV sets.
+
+## AS-74 — a fan coil's two coil blocks printed under no coil name were read as neither (metamorphic sweep, round 5: titles) (FIXED — guarded by the evals)
+
+**Found:** 2026-09-28, by a fifth metamorphic sweep over the same fresh snapshots (the 72 of the 98 eligible documents
+with units; held-out excluded; scratch meta5/metamorphic5.mjs). Each table's title was replaced by another document's
+title for the same family that a probe row reads alike (the same attributes, values and rules under both: airflows,
+water temperatures and flow, capacities, electric heat, a motor, a size, V/PH/HZ), and each project normalized again.
+4,738 title moves (2,050 runs) left 11 kinds of change:
+- **The variant's own doing (7):** a title that says more than the one it replaces, beyond what the probe reads:
+  "COOLING ONLY" makes a fan coil's heating none (88 values on 12 documents); "GAS FIRED" contradicts 16_NV's outdoor
+  air units' printed no-heat block; "SPLIT SYSTEM" gives 030_NY's CRAC condensing units' airflow to an indoor half;
+  and 061_IA's AHU-A, renamed alone, loses its "(CONT.)" continuation's supply fans, final filter and 480 V (a
+  continuation joins the table its title repeats).
+- **A miss as printed (4 kinds, all 14_OR's):** under "HOT WATER FAN COIL UNIT SCHEDULE", FC-101's second coil read
+  as hot water, and its "TC (MBH)" as a heating capacity. Under its own title, FAN COIL UNITS, none of its coil data
+  was read: the table (sheet 2, checked on renders) prints a cooling coil block (TC, SC, EAT, LAT, EWT, LWT, FLOW,
+  WPD, ROWS) and a heating coil block (TH and the same columns) with the cells above both left blank, so the compile
+  marks the second block's repeated headers " 2". The normalizer knew neither TC, SC and TH as capacities nor either
+  block's water: its physics rule (EWT above LWT, a heating coil) reads a row's only EWT and LWT, and these rows print
+  two of each. 14_OR's 18 fan coils (FC-101 to FC-210; its key covers only its SPLIT SYSTEM HEAT PUMPS table) read no
+  cooling or heating type, flow, temperature, capacity, pressure drop or rows, so their fcu typical's water valves,
+  coil commands and plant requests, their coil hook-ups, and the DX, electric heat and heat stage lines all waited.
+
+**Fix (the shared path: `normalize.ts`, which the apply path every surface uses reads):**
+- `headerText`: TC, SC and TH before a capacity unit (MBH, BTUH) are TOTAL COOLING, SENSIBLE COOLING and TOTAL
+  HEATING; before anything else they stay (a lone TC, "TH (IN)", SCCR).
+- `blockWater`: physicsWater block by block. Where a row prints its coil headers twice or more (twins: "EWT (F)" and
+  "EWT (F) 2", the compile's repeat marks), each block's own EWT and LWT give that block's water columns their service
+  (entering above leaving: heating hot water; below: chilled water). A block printing no EWT or LWT, equal ones, or two
+  entering temperatures that disagree says nothing; a column printed once is no block's; a column's own medium word
+  rules; a unit that makes water or an exchanger is never read so, as physicsWater never reads one.
+
+**Measured:**
+- **The 98 documents as printed** (an A/B on the fresh snapshots against da93511): only 14_OR changes. Its 18 fan
+  coils read 14 attributes each, 252 values, each the print (checked on renders of sheet 2: FC-101's 21.5 MBH, 46/60
+  °F, 3.4 GPM, 0.48 ft and 6 rows, then 29.6 MBH, 130/100 °F, 1.9 GPM, 0.17 ft and 2 rows; FC-109's 36.8 MBH and 8 GPM;
+  FC-201's 14.2; FC-204's 36.3 and 57.2 MBH). No record changes (each applies fcu, as before); 14_OR's lines go
+  1,702 → 1,648: on each fan coil the chilled- and hot-water valves, the cooling and heating commands and the four
+  plant and reset requests are decided, where they waited on cooling_type and heating_type; the DX interface,
+  electric heat and heat stage lines go (decided no); and the coil hook-ups wait only on the kit and connection sizes
+  the schedule does not print.
+- **The sweep again:** 11 kinds → 7, 14_OR's four gone. Round 4 on the change adds kinds that are transplants into
+  14_OR's newly read twin columns (renaming one twin orphans the other's " 2", which no drafter prints), 14_OR's
+  block-bound bare headers moved alone into other tables, and batch order (072_CA's CIRCULATING WATER LWT, moved alone,
+  loses its value on both sides alike).
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C
+  dev (227/244) and the binding, question and reading evals are identical to AS-73's but timings; 14_OR's key covers
+  only its SPLIT SYSTEM HEAT PUMPS table. The unseen audit replays as recorded: "model calls: replayed 61, live 0,
+  not recorded 0, failed 0"; "applied 56: audited 56 (right 56, wrong 0, unaudited 0); new 0; gone 0".
+- **Held-out** (aggregates only): GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472, 1 wrong,
+  2 invented; GATE 5 21/91; GATE C 35/91. Each is as with AS-73.
+
+**Tests:** normalize.test.ts (AS-74): FC-101's row as printed, both coils read; TC, SC and TH before a unit only (a
+lone TC, "TH (IN)" and SCCR stay); TC under a HOT WATER title is still total cooling; a block whose EWT and LWT are
+equal, or one printing two entering temperatures that disagree, says nothing; one block reads as before
+(physicsWater); a column printed once is no block's; a chiller reads no block by physics. 11 mutations, one per rule
+or guard: each fails the test.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,933 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite (every file but the WP1 test) 378 of 380
+  pass and 1 skips, its one failure the AS-1 conformance test.
+- **UI proof** (the dev server started on the change): 14_OR (18 checks; 97 records, 1,648 lines) and 069_ID (17)
+  are byte-identical to apply_assemblies over MCP with their CSV sets.

@@ -1,5 +1,18 @@
 # Changelog
 
+- **Assemblies: a fan coil's two coil blocks printed under no coil name.**
+  14_OR's FAN COIL UNITS schedule prints a cooling coil block and a heating
+  coil block with blank cells above both, headed "TC (MBH)" and "TH
+  (MBH)", so its 18 fan coils read neither coil: no cooling or heating type,
+  flow, temperature, capacity, pressure drop or rows, and their water
+  valves, coil commands and hook-ups waited. TC, SC and TH before a
+  capacity unit now read as total cooling, sensible cooling and total
+  heating, and where a row prints its coil headers twice, each block's own
+  entering and leaving water temperatures say which water it is (entering
+  above leaving: heating hot water), as they already did for a row's only
+  coil. Only 14_OR changes: its fan coils read their coils as printed, and
+  their valves and coil commands are decided (`normalize.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-74).
 - **Assemblies: another drafter's word for a column the schedule already
   prints.** A sweep that put each header and cell the corpus reads as an
   attribute in place of another document's column for the same attribute

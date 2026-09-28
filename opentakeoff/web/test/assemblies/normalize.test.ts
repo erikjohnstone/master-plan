@@ -1630,3 +1630,45 @@ test("metamorphic sweep, round 4: a terminal's one plain airflow beside its mini
   assert.equal(fan.vfd, undefined);
   assert.equal(fan.control, "NO");
 });
+
+test("a fan coil's two coil blocks printed under no coil name: TC and TH, and each block's own EWT and LWT, say which is which (AS-74)", () => {
+  // 14_OR's FAN COIL UNITS (sheet 2): the cells above both coil blocks are
+  // blank, so the compile marks the second block's repeated headers " 2".
+  const fc = {
+    CFM: "1000", "TC (MBH)": "21.5", "SC (MBH)": "15.9", "EAT DB (F)": "75", "LAT DB (F)": "57.8", "EWT (F)": "46", "LWT (F)": "60",
+    "FLOW (GPM)": "3.4", "WPD (FT. WC)": "0.48", ROWS: "6", "TH (MBH)": "29.6", "EAT DB (F) 2": "65", "LAT DB (F) 2": "95.1",
+    "EWT (F) 2": "130", "LWT (F) 2": "100", "FLOW (GPM) 2": "1.9", "WPD (FT. WC) 2": "0.17", "ROWS 2": "2", "ELECTRICAL V/PH": "208/1",
+  };
+  const unit = (cells: Record<string, string>, title = "FAN COIL UNITS", family = "FCU") => values(normalizeCompileItem(row("FC-101", title, cells), family));
+  const v = unit(fc);
+  assert.deepEqual([v.cooling_type, v.chw_mbh, v.chw_ewt_f, v.chw_lwt_f, v.chw_gpm, v.chw_wpd_ft, v.chw_rows], ["chw", 21.5, 46, 60, 3.4, 0.48, 6]);
+  assert.deepEqual([v.heating_type, v.hw_mbh, v.hw_ewt_f, v.hw_lwt_f, v.hw_gpm, v.hw_wpd_ft, v.hw_rows], ["hw", 29.6, 130, 100, 1.9, 0.17, 2]);
+  assert.equal(headerText("TC (MBH)"), "TOTAL COOLING (MBH)");
+  assert.equal(headerText("SC (BTUH)"), "SENSIBLE COOLING (BTUH)");
+  assert.equal(headerText("TH MBH"), "TOTAL HEATING MBH");
+  // Under a title naming hot water, TC is still total cooling (round 5's
+  // "HOT WATER FAN COIL UNIT SCHEDULE" read it as the heating capacity).
+  const titled = unit(fc, "HOT WATER FAN COIL UNIT SCHEDULE");
+  assert.equal(titled.heating_mbh, undefined);
+  assert.equal(titled.chw_mbh, 21.5);
+  // A block whose EWT and LWT are equal says nothing; the other still reads.
+  const flat = unit({ ...fc, "EWT (F) 2": "100", "LWT (F) 2": "100" });
+  assert.deepEqual([flat.chw_gpm, flat.hw_gpm, flat.heating_type], [3.4, undefined, undefined]);
+  // A block printing two entering temperatures that disagree says nothing.
+  assert.equal(unit({ ...fc, "ENTERING WATER TEMP (F)": "130", "ENTERING WATER TEMP (F) 2": "46" }).cooling_type, undefined);
+  // One block: the row's only EWT and LWT, as before (physicsWater).
+  const one = unit({ CFM: "800", "EWT (F)": "44", "LWT (F)": "56", "FLOW (GPM)": "2.2" });
+  assert.deepEqual([one.cooling_type, one.chw_gpm], ["chw", 2.2]);
+  // A column printed once is no block's; a header's own medium word rules.
+  const once = unit({ ...fc, "CONN (IN)": "3/4" });
+  assert.deepEqual([once.chw_conn_in, once.hw_conn_in], [undefined, undefined]);
+  const named = unit({ ...fc, "FLOW (GPM) 2": "1.9", "HW FLOW (GPM)": "2.5", "EWT (F) 2": "130" });
+  assert.equal(named.hw_gpm, undefined, "two hot water flows disagree");
+  // TC, SC and TH stand for a capacity only before its unit.
+  assert.equal(headerText("TC"), "TC");
+  assert.equal(headerText("TH (IN)"), "TH (IN)");
+  assert.equal(headerText("SCCR"), "SCCR");
+  // A unit that makes water reads no coil block by physics (a chiller's
+  // evaporator enters warmer than it leaves).
+  assert.equal(unit({ "EWT (F)": "56", "LWT (F)": "44", "EWT (F) 2": "56", "LWT (F) 2": "44" }, "AIR-COOLED CHILLER SCHEDULE", "AIR_COOLED_CHILLER").chw_ewt_f, 56);
+});

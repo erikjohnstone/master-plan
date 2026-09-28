@@ -150,6 +150,11 @@ export function headerText(header: string): string {
   // Mode abbreviations ("CLNG CAP. MBH", "HTG. CFM") and a total
   // capacity's TMBH ("COOLING MIN. TMBH").
   s = s.replace(/\bCLN?G\b/g, "COOLING").replace(/\bHTN?G\b/g, "HEATING").replace(/\bTMBH\b/g, "TOTAL MBH");
+  // A coil's capacity by its initials before a capacity unit: TC total
+  // cooling, SC sensible cooling, TH total heating (14_OR's fan coils print
+  // "TC (MBH)", "SC (MBH)" and "TH (MBH)" over two coil blocks).
+  s = s.replace(/\bTC\b(?=\s*\(?\s*(?:MBH|BTUH)\b)/g, "TOTAL COOLING").replace(/\bSC\b(?=\s*\(?\s*(?:MBH|BTUH)\b)/g, "SENSIBLE COOLING")
+    .replace(/\bTH\b(?=\s*\(?\s*(?:MBH|BTUH)\b)/g, "TOTAL HEATING");
   // Abbreviations with one meaning in a schedule header: CAP. is capacity
   // ("TANK CAP. (GAL)", "KW CAP."), ENT. and LVG. entering and leaving, DEG F
   // the degree sign, HORSEPOWER HP (BRAKE HORSEPOWER BHP).
@@ -660,7 +665,41 @@ function waterService(col: Column, ctx: RowContext): Service {
   if (hw && !chw) return "hw";
   if (chw && !hw) return "chw";
   if (hw && chw) return null;
-  return ctx.defaultWater;
+  return ctx.blockWater.get(twinIndex(col, ctx.cols)) ?? ctx.defaultWater;
+}
+
+/** A column's block among a row's twin coil blocks, when the table prints a
+ * header more than once (the compile marks each repeat " 2", " 3": "EWT
+ * (F)", "EWT (F) 2"): the repeat's number, 1 for a header repeated after it,
+ * 0 for a header printed once. */
+function twinIndex(col: Column, cols: Column[]): number {
+  const m = col.header.match(/^(.*\S)\s+(\d)$/);
+  if (m && Number(m[2]) >= 2 && cols.some((c) => c.header === m[1])) return Number(m[2]);
+  return cols.some((c) => c.header === `${col.header} 2`) ? 1 : 0;
+}
+
+/** physicsWater block by block: a row printing two or more coil blocks with
+ * no medium word, their headers twins, gives each block the service its own
+ * EWT and LWT say (14_OR's fan coils: EWT 46 / LWT 60, chilled water, and
+ * as "EWT (F) 2" / "LWT (F) 2", 130 / 100, heating hot water). */
+function blockWater(cols: Column[], family: string): Map<number, Service> {
+  const out = new Map<number, Service>();
+  if (WATER_PRODUCERS.has(family) || family === "HEAT_EXCHANGER") return out;
+  const plain = (q: Quantity) => cols.filter((c) => quantitiesOf(c.h).includes(q) && !W.hw.test(c.h) && !W.chw.test(c.h) && !W.condenser.test(c.h) && !W.primary.test(c.h) && !W.secondary.test(c.h));
+  const byBlock = (xs: Column[]) => {
+    const m = new Map<number, Column[]>();
+    for (const c of xs) { const k = twinIndex(c, cols); if (k) m.set(k, [...(m.get(k) ?? []), c]); }
+    return m;
+  };
+  const e = byBlock(plain("ewt")), l = byBlock(plain("lwt"));
+  for (const [k, es] of e) {
+    const ls = l.get(k) ?? [];
+    if (es.length !== 1 || ls.length !== 1 || !es[0].cell || !ls[0].cell) continue;
+    const ev = parseNumberCell(es[0].cell.text), lv = parseNumberCell(ls[0].cell.text);
+    if (!ev || !lv || ev.n === lv.n) continue;
+    out.set(k, ev.n > lv.n ? "hw" : "chw");
+  }
+  return out;
 }
 
 /** A heat exchanger's HOT SIDE or COLD SIDE as its primary (source) or
@@ -702,6 +741,8 @@ interface RowContext {
   cols: Column[];
   /** The service of an unqualified water column, when the table decides it. */
   defaultWater: Service;
+  /** Per twin coil block (twinIndex), the service its own EWT and LWT say. */
+  blockWater: Map<number, Service>;
   /** The table prints a water flow or water temperature column. */
   hasWaterSide: boolean;
   /** Per header, the codes its cited note defines. */
@@ -2494,7 +2535,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
     if (parseElectricalCell(tuple)?.volts) cols.push({ header: group[0].header, h: "ELECTRICAL V/PH/HZ", cell: { text: tuple, bbox: group[0].cell!.bbox }, order: group[0].order });
   }
   const ctx: RowContext = {
-    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null, codes: table?.codes ?? {}, legend: table?.legend ?? {}, paired, half,
+    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null, blockWater: blockWater(cols, family), codes: table?.codes ?? {}, legend: table?.legend ?? {}, paired, half,
     indoorColumns: all.some((c) => INDOOR_WORDS.test(c.h)),
     hasWaterSide: cols.some((c) => quantitiesOf(c.h).some((q) => q === "waterflow" || q === "ewt" || q === "lwt" || q === "ewt_lwt")),
   };
