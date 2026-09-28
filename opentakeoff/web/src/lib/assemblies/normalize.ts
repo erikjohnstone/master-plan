@@ -378,6 +378,10 @@ export type Quantity =
   | "reheat_kind" | "bas_protocol" | "oa_pct" | "motor_type" | "space" | "floors" | "plates"
   | "heat_kind" | "description" | "unit_size" | "poles" | "heat_watts" | "interlock" | "disconnect";
 
+/** A terminal's heating mode in a header: HEAT, HEATING, REHEAT (053_VA's
+ * AIRFLOW REHEAT beside AIRFLOW MIN), or a dual-duct box's HOT deck. */
+const TERMINAL_HEAT = /\b(?:RE-?)?HEAT(?:ING)?\b|\bHOT\b/;
+
 /** A header naming the parts of an electrical cell: V/PH, VOLTS/ PH /HZ,
  * V/HZ/PH, V/H/P, VOLT-PH-CY, VOLTAGE-PHASE (headerText has read Ø as PH). */
 const ELECTRICAL_TUPLE = /\b(?:V|VOLTS?|VOLTAGE)\s*[/-]\s*(?:PH|PHASES?|P|HZ|HERTZ|H|CY)(?:\s*[/-]\s*(?:PH|PHASES?|P|HZ|HERTZ|H|CY))?\b(?=\s*(?:$|[)\]]|\s))/;
@@ -904,6 +908,17 @@ const ZONE_UNITS = new Set(["VAV", "FCU", "VRF_INDOOR", "UNIT_HEATER", "CABINET_
 /** "ECM - FAN MFR", "VFD (BY EC)": who furnishes a device, after it. */
 const FURNISHED_BY = /\s*(?:[-–—]\s*|\(\s*)(?:(?:FURNISHED|PROVIDED|SUPPLIED)\s+)?(?:BY\s+)?(?:(?:FAN|UNIT|EQUIPMENT|PUMP|MOTOR)\s+)?(?:MFR|MFGR?|MANUFACTURER|SUPPLIER|VENDOR|EC|MC|E\.C\.|M\.C\.|OTHERS|DIV(?:ISION)?\s*\d+)\s*\)?$/;
 
+/** The device a motor runs on, as a VFD, speed control or controller cell
+ * names it (upper case, the furnisher after it dropped): the same words
+ * mean the same under whichever of those headers prints them. A variable
+ * frequency drive, with its bypass or disconnect ("VFD/B", "VFD WITH
+ * INTEGRAL DISCONNECT", "VFD W/ BYPASS"); an EC motor, its own speed
+ * control; a starter, across the line. */
+const VFD_CELL = /^(?:VFD|VSD|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVE)(?:\s*\/\s*B|\s+(?:WITH|W\/)\s*[A-Z].*)?$/;
+const ECM_CELL = /^(?:ECM?|EC\s+MOTOR|EC\s+(?:MOTOR\s+)?CONTROLLER|ECM\s+CONTROLLER|ELECTRONICALLY\s+COMMUTATED(?:\s+MOTOR)?)$/;
+const STARTER_CELL = /^(?:(?:COMBINATION\s+|MAGNETIC\s+|MANUAL\s+|MOTOR\s+)?STARTER|MAG\.?\s+STARTER|FVNR|ACROSS\s+THE\s+LINE|FULL\s+VOLTAGE(?:\s+NON-?\s?REVERSING)?(?:\s+STARTER)?|WYE-?\s?DELTA|SOLID\s+STATE(?:\s+\(?SOFT\s+START\)?)?|SOFT\s+START(?:ER)?)$/;
+const deviceNamed = (text: string): string => { const whole = text.toUpperCase().replace(/\s+/g, " ").trim(); return whole.replace(FURNISHED_BY, "").trim() || whole; };
+
 /** A cell naming units only ("ACU-A-1", "F-B1 AND EC-B1"). */
 function tagsOnly(text: string): boolean {
   const parts = String(text ?? "").toUpperCase().trim().split(/\s*(?:,|&|\/|\bAND\b)\s*/).filter(Boolean);
@@ -1056,7 +1071,7 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         if (W.perLength.test(h)) break;
         // A coil's face airflow is the coil's, not the unit's (except a coil);
         // a terminal's reheat block prints the box's own heating airflow.
-        if (/\bCOILS?\b/.test(h) && ctx.family !== "DUCT_MOUNTED_COIL" && !(ctx.family === "VAV" && /\bHEAT(?:ING)?\b/.test(h) && !W.min.test(h))) break;
+        if (/\bCOILS?\b/.test(h) && ctx.family !== "DUCT_MOUNTED_COIL" && !(ctx.family === "VAV" && /\b(?:RE-?)?HEAT(?:ING)?\b/.test(h) && !W.min.test(h))) break;
         // A louver's airflow (an ECONOMIZER, RELIEF or MINIMUM VENTILATION
         // LOUVER block of an air handler) is the louver's rating, never the
         // unit's supply, outdoor or return airflow.
@@ -1079,24 +1094,27 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         }
         if (ctx.family === "VAV") {
           // A heating (hot deck) minimum is not the box's minimum.
-          if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h) && W.min.test(h)) break;
+          if (TERMINAL_HEAT.test(h) && W.min.test(h)) break;
           // A fan-powered box prints its fan's airflows beside its primary
           // air valve's (26_CA: FAN DATA MAXIMUM COOLING CFM 770, PRIMARY AIR
           // VALVE DATA MAXIMUM PRIMARY CFM 680): the primary airflows are the
           // box's, the fan's maximum is the fan's, and the fan's minimum is
           // neither (AS-69).
           if (W.fanWord.test(h) && !W.primary.test(h) && ctx.cols.some((c) => W.primary.test(c.h) && quantitiesOf(c.h).includes("airflow"))) {
-            if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h)) num(pick(ctx, "cfm_heat"), q, "airflow.terminal_heating");
+            if (TERMINAL_HEAT.test(h)) num(pick(ctx, "cfm_heat"), q, "airflow.terminal_heating");
             else if (!W.min.test(h)) num(pick(ctx, "fan_cfm"), q, "airflow.terminal_fan_section");
             break;
           }
-          if (/\bHEAT(?:ING)?\b|\bHOT\b/.test(h) && !W.min.test(h)) num(pick(ctx, "cfm_heat"), q, "airflow.terminal_heating");
+          if (TERMINAL_HEAT.test(h) && !W.min.test(h)) num(pick(ctx, "cfm_heat"), q, "airflow.terminal_heating");
           else if (W.min.test(h)) num(pick(ctx, "cfm_min"), q, "airflow.terminal_min");
           else if (W.max.test(h) || W.design.test(h) || /\bCOOLING\b|\bCOLD\b/.test(h)) num(pick(ctx, "cfm_max"), q, "airflow.terminal_max");
           else if (W.fanWord.test(h)) num(pick(ctx, "fan_cfm"), q, "airflow.terminal_fan");
-          // The box's one printed airflow (the table prints no other): its
-          // design maximum.
-          else if (!W.returnAir.test(h) && ctx.cols.filter((c) => quantitiesOf(c.h).includes("airflow")).length === 1) num(pick(ctx, "cfm_max"), q, "airflow.terminal_only", 1);
+          // The box's one printed airflow that is no minimum, heating, fan,
+          // outdoor air or return one (the table prints no other, or only
+          // those beside it: "AIRFLOW (CFM)" beside "MIN CFM" and "HEATING
+          // CFM"): its design maximum.
+          else if (!W.returnAir.test(h) && ctx.cols.filter((c) => quantitiesOf(c.h).includes("airflow") && !W.perLength.test(c.h) && !W.oa.test(c.h) && !/\bCOILS?\b/.test(c.h)
+            && !W.min.test(c.h) && !TERMINAL_HEAT.test(c.h) && !W.fanWord.test(c.h) && !W.returnAir.test(c.h)).length === 1) num(pick(ctx, "cfm_max"), q, "airflow.terminal_only", 1);
           break;
         }
         if (AIR_HANDLERS.has(ctx.family) || ctx.family === "ERV") {
@@ -1520,8 +1538,10 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
       }
       case "vfd": {
         if (!col.cell || !ctx.attrs.has("vfd")) break;
-        const t = text.toUpperCase().trim();
-        const v = /^(?:YES|Y|X|VFD|VARIABLE\s+FREQUENCY\s+DRIVE)$/.test(t) ? "yes" : /^(?:NO|N)$/.test(t) ? "no" : null;
+        // A VFD column's yes or no, or the device it names: a drive is yes;
+        // none, an EC motor or a starter is no.
+        const t = deviceNamed(text);
+        const v = /^(?:YES|Y|X)$/.test(t) || VFD_CELL.test(t) ? "yes" : /^(?:NO|N|NONE)$/.test(t) || ECM_CELL.test(t) || STARTER_CELL.test(t) ? "no" : null;
         if (v) found.push({ attr: "vfd", col, value: v, printed: printedText, rule: "enum.vfd", rank: 0 });
         else failed.push({ attr: "vfd", reason: `cell "${text}" is not yes or no` });
         break;
@@ -1550,8 +1570,11 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         // A cell citing notes ("1, 2, 5, 6", "SEE NOTE 3") names no control.
         if (!col.cell || citedNoteIds(text) !== null || !/[A-Z]{2}/i.test(text)) break;
         const t = text.toUpperCase().trim();
-        if (!ctx.attrs.has("control") && ctx.attrs.has("vfd") && /^(?:CONSTANT(?:\s+(?:SPEED|VOLUME))?|C\.?V\.?|NONE)$/.test(t)) {
-          // Constant speed: a motor with no variable frequency drive.
+        const device = deviceNamed(text);
+        if (!ctx.attrs.has("control") && ctx.attrs.has("vfd") && (/^(?:CONSTANT(?:\s+(?:SPEED|VOLUME))?|C\.?V\.?|NONE)$/.test(t)
+          || (/\bSPEED\s+CONTROL\b/.test(h) && /^NO$/.test(t)) || ECM_CELL.test(device) || STARTER_CELL.test(device))) {
+          // Constant speed, no speed control, an EC motor or a starter: a
+          // motor with no variable frequency drive.
           found.push({ attr: "vfd", col, value: "no", printed: printedText, rule: "enum.vfd_constant_speed", rank: 1 });
           break;
         }
@@ -1561,7 +1584,7 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         // A cell that names the drive ("VFD" under VARIABLE CONTROL TYPE or
         // SPEED CONTROL) says the motor runs on one, whether or not the family
         // keeps the control as text too; a pump keeps only that.
-        if (ctx.attrs.has("vfd") && /^(?:VFD|VSD|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVE)$/.test(t)) found.push({ attr: "vfd", col, value: "yes", printed: printedText, rule: "enum.vfd_speed_control", rank: 1 });
+        if (ctx.attrs.has("vfd") && VFD_CELL.test(device)) found.push({ attr: "vfd", col, value: "yes", printed: printedText, rule: "enum.vfd_speed_control", rank: 1 });
         if (ctx.attrs.has("control")) found.push({ attr: "control", col, value: text.trim(), printed: printedText, rule: "text.control", rank: 0 });
         break;
       }
@@ -1639,9 +1662,7 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
         const whole = text.toUpperCase().replace(/\s+/g, " ").trim();
         const printed = whole.replace(FURNISHED_BY, "").trim() || whole;
         const t = (ctx.codes[col.header]?.[whole] ?? ctx.codes[col.header]?.[printed] ?? printed).toUpperCase().replace(/\s+/g, " ").trim();
-        const kind = /^(?:VFD|VSD|VARIABLE\s+(?:FREQUENCY|SPEED)\s+DRIVE)(?:\s*(?:\/\s*B|WITH\s+BYPASS))?$/.test(t) ? "vfd"
-          : /^(?:ECM?|EC\s+(?:MOTOR\s+)?CONTROLLER|ECM\s+CONTROLLER|ELECTRONICALLY\s+COMMUTATED(?:\s+MOTOR)?)$/.test(t) ? "ecm"
-          : /^(?:(?:COMBINATION\s+|MAGNETIC\s+|MANUAL\s+|MOTOR\s+)?STARTER|MAG\.?\s+STARTER|FVNR|ACROSS\s+THE\s+LINE|FULL\s+VOLTAGE(?:\s+NON-?\s?REVERSING)?(?:\s+STARTER)?|WYE-?\s?DELTA|SOLID\s+STATE(?:\s+\(?SOFT\s+START\)?)?|SOFT\s+START(?:ER)?)$/.test(t) ? "starter" : null;
+        const kind = VFD_CELL.test(t) ? "vfd" : ECM_CELL.test(t) ? "ecm" : STARTER_CELL.test(t) ? "starter" : null;
         if (!kind) break;
         if (ctx.attrs.has("vfd")) found.push({ attr: "vfd", col, value: kind === "vfd" ? "yes" : "no", printed: printedText, rule: "enum.controller_type", rank: 0 });
         if (ctx.attrs.has("ecm")) found.push({ attr: "ecm", col, value: kind === "ecm" ? "yes" : "no", printed: printedText, rule: "enum.controller_type", rank: 0 });

@@ -1158,10 +1158,12 @@ test("dev 5: a single-duct terminal's DESCRIPTION, size number, one airflow, 24 
   const v5 = box(cells);
   assert.deepEqual([v5.terminal_type, v5.inlet_size_in, v5.cfm_max, v5.heat_type, v5.volts, v5.phase], ["single_duct", "4", 60, "none", 24, 1]);
   assert.equal(box({ ...cells, "ELECTRIC HEAT (KW)": "2.0", "ELECTRICAL VOLTAGE": "120" }).heat_type, "electric");
-  // A fan-powered box's size is a cabinet code; a table printing MAX and MIN
-  // airflows has no one airflow; a hot water coil beside it is heat.
+  // A fan-powered box's size is a cabinet code; a minimum beside the one
+  // airflow leaves it the maximum (AS-73), and a second plain airflow leaves
+  // neither; a hot water coil beside it is heat.
   assert.equal(box({ ...cells, DESCRIPTION: "SERIES FAN POWERED TERMINAL" }).inlet_size_in, undefined);
-  assert.equal(box({ ...cells, "AIRFLOW MIN (CFM)": "30" }).cfm_max, undefined);
+  assert.equal(box({ ...cells, "AIRFLOW MIN (CFM)": "30" }).cfm_max, 60);
+  assert.equal(box({ ...cells, "SUPPLY AIRFLOW (CFM)": "80" }).cfm_max, undefined);
   assert.equal(box({ ...cells, "HW COIL GPM": "0.5" }).heat_type, undefined);
   assert.equal(values(normalizeCompileItem(row("EF-1", "FAN SCHEDULE", { VOLTAGE: "24" }), "FAN")).volts, undefined, "only a terminal's controls");
 });
@@ -1570,4 +1572,61 @@ test("metamorphic sweep, round 3: thousands of BTU/H, º, CLG./HTG., SUP./RET./E
   const kef = (h: string, cell: string) => values(normalizeCompileItem(row("KEF-1", "EXHAUST FANS", { CFM: "2150", [h]: cell }), "FAN"));
   for (const h of ["MOTOR WATTS/HP", "MOTOR HP/W", "MOTOR W/HP"]) assert.deepEqual([kef(h, "1.5").motor_hp, kef(h, "1.5").motor_watts], [1.5, undefined], h);
   assert.equal(kef("MOTOR WATTS/HP", "46.5 W").motor_watts, 46.5);
+});
+
+test("metamorphic sweep, round 4: a terminal's one plain airflow beside its minimum and heating ones is its maximum; a VFD, speed control or controller cell's words read alike under each (AS-73)", () => {
+  const vav = (cells: Record<string, string>) => values(normalizeCompileItem(row("VAV-1", "VAV BOX SCHEDULE", cells), "VAV"));
+  // The one plain airflow among a minimum and a heating one (another
+  // drafter's "AIRFLOW (CFM)" for 009_FL's PRIMARY AIR MAX CFM).
+  const plain = vav({ "AIRFLOW (CFM)": "500", "MIN CFM": "150", "HEATING CFM": "250" });
+  assert.equal(plain.cfm_max, 500);
+  assert.equal(plain.cfm_min, 150);
+  assert.equal(plain.cfm_heat, 250);
+  // … and a fan-powered box's primary airflow beside its fan's.
+  assert.equal(vav({ "PRIMARY AIR CFM": "680", "FAN CFM": "770", "PRIMARY AIR MIN CFM": "200" }).cfm_max, 680);
+  // The only airflow, as before; a printed maximum beside a plain airflow
+  // rules, and two plain airflows name neither.
+  assert.equal(vav({ "AIRFLOW (CFM)": "500" }).cfm_max, 500);
+  assert.equal(vav({ "AIRFLOW (CFM)": "500", "MAX CFM": "600", "MIN CFM": "150" }).cfm_max, 600);
+  assert.equal(vav({ "AIRFLOW (CFM)": "500", "SUPPLY CFM": "600", "MIN CFM": "150" }).cfm_max, undefined);
+  // A REHEAT airflow is the box's heating airflow (053_VA's AIRFLOW REHEAT,
+  // printed and unread until the sweep's AIRFLOW (CFM) beside it).
+  const reheat = vav({ "AIRFLOW MAX": "1070", "AIRFLOW MIN": "320", "AIRFLOW REHEAT": "535" });
+  assert.equal(reheat.cfm_heat, 535);
+  assert.equal(reheat.cfm_max, 1070);
+  const plainReheat = vav({ "AIRFLOW (CFM)": "1070", "AIRFLOW MIN": "320", "AIRFLOW REHEAT": "535" });
+  assert.equal(plainReheat.cfm_max, 1070);
+  assert.equal(plainReheat.cfm_heat, 535);
+  // … and a reheat coil's airflow, the box's own in heating.
+  assert.equal(vav({ "AIRFLOW MAX": "1070", "REHEAT COIL CFM": "535" }).cfm_heat, 535);
+  // … never a reheat minimum ("AIRFLOW REHEAT MIN" is no box minimum).
+  assert.equal(vav({ "AIRFLOW MAX": "1070", "AIRFLOW REHEAT MIN": "200" }).cfm_min, undefined);
+
+  const pump = (cells: Record<string, string>) => values(normalizeCompileItem(row("P-1", "PUMP SCHEDULE", { GPM: "100", ...cells }), "PUMP"));
+  // A VFD column's NONE (031_MO's SPEED CONTROL word under 096_IN's MOTOR
+  // VSC) or EC motor is no drive; its VSD, a drive with its furnisher, yes.
+  assert.equal(pump({ "MOTOR VSC": "NO" }).vfd, "no");
+  assert.equal(pump({ "MOTOR VSC": "NONE" }).vfd, "no");
+  assert.equal(pump({ VFD: "ECM" }).vfd, "no");
+  assert.equal(pump({ VFD: "VSD" }).vfd, "yes");
+  assert.equal(pump({ VFD: "VFD (BY DIV 26)" }).vfd, "yes");
+  // A pump's speed control that says NO, an EC motor or a starter runs on
+  // no drive (096_IN's NO, 14_OR's ECM under 031_MO's header); a drive with
+  // its disconnect is one under any drive header (043_FL's cell).
+  const speed = "ELECTRICAL MOTOR SPEED CONTROL";
+  assert.equal(pump({ [speed]: "NONE" }).vfd, "no");
+  assert.equal(pump({ [speed]: "NO" }).vfd, "no");
+  assert.equal(pump({ [speed]: "ECM" }).vfd, "no");
+  assert.equal(pump({ [speed]: "MAGNETIC STARTER" }).vfd, "no");
+  assert.equal(pump({ [speed]: "VFD WITH INTEGRAL DISCONNECT" }).vfd, "yes");
+  assert.equal(pump({ "CONTROLLER TYPE": "VFD WITH INTEGRAL DISCONNECT" }).vfd, "yes");
+  assert.equal(pump({ "DISC SWITCH/FUSE DATA": "VFD WITH INTEGRAL DISCONNECT" }).vfd, "yes");
+  // A speed control's YES names no device, a CONTROL TYPE's NO no speed,
+  // and N/A nothing; a fan keeps a speed control's words as its control.
+  assert.equal(pump({ [speed]: "YES" }).vfd, undefined);
+  assert.equal(pump({ "CONTROL TYPE": "NO" }).vfd, undefined);
+  assert.equal(pump({ VFD: "N/A" }).vfd, undefined);
+  const fan = values(normalizeCompileItem(row("EF-1", "FAN SCHEDULE", { CFM: "500", "MOTOR SPEED CONTROL": "NO" }), "FAN"));
+  assert.equal(fan.vfd, undefined);
+  assert.equal(fan.control, "NO");
 });

@@ -1,5 +1,18 @@
 # Changelog
 
+- **Assemblies: another drafter's word for a column the schedule already
+  prints.** A sweep that put each header and cell the corpus reads as an
+  attribute in place of another document's column for the same attribute
+  found rules that read one drafter's words and not another's. A terminal
+  unit's one plain airflow ("AIRFLOW (CFM)") beside its minimum and heating
+  airflows is now its maximum, as it was when the table printed no other; a
+  REHEAT airflow is the box's heating airflow, as a HEATING one was; and a
+  VFD, speed control or controller column reads a motor's drive in one
+  vocabulary under whichever of those headers prints it: NONE, an EC motor
+  or a starter is no drive, and "VSD" or "VFD WITH INTEGRAL DISCONNECT" is
+  one (a fan's speed control stays its control as printed). As printed, only
+  053_VA changes: its 21 terminal units read the heating airflows they print
+  under AIRFLOW REHEAT (`normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-73).
 - **Assemblies: a schedule's values read the same however another drafter
   spells them.** A sweep that respelled every cached schedule's headers,
   titles and cells without changing their meaning found values lost, and on

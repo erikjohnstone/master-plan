@@ -5136,3 +5136,95 @@ parser beneath already makes) are removed.
   sweep's (the PDF differs in its generation time only, as 069_ID's, which AS-72 does not change, does).
 - **The regression sweep at e91ae9e** (before this change; the UI proof on all 97 eligible documents): all 97 pass,
   1,304 checks, 32 of them (no unit to open) on the parity checks only.
+
+## AS-73 — another drafter's word for a column the schedule already prints: the corpus's own vocabulary (metamorphic sweep, round 4) (FIXED — guarded by the evals)
+
+**Found:** 2026-09-28, by a fourth metamorphic sweep over the same fresh snapshots (the 72 of the 98 eligible documents
+with units; 2,598 rows; held-out excluded; scratch meta4/metamorphic4.mjs). Rounds 1 to 3 respelled what their author
+thought of; this one takes its spellings from the corpus. Each header and cell the normalizer reads as an attribute on
+one drafter's schedule (1,431 header spellings over 354 family attribute sets; 70 cell spellings over 42 enum and
+yes/no values) was put in place of the column or cell another document reads as the same attribute, family by family,
+and each project normalized again (`normalizeProject`):
+- a header only where it was read as the same attribute set with the same scale units (MBH never for BTUH, KW never
+  for W), over cells of the same form (a V/PH tuple, a number with or without its unit, a yes/no mark, text); a header
+  that says its value (REHEAT NONE, DRIVE DIRECT) only onto that value; never beside a column of the same words;
+- a cell only from a column naming the same quantity, and a mark (YES, X, NONE) only for a mark;
+- and, synthetic, a header's unit moved into its numeric cells ("SUPPLY FAN" over "2,250 CFM"), or to its front or
+  middle, as a schedule grouped by unit prints ("CFM | SUPPLY | RETURN", "COOLING MBH TOTAL").
+
+10,392 header transplants, 204 cell transplants and 1,021 unit moves (6,315 runs; transplants batched, a batch that
+changed anything run again one at a time) left 304 kinds of change at f507001. Read one by one:
+- **Brittle, and fixed:**
+  - A terminal unit's plain airflow was its maximum only where the table printed no other airflow, so another
+    drafter's "AIRFLOW (CFM)" (06_MO's) beside a MIN and a HEATING airflow was nobody's: in place of 009_FL's
+    PRIMARY AIR MAX CFM, 019_FL's AIRSIDE DATA MAXIMUM AIR FLOW CFM, 039_TX's AIRFLOW MAX and 16 more documents'
+    maximum columns, 660 maximums were lost.
+  - A motor's drive was read by three kinds of header with three vocabularies. A VFD, VSC or VSD column read YES, X
+    or VFD as a drive and NO as none, never NONE, VSD or an EC motor; a SPEED CONTROL column read CONSTANT or NONE as
+    none and a bare VFD as a drive, never NO, an EC motor or a starter; a CONTROLLER column read an EC motor or a
+    starter, never "VFD WITH INTEGRAL DISCONNECT". 031_MO's NONE under 096_IN's MOTOR VSC, 096_IN's NO or 14_OR's
+    ECM under 031_MO's MOTOR SPEED CONTROL, and 043_FL's "VFD WITH INTEGRAL DISCONNECT" under either lost 24 pumps'
+    drives.
+  - Reading the first finding's residue, one miss as printed: 053_VA's terminal unit schedules print AIRFLOW MAX,
+    MIN and REHEAT (checked on a render of sheet 12), and a REHEAT airflow was no heating mode (HEAT and HEATING
+    were), so its 21 boxes' heating airflows were unread.
+- **The variant's own doing, not a rule's (the rest):** a header that drops the word telling two columns apart
+  (019_FL's FAN RPM as ELECTRICAL RPM beside the motor's MAX RPM; 009_FL's SUPPLY FAN MAX CFM as SUPPLY CFM beside a
+  garbled "UNOCCMI N CFM"; 067_CA's DESIGN FLOW as GPM beside SELECTION FLOW; 03_FL's TOTAL CAPACITY beside the
+  nominal ARI CAPACITY; 062_ID's SUPPLY FAN V/Ø beside the condensing unit's on a split system's row); a second
+  column of one quantity (05_MO's ESP as TSP beside its TSP); a header naming another medium or fuel (GAS HEATING
+  COIL, DX); one column of a group renamed alone (05_MO's CIRCULATING WATER EWT); a yes/no mark under a temperature;
+  and context by design (a SIZE is a box's inlet only on a single-duct box; SERVING names a place or a service; a
+  fan's RPM is not its motor's).
+- **A unit moved into the cells** loses the value wherever the header names no quantity, since a column's quantity
+  is read from its header. The corpus prints that for no CFM, GPM, MBH, HP, KW, RPM or TONS (a census of the 98
+  documents: 0 columns); it prints inches, °F, % and W so, in columns no attribute reads but three: 039_TX's DUCT
+  INLET "12 in" (186 boxes) and 009_FL's DUCT CONN INLET '8"' (7), inlet sizes, and 093_ME's VRF indoor units' POWER
+  "40.0 W" (20). Not changed: a cell's unit words name no column ("50F" under MODEL or TITUS is a grille's model, not
+  50 °F), and inlet size feeds no typical; recorded for the next census.
+
+**Fix (the shared path: `normalize.ts`, which the apply path every surface uses reads):**
+- A VAV box's one printed airflow that is no minimum, heating, fan, outdoor air or return airflow is its design
+  maximum (before: the only airflow its table printed). A printed maximum beside it still rules, and two plain
+  airflows name neither.
+- One vocabulary for a motor's drive (VFD_CELL, ECM_CELL, STARTER_CELL; the furnisher after it dropped, "VFD (BY DIV
+  26)"). Under a VFD, VSC or VSD header a drive, YES or X is yes, and NO, NONE, an EC motor or a starter is no. Under
+  a SPEED CONTROL header a drive is yes, and, for a family whose schedule keeps no control text (a pump), NO, an EC
+  motor or a starter is no, as CONSTANT and NONE were. A CONTROLLER column names a drive with its bypass or
+  disconnect. A fan's speed control stays its control as printed (the keys type 031_MO's and 044_NY's CONSTANT so),
+  and a speed control's YES names no device.
+- REHEAT (TERMINAL_HEAT) is a terminal's heating mode wherever HEAT and HEATING are: its airflow is the box's heating
+  airflow, a reheat coil's airflow too, and a REHEAT minimum is no box minimum.
+
+**Measured:**
+- **The 98 documents as printed** (an A/B on the fresh snapshots against f507001: every attribute with its rule,
+  cite and printed text, every application, each document's lines): only 053_VA changes. TU26-11 to TU26-73 read
+  the REHEAT airflows they print (55 to 595 CFM) as their heating airflows; no record and no line changes (985 lines).
+  The airflow and drive rules change nothing as printed: no document prints those combinations.
+- **The sweep again** (before the REHEAT rule): 304 kinds → 302; VAV maximums lost 660 → 28 (19 documents → 2:
+  053_VA's, whose REHEAT is read now, and 26_CA's exhaust terminals, whose "AT MAXIMUM CFM" static pressure column
+  prints "#REF!"); pumps' drives lost 24 → 4 (03_FL's REMARKS sentence "PROVIDE WITH MOTOR STARTER" under another
+  header); header transplant records 1,468 → 816. The unit moves are as before (not changed, above).
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C
+  dev (227/244) and the binding, question and reading evals are identical to AS-72's but timings; 053_VA is keyed
+  for tags only. The unseen audit replays as recorded: "model calls: replayed 61, live 0, not recorded 0, failed 0";
+  "applied 56: audited 56 (right 56, wrong 0, unaudited 0); new 0; gone 0".
+- **Held-out** (aggregates only; nothing tuned on them): GATE 2 held-out 905/1,008 exact (from 902; 89.5% → 89.8%),
+  0 wrong, 2 invented; held-out 2 334/472, 1 wrong, 2 invented; GATE 5 21/91; GATE C 35/91. No rule came from a
+  held-out row, and only these lines were read.
+
+**Tests:** normalize.test.ts (AS-73): the plain airflow beside a minimum and a heating one, a fan-powered box's
+primary airflow beside its fan's, 053_VA's MAX/MIN/REHEAT and a reheat coil's airflow; every drive word under a VFD,
+VSC, SPEED CONTROL, CONTROLLER and disconnect header; negative controls (a printed maximum rules, two plain airflows
+name neither, a REHEAT minimum is no box minimum, a speed control's YES, a CONTROL TYPE's NO and a VFD's N/A name
+nothing, a fan keeps NO as its control). 18 mutations, one per rule or word: each fails the test. AS-31's test on 06_MO's
+VAV-5 asserted the old rule's scope as a negative control (a MIN beside a table's one airflow left no maximum); no
+document prints that, and it now asserts the maximum, with a second plain airflow still naming none.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,932 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite (every file but the WP1 test) 378 of 380
+  pass and 1 skips, its one failure the AS-1 conformance test. navfac's `sweep_schedule_row` passed this run (it
+  fails at the SDK's 60 s default under load, as on AS-62 to AS-72), and a first run reported 375 tests, leaving
+  assembliesKeys.test.mjs's five tier-draw tests unreported; the file alone passes them, and the second run reports
+  all 380.
+- **UI proof** (the dev server started on the change): 053_VA (16 checks), 069_ID (17) and 031_MO (16) are
+  byte-identical to apply_assemblies over MCP with their CSV sets.
