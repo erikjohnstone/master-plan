@@ -2,11 +2,6 @@
  "about": "Every decision the readers apply on the unseen corpus sets, with a person's verdict against its cites and the drawing (right, wrong, or unaudited until checked). mcp/scripts/control-intent-unseen-audit.mjs replays the recorded runs (unseen-runs/) and compares.",
  "sets": [
   {
-   "id": "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
-   "status": "no_snapshot",
-   "error": "child exited null with no result"
-  },
-  {
    "id": "13_MI_MSU_LifeSciences_LabRenovation",
    "status": "no_control_packets",
    "units": 5,
@@ -21,9 +16,9 @@
   {
    "id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
    "status": "read",
-   "units": 7,
+   "units": 17,
    "packets": 9,
-   "applied": 0
+   "applied": 25
   },
   {
    "id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
@@ -40,10 +35,9 @@
   },
   {
    "id": "02_UT_FAA_Ogden_AirTrafficControlTower",
-   "status": "read",
-   "units": 1,
-   "packets": 2,
-   "applied": 0
+   "status": "no_scheduled_units",
+   "units": 0,
+   "packets": 2
   },
   {
    "id": "04_NV_VA_LasVegas_CentralUtilityPlant",
@@ -55,7 +49,7 @@
   {
    "id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
    "status": "read",
-   "units": 37,
+   "units": 90,
    "packets": 12,
    "applied": 2
   },
@@ -99,7 +93,7 @@
   {
    "id": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
    "status": "read",
-   "units": 42,
+   "units": 60,
    "packets": 10,
    "applied": 16
   },
@@ -117,9 +111,10 @@
   },
   {
    "id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
-   "status": "no_scheduled_units",
-   "units": 0,
-   "packets": 9
+   "status": "read",
+   "units": 186,
+   "packets": 9,
+   "applied": 0
   },
   {
    "id": "046_MI_Veterinary_Medical_Center_Replace_Elevators_3",
@@ -136,9 +131,9 @@
   {
    "id": "050_IL_VA_Project_537_17_115_Sterile_Processing",
    "status": "read",
-   "units": 2,
+   "units": 3,
    "packets": 4,
-   "applied": 0
+   "applied": 5
   },
   {
    "id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
@@ -153,11 +148,23 @@
    "packets": 0
   },
   {
+   "id": "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+   "status": "no_snapshot",
+   "error": "child exited null with no result"
+  },
+  {
    "id": "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit",
    "status": "read",
    "units": 2,
    "packets": 6,
    "applied": 0
+  },
+  {
+   "id": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+   "status": "read",
+   "units": 14,
+   "packets": 7,
+   "applied": 8
   },
   {
    "id": "080_CA_Contra_Costa_College_Science_Center_Conference",
@@ -179,9 +186,10 @@
   },
   {
    "id": "087_US_Contra_Costa_College_Chiller_Replacement",
-   "status": "no_scheduled_units",
-   "units": 0,
-   "packets": 1
+   "status": "read",
+   "units": 1,
+   "packets": 1,
+   "applied": 0
   },
   {
    "id": "100_OH_Butler_Tech_RTU_Welding_Source_Capture",
@@ -194,20 +202,13 @@
    "status": "no_scheduled_units",
    "units": 0,
    "packets": 2
-  },
-  {
-   "id": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
-   "status": "read",
-   "units": 14,
-   "packets": 7,
-   "applied": 8
   }
  ],
  "totals": {
   "eligible": 32,
-  "read": 10,
-  "applied": 26,
-  "right": 26,
+  "read": 11,
+  "applied": 56,
+  "right": 56,
   "wrong": 0,
   "unaudited": 0,
   "gone": [],
@@ -273,6 +274,346 @@
   ]
  },
  "decisions": [
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-01",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "WHEN ZONE TEMPERATURE IS GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM AIRFLOW (ADJ.) AND THE MAXIMUM COOLING AIRFLOW (ADJ.) UNTIL THE ZONE IS SATISFIED."
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-01",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-01",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-01",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "ZONE SETPOINT ADJUST:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-01",
+   "family": "VAV",
+   "question": "opt.scr_heat",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-02",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "WHEN ZONE TEMPERATURE IS GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM AIRFLOW (ADJ.) AND THE MAXIMUM COOLING AIRFLOW (ADJ.) UNTIL THE ZONE IS SATISFIED."
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-02",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-02",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-02",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "ZONE SETPOINT ADJUST:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-02",
+   "family": "VAV",
+   "question": "opt.scr_heat",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-03",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "WHEN ZONE TEMPERATURE IS GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM AIRFLOW (ADJ.) AND THE MAXIMUM COOLING AIRFLOW (ADJ.) UNTIL THE ZONE IS SATISFIED."
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-03",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-03",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-03",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "ZONE SETPOINT ADJUST:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-03",
+   "family": "VAV",
+   "question": "opt.scr_heat",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-04",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "WHEN ZONE TEMPERATURE IS GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM AIRFLOW (ADJ.) AND THE MAXIMUM COOLING AIRFLOW (ADJ.) UNTIL THE ZONE IS SATISFIED."
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-04",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-04",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-04",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "ZONE SETPOINT ADJUST:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-04",
+   "family": "VAV",
+   "question": "opt.scr_heat",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-05",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "WHEN ZONE TEMPERATURE IS GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM AIRFLOW (ADJ.) AND THE MAXIMUM COOLING AIRFLOW (ADJ.) UNTIL THE ZONE IS SATISFIED."
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-05",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-05",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-05",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24#p3",
+    "sheet": "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf#24",
+    "text": "ZONE SETPOINT ADJUST:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "40-VAV-05",
+   "family": "VAV",
+   "question": "opt.scr_heat",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
   {
    "set": "05_MO_VA_StLouis_AHU_VAV_Replacement",
    "tag": "AC-57",
@@ -560,6 +901,74 @@
    },
    "verdict": "right",
    "checked": "2026-09-26"
+  },
+  {
+   "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "1-VAV-01",
+   "family": "VAV",
+   "question": "role",
+   "value": "in",
+   "rule": "drawing_read:agree(r1,r2)",
+   "readers": "r0:not_shown r1:commands r2a:commands r2b:commands",
+   "cite": {
+    "packet": "050_IL_VA_Project_537_17_115_Sterile_Processing.pdf#17#p2",
+    "sheet": "050_IL_VA_Project_537_17_115_Sterile_Processing.pdf#17",
+    "text": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND MODULATE THE REHEATING COIL VALVE OPEN ON DROPPING ZONE TEMPERATURE TO MAINTAIN ITS HEATING SETPOINT."
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "1-VAV-01",
+   "family": "VAV",
+   "question": "opt.co2_sensor",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "1-VAV-01",
+   "family": "VAV",
+   "question": "opt.window_switch",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "1-VAV-01",
+   "family": "VAV",
+   "question": "opt.setpoint_adjust",
+   "value": true,
+   "rule": "drawing_read:agree(r0,r1)",
+   "readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
+   "cite": {
+    "packet": "050_IL_VA_Project_537_17_115_Sterile_Processing.pdf#17#p2",
+    "sheet": "050_IL_VA_Project_537_17_115_Sterile_Processing.pdf#17",
+    "text": "ZONE SETPOINT ADJUST:"
+   },
+   "verdict": "right",
+   "checked": "2026-09-28"
+  },
+  {
+   "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",
+   "tag": "1-VAV-01",
+   "family": "VAV",
+   "question": "opt.scr_heat",
+   "value": false,
+   "rule": "drawing_read:absence",
+   "readers": "r0:absent r1:absent r2a:absent r2b:absent",
+   "cite": null,
+   "verdict": "right",
+   "checked": "2026-09-28"
   },
   {
    "set": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",

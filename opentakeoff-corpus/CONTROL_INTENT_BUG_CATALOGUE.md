@@ -1061,3 +1061,55 @@ calls its kind names it too.
 - Tests (readers.test.ts): "namesUnit: a shared packet names a pump by what its own row calls its kind", on the two
   sets' cells with eleven look-alikes, and "record: a shared drawing's label speaks for the pump whose own row calls
   it by that kind, not for the pump beside it". Disabling the rule fails the second.
+
+## CI-35: the unseen audit's recorded calls fell behind the takeoff, so the units AS-62 to AS-65 added were asked of no model on replay (PROCESS NOTE; FIXED, next commit)
+
+**Found:** 2026-09-28, while re-running the unseen audit after AS-69. From AS-62 (71bca4f) on, the takeoff reads units
+on three unseen sets that the audit's recorded runs never asked about:
+- 05_MO_VA_StLouis: its 1-VAV-n boxes and 1-TU-28-n terminals (37 → 90 units);
+- 041_IL (the VA's Sterile Processing remodel, phase 3): its five VAV boxes, 40-VAV-01 to 40-VAV-05 (7 → 17 units);
+- 050_IL (the same project's phase 4): its 1-VAV-01 (2 → 3 units).
+
+The packets that bind them now name them, so each such question is a new prompt, and a replay answers a prompt it has
+no recording for with nothing. Every replay run for AS-66 to AS-69 printed "replayed 41, live 0, not recorded 19" and
+exited 1. Their entries (AS-66 to AS-69) report that the replay "decides the same (26 applied, 26 right, 0 new,
+0 gone)". That was true of the recorded calls, but it said nothing about the new units, whose questions no model had
+read.
+
+**Fix:** the 19 calls recorded live on 2026-09-28 (`control-intent-unseen-audit.mjs <corpus> 05_MO… 041_IL… 050_IL…
+--live`; R1 gpt-oss-120b, R2 qwen-3.8-27b): 20 live calls, the 19 and one re-ask of a vision reply the token limit
+cut off (CI-31), and 4 replayed. Six of 05_MO's recordings that no reading uses any more, its ATU-6 packets' prompts
+from before the new units, are pruned. The 30 new decisions are all on the new VAV boxes. Each was checked by hand
+against its cites and the drawing, and all are right:
+- **The drawings:** each set has one sheet with the VAV TERMINAL SCHEMATIC, its SEQUENCE OF OPERATION and the VAV
+  TERMINAL POINTS LIST: 041_IL's M-502-3 (p24) and 050_IL's MH-101-4 (p17). Each box's schedule row cites note 2,
+  "DIGITAL CONTROL SEQUENCE SHALL BE AS PER SEQUENCE OF OPERATION PROVIDED ON DRAWING" M-502-3 (MH-101-4).
+- **role "in"** (R1 and both R2 runs; R0 answered "not shown") on all six boxes. 041_IL cites "WHEN ZONE TEMPERATURE IS
+  GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM AIRFLOW (ADJ.) AND THE
+  MAXIMUM…". 050_IL cites "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND MODULATE THE REHEATING COIL VALVE".
+  The points list makes the zone damper and the reheating valve hardware outputs (AO).
+- **setpoint_adjust true** (R0 and R1) cites "ZONE SETPOINT ADJUST: THE OCCUPANT SHALL BE ABLE TO ADJUST THE ZONE
+  TEMPERATURE HEATING AND COOLING SETPOINTS AT THE ZONE SENSOR". The schematic prints "AI - ZONE SETPOINT ADJUST"
+  and the points list ZONE TEMPERATURE SETPOINT (AI).
+- **co2_sensor, window_switch and scr_heat false** (absence; all four readers found none):
+  - the points list (4 AI, 2 AO) has no CO2, window or electric heat point;
+  - each box's schedule row gives it a hot water reheat coil (one or two rows, 140 °F entering water), and no
+    electric heat;
+  - the HVAC plans (041_IL p20, 050_IL p17) give each box's zone a temperature sensor (T) and a "TEMP TRAC ROOM
+    MONITOR" (key note 05; 04 on 050_IL), and no CO2 sensor or window switch;
+  - the only CO2 on either set is the plumbing legend's gas and the mechanical symbol legend.
+- **05_MO:** the new calls, for its 1-VAV-n and 1-TU-28-n boxes and the ATU-6 packets that now name them, apply nothing
+  new. Its two audited decisions (AC-57's) are unchanged.
+
+**The record now** (a full run over all 32 eligible sets, `--report`): 61 calls replayed, none live, unrecorded or
+failed; 56 applied, all audited, 56 right, 0 wrong; 0 new, 0 gone.
+- 11 sets are read (10 before). 02_UT is no longer read: AS-66 took its only unit, SPF, which its key does not count.
+  039_TX (186 units) and 087_US (1) now are, since the takeoff reads their marks (none when the record was last
+  written, at 8243407). Neither needs a model call or applies a decision.
+- 014_MT has 60 units (42 when it was recorded) and decides as before.
+- 058_CA still has no snapshot: building it runs out of memory here, as before.
+
+**Process:** a change that adds or removes units on an unseen set changes the prompts of the packets bound to them.
+Its replay then prints "not recorded N" and exits 1, and "decides the same" covers only the recorded calls. From
+here, a change's entry quotes the replay's model-call line. A replay with unrecorded calls is recorded live, and its
+new decisions are audited, before the change's control-intent numbers are called unchanged.
