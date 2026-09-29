@@ -825,14 +825,14 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   // table is not gated on table.kind (Valdosta's GRILLE SCHEDULE extracts as
   // reference-kind but is still schedule truth), one no title vouches for is
   // (AS-66).
+  // The family's HVAC_FAMILY_SPECS key (familyNeedleFromSpecs labels it).
+  const family = String(needle?.label || "").trim().replace(/\s+/g, "_").toUpperCase();
   const gated = [];
   for (const printed of graph?.tables || []) {
     const table = scheduleTableView(printed);
-    const gate = familyTableGate(table, needle);
+    const gate = familyTableGate(table, needle, family);
     if (gate) gated.push({ table, gate });
   }
-  // The family's HVAC_FAMILY_SPECS key (familyNeedleFromSpecs labels it).
-  const family = String(needle?.label || "").trim().replace(/\s+/g, "_").toUpperCase();
   for (const mode of ["scan", "emit"]) {
   // Titled family schedules first (parity with compile uniqueFamily) so shared
   // marks cite the device definition, not a blank/catch-all accessory row.

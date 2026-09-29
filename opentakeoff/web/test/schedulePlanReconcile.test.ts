@@ -19,7 +19,7 @@ import {
 } from "../src/lib/schedulePlanReconcile.mjs";
 import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
-  inferValveServiceFromTable,
+  inferValveServiceFromTable, familyTableGate, scheduleTableView,
 } from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
@@ -1439,4 +1439,67 @@ test("the takeoff and the reconcile read the same units from a table printing UN
     as77Parity(unitFirst, `${title || "(untitled)"}, unit first`);
     assert.deepEqual(as77Marks(as79Graph(title, true)), unitFirst, `${title || "(untitled)"}: column order`);
   }
+});
+
+// AS-80: a table whose title names two families gives a row to the family
+// whose own mark rule reads it, not also to the one whose title alone vouches.
+const as80Headers = ["PLAN MARK", "MODEL NUMBER", "CLNG CAP. MBH", "HTNG CAP. MBH", "HTNG COP"];
+const as80Row = (mark: string) => ({ "PLAN MARK": mark, "MODEL NUMBER": "TWA09043D", "CLNG CAP. MBH": "90", "HTNG CAP. MBH": "78.6", "HTNG COP": "3.3" });
+
+test("a row of a table titled for two families is the unit of the family whose own mark rule reads it, not the other's by the title alone: 089_FL's HP-2 is a heat pump (AS-80)", () => {
+  // 089_FL's OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE prints
+  // one row, HP-2, with a heating capacity and COP: a heat pump, as its key
+  // reads it. CONDENSING_UNIT reads its primary title's rows by the title
+  // alone, and counted HP-2 a second time.
+  const combined = { tables: [as77Table("m.pdf#136", "OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE", as80Headers, [as80Row("HP-2")])] };
+  assert.deepEqual(as77Marks(combined), { HEAT_PUMP: { compile: ["HP2"], reconcile: ["HP2"] } });
+  // A condensing unit's own mark stays its, a mark neither family's rule
+  // reads stays the title's, and a mark both families' own rules read is
+  // both families' (as before).
+  const rows = { tables: [as77Table("m.pdf#136", "OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE", as80Headers,
+    ["HP-2", "CU-1", "AC-1", "CU-HP1"].map(as80Row))] };
+  assert.deepEqual(as77Marks(rows), {
+    CONDENSING_UNIT: { compile: ["AC1", "CU1", "CUHP1"], reconcile: ["AC1", "CU1", "CUHP1"] },
+    HEAT_PUMP: { compile: ["CUHP1", "HP2"], reconcile: ["CUHP1", "HP2"] },
+  });
+  // A mark the other family reads only under its own title is no claim: FCU
+  // reads F-1 only under its titles, so a furnace schedule's F-1 stays the
+  // furnace's where a ductless split system shares the title, and the split
+  // system's DCU-1 is the condensing unit's alone.
+  const furnace = as77Marks({ tables: [as77Table("m.pdf#7", "GAS-FIRED FURNACE AND DUCTLESS SPLIT SCHEDULE", ["MARK", "MBH", "CFM"], [
+    { MARK: "F-1", MBH: "60", CFM: "1200" }, { MARK: "DCU-1", MBH: "24", CFM: "800" },
+  ])] });
+  as77Parity(furnace, "furnace and ductless split");
+  assert.deepEqual(furnace.FURNACE, { compile: ["F1"], reconcile: ["F1"] });
+  assert.deepEqual(furnace.CONDENSING_UNIT, { compile: ["DCU1"], reconcile: ["DCU1"] });
+  // The other family's rule claims a mark in its forms too (a building's
+  // 1-FCU-1 is FCU-1), never one it reads only under its own title (F-2).
+  const fanCoils = as77Marks({ tables: [as77Table("m.pdf#8", "GAS-FIRED FURNACE AND FAN COIL UNIT SCHEDULE", ["MARK", "MBH", "CFM"], [
+    { MARK: "1-F-1", MBH: "60", CFM: "1200" }, { MARK: "1-FCU-1", MBH: "12", CFM: "400" }, { MARK: "F-2", MBH: "60", CFM: "1200" },
+  ])] });
+  as77Parity(fanCoils, "furnace and fan coil");
+  assert.deepEqual(fanCoils.FURNACE, { compile: ["1F1", "F2"], reconcile: ["1F1", "F2"] });
+  assert.ok(fanCoils.FCU.compile.includes("1FCU1"));
+  // The gate names the other families' rules only where the family reads its
+  // rows by the title alone, and only for a family the specs name.
+  const view = scheduleTableView(combined.tables[0]);
+  assert.equal(familyTableGate(view, HVAC_FAMILY_SPECS.CONDENSING_UNIT, "CONDENSING_UNIT")!.coTitled.length, 1);
+  assert.deepEqual(familyTableGate(view, HVAC_FAMILY_SPECS.CONDENSING_UNIT)!.coTitled, []);
+  assert.deepEqual(familyTableGate(view, HVAC_FAMILY_SPECS.HEAT_PUMP, "HEAT_PUMP")!.coTitled, []);
+  const twoRules = scheduleTableView(as77Table("m.pdf#9", "FAN COIL AND HEAT PUMP SCHEDULE", ["MARK", "MBH"], [{ MARK: "FCU-1", MBH: "12" }]));
+  assert.deepEqual(familyTableGate(twoRules, HVAC_FAMILY_SPECS.HEAT_PUMP, "HEAT_PUMP")!.coTitled, []);
+});
+
+test("a title that names one family keeps every row it vouches for, and a reconcile needle the specs do not name reads as before (AS-80)", () => {
+  const single = { tables: [as77Table("m.pdf#5", "CONDENSING UNIT SCHEDULE", as80Headers, [as80Row("HP-2")])] };
+  assert.deepEqual(as77Marks(single), { CONDENSING_UNIT: { compile: ["HP2"], reconcile: ["HP2"] } });
+  const split = { tables: [as77Table("m.pdf#14", "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE", ["MARK", "CFM", "MBH"], [
+    { MARK: "FC-1, CU-1", CFM: "800", MBH: "24" },
+  ])] };
+  const splitMarks = as77Marks(split);
+  as77Parity(splitMarks, "split system");
+  assert.deepEqual(splitMarks.CONDENSING_UNIT?.compile, ["CU1"]);
+  const combined = { tables: [as77Table("m.pdf#136", "OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE", as80Headers, [as80Row("HP-2")])] };
+  const custom = reconcileScheduleFamilyFromGraph(combined, { label: "Outdoor units", titleRe: /CONDENSING\s+UNIT/i }) as Array<{ tag: string }>;
+  assert.deepEqual(custom.map((r) => r.tag), ["HP-2"]);
 });

@@ -1,5 +1,19 @@
 # Changelog
 
+- **Takeoff and reconcile: a table titled for two families counts each
+  unit once.** A family that reads its schedule by the title alone
+  (CONDENSING_UNIT's primary title) took every row of a title that names
+  another family too: 089_FL's OUTDOOR AIR-COOLED HEAT PUMP OR
+  CONDENSING UNIT SCHEDULE counted its heat pump HP-2 as a condensing
+  unit as well, and `apply_assemblies` listed it twice, the second time
+  with no assembly. Such a family now yields a mark to the other family
+  the title names where that family's own mark rule reads it (in any of
+  the mark's forms, never a mark it reads only under its own title), and
+  keeps every mark its own rules read. On the dev corpus only 089_FL's
+  HP-2 changes: a heat pump alone, in the takeoff and the reconcile alike
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-80).
+
 - **Takeoff and reconcile: one rule names a schedule row's unit.** The
   takeoff named a row's unit by whichever mark column the drafter printed
   first; the schedule-to-plan reconcile preferred a VALVE MARK always. So

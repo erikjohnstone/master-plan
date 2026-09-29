@@ -1171,11 +1171,14 @@ const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MEC
  * untitled table or a general one. `filterRe` picks the family's marks from
  * the table's rows (none: every row), `titledAlso` the marks a title also
  * vouches for; `unvouched` says no title vouches for the family here.
+ * `coTitled` are the other families a title names too, with their mark
+ * rules, where the family reads every row by its title alone (AS-80).
  * @param {object} table a schedule table, as scheduleTableView gives it
  * @param {object} spec an HVAC_FAMILY_SPECS entry, or a reconcile needle
  *   (whose `title` stands in for a titleRe)
+ * @param {string|null} [family] the spec's HVAC_FAMILY_SPECS key
  */
-export function familyTableGate(table, spec) {
+export function familyTableGate(table, spec, family = null) {
   const {
     exclude, keyRe = null, blankKeyRe = null, blankHeaderRes = null, blankServiceHint = null,
     titledOnly = false, altTitleRe = null, altKeyRe = null, titledKeyRe = null, host = null,
@@ -1254,10 +1257,43 @@ export function familyTableGate(table, spec) {
   // (blankKeyRe: a CONTROL DAMPER SCHEDULE's CD-1) or its title vouches for
   // (titledKeyRe) is read too (AS-63): a title never reads less than none.
   const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
+  // A title that names another family too, whose own mark rule reads its
+  // rows ("OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE"; AS-80).
+  const coTitled = (titleOk || altOk) && !filterRe && family && HVAC_FAMILY_SPECS[family]
+    ? titleFamilies(title).filter((named) => named.family !== family)
+    : [];
   return {
     pass, title, titleOk, altOk, hostOk, blankTitle, genericValveTitle,
-    catchAll, unvouched, filterRe, titledAlso, rowService,
+    catchAll, unvouched, filterRe, titledAlso, rowService, coTitled,
   };
+}
+
+// The families each title names, with the mark rule each reads its rows by.
+const TITLE_FAMILIES = new Map();
+
+/**
+ * The families a schedule title names, each with the mark rule it reads the
+ * table's rows by (its other title's where that is what matched) and the
+ * marks it reads under its own title only: a title can name two, as 089_FL's
+ * HEAT PUMP OR CONDENSING UNIT SCHEDULE does (AS-80). A family with no mark
+ * rule of its own for the title is left out.
+ * @param {string} title
+ * @returns {Array<{ family: string, markRe: RegExp, titledOnlyRe: RegExp|null }>}
+ */
+function titleFamilies(title) {
+  let named = TITLE_FAMILIES.get(title);
+  if (named) return named;
+  named = [];
+  for (const [family, spec] of Object.entries(HVAC_FAMILY_SPECS)) {
+    const titleRe = spec.titleRe || spec.title || null;
+    const titleOk = Boolean(titleRe) && scheduleTitleMatches(title, titleRe, spec.exclude);
+    const altOk = Boolean(spec.altTitleRe) && scheduleTitleMatches(title, spec.altTitleRe, spec.exclude);
+    if (!titleOk && !altOk) continue;
+    const markRe = (altOk && spec.altKeyRe) ? spec.altKeyRe : spec.keyRe;
+    if (markRe) named.push({ family, markRe, titledOnlyRe: spec.titledOnlyRe || null });
+  }
+  TITLE_FAMILIES.set(title, named);
+  return named;
 }
 
 /**
@@ -1298,6 +1334,14 @@ export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = 
   } else if (gate.filterRe) {
     read = reads(gate.filterRe);
     if (!read && gate.titledAlso.some((re) => markMatchesKeyRe(re, one, canon))) read = 1;
+  } else if (gate.coTitled?.some((named) => markMatchesKeyRe(named.markRe, one, canon)
+      && !markMatchesKeyRe(named.titledOnlyRe, one, canon))
+    && ![keyRe, blankKeyRe, spec?.altKeyRe, spec?.titledKeyRe].some((re) => markMatchesKeyRe(re, one, canon))) {
+    // Another family the title names reads the mark by its own rule (as
+    // printed or in one of its forms, 1-FCU-1), not one only its own title
+    // reads (FCU's F-1), and none of this family's own rules reads it: it is
+    // that family's unit (AS-80).
+    return 0;
   }
   if (!read) return 0;
   if (gate.unvouched && ((!countKeyed && !unvouchedMarkNamesUnit(one))
@@ -1402,7 +1446,7 @@ function uniqueFamily(graph, spec, family) {
   const gated = [];
   for (const printed of graph.tables || []) {
     const table = scheduleTableView(printed);
-    const gate = familyTableGate(table, spec);
+    const gate = familyTableGate(table, spec, family);
     if (gate) gated.push({ table, gate });
   }
   for (const mode of ["scan", "emit"]) {

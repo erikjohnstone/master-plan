@@ -5639,3 +5639,70 @@ baseline's.
 - Widening the lookup to a row's UNIT MARK would add the valve schedules that name a unit they serve. That adds
   rows to the accessory-row narrowing and risks ambiguity refusals on documents no dev tier holds, and no dev
   document prints that layout.
+
+## AS-80 — a table whose title names two families counted a unit in both (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by a census of every tag the takeoff counts in two families on one document (22 pairs over the
+97 cached dev documents). All but one are 16_NV's building-letter marks, distinct units in distinct schedules. The one
+left is 089_FL's OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE (sheet 136). Its one row, HP-2 (TWA09043D,
+78.6 MBH heating, a heating COP), was counted as a heat pump and again as a condensing unit:
+- CONDENSING_UNIT reads a table under its own title by the title alone (no mark rule filters its primary title, for
+  Carson's B1 and B2), so it took every row of a title that names another family too;
+- the dev-4 key, authored from renders, types HP-2 a heat pump, and the attribute eval listed the condensing unit
+  HP-2 as a compile item matching no keyed unit;
+- `apply_assemblies` gave 089_FL 34 units: HP-2 once with the heat-pump typical and its hook-up, and again as a
+  condensing unit with no assembly, an exception the estimator would have to dismiss.
+
+A census of the tables whose titles name several families (29 on the 97 documents) found no other: split system
+tables give each family its own marks (FC-n, CU-n), and each family with a mark rule of its own reads by it.
+
+**Fix (`corpusTakeoff.mjs`, in the gate and the mark reading AS-77 made shared, so the takeoff and the reconcile
+alike):**
+- A family that reads a table by its title alone yields a row's mark to another family the same title names, where
+  that family's own mark rule reads it (`familyTableGate`'s `coTitled`; `titleFamilies` lists the families a title
+  names, each with the mark rule it reads that title by, its other title's where that is what matched).
+- It keeps any mark one of its own rules reads, in any of the mark's forms, and a mark the other family reads only
+  under its own title (FCU's F-1).
+- The claim counts in the mark's forms too: a building's 1-FCU-1 is FCU-1. Under a synthetic GAS-FIRED FURNACE AND
+  FAN COIL UNIT SCHEDULE, 1-FCU-1 had been a furnace as well as a fan coil.
+- Only a family the specs name yields: a reconcile needle built by hand reads as before. The takeoff passes its
+  family's key; the reconcile scaffold passes its needle's.
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-79):
+  - 089_FL's condensing unit HP-2 leaves the takeoff and the reconcile scaffold; nothing else changes (2,626 → 2,625
+    reconcile rows; the takeoff otherwise byte-identical; 089_FL's `totals.items` 34 → 33);
+  - HP-2 stays a heat pump in both.
+- **Assemblies on 089_FL** (`apply_assemblies` over MCP): 34 → 33 units and 49 → 48 records; the condensing unit
+  HP-2 (no assembly) goes, and its 293 lines are byte-identical.
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C
+  dev (227/244), the binding, question and reading evals and the unseen audit's replay as with AS-79, but dev 4's report,
+  which no longer lists the condensing unit HP-2 as a compile item matching no keyed unit (out-of-key-scope items
+  1 → 0); its scores are unchanged (1,380/1,421).
+- **Held-out** (aggregates only, 0 graphs built): GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472; GATE 5
+  21/91; GATE C 35/91; each as with AS-79.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-80):
+- 089_FL's row, with its printed cells: a heat pump alone, in the takeoff and the reconcile;
+- under the same title, a condensing unit's own mark (CU-1) stays its, a mark neither family's rule reads (AC-1)
+  stays the title's, and a mark both families' own rules read (CU-HP1) stays both's;
+- a furnace and ductless split title: the furnace keeps F-1 (FCU's titled-only mark), DCU-1 is the condensing unit's
+  alone;
+- a furnace and fan coil title: 1-FCU-1 is the fan coil's (a claim in the mark's forms), F-2 stays the furnace's;
+- the gate: `coTitled` only for a family that reads by its title alone and that the specs name, empty for a family
+  with its own mark rule (a heat pump, and a heat pump under a title naming fan coils too);
+- negative controls: a title naming one family keeps every row it vouches for, a split system table reads as before,
+  and a hand-built reconcile needle reads HP-2 as before.
+
+11 mutations each fail a test beyond the baseline's. They cover: no yield, own rules ignored, titled-only marks
+claiming, printed-only claims, either side unnamed, filtered families yielding, any needle yielding, the family
+itself included, the other title's rule unread, and alternate titles unnamed.
+
+**Guard:** web typecheck clean; lint 0 errors (the 3 known warnings); the web suite's 3,956 tests fail only AS-1's three
+base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377 of 380, as at AS-79 (AS-1's conformance test,
+and navfac's `sweep_schedule_row` past the SDK's 60 s default under load).
+
+**UI proof** (the dev server started on the change): on 089_FL the Takeoff canvas's reconcile equals
+`reconcile_schedule_plan` over MCP row for row (CONDENSING_UNIT none, HEAT_PUMP HP-2, DOAS, FCU, UNIT_HEATER 8 and
+MIXING_VALVE 2; 19 checks). Takeoff → Assemblies on 089_FL (33 units, 48 records, 293 lines; 17 checks) and 069_ID
+(17) is byte-identical to `apply_assemblies` over MCP.
