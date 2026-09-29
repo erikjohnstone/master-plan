@@ -1,0 +1,62 @@
+# 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2, dev (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,AHU-A,AHU,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,family_detail,detail B5
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,AHU-A,AHU,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FCU-A,FCU,,none,,no fan coil control drawing
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-A-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,BID ALTERNATE #1 HEAT RECOVERY AND BID ALTERNATE #2 EXHAUST FANS SEQUENCES OF OPERATION,tag,"detail A1 names the condenser and evaporator pumps (GWP - A - X, GWP - B - X)"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-A-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-A-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,the AHU schematic labels the heat recovery pumps at its coil
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-A-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,BID ALTERNATE #1 HEAT RECOVERY AND BID ALTERNATE #2 EXHAUST FANS SEQUENCES OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-A-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-A-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,the AHU schematic labels the heat recovery pumps at its coil
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-B-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,BID ALTERNATE #1 HEAT RECOVERY AND BID ALTERNATE #2 EXHAUST FANS SEQUENCES OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-B-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-B-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,the AHU schematic labels the heat recovery pumps at its coil
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-B-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,BID ALTERNATE #1 HEAT RECOVERY AND BID ALTERNATE #2 EXHAUST FANS SEQUENCES OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-B-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,GWP-B-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,the AHU schematic labels the heat recovery pumps at its coil
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HWP-A-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,HEATING HOT WATER PLANT SEQUENCE,tag,detail A3: the exchangers (HX - A) and two redundant pumps (HWP - A)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HWP-A-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,HEATING HOT WATER PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HWP-A-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,HEATING HOT WATER PLANT SEQUENCE,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HWP-A-2,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,HEATING HOT WATER PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HWP-B-1,PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,the AHU sequence runs HOT WATER PUMP (HWP - B); the schematic labels HWP - B
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HX-A-1,HEAT_EXCHANGER,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,HEATING HOT WATER PLANT SEQUENCE,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HX-A-1,HEAT_EXCHANGER,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,HEATING HOT WATER PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HX-A-2,HEAT_EXCHANGER,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,HEATING HOT WATER PLANT SEQUENCE,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HX-A-2,HEAT_EXCHANGER,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,HEATING HOT WATER PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-1,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,AHU-A's supply fan array and return fans: the AHU schematic labels each
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-1,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-2,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-2,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-3,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-3,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-4,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-4,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-5,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-5,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-6,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,SF-6,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-1,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-1,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-2,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-2,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-3,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-3,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-4,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,RF-4,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,AHU POINTS LIST,semantic,a component of AHU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EF-2,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,BID ALTERNATE #1 HEAT RECOVERY AND BID ALTERNATE #2 EXHAUST FANS SEQUENCES OF OPERATION,tag,its sequence runs FANS EF-3 AND EF-2 in an N-1 arrangement
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EF-2,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,BID ALTERNATE #2 EXHAUST FAN POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EF-3,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,BID ALTERNATE #1 HEAT RECOVERY AND BID ALTERNATE #2 EXHAUST FANS SEQUENCES OF OPERATION,tag,its sequence runs FANS EF-3 AND EF-2 in an N-1 arrangement
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,EF-3,FAN,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,BID ALTERNATE #2 EXHAUST FAN POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,WWHP-A,HEAT_PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,BID ALTERNATE #1 HEAT RECOVERY AND BID ALTERNATE #2 EXHAUST FANS SEQUENCES OF OPERATION,tag,the heat recovery sequence enables and controls WWHP - A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,WWHP-A,HEAT_PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#57,BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST,family_detail,
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#71,WWHP-A,HEAT_PUMP,061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#56,AHU CONTROLS SCHEMATIC AND SEQUENCE OF OPERATION,tag,the AHU schematic labels WWHP - A

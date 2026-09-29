@@ -1,0 +1,131 @@
+# 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2, dev (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.attrs.csv but its
+# placeholder row (no tag: "no FAN instance printed").
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU-4,AHU,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#33,AHU-4 CONTROL SCHEMATIC,tag,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,CC-1,DUCT_MOUNTED_COIL,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#32,DOAS-1 & DOAS-2 CONTROL SCHEMATIC,semantic,DOAS-1's cooling coil (its valve is the schematic's AO-7)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,CC-2,DUCT_MOUNTED_COIL,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#32,DOAS-1 & DOAS-2 CONTROL SCHEMATIC,semantic,DOAS-2's cooling coil
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,CC-3,DUCT_MOUNTED_COIL,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#34,DOAS-3 CONTROL SCHEMATIC,semantic,DOAS-3's cooling coil
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,CC-4,DUCT_MOUNTED_COIL,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#33,AHU-4 CONTROL SCHEMATIC,semantic,AHU-4's cooling coil
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,HE-1,HEAT_EXCHANGER,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#32,DOAS-1 & DOAS-2 CONTROL SCHEMATIC,semantic,DOAS-1's plate and frame exchanger (its frost bypass damper)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,HE-2,HEAT_EXCHANGER,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#32,DOAS-1 & DOAS-2 CONTROL SCHEMATIC,semantic,DOAS-2's plate and frame exchanger
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CH-1,AIR_COOLED_CHILLER,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#31,AIR COOLED CHILLED WATER CONTROL SCHEMATIC,tag,M901 detail 1 with its points schedule and sequence
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,CH-2,AIR_COOLED_CHILLER,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#31,AIR COOLED CHILLED WATER CONTROL SCHEMATIC,tag,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,B-1,BOILER,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#31,HEATING HOT WATER CONTROL SCHEMATIC,tag,M901 detail 2 with its points schedule and sequence
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,B-2,BOILER,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#31,HEATING HOT WATER CONTROL SCHEMATIC,tag,M901 detail 2 with its points schedule and sequence
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HWP-1,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#31,HEATING HOT WATER CONTROL SCHEMATIC,tag,M901 detail 2 with its points schedule and sequence
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HWP-2,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#31,HEATING HOT WATER CONTROL SCHEMATIC,tag,M901 detail 2 with its points schedule and sequence
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HCP-1,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#32,DOAS-1 & DOAS-2 CONTROL SCHEMATIC,semantic,the heating coil pump (HCP) at DOAS-1's preheat coil; its row serves DOAS-1
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HCP-2,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#32,DOAS-1 & DOAS-2 CONTROL SCHEMATIC,semantic,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HCP-3,PUMP,,none,,DOAS-3's schematic draws no pump
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HCP-4,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#33,AHU-4 CONTROL SCHEMATIC,semantic,the heating coil pump (HCP) at AHU-4's preheat coil
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HRCP-1A,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,HEATING RECOVERY CHILLER CONTROL SCHEMATIC,family_detail,M902 detail 6 labels HRCP-1 and HRCP-2; its sequence commands the heat recovery chiller pumps
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HRCP-1B,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,HEATING RECOVERY CHILLER CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HRCP-2A,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,HEATING RECOVERY CHILLER CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#20,HRCP-2B,PUMP,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,HEATING RECOVERY CHILLER CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,CUH-1,UNIT_HEATER,,none,,only a CUH/UH load on the heating hot water schematic
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,CUH-2,UNIT_HEATER,,none,,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,CUH-3,UNIT_HEATER,,none,,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,CUH-4,UNIT_HEATER,,none,,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,CUH-5,UNIT_HEATER,,none,,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FCU-1,FCU,,none,,only an FCU'S load on the plant schematics and FCU DDC in the BAS architecture
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FCU-2,FCU,,none,,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#21,FCU-3,FCU,,none,,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-1,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,M902 detail 2
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-1,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-1,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-2,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-2,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-2,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-3,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-3,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-3,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-4,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-4,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-4,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-5,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-5,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-5,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-6,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-6,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-6,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-7,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-7,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-7,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-8,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-8,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-1-8,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-1,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-1,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-1,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-2,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-2,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-2,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-3,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-3,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-3,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-4,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-4,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-4,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-5,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-5,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-5,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-6,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-6,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-6,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-7,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-7,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-7,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-9,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-9,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-9,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-10,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-10,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-10,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-11,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-11,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-11,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-12,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-12,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-12,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-13,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-13,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-13,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-14,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-14,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-14,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-15,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-15,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-15,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-16,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-16,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-16,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-17,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-17,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-17,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-18,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-18,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-18,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-19,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-19,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-19,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-20,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-20,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-20,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-21,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-21,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-21,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-22,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-22,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-22,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-23,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,VAV/CAV TERMINAL BOX CONTROL SCHEMATIC,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-23,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,SEQUENCE OF OPERATION - VAV BOXES,family_detail,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22,VAV-2-23,VAV,096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#36,TERMINAL BOX VAV/CAV/AFCV POWER SUPPLY CONTROL SCHEMATIC,family_detail,

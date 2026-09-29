@@ -1,0 +1,58 @@
+# 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2, dev (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-1,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,"detail 1 on its sheet: tag symbols CH 1 to 3, CT 1 to 3, CWP 1 to 3, PCHP 1 to 3, SCHP 1 and 2"
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-1,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,family_detail,lists CHILLER 1 by number
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-1,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-2,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-2,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,family_detail,lists CHILLER 2 by number
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-2,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-3,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-3,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,family_detail,lists CHILLER 3 by number
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CH-3,AIR_COOLED_CHILLER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-3,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-3,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CWP-3,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-3,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-3,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PCHP-3,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SCHP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SCHP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SCHP-1,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SCHP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SCHP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SCHP-2,PUMP,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PHWP-1,PUMP,,none,,heating water pumps: no heating water control drawing (M511/M512 are piping diagrams)
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PHWP-2,PUMP,,none,,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,PHWP-3,PUMP,,none,,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SHWP-1,PUMP,,none,,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,SHWP-2,PUMP,,none,,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-1,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-1,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,family_detail,lists COOLING TOWER 1 by number
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-1,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-2,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-2,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,family_detail,lists COOLING TOWER 2 by number
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-2,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-3,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#21,CHILLED WATER AND CONDENSER WATER CONTROLS DIAGRAM,tag,
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-3,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM,family_detail,lists COOLING TOWER 3 by number
+012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#19,CT-3,COOLING_TOWER,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,CHILLED WATER SYSTEM SEQUENCE OF OPERATION,family_detail,
