@@ -105,6 +105,24 @@ test("R0: the negation guard reads a negated device as its absence; a trap is ne
   assert.equal(b.answer, "absent", "SMOKE MODE is not a smoke detector");
 });
 
+test("R0: a monitored point is the unit's own points list's to decide: a duct detector the list omits is no BAS point; one it lists is; a proposal's list decides nothing", () => {
+  const seq = packet("seq", "AHU SEQUENCE OF OPERATION", [sp("WHEN SMOKE IS DETECTED BY DUCT SMOKE DETECTOR, SD, THE FANS SHALL STOP AND AN ALARM SHALL BE SENT TO THE FIRE ALARM SYSTEM.", 100, 100)], "sequence");
+  const omits = packet("pts", "POINTS LIST FOR AHU", [sp("SUPPLY FAN STATUS BI-1", 100, 100), sp("MIXED AIR LOW LIMIT BI-2", 100, 130)], "points");
+  const lists = packet("pts2", "POINTS LIST FOR AHU", [sp("SUPPLY FAN STATUS BI-1", 100, 100), sp("SUPPLY AIR SMOKE DETECTOR BI-2", 100, 130)], "points");
+  const [a] = readR0({ tag: "AHU-1", family: "AHU" }, [bound(seq, "family_detail"), bound(omits, "family_detail")], [opt("duct_smoke_detectors")], TERM_LIST);
+  assert.equal(a.answer, "no");
+  assert.equal(a.rule, "r0.duct_smoke_detectors.points_list_omits");
+  assert.ok(a.cites.length && a.cites[0].packet === "pts");
+  const [b] = readR0({ tag: "AHU-1", family: "AHU" }, [bound(seq, "family_detail"), bound(lists, "family_detail")], [opt("duct_smoke_detectors")], TERM_LIST);
+  assert.equal(b.answer, "yes");
+  const [c] = readR0({ tag: "AHU-1", family: "AHU" }, [bound(seq, "family_detail"), bound(omits, "family_detail", { proposal: true })], [opt("duct_smoke_detectors")], TERM_LIST);
+  assert.equal(c.answer, "yes", "a proposal's points list is not the unit's to decide by");
+  const fanSeq = packet("fs", "AHU SEQUENCE OF OPERATION", [sp("A CURRENT SWITCH SHALL PROVE FAN STATUS TO THE BAS.", 100, 100)], "sequence");
+  const lowLimit = packet("pts3", "POINTS LIST FOR AHU", [sp("MIXED AIR LOW LIMIT BI-2", 100, 130)], "points");
+  const [d] = readR0({ tag: "AHU-1", family: "AHU" }, [bound(fanSeq, "family_detail"), bound(lowLimit, "family_detail")], [opt("fan_status")], TERM_LIST);
+  assert.notEqual(d.rule, "r0.fan_status.points_list_omits", "only a monitored point's option");
+});
+
 test("R0: absence is read only through a packet a title binds to the unit; a shared packet speaks for the unit only where it names it", () => {
   const p = packet("p1", "VAV BOX CONTROL DIAGRAM", [sp("ZONE TEMPERATURE SENSOR", 100, 100), sp("AO - DAMPER", 100, 300)]);
   const [fam] = readR0({ tag: "VAV-1" }, [bound(p, "family_detail")], [opt("co2_sensor")], TERM_LIST);

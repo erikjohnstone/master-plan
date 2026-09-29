@@ -7,13 +7,15 @@
 // below is eval-only; no surface imports it.
 //
 //   node --import tsx scripts/control-intent-binding-eval.mjs <corpus-dir> [setId ...]
-//        [--heldout | --dev2 | --heldout2] [--report] [--detail]
+//        [--heldout | --dev2 | --heldout2 | --dev3] [--report] [--detail]
 //
 //   --heldout  the frozen held-out documents: aggregates only (gates; never
 //              tuned on).
 //   --dev2, --heldout2  the second tier's sides (reports/control-intent/
 //              binding-tier2/01-split.json): documents the assemblies tiers 2
 //              to 5 key, drawn by seed; held-out 2 is scored in aggregate only.
+//   --dev3     the third tier (binding-tier3/01-split.json): the second
+//              tier's eligible exposed documents it did not draw; dev only.
 //   --report   write reports/control-intent/03-binding-eval-<side>.{json,md}.
 //   --detail   (dev sides only) every missed and every false binding.
 //
@@ -64,6 +66,7 @@ export const BINDING_KEY_COLUMNS = ["sheet", "tag", "family", "packet_sheet", "p
 export const GATES = { dev: { recall: 0.95, precision: 0.98, unit_recall: 0.95 }, heldout: { recall: 0.85, precision: 0.95 } };
 GATES.dev2 = GATES.dev;
 GATES.heldout2 = GATES.heldout;
+GATES.dev3 = GATES.dev;
 
 function splitCsvLine(line) {
   const out = [];
@@ -275,11 +278,11 @@ async function main() {
   const flag = (f) => argv.includes(f);
   const [corpusDir, ...only] = argv.filter((a) => !a.startsWith("--"));
   if (!corpusDir) {
-    console.error("usage: node --import tsx scripts/control-intent-binding-eval.mjs <corpus-dir> [setId ...] [--heldout | --dev2 | --heldout2] [--report] [--detail]");
+    console.error("usage: node --import tsx scripts/control-intent-binding-eval.mjs <corpus-dir> [setId ...] [--heldout | --dev2 | --heldout2 | --dev3] [--report] [--detail]");
     process.exit(2);
   }
   const corpus = resolve(corpusDir);
-  const side = flag("--heldout2") ? "heldout2" : flag("--dev2") ? "dev2" : flag("--heldout") ? "heldout" : "dev";
+  const side = flag("--heldout2") ? "heldout2" : flag("--dev2") ? "dev2" : flag("--dev3") ? "dev3" : flag("--heldout") ? "heldout" : "dev";
   const heldout = side.startsWith("heldout");
   if (flag("--detail") && heldout) {
     console.error("--detail is dev-only: held-out documents are scored at gates, never tuned on");

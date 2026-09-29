@@ -1,7 +1,7 @@
 # Reading eval — heldout
 
 ```
-READING EVAL (instrument 4) — heldout, replayed runs (live top-up)
+READING EVAL (instrument 4) — heldout, replayed runs
 
                                            applied-right applied-wrong INVENTED proposal-right proposal-wrong unresolved abstained
   ALL decisions                                         5              0         0              16               3           0        258

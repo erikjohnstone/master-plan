@@ -1326,3 +1326,202 @@ here. Held-out 2 was unchanged by both cuts, so it informed nothing.
     `session.ts`, and pass with it and this binder. The other 2 are the known AS-1 conformance test and navfac's
     `sweep_schedule_row` timeout.
   - The shared-path parity tests pass and fail test for test the same with the binder before this batch and after it.
+
+## CI-46: a "variable volume" terminal unit detail, a dual duct box and a hyphenated family name (FIXED, next commit)
+
+**Found:** the dev-2 miss list and a survey of every proposal the binder left over the 89 non-held-out cached
+documents (355 proposals on 20 documents), read by qualifier.
+
+- "VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM" (031_MO M-400, 05_MO M-7xx detail 1): VARIABLE and VOLUME were
+  two qualifiers a VAV row never prints, so 45 terminal-unit bindings on 031_MO and 05_MO stayed proposals. The
+  synonym list read "VARIABLE AIR VOLUME" and "VAV" as one meaning, never "VARIABLE VOLUME".
+- 05_MO also schedules dual duct boxes apart from its single duct boxes, and its dual duct detail (detail 3,
+  "DUAL-DUCT AIR TERMINAL UNIT DIAGRAM") is a finder miss (CI-26). Read as the family's own name alone, "variable
+  volume" would have handed that sheet's single duct diagram to the 15 dual duct boxes. DUAL was dropped as a count
+  ("DUAL HEAT EXCHANGER"), so a dual duct schedule was no kind apart from a single duct one.
+- "DE-HUMIDIFIER SEQUENCE" (030_NY): the family's own name, hyphenated, was a qualifier.
+
+**Change:**
+- "VARIABLE VOLUME" joins "VARIABLE AIR VOLUME" and "VAV".
+- DUAL DUCT (DUAL-DUCT, DOUBLE DUCT) is one kind phrase: a dual duct schedule is apart from a single duct one, and a
+  detail titled for plain terminal units is a dual duct box's only as a proposal. "DUAL MAXIMUM" confirms no dual duct.
+- A qualifier that is the unit's own name in another spelling (hyphens) is none.
+
+**Tests** (`evidence.test.ts`): a variable volume detail is a VAV box's; a dual duct box scheduled apart takes it only
+as a proposal; DUAL MAXIMUM is no dual duct; DOUBLE DUCT is its own kind; DE-HUMIDIFIER. Each mutation fails a test.
+
+## CI-47: a sequence column that names the sequence by what it does ("CONSTANT VOLUME") (FIXED, next commit)
+
+**Found with CI-46:** 05_MO's 1-TU-28-1 to 4 print CONTROL TYPE "VAV" and CONTROL SEQUENCE "CONSTANT VOLUME" (min =
+max 2500 CFM). CI-38 read a sequence column's letter ("B"), never a phrase, and with CI-46 the variable volume
+diagram named their row's whole subject through CONTROL TYPE, so it beat the constant volume diagram. Min = max is no
+test: ATU-6-4 to 7 print min = max under a DUAL MAX sequence.
+
+**Change:** a sequence column's phrase of two or more words binds, of each kind, the one untagged detail of the
+unit's family whose title prints it, beside another of that kind that does not, as a section (cross_reference). It
+chooses for that row only, never for its schedule's other rows; never through the family's own name ("VARIABLE AIR
+VOLUME" of a VAV box); never a detail the row's parts contradict. 05_MO's four constant volume boxes keep the constant
+volume diagram; its DUAL MAX boxes take the variable volume one.
+
+## CI-48: an air handler variant its row confirms by its columns, or by the terminal units it serves (FIXED, next commit)
+
+- 031_MO's WHSE-AHU-1 (the set's one air handler) takes M-401's "VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM
+  OUTSIDE AIR" diagram, sequence and points list only as proposals: its row prints no "MINIMUM" or "OUTSIDE AIR"
+  (it prints "AIR FLOW MIN OA CFM 1920" under a column header, and headers never confirm, CI-13). Its four parts
+  (WHSE-SF1, RF1, CC-1, PHC1), which the key gives the air handler's sequence and points list, took nothing: a part
+  inherits only confirmed packets (CI-44).
+- 06_MO's ACU-6, the set's one rooftop unit, takes "VAV ROOFTOP UNIT CONTROLS DIAGRAM" and its sequence and control
+  summary only as proposals, though the set schedules nine VAV boxes (their airflow sums to the unit's 3,520 CFM).
+
+**Change:**
+- A part (PARTS, CI-15) for minimum outdoor air: "WITH MINIMUM OUTSIDE AIR" in a title is confirmed by the row filling
+  a minimum outdoor airflow column (a CFM, L/S, FLOW or % column; never a temperature).
+- An air handler serves VAV terminal units: VAV rows naming it as their system, or the set's one air handler where the
+  set schedules VAV units, confirm a VAV qualifier. Never where its own row prints a constant volume, and never through
+  the one-air-handler reading where a VAV row names another unit as its system.
+
+## CI-49: a part its location names in any spacing; a pump of a water system is no part of the air handler it serves (FIXED, next commit)
+
+- WHSE-SF1's LOCATION prints "WHSE-AHU1": a unit's mark without its dash was no unit in a row's cells.
+- WHSE-P4 ("AREA AND/OR BLDG SERVED: WHSE-AHU-1", "SYSTEM AND/OR SERVICE: PREHEAT WATER"), the preheat coil's pump,
+  took the air handler's three packets once CI-48 confirmed them. The key gives it none, and M-401 draws no pump.
+
+**Change:**
+- A mark in a column that names a unit's owner, location or system is read in any spacing (two letters or more;
+  "B1" alone is a room or a level as often as a unit). Everywhere else, as before, only with its dash: a panel "HP1"
+  pairs no heat pump.
+- A unit whose system cells name a fluid system (water, steam, glycol, refrigerant, fuel...) and no unit is part of
+  that piping: what its row says it serves is not its owner. A return fan whose SERVICE is "RETURN AIR" still is.
+
+## CI-50: measured and not adopted: a unit with no binding inheriting through the indoor unit its row serves
+
+16_NV's condensing units BO1 and BO2 ("SERVICE: OAU-B1", read by the designator, CI-37) have no binding, and the key
+gives them the outdoor air unit's "BUILDING B OUTSIDE AIR CONTROL DIAGRAM". Letting a unit with no binding at all take
+its served indoor unit's packets gains those 2 dev-2 pairs, changes nothing else over the 89 cached documents, and
+does not replace a proposal. It reverses CI-44's narrowing, though, which a held-out aggregate prompted and which a
+committed test pins ("with no packet of its own, it takes none through the pairing"). Whether the empty-unit case
+caused part of that first cut's 27 wrong inherited bindings is unknown without reading the held-out side again, so it
+stays out.
+
+## CI-51: a duct smoke detector its unit's points list omits is no BAS point (FIXED, next commit; R0 v8)
+
+**Found:** CI-48 confirmed 031_MO's air handler drawings, and the reading eval then applied WHSE-AHU-1's
+duct_smoke_detectors = true, wrong: R0 and R1 read "WHEN SMOKE IS DETECTED BY DUCT SMOKE DETECTOR, SD, ... AN ALARM
+SIGNAL SHALL BE TRANSMITTED TO THE FIRE ALARM SYSTEM" as the option. The option is "supply and return duct smoke
+detectors monitored by the BAS" (term list v2), and M-401's points list, the air handler's BAS points, lists none.
+The dev keys read it so throughout: bldg5406's and federal-mech's are true where their points schedules list the
+detectors; 031_MO's is false.
+
+**Change (readers/r0.ts, control_r0_v8):** for an option whose device is a point the BAS monitors (POINTS_DECIDE:
+duct_smoke_detectors), the unit's own confirmed points list decides. Where the unit has one and it lists no point for
+the device, R0 reads "no", citing the list. With R1's "yes" the question is unresolved (both sides shown), no longer
+applied. **Tests** (`readers.test.ts`): omitted, listed, a proposal's list, and an option outside the set; each
+mutation fails.
+
+## CI-52: an independent review of the first cut before commit (PROCESS NOTE)
+
+An adversarial review of the first cut (a separate agent, read-only, barred from evidence.ts and the held-out side;
+its findings reproduced here before any change) found eight problems, all fixed with a test each:
+1. The sequence phrase matched through synonyms (a VAV box's "VARIABLE AIR VOLUME" took "VAV BOX CONTROL DIAGRAM"),
+   and its choice fed the schedule's chosen packets, so the schedule's other rows lost the packet by family.
+2. Any header with SERVICE or SYSTEM ("MOTOR SERVICE FACTOR") counted as the unit's system.
+3. "DUAL MAXIMUM" confirmed DUAL, so a single duct box took a dual duct detail.
+4. "DOUBLE DUCT" regressed to a proposal.
+5. The one-air-handler VAV reading ignored an air handler printing CONSTANT VOLUME and a VAV row naming another system.
+6. The minimum outdoor air column matched "MIN OA TEMP".
+7. Marks without a dash were read in every cell, so a panel "HP1" paired a fan coil with heat pump HP-1.
+8. DUAL-DUCT was only partly a kind.
+
+A last guard found by typecheck: `cells.flatMap(namedUnits)` passed the cell's index as the column flag, so every cell
+but the first read marks without a dash. It changed no binding over the 89 documents; the test now puts the panel cell
+second. Three guards that no test could tell from the rest were removed (literal phrase matching, a header word list,
+a temperature exclusion): another guard already covers each.
+
+## CI-53: binder batch 3 (MEASURE NOTE)
+
+**Binding eval** (`--report`; held-out in aggregate only):
+
+| side | pair recall | precision | unit recall |
+|---|---|---|---|
+| dev (first tier) | 96.9% (313/323; was 93.8%) | 91.4% over 360 (was 92.5% over 345) | 95.7% (was 93.3%) |
+| dev 2 | 80.1% (504/629; was 79.7%) | 95.3% over 449 (was 95.3% over 448) | 92.1% (was 91.7%) |
+| the first tier's held-out (aggregates) | 26.7% (51/191), unchanged | 93.5% over 46, unchanged | |
+| held-out 2 (aggregates) | 23.1%, unchanged | 76.6%, unchanged | |
+
+- dev's precision: 5 of the 15 new confirmed bindings are 031_MO's "VARIABLE AIR VOLUME AIR HANDLING UNIT WITH
+  MINIMUM OUTSIDE AIR CONTROL DIAGRAM" (M-401 detail 1, drawn above the air handler's sequence and beside its points
+  list, both keyed), for WHSE-AHU-1 and its four parts. The key omits the diagram for them. **Key disagreement,
+  catalogued, the key not edited:** read on the sheet, the diagram is the set's one air handler's control diagram.
+- Over the 89 non-held-out cached documents, 44 units' bindings change on 5 documents, each read against its drawing
+  and right: 031_MO's air handler, its four parts and 13 terminal units; 05_MO's 21 single duct boxes (4 constant
+  volume, 17 DUAL MAX); 03_FL's AHU-1 and AHU-2 (their schedule is titled VARIABLE VOLUME AIR HANDLING UNIT; the VAV
+  AHU diagram and sequence replace a coil piping detail); 06_MO's ACU-6; 030_NY's two dehumidifiers.
+
+**Reading eval:** dev 296 applied (was 294), 0 wrong, 0 invented; unresolved 10 (the smoke detector, CI-51);
+held-out unchanged (5 applied, 0 wrong). No request was new: the readers had already read these packets as the
+units' proposals, and a live top-up recorded nothing.
+
+**Unseen audit:** 05_MO's 2 new requests recorded live; 56 applied, 56 audited, 56 right; none new, none gone.
+
+**Binding tier 3, cold (CI-54):** the third tier's keys were written after these rules and never informed them. With
+the binder before this batch it scores 38.7% (120/310), precision 78.3% over 152; with this batch 40.0% (124/310),
+79.9% over 154. The whole change is 03_FL's two VAV air handlers: they gain their VAV AHU diagram and sequence (4
+pairs) and lose a coil piping detail the key does not give them (2 wrong bindings).
+
+**GATE D:** every item passes but the live re-run: 23 of 564 decisions change (4.1%, limit 2%; 20 of 566 at CI-45).
+Each change is a model answering a fresh call differently, on units whose bindings did not change (040_IL's unit
+heaters, federal-mech, itd-d1-lab, bldg5406; 031_MO 0 of 18). Swap: 0 of 463 questions apply through a rebound packet
+(another family), 0 of 72 (another tag).
+
+**GATE C:** dev 227/244, held-out 35/91, both as before.
+
+**Guard:** web typecheck, lint and 3,996 tests, failing only the 3 AS-1 tests. mcp typecheck; test:bas 189/189; the
+mcp suite and the shared-path files fail exactly the tests they failed at CI-45 in the same worktree (its held-back
+session.ts; nothing here touches it). 16 mutations of the binder rules and 3 of R0's rule each fail a test.
+
+## CI-54: binding tier 3: the second tier's undrawn documents, keyed and measured cold (MEASURE NOTE)
+
+**What:** the second tier drew its dev side from the 19 eligible exposed documents (seed 181) and took the first 10;
+the other 9 were never keyed. They are now the third tier (`reports/control-intent/binding-tier3/01-split.md`,
+`control-intent-binding-split.mjs --tier3`, the eval's `--dev3`): 044_NY, 21_VA, 14_OR, 017_MD, 008_MO, 03_FL,
+088_AZ, 043_FL and 030_NY. Every eligible unexposed document is held-out 2 already, so this tier is dev only.
+
+**Keys** (`keys/<set>.binding.csv`, 337 rows over the 173 instances of their attribute keys): each written by a
+separate agent from the set's control sheets (text layer and renders), never pipeline output, in the tier-2 header
+format; each then re-checked row by row on the renders by a second, independent agent. 7 of the 9 keys drew no
+disagreement. The coordinator adjudicated the other ten on the renders:
+- 044_NY B-1 to B-4: MI-402 detail 5 "WATER SAMPLE COOLERS / CONDUCTIVITY CONTROLLER" pipes each boiler's surface
+  blowdown ("FROM B-1" ... "FROM B-4") through new conductivity sensors, controllers and modulating valves (its note
+  1). A boiler control detail the key had left out: **added**, 4 rows (kind tag, as the tier-2 keys key a unit
+  labelled inside a drawing).
+- 03_FL AHU-1, AHU-2: the checker proposed the "EXHAUST FANS AND SUPPLY FANS" section for its closing sentence
+  "ALL FANS AND AIR HANDLING UNITS SHALL SHUTDOWN ON A SIGNAL FROM THE FIRE ALARM CONTROL PANEL". A general
+  sentence in a section titled for another kind is not the air handlers' packet; they have their own diagram and
+  sequence. **Not added.**
+- 03_FL B-1, HWP-1, BP-1 and 044_NY EF-5: binding kind only (tag against semantic for a unit labelled inside a
+  drawing whose title names no tag). The tier-2 keys use tag; **kept** for consistency. The eval scores pairs, not
+  kinds.
+
+**Cold measure** (the binder at CI-53, before any rule from this tier): pair recall **40.0% (124/310)**, precision
+**79.9% over 154** confirmed bindings, unit recall 56.2%. The first tier's dev reads 96.9% and dev 2 80.1%: how far
+the binder generalizes to documents that informed no rule is this number. Of the 186 missed pairs:
+
+| why | pairs |
+|---|---:|
+| the key's packet is not found by the finder (CI-26) | 68 |
+| the instance is not matched to a compile item | 44 |
+| bound as a proposal only | 33 |
+| bound to another packet of that kind | 21 |
+| no binding at all (tag read) | 11 |
+| bound to packets of other kinds only | 7 |
+| no binding at all (tag not read) | 2 |
+
+- The 44 unmatched: 03_FL's 15 air terminal units, which its attribute key names "(N)ATU N" and "(E)ATU H" (30
+  pairs); 043_FL's four pumps (12), which the compile does not read (2 compile items); 088_AZ's "(E) CT-1" and
+  "(E) CH-3" (4). Schedule extraction and the attribute key's instance names, not the binder.
+- By set: 21_VA 98.4%; 030_NY 47.1%; 03_FL 36.2%; 14_OR 54.2% (precision 38.2% over 34); 044_NY 16.9%; 088_AZ
+  28.6%; 017_MD 0% (39 semantic pairs: fans and coils of the ACUs, whose schedules name their ACU); 043_FL and
+  008_MO 0%.
+- 18 units the keys give no packet are bound (precision's main loss), and 54 bindings are ambiguous.
+
+This tier is dev from now: its misses may inform rules, and the cold number above stays the record.

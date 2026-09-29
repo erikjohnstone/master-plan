@@ -1,0 +1,60 @@
+{
+ "from": "binding-tier2/01-split.json: the eligible exposed documents after its dev head",
+ "tier2_seed": 181,
+ "exposure": {
+  "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers": [
+   "tier 2's examined list: CONTROL_INTENT_BUG_CATALOGUE CI-28 cites its exhaust fans and a finder miss; a sheet (p27) was rendered and viewed",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 3 times"
+  ],
+  "21_VA_OrangeCounty_PublicSafetyBldg": [
+   "tier 2's examined list: the unseen audit checked its 115 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 10 times"
+  ],
+  "14_OR_KlamathCC_LearningCtr_Mechanical": [
+   "tier 2's examined list: the unseen audit checked its 35 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 5 times"
+  ],
+  "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling": [
+   "tier 2's examined list: CONTROL_INTENT_BUG_CATALOGUE CI-11 cites its bindings (MCC-A1, the ACU A-1 sequence)",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 1 time"
+  ],
+  "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated": [
+   "tier 2's examined list: CONTROL_INTENT_BUG_CATALOGUE cites its control diagram title as a finder example",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 2 times"
+  ],
+  "03_FL_HurlburtField_ChildDevCenter": [
+   "tier 2's examined list: the unseen audit checked its 16 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 10 times"
+  ],
+  "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX": [
+   "tier 2's examined list: the unseen audit checked its 32 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 4 times"
+  ],
+  "043_FL_VA_Project_673_21_151_Replace_Air_Handling": [
+   "tier 2's examined list: the unseen audit checked its 2 applied control-intent decisions against their cites and the drawings (06-unseen-audit.json)",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 1 time"
+  ],
+  "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction": [
+   "tier 2's examined list: CONTROL_INTENT_BUG_CATALOGUE CI-29 cites its 2-pipe fan coil diagram and schedule",
+   "CONTROL_INTENT_BUG_CATALOGUE.md cites it 2 times"
+  ]
+ },
+ "dev": {
+  "sets": [
+   "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "21_VA_OrangeCounty_PublicSafetyBldg",
+   "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+   "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+   "03_FL_HurlburtField_ChildDevCenter",
+   "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction"
+  ],
+  "instances": 174
+ },
+ "heldout": {
+  "sets": [],
+  "instances": 0
+ }
+}

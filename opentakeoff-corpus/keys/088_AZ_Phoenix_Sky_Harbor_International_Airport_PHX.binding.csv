@@ -1,0 +1,39 @@
+# 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 3, dev (reports/control-intent/binding-tier3/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output.
+# Checked row by row on the renders by a second, independent reader; its disagreements adjudicated on the renders (CONTROL_INTENT_BUG_CATALOGUE CI-54).
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,AHU-1,AHU,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#37,VARIABLE AIR VOLUME AHU CONTROLS,family_detail,"RBME0901 detail 1: diagram, points and sequence (headed VARIABLE AIR VOLUME - AHU); the set's one air handler"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,FCU-1,FCU,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38,CHILLED WATER FAN COIL UNIT CONTROLS,family_detail,"RBME0902 detail 3, sequence headed FAN COIL UNIT - CHILLED WATER"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,FCU-2,FCU,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38,CHILLED WATER FAN COIL UNIT CONTROLS,family_detail,"RBME0902 detail 3, sequence headed FAN COIL UNIT - CHILLED WATER"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SEF-1,FAN,,none,,"smoke exhaust fan interlocked with the smoke control panel (schedule note 5); EXHAUST FAN ON OFF CONTROLS serves the scheduled exhaust fans EF-1 to EF-3"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SEF-2,FAN,,none,,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SEF-3,FAN,,none,,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,SEF-4,FAN,,none,,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30,EDH-1,UNIT_HEATER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#37,VARIABLE AIR VOLUME AHU CONTROLS,semantic,"the SCR duct heater at AHU-1's discharge (plan RBME021A); the detail's SCR heating points and ELECTRIC HEATING WITH SCR section control it"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,CU-1,CONDENSING_UNIT,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38,DX - FAN COIL UNIT CONTROLS,semantic,"remote condenser of a DX fan coil (DX FAN COIL SCHEDULE condenser column); the detail's DX section, BO - COOLING STAGE 1"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,CU-2,CONDENSING_UNIT,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38,DX - FAN COIL UNIT CONTROLS,semantic,remote condenser of a DX fan coil
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,CU-3,CONDENSING_UNIT,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38,DX - FAN COIL UNIT CONTROLS,semantic,remote condenser of a DX fan coil
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,CU-4,CONDENSING_UNIT,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38,DX - FAN COIL UNIT CONTROLS,semantic,remote condenser of a DX fan coil
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,CU-5,CONDENSING_UNIT,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#38,DX - FAN COIL UNIT CONTROLS,semantic,remote condenser of a DX fan coil
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,CHWP-1,PUMP,,none,,the RCC station's chilled water pumps; no RCC control diagram covers pumps
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31,CHWP-2,PUMP,,none,,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CH-1,AIR_COOLED_CHILLER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#244,CHILLER - CONTROLS,family_detail,"ACME0701 detail 1, diagram with its points list"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CH-1,AIR_COOLED_CHILLER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#243,PIPING SCHEMATIC COB,semantic,labelled in the plant schematic with its motorized CWR and CHWR isolation valves
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CH-2,AIR_COOLED_CHILLER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#244,CHILLER - CONTROLS,family_detail,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CH-2,AIR_COOLED_CHILLER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#243,PIPING SCHEMATIC COB,semantic,labelled in the plant schematic
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,(E) CH-3,AIR_COOLED_CHILLER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#244,CHILLER - CONTROLS,family_detail,"existing chiller relocated into the rebuilt plant"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,(E) CH-3,AIR_COOLED_CHILLER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#243,PIPING SCHEMATIC COB,semantic,labelled in the plant schematic
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,(E) CT-1,COOLING_TOWER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245,COOLING TOWER - CONTROLS,family_detail,"ACME0702 detail 1, diagram with its points list; existing tower relocated"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,(E) CT-1,COOLING_TOWER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#243,PIPING SCHEMATIC COB,semantic,"labelled in the plant schematic with its VFD, motorized isolation valves and BAS temperature sensor"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CT-2,COOLING_TOWER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245,COOLING TOWER - CONTROLS,family_detail,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CT-2,COOLING_TOWER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#243,PIPING SCHEMATIC COB,semantic,labelled in the plant schematic
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CT-3,COOLING_TOWER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#245,COOLING TOWER - CONTROLS,family_detail,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246,CT-3,COOLING_TOWER,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#243,PIPING SCHEMATIC COB,semantic,labelled in the plant schematic

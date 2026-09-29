@@ -26,7 +26,11 @@
 //   · OPTIONS: the option's yes and no phrases, traps removed first and each
 //     hit checked by the negation guard ("NO", "NOT", "WITHOUT" up to three
 //     words before it, or "NOT REQUIRED" and the like right after it: a
-//     negated yes is a no); "absent" when no packet mentions the device.
+//     negated yes is a no); "absent" when no packet mentions the device. A
+//     device the BAS monitors (POINTS_DECIDE) is the unit's own points
+//     list's to decide: where the unit has one, confirmed, and it lists no
+//     point for the device, a mention elsewhere is a "no" (a duct detector
+//     that reports to the fire alarm is no BAS point).
 // R0 reports what it read; combine.ts decides what applies.
 import type { Box } from "../../assemblies/scheduleNotes";
 import type { Binding } from "../binding";
@@ -37,7 +41,7 @@ import { leadSubject, type PacketText } from "./text";
 import type { ReadingQuestion, RoleAnswer, OptionAnswer } from "./questions";
 import type { TermList, TermPattern } from "./terms";
 
-export const R0_VERSION = "control_r0_v7";
+export const R0_VERSION = "control_r0_v8";
 
 /** A packet bound to the unit, read. */
 export interface BoundPacket {
@@ -316,6 +320,10 @@ function controlAct(c: PacketText["clauses"][number]): { subject: string } | nul
   return CONTROL_VERB.test(verbs) ? { subject } : null;
 }
 
+/** Options whose device is a point the BAS monitors (the term list's
+ * "monitored by the BAS"): the unit's own points list decides them. */
+const POINTS_DECIDE = new Set(["duct_smoke_detectors"]);
+
 /** R0's answers for one unit. */
 export function readR0(unit: { tag: string; family?: string }, bound: readonly BoundPacket[], questions: readonly ReadingQuestion[], terms: TermList): ReaderAnswer[] {
   // A packet the print says is about other units binds nothing of its own.
@@ -362,6 +370,17 @@ export function readR0(unit: { tag: string; family?: string }, bound: readonly B
     for (const { bp, own } of scoped) {
       if (!own || bp.packet.kind === "sequence" || !t.callouts.length) continue;
       for (const h of calloutHits(bp, t, deviceRes(terms))) (h.value === "yes" ? yes : no).push(h.hit);
+    }
+    // The unit's own points lists, where the option is a monitored point:
+    // one that lists no point for the device says the BAS does not monitor
+    // it, whatever the other drawings mention.
+    if (POINTS_DECIDE.has(q.option!)) {
+      const lists = scoped.filter(({ bp, own }) => own && bp.packet.kind === "points" && !bp.binding.proposal && bp.text.lines.length > 0);
+      if (lists.length && !lists.some(({ bp }) => bp.text.lines.some((l) => t.mention.some((p) => p.re.test(untrapped(l.norm, t.traps)))))) {
+        const bp = lists[0].bp;
+        out.push({ reader: "r0", question: q.id, answer: "no", rule: `r0.${q.option}.points_list_omits`, cites: [citeLines(bp, bp.text.lines.slice(0, 3).map((l) => l.id))], why: `the unit's points list "${bp.packet.title}" lists no point for it` });
+        continue;
+      }
     }
     // A mention anywhere in the unit's packets, whoever it speaks for.
     const mentioned = bound.some((bp) => bp.text.clauses.some((c) => t.mention.some((p) => p.re.test(untrapped(c.norm, t.traps)))));

@@ -1,5 +1,35 @@
 # Changelog
 
+- **Control intent: terminal units, air handlers and their parts find more
+  of their own control drawings.** The binder's first-tier dev documents go
+  from 93.8% to 96.9% of the drawings their keys give each unit, and the
+  second tier from 79.7% to 80.1% (precision 95.3%).
+  - "Variable volume" names a VAV box's detail, as "variable air volume"
+    and "VAV" do. A dual duct box scheduled apart from the single duct boxes
+    takes a plain terminal unit detail only as a proposal; "DUAL MAXIMUM" is
+    no dual duct.
+  - A schedule's CONTROL SEQUENCE column that prints a phrase ("CONSTANT
+    VOLUME") picks, for that row only, the one detail of the unit's kind
+    whose title prints it.
+  - An air handler's "with minimum outside air" drawing is its own where
+    its row fills a minimum outdoor airflow column. A "VAV" air handler
+    drawing is its own where VAV boxes name it as their system, or where it
+    is the set's one air handler and the set schedules VAV boxes (never where
+    its row prints constant volume).
+  - A part whose location names its air handler without the dash
+    ("WHSE-AHU1") takes the air handler's drawings. A pump whose system is a
+    water or other fluid system is no part of the unit its row serves.
+  - Readings: a duct smoke detector the unit's own points list omits is not
+    applied as a BAS point; with the models reading it yes, it is left for
+    the user (R0 v8). Dev readings: 296 applied, 0 wrong.
+  - Held-out, in aggregate: unchanged (26.7% and 23.1%).
+  - A third binding tier (nine more dev documents, keyed from renders and
+    re-checked by a second reader) measures the binder on documents no rule
+    came from: 40.0% of their drawings, precision 79.9% (38.7% and 78.3%
+    before this batch).
+  (`web/src/lib/controlIntent/binding.ts`, `readers/r0.ts`;
+  CONTROL_INTENT_BUG_CATALOGUE CI-46 to CI-54.)
+
 - **Control intent: the binder finds more of each unit's control drawings.**
   On a second tier of ten dev documents from new drafters, the binder bound
   61% of the drawings their keys give each unit. It now binds 80%, with

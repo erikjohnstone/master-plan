@@ -664,3 +664,83 @@ test("a part its description puts in the set's one air handler takes that unit's
   const two = bindPackets(packets, [unit(0, "AHU-A", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(2, "AHU-B", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(1, "SF-1", "FAN", "EQUIPMENT SCHEDULE", { DESCRIPTION: "AHU SUPPLY FAN" })]);
   assert.deepEqual(two.get(1)?.map((x) => [x.packet, x.kind]), [["sch", "tag_body"]]);
 });
+
+test("a variable volume terminal unit detail is a VAV unit's; a sequence column naming constant volume picks that drawing; a dual duct box scheduled apart from single duct boxes takes neither but as a proposal", () => {
+  const b = bindPackets([
+    packet("vv", "VARIABLE VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM", "diagram"),
+    packet("cv", "CONSTANT VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM", "diagram"),
+  ], [
+    unit(0, "TU-1", "VAV", "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE", { "CONTROL TYPE": "VAV", "CONTROL SEQUENCE": "DUAL MAX" }),
+    unit(1, "TU-2", "VAV", "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE", { "CONTROL TYPE": "VAV", "CONTROL SEQUENCE": "CONSTANT VOLUME" }),
+    unit(2, "DD-1", "VAV", "DUAL DUCT AIR TERMINAL UNIT SCHEDULE", { "COLD DUCT AIRFLOW": "800" }),
+  ]);
+  assert.deepEqual(b.get(0)?.map((x) => [x.packet, x.kind, Boolean(x.proposal)]), [["vv", "family_detail", false]]);
+  assert.deepEqual(b.get(1)?.map((x) => [x.packet, x.kind]), [["cv", "cross_reference"]]);
+  assert.match(b.get(1)![0].evidence, /CONTROL SEQUENCE "CONSTANT VOLUME"/);
+  assert.ok(b.get(2)?.length && b.get(2)!.every((x) => x.proposal), "the dual duct box: proposals only");
+  // The family's own name in another spelling is no qualifier.
+  const dh = bindPackets([packet("dh", "DE-HUMIDIFIER SEQUENCE", "sequence")], [unit(0, "DH-1", "DEHUMIDIFIER", "DEHUMIDIFIER SCHEDULE")]);
+  assert.deepEqual(dh.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["dh", false]]);
+});
+
+test("an air handler detail with minimum outside air is the unit's where its row fills a minimum outdoor airflow; a VAV air handler detail where it serves the set's VAV units", () => {
+  const moa = [packet("d", "VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR CONTROL DIAGRAM", "diagram")];
+  const filled = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "AIR FLOW": "VAV", "AIR FLOW SUPPLY CFM": "13500", "AIR FLOW MIN OA CFM": "1920" })]);
+  assert.deepEqual(filled.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["d", false]]);
+  const none = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "AIR FLOW": "VAV", "AIR FLOW SUPPLY CFM": "13500" })]);
+  assert.deepEqual(none.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["d", true]]);
+  const vav = [packet("r", "VAV ROOFTOP UNIT CONTROLS DIAGRAM", "diagram")];
+  const rtu = (i: number, tag: string) => unit(i, tag, "RTU", "ROOFTOP UNIT SCHEDULE", { "AIRFLOW CFM": "3520" });
+  const boxes = [unit(5, "VAV-1", "VAV", "VARIABLE-AIR-VOLUME BOX SCHEDULE"), unit(6, "VAV-2", "VAV", "VARIABLE-AIR-VOLUME BOX SCHEDULE")];
+  const only = bindPackets(vav, [rtu(0, "ACU-6"), ...boxes]);
+  assert.deepEqual(only.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["r", false]]);
+  assert.match(only.get(0)![0].evidence, /set's one air handler, and the set schedules VAV units/);
+  assert.deepEqual(bindPackets(vav, [rtu(0, "ACU-6")]).get(0)?.map((x) => Boolean(x.proposal)), [true], "no VAV units: a proposal");
+  const two = bindPackets(vav, [rtu(0, "RTU-1"), rtu(1, "RTU-2"), unit(5, "VAV-1", "VAV", "VAV BOX SCHEDULE", { SYSTEM: "RTU-2" })]);
+  assert.deepEqual([0, 1].map((i) => two.get(i)?.map((x) => Boolean(x.proposal))), [[true], [false]]);
+});
+
+test("a part takes the packets of the air handler its location names in any spacing; a pump whose system is a water system is no part of the air handler it serves", () => {
+  const seq = packet("s", "AIR HANDLING UNIT SEQUENCE OF OPERATION", "sequence");
+  const c = bindPackets([seq], [
+    unit(0, "WHSE-AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE"),
+    unit(1, "WHSE-SF1", "FAN", "FAN SCHEDULE", { LOCATION: "WHSE-AHU1", "AREA AND/OR BLDG SERVED": "WAREHOUSE" }),
+    unit(2, "WHSE-P4", "PUMP", "PUMP SCHEDULE", { "AREA AND/OR BLDG SERVED": "WHSE-AHU-1", "SYSTEM AND/OR SERVICE": "PREHEAT WATER" }),
+    unit(3, "WHSE-RF1", "FAN", "FAN SCHEDULE", { "AREA AND/OR BLDG SERVED": "WAREHOUSE", "SYSTEM AND/OR SERVICE": "WHSE-AHU-1" }),
+  ]);
+  assert.deepEqual(c.get(1)?.map((x) => [x.packet, x.kind]), [["s", "component_of"]]);
+  assert.equal(c.get(2), undefined, "a preheat water pump is not the air handler's part");
+  assert.deepEqual(c.get(3)?.map((x) => [x.packet, x.kind]), [["s", "component_of"]]);
+});
+
+test("the new readings stay narrow: a sequence phrase that is the family's own name chooses nothing; DUAL MAXIMUM is no dual duct; a constant volume row or another system keeps the one air handler's VAV detail a proposal; a temperature is no minimum airflow; a panel's cell pairs nothing; a motor's service factor is no system", () => {
+  const vavBox = [packet("vav", "VAV BOX CONTROL DIAGRAM", "diagram")];
+  const three = bindPackets(vavBox, [
+    unit(0, "VAV-1", "VAV", "VAV BOX SCHEDULE", { "CONTROL SEQUENCE": "VARIABLE AIR VOLUME" }),
+    unit(1, "VAV-2", "VAV", "VAV BOX SCHEDULE", { "CONTROL SEQUENCE": "DUAL MAXIMUM" }),
+    unit(2, "VAV-3", "VAV", "VAV BOX SCHEDULE", { "CONTROL SEQUENCE": "B" }),
+  ]);
+  assert.deepEqual([0, 1, 2].map((i) => three.get(i)?.map((x) => [x.packet, x.kind])), [[["vav", "family_detail"]], [["vav", "family_detail"]], [["vav", "family_detail"]]]);
+  const ducts = bindPackets([packet("sd", "SINGLE DUCT TERMINAL UNIT CONTROL DIAGRAM", "diagram"), packet("dd", "DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM", "diagram")],
+    [unit(0, "TU-1", "VAV", "SINGLE DUCT TERMINAL UNIT SCHEDULE", { "CONTROL SEQUENCE": "DUAL MAXIMUM" })]);
+  assert.deepEqual(ducts.get(0)?.filter((x) => !x.proposal).map((x) => x.packet), ["sd"]);
+  const double = bindPackets([packet("dd", "DOUBLE DUCT TERMINAL UNIT CONTROL DIAGRAM", "diagram")], [unit(0, "DD-1", "VAV", "DOUBLE DUCT TERMINAL UNIT SCHEDULE")]);
+  assert.deepEqual(double.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["dd", false]]);
+  const ahuVav = [packet("a", "VAV AIR HANDLING UNIT CONTROL DIAGRAM", "diagram")];
+  const cv = bindPackets(ahuVav, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { TYPE: "CONSTANT VOLUME" }), unit(5, "VAV-1", "VAV", "VAV BOX SCHEDULE")]);
+  assert.deepEqual(cv.get(0)?.map((x) => Boolean(x.proposal)), [true], "its row prints constant volume");
+  const other = bindPackets(ahuVav, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(5, "VAV-1", "VAV", "VAV BOX SCHEDULE", { SYSTEM: "EX-AHU-3" })]);
+  assert.deepEqual(other.get(0)?.map((x) => Boolean(x.proposal)), [true], "the VAV units' system is another air handler");
+  const moa = [packet("d", "AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR CONTROL DIAGRAM", "diagram")];
+  const temps = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "HEATING COIL MIN OA TEMP F": "0" }), unit(1, "AHU-2", "AHU", "AIR HANDLING UNIT SCHEDULE", { "HEATING COIL MIN OA TEMP F": "-5" })]);
+  assert.deepEqual([0, 1].map((i) => temps.get(i)?.map((x) => Boolean(x.proposal))), [[true], [true]]);
+  const panel = bindPackets([packet("fcs", "FAN COIL UNIT SEQUENCE OF OPERATION", "sequence")], [unit(0, "FCU-1", "FCU", "FAN COIL UNIT SCHEDULE", { MODEL: "FXUQ24", "ELEC PANEL": "HP1" }), unit(1, "HP-1", "HEAT_PUMP", "HEAT PUMP SCHEDULE")]);
+  assert.equal(panel.get(1), undefined, "a panel named HP1 is no heat pump");
+  const motor = bindPackets([packet("s", "AIR HANDLING UNIT SEQUENCE OF OPERATION", "sequence")], [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(1, "RF-1", "FAN", "FAN SCHEDULE", { "UNIT SERVED": "AHU-1", "MOTOR SERVICE FACTOR": "1.15" }), unit(2, "RF-3", "FAN", "FAN SCHEDULE", { SERVICE: "RETURN AIR", "UNIT SERVED": "AHU-1" })]);
+  assert.deepEqual([1, 2].map((i) => motor.get(i)?.map((x) => [x.packet, x.kind])), [[["s", "component_of"]], [["s", "component_of"]]]);
+  // A phrase chooses for its own row, never for its schedule's other rows.
+  const fans = bindPackets([packet("sw", "SWITCH CONTROLLED EXHAUST FAN DIAGRAM", "diagram"), packet("bas", "BAS CONTROLLED EXHAUST FAN DIAGRAM", "diagram")],
+    [unit(0, "EF-1", "FAN", "EXHAUST FAN SCHEDULE", { "CONTROL SEQUENCE": "SWITCH CONTROLLED" }), unit(1, "EF-2", "FAN", "EXHAUST FAN SCHEDULE")]);
+  assert.deepEqual(fans.get(0)?.map((x) => [x.packet, x.kind]), [["sw", "cross_reference"]]);
+  assert.deepEqual(fans.get(1)?.map((x) => x.packet).sort(), ["bas", "sw"]);
+});

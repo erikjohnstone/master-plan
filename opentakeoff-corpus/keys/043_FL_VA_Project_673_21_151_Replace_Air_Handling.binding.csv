@@ -1,0 +1,24 @@
+# 043_FL_VA_Project_673_21_151_Replace_Air_Handling.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 3, dev (reports/control-intent/binding-tier3/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output.
+# Checked row by row on the renders by a second, independent reader; its disagreements adjudicated on the renders (CONTROL_INTENT_BUG_CATALOGUE CI-54).
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/043_FL_VA_Project_673_21_151_Replace_Air_Handling.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,HWP-1,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,HEATING HOT WATER PUMP CONTROL DIAGRAM,family_detail,M801; the set's two hot water pumps drawn as P1/P2 (Hot Water Pump 1 / 2)
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,HWP-1,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,HEATING HOT WATER PUMPS CONTROLS POINTS LIST,family_detail,M801; Hot Water Pump 1 / 2 points
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,HWP-1,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,HEATING HOT WATER PUMPS SEQUENCE OF CONTROLS,family_detail,M801; HOT WATER LOOP PUMPS (TYPICAL OF 1); the two hot water pumps lead/standby
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,HWP-2,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,HEATING HOT WATER PUMP CONTROL DIAGRAM,family_detail,M801; the set's two hot water pumps drawn as P1/P2 (Hot Water Pump 1 / 2)
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,HWP-2,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,HEATING HOT WATER PUMPS CONTROLS POINTS LIST,family_detail,M801; Hot Water Pump 1 / 2 points
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,HWP-2,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,HEATING HOT WATER PUMPS SEQUENCE OF CONTROLS,family_detail,M801; HOT WATER LOOP PUMPS (TYPICAL OF 1); the two hot water pumps lead/standby
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,CWP-9,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,CHILLED WATER PUMP CONTROL DIAGRAM,family_detail,"M801; the set's two chilled water pumps drawn as P1/P2 (Chilled Water Pump 1 / 2); E001 and plans tag them CWP-9/10, M600 CWP-1/2"
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,CWP-9,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,CHILLED WATER PUMPS CONTROLS POINTS LIST,family_detail,M801; Chilled Water Pump 1 / 2 points
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,CWP-9,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,CHILLED WATER PUMPS SEQUENCE OF CONTROLS,family_detail,M801; CHILLED WATER LOOP PUMPS (TYPICAL OF 1); the two chilled water pumps lead/standby
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,CWP-10,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,CHILLED WATER PUMP CONTROL DIAGRAM,family_detail,"M801; the set's two chilled water pumps drawn as P1/P2 (Chilled Water Pump 1 / 2); E001 and plans tag them CWP-9/10, M600 CWP-1/2"
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,CWP-10,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,CHILLED WATER PUMPS CONTROLS POINTS LIST,family_detail,M801; Chilled Water Pump 1 / 2 points
+043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#23,CWP-10,PUMP,043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf#22,CHILLED WATER PUMPS SEQUENCE OF CONTROLS,family_detail,M801; CHILLED WATER LOOP PUMPS (TYPICAL OF 1); the two chilled water pumps lead/standby

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T19:14:32.097Z",
+  "generated_at": "2026-09-29T20:59:37.807Z",
   "side": "dev",
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -31,15 +31,15 @@
   },
   "summary": {
     "total": {
-      "applied-right": 294,
+      "applied-right": 296,
       "applied-wrong": 0,
       "INVENTED": 0,
-      "proposal-right": 48,
-      "proposal-wrong": 6,
-      "unresolved": 9,
+      "proposal-right": 46,
+      "proposal-wrong": 5,
+      "unresolved": 10,
       "abstained": 291
     },
-    "applied": 294,
+    "applied": 296,
     "applied_wrong_rate": 0,
     "absence": {
       "applied-right": 48,
@@ -53,8 +53,8 @@
     "uncited_applied": 0,
     "readers": {
       "r0": {
-        "right": 319,
-        "wrong": 2,
+        "right": 320,
+        "wrong": 1,
         "abstained": 326,
         "unverified": 0,
         "undecided-key": 1
@@ -144,12 +144,12 @@
         "abstained": 16
       },
       "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for": {
-        "applied-right": 1,
+        "applied-right": 3,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 2,
-        "proposal-wrong": 2,
-        "unresolved": 0,
+        "proposal-right": 0,
+        "proposal-wrong": 1,
+        "unresolved": 1,
         "abstained": 13
       },
       "004_MO_T2504_03_Interior_and_Exterior_Renovation": {
@@ -200,12 +200,12 @@
         "abstained": 233
       },
       "AHU": {
-        "applied-right": 35,
+        "applied-right": 37,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 22,
-        "proposal-wrong": 2,
-        "unresolved": 2,
+        "proposal-right": 20,
+        "proposal-wrong": 1,
+        "unresolved": 3,
         "abstained": 11
       },
       "FAN": {
@@ -319,10 +319,10 @@
     },
     "by_question": {
       "role": {
-        "applied-right": 122,
+        "applied-right": 123,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 14,
+        "proposal-right": 13,
         "proposal-wrong": 4,
         "unresolved": 6,
         "abstained": 23
@@ -395,8 +395,8 @@
         "applied-wrong": 0,
         "INVENTED": 0,
         "proposal-right": 6,
-        "proposal-wrong": 1,
-        "unresolved": 0,
+        "proposal-wrong": 0,
+        "unresolved": 1,
         "abstained": 0
       },
       "opt.freezestat_to_bas": {
@@ -436,10 +436,10 @@
         "abstained": 1
       },
       "opt.return_fan": {
-        "applied-right": 3,
+        "applied-right": 4,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 2,
+        "proposal-right": 1,
         "proposal-wrong": 0,
         "unresolved": 1,
         "abstained": 0

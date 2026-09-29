@@ -1,0 +1,59 @@
+# 03_FL_HurlburtField_ChildDevCenter.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 3, dev (reports/control-intent/binding-tier3/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output.
+# Checked row by row on the renders by a second, independent reader; its disagreements adjudicated on the renders (CONTROL_INTENT_BUG_CATALOGUE CI-54).
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/03_FL_HurlburtField_ChildDevCenter.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AHU-1,AHU,03_FL_HurlburtField_ChildDevCenter.pdf#85,VAV AHU SEQUENCE OF OPERATION,family_detail,M22; the VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE note 7 says SEE CONTROLS SEQUENCE OF OPERATION
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AHU-1,AHU,03_FL_HurlburtField_ChildDevCenter.pdf#85,VAV AHU CONTROL DIAGRAM,family_detail,"M22 detail 2: preheat HW coil, CHW coil and VFD as the unit is scheduled"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AHU-2,AHU,03_FL_HurlburtField_ChildDevCenter.pdf#85,VAV AHU SEQUENCE OF OPERATION,family_detail,M22; the VARIABLE VOLUME AIR HANDLING UNIT SCHEDULE note 7 says SEE CONTROLS SEQUENCE OF OPERATION
+03_FL_HurlburtField_ChildDevCenter.pdf#64,AHU-2,AHU,03_FL_HurlburtField_ChildDevCenter.pdf#85,VAV AHU CONTROL DIAGRAM,family_detail,"M22 detail 2: preheat HW coil, CHW coil and VFD as the unit is scheduled"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU A,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU A,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU B,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU B,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU C,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU C,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU D,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU D,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU E,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU E,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU F,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU F,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU G,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU G,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU H,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,its first line: CONTROL SEQUENCE FOR EXISTING ATU'S TO REMAIN AS IS PER ORIGINAL DESIGN; the written sequence is for new ATUs
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(E)ATU H,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU I,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,THE FOLLOWING SEQUENCE APPLIES TO ALL NEW ATU'S
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU I,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU J,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,THE FOLLOWING SEQUENCE APPLIES TO ALL NEW ATU'S
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU J,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU K1,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,THE FOLLOWING SEQUENCE APPLIES TO ALL NEW ATU'S
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU K1,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU K2,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,THE FOLLOWING SEQUENCE APPLIES TO ALL NEW ATU'S
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU K2,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU L,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,THE FOLLOWING SEQUENCE APPLIES TO ALL NEW ATU'S
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU L,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU M,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,THE FOLLOWING SEQUENCE APPLIES TO ALL NEW ATU'S
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU M,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU N,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,ATU SEQUENCE OF OPERATION,family_detail,THE FOLLOWING SEQUENCE APPLIES TO ALL NEW ATU'S
+03_FL_HurlburtField_ChildDevCenter.pdf#64,(N)ATU N,VAV,03_FL_HurlburtField_ChildDevCenter.pdf#85,SINGLE DUCT ATU BOX CONTROL SCHEMATIC,family_detail,"M22 detail 1, printed (FOR NEW AND EXISTING)"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,B-1,BOILER,03_FL_HurlburtField_ChildDevCenter.pdf#86,SEQUENCE OF OPERATIONS HEATING WATER SYSTEM,tag,"its SYSTEM DESCRIPTION lists ONE (1) CONDENSING BOILER (B - 1); boiler schedule note 13 cites a sequence on sheet M21, but it is printed on M23"
+03_FL_HurlburtField_ChildDevCenter.pdf#64,B-1,BOILER,03_FL_HurlburtField_ChildDevCenter.pdf#86,HOT WATER SYSTEM CONTROL SCHEMATIC,tag,M23 detail 2 labels B 1
+03_FL_HurlburtField_ChildDevCenter.pdf#64,B-1,BOILER,03_FL_HurlburtField_ChildDevCenter.pdf#86,TYPICAL BOILER CONTROLS POINTS LIST BY THE BOILER MFR TO BE INTERFACED WITH DDC SYSTEM,family_detail,a points list inside the heating water sequence; the schedule's only boiler
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CHWP-1,PUMP,03_FL_HurlburtField_ChildDevCenter.pdf#86,SEQUENCE OF OPERATIONS CHILLED WATER SYSTEM,semantic,its ONE (1) PRIMARY CHILLED WATER PUMP AS PART OF CHILLER PACKAGE; M13 sheet note 4: CHWP-1 PROVIDED PACKAGED WITH CHILLER
+03_FL_HurlburtField_ChildDevCenter.pdf#64,CHWP-1,PUMP,03_FL_HurlburtField_ChildDevCenter.pdf#86,CHILLED WATER SYSTEM CONTROL SCHEMATIC,semantic,the unlabelled pump of sheet note 1 INTERNAL DEDICATED CHILLER PUMP
+03_FL_HurlburtField_ChildDevCenter.pdf#64,HWP-1,PUMP,03_FL_HurlburtField_ChildDevCenter.pdf#86,SEQUENCE OF OPERATIONS HEATING WATER SYSTEM,tag,its SYSTEM DESCRIPTION lists ONE (1) SECONDARY HOT WATER PUMP (HWP-1)
+03_FL_HurlburtField_ChildDevCenter.pdf#64,HWP-1,PUMP,03_FL_HurlburtField_ChildDevCenter.pdf#86,HOT WATER SYSTEM CONTROL SCHEMATIC,tag,M23 detail 2 labels HWP 1 (starter DI and AO)
+03_FL_HurlburtField_ChildDevCenter.pdf#64,BP-1,PUMP,03_FL_HurlburtField_ChildDevCenter.pdf#86,SEQUENCE OF OPERATIONS HEATING WATER SYSTEM,tag,its SYSTEM DESCRIPTION lists ONE (1) PRIMARY DEDICATED CONSTANT VOLUME PUMP (BP-1); section PRIMARY BOILER PUMP
+03_FL_HurlburtField_ChildDevCenter.pdf#64,BP-1,PUMP,03_FL_HurlburtField_ChildDevCenter.pdf#86,HOT WATER SYSTEM CONTROL SCHEMATIC,tag,M23 detail 2 labels BP 1 (key note 1 INTEGRAL PACKAGED BOILER PUMP)
+03_FL_HurlburtField_ChildDevCenter.pdf#65,EF-1,FAN,03_FL_HurlburtField_ChildDevCenter.pdf#85,EXHAUST FANS AND SUPPLY FANS,family_detail,kitchen hood KH-1 exhaust; FAN WITH INTERLOCKS (SF-1 note 7 interlocks it) and fire alarm shutdown
+03_FL_HurlburtField_ChildDevCenter.pdf#65,EF-2,FAN,03_FL_HurlburtField_ChildDevCenter.pdf#85,EXHAUST FANS AND SUPPLY FANS,family_detail,dishwasher hood DWH-1 exhaust; fire alarm shutdown
+03_FL_HurlburtField_ChildDevCenter.pdf#65,EF-3,FAN,03_FL_HurlburtField_ChildDevCenter.pdf#85,EXHAUST FANS AND SUPPLY FANS,family_detail,restroom exhaust; fire alarm shutdown
+03_FL_HurlburtField_ChildDevCenter.pdf#65,SF-1,FAN,03_FL_HurlburtField_ChildDevCenter.pdf#85,EXHAUST FANS AND SUPPLY FANS,family_detail,kitchen hood supply; its schedule note 7 INTERLOCK WITH HOOD EXHAUST FAN matches FAN WITH INTERLOCKS

@@ -223,7 +223,7 @@ const SYNONYMS: string[][] = [
   ["SUPPLY", "SUP", "SA"],
   ["RETURN", "RET", "RA"],
   ["OUTSIDE AIR", "OUTDOOR AIR", "OA"],
-  ["VARIABLE AIR VOLUME", "VAV"],
+  ["VARIABLE AIR VOLUME", "VARIABLE VOLUME", "VAV"],
   ["CONSTANT VOLUME", "CV", "CONSTANT AIR VOLUME", "CAV"],
   ["VARIABLE FREQUENCY DRIVE", "VFD", "VSD", "VARIABLE SPEED"],
   ["FAN COIL", "FAN COIL UNIT", "FCU"],
@@ -240,6 +240,7 @@ const SYNONYMS: string[][] = [
   ["MAXIMUM", "MAX"],
   ["RADIATION", "RADIATOR", "RADIATORS"],
   ["TWO PIPE", "TWO-PIPE", "2-PIPE", "2 PIPE"],
+  ["DUAL DUCT", "DUAL-DUCT", "DOUBLE DUCT", "DOUBLE-DUCT"],
   ["FOUR PIPE", "FOUR-PIPE", "4-PIPE", "4 PIPE"],
 ];
 const expand = (w: string): string[] => SYNONYMS.find((g) => g.includes(w)) ?? [w];
@@ -258,6 +259,16 @@ export const PREFIX_WORDS: Record<string, string> = {
 const DEVICE_NOUNS = new Set(["UNIT", "UNITS", "BOX", "BOXES", "TERMINAL", "TERMINALS", "SYSTEM", "SYSTEMS", "EQUIPMENT", "TYPICAL", "TYP", "DEVICE", "DEVICES",
   // How many, not what kind: "DUAL HEAT EXCHANGER", "SINGLE AIR COOLED CHILLER".
   "SINGLE", "DUAL", "TWIN", "TWO", "DUPLEX", "TRIPLEX", "MULTIPLE", "PARALLEL", "EXISTING", "NEW", "W/", "WITH"]);
+/** "DUAL DUCT" (or "DUAL-DUCT", "DOUBLE DUCT") names a kind of terminal unit,
+ * not how many: a dual duct box has a hot and a cold deck inlet, and the
+ * project that schedules it beside single duct boxes draws it apart. */
+const kindOfDuct = (t: string) => t.replace(/\b(?:DUAL|DOUBLE)[\s-]+DUCT\b/g, "DUAL DUCT");
+/** A word that names no qualifier, among the title's words. */
+const nounAt = (ws: readonly string[], i: number) => DEVICE_NOUNS.has(ws[i]) && !(ws[i] === "DUAL" && ws[i + 1] === "DUCT");
+/** A title's subject in one spelling, a dual duct box's kind as its two
+ * words (so a single duct schedule's words are a dual duct one's less
+ * DUAL). */
+const kindCanon = (t: string) => canonSubject(kindOfDuct(t)).flatMap((w) => (w === "DUAL_DUCT" ? ["DUAL", "DUCT"] : [w]));
 
 /** The text of a unit's own schedule row: its cells, its schedule's title,
  * its description. */
@@ -367,8 +378,8 @@ export function coSubjects(title: string): Map<string, string[]> {
  * of a unit whose family is one of them. */
 function qualifiers(title: string, u: RowUnit): string[] {
   const others = new Set(coSubjects(title).get(u.family) ?? []);
-  const words = subjectWords(withoutOwnAbbreviations(repairSpacing(title).replace(NOT_SUBJECT, " "))).map((w) => w.replace(/^[(]+|[)]+$/g, ""))
-    .filter((w) => w && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !DEVICE_NOUNS.has(w) && !others.has(w));
+  const all = subjectWords(withoutOwnAbbreviations(kindOfDuct(repairSpacing(title)).replace(NOT_SUBJECT, " "))).map((w) => w.replace(/^[(]+|[)]+$/g, ""));
+  const words = all.filter((w, i) => w && !/^(?:[A-Z]{1,6}-)?[A-Z]{1,6}-?\d/.test(w) && !nounAt(all, i) && !others.has(w));
   const own = new Set([...clean(u.table_title).split(/[^A-Z0-9]+/), ...repairSpacing(u.table_title).split(/[^A-Z0-9]+/), ...u.family.split("_"),
     ...Object.entries(HOST_PREFIX).filter(([, f]) => f === u.family).map(([k]) => k)]);
   const phrases: string[] = [];
@@ -378,7 +389,8 @@ function qualifiers(title: string, u: RowUnit): string[] {
     const group = SYNONYMS.find((g) => g.includes(three)) ? three : SYNONYMS.find((g) => g.includes(two)) ? two : words[i];
     i += group.split(" ").length - 1;
     const parts = group.split(" ");
-    if (parts.every((p) => own.has(p) || own.has(p.replace(/S$/, "")))) continue;
+    // The family's own name in another spelling ("DE-HUMIDIFIER") is none.
+    if (parts.every((p) => own.has(p) || own.has(p.replace(/S$/, "")) || own.has(p.replace(/-/g, "")) || p.split("-").every((x) => own.has(x)))) continue;
     if (expand(group).some((g) => g.split(" ").every((p) => own.has(p)))) continue;
     if (/^[A-Z0-9]+(?:\/[A-Z0-9]+)+$/.test(group) && group.split("/").some((a) => own.has(a))) continue;
     phrases.push(group);
@@ -398,7 +410,8 @@ const printedQualifier = (q: string, text: string, u?: Pick<RowUnit, "tag">) => 
 /** What a schedule's title says its units are, one spelling per meaning: no
  * scope note in parentheses ("(AHU 2)"), device noun, tag or number. */
 function kindWords(tableTitle: string): string[] {
-  return [...new Set(canonSubject(String(tableTitle ?? "").replace(/\([^)]*\)/g, " ")).filter((w) => !DEVICE_NOUNS.has(w) && !/\d/.test(w)))];
+  const ws = kindCanon(String(tableTitle ?? "").replace(/\([^)]*\)/g, " "));
+  return [...new Set(ws.filter((w, i) => !nounAt(ws, i) && !/\d/.test(w)))];
 }
 
 /** A special kind of a family the project schedules apart from its plain
@@ -492,6 +505,14 @@ const PARTS: ReadonlyArray<{ has: RegExp; lacks: RegExp; header: RegExp; never?:
     lacks: /\bHEATING[\s-]+ONLY\b|\b(?:NO|WITHOUT|W\/O)\s+COOLING\b/,
     header: /\bCOOLING\s+COIL|\b(?:CHILLED\s+WATER|CHW|DX)\s+COIL/,
     never: new Set(["UNIT_HEATER", "CABINET_UNIT_HEATER", "FIN_TUBE_RADIATION"]),
+  },
+  { // outdoor air: an air handler's minimum outdoor air intake ("VAV AIR
+    // HANDLING UNIT WITH MINIMUM OUTSIDE AIR"), the row's minimum outdoor
+    // airflow ("MIN OA CFM")
+    has: /\b(?:WITH|W\/)\s+MIN(?:IMUM)?\.?\s+(?:OUTSIDE|OUTDOOR)\s+AIR\b/,
+    lacks: /\b(?:NO|WITHOUT|W\/O)\s+(?:OUTSIDE|OUTDOOR)\s+AIR\b/,
+    // an airflow column ("MIN OA CFM"), never a temperature ("MIN OA TEMP F")
+    header: /^(?=.*(?:\bCFM\b|\bL\/S\b|FLOW\b|%)).*\bMIN(?:IMUM)?\.?\s*(?:OUTSIDE\s+AIR|OUTDOOR\s+AIR|O\.?\s?A\.?)(?:$|[^A-Z])/,
   },
 ];
 /** A cell that prints nothing for its column. */
@@ -670,13 +691,16 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   for (const u of units) (familyTitles.get(u.family) ?? familyTitles.set(u.family, new Set()).get(u.family)!).add(u.table_title);
   const byTag = new Map<string, RowUnit[]>();
   for (const u of units) { const k = tagKey(u.tag); if (k) (byTag.get(keyString(k)) ?? byTag.set(keyString(k), []).get(keyString(k))!).push(u); }
-  const namedUnits = (v: string) => [...clean(v).matchAll(/(?<![A-Z0-9-])(?:[A-Z]{1,6}-)?[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])/g)]
+  // A unit's mark with its dash. In a column that names the unit's owner,
+  // location or system ("LOCATION: WHSE-AHU1"), in any spacing (one letter
+  // only with its dash: "B1" alone is a room or a level as often as a unit).
+  const namedUnits = (v: string, column = false) => [...clean(v).matchAll(column ? /(?<![A-Z0-9-])(?:[A-Z]{1,6}-)?(?:[A-Z]{1,6}\s?-\s?|[A-Z]{2,6})\d{1,4}[A-Z]{0,2}(?![A-Z0-9])/g : /(?<![A-Z0-9-])(?:[A-Z]{1,6}-)?[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2}(?![A-Z0-9])/g)]
     .map((m) => tagKey(m[0].replace(/\s+/g, ""))).filter((k): k is TagKey => Boolean(k))
     .flatMap((k) => (byTag.get(keyString(k)) ?? []).filter((o) => { const ok = tagKey(o.tag); return Boolean(ok && sameTag(k, ok)); }));
   // Also a qualified mark ("F-B1", "OAU-B1"): the unit of that mark its
   // designator fits. Read only where a row pairs the halves of a split
   // system; a unit's own packets are never replaced through it.
-  const namedQualified = (v: string) => [...clean(v).matchAll(/(?<![A-Z0-9-])(?:[A-Z]{1,6}-[A-Z]{1,6}-?\d{1,4}[A-Z]{0,2}|[A-Z]{1,6}\s?-\s?\d{1,4}[A-Z]{0,2})(?![A-Z0-9])/g)]
+  const namedQualified = (v: string) => [...clean(v).matchAll(/(?<![A-Z0-9-])(?:[A-Z]{1,6}-[A-Z]{1,6}-?\d{1,4}[A-Z]{0,2}|(?:[A-Z]{1,6}\s?-\s?|[A-Z]{2,6})\d{1,4}[A-Z]{0,2})(?![A-Z0-9])/g)]
     .map((m) => tagKey(m[0].replace(/\s+/g, ""))).filter((k): k is TagKey => Boolean(k))
     .flatMap((k) => (byTag.get(keyString(k)) ?? []).filter((o) => { const ok = tagKey(o.tag); return Boolean(ok && sameTag(k, ok) && !(k.qualifier && !ok.qualifier && designatorFits(k.qualifier, o) === false)); }));
   /** Whether a tag printed in a drawing is this unit's: its mark, and no
@@ -701,7 +725,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   const outdoorOf = new Map<number, RowUnit>();
   for (const u of units) {
     if (OUTDOOR_FAMILIES.has(u.family)) continue;
-    const outs = new Set(Object.values(u.cells).flatMap(namedUnits).filter((o) => OUTDOOR_FAMILIES.has(o.family)));
+    const outs = new Set(Object.values(u.cells).flatMap((v) => namedUnits(v)).filter((o) => OUTDOOR_FAMILIES.has(o.family)));
     for (const o of units) if (o !== u && OUTDOOR_FAMILIES.has(o.family) && rowKey(o) === rowKey(u) && Object.keys(u.cells).length) outs.add(o);
     if (outs.size === 1) outdoorOf.set(u.index, [...outs][0]);
   }
@@ -738,6 +762,9 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   // names): the packet is the unit's for its kind, but the unit is not named
   // by a title.
   const sections = new Set<string>();
+  /** Of those, the ones a sequence column's phrase chose: they choose for
+   * that row only, never for its schedule. */
+  const phrased = new Set<string>();
   const direct = new Map<number, Binding[]>();
   for (const u of units) {
     const key = tagKey(u.tag);
@@ -780,6 +807,28 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       if (holders.length !== 1) continue;
       add({ packet: holders[0].p.id, kind: "cross_reference", evidence: `its ${clean(h)} "${x}" is a sequence "${holders[0].p.title}" prints under the heading SEQUENCE ${x}` });
       sections.add(`${u.index}|${holders[0].p.id}`);
+    }
+    //   Or naming it by what it does ("CONTROL SEQUENCE: CONSTANT VOLUME"):
+    //   of each kind, the one detail of the unit's family whose title prints
+    //   that phrase ("CONSTANT VOLUME AIR TERMINAL UNIT CONTROL DIAGRAM"),
+    //   beside one titled for the other ("VARIABLE VOLUME …").
+    //   Never the family's own name in other words ("VARIABLE AIR VOLUME" of
+    //   a VAV box), never a detail the row's parts contradict.
+    const ownWords = new Set([...clean(u.table_title).split(/[^A-Z0-9]+/), ...u.family.split("_"), ...Object.entries(HOST_PREFIX).filter(([, f]) => f === u.family).map(([k]) => k)]);
+    for (const [h, v] of Object.entries(u.cells)) {
+      const x = clean(v);
+      if (!SEQUENCE_HEADER.test(clean(h)) || !/^[A-Z][A-Z-]*(?:\s+[A-Z][A-Z-]*)+$/.test(x)) continue;
+      if (expand(x).some((g) => g.split(/[\s-]+/).every((w) => ownWords.has(w)))) continue;
+      const ofFamily = titled.filter((t) => t.p.scope !== "sheet" && t.tags.length === 0 && (t.family === u.family || t.families.includes(u.family)));
+      for (const kind of new Set(ofFamily.map((t) => t.p.kind))) {
+        const ofKind = ofFamily.filter((t) => t.p.kind === kind);
+        const holders = ofKind.filter((t) => printed(x, repairSpacing(t.p.title)));
+        if (holders.length !== 1 || ofKind.length < 2) continue;
+        if (partVariant(holders[0].p.title, u, bySchedule.get(`${u.cite?.sheet}|${u.table_title}`) ?? [u]) === "contradicted") continue;
+        add({ packet: holders[0].p.id, kind: "cross_reference", evidence: `its ${clean(h)} "${x}" names the sequence "${holders[0].p.title}" draws` });
+        sections.add(`${u.index}|${holders[0].p.id}`);
+        phrased.add(`${u.index}|${holders[0].p.id}`);
+      }
     }
     //   A note or remark naming a sheet: that sheet's packets of the unit's kind.
     const refs = new Set<string>();
@@ -853,9 +902,25 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
   // not bound to them by family.
   const chosenBy = new Map<string, Set<string>>();
   for (const u of units) for (const b of direct.get(u.index) ?? []) {
-    if (b.kind !== "cross_reference") continue;
+    if (b.kind !== "cross_reference" || phrased.has(`${u.index}|${b.packet}`)) continue;
     const k = `${u.cite?.sheet}|${u.table_title}`;
     (chosenBy.get(k) ?? chosenBy.set(k, new Set()).get(k)!).add(b.packet);
+  }
+  // An air handler that serves VAV terminal units is a variable air volume
+  // unit however its own row prints it: one a VAV unit's row names as its
+  // system ("SYSTEM: WHSE-AHU-1"), or the set's one air handler where the
+  // set schedules VAV units.
+  const vavUnits = units.filter((o) => o.family === "VAV");
+  const airHandlers = units.filter((o) => AIR_HANDLERS.has(o.family));
+  const servesVav = new Map<number, string>();
+  // Never one whose own row prints a constant volume; the one air handler
+  // only where no VAV row names another unit as its system.
+  const ownerCells = vavUnits.flatMap((o) => Object.entries(o.cells).filter(([h, v]) => OWNER_HEADER.test(h) && /(?<![A-Z0-9])[A-Z]{1,6}\s?-?\s?\d{1,4}/.test(clean(v))).map(([, v]) => v));
+  for (const a of airHandlers) {
+    if (printed("CONSTANT VOLUME", rowText(a))) continue;
+    const naming = vavUnits.filter((o) => Object.entries(o.cells).some(([h, v]) => OWNER_HEADER.test(h) && namedUnits(v, true).includes(a)));
+    if (naming.length) servesVav.set(a.index, `${naming.length === 1 ? `the VAV unit ${naming[0].tag} names` : `${naming.length} VAV units name`} it as their system`);
+    else if (vavUnits.length && airHandlers.length === 1 && ownerCells.every((v) => namedUnits(v, true).includes(a))) servesVav.set(a.index, "it is the set's one air handler, and the set schedules VAV units");
   }
 
   for (const u of units) {
@@ -933,7 +998,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       && !(chosen?.has(t.p.id) && !found.some((b) => b.packet === t.p.id))
       && (((t.family === u.family || t.families.includes(u.family)) && !(partner && t.families.includes(u.family) && !t.families.includes(partner.family)))
         || (t.family === null && namesRow(t.p.title, u, typeText(u), paired && SPLIT.test(repairSpacing(t.p.title))))));
-    const byKind = new Map<string, Array<{ t: typeof titled[number]; unconfirmed: string[]; apart: string[]; subject: boolean; qualified: number }>>();
+    const byKind = new Map<string, Array<{ t: typeof titled[number]; unconfirmed: string[]; apart: string[]; subject: boolean; qualified: number; vav?: string }>>();
     const peers = bySchedule.get(`${u.cite?.sheet}|${u.table_title}`) ?? [u];
     const special = scheduledApart(u, familyTitles.get(u.family) ?? new Set());
     for (const t of familyCands) {
@@ -944,13 +1009,15 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       // is the other variant.
       const variant = partVariant(t.p.title, u, peers);
       if (variant === "contradicted") continue;
-      const unconfirmed = quals.filter((q) => !printedQualifier(q, text, u) && !(split && q === "SPLIT") && !q.split(" ").every((w) => variant.has(w)));
-      const named = canonSubject(t.p.title);
+      const vav = servesVav.has(u.index) ? quals.filter((q) => expand(q).includes("VAV") && !printedQualifier(q, text, u)) : [];
+      const unconfirmed = quals.filter((q) => !printedQualifier(q, text, u) && !(split && q === "SPLIT") && !q.split(" ").every((w) => variant.has(w)) && !vav.includes(q));
+      const named = kindCanon(t.p.title);
       const apart = (special?.words ?? []).filter((w) => !named.includes(w));
       // A drawing of one aspect of the kind's controls stands beside its
       // control diagram, not against it.
       const group = `${t.p.kind}${ASPECT.test(repairSpacing(t.p.title)) ? "|aspect" : ""}`;
-      (byKind.get(group) ?? byKind.set(group, []).get(group)!).push({ t, unconfirmed: [...unconfirmed, ...apart], apart, subject: namesRow(t.p.title, u, typeText(u), split), qualified: quals.length - unconfirmed.length });
+      (byKind.get(group) ?? byKind.set(group, []).get(group)!).push({ t, unconfirmed: [...unconfirmed, ...apart], apart, subject: namesRow(t.p.title, u, typeText(u), split), qualified: quals.length - unconfirmed.length,
+        ...(vav.length ? { vav: `${vav.map((q) => `"${q}"`).join(", ")}: ${servesVav.get(u.index)}` } : {}) });
     }
     // Several details of one kind are left: the one printed right under or
     // over a detail that is the unit's is its, when each other one is printed
@@ -973,7 +1040,7 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       for (const c of pick) {
         add({
           packet: c.t.p.id, kind: "family_detail",
-          evidence: `"${c.t.p.title}" is a detail for ${c.t.family === u.family ? `its family (${u.family})` : "what its schedule names"}${c.unconfirmed.some((q) => !c.apart.includes(q)) ? `; its row does not print ${c.unconfirmed.filter((q) => !c.apart.includes(q)).map((q) => `"${q}"`).join(", ")}` : ""}${c.apart.length ? `; the project schedules "${u.table_title}" apart from "${special!.plain}", and the title does not name ${c.apart.map((w) => `"${w.replace(/_/g, " ")}"`).join(", ")}` : ""}`,
+          evidence: `"${c.t.p.title}" is a detail for ${c.t.family === u.family ? `its family (${u.family})` : "what its schedule names"}${c.vav ? `; ${c.vav}` : ""}${c.unconfirmed.some((q) => !c.apart.includes(q)) ? `; its row does not print ${c.unconfirmed.filter((q) => !c.apart.includes(q)).map((q) => `"${q}"`).join(", ")}` : ""}${c.apart.length ? `; the project schedules "${u.table_title}" apart from "${special!.plain}", and the title does not name ${c.apart.map((w) => `"${w.replace(/_/g, " ")}"`).join(", ")}` : ""}`,
           ...(c.unconfirmed.length ? { proposal: true as const } : {}),
           ...(pick.length > 1 ? { ambiguous: true as const } : {}),
         });
@@ -1046,10 +1113,16 @@ export function bindPackets(packets: readonly Packet[], units: readonly RowUnit[
       if (more.length) out.set(u.index, [...own, ...more.map((b) => ({ packet: b.packet, kind: "component_of" as BindingKind, evidence: `its row ${indoor ? "is the outdoor unit of" : "describes it as part of"} ${host.tag}, whose packet it is (${b.kind}: ${b.evidence})`, ...(b.ambiguous ? { ambiguous: true as const } : {}) }))]);
       continue;
     }
-    const at = (re: RegExp) => new Set(Object.entries(u.cells).filter(([h]) => re.test(h)).flatMap(([, v]) => namedUnits(v)).filter((o) => o !== u));
+    const at = (re: RegExp) => new Set(Object.entries(u.cells).filter(([h]) => re.test(h)).flatMap(([, v]) => namedUnits(v, true)).filter((o) => o !== u));
     const inside = at(LOCATION_HEADER);
-    const serves = at(OWNER_HEADER);
-    const elsewhere = Object.entries(u.cells).some(([h, v]) => LOCATION_HEADER.test(h) && /\b(?:TU|VAV|FCU|AHU|RTU|CUH|UH)[-\s]?\d/i.test(String(v)) && !namedUnits(v).length);
+    // What a unit serves is its owner where it is part of that unit's
+    // system: a pump whose SYSTEM prints a water system ("PREHEAT WATER")
+    // is part of that piping, and serves the air handler its AREA SERVED
+    // names without being part of it.
+    const systems = Object.entries(u.cells).filter(([h]) => SYSTEM_HEADER.test(h) && !SERVED_HEADER.test(h)).map(([, v]) => clean(v)).filter((v) => !EMPTY_CELL.test(v));
+    const piping = systems.length > 0 && systems.every((v) => !namedUnits(v, true).length) && systems.some((v) => FLUID_SYSTEM.test(v));
+    const serves = piping ? new Set<RowUnit>() : at(OWNER_HEADER);
+    const elsewhere = Object.entries(u.cells).some(([h, v]) => LOCATION_HEADER.test(h) && /\b(?:TU|VAV|FCU|AHU|RTU|CUH|UH)[-\s]?\d/i.test(String(v)) && !namedUnits(v, true).length);
     const indoor = indoorOf.get(u.index) ?? undefined;
     const owners = inside.size ? inside : !elsewhere && serves.size ? serves : indoor ? new Set([indoor]) : new Set<RowUnit>();
     if (owners.size !== 1) {
@@ -1217,6 +1290,14 @@ export function scheduleNamesSubject(title: string, row: Pick<RowUnit, "table_ti
 /** A schedule note or remark that sends a unit to the control drawings. */
 const CONTROLS_REF = /\b(?:SEE|REFER\s+TO|PER)\s+(?:THE\s+)?(?:(?:TEMPERATURE\s+)?CONTROLS?|DDC|BAS|BMS|ATC)\s+(?:DRAWINGS?|SHEETS?|DIAGRAMS?|DETAILS?|SCHEMATICS?|SEQUENCES?)\b|\b(?:SEE|REFER\s+TO)\s+(?:THE\s+)?SEQUENCES?\s+OF\s+(?:OPERATIONS?|CONTROLS?)\b/;
 
+/** A row's system ("SYSTEM AND/OR SERVICE") and what it serves ("AREA
+ * SERVED"). A system of water or another fluid ("PREHEAT WATER", "CHW") is
+ * piping. */
+const SYSTEM_HEADER = /\b(?:SERVICE|SEVICE|SYSTEM)\b/i;
+const SERVED_HEADER = /\b(?:SERVES|SERVING|SERVED)\b/i;
+const FLUID_SYSTEM = /\b(?:WATER|STEAM|GLYCOL|CONDENSATE|FUEL|OIL|REFRIGERANT|HWS?|HHW|CHWS?|CWS?)\b/;
+/** Families that supply air to terminal units. */
+const AIR_HANDLERS = new Set(["AHU", "RTU", "DOAS", "OUTDOOR_AIR_UNIT"]);
 /** A column that names what a unit serves or belongs to. */
 const OWNER_HEADER = /\b(?:SERVICE|SEVICE|SERVES|SERVING|SERVED|SYSTEM|ASSOCIATED|CONNECTED|MATCHING|PAIRED)\b/i;
 /** Equipment a location names by its standard designator ("TU01", "VAV-3"),

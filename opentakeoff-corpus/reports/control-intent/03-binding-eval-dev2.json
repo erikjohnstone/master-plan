@@ -3,27 +3,27 @@
  "total": {
   "packets": 95,
   "pairs": 629,
-  "pair_hits": 501,
-  "recall": 0.7965023847376789,
-  "recall_without_semantic": 0.7911184210526315,
+  "pair_hits": 504,
+  "recall": 0.8012718600953895,
+  "recall_without_semantic": 0.7960526315789473,
   "recall_with_proposals": 0.8267090620031796,
   "bindings": 474,
-  "confirmed_bindings": 448,
-  "precision": 0.953125,
+  "confirmed_bindings": 449,
+  "precision": 0.9532293986636972,
   "precision_with_proposals": 0.930379746835443,
-  "proposals": 26,
+  "proposals": 25,
   "ambiguous": 8,
   "hits_inside": 0,
   "hits_containing": 0,
   "key_packets_not_found": 16,
   "units_with_packets": 252,
-  "unit_recall": 0.9166666666666666,
+  "unit_recall": 0.9206349206349206,
   "unmatched_instances": 2,
   "none_units_bound": 9,
   "by_key_kind": {
    "family_detail": {
     "pairs": 495,
-    "hit": 394
+    "hit": 397
    },
    "list_range": {
     "pairs": 15,
@@ -46,7 +46,7 @@
    "family_detail": {
     "bindings": 296,
     "correct": 269,
-    "proposal": 26
+    "proposal": 25
    },
    "list_range": {
     "bindings": 7,
@@ -86,7 +86,7 @@
   },
   "miss_reasons": {
    "key packet not found by the finder": 88,
-   "bound as a proposal only": 19,
+   "bound as a proposal only": 16,
    "bound to packets of other kinds only": 5,
    "no binding at all (tag read)": 5,
    "bound to another packet of that kind": 4,
@@ -13708,13 +13708,13 @@
      "packet_sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
      "packet_title": "VARIABLE AIR VOLUME ROOFTOP UNIT SEQUENCE OF OPERATION",
      "key_how": "label",
-     "hit": false,
+     "hit": true,
      "hit_any": true,
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
      "note": "the schedule's only rooftop unit; the controls label it ACU-5",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -13726,13 +13726,13 @@
      "packet_sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
      "packet_title": "VARIABLE AIR VOLUME ROOFTOP UNIT CONTROL SUMMARY",
      "key_how": "label",
-     "hit": false,
+     "hit": true,
      "hit_any": true,
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
      "note": "",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -13744,13 +13744,13 @@
      "packet_sheet": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf#76",
      "packet_title": "VAV ROOFTOP UNIT CONTROLS DIAGRAM",
      "key_how": "title",
-     "hit": false,
+     "hit": true,
      "hit_any": true,
      "hit_how": "same",
      "via": "family_detail",
      "matched": true,
      "note": "",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -14085,8 +14085,8 @@
      "packet_title": "VAV ROOFTOP UNIT CONTROLS DIAGRAM",
      "packet_scope": "detail",
      "kind": "family_detail",
-     "evidence": "\"VAV ROOFTOP UNIT CONTROLS DIAGRAM\" is a detail for its family (RTU); its row does not print \"VAV\"",
-     "proposal": true,
+     "evidence": "\"VAV ROOFTOP UNIT CONTROLS DIAGRAM\" is a detail for its family (RTU); \"VAV\": it is the set's one air handler, and the set schedules VAV units",
+     "proposal": false,
      "ambiguous": false,
      "correct": true,
      "hit_how": "same",
@@ -14254,7 +14254,7 @@
      "matched": true,
      "why": null,
      "keyed": 3,
-     "hit": 0
+     "hit": 3
     },
     {
      "set": "06_MO_NatlGuard_JeffCity_CST_Addition",

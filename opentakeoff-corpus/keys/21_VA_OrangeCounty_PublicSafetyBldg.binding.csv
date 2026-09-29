@@ -1,0 +1,75 @@
+# 21_VA_OrangeCounty_PublicSafetyBldg.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 3, dev (reports/control-intent/binding-tier3/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output.
+# Checked row by row on the renders by a second, independent reader; its disagreements adjudicated on the renders (CONTROL_INTENT_BUG_CATALOGUE CI-54).
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/21_VA_OrangeCounty_PublicSafetyBldg.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-01,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,VCWF box with hot water heating coil
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-01,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,the sequence under the heating coil diagram (left column); VAV-1 boxes are AHU-1 boxes
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-02,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-02,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-03,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-03,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-04,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-04,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-05,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-05,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-06,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-06,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-07,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-07,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-08,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-08,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-09,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-09,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-10,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-10,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-11,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-11,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-12,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-12,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-13,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-13,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-14,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-14,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-15,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-15,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-16,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,COOLING ONLY VAV BOX CONTROL DIAGRAM,family_detail,"the only cooling only box (VCCF08, no reheat coil)"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-16,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,"the sequence under the cooling only diagram (centre column), not the heating coil one"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-17,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-17,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-18,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-18,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-19,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-19,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-20,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-20,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-21A,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-21A,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-21B,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-21B,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-22,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-22,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-23,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-23,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-24,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-24,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-25,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-25,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-26,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,"its CO2 sensor for MULTI-PURPOSE ROOM A-109 (DEMAND CONTROL VENTILATION - AHU-1) is drawn here, no tag"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-26,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,list_range,its section MULTI-PURPOSE ROOM (VAV-1-26 AND VAV-1-29) - AHU-1 VENTILATION CONTROL: names it
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-27,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-27,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-28,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-28,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,family_detail,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-29,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX WITH HEATING COIL CONTROL DIAGRAM,family_detail,"its CO2 sensor for MULTI-PURPOSE ROOM A-109 (DEMAND CONTROL VENTILATION - AHU-1) is drawn here, no tag"
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#50,VAV-1-29,VAV,21_VA_OrangeCounty_PublicSafetyBldg.pdf#55,VAV BOX SEQUENCE OF OPERATION,list_range,its section MULTI-PURPOSE ROOM (VAV-1-26 AND VAV-1-29) - AHU-1 VENTILATION CONTROL: names it
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#51,ACCU-1,CONDENSING_UNIT,,none,,outdoor unit of CRAC-1/CRAC-2 (Liebert); no control drawing covers the computer room units
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#51,ACCU-2,CONDENSING_UNIT,,none,,
+21_VA_OrangeCounty_PublicSafetyBldg.pdf#30,BP-1,PUMP,21_VA_OrangeCounty_PublicSafetyBldg.pdf#56,PACKAGED DOMESTIC WATER BOOSTER PUMP ALARM,family_detail,the schedule's only booster (packaged 2-pump system); pump 1 and 2 failure alarms to the BAS

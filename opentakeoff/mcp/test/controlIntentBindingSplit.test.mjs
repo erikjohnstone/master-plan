@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BINDING_TIER2_DEV_DOCS, bindingExposure, drawBindingTier2, shortId } from "../scripts/control-intent-binding-split.mjs";
+import { BINDING_TIER2_DEV_DOCS, bindingExposure, drawBindingTier2, drawBindingTier3, shortId } from "../scripts/control-intent-binding-split.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
@@ -49,4 +49,23 @@ test("binding tier 2: the committed draw is reproduced exactly by its seed", { s
   assert.deepEqual(again.dev, split.dev.sets);
   assert.deepEqual(again.heldout, split.heldout.sets);
   for (const id of [...split.dev.sets, ...split.heldout.sets]) assert.ok(existsSync(join(CORPUS, "keys", `${id}.attrs.csv`)), `${id} has an attribute key`);
+});
+
+test("binding tier 3: tier 2's exposed documents it did not draw, all dev", () => {
+  const eligibility = docs(12, (i) => i !== 5);
+  const exposure = Object.fromEntries(eligibility.filter((_, i) => i % 3 !== 0).map((d) => [d.id, ["cited"]]));
+  const t2 = drawBindingTier2(eligibility, exposure, 7, 4);
+  const t3 = drawBindingTier3({ ...t2, dev: { sets: t2.dev }, heldout: { sets: t2.heldout }, dev_docs: 4 });
+  assert.deepEqual(t3.dev, t2.pool_order.slice(4));
+  assert.deepEqual(t3.heldout, []);
+  assert.ok(t3.dev.every((id) => !t2.dev.includes(id) && !t2.heldout.includes(id)), "no document on two tiers");
+});
+
+const DIR3 = join(CORPUS, "reports", "control-intent", "binding-tier3");
+test("binding tier 3: the committed split is tier 2's undrawn pool", { skip: !existsSync(join(DIR3, "01-split.json")) && "binding tier 3 not drawn here" }, () => {
+  const t2 = JSON.parse(readFileSync(join(DIR, "01-split.json"), "utf8"));
+  const t3 = JSON.parse(readFileSync(join(DIR3, "01-split.json"), "utf8"));
+  assert.deepEqual(t3.dev.sets, drawBindingTier3(t2).dev);
+  assert.deepEqual(t3.heldout.sets, []);
+  for (const id of t3.dev.sets) assert.ok(existsSync(join(CORPUS, "keys", `${id}.binding.csv`)), `${id} has a binding key`);
 });

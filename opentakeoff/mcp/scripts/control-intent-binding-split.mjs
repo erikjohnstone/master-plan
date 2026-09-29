@@ -8,6 +8,7 @@
 // SHOULD THIS BE ON THE SHARED PATH? No: eval tooling. No surface imports it.
 //
 //   node scripts/control-intent-binding-split.mjs <corpus-dir> [--seed N] [--dev N]
+//   node scripts/control-intent-binding-split.mjs <corpus-dir> --tier3
 //
 // Population: the tier-2..5 dev documents (reports/assemblies/tier<N>/01-split.json).
 // Eligible: reports/control-intent/binding-tier2/00-eligibility.json, a census
@@ -21,7 +22,12 @@
 // never tuned on). dev: the first N eligible exposed documents in a seeded
 // shuffle.
 // Writes reports/control-intent/binding-tier2/01-split.{json,md}.
-import { readFileSync, writeFileSync } from "node:fs";
+//
+// --tier3: the third tier is every eligible exposed document the second tier
+// did not draw (its pool after the dev head). Every eligible unexposed
+// document is already held-out 2, so the third tier is dev only. Writes
+// reports/control-intent/binding-tier3/01-split.{json,md} from tier 2's split.
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { mulberry32, seededShuffle } from "./assembliesSplit.mjs";
@@ -57,12 +63,47 @@ export function drawBindingTier2(eligibility, exposure, seed = BINDING_TIER2_SEE
   return { dev: order.slice(0, devDocs), heldout, pool_order: order };
 }
 
+/** The third tier: tier 2's exposed documents it did not draw. */
+export function drawBindingTier3(tier2) {
+  const drawn = new Set([...tier2.dev.sets, ...tier2.heldout.sets]);
+  const dev = tier2.pool_order.slice(tier2.dev_docs ?? BINDING_TIER2_DEV_DOCS).filter((id) => !drawn.has(id));
+  return { dev, heldout: [] };
+}
+
+function writeTier3(corpus) {
+  const t2 = join(corpus, "reports", "control-intent", "binding-tier2");
+  const tier2 = JSON.parse(readFileSync(join(t2, "01-split.json"), "utf8"));
+  const eligibility = JSON.parse(readFileSync(join(t2, "00-eligibility.json"), "utf8")).documents;
+  const inst = (id) => eligibility.find((d) => d.id === id).instances;
+  const { dev, heldout } = drawBindingTier3(tier2);
+  const split = {
+    from: "binding-tier2/01-split.json: the eligible exposed documents after its dev head",
+    tier2_seed: tier2.seed,
+    exposure: Object.fromEntries(dev.map((id) => [id, tier2.exposure[id]])),
+    dev: { sets: dev, instances: dev.reduce((s, id) => s + inst(id), 0) },
+    heldout: { sets: heldout, instances: 0 },
+  };
+  const dir = join(corpus, "reports", "control-intent", "binding-tier3");
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "01-split.json"), JSON.stringify(split, null, 1) + "\n");
+  const md = [
+    "# Control intent: binding tier 3", "",
+    `Tier 2's eligible exposed documents it did not draw (seed ${tier2.seed}; binding-tier2/01-split.json): ${dev.length} documents, ${split.dev.instances} instances, all dev.`,
+    "Every eligible unexposed document is held-out 2 already, so this tier has no held-out side.", "",
+    "| side | document | instances | exposure |", "|---|---|---:|---|",
+    ...dev.map((id) => `| dev | ${id} | ${inst(id)} | ${split.exposure[id].join("; ")} |`),
+  ];
+  writeFileSync(join(dir, "01-split.md"), md.join("\n") + "\n");
+  console.log(md.join("\n"));
+}
+
 async function main() {
   const argv = process.argv.slice(2);
   const opt = (f, d) => { const i = argv.indexOf(f); return i >= 0 ? Number(argv[i + 1]) : d; };
   const corpusDir = argv.find((a, i) => !a.startsWith("--") && !/^--/.test(argv[i - 1] ?? ""));
-  if (!corpusDir) { console.error("usage: node scripts/control-intent-binding-split.mjs <corpus-dir> [--seed N] [--dev N]"); process.exit(2); }
+  if (!corpusDir) { console.error("usage: node scripts/control-intent-binding-split.mjs <corpus-dir> [--seed N] [--dev N] | --tier3"); process.exit(2); }
   const corpus = resolve(corpusDir);
+  if (argv.includes("--tier3")) return writeTier3(corpus);
   const seed = opt("--seed", BINDING_TIER2_SEED);
   const devDocs = opt("--dev", BINDING_TIER2_DEV_DOCS);
   const dir = join(corpus, "reports", "control-intent", "binding-tier2");
