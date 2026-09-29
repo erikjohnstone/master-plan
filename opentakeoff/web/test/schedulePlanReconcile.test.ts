@@ -17,7 +17,10 @@ import {
   servedEquipmentTag,
   unscheduledTagsAndAliasCandidates,
 } from "../src/lib/schedulePlanReconcile.mjs";
-import { HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService } from "../src/lib/corpusTakeoff.mjs";
+import {
+  HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
+  inferValveServiceFromTable,
+} from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
@@ -1318,4 +1321,122 @@ test("a valve table whose title names no water is read by the water its rows pri
   ])] };
   assert.deepEqual(as77Marks(titled).CHW_CONTROL_VALVE, { compile: ["CV1"], reconcile: ["CV1"] });
   assert.equal(as77Marks(titled).HHW_CONTROL_VALVE, undefined);
+});
+
+// AS-79: the takeoff and the reconcile name a row's unit by one rule
+// (rowIdentityText). A row printing both a UNIT MARK and a VALVE MARK is its
+// UNIT MARK's unit in a table titled as a family of units (or another
+// family's schedule that lists them), and a valve anywhere else and to a
+// valve's family, whichever column the drafter put first.
+const as79Rows = [
+  { unit: "FCU-A2", valve: "CV-FCU-A2-HHW", gpm: "3" },
+  { unit: "UH-B1", valve: "CV-UH-B1-HHW", gpm: "2" },
+  { unit: "CUH-A1", valve: "CV-CUH-A1-HHW", gpm: "2" },
+];
+const as79Graph = (title: string, valveFirst: boolean, rows = as79Rows) => {
+  const headers = valveFirst ? ["VALVE MARK", "UNIT MARK", "GPM"] : ["UNIT MARK", "VALVE MARK", "GPM"];
+  return { tables: [as77Table("m.pdf#12", title, headers, rows.map((r) => (valveFirst
+    ? { "VALVE MARK": r.valve, "UNIT MARK": r.unit, GPM: r.gpm }
+    : { "UNIT MARK": r.unit, "VALVE MARK": r.valve, GPM: r.gpm })))] };
+};
+
+test("a row printing both a UNIT MARK and a VALVE MARK names its unit by the family reading it, never by their column order (AS-79)", () => {
+  // A family of units reads the UNIT MARK under its own title, or another
+  // family's schedule that lists its units; a valve's, a damper's or an air
+  // valve's family never does; nor does any family where no title vouches.
+  const gate = (g: Record<string, boolean>) => ({ titleOk: false, altOk: false, hostOk: false, ...g });
+  assert.equal(familyReadsUnitMark(gate({ titleOk: true }), "FCU"), true);
+  assert.equal(familyReadsUnitMark(gate({ altOk: true }), "CONDENSING_UNIT"), true);
+  assert.equal(familyReadsUnitMark(gate({ hostOk: true }), "FCU"), true);
+  assert.equal(familyReadsUnitMark(gate({}), "FCU"), false);
+  for (const valves of ["ISOLATION_VALVE", "CHW_CONTROL_VALVE", "MIXING_VALVE", "CONTROL_DAMPER", "LAB_AIR_VALVE"]) {
+    assert.equal(familyReadsUnitMark(gate({ titleOk: true, altOk: true }), valves), false, valves);
+  }
+  const row = (cells: Record<string, string>, key?: string) => ({
+    key: key ?? Object.values(cells)[0],
+    cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text }])),
+  });
+  const unitFirst = row({ "UNIT MARK": "FCU-A2", "VALVE MARK": "CV-FCU-A2-HHW", GPM: "3" });
+  const valveFirst = row({ "VALVE MARK": "CV-FCU-A2-HHW", "UNIT MARK": "FCU-A2", GPM: "3" });
+  for (const r of [unitFirst, valveFirst]) {
+    assert.equal(rowIdentityText(r, { unitMark: true }), "FCU-A2");
+    assert.equal(rowIdentityText(r, { unitMark: false }), "CV-FCU-A2-HHW");
+    assert.equal(rowIdentityText(r), "CV-FCU-A2-HHW");
+    // A control valve family's own identity column wins wherever it reads the row.
+    assert.equal(rowIdentityText(r, { unitMark: true, identityHeaderRe: /VALVE\s*MARK/i }), "CV-FCU-A2-HHW");
+  }
+  // Negative controls: a row printing one of them, or a MARK before them,
+  // reads as it always has, whichever the family.
+  for (const unitMark of [true, false]) {
+    assert.equal(rowIdentityText(row({ "UNIT MARK": "FCU-A2", GPM: "3" }), { unitMark }), "FCU-A2");
+    assert.equal(rowIdentityText(row({ "VALVE MARK": "CV-1", GPM: "3" }), { unitMark }), "CV-1");
+    assert.equal(rowIdentityText(row({ MARK: "FCU-3", "UNIT MARK": "FCU-A2", "VALVE MARK": "CV-1" }), { unitMark }), "FCU-3");
+    assert.equal(rowIdentityText(row({ "EQUIP. TAG": "\"EF-1\"", CFM: "500" }), { unitMark }), "EF-1");
+    assert.equal(rowIdentityText(row({ TAG: "RF-1 & 2", CFM: "900" }, "RF-12"), { unitMark }), "RF-1 & 2");
+    assert.equal(rowIdentityText(row({ TAG: "1S", CFM: "200" }, "EF-3"), { unitMark }), "EF-3");
+  }
+  // The row's own mark column, empty, leaves its key, in either order.
+  assert.equal(rowIdentityText(row({ "UNIT MARK": "", "VALVE MARK": "CV-9" }, "K-1"), { unitMark: true }), "K-1");
+  assert.equal(rowIdentityText(row({ "VALVE MARK": "", "UNIT MARK": "FCU-9" }, "K-2"), { unitMark: false }), "K-2");
+  // The extraction's identity is not a second rule: the row reads by its key
+  // and mark columns, in the reconcile as in the takeoff.
+  const withIdentity = { key: "EF-6", identity: { text: "EF-7" }, cells: { CFM: { text: "300" } } };
+  assert.equal(rowIdentityText(withIdentity), "EF-6");
+  const fans = { tables: [{ kind: "equipment", sheet: "m.pdf#3", title: { text: "FAN SCHEDULE" }, headers: ["CFM"], rows: [withIdentity] }] };
+  assert.deepEqual(as77Marks(fans).FAN, { compile: ["EF6"], reconcile: ["EF6"] });
+});
+
+test("a valve's own mark is its VALVE MARK where a UNIT MARK leads the row: its table holds valves, of the water the mark names (AS-79)", () => {
+  for (const valveFirst of [false, true]) {
+    const table = as79Graph("", valveFirst).tables[0];
+    assert.equal(hasValveOrDamperMark(table), true, `valve first ${valveFirst}`);
+    assert.equal(inferValveServiceFromTable(table), "HHW", `valve first ${valveFirst}`);
+  }
+  // Negative controls: a unit schedule holds no valve; a table printing no
+  // VALVE MARK reads its key as before.
+  const units = as77Table("m.pdf#12", "", ["UNIT MARK", "GPM"], [{ "UNIT MARK": "FCU-A2", GPM: "3" }]);
+  assert.equal(hasValveOrDamperMark(units), false);
+  const keyed = as77Table("m.pdf#12", "", ["TAG", "GPM"], [{ TAG: "CV-CHW-1", GPM: "3" }]);
+  assert.equal(hasValveOrDamperMark(keyed), true);
+  assert.equal(inferValveServiceFromTable(keyed), "CHW");
+});
+
+test("the takeoff and the reconcile read the same units from a table printing UNIT MARK and VALVE MARK, in either column order: no fan coil or unit heater from a valve grid, no valve counted twice (AS-79)", () => {
+  const hhw = { compile: ["CVCUHA1HHW", "CVFCUA2HHW", "CVUHB1HHW"], reconcile: ["CVCUHA1HHW", "CVFCUA2HHW", "CVUHB1HHW"] };
+  const expected: Record<string, ReturnType<typeof as77Marks>> = {
+    "FAN COIL UNIT SCHEDULE": { FCU: { compile: ["FCUA2"], reconcile: ["FCUA2"] } },
+    "UNIT HEATER SCHEDULE": { UNIT_HEATER: { compile: ["CUHA1", "UHB1"], reconcile: ["CUHA1", "UHB1"] } },
+    "HHW CONTROL VALVE SCHEDULE": { HHW_CONTROL_VALVE: hhw },
+    "CONTROL VALVE SCHEDULE": { HHW_CONTROL_VALVE: hhw },
+    "": { HHW_CONTROL_VALVE: hhw },
+  };
+  for (const [title, marks] of Object.entries(expected)) {
+    for (const valveFirst of [false, true]) {
+      assert.deepEqual(as77Marks(as79Graph(title, valveFirst)), marks, `${title || "(untitled)"}, valve first ${valveFirst}`);
+    }
+  }
+  // Another family's schedule that lists the family's units (a split system
+  // air handler's FCU-1), and a title the family reads by its other name (a
+  // split system's CU-1), are the unit's own too; a valve family's own
+  // schedule is the valve's, the chiller it isolates its UNIT MARK.
+  for (const valveFirst of [false, true]) {
+    assert.deepEqual(as77Marks(as79Graph("ISOLATION VALVE SCHEDULE", valveFirst, [{ unit: "CH-1", valve: "IV-1", gpm: "400" }])),
+      { ISOLATION_VALVE: { compile: ["IV1"], reconcile: ["IV1"] } }, `valve family, valve first ${valveFirst}`);
+    assert.deepEqual(as77Marks(as79Graph("SPLIT SYSTEM AIR HANDLER SCHEDULE", valveFirst, [{ unit: "FCU-1", valve: "CV-FCU-1-HHW", gpm: "2" }])),
+      { FCU: { compile: ["FCU1"], reconcile: ["FCU1"] } }, `host, valve first ${valveFirst}`);
+    assert.deepEqual(as77Marks(as79Graph("SPLIT SYSTEM AIR CONDITIONING SCHEDULE", valveFirst, [{ unit: "CU-1", valve: "CV-CU-1", gpm: "2" }])),
+      { CONDENSING_UNIT: { compile: ["CU1"], reconcile: ["CU1"] } }, `other title, valve first ${valveFirst}`);
+  }
+  // Over every title the AS-77 battery prints, both orders read alike, and
+  // the reconcile holds a row for each unit the takeoff counts.
+  const titles = ["", "MISCELLANEOUS SCHEDULE", "EQUIPMENT SCHEDULE", "HYDRONIC ACCESSORIES", "CONTROL VALVES",
+    "CONTROL VALVE SCHEDULE", "CHW CONTROL VALVE SCHEDULE", "HHW CONTROL VALVE SCHEDULE", "VALVE SCHEDULE",
+    "FAN SCHEDULE", "PUMP SCHEDULE", "AIR HANDLING UNIT SCHEDULE", "VAV BOX SCHEDULE", "FAN COIL UNIT SCHEDULE",
+    "UNIT HEATER SCHEDULE", "CABINET UNIT HEATER SCHEDULE", "ISOLATION VALVE SCHEDULE", "MIXING VALVE SCHEDULE",
+    "PRESSURE REDUCING VALVE SCHEDULE", "BYPASS CONTROL VALVE SCHEDULE", "CONTROL DAMPER SCHEDULE"];
+  for (const title of titles) {
+    const unitFirst = as77Marks(as79Graph(title, false));
+    as77Parity(unitFirst, `${title || "(untitled)"}, unit first`);
+    assert.deepEqual(as77Marks(as79Graph(title, true)), unitFirst, `${title || "(untitled)"}: column order`);
+  }
 });

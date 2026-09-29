@@ -7,7 +7,7 @@
  */
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark,
-  familyTableGate, familyMarkRead, familyRowRead, rowMarkText, splitRowMarks,
+  familyTableGate, familyMarkRead, familyRowRead, familyReadsUnitMark, rowIdentityText, rowMarkText, splitRowMarks,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
@@ -831,6 +831,8 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     const gate = familyTableGate(table, needle);
     if (gate) gated.push({ table, gate });
   }
+  // The family's HVAC_FAMILY_SPECS key (familyNeedleFromSpecs labels it).
+  const family = String(needle?.label || "").trim().replace(/\s+/g, "_").toUpperCase();
   for (const mode of ["scan", "emit"]) {
   // Titled family schedules first (parity with compile uniqueFamily) so shared
   // marks cite the device definition, not a blank/catch-all accessory row.
@@ -842,7 +844,10 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       // In a valve table whose rows name both waters, the row's own, as the
       // takeoff reads it (AS-78).
       if (!familyRowRead(gate, row, table)) continue;
-      const rawTag = rowIdentityTag(row, needle?.identityHeaderRe || null);
+      // The text the row names its unit by, the takeoff's own (AS-79).
+      const rawTag = rowIdentityText(row, {
+        identityHeaderRe: needle?.identityHeaderRe || null, unitMark: familyReadsUnitMark(gate, family),
+      });
       if (!rawTag) continue;
       // The takeoff's split of a row's marks (AS-77).
       const willFilter = Boolean(gate.catchAll || gate.filterRe);

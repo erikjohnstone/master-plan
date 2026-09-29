@@ -1,5 +1,24 @@
 # Changelog
 
+- **Takeoff and reconcile: one rule names a schedule row's unit.** The
+  takeoff named a row's unit by whichever mark column the drafter printed
+  first; the schedule-to-plan reconcile preferred a VALVE MARK always. So
+  a row printing both a UNIT MARK and a VALVE MARK was read by column
+  order. A fan coil schedule led by its valves' marks counted them as fan
+  coils (FCU-1 lost), and a valve grid led by UNIT MARK gave a phantom fan
+  coil or unit heater wherever a family read it by its marks. An isolation
+  valve schedule led by UNIT MARK was read as the chiller it isolates.
+  With the valve checks reading the first column, a valve grid led by
+  UNIT MARK had no valve shape, and its hot-water valves were counted as
+  chilled water's too. The takeoff and the reconcile now share one rule:
+  such a row is its UNIT MARK's unit to a family of units under its own
+  title (or another family's schedule that lists its units), and the
+  valve its VALVE MARK names to a valve's family and anywhere else. The
+  valve checks read a row's VALVE MARK as the valve's own mark. On the dev
+  corpus the takeoff and the reconcile are byte-identical: no dev document
+  prints that layout (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-79).
+
 - **Takeoff: a valve's water from its own row.** A valve schedule whose
   title names no water ("CONTROL VALVES", "EQUIPMENT CONTROL VALVES", or
   none) was read as one water for the whole table, its headers' or its

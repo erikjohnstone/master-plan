@@ -5530,3 +5530,112 @@ chilled) and a titled table staying its family's. The mixed-table test fails on 
   `compile_corpus_takeoff`'s water by water (0 and 6; 12 and 10; 12 and 10; 2 and 0), and the Takeoff panel lists
   every valve (40 checks). Takeoff → Assemblies on 013_MO (9 checks), 074_CA (18) and 069_ID (17) is byte-identical to
   apply_assemblies over MCP.
+
+## AS-79 — a row printing both a UNIT MARK and a VALVE MARK was named by column order, and differently by the takeoff and the reconcile (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, after AS-77 and AS-78, by a synthetic parity battery of the takeoff and the reconcile over
+rows whose unit is named in different columns. The two named a schedule row's unit by different rules.
+- **Takeoff** (`uniqueFamily`): its key, then the first of MARK, SYMBOL, VALVE MARK, UNIT MARK, EQUIP. TAG,
+  DESIGNATION, UNIT NO, UNIT TAG or ITEM NO in the order the columns are printed.
+- **Reconcile** (`rowIdentityTag`): VALVE MARK before anything, then the extraction's identity, then the rest.
+
+A row printing both a UNIT MARK and a VALVE MARK was therefore:
+- named by whichever column the drafter put first in the takeoff, and by its VALVE MARK in the reconcile;
+- in a FAN COIL UNIT SCHEDULE listing each unit's valve, counted by its valve's mark (CV-FCU-1-HHW) as a fan coil
+  whenever the VALVE MARK came first, with FCU-1 lost;
+- in a valve grid a family of units reads by its marks (untitled, EQUIPMENT or MISCELLANEOUS SCHEDULE), counted as
+  a fan coil or unit heater by its UNIT MARK whenever that came first: a phantom unit beside the one its own
+  schedule lists;
+- in an ISOLATION VALVE SCHEDULE led by the UNIT MARK, read by the chiller it isolates (CH-1), not by IV-1: no
+  isolation valve in the takeoff, while the reconcile held IV-1.
+
+Two valve checks read the row's key, which is its first column, for the valve's own mark:
+- `hasValveOrDamperMark`;
+- `inferValveServiceFromTable`.
+
+So a valve grid led by UNIT MARK had no valve shape. Its hot-water valves (CV-FCU-1-HHW) were then counted twice,
+as CHW and as HHW control valves.
+
+Totals:
+- a battery of 70 family readings over 8 titles and 11 row shapes: the two sides disagreed on 18;
+- a column-order battery (11 titles, both orders): 10 disagreements, 12 answers that changed with the order.
+
+**Fix (`corpusTakeoff.mjs`, on the shared path, so the takeoff and the reconcile alike):**
+- `rowIdentityText` is the takeoff's rule, and the reconcile scaffold now calls it in place of `rowIdentityTag`,
+  which stays for the sweep's row lookup and the unscheduled-tag scan.
+- A row printing both a UNIT MARK and a VALVE MARK is read by the family, never by their column order
+  (`familyReadsUnitMark`): it is its UNIT MARK's unit to a family of units in a table titled as that family (by
+  its title or its other title), or in another family's schedule that lists its units.
+- To a valve's, a damper's or an air valve's family (the valve takeoff's families), and anywhere no title vouches
+  for a family of units, it is the valve its VALVE MARK names. A control valve family's own identity column still
+  wins wherever it reads the row.
+- The extraction's identity is no second rule.
+- `hasValveOrDamperMark` and `inferValveServiceFromTable` read a row's VALVE MARK, where it prints one, as the
+  valve's own mark.
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-78):
+  - the takeoff (`compileTakeoff`, every family) and the reconcile scaffold (2,626 rows, every family) are
+    byte-identical on all 97;
+  - no table of the 1,654 prints a VALVE MARK column, so nothing on the corpus reads a row either rule named apart.
+- **Synthetic batteries:**
+  - the 70 readings: 64 now read units, with 0 disagreements;
+  - the column-order battery: 0 disagreements, and 0 answers that change with the order.
+- **A drawn three-sheet set**, vector grids with a text layer (the proof in `uiproof/as79`): a FAN COIL UNIT
+  SCHEDULE led by VALVE MARK, a CONTROL VALVE SCHEDULE that names no water led by UNIT MARK, and an ISOLATION VALVE
+  SCHEDULE led by UNIT MARK.
+  - At AS-78 over MCP: fan coils CV-FCU-1-HHW to -3-HHW, in the takeoff and the reconcile; the three hot-water
+    valves counted again as chilled water's (Service CHW); isolation valves none in the takeoff, but IV-1 and IV-2
+    in the reconcile.
+  - At AS-79: fan coils FCU-1 to FCU-3; the three hot-water valves once (Service HHW); IV-1 and IV-2. The takeoff
+    and the reconcile agree.
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval, GATE C dev, the
+  binding, question and reading evals and the unseen audit's replay identical to AS-78's (the typical eval 130/244,
+  GATE C dev 227/244).
+- **Held-out** (aggregates only, 0 graphs built), each as with AS-78:
+  - GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented;
+  - held-out 2 334/472;
+  - GATE 5 21/91;
+  - GATE C 35/91.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-79):
+- `familyReadsUnitMark` for titles, other titles, host schedules, no title, and five valve and damper families;
+- `rowIdentityText` in both column orders, and a control valve family's identity column. Negative controls: a row
+  printing one of them, a MARK before them, a quoted EQUIP. TAG, a paired TAG, a grille code, an empty mark column,
+  the extraction's identity;
+- `hasValveOrDamperMark` and `inferValveServiceFromTable` in both orders, with a unit schedule and a keyed table as
+  controls;
+- the takeoff and the reconcile on both orders under a fan coil and a unit heater schedule, HHW and generic control
+  valve schedules, an untitled grid, a host schedule (FCU-1 in a split system air handler schedule), an other
+  title (CU-1 in a split system air conditioning schedule) and an isolation valve schedule;
+- both orders reading alike, and the two sides alike, over 21 titles.
+
+The takeoff's own `control_valves compile includes isolation/damper families` test caught a first draft that read
+the UNIT MARK in any titled table (a valve family's own included). 18 mutations each fail a test beyond the
+baseline's.
+
+**Guard:**
+- web typecheck clean; lint 0 errors (the 3 known warnings);
+- the web suite's 3,954 tests fail only AS-1's three base-red tests;
+- MCP typecheck clean; `test:bas` 133/133;
+- the MCP suite 377 of 380, as at AS-78: AS-1's conformance test, and navfac's `sweep_schedule_row`, which runs
+  past the SDK's 60 s default under load.
+
+**UI proof** (the dev server started on the change):
+- On the drawn set, the Takeoff canvas's reconcile equals `reconcile_schedule_plan` over MCP row for row (FCU,
+  UNIT_HEATER, CHW and HHW control valves, ISOLATION_VALVE). Its takeoff's counts equal `compile_corpus_takeoff`'s,
+  family by family: FCU 3, UNIT_HEATER 0, CHW 0, HHW 3, ISOLATION_VALVE 2, in `hvac_equipment` and the valve
+  takeoff. The Takeoff panel lists all eight marks (22 checks).
+- On real documents covering every family the change touches, the canvas's reconcile equals
+  `reconcile_schedule_plan` over MCP row for row, family by family, and its valve takeoff's counts equal
+  `compile_corpus_takeoff`'s (79 checks). The documents are 074_CA, 053_VA, 014_MT, itd-d1-lab, 089_FL, 044_NY and
+  036_LA. The families are fan coils, unit and cabinet unit heaters, control dampers, chilled and hot water valves,
+  bypass, mixing and pressure reducing valves, condensing units and heat pumps.
+
+**Left as it is (measured, disclosed):**
+- The sweep's row lookup (`session.ts`'s `sweep_schedule_row`) still finds a row by its key or its VALVE MARK. A
+  fan coil schedule led by a VALVE MARK column would name FCU-1 in the takeoff, but a sweep of FCU-1 finds that row
+  only by another listing.
+- Widening the lookup to a row's UNIT MARK would add the valve schedules that name a unit they serve. That adds
+  rows to the accessory-row narrowing and risks ambiguity refusals on documents no dev tier holds, and no dev
+  document prints that layout.

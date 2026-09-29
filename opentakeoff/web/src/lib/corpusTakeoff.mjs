@@ -56,16 +56,25 @@ const VALVE_DAMPER_TAG_PREFIXES = [...VALVES, ...ACTUATORS, ...DAMPERS]
   .flatMap((c) => c.tagPrefixes)
   .filter(Boolean);
 
-/** True when at least one row's own key starts with a real, hand-verified
+// A row's mark columns (AS-79): the takeoff's and the reconcile's identity,
+// and the valve's own where a row prints a UNIT MARK beside its VALVE MARK.
+const MARK_HEADER_RE = /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i;
+const UNIT_MARK_HEADER_RE = /^UNIT\s*MARK$/i;
+const VALVE_MARK_HEADER_RE = /^VALVE\s*MARK$/i;
+
+/** True when at least one row's own mark (its key, or the VALVE MARK it
+ * prints, whichever column leads the row) starts with a real, hand-verified
  * valve/damper/actuator tag prefix — mark-SHAPE corroboration, not a title
  * string match. This is what actually distinguishes "CV-7" (a real control
  * valve mark) from "RTU-1" (a rooftop unit that merely shares the same
  * generic TAG/GPM/SIZE/MODEL header columns). */
 export function hasValveOrDamperMark(table) {
   for (const row of table?.rows || []) {
-    const key = String(row?.key || "").trim().toUpperCase();
-    if (!key) continue;
-    if (VALVE_DAMPER_TAG_PREFIXES.some((p) => key.startsWith(p.toUpperCase()))) return true;
+    for (const mark of [row?.key, cellText(row, VALVE_MARK_HEADER_RE)]) {
+      const key = String(mark || "").trim().toUpperCase();
+      if (!key) continue;
+      if (VALVE_DAMPER_TAG_PREFIXES.some((p) => key.startsWith(p.toUpperCase()))) return true;
+    }
   }
   return false;
 }
@@ -914,8 +923,10 @@ export function inferValveServiceFromTable(table) {
   // a substring — so a genuinely chilled-water valve fell through to the
   // HHW bucket, exactly backwards. Word boundaries, and the more specific
   // CHW/CW check tried first as defense in depth.
+  // A row's own mark: the VALVE MARK it prints, whichever column leads the
+  // row (a UNIT MARK names the unit the valve serves), then its key (AS-79).
   for (const row of table?.rows || []) {
-    const tag = String(row.key || cellText(row, /^(?:TAG|MARK|VALVE\s*MARK)$/i) || "").trim();
+    const tag = String(cellText(row, VALVE_MARK_HEADER_RE) || row.key || cellText(row, /^(?:TAG|MARK)$/i) || "").trim();
     if (/\bCHW\b|\bCW\b/i.test(tag)) return "CHW";
     if (/\bHHW\b|REHEAT|\bHW\b/i.test(tag)) return "HHW";
   }
@@ -1294,6 +1305,64 @@ export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = 
   return gate.hostOk ? 1 : read;
 }
 
+const QUOTES_RE = /^["'\s]+|["'\s]+$/g;
+
+/**
+ * Whether a row printing both a UNIT MARK and a VALVE MARK is, to a family,
+ * its UNIT MARK's unit beside that unit's valve (AS-79): in a table titled as
+ * a family of units, or another family's schedule that lists them. To a
+ * valve's, a damper's or an air valve's family the row is the valve its
+ * VALVE MARK names, and anywhere no title vouches for a family of units it is
+ * a valve's too, its UNIT MARK the unit the valve serves.
+ * @param {object} gate the family's familyTableGate reading of the table
+ * @param {string} family the family's HVAC_FAMILY_SPECS key
+ */
+export function familyReadsUnitMark(gate, family) {
+  return Boolean(gate?.titleOk || gate?.altOk || gate?.hostOk) && !CONTROL_VALVE_FAMILIES.includes(family);
+}
+
+/**
+ * The text a row names its unit by, for the takeoff and the reconcile alike
+ * (AS-79): its key; a count-keyed table's identifier column (B-3); its mark
+ * column (MARK, SYMBOL, EQUIP. TAG, DESIGNATION, UNIT NO, UNIT TAG, ITEM NO,
+ * or a UNIT or VALVE MARK), whichever the row prints first; a TAG that pairs
+ * marks ("RF-1 & 2" beats a glued key "RF-12"; a bare TAG is often a grille's
+ * type code, 1S or 2R); and the family's own identity column (a control
+ * valve's VALVE MARK). A row printing both a UNIT MARK and a VALVE MARK is
+ * read by the family, never by their column order (familyReadsUnitMark).
+ * @param {object} row a schedule table's row
+ * @param {{ countKeyedIdentCol?: string|null, identityHeaderRe?: RegExp|null, unitMark?: boolean }} [opts]
+ */
+export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeaderRe = null, unitMark = false } = {}) {
+  let tag = String(row.key || "").trim().replace(QUOTES_RE, "");
+  if (countKeyedIdentCol) {
+    const ident = String(row.cells?.[countKeyedIdentCol]?.text || "").trim();
+    if (ident) tag = ident;
+  }
+  // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
+  // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
+  // while row.key correctly holds EF-1.
+  const headers = Object.keys(row.cells || {});
+  let markHeader = headers.find((header) => MARK_HEADER_RE.test(header));
+  if (markHeader && (UNIT_MARK_HEADER_RE.test(markHeader) || VALVE_MARK_HEADER_RE.test(markHeader))) {
+    const own = unitMark ? UNIT_MARK_HEADER_RE : VALVE_MARK_HEADER_RE;
+    markHeader = headers.find((header) => own.test(header)) || markHeader;
+  }
+  const markCell = markHeader ? String(row.cells[markHeader]?.text || "").trim() : "";
+  if (markCell) tag = markCell.replace(QUOTES_RE, "").trim();
+  // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12") — Northport
+  // blank return-fan schedule. Still never prefer bare grille-type TAG codes.
+  const tagCell = cellText(row, /^TAG$/i);
+  if (tagCell && /&/.test(tagCell) && /^[A-Za-z]{1,8}[\s\-]?\d/i.test(tagCell.trim())) {
+    tag = String(tagCell).replace(QUOTES_RE, "").trim();
+  }
+  if (identityHeaderRe) {
+    const ident = cellText(row, identityHeaderRe);
+    if (ident) tag = String(ident).replace(QUOTES_RE, "").trim();
+  }
+  return tag;
+}
+
 /**
  * The text a row's marks are split from (AS-77, the takeoff's rule the
  * reconcile shares): a mark cell printing a comma list, in a table no key
@@ -1318,7 +1387,7 @@ export function splitRowMarks(text, willFilter) {
     .flatMap((t) => expandEquipMarks(t));
 }
 
-function uniqueFamily(graph, spec) {
+function uniqueFamily(graph, spec, family) {
   const { identityHeaderRe } = spec;
   const keys = new Set();
   const items = [];
@@ -1357,30 +1426,10 @@ function uniqueFamily(graph, spec) {
       // In a valve table whose rows name both waters, the row's own (AS-78).
       if (!familyRowRead(gate, row, table)) continue;
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
-      let tag = rowKey;
-      if (countKeyedIdentCol) {
-        const ident = String(row.cells?.[countKeyedIdentCol]?.text || "").trim();
-        if (ident) tag = ident;
-      }
-      // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
-      // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
-      // while row.key correctly holds EF-1.
-      const markCell = cellText(row, /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i);
-      if (markCell) tag = String(markCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12") — Northport
-      // blank return-fan schedule. Still never prefer bare grille-type TAG codes.
-      const tagCell = cellText(row, /^TAG$/i);
-      if (
-        tagCell
-        && /&/.test(tagCell)
-        && /^[A-Za-z]{1,8}[\s\-]?\d/i.test(tagCell.trim())
-      ) {
-        tag = String(tagCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      }
-      if (identityHeaderRe) {
-        const ident = cellText(row, identityHeaderRe);
-        if (ident) tag = String(ident).replace(/^["'\s]+|["'\s]+$/g, "").trim();
-      }
+      // The text the row names its unit by, as the reconcile reads it (AS-79).
+      const tag = rowIdentityText(row, {
+        countKeyedIdentCol, identityHeaderRe, unitMark: familyReadsUnitMark(gate, family),
+      });
       // Always expand slash compounds (CWP-1/CWP-2). Comma-split only when a
       // key filter can pick family marks (DFC-1 , DCU-1). Untagged titled
       // families keep row.key when SYMBOL is a comma list (Baker ERU-1, HP-4).
@@ -2722,7 +2771,7 @@ export function compileHvacTakeoff(sessionOrSheets, graph) {
   const sheets = sheetRecords(sessionOrSheets, graph);
   const categories = {};
   for (const [name, spec] of Object.entries(HVAC_FAMILY_SPECS)) {
-    const fam = uniqueFamily(graph, spec);
+    const fam = uniqueFamily(graph, spec, name);
     categories[name] = {
       count: fam.count,
       tolerance: 0,
