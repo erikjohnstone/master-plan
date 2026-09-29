@@ -1,0 +1,2062 @@
+{
+ "about": "Which tier-2..5 dev documents (attribute keys exist) print HVAC control drawings: the PDF text layer's control phrases per page (census), then each document's flagged pages read in context (by eye). A document is eligible for the binding tier when it prints at least one HVAC control drawing (a sequence of operation, a control diagram or schematic, a P&ID, or a points list) and its attribute key holds at least two instances.",
+ "documents": [
+  {
+   "id": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+   "tier": 2,
+   "instances": 2,
+   "eligible": true,
+   "reason": "p62 prints SPLIT SYSTEM CONTROL SCHEMATIC and COMPUTER ROOM AIR CONDITIONER CONTROLS SCHEMATIC, POINTS LIST and SEQUENCE OF OPERATION",
+   "control_pages": [
+    {
+     "file": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf",
+     "page": 2,
+     "phrases": {
+      "points": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf",
+     "page": 62,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2,
+      "points": 2,
+      "controls": 10
+     }
+    }
+   ]
+  },
+  {
+   "id": "03_FL_HurlburtField_ChildDevCenter",
+   "tier": 2,
+   "instances": 25,
+   "eligible": true,
+   "reason": "p64, p85, p86 print sequences of operation, control diagrams and a points list",
+   "control_pages": [
+    {
+     "file": "03_FL_HurlburtField_ChildDevCenter.pdf",
+     "page": 2,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "03_FL_HurlburtField_ChildDevCenter.pdf",
+     "page": 59,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "03_FL_HurlburtField_ChildDevCenter.pdf",
+     "page": 60,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "03_FL_HurlburtField_ChildDevCenter.pdf",
+     "page": 64,
+     "phrases": {
+      "seq": 2,
+      "controls": 2
+     }
+    },
+    {
+     "file": "03_FL_HurlburtField_ChildDevCenter.pdf",
+     "page": 85,
+     "phrases": {
+      "seq": 4,
+      "diagram": 2,
+      "controls": 5
+     }
+    },
+    {
+     "file": "03_FL_HurlburtField_ChildDevCenter.pdf",
+     "page": 86,
+     "phrases": {
+      "seq": 2,
+      "diagram": 2,
+      "points": 1,
+      "controls": 5
+     }
+    },
+    {
+     "file": "03_FL_HurlburtField_ChildDevCenter.pdf",
+     "page": 97,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "tier": 2,
+   "instances": 19,
+   "eligible": true,
+   "reason": "p27, p29, p31 print sequences of operation, a control diagram and points lists",
+   "control_pages": [
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 2,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 3,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 4,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 5,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 6,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 7,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 8,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 9,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 10,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 11,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 12,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 13,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 14,
+     "phrases": {
+      "seq": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 15,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 25,
+     "phrases": {
+      "points": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 26,
+     "phrases": {
+      "seq": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 27,
+     "phrases": {
+      "seq": 1,
+      "controls": 8
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 29,
+     "phrases": {
+      "seq": 2,
+      "diagram": 1,
+      "points": 1,
+      "controls": 11
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 30,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+     "page": 31,
+     "phrases": {
+      "seq": 2,
+      "points": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU",
+   "tier": 2,
+   "instances": 10,
+   "eligible": true,
+   "reason": "p20 prints SEQUENCE OF OPERATION (chiller system), INPUT/OUTPUT SUMMARY, CONTROL DIAGRAM - AIR COOLED CHILLERS and DUCTLESS MINI SPLIT CONTROL DIAGRAM",
+   "control_pages": [
+    {
+     "file": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+     "page": 10,
+     "phrases": {
+      "diagram": 7,
+      "points": 1,
+      "controls": 3
+     }
+    },
+    {
+     "file": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+     "page": 13,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+     "page": 14,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+     "page": 19,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+     "page": 20,
+     "phrases": {
+      "seq": 2,
+      "diagram": 2,
+      "points": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf",
+     "page": 23,
+     "phrases": {
+      "diagram": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+   "tier": 2,
+   "instances": 3,
+   "eligible": false,
+   "reason": "general notes only (\"CONTROL SYSTEM DRAWINGS AND SEQUENCES OF OPERATION\" as a submittal item)",
+   "control_pages": [
+    {
+     "file": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf",
+     "page": 18,
+     "phrases": {
+      "diagram": 3
+     }
+    },
+    {
+     "file": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf",
+     "page": 19,
+     "phrases": {
+      "seq": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+   "tier": 2,
+   "instances": 2,
+   "eligible": false,
+   "reason": "an electrical partial riser diagram only",
+   "control_pages": [
+    {
+     "file": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf",
+     "page": 12,
+     "phrases": {
+      "diagram": 1,
+      "controls": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "tier": 2,
+   "instances": 21,
+   "eligible": true,
+   "reason": "p111, p119, p232 print sequences of operation; p151 a control diagram and points list",
+   "control_pages": [
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 37,
+     "phrases": {
+      "diagram": 1,
+      "controls": 2
+     }
+    },
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 38,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 111,
+     "phrases": {
+      "seq": 3
+     }
+    },
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 119,
+     "phrases": {
+      "seq": 3
+     }
+    },
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 151,
+     "phrases": {
+      "diagram": 1,
+      "points": 1
+     }
+    },
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 153,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 154,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf",
+     "page": 232,
+     "phrases": {
+      "seq": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "tier": 2,
+   "instances": 24,
+   "eligible": true,
+   "reason": "p16 prints twelve sequence of operation sections",
+   "control_pages": [
+    {
+     "file": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
+     "page": 1,
+     "phrases": {
+      "seq": 1
+     }
+    },
+    {
+     "file": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
+     "page": 2,
+     "phrases": {
+      "seq": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
+     "page": 16,
+     "phrases": {
+      "seq": 12,
+      "controls": 39
+     }
+    }
+   ]
+  },
+  {
+   "id": "16_NV_CarsonValleyMS_HVAC_Replacement",
+   "tier": 2,
+   "instances": 52,
+   "eligible": true,
+   "reason": "p27 to p29 print sequences of operation and control diagrams",
+   "control_pages": [
+    {
+     "file": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+     "page": 1,
+     "phrases": {
+      "seq": 3,
+      "diagram": 3
+     }
+    },
+    {
+     "file": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+     "page": 27,
+     "phrases": {
+      "seq": 2,
+      "diagram": 2,
+      "controls": 4
+     }
+    },
+    {
+     "file": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+     "page": 28,
+     "phrases": {
+      "seq": 4,
+      "diagram": 4,
+      "controls": 5
+     }
+    },
+    {
+     "file": "16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
+     "page": 29,
+     "phrases": {
+      "seq": 2,
+      "diagram": 3,
+      "controls": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "21_VA_OrangeCounty_PublicSafetyBldg",
+   "tier": 2,
+   "instances": 34,
+   "eligible": true,
+   "reason": "p52 to p56 print sequences of operation and control diagrams",
+   "control_pages": [
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 2,
+     "phrases": {
+      "diagram": 4
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 6,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 19,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 20,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 31,
+     "phrases": {
+      "diagram": 3
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 33,
+     "phrases": {
+      "diagram": 1,
+      "controls": 3
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 45,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 49,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 52,
+     "phrases": {
+      "seq": 1,
+      "diagram": 1,
+      "controls": 11
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 53,
+     "phrases": {
+      "seq": 1,
+      "controls": 9
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 54,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2,
+      "controls": 5
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 55,
+     "phrases": {
+      "seq": 4,
+      "diagram": 4,
+      "controls": 6
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 56,
+     "phrases": {
+      "seq": 5,
+      "diagram": 5,
+      "controls": 4
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 87,
+     "phrases": {
+      "diagram": 6
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 88,
+     "phrases": {
+      "diagram": 5
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 124,
+     "phrases": {
+      "diagram": 4
+     }
+    },
+    {
+     "file": "21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+     "page": 125,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+   "tier": 3,
+   "instances": 3,
+   "eligible": true,
+   "reason": "p32 prints control diagrams",
+   "control_pages": [
+    {
+     "file": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf",
+     "page": 32,
+     "phrases": {
+      "diagram": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+   "tier": 3,
+   "instances": 19,
+   "eligible": true,
+   "reason": "p11 to p21 print control diagrams, sequences and a points list",
+   "control_pages": [
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 11,
+     "phrases": {
+      "diagram": 5,
+      "controls": 2
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 12,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 13,
+     "phrases": {
+      "diagram": 6,
+      "controls": 2
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 14,
+     "phrases": {
+      "diagram": 4,
+      "controls": 1
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 16,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 17,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 18,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 19,
+     "phrases": {
+      "seq": 1
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 20,
+     "phrases": {
+      "seq": 1,
+      "points": 1,
+      "controls": 18
+     }
+    },
+    {
+     "file": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+     "page": 21,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+   "tier": 3,
+   "instances": 13,
+   "eligible": true,
+   "reason": "p15 to p17 print sequences of operation and points lists",
+   "control_pages": [
+    {
+     "file": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 1,
+      "points": 1
+     }
+    },
+    {
+     "file": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+     "page": 15,
+     "phrases": {
+      "seq": 2,
+      "controls": 2
+     }
+    },
+    {
+     "file": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+     "page": 16,
+     "phrases": {
+      "seq": 6,
+      "points": 3,
+      "controls": 28
+     }
+    },
+    {
+     "file": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+     "page": 17,
+     "phrases": {
+      "seq": 2,
+      "points": 3,
+      "controls": 1
+     }
+    },
+    {
+     "file": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+     "page": 18,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+     "page": 25,
+     "phrases": {
+      "points": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "071_ME_BGS_Project_3809_Health_Science_Center",
+   "tier": 3,
+   "instances": 24,
+   "eligible": false,
+   "reason": "p45 and p46 print riser diagrams and lighting control details only: no HVAC control drawing",
+   "control_pages": [
+    {
+     "file": "071_ME_BGS_Project_3809_Health_Science_Center.pdf",
+     "page": 45,
+     "phrases": {
+      "diagram": 1,
+      "controls": 2
+     }
+    },
+    {
+     "file": "071_ME_BGS_Project_3809_Health_Science_Center.pdf",
+     "page": 46,
+     "phrases": {
+      "diagram": 2,
+      "controls": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+   "tier": 3,
+   "instances": 9,
+   "eligible": true,
+   "reason": "p3 prints a control diagram, p7 sequences of operation",
+   "control_pages": [
+    {
+     "file": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
+     "page": 3,
+     "phrases": {
+      "diagram": 1,
+      "controls": 3
+     }
+    },
+    {
+     "file": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
+     "page": 7,
+     "phrases": {
+      "seq": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
+     "page": 15,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+   "tier": 3,
+   "instances": 23,
+   "eligible": true,
+   "reason": "p7 prints CONTROL SYSTEM NOTES & SEQUENCE OF OPERATIONS for the heat pumps",
+   "control_pages": [
+    {
+     "file": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf",
+     "page": 7,
+     "phrases": {
+      "seq": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "tier": 3,
+   "instances": 60,
+   "eligible": true,
+   "reason": "p31 to p36 print sequences of operation, control diagrams and points lists",
+   "control_pages": [
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 10,
+     "phrases": {
+      "seq": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 23,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 31,
+     "phrases": {
+      "seq": 3,
+      "diagram": 3,
+      "points": 2,
+      "controls": 7
+     }
+    },
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 32,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2,
+      "points": 1,
+      "controls": 5
+     }
+    },
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 33,
+     "phrases": {
+      "seq": 1,
+      "diagram": 1,
+      "points": 1,
+      "controls": 3
+     }
+    },
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 34,
+     "phrases": {
+      "seq": 1,
+      "diagram": 1,
+      "points": 1,
+      "controls": 3
+     }
+    },
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 35,
+     "phrases": {
+      "seq": 10,
+      "diagram": 3,
+      "controls": 8
+     }
+    },
+    {
+     "file": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+     "page": 36,
+     "phrases": {
+      "seq": 6,
+      "diagram": 6,
+      "points": 2,
+      "controls": 7
+     }
+    }
+   ]
+  },
+  {
+   "id": "19_CA_VistaUSD_DataCenter",
+   "tier": 3,
+   "instances": 1,
+   "eligible": false,
+   "reason": "no page prints a sequence, control diagram or points list",
+   "control_pages": []
+  },
+  {
+   "id": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+   "tier": 3,
+   "instances": 15,
+   "eligible": false,
+   "reason": "no page prints a sequence, control diagram or points list (M0.02 energy code notes only)",
+   "control_pages": []
+  },
+  {
+   "id": "011_IL_VA_Hines_Finance_Center_Renovation",
+   "tier": 4,
+   "instances": 15,
+   "eligible": true,
+   "reason": "p19 and p26 print sequences of operation, control diagrams and points lists",
+   "control_pages": [
+    {
+     "file": "011_IL_VA_Hines_Finance_Center_Renovation.pdf",
+     "page": 13,
+     "phrases": {
+      "points": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "011_IL_VA_Hines_Finance_Center_Renovation.pdf",
+     "page": 19,
+     "phrases": {
+      "seq": 2,
+      "diagram": 1,
+      "points": 2,
+      "controls": 2
+     }
+    },
+    {
+     "file": "011_IL_VA_Hines_Finance_Center_Renovation.pdf",
+     "page": 26,
+     "phrases": {
+      "seq": 2,
+      "diagram": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "01_NY_VA_Northport_Dialysis_100CD",
+   "tier": 4,
+   "instances": 27,
+   "eligible": true,
+   "reason": "p87 prints sequences of operation, control diagrams and points lists",
+   "control_pages": [
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 6
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 62,
+     "phrases": {
+      "diagram": 2,
+      "controls": 4
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 84,
+     "phrases": {
+      "seq": 1,
+      "diagram": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 87,
+     "phrases": {
+      "seq": 7,
+      "diagram": 2,
+      "points": 3,
+      "controls": 25
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 89,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 107,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 109,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 110,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 111,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 134,
+     "phrases": {
+      "seq": 1,
+      "points": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 139,
+     "phrases": {
+      "diagram": 2,
+      "points": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 140,
+     "phrases": {
+      "diagram": 2,
+      "controls": 2
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 149,
+     "phrases": {
+      "diagram": 4
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 150,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 153,
+     "phrases": {
+      "diagram": 3
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 154,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 155,
+     "phrases": {
+      "diagram": 7,
+      "controls": 1
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 156,
+     "phrases": {
+      "diagram": 2,
+      "controls": 2
+     }
+    },
+    {
+     "file": "01_NY_VA_Northport_Dialysis_100CD.pdf",
+     "page": 162,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+   "tier": 4,
+   "instances": 33,
+   "eligible": true,
+   "reason": "p2 to p8 print sequences of operation, control diagrams and points lists",
+   "control_pages": [
+    {
+     "file": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+     "page": 2,
+     "phrases": {
+      "seq": 2,
+      "diagram": 3,
+      "points": 16,
+      "controls": 11
+     }
+    },
+    {
+     "file": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+     "page": 3,
+     "phrases": {
+      "diagram": 2,
+      "points": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+     "page": 4,
+     "phrases": {
+      "diagram": 2,
+      "points": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+     "page": 5,
+     "phrases": {
+      "seq": 6,
+      "diagram": 1,
+      "points": 1,
+      "controls": 16
+     }
+    },
+    {
+     "file": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+     "page": 6,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2,
+      "points": 2,
+      "controls": 16
+     }
+    },
+    {
+     "file": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+     "page": 7,
+     "phrases": {
+      "seq": 2,
+      "diagram": 3,
+      "points": 7,
+      "controls": 6
+     }
+    },
+    {
+     "file": "028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+     "page": 8,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2,
+      "points": 5,
+      "controls": 5
+     }
+    }
+   ]
+  },
+  {
+   "id": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+   "tier": 4,
+   "instances": 31,
+   "eligible": true,
+   "reason": "p82 to p92 print control diagrams, sequences and points lists",
+   "control_pages": [
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 65,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 82,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 83,
+     "phrases": {
+      "seq": 1
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 84,
+     "phrases": {
+      "diagram": 1,
+      "controls": 3
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 88,
+     "phrases": {
+      "seq": 2,
+      "diagram": 1,
+      "points": 2
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 89,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 90,
+     "phrases": {
+      "seq": 1,
+      "diagram": 1,
+      "points": 1
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 91,
+     "phrases": {
+      "seq": 1,
+      "diagram": 1
+     }
+    },
+    {
+     "file": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+     "page": 92,
+     "phrases": {
+      "diagram": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "033_MN_VA_Project_656_18_301_Construct_Replace",
+   "tier": 4,
+   "instances": 6,
+   "eligible": true,
+   "reason": "p66 VAV BOX CONTROL SCHEMATIC DIAGRAM; p70 AIR HANDLING UNIT, SUPPLY FAN and RETURN FAN POINTS LISTS and a SEQUENCE OF OPERATION; p71 VAV BOX CONTROL SEQUENCE, VAV TERMINAL UNIT POINTS LIST; p72 SUSPENDED UNIT HEATER POINTS LIST",
+   "control_pages": [
+    {
+     "file": "033_MN_VA_Project_656_18_301_Construct_Replace.pdf",
+     "page": 66,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "033_MN_VA_Project_656_18_301_Construct_Replace.pdf",
+     "page": 70,
+     "phrases": {
+      "seq": 1,
+      "points": 3,
+      "controls": 5
+     }
+    },
+    {
+     "file": "033_MN_VA_Project_656_18_301_Construct_Replace.pdf",
+     "page": 71,
+     "phrases": {
+      "seq": 7,
+      "points": 2,
+      "controls": 3
+     }
+    },
+    {
+     "file": "033_MN_VA_Project_656_18_301_Construct_Replace.pdf",
+     "page": 72,
+     "phrases": {
+      "points": 1,
+      "controls": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+   "tier": 4,
+   "instances": 3,
+   "eligible": true,
+   "reason": "p6 prints the PCW skid P&ID and a SEQUENCE OF OPERATION; p7 the skid's FLOW DIAGRAMS",
+   "control_pages": [
+    {
+     "file": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+     "page": 3,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+     "page": 6,
+     "phrases": {
+      "seq": 2,
+      "diagram": 6,
+      "points": 1,
+      "controls": 2
+     }
+    },
+    {
+     "file": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+     "page": 7,
+     "phrases": {
+      "diagram": 4
+     }
+    },
+    {
+     "file": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+     "page": 8,
+     "phrases": {
+      "diagram": 5
+     }
+    }
+   ]
+  },
+  {
+   "id": "089_FL_Airport_Terminal_and_Hangar_Development",
+   "tier": 4,
+   "instances": 26,
+   "eligible": true,
+   "reason": "p137 prints HANGAR VENTILATION SEQUENCE OF OPERATION (EF-2), DEHUMIDIFICATION CONTROL SEQUENCE and SEQUENCE OF OPERATIONS",
+   "control_pages": [
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 31,
+     "phrases": {
+      "points": 1
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 136,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 137,
+     "phrases": {
+      "seq": 4
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 139,
+     "phrases": {
+      "diagram": 11
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 141,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 142,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 147,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 148,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 155,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 163,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "089_FL_Airport_Terminal_and_Hangar_Development.pdf",
+     "page": 170,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "08_ME_BGS_Augusta_EastCampus_Renovation",
+   "tier": 4,
+   "instances": 1,
+   "eligible": false,
+   "reason": "no page prints a sequence, control diagram or points list",
+   "control_pages": []
+  },
+  {
+   "id": "22_GA_Valdosta_FireStation8_100CD",
+   "tier": 4,
+   "instances": 7,
+   "eligible": false,
+   "reason": "erosion control details and power riser diagrams only: no HVAC control drawing",
+   "control_pages": [
+    {
+     "file": "22_GA_Valdosta_FireStation8_100CD.pdf",
+     "page": 2,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "22_GA_Valdosta_FireStation8_100CD.pdf",
+     "page": 79,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "22_GA_Valdosta_FireStation8_100CD.pdf",
+     "page": 80,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "26_CA_TransbayTower_Mechanical_64Sheets",
+   "tier": 4,
+   "instances": 8,
+   "eligible": false,
+   "reason": "air and water riser diagrams and a HEATING PLANT FLOW DIAGRAM (piping): no HVAC control drawing",
+   "control_pages": [
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 8,
+      "controls": 4
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 12,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 14,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 15,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 16,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 36,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 45,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 53,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 54,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 55,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 57,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 58,
+     "phrases": {
+      "diagram": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+     "page": 60,
+     "phrases": {
+      "diagram": 1,
+      "controls": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "tier": 5,
+   "instances": 15,
+   "eligible": true,
+   "reason": "p20 to p22 print sequences of operation and points lists",
+   "control_pages": [
+    {
+     "file": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+     "page": 20,
+     "phrases": {
+      "seq": 4,
+      "points": 3,
+      "controls": 14
+     }
+    },
+    {
+     "file": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+     "page": 21,
+     "phrases": {
+      "seq": 3,
+      "points": 3,
+      "controls": 2
+     }
+    },
+    {
+     "file": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+     "page": 22,
+     "phrases": {
+      "seq": 2,
+      "points": 2
+     }
+    },
+    {
+     "file": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+     "page": 23,
+     "phrases": {
+      "diagram": 2,
+      "controls": 2
+     }
+    },
+    {
+     "file": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+     "page": 30,
+     "phrases": {
+      "diagram": 5
+     }
+    },
+    {
+     "file": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+     "page": 31,
+     "phrases": {
+      "diagram": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+   "tier": 5,
+   "instances": 8,
+   "eligible": false,
+   "reason": "a door security sequence and plumbing riser diagrams only",
+   "control_pages": [
+    {
+     "file": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
+     "page": 3,
+     "phrases": {
+      "seq": 1
+     }
+    },
+    {
+     "file": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
+     "page": 8,
+     "phrases": {
+      "diagram": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "032_PA_Construct_EHRM_Infrastructure_Upgrades",
+   "tier": 5,
+   "instances": 2,
+   "eligible": true,
+   "reason": "p4 prints DATA CENTRE SEQUENCE OF OPERATION, DATA CENTRE CRAC UNIT CONTROL, a POINTS TABLE and SPLIT SYSTEM DX TELECOM A/C UNIT CONTROL SEQUENCE OF OPERATIONS",
+   "control_pages": [
+    {
+     "file": "032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 4
+     }
+    },
+    {
+     "file": "032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+     "page": 4,
+     "phrases": {
+      "seq": 3,
+      "points": 1,
+      "controls": 4
+     }
+    },
+    {
+     "file": "032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+     "page": 82,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+     "page": 83,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+     "page": 84,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+     "page": 85,
+     "phrases": {
+      "diagram": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+   "tier": 5,
+   "instances": 4,
+   "eligible": true,
+   "reason": "p21 and p22 print sequences of operation, control diagrams and points lists",
+   "control_pages": [
+    {
+     "file": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
+     "page": 2,
+     "phrases": {
+      "seq": 1
+     }
+    },
+    {
+     "file": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
+     "page": 11,
+     "phrases": {
+      "points": 1,
+      "controls": 1
+     }
+    },
+    {
+     "file": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
+     "page": 21,
+     "phrases": {
+      "seq": 2,
+      "diagram": 2,
+      "points": 1,
+      "controls": 14
+     }
+    },
+    {
+     "file": "043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
+     "page": 22,
+     "phrases": {
+      "seq": 3,
+      "diagram": 4,
+      "points": 2,
+      "controls": 14
+     }
+    }
+   ]
+  },
+  {
+   "id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+   "tier": 5,
+   "instances": 24,
+   "eligible": true,
+   "reason": "p56 prints sequences of operation, p57 points lists",
+   "control_pages": [
+    {
+     "file": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+     "page": 1,
+     "phrases": {
+      "seq": 1,
+      "points": 1
+     }
+    },
+    {
+     "file": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+     "page": 3,
+     "phrases": {
+      "points": 1
+     }
+    },
+    {
+     "file": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+     "page": 56,
+     "phrases": {
+      "seq": 9,
+      "diagram": 1,
+      "points": 1,
+      "controls": 18
+     }
+    },
+    {
+     "file": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf",
+     "page": 57,
+     "phrases": {
+      "points": 6
+     }
+    }
+   ]
+  },
+  {
+   "id": "06_MO_NatlGuard_JeffCity_CST_Addition",
+   "tier": 5,
+   "instances": 18,
+   "eligible": true,
+   "reason": "p76 and p77 print sequences of operation and control diagrams",
+   "control_pages": [
+    {
+     "file": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf",
+     "page": 2,
+     "phrases": {
+      "seq": 2
+     }
+    },
+    {
+     "file": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf",
+     "page": 76,
+     "phrases": {
+      "seq": 3,
+      "diagram": 2,
+      "controls": 16
+     }
+    },
+    {
+     "file": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf",
+     "page": 77,
+     "phrases": {
+      "seq": 3,
+      "diagram": 3,
+      "controls": 32
+     }
+    },
+    {
+     "file": "06_MO_NatlGuard_JeffCity_CST_Addition.pdf",
+     "page": 84,
+     "phrases": {
+      "seq": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project",
+   "tier": 5,
+   "instances": 2,
+   "eligible": true,
+   "reason": "p13 prints ELECTRIC UNIT HEATER CONTROL DIAGRAM, MAU / HV - CONTROL SEQUENCE OF OPERATIONS and PACKAGED ROOFTOP MAU & HV CONTROL DIAGRAM",
+   "control_pages": [
+    {
+     "file": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf",
+     "page": 1,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf",
+     "page": 13,
+     "phrases": {
+      "seq": 1,
+      "diagram": 2,
+      "controls": 1
+     }
+    },
+    {
+     "file": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf",
+     "page": 14,
+     "phrases": {
+      "diagram": 2
+     }
+    },
+    {
+     "file": "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.pdf",
+     "page": 15,
+     "phrases": {
+      "points": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "10_MO_Hawthorn_PsychHospital_HVAC",
+   "tier": 5,
+   "instances": 4,
+   "eligible": true,
+   "reason": "p9 prints SEQUENCE OF OPERATIONS (condensing unit, BAS)",
+   "control_pages": [
+    {
+     "file": "10_MO_Hawthorn_PsychHospital_HVAC.pdf",
+     "page": 5,
+     "phrases": {
+      "seq": 1,
+      "controls": 6
+     }
+    },
+    {
+     "file": "10_MO_Hawthorn_PsychHospital_HVAC.pdf",
+     "page": 9,
+     "phrases": {
+      "seq": 4,
+      "controls": 23
+     }
+    }
+   ]
+  },
+  {
+   "id": "23_GA_MaconBibb_RecreationCenter",
+   "tier": 5,
+   "instances": 2,
+   "eligible": false,
+   "reason": "sequences are in the specifications (\"SEE CONTROL SEQUENCE OF OPERATION IN SPECIFICATIONS\"); a bi-polar ionization control detail only",
+   "control_pages": [
+    {
+     "file": "23_GA_MaconBibb_RecreationCenter.pdf",
+     "page": 33,
+     "phrases": {
+      "seq": 1
+     }
+    },
+    {
+     "file": "23_GA_MaconBibb_RecreationCenter.pdf",
+     "page": 34,
+     "phrases": {
+      "diagram": 1
+     }
+    },
+    {
+     "file": "23_GA_MaconBibb_RecreationCenter.pdf",
+     "page": 41,
+     "phrases": {
+      "diagram": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "24_IA_JohnsonCounty_Courthouse",
+   "tier": 5,
+   "instances": 5,
+   "eligible": false,
+   "reason": "lighting control sequences and an access control detail only",
+   "control_pages": [
+    {
+     "file": "24_IA_JohnsonCounty_Courthouse.pdf",
+     "page": 19,
+     "phrases": {
+      "seq": 2
+     }
+    },
+    {
+     "file": "24_IA_JohnsonCounty_Courthouse.pdf",
+     "page": 26,
+     "phrases": {
+      "seq": 1
+     }
+    },
+    {
+     "file": "24_IA_JohnsonCounty_Courthouse.pdf",
+     "page": 31,
+     "phrases": {
+      "diagram": 1,
+      "points": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "28_WA_KCHA_PublicHousing_HVAC",
+   "tier": 5,
+   "instances": 4,
+   "eligible": false,
+   "reason": "an abbreviation (FUNCTIONAL TESTING SEQUENCE OF OPERATION & TEST) only",
+   "control_pages": [
+    {
+     "file": "28_WA_KCHA_PublicHousing_HVAC.pdf",
+     "page": 1,
+     "phrases": {
+      "seq": 1,
+      "controls": 1
+     }
+    }
+   ]
+  }
+ ]
+}

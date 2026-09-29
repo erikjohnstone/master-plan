@@ -1,0 +1,64 @@
+# 089_FL_Airport_Terminal_and_Hangar_Development.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2 (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/089_FL_Airport_Terminal_and_Hangar_Development.attrs.csv.
+# M-701 (MECHANICAL CONTROLS) titles no detail: an untitled diagram is named by a label printed in it (the eval's label rule).
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,DOAS-1,DOAS,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,DEDICATED OA SYSTEM (DOAS-1 / HP-2),tag,a sequence section on M-701
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,DOAS-1,DOAS,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,DEHUMIDIFICATION CONTROL SEQUENCE,family_detail,the DX DOAS's hot gas reheat dehumidification
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,DOAS-1,DOAS,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,the VRF control riser diagram (untitled) labels DOAS-1 with its controller
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,HP-2,HEAT_PUMP,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,DEDICATED OA SYSTEM (DOAS-1 / HP-2),tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,HP-2,HEAT_PUMP,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,the riser diagram labels HP-2 beside DOAS-1
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,HP-2,HEAT_PUMP,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,DEHUMIDIFICATION CONTROL SEQUENCE,semantic,it cycles the DOAS's compressors (HP-2 is DOAS-1's outdoor unit)
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-1,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-1,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,the riser diagram labels each AC with its remote zone controller
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-2,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-2,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-3,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-3,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-4,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-4,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-5,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-5,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-6,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-6,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-7,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-7,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-8,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-8,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-9,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-9,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-10,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-10,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-11,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-11,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-12,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,VARIABLE REFRIGERANT FLOW SYSTEMS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,AC-12,VRF_INDOOR,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#163,RCP-1,PUMP,,none,,a plumbing hot water circulating pump: no control drawing
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EF-1,FAN,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,STARTER / SPEED CONTROLLER,tag,the EF-1 diagram (untitled): starter and speed controller started by a contact from DOAS-1
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EF-1,FAN,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,TE-200A CENTRALIZED CONTROLLER,tag,the riser diagram labels EF-1 beside DOAS-1
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EF-2,FAN,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,HANGAR VENTILATION SEQUENCE OF OPERATION (EF-2),tag,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EF-2,FAN,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,DAMPER END SWITCH,tag,the EF-2 diagram (untitled) with its motorized dampers and low voltage thermostat
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,IF-1,FAN,,none,,an HVLS fan on its manufacturer's VFD controller: no control drawing
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-1,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,the unit heater diagram is labelled UH-1 THRU 8 for the scheduled EUH-1 to EUH-8
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-1,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,its SEQUENCE OF OPERATIONS for the unit heaters
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-2,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-2,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-3,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-3,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-4,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-4,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-5,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-5,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-6,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-6,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-7,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-7,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-8,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,UH-1 THRU 8,list_range,
+089_FL_Airport_Terminal_and_Hangar_Development.pdf#136,EUH-8,UNIT_HEATER,089_FL_Airport_Terminal_and_Hangar_Development.pdf#137,SEQUENCE OF OPERATIONS,family_detail,

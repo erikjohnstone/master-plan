@@ -1,0 +1,26 @@
+# 033_MN_VA_Project_656_18_301_Construct_Replace.binding.csv — control-evidence binding truth for the CONTROL_INTENT goal, binding tier 2 (reports/control-intent/binding-tier2/01-split.md).
+# Authored 2026-09-29 by reading the set's control sheets (PDF text layer and renders), never pipeline output, before any binder run on the set.
+# One row per (keyed instance, governing control packet): the control detail, schematic, sequence section or
+# points schedule that decides the unit's BAS scope and options. packet_title is the title as printed (a line
+# break joined by a space). binding: tag (the packet names the unit's own tag) · list_range (a tag list or range
+# that contains it) · cross_reference (a schedule cell or remark points to it) · family_detail (a detail for the
+# unit's type, with no tag) · semantic (only meaning connects them, e.g. a component of another unit). packet
+# "none": no control packet governs the instance. Population: every instance of keys/033_MN_VA_Project_656_18_301_Construct_Replace.attrs.csv.
+# Project-wide general controls notes are not listed per unit. A key that looks wrong later is catalogued,
+# never edited (GOAL_LOOPS ANTI-GAMING).
+sheet,tag,family,packet_sheet,packet_title,binding,note
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AHU-6,AHU,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#70,VARIABLE VOLUME AIR HANDLING UNIT (AHU-6),tag,"detail 1; its title is drawn as strokes, not in the text layer"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AHU-6,AHU,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#70,SEQUENCE OF OPERATION VARIABLE VOLUME AIR HANDLING UNIT,family_detail,the sequence printed under detail 1
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,AHU-6,AHU,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#70,AIR HANDLING UNIT POINTS LIST,family_detail,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EF-2,FAN,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,"EXHAUST FAN CONTROL DIAGRAM (EF-2, EF-2A, EF-19)",list_range,"detail 2; its title is drawn as strokes, not in the text layer"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EF-2,FAN,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,EXHAUST FAN POINTS LIST,family_detail,printed in detail 2
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EF-2A,FAN,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,"EXHAUST FAN CONTROL DIAGRAM (EF-2, EF-2A, EF-19)",list_range,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EF-2A,FAN,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,EXHAUST FAN POINTS LIST,family_detail,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EF-19,FAN,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,"EXHAUST FAN CONTROL DIAGRAM (EF-2, EF-2A, EF-19)",list_range,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68,EF-19,FAN,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,EXHAUST FAN POINTS LIST,family_detail,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,P-12,PUMP,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,"PUMP CONTROL DIAGRAM (P-12, P-13)",list_range,"detail 3; its title is drawn as strokes, not in the text layer; the diagram labels P-12 and P-13"
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,P-12,PUMP,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,PUMP CONTROL POINTS,family_detail,printed in detail 3
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,P-12,PUMP,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,SEQUENCE OF OPERATION,family_detail,the pumps' sequence printed in detail 3
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,P-13,PUMP,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,"PUMP CONTROL DIAGRAM (P-12, P-13)",list_range,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,P-13,PUMP,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,PUMP CONTROL POINTS,family_detail,
+033_MN_VA_Project_656_18_301_Construct_Replace.pdf#69,P-13,PUMP,033_MN_VA_Project_656_18_301_Construct_Replace.pdf#71,SEQUENCE OF OPERATION,family_detail,
