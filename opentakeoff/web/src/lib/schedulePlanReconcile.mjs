@@ -5,10 +5,9 @@
  *
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
-import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import {
-  normalizeEquipMark, expandEquipMarks, markMatchesKeyRe, scheduleTableView, sameKindMarks,
-  isScheduleHeaderJunkMark, isControlValveHeaderShape, unvouchedTableHoldsUnits, unvouchedMarkNamesUnit,
+  normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark,
+  familyTableGate, familyMarkRead, rowMarkText, splitRowMarks,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
@@ -806,7 +805,9 @@ export function summarizeReconcile(rows) {
  * @param {object} graph sheet graph
  * @param {{ label?: string, title?: string, titleRe?: RegExp, exclude?: RegExp,
  *   keyRe?: RegExp, blankKeyRe?: RegExp, altTitleRe?: RegExp, altKeyRe?: RegExp,
- *   identityHeaderRe?: RegExp, titledOnly?: boolean }} needle
+ *   identityHeaderRe?: RegExp, titledOnly?: boolean }} needle a family's
+ *   HVAC_FAMILY_SPECS entry (familyNeedleFromSpecs), read by the takeoff's
+ *   own gate (familyTableGate, AS-77)
  * @param {Map<string, { installedQty?: number|null, itemStatus?: string, reason?: string, failureType?: string, planCites?: object[] }>} [sweepByTag]
  */
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
@@ -814,106 +815,52 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   const seen = new Set();
   // The marks the scaffold holds a row for, in any table (AS-62).
   const held = new Set();
-  const keyRe = needle?.keyRe || null;
-  const blankKeyRe = needle?.blankKeyRe || null;
-  const altTitleRe = needle?.altTitleRe || null;
-  const altKeyRe = needle?.altKeyRe || null;
-  // AS-63, as the compile reads them: marks the family's own title vouches
-  // for, and another family's schedules that list this family's units.
-  const titledKeyRe = needle?.titledKeyRe || null;
-  const host = needle?.host || null;
-  // AS-66, as the compile reads them: marks only a title vouches for.
-  const titledOnlyRe = needle?.titledOnlyRe || null;
   // Parity with compile uniqueFamily: a reading of the mark as printed ranks
   // above a widened one, so the scan first finds every unit a printed
   // reading holds.
   const printedCanons = new Set();
+  // Each table's reading by the family, by the takeoff's own gate (AS-77), so
+  // the scaffold holds a row for every unit the takeoff counts and for none it
+  // does not. A transposed schedule is read one row per unit (AS-65); a titled
+  // table is not gated on table.kind (Valdosta's GRILLE SCHEDULE extracts as
+  // reference-kind but is still schedule truth), one no title vouches for is
+  // (AS-66).
+  const gated = [];
+  for (const printed of graph?.tables || []) {
+    const table = scheduleTableView(printed);
+    const gate = familyTableGate(table, needle);
+    if (gate) gated.push({ table, gate });
+  }
   for (const mode of ["scan", "emit"]) {
   // Titled family schedules first (parity with compile uniqueFamily) so shared
   // marks cite the device definition, not a blank/catch-all accessory row.
   for (const pass of [1, 2]) {
-  for (const printed of graph?.tables || []) {
-    // Parity with compile uniqueFamily: a transposed schedule is read one row
-    // per unit (AS-65).
-    const table = scheduleTableView(printed);
-    const title = String(table.title?.text || "");
-    // Parity with compile uniqueFamily: a titled table is not gated on
-    // table.kind (Valdosta's GRILLE SCHEDULE extracts as reference-kind but is
-    // still schedule truth); one no title vouches for is (AS-66).
-    // Match compile's uniqueFamily gate: titled soft-match OR blank title with
-    // a family keyRe (Transbay/Macon Bibb blank-title RAH/FCU/EF tables).
-    const titleOk = needle?.titleRe
-      ? scheduleTitleMatches(title, needle.titleRe, needle.exclude)
-      : (needle?.title
-        ? scheduleTitleMatches(title, needle.title, needle.exclude)
-        : false);
-    const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, needle.exclude);
-    const blankTitle = !title.trim();
-    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
-    const blankGate = blankKeyRe || keyRe;
-    const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
-    const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
-      && scheduleTitleMatches(title, host.titleRe, host.exclude);
-    // Parity with compile uniqueFamily: read by its marks alone (AS-66).
-    const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAllSchedule);
-    // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
-    // miscellaneous schedules only when the family has a keyRe/blankKeyRe.
-    // titledOnly families skip blank/catch-all (FIN_TUBE vs filter FTR).
-    if (titleOk || altOk) {
-      if (pass !== 1) continue;
-    } else if (hostOk) {
-      if (pass !== 2) continue;
-    } else {
-      if (pass !== 2) continue;
-      if (needle?.titledOnly) continue;
-      if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
-      // Parity with compile uniqueFamily: notes, a drawing index or a
-      // furnishings list hold no unit (AS-66).
-      if (unvouched && !(blankTitle && isControlValveHeaderShape(table)) && !unvouchedTableHoldsUnits(table)) continue;
-    }
-    const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-    const filterRe = hostOk ? host.keyRe : blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
-    // Parity with compile uniqueFamily (AS-63): a titled table also reads the
-    // family's untitled marks and the marks its title vouches for.
-    const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
+  for (const { table, gate } of gated) {
+    if (gate.pass !== pass) continue;
+    const { title } = gate;
     for (const row of table.rows || []) {
       const rawTag = rowIdentityTag(row, needle?.identityHeaderRe || null);
       if (!rawTag) continue;
-      const willFilter = Boolean(catchAllSchedule || filterRe);
-      const tagList = String(rawTag)
-        .split(willFilter ? /[/,]/ : "/")
-        .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
-        .filter(Boolean)
-        .flatMap((t) => expandEquipMarks(t))
+      // The takeoff's split of a row's marks (AS-77).
+      const willFilter = Boolean(gate.catchAll || gate.filterRe);
+      const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
+      const working = rowMarkText(rawTag, rowKey, willFilter);
+      const tagList = splitRowMarks(working, willFilter)
         .map((t) => normalizeEquipMark(t))
         .filter(Boolean);
-      for (const tag of (tagList.length ? tagList : [rawTag])) {
+      for (const tag of (tagList.length ? tagList : [working])) {
         if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
         const canonTag = String(tag).toUpperCase().replace(/\s+/g, "");
         // Parity with compile uniqueFamily: a header word or a legend's
-        // heading is no mark, and read by its mark alone a mark may be a word
-        // or another thing's (AS-66).
+        // heading is no mark.
         if (isScheduleHeaderJunkMark(canonTag)) continue;
-        if (unvouched && (!unvouchedMarkNamesUnit(tag) || markMatchesKeyRe(titledOnlyRe, tag, canonTag))) continue;
-        // The compile's own mark rule (markMatchesKeyRe): a building prefix
-        // (WHSE-ET-1, 1-VAV-1) or a building letter (FC-A-2) reads as the
-        // family's mark here too, so every unit the takeoff counts has its row.
-        // 2 = the rule reads the mark as printed, 1 = only in one of its forms.
-        const reads = (re) => (!re ? 0
-          : re.test(tag) || re.test(canonTag) ? 2
-            : markMatchesKeyRe(re, tag, canonTag) ? 1 : 0);
-        let read = 2;
-        if (catchAllSchedule) {
-          read = Math.max(reads(blankKeyRe), reads(keyRe), reads(altKeyRe));
-          if (!read) continue;
-        } else if (filterRe) {
-          read = reads(filterRe);
-          // Read only through AS-63's rules, or in another family's schedule:
-          // a new admission, which adds no second row for a unit held.
-          if (!read && titledAlso.some((re) => reads(re))) read = 1;
-          if (!read) continue;
-          if (hostOk) read = 1;
-        }
+        // The takeoff's own mark rules (AS-77): 2 = read as printed; 1 = only
+        // in one of its forms (a building prefix WHSE-ET-1 or letter FC-A-2),
+        // through a title's vouching or in another family's schedule, a new
+        // admission, which adds no second row for a unit held; 0 = not the
+        // family's here, or read by its mark alone a word or another thing's.
+        const read = familyMarkRead(gate, needle, tag, canonTag);
+        if (!read) continue;
         // Parity with compile uniqueFamily — continuation / duplicate extracts
         // of the same MARK must not inflate reconcile rows (Douglas HP-20).
         const canon = markKey(tag);

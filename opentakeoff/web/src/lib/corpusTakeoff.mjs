@@ -1094,26 +1094,171 @@ function identifierColumnByCardinality(table) {
   return null;
 }
 
-function uniqueFamily(graph, {
-  titleRe, exclude, keyRe, blankKeyRe, blankHeaderRes, blankServiceHint,
-  identityHeaderRe, titledOnly,
-  // Secondary titles that need a stricter key filter than the primary titleRe
-  // (e.g. SPLIT SYSTEM SYMBOL "F-1 , CU-1" → only CU-* for CONDENSING_UNIT,
-  // while titled CONDENSING UNIT SCHEDULE keeps set-local B1/B2 with no keyRe).
-  altTitleRe, altKeyRe,
-  // Marks the family's own schedule title vouches for (AS-63): read only in a
-  // table titled as the family, never in an untitled or general one, where
-  // the same letters may name something else (ACC is an air-cooled condenser
-  // anywhere but under an AIR COOLED CHILLER title).
-  titledKeyRe,
-  // Marks the family's keyRe reads that only a title vouches for (AS-66): in
-  // a table no title vouches for, the same letters name another thing.
-  titledOnlyRe,
-  // Another family's schedules that list this family's own units (AS-63):
-  // { titleRe, exclude, keyRe }. 096_IN's AIR HANDLING UNIT SYSTEM INDEX lists
-  // DOAS-1 to DOAS-3; only host.keyRe's marks are read there, as this family's.
-  host,
-}) {
+// MISCELLANEOUS / bare EQUIPMENT / SPECIALTY EQUIPMENT / HYDRONIC ACCESSORIES:
+// a general schedule, where only a family's mark rule may claim a row.
+const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i;
+
+/**
+ * How a family reads one schedule table, or null when it reads no unit there:
+ * the one gate the takeoff (uniqueFamily) and the schedule↔plan reconcile
+ * scaffold share (AS-77), so each reads the tables the other does. The
+ * reconcile kept a copy of it that drifted: it read no CONTROL VALVES table
+ * that names no water (013_MO's, 072_CA's and 074_CA's), never checked an
+ * untitled table's header shape or valve service, and in a general schedule
+ * read a family's alternate marks (25_WA's electric heaters EH-20 and EH-30
+ * as humidifiers, 043_FL's air handler ED 203 as a damper).
+ *
+ * `pass` 1 is a table titled as the family, read first so a unit cites its
+ * own schedule; 2 another family's schedule that lists the family's units, an
+ * untitled table or a general one. `filterRe` picks the family's marks from
+ * the table's rows (none: every row), `titledAlso` the marks a title also
+ * vouches for; `unvouched` says no title vouches for the family here.
+ * @param {object} table a schedule table, as scheduleTableView gives it
+ * @param {object} spec an HVAC_FAMILY_SPECS entry, or a reconcile needle
+ *   (whose `title` stands in for a titleRe)
+ */
+export function familyTableGate(table, spec) {
+  const {
+    exclude, keyRe = null, blankKeyRe = null, blankHeaderRes = null, blankServiceHint = null,
+    titledOnly = false, altTitleRe = null, altKeyRe = null, titledKeyRe = null, host = null,
+  } = spec || {};
+  const titleRe = spec?.titleRe || spec?.title || null;
+  const title = String(table?.title?.text || "");
+  // A points-list caption can legitimately name its served equipment family
+  // (for example CRAH DDC POINTS LIST). It is still an I/O inventory, never
+  // an equipment schedule. Apply this boundary once for every HVAC family
+  // instead of relying on dozens of family-specific exclude regexes to stay
+  // perfectly synchronized with the BAS title/table grammar.
+  if (isBasPointsListTitle(title) || isBasPointsListTable(table)) return null;
+  // Soft title match: exact regex first, then compact (no-space) form so
+  // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
+  // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
+  // (Transbay RAH-/WFU- tables extract without a recoverable caption).
+  // General schedules: same gate — only families with keyRe may claim rows.
+  // titledOnly: skip blank/catch-all entirely (FIN_TUBE FTR vs filter panels).
+  const titleOk = Boolean(titleRe) && scheduleTitleMatches(title, titleRe, exclude);
+  const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, exclude);
+  const blankTitle = !title.trim();
+  // A titled-but-service-unqualified "CONTROL VALVE(S)" table is the same
+  // problem as a blank title for CHW_CONTROL_VALVE/HHW_CONTROL_VALVE
+  // specifically (blankServiceHint set) — service still has to come from
+  // header/mark content either way, never invented from a title that
+  // doesn't state it. Scoped to blankServiceHint families only so no other
+  // family's blank-title handling (LOUVER, FIN_TUBE, etc.) is touched.
+  const genericValveTitle = Boolean(blankServiceHint) && !blankTitle
+    && isGenericControlValveTitle(title);
+  const catchAll = CATCH_ALL_SCHEDULE_RE.test(title);
+  const blankGate = blankKeyRe || keyRe;
+  const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
+  const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
+  const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
+    && scheduleTitleMatches(title, host.titleRe, host.exclude);
+  // Read by its marks alone: no title vouches for the family here (AS-66).
+  const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAll);
+  let pass = 2;
+  if (titleOk || altOk) {
+    pass = 1;
+  } else if (!hostOk) {
+    // A family's own schedules, then another's that lists its units, then
+    // the rest, so a unit they define cites them.
+    if (titledOnly) return null;
+    const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
+    if ((blankTitle || genericValveTitle) && blankGate) {
+      if (!blankHeaderOk) return null;
+      if (blankServiceHint && headerValveShape) {
+        const inferred = inferValveServiceFromTable(table);
+        if (blankServiceHint === "CHW" && inferred === "HHW") return null;
+        if (blankServiceHint === "HHW" && inferred !== "HHW") return null;
+      }
+    } else if (!(catchAll && keyGated)) {
+      return null;
+    }
+    // Notes, a drawing index or a furnishings list hold no unit (AS-66); an
+    // untitled grid of valve marks keeps the word of its header shape.
+    if (unvouched && !headerValveShape && !unvouchedTableHoldsUnits(table)) return null;
+  }
+  // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
+  // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
+  // altTitleRe hits use altKeyRe so split outdoor CU/DCU can join without
+  // forcing a CU filter onto primary CONDENSING UNIT schedules.
+  // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
+  // does not shadow WSHP/GSHP matches that only keyRe accepts.
+  // Prefer altKeyRe whenever altTitleRe matched (ELECTRIC HUMIDIFIER EH-*,
+  // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
+  // because altOk is false there.
+  const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
+  const filterRe = hostOk ? host.keyRe
+    : (blankTitle || genericValveTitle) ? blankGate : catchAll ? null : titledFilter;
+  // In a table titled as the family, a mark its untitled rule reads
+  // (blankKeyRe: a CONTROL DAMPER SCHEDULE's CD-1) or its title vouches for
+  // (titledKeyRe) is read too (AS-63): a title never reads less than none.
+  const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
+  return {
+    pass, title, titleOk, altOk, hostOk, blankTitle, genericValveTitle,
+    catchAll, unvouched, filterRe, titledAlso,
+  };
+}
+
+/**
+ * How a family's table gate reads one of a row's marks (AS-77), for the
+ * takeoff and the reconcile alike: 0 not as the family's; 2 as printed, by
+ * the rule that gates the table; 1 only in one of the mark's forms (AS-62),
+ * through a title's vouching or in another family's schedule (AS-63), a
+ * widened reading that never takes a unit a printed one holds. In a general
+ * schedule only the family's own mark rules read (never its alternate
+ * title's), and read by its mark alone a word, or a mark only a title
+ * vouches for, is no unit (AS-66).
+ * @param {object} gate familyTableGate's reading of the row's table
+ * @param {object} spec the family's spec or needle
+ * @param {string} one the mark, normalized
+ * @param {string} canon the mark upper-cased without spaces
+ * @param {{ countKeyed?: boolean }} [opts] countKeyed: the row is named by
+ *   a count-keyed table's identifier column (B-3), not a mark
+ */
+export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = {}) {
+  const { keyRe = null, blankKeyRe = null, titledOnlyRe = null } = spec || {};
+  const reads = (re) => (!re ? 0
+    : re.test(canon) || re.test(one) ? 2
+      : markMatchesKeyRe(re, one, canon) ? 1 : 0);
+  let read = 2;
+  if (gate.catchAll) {
+    read = Math.max(reads(blankKeyRe), reads(keyRe));
+  } else if (gate.filterRe) {
+    read = reads(gate.filterRe);
+    if (!read && gate.titledAlso.some((re) => markMatchesKeyRe(re, one, canon))) read = 1;
+  }
+  if (!read) return 0;
+  if (gate.unvouched && ((!countKeyed && !unvouchedMarkNamesUnit(one))
+    || markMatchesKeyRe(titledOnlyRe, one, canon))) return 0;
+  return gate.hostOk ? 1 : read;
+}
+
+/**
+ * The text a row's marks are split from (AS-77, the takeoff's rule the
+ * reconcile shares): a mark cell printing a comma list, in a table no key
+ * filter reads, gives way to a row key that prints none (Baker's SYMBOL
+ * "ERU-1, HP-4" beside ERU-1; 044_NY's MARK "FOP-1, 2" beside FOP-1/FOP-2).
+ */
+export function rowMarkText(text, rowKey, willFilter) {
+  return !willFilter && /,/.test(text) && rowKey && !/,/.test(rowKey) ? rowKey : text;
+}
+
+/**
+ * A row's marks, before each is normalized (AS-77, shared by the takeoff and
+ * the reconcile): split on "/" always and on "," only where a key filter
+ * picks the family's marks from a list (DFC-1 , DCU-1), each range or pair
+ * expanded (AS-75).
+ */
+export function splitRowMarks(text, willFilter) {
+  return String(text)
+    .split(willFilter ? /[/,]/ : "/")
+    .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
+    .filter(Boolean)
+    .flatMap((t) => expandEquipMarks(t));
+}
+
+function uniqueFamily(graph, spec) {
+  const { identityHeaderRe } = spec;
   const keys = new Set();
   const items = [];
   // A reading of the mark as printed, by the rule that gates its table, ranks
@@ -1122,88 +1267,23 @@ function uniqueFamily(graph, {
   // unit a printed reading holds, so a widened reading only adds units, and
   // never takes a unit's row from its printed listing, whatever the table order.
   const printedCanons = new Set();
+  // Each table's reading by the family, the gate the reconcile scaffold shares
+  // (AS-77). A transposed schedule is read one row per unit (AS-65).
+  const gated = [];
+  for (const printed of graph.tables || []) {
+    const table = scheduleTableView(printed);
+    const gate = familyTableGate(table, spec);
+    if (gate) gated.push({ table, gate });
+  }
   for (const mode of ["scan", "emit"]) {
   // Two passes: titled family schedules first, then blank/catch-all fallbacks.
   // Same mark on a blank seismic summary and a titled ERV schedule (Colville)
   // must cite the titled device definition — blank-first walk poisoned
   // prefer-schedule sweeps.
   for (const pass of [1, 2]) {
-  for (const printed of graph.tables || []) {
-    // A transposed schedule is read one row per unit (AS-65).
-    const table = scheduleTableView(printed);
-    const title = String(table.title?.text || "");
-    // A points-list caption can legitimately name its served equipment family
-    // (for example CRAH DDC POINTS LIST). It is still an I/O inventory, never
-    // an equipment schedule. Apply this boundary once for every HVAC family
-    // instead of relying on dozens of family-specific exclude regexes to stay
-    // perfectly synchronized with the BAS title/table grammar.
-    if (isBasPointsListTitle(title) || isBasPointsListTable(table)) continue;
-    // Soft title match: exact regex first, then compact (no-space) form so
-    // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
-    // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
-    // (Transbay RAH-/WFU- tables extract without a recoverable caption).
-    // MISCELLANEOUS / bare EQUIPMENT / SPECIALTY EQUIPMENT / HYDRONIC
-    // ACCESSORIES: same gate — only families with keyRe may claim rows.
-    // titledOnly: skip blank/catch-all entirely (FIN_TUBE FTR vs filter panels).
-    const titleOk = scheduleTitleMatches(title, titleRe, exclude);
-    const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, exclude);
-    const blankTitle = !title.trim();
-    // A titled-but-service-unqualified "CONTROL VALVE(S)" table is the same
-    // problem as a blank title for CHW_CONTROL_VALVE/HHW_CONTROL_VALVE
-    // specifically (blankServiceHint set) — service still has to come from
-    // header/mark content either way, never invented from a title that
-    // doesn't state it. Scoped to blankServiceHint families only so no other
-    // family's blank-title handling (LOUVER, FIN_TUBE, etc.) is touched.
-    const genericValveTitle = Boolean(blankServiceHint) && !blankTitle
-      && isGenericControlValveTitle(title);
-    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
-    const blankGate = blankKeyRe || keyRe;
-    const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
-    const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
-    const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
-      && scheduleTitleMatches(title, host.titleRe, host.exclude);
-    // Read by its marks alone: no title vouches for the family here (AS-66).
-    const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAllSchedule);
-    if (titleOk || altOk) {
-      if (pass !== 1) continue;
-    } else if (hostOk) {
-      // After the family's own schedules, so a unit they define cites them.
-      if (pass !== 2) continue;
-    } else {
-      if (pass !== 2) continue;
-      if (titledOnly) continue;
-      const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
-      if ((blankTitle || genericValveTitle) && blankGate) {
-        if (!blankHeaderOk) continue;
-        if (blankServiceHint && headerValveShape) {
-          const inferred = inferValveServiceFromTable(table);
-          if (blankServiceHint === "CHW" && inferred === "HHW") continue;
-          if (blankServiceHint === "HHW" && inferred !== "HHW") continue;
-        }
-      } else if (!(catchAllSchedule && keyGated)) {
-        continue;
-      }
-      // Notes, a drawing index or a furnishings list hold no unit (AS-66); an
-      // untitled grid of valve marks keeps the word of its header shape.
-      if (unvouched && !headerValveShape && !unvouchedTableHoldsUnits(table)) continue;
-    }
-    // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
-    // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
-    // altTitleRe hits use altKeyRe so split outdoor CU/DCU can join without
-    // forcing a CU filter onto primary CONDENSING UNIT schedules.
-    // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
-    // does not shadow WSHP/GSHP matches that only keyRe accepts.
-    // Prefer altKeyRe whenever altTitleRe matched (ELECTRIC HUMIDIFIER EH-*,
-    // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
-    // because altOk is false there.
-    const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-    const filterRe = hostOk ? host.keyRe
-      : (blankTitle || genericValveTitle) ? blankGate : catchAllSchedule ? null : titledFilter;
-    // In a table titled as the family, a mark its untitled rule reads
-    // (blankKeyRe: a CONTROL DAMPER SCHEDULE's CD-1) or its title vouches for
-    // (titledKeyRe) is read too (AS-63): a title never reads less than none.
-    const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
-    const catchAllFilter = catchAllSchedule;
+  for (const { table, gate } of gated) {
+    if (gate.pass !== pass) continue;
+    const { title, filterRe, catchAll: catchAllFilter } = gate;
     // B-3: when the key column is a COUNT column, identify rows by the
     // highest-cardinality column instead, and never dedupe on the count —
     // two rows both reading "1" are two physical silencers, not one tag
@@ -1242,10 +1322,7 @@ function uniqueFamily(graph, {
       // key filter can pick family marks (DFC-1 , DCU-1). Untagged titled
       // families keep row.key when SYMBOL is a comma list (Baker ERU-1, HP-4).
       const willFilter = Boolean(catchAllFilter || filterRe);
-      let working = tag;
-      if (!willFilter && /,/.test(tag) && rowKey && !/,/.test(rowKey)) {
-        working = rowKey;
-      }
+      const working = rowMarkText(tag, rowKey, willFilter);
       // A count-keyed table's identifier is a descriptive NOUN PHRASE
       // ("GROUP REHEARSAL 123 - SUPPLY/RETURN"), never a compound tag list —
       // splitting it on "/" the way CWP-1/CWP-2 is split shreds one real
@@ -1253,11 +1330,7 @@ function uniqueFamily(graph, {
       // "RETURN"), measured: 16 real rows became 31 items.
       const tagList = countKeyedIdentCol
         ? [String(working).trim()].filter(Boolean)
-        : String(working)
-        .split(willFilter ? /[/,]/ : "/")
-        .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
-        .filter(Boolean)
-        .flatMap((t) => expandEquipMarks(t));
+        : splitRowMarks(working, willFilter);
       for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
         const canon = one.toUpperCase().replace(/\s+/g, "");
@@ -1268,21 +1341,11 @@ function uniqueFamily(graph, {
         // Do NOT require a digit here — NAVFAC valve marks like CV-CHW-BP-A are
         // letter-suffixed building tags with no digits.
         if (isScheduleHeaderJunkMark(canon)) continue;
-        if (catchAllFilter) {
-          const okBlank = blankKeyRe && markMatchesKeyRe(blankKeyRe, one, canon);
-          const okKey = keyRe && markMatchesKeyRe(keyRe, one, canon);
-          if (!(okBlank || okKey)) continue;
-        } else if (filterRe && !markMatchesKeyRe(filterRe, one, canon)
-          && !titledAlso.some((re) => markMatchesKeyRe(re, one, canon))) {
-          continue;
-        }
-        // Read by its mark alone, a mark is a word or another thing's (AS-66).
-        if (unvouched && ((!countKeyedIdentCol && !unvouchedMarkNamesUnit(one))
-          || markMatchesKeyRe(titledOnlyRe, one, canon))) continue;
-        const printedBy = (re) => Boolean(re) && (re.test(canon) || re.test(one));
-        const widened = hostOk || (catchAllFilter
-          ? !(printedBy(blankKeyRe) || printedBy(keyRe))
-          : Boolean(filterRe) && !printedBy(filterRe));
+        // The family's mark rules, and read by its mark alone a mark is a word
+        // or another thing's (AS-66), as the reconcile reads it (AS-77).
+        const read = familyMarkRead(gate, spec, one, canon, { countKeyed: Boolean(countKeyedIdentCol) });
+        if (!read) continue;
+        const widened = read === 1;
         if (mode === "scan") {
           if (!widened && !countKeyedIdentCol) printedCanons.add(canon);
           continue;

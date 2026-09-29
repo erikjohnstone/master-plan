@@ -802,21 +802,31 @@ test("reconcile scaffold reads what the compile reads under a title and in a hos
   // title vouches for) and 096_IN-style DOAS-1 in an air handler index (a host
   // schedule) each get their row, as the compile counts them. Read so, a mark
   // adds no row for a unit a printed listing holds: CD-1 is printed in the
-  // untitled table, so its titled copy adds nothing and its row stays there.
-  const table = (sheet: string, title: string, keys: string[]) => ({
+  // untitled damper table, so its titled copy adds nothing and its row stays
+  // there.
+  const table = (sheet: string, title: string, keys: string[], extra: Record<string, string> = {}) => ({
     kind: "equipment", sheet, title: { text: title },
-    rows: keys.map((key) => ({ key, cells: { MARK: { text: key } } })),
+    rows: keys.map((key) => ({
+      key, cells: { MARK: { text: key }, ...Object.fromEntries(Object.entries(extra).map(([h, text]) => [h, { text }])) },
+    })),
   });
   const graph = { tables: [
     table("m.pdf#5", "CONTROL DAMPER SCHEDULE", ["CD-1", "OA-1"]),
-    table("m.pdf#6", "", ["CD-1", "CD-2"]),
+    table("m.pdf#6", "", ["CD-1", "CD-2"], { "DAMPER SIZE": "12x12" }),
     table("m.pdf#1", "RETURN FAN SCHEDULE", ["E-A-1", "EF-1"]),
     table("m.pdf#19", "AIR HANDLING UNIT SYSTEM INDEX SCHEDULE", ["DOAS-1", "AHU-4"]),
     table("m.pdf#21", "DOAS UNIT SCHEDULE", ["DOAS-2"]),
   ] };
-  const rowsOf = (family: string) => reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
+  const rowsOf = (family: string, g: object = graph) => reconcileScheduleFamilyFromGraph(g, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!)
     .map((r: any) => `${r.tag}@${r.row_id.split("::")[0]}`);
   assert.deepEqual(rowsOf("CONTROL_DAMPER"), ["OA-1@m.pdf#5", "CD-1@m.pdf#6", "CD-2@m.pdf#6"]);
+  // An untitled table that prints no damper column is no damper schedule, to
+  // the compile and the reconcile alike (AS-77): CD-1 is its titled listing's,
+  // and CD-2 no unit.
+  const marksOnly = { tables: [table("m.pdf#5", "CONTROL DAMPER SCHEDULE", ["CD-1", "OA-1"]), table("m.pdf#6", "", ["CD-1", "CD-2"])] };
+  assert.deepEqual(rowsOf("CONTROL_DAMPER", marksOnly), ["CD-1@m.pdf#5", "OA-1@m.pdf#5"]);
+  const compiled = compileHvacTakeoff(null, marksOnly).categories as Record<string, { items: Array<{ tag: string; sheet_id: string }> }>;
+  assert.deepEqual(compiled.CONTROL_DAMPER.items.map((i) => `${i.tag}@${i.sheet_id}`), ["CD-1@m.pdf#5", "OA-1@m.pdf#5"]);
   assert.deepEqual(rowsOf("FAN"), ["E-A-1@m.pdf#1", "EF-1@m.pdf#1"]);
   assert.deepEqual(rowsOf("DOAS"), ["DOAS-2@m.pdf#21", "DOAS-1@m.pdf#19"]);
   assert.deepEqual(rowsOf("AHU"), ["AHU-4@m.pdf#19"]);
@@ -1129,4 +1139,124 @@ test("reconcile scaffold holds a row for each unit of a range or pair, its QTY o
   assert.equal(by("EF-7").scheduled_qty, 2);
   const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string; scheduled_qty: number | null }> }>;
   assert.deepEqual(cats.FAN.items.map((i) => `${i.tag}:${i.scheduled_qty}`).sort(), rows.map((r) => `${r.tag}:${r.scheduled_qty}`).sort());
+});
+
+// AS-77: the reconcile scaffold reads each table by the takeoff's own gate
+// (familyTableGate) and marks (familyMarkRead, rowMarkText), so it holds a row
+// for every unit the takeoff counts and for none it does not.
+const as77Table = (sheet: string, title: string, headers: string[], rows: Array<Record<string, string>>) => ({
+  kind: "equipment", sheet, title: { text: title }, headers,
+  rows: rows.map((cells) => ({
+    key: cells.__key ?? cells[headers[0]],
+    cells: Object.fromEntries(Object.entries(cells).filter(([h]) => h !== "__key").map(([h, text]) => [h, { text }])),
+  })),
+});
+/** Each family's marks, as the takeoff counts them and as the reconcile holds rows for them. */
+const as77Marks = (graph: object) => {
+  const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>;
+  const out: Record<string, { compile: string[]; reconcile: string[] }> = {};
+  for (const fam of Object.keys(HVAC_FAMILY_SPECS)) {
+    const compile = (cats[fam]?.items ?? []).map((i) => markKey(i.tag)).sort();
+    const reconcile = (reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, fam)!) as Array<{ tag: string }>)
+      .map((r) => markKey(r.tag)).sort();
+    if (compile.length || reconcile.length) out[fam] = { compile, reconcile };
+  }
+  return out;
+};
+const as77Parity = (marks: ReturnType<typeof as77Marks>, what: string) => {
+  for (const [fam, m] of Object.entries(marks)) assert.deepEqual(m.reconcile, m.compile, `${what}: ${fam}`);
+};
+
+test("reconcile scaffold holds each valve of a CONTROL VALVES table that names no water, under the service its table says, as the takeoff counts it (AS-77)", () => {
+  // 013_MO's CONTROL VALVES prints TAG, MANUFACTURER, MODEL, SERVED, GPM and
+  // SIZE and names no water: the takeoff reads its valves as chilled water's.
+  const plain = { tables: [as77Table("m.pdf#20", "CONTROL VALVES", ["TAG", "MANUFACTURER", "MODEL", "SERVED", "GPM", "SIZE"], [
+    { TAG: "CV-7", MANUFACTURER: "BELIMO", MODEL: "B2", SERVED: "B-1", GPM: "12", SIZE: "2\"" },
+    { TAG: "CV-8", MANUFACTURER: "BELIMO", MODEL: "B2", SERVED: "B-2", GPM: "12", SIZE: "2\"" },
+  ])] };
+  assert.deepEqual(as77Marks(plain), { CHW_CONTROL_VALVE: { compile: ["CV7", "CV8"], reconcile: ["CV7", "CV8"] } });
+  const [row] = reconcileScheduleFamilyFromGraph(plain, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "CHW_CONTROL_VALVE")!) as any[];
+  assert.equal(row.schedule_cite.title, "CONTROL VALVES");
+  // A header naming heating water makes it hot water's, in both.
+  const hot = { tables: [as77Table("m.pdf#25", "EQUIPMENT CONTROL VALVES", ["MARK", "SERVED", "HEATING WATER GPM", "SIZE"], [
+    { MARK: "CV-7", SERVED: "B-1", "HEATING WATER GPM": "12", SIZE: "2\"" },
+  ])] };
+  assert.deepEqual(as77Marks(hot), { HHW_CONTROL_VALVE: { compile: ["CV7"], reconcile: ["CV7"] } });
+  // A table no valve mark or valve header vouches for is no valve schedule.
+  const other = { tables: [as77Table("m.pdf#25", "CONTROL VALVES", ["TAG", "NOTES"], [{ TAG: "CV-7", NOTES: "SEE SPEC" }])] };
+  assert.deepEqual(as77Marks(other), {});
+});
+
+test("reconcile scaffold reads a general schedule by a family's own mark rules only, as the takeoff does: 25_WA's electric heaters are no humidifiers (AS-77)", () => {
+  const general = { tables: [as77Table("m.pdf#4", "MISCELLANEOUS SCHEDULE", ["SYMBOL", "TYPE", "AREA / UNIT SERVED", "ELECTRICAL WATTS"], [
+    { SYMBOL: "EH-20", TYPE: "CEILING ELECTRIC HEATER", "AREA / UNIT SERVED": "MAINT OFFICE", "ELECTRICAL WATTS": "2250" },
+    { SYMBOL: "EH-30", TYPE: "DUCT ELECTRIC HEATER", "AREA / UNIT SERVED": "DOAS-3", "ELECTRICAL WATTS": "2500" },
+    { SYMBOL: "HUM-1", TYPE: "STEAM HUMIDIFIER", "AREA / UNIT SERVED": "AHU-1", "ELECTRICAL WATTS": "500" },
+  ])] };
+  const marks = as77Marks(general);
+  assert.deepEqual(marks.HUMIDIFIER, { compile: ["HUM1"], reconcile: ["HUM1"] });
+  as77Parity(marks, "MISCELLANEOUS SCHEDULE");
+  // 043_FL's air handler "ED 203" in its MECHANICAL EQUIPMENT SCHEDULE is no damper.
+  const equipment = { tables: [as77Table("m.pdf#23", "MECHANICAL EQUIPMENT SCHEDULE", ["EQUIP ID", "DESCRIPTION", "VOLTS"], [
+    { "EQUIP ID": "ED 203", __key: "ED203", DESCRIPTION: "AIR HANDLING UNIT", VOLTS: "480" },
+  ])] };
+  assert.equal(as77Marks(equipment).CONTROL_DAMPER, undefined);
+  // Under the family's alternate title the same marks are its own.
+  const titled = { tables: [as77Table("m.pdf#4", "ELECTRIC HUMIDIFIER SCHEDULE", ["SYMBOL", "TYPE"], [{ SYMBOL: "EH-20", TYPE: "ELECTRIC HUMIDIFIER" }])] };
+  assert.deepEqual(as77Marks(titled).HUMIDIFIER, { compile: ["EH20"], reconcile: ["EH20"] });
+});
+
+test("reconcile scaffold holds no row from a points list, which the takeoff never reads as a schedule: 017_MD's H-A-3 cites its HUMIDIFIER SCHEDULE alone (AS-77)", () => {
+  const graph = { tables: [
+    as77Table("m.pdf#13", "HUMIDIFIER SCHEDULE", ["TAG", "LOCATION", "TYPE"], [{ TAG: "H-A-3", LOCATION: "ACU-A-3", TYPE: "STEAM-TO-STEAM" }]),
+    as77Table("m.pdf#17", "", ["DESCRIPTION", "INPUT TO DDC ANALOG TEMPERATURE", "INPUT TO DDC BINARY STATUS", "TAG"], [
+      { __key: "H-A-3", DESCRIPTION: "HUMIDIFIER ENABLE", "INPUT TO DDC BINARY STATUS": "X", TAG: "H-A-3" },
+    ]),
+  ] };
+  const rows = reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HUMIDIFIER")!) as any[];
+  assert.deepEqual(rows.map((r) => r.row_id), ["m.pdf#13::HA3"]);
+  as77Parity(as77Marks(graph), "points list");
+});
+
+test("reconcile scaffold reads a row's marks from its key where its mark cell prints a comma list the key does not, as the takeoff does: 044_NY's FOP-1, 2 (AS-77)", () => {
+  const graph = { tables: [as77Table("m.pdf#21", "GENERATOR FUEL OIL PUMP SCHEDULE", ["MARK", "LOCATION", "GPH"], [
+    { __key: "FOP-1/FOP-2", MARK: "FOP-1, 2", LOCATION: "TANK VAULT", GPH: "757" },
+  ])] };
+  assert.deepEqual(as77Marks(graph).PUMP, { compile: ["FOP1", "FOP2"], reconcile: ["FOP1", "FOP2"] });
+  // A key that prints the comma list too keeps the cell's text, as before.
+  const both = { tables: [as77Table("m.pdf#21", "PUMP SCHEDULE", ["MARK", "GPM"], [{ __key: "P-1, 2", MARK: "P-1, 2", GPM: "40" }])] };
+  as77Parity(as77Marks(both), "comma key");
+});
+
+test("reconcile scaffold reads an untitled table as a family's only where its headers fit the family, as the takeoff does (AS-77)", () => {
+  // No damper, actuator, size or airflow column: OA-1 and OA-2 are outdoor
+  // air units here, not dampers.
+  const graph = { tables: [as77Table("m.pdf#5", "", ["MARK", "DESCRIPTION", "MANUFACTURER", "ELECTRICAL"], [
+    { MARK: "OA-1", DESCRIPTION: "OUTDOOR AIR UNIT", MANUFACTURER: "ACME", ELECTRICAL: "460/3" },
+    { MARK: "OA-2", DESCRIPTION: "OUTDOOR AIR UNIT", MANUFACTURER: "ACME", ELECTRICAL: "460/3" },
+  ])] };
+  const marks = as77Marks(graph);
+  assert.equal(marks.CONTROL_DAMPER, undefined);
+  assert.deepEqual(marks.OUTDOOR_AIR_UNIT, { compile: ["OA1", "OA2"], reconcile: ["OA1", "OA2"] });
+  as77Parity(marks, "untitled");
+});
+
+test("reconcile scaffold and takeoff read the same marks of every family, over titles, headers and marks drafters print (AS-77)", () => {
+  const titles = ["", "MISCELLANEOUS SCHEDULE", "EQUIPMENT SCHEDULE", "HYDRONIC ACCESSORIES", "CONTROL VALVES",
+    "CONTROL VALVE SCHEDULE", "CHW CONTROL VALVE SCHEDULE", "HHW CONTROL VALVE SCHEDULE", "VALVE SCHEDULE",
+    "FAN SCHEDULE", "PUMP SCHEDULE", "AIR HANDLING UNIT SCHEDULE", "AIR HANDLING UNIT SYSTEM INDEX", "HUMIDIFIER SCHEDULE",
+    "ELECTRIC HUMIDIFIER SCHEDULE", "CONTROL DAMPER SCHEDULE", "MOTORIZED DAMPER SCHEDULE", "SPLIT SYSTEM SCHEDULE",
+    "AHU-1 POINTS LIST", "VAV BOX SCHEDULE", "FAN COIL UNIT SCHEDULE", "UNIT HEATER SCHEDULE"];
+  const headerSets = [["MARK", "GPM", "SIZE", "SERVED"], ["TAG", "HEATING WATER GPM", "SIZE"], ["MARK", "DESCRIPTION", "MANUFACTURER"],
+    ["SYMBOL", "CFM", "DAMPER SIZE"], ["DESCRIPTION", "INPUT TO DDC ANALOG", "TAG"]];
+  const markSets = [["CV-1", "CV-2"], ["EH-20", "HUM-1"], ["OA-1", "MD-1"], ["FOP-1, 2"], ["AHU-1", "DOAS-1"], ["EF-1 THRU EF-3"],
+    ["V-CHW-1", "V-HHW-1"], ["P-1/P-2"], ["1-VAV-1", "FC-A-2"], ["CU-1", "HP-1"]];
+  let read = 0;
+  for (const title of titles) for (const headers of headerSets) for (const marks of markSets) {
+    const graph = { tables: [as77Table("m.pdf#9", title, headers, marks.map((m) => ({ [headers[0]]: m, [headers[1]]: "1" })))] };
+    const byFamily = as77Marks(graph);
+    as77Parity(byFamily, `${title || "(untitled)"} / ${headers.join(",")} / ${marks.join(",")}`);
+    read += Object.values(byFamily).reduce((n, m) => n + m.compile.length, 0);
+  }
+  assert.ok(read > 500, `the battery reads units (${read})`);
 });

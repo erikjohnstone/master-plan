@@ -1,5 +1,19 @@
 # Changelog
 
+- **Reconcile: the schedule↔plan reconcile reads tables by the takeoff's
+  own gate.** The reconcile scaffold kept its own copy of the takeoff's
+  table gate, and the copy had drifted: it held no row for a CONTROL
+  VALVES table that names no water (013_MO's, 072_CA's and 074_CA's
+  valves, which the takeoff counts), read a points list as a schedule,
+  read a family's alternate marks in a general schedule (25_WA's electric
+  heaters as humidifiers) and kept "FOP-1, 2" as one row. The takeoff and
+  the reconcile now share one gate (`familyTableGate`), one mark reading
+  (`familyMarkRead`) and one split of a row's marks, so the reconcile holds
+  a row for every unit the takeoff counts and for none it does not (56
+  units without a row and 5 rows without a unit on the dev corpus, now
+  none); the takeoff's output is byte-identical (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-77).
+
 - **Assemblies: a variable speed column asked yes or no.** 26_CA prints
   each fan's drive under "VAR. SPEED (Y/N)", and the normalizer read a
   variable speed column only when headed exactly "VARIABLE SPEED", so its

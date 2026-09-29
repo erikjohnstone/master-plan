@@ -5419,3 +5419,66 @@ old whole-header rule; VAR., DRIVE or (Y/N) not read; the rule unanchored): each
   first). The AS-1 conformance test fails in both, as at AS-75.
 - **UI proof** (the dev server started on the change): 26_CA (19 checks; 190 units, 291 records, 2,262 lines) and
   069_ID (17) are byte-identical to apply_assemblies over MCP with their CSV sets.
+
+## AS-77 — the schedule↔plan reconcile read tables by its own copy of the takeoff's gate, and the copy had drifted (FIXED — the takeoff's output unchanged)
+
+**Found:** 2026-09-29, after AS-75: the reconcile scaffold held no row for 013_MO's CONTROL VALVES, which the takeoff
+counts (queued in the PR). A parity census (every family's marks, as the takeoff counts them and as the reconcile holds
+rows for them, over the 97 cached dev documents) found 56 compiled units with no reconcile row and 5 rows with no unit.
+The reconcile scaffold (`reconcileScheduleFamilyFromGraph`) read each table by its own copy of the takeoff's gate
+(`uniqueFamily`), and the copy had drifted:
+- it read no table titled CONTROL VALVE(S) that names no water, which the takeoff reads under the water its headers and
+  marks name: 013_MO's CV-7 to CV-12 (CONTROL VALVES), 072_CA's and 074_CA's 22 valves each (EQUIPMENT CONTROL VALVES),
+  009_FL's CV-1 and CV-2 (HYDRONIC CONTROL VALVE SCHEDULE);
+- it checked neither an untitled table's header shape (a damper table's damper column) nor its water;
+- it read a points list as a schedule: 017_MD's H-A-3 had a second row, citing its DDC points list;
+- in a general schedule it read a family's alternate marks, which only the family's alternate title vouches for: 25_WA's
+  ceiling and duct electric heaters EH-20 and EH-30 (MISCELLANEOUS SCHEDULE) were humidifiers, 043_FL's air handling
+  unit "ED 203" (MECHANICAL EQUIPMENT SCHEDULE) a control damper;
+- it kept a mark cell's comma list whole where the takeoff reads the row key: 044_NY's "FOP-1, 2" and "FOP-3, 4" were
+  one row each for four fuel oil pumps.
+
+**Fix (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`; the shared path):** one gate for both. `familyTableGate(table,
+spec)` says whether and how a family reads a table (its pass, its mark filter, the marks its title vouches for, whether
+no title vouches for it), `familyMarkRead` how it reads a row's mark (as printed, widened, or not at all), and
+`rowMarkText` and `splitRowMarks` which marks a row names. The takeoff calls them in place of its inline code, each
+table's gate computed once; the reconcile calls them in place of its copy, and keeps its own row identity and row
+fields.
+
+**Measured** (an A/B over the 97 cached dev documents, 516a681 against the change):
+- **The takeoff:** its output, every family and field, byte-identical on all 97.
+- **The reconcile:** 56 rows added, 6 removed, none changed or reordered; takeoff↔reconcile parity from 56 units without
+  a row and 5 rows without a unit to 0 and 0 (2,605 units, 2,626 rows). Added: 013_MO's 6, 072_CA's and 074_CA's 22
+  each and 009_FL's 2 control valves, and 044_NY's FOP-1 to FOP-4. Removed: 25_WA's EH-20 and EH-30 and 043_FL's ED203
+  (each checked on its row: a ceiling heater, a duct heater, an air handling unit), 044_NY's two comma rows, and 017_MD's
+  H-A-3 row citing its points list (its HUMIDIFIER SCHEDULE row stays). The reconcile's duplicate listings the owner
+  decides: 22 marks on 8 documents → 21 on 7 (017_MD's second listing was the points list).
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C dev
+  (227/244), the binding, question and reading evals and the unseen audit's replay identical to AS-76's but timings; no
+  eval reads the reconcile, and the takeoff is byte-identical.
+- **Held-out** (aggregates only): GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472, 1 wrong,
+  2 invented; GATE 5 21/91; GATE C 35/91. Each is as with AS-76; every run read its graphs from cache.
+
+**Found, not fixed here:** the takeoff reads a valve table whose title names no water as one water, its headers' or
+its marks', else chilled: 072_CA's and 074_CA's rows print SERVICE "CHW, …" and "HHW, …" row by row, and all 22 were
+chilled water's; 013_MO's print HHW/BOILER. The reconcile now holds them as the takeoff does (AS-78). 044_NY's
+"FOP-8A & B" reads as one pump, "FOP-8AB", in both: its header row carries the table's title ("SUMMER BOILER FUEL OIL
+PUMP SCHEDULE MARK"), so no MARK column is found (extraction's).
+
+**Tests:** schedulePlanReconcile.test.ts (AS-77): 013_MO's CONTROL VALVES in both (a heating water header makes it hot;
+with no valve header it is no valve schedule); 25_WA's heaters beside a HUM-1 in a MISCELLANEOUS SCHEDULE, 043_FL's
+"ED 203", and the same marks under the humidifier's alternate title; 017_MD's points list; 044_NY's comma cell; an
+untitled table with no damper column (OA-1 and OA-2 are outdoor air units, not dampers); and a battery of 1,100
+generated tables (22 titles, 5 header sets, 10 mark sets) in which every family's marks are the takeoff's and the
+reconcile's alike. Each fails on 516a681. The AS-63 test's untitled damper table now prints a damper column: without
+one the takeoff never read it, and the old reconcile's CD-2 row was a unit the takeoff does not count; that marks-only
+form is asserted too. 15 mutations of the shared gate and of the reconcile's calls each fail a test.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,949 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite (every file but the WP1 test) 377 of 380:
+  AS-1's conformance test, and navfac's `sweep_schedule_row` over the SDK's 60 s default under load (63.6 s), which
+  passes alone. Every reconcile test file passes.
+- **UI proof** (the dev server started on the change): the Takeoff canvas's reconcile (the Agent tool path, through
+  the production Session) equals `reconcile_schedule_plan` over MCP row for row on 013_MO (CV-7 to CV-12), 074_CA (22
+  valves, 11 fans), 044_NY (FOP-1 to FOP-4 among 11 pumps), 25_WA (no humidifier), 017_MD (H-A-3 once), 043_FL (no
+  damper) and 009_FL (CV-1, CV-2); 40 checks. Takeoff → Assemblies on 013_MO (9 checks) and 069_ID (17) is
+  byte-identical to apply_assemblies over MCP.
