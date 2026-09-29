@@ -7,7 +7,7 @@
  */
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark,
-  familyTableGate, familyMarkRead, familyRowRead, familyReadsUnitMark, rowIdentityText, rowMarkText, splitRowMarks,
+  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
@@ -845,15 +845,13 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       // takeoff reads it (AS-78).
       if (!familyRowRead(gate, row, table)) continue;
       // The text the row names its unit by, the takeoff's own (AS-79).
-      const rawTag = rowIdentityText(row, {
-        identityHeaderRe: needle?.identityHeaderRe || null, unitMark: familyReadsUnitMark(gate, family),
-      });
+      const rawTag = rowIdentityText(row, gate.identity);
       if (!rawTag) continue;
       // The takeoff's split of a row's marks (AS-77).
       const willFilter = Boolean(gate.catchAll || gate.filterRe);
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
       const working = rowMarkText(rawTag, rowKey, willFilter);
-      const tagList = splitRowMarks(working, willFilter)
+      const tagList = splitRowMarks(working, willFilter, gate.wordsNamed)
         .map((t) => normalizeEquipMark(t))
         .filter(Boolean);
       for (const tag of (tagList.length ? tagList : [working])) {

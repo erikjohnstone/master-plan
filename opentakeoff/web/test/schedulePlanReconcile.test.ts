@@ -19,7 +19,7 @@ import {
 } from "../src/lib/schedulePlanReconcile.mjs";
 import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
-  inferValveServiceFromTable, familyTableGate, scheduleTableView,
+  inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks,
 } from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
@@ -1502,4 +1502,161 @@ test("a title that names one family keeps every row it vouches for, and a reconc
   const combined = { tables: [as77Table("m.pdf#136", "OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE", as80Headers, [as80Row("HP-2")])] };
   const custom = reconcileScheduleFamilyFromGraph(combined, { label: "Outdoor units", titleRe: /CONDENSING\s+UNIT/i }) as Array<{ tag: string }>;
   assert.deepEqual(custom.map((r) => r.tag), ["HP-2"]);
+});
+
+// AS-81: a row a title alone vouches for, named by words (the room and the
+// air it serves), is one line: its slash lists no marks.
+const as81Headers = ["QTY.", "LOCATION & SERVES", "AIR FLOW (CFM)"];
+// 028_TX's NOISE CONTROL DUCT SILENCER SCHEDULE, as the sheet graph keys its
+// rows (the location, and the airflow where two rows share one).
+const as81Rows = [
+  ["2", "GROUP REHEARSAL 123 - SUPPLY/RETURN", "745"], ["1", "GROUP REHEARSAL 123 - RETURN", "160"],
+  ["2", "GROUP REHEARSAL 112/111 - SUPPLY/RETURN", "535"], ["1", "GROUP REHEARSAL 112/113 - RETURN", "385"],
+  ["1", "GROUP REHEARSAL 114/113 - SUPPLY", "245"], ["2", "ROCK REHEARSAL 218 - SUPPLY/RETURN", "540"],
+  ["2", "VEST 212 - SUPPLY/RETURN", "330"],
+].map(([qty, where, cfm]) => ({ __key: `${where} ${cfm}`, "QTY.": qty, "LOCATION & SERVES": where, "AIR FLOW (CFM)": cfm }));
+const as81Graph = (rows = as81Rows) => ({ tables: [as77Table("m.pdf#41", "NOISE CONTROL DUCT SILENCER SCHEDULE", as81Headers, rows)] });
+const as81Silencers = (graph: object) => {
+  const items = (compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string; scheduled_qty: number | null }> }>).DUCT_SILENCER.items;
+  const rows = reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "DUCT_SILENCER")!) as Array<{ tag: string; scheduled_qty: number | null }>;
+  const view = (xs: Array<{ tag: string; scheduled_qty: number | null }>) => xs.map((x) => `${x.tag}=${x.scheduled_qty}`).sort();
+  return { compile: view(items), reconcile: view(rows) };
+};
+
+test("a silencer schedule whose rows are named by the room and air they serve reads each row as one line, its QTY its silencers: 028_TX (AS-81)", () => {
+  const read = as81Silencers(as81Graph());
+  assert.deepEqual(read.compile, [
+    "GROUP REHEARSAL 112/111 - SUPPLY/RETURN 535=2", "GROUP REHEARSAL 112/113 - RETURN 385=1",
+    "GROUP REHEARSAL 114/113 - SUPPLY 245=1", "GROUP REHEARSAL 123 - RETURN 160=1",
+    "GROUP REHEARSAL 123 - SUPPLY/RETURN 745=2", "ROCK REHEARSAL 218 - SUPPLY/RETURN 540=2", "VEST 212=2",
+  ]);
+  assert.deepEqual(read.reconcile, read.compile);
+  // Every row order reads alike, in the takeoff and the reconcile.
+  for (const order of [[6, 5, 4, 3, 2, 1, 0], [2, 0, 6, 1, 5, 3, 4]]) {
+    assert.deepEqual(as81Silencers(as81Graph(order.map((i) => as81Rows[i]))), read);
+  }
+  const gate = familyTableGate(scheduleTableView(as81Graph().tables[0]), HVAC_FAMILY_SPECS.DUCT_SILENCER, "DUCT_SILENCER")!;
+  assert.equal(gate.wordsNamed, true);
+});
+
+test("a row's slash lists marks unless the row is named by words, where a title alone vouches for it (AS-81)", () => {
+  // Named by words: one line, in a reading no mark rule filters.
+  assert.deepEqual(splitRowMarks("GROUP REHEARSAL 112/111 - SUPPLY/RETURN 535", false), ["GROUP REHEARSAL 112/111 - SUPPLY/RETURN 535"]);
+  assert.deepEqual(splitRowMarks("VEST 212 - SUPPLY/RETURN 330", false, true), ["VEST 212 - SUPPLY/RETURN 330"]);
+  // Marks, and a mark with words after it, a building's or a coded one: split as before.
+  assert.deepEqual(splitRowMarks("EF-1/EF-2", false), ["EF-1", "EF-2"]);
+  assert.deepEqual(splitRowMarks("AHU-1/HP-1", false), ["AHU-1", "HP-1"]);
+  assert.deepEqual(splitRowMarks("RTU-1 (ALT#2)/RTU-2", false), ["RTU-1 (ALT#2)", "RTU-2"]);
+  assert.deepEqual(splitRowMarks("1-VAV-1/1-VAV-2", false), ["1-VAV-1", "1-VAV-2"]);
+  assert.deepEqual(splitRowMarks("CV-CHW-BP-A/CV-CHW-BP-B", false), ["CV-CHW-BP-A", "CV-CHW-BP-B"]);
+  assert.deepEqual(splitRowMarks("HHW-PUMP-1/HHW-PUMP-2", false), ["HHW-PUMP-1", "HHW-PUMP-2"]);
+  assert.deepEqual(splitRowMarks("VEST 212 - SUPPLY/RETURN 330", false), ["VEST 212 - SUPPLY", "RETURN 330"]);
+  // Where a mark rule filters the rows, it reads each piece, as before.
+  assert.deepEqual(splitRowMarks("GROUP REHEARSAL 112/111 - SUPPLY", true), ["GROUP REHEARSAL 112", "111 - SUPPLY"]);
+  assert.deepEqual(splitRowMarks("GROUP REHEARSAL 112/111 - SUPPLY", true, true), ["GROUP REHEARSAL 112", "111 - SUPPLY"]);
+  // A table of marks is no table named by words; a mark rule's reading never is.
+  const fans = scheduleTableView(as77Table("m.pdf#3", "FAN SCHEDULE", ["MARK", "CFM"], [
+    { MARK: "EF-1/EF-2", CFM: "400" }, { MARK: "EF-3", CFM: "300" }, { MARK: "GENERAL EXHAUST/RELIEF", CFM: "900" },
+  ]));
+  assert.equal(familyTableGate(fans, HVAC_FAMILY_SPECS.FAN, "FAN")!.wordsNamed, false);
+  assert.deepEqual(as77Marks({ tables: [fans] }).FAN, { compile: ["EF1", "EF2", "EF3"], reconcile: ["EF1", "EF2", "EF3"] });
+  const exhausts = scheduleTableView(as77Table("m.pdf#3", "FAN SCHEDULE", ["MARK", "CFM"], [
+    { MARK: "GENERAL EXHAUST/EF-1", CFM: "400" }, { MARK: "TOILET EXHAUST/EF-2", CFM: "300" },
+  ]));
+  assert.equal(familyTableGate(exhausts, HVAC_FAMILY_SPECS.FAN, "FAN")!.wordsNamed, false);
+  assert.deepEqual(as77Marks({ tables: [exhausts] }).FAN, { compile: ["EF1", "EF2"], reconcile: ["EF1", "EF2"] });
+  const general = scheduleTableView(as77Table("m.pdf#3", "EQUIPMENT SCHEDULE", ["MARK", "CFM"], [
+    { MARK: "BOILER ROOM EXHAUST/EF-9", CFM: "400" }, { MARK: "TOILET ROOM EXHAUST/EF-8", CFM: "300" },
+  ]));
+  assert.equal(familyTableGate(general, HVAC_FAMILY_SPECS.FAN, "FAN")!.wordsNamed, false);
+  assert.deepEqual(as77Marks({ tables: [general] }).FAN, { compile: ["EF8", "EF9"], reconcile: ["EF8", "EF9"] });
+});
+
+test("a table is named by words where most rows' names, read as the family reads them, are words; a slash between bare marks always lists marks (AS-81)", () => {
+  const silencers = (headers: string[], rows: Array<Record<string, string>>) =>
+    ({ tables: [as77Table("m.pdf#41", "NOISE CONTROL DUCT SILENCER SCHEDULE", headers, rows)] });
+  const gateOf = (graph: { tables: Array<Parameters<typeof scheduleTableView>[0]> }) =>
+    familyTableGate(scheduleTableView(graph.tables[0]), HVAC_FAMILY_SPECS.DUCT_SILENCER, "DUCT_SILENCER")!;
+  // Keyed by its rooms, its MARK column listing marks: the marks name the
+  // rows, so it is no table named by words and SL-1 (ALT)/SL-2 is two.
+  const marked = silencers(["LOCATION", "MARK", "QTY."], [
+    { LOCATION: "GROUP REHEARSAL 123", MARK: "SL-1 (ALT)/SL-2", "QTY.": "2" },
+    { LOCATION: "ROCK REHEARSAL 218", MARK: "SL-3", "QTY.": "1" },
+    { LOCATION: "BAND ROOM 101", MARK: "SL-4", "QTY.": "1" },
+  ]);
+  assert.equal(gateOf(marked).wordsNamed, false);
+  assert.deepEqual(as77Marks(marked).DUCT_SILENCER, { compile: ["SL1", "SL2", "SL3", "SL4"], reconcile: ["SL1", "SL2", "SL3", "SL4"] });
+  // One row named by words beside one of marks is no majority.
+  const tie = silencers(["LOCATION & SERVES", "QTY."], [
+    { "LOCATION & SERVES": "GROUP REHEARSAL 123 - SUPPLY/RETURN", "QTY.": "2" },
+    { "LOCATION & SERVES": "SL-5 (ALT)/SL-6", "QTY.": "2" },
+  ]);
+  assert.equal(gateOf(tie).wordsNamed, false);
+  assert.deepEqual(as81Silencers(tie), {
+    compile: ["GROUP REHEARSAL 123 - SUPPLY/RETURN=2", "SL-5=1", "SL-6=1"],
+    reconcile: ["GROUP REHEARSAL 123 - SUPPLY/RETURN=2", "SL-5=1", "SL-6=1"],
+  });
+  // Among 028_TX's rows, a row of bare marks lists them, and a row of words
+  // alone (SUPPLY/RETURN) is one line.
+  const mixed = as81Graph([
+    ...as81Rows,
+    { __key: "SL-7/SL-8", "QTY.": "2", "LOCATION & SERVES": "SL-7/SL-8", "AIR FLOW (CFM)": "300" },
+    { __key: "SUPPLY/RETURN", "QTY.": "2", "LOCATION & SERVES": "SUPPLY/RETURN", "AIR FLOW (CFM)": "300" },
+  ]);
+  assert.equal(gateOf(mixed).wordsNamed, true);
+  const read = as81Silencers(mixed);
+  assert.deepEqual(read.compile.filter((t) => /^S[LU]/.test(t)), ["SL-7=1", "SL-8=1", "SUPPLY/RETURN=2"]);
+  assert.ok(read.compile.includes("VEST 212=2"));
+  assert.deepEqual(read.reconcile, read.compile);
+  for (const [text, pieces] of [
+    ["SL-7/SL-8", ["SL-7", "SL-8"]], ["AHU 1/AHU 2", ["AHU 1", "AHU 2"]], ["1-VAV-1/1-VAV-2", ["1-VAV-1", "1-VAV-2"]],
+    ["RTU-G/RTU-H", ["RTU-G", "RTU-H"]], ["CV-CHW-BP-A/CV-CHW-BP-B", ["CV-CHW-BP-A", "CV-CHW-BP-B"]], ["B1/B2", ["B1", "B2"]],
+    ["SUPPLY/RETURN", ["SUPPLY/RETURN"]], ["VEST 212 - SUPPLY/RETURN 330", ["VEST 212 - SUPPLY/RETURN 330"]],
+    ["SL-9 (ALT)/SL-10", ["SL-9 (ALT)", "SL-10"]], ["(N)SL-1/(N)SL-2", ["(N)SL-1", "(N)SL-2"]],
+    ["GENERAL EXHAUST/EF-1", ["GENERAL EXHAUST", "EF-1"]], ["GENERAL EXHAUST/(N)EF-1", ["GENERAL EXHAUST", "(N)EF-1"]],
+    ["OFFICE WING 101/101A - SUPPLY", ["OFFICE WING 101/101A - SUPPLY"]], ["OFFICE WING 101/101A", ["OFFICE WING 101/101A"]],
+    ["GROUP REHEARSAL 112/111", ["GROUP REHEARSAL 112/111"]],
+  ] as Array<[string, string[]]>) {
+    assert.deepEqual(splitRowMarks(text, false, true), pieces, text);
+  }
+  // A row led by a coded mark is no row named by words, whatever follows it,
+  // and a row named by words that prints a mark lists it, as before.
+  assert.deepEqual(splitRowMarks("HHW-PUMP-1/STANDBY PUMP", false), ["HHW-PUMP-1", "STANDBY PUMP"]);
+  assert.deepEqual(splitRowMarks("GENERAL EXHAUST/EF-1", false), ["GENERAL EXHAUST", "EF-1"]);
+  const outdoor = { tables: [as77Table("m.pdf#40", "CONDENSING UNIT SCHEDULE", ["LOCATION", "QTY."], [
+    { LOCATION: "ELECTRICAL ROOM 101/CU-5", "QTY.": "1" }, { LOCATION: "ROOF NORTH SIDE/ROOF SOUTH SIDE", "QTY.": "2" },
+  ])] };
+  const cu = as77Marks(outdoor).CONDENSING_UNIT;
+  assert.ok(cu.compile.includes("CU5") && cu.compile.includes("ROOFNORTHSIDE/ROOFSOUTHSIDE"), cu.compile.join(" "));
+  assert.deepEqual(cu.reconcile, cu.compile);
+  // Names spelled with dashes and no space are no words: a table of them is
+  // no table named by words.
+  const dashed = scheduleTableView(as77Table("m.pdf#41", "NOISE CONTROL DUCT SILENCER SCHEDULE", ["LOCATION & SERVES", "QTY."], [
+    { "LOCATION & SERVES": "SUPPLY-SILENCER-EAST", "QTY.": "1" }, { "LOCATION & SERVES": "RETURN-SILENCER-EAST", "QTY.": "1" },
+  ]));
+  assert.equal(familyTableGate(dashed, HVAC_FAMILY_SPECS.DUCT_SILENCER, "DUCT_SILENCER")!.wordsNamed, false);
+  // A title naming a general schedule too reads rows by their marks, never
+  // as a table named by words.
+  const general = scheduleTableView(as77Table("m.pdf#41", "CONDENSING UNIT MISCELLANEOUS SCHEDULE", ["LOCATION & SERVES", "QTY."], [
+    { "LOCATION & SERVES": "GROUP REHEARSAL 123 - SUPPLY/RETURN", "QTY.": "2" },
+    { "LOCATION & SERVES": "ROCK REHEARSAL 218 - SUPPLY/RETURN", "QTY.": "2" },
+  ]));
+  const generalGate = familyTableGate(general, HVAC_FAMILY_SPECS.CONDENSING_UNIT, "CONDENSING_UNIT")!;
+  assert.ok(generalGate.titleOk && generalGate.catchAll);
+  assert.equal(generalGate.wordsNamed, false);
+});
+
+test("a family's own identity column names a row before a MARK the row prints first, in the takeoff and the reconcile alike (AS-79, AS-81)", () => {
+  // The gate's reading of a row's name is the one both sides use.
+  const chw = { tables: [as77Table("m.pdf#30", "CHILLED WATER CONTROL VALVE SCHEDULE", ["MARK", "VALVE MARK", "GPM"], [
+    { MARK: "1", "VALVE MARK": "CV-1", GPM: "12" }, { MARK: "2", "VALVE MARK": "CV-2", GPM: "8" },
+  ])] };
+  assert.deepEqual(as77Marks(chw).CHW_CONTROL_VALVE, { compile: ["CV1", "CV2"], reconcile: ["CV1", "CV2"] });
+  const bypass = { tables: [as77Table("m.pdf#30", "BYPASS CONTROL VALVE SCHEDULE", ["MARK", "SYMBOL", "GPM"], [
+    { MARK: "1", SYMBOL: "BCV-1", GPM: "40" },
+  ])] };
+  assert.deepEqual(as77Marks(bypass).BYPASS_CONTROL_VALVE, { compile: ["BCV1"], reconcile: ["BCV1"] });
+  const gate = familyTableGate(scheduleTableView(chw.tables[0]), HVAC_FAMILY_SPECS.CHW_CONTROL_VALVE, "CHW_CONTROL_VALVE")!;
+  assert.deepEqual(gate.identity, { identityHeaderRe: HVAC_FAMILY_SPECS.CHW_CONTROL_VALVE.identityHeaderRe, unitMark: false });
+  assert.equal(gate.wordsNamed, false);
 });

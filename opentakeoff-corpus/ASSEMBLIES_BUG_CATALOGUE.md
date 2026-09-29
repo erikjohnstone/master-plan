@@ -5706,3 +5706,92 @@ and navfac's `sweep_schedule_row` past the SDK's 60 s default under load).
 `reconcile_schedule_plan` over MCP row for row (CONDENSING_UNIT none, HEAT_PUMP HP-2, DOAS, FCU, UNIT_HEATER 8 and
 MIXING_VALVE 2; 19 checks). Takeoff → Assemblies on 089_FL (33 units, 48 records, 293 lines; 17 checks) and 069_ID
 (17) is byte-identical to `apply_assemblies` over MCP.
+
+## AS-81 — a row named by the room it serves was shredded on "/" into bogus units (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by a metamorphic check of the takeoff and the reconcile on the 97 cached dev documents. The
+check permutes each table's columns and shuffles its rows and the tables, with 3 seeds. The takeoff never changed.
+The reconcile changed once: 028_TX's DUCT_SILENCER row "GROUP REHEARSAL 114" had QTY 1 or 2, depending on which
+row came first.
+
+028_TX's NOISE CONTROL DUCT SILENCER SCHEDULE names each row by the room and the air it serves: "GROUP REHEARSAL
+112/111 - SUPPLY/RETURN", with QTY 2. The sheet graph keys each row by that location and its airflow, as two rows
+can share a location. The takeoff and the reconcile split every row's name on "/" as a list of marks, so:
+- its 16 rows (23 silencers) became 22 units of fragments, such as "GROUP REHEARSAL 112", "111 - SUPPLY" and
+  "RETURN 535";
+- each fragment took the whole row's QTY;
+- two rows' fragments collided ("GROUP REHEARSAL 114"), so which QTY the unit kept depended on the row order;
+- `apply_assemblies` listed the 22 fragments as silencers with no assembly, exceptions an estimator would have
+  to dismiss one by one.
+
+**Fix (`corpusTakeoff.mjs`, the split the takeoff and the reconcile share since AS-77):**
+- Where no mark rule picks the family's marks from a row, the row is one line if it is named by words
+  (`splitRowMarks`, `namedByWords`). Named by words means two words of three letters or more, apart, before its
+  first slash, once a mark's own trailing words are dropped: "GROUP REHEARSAL 112".
+- A row among rows mostly named so is one line too, which covers "VEST 212 - SUPPLY/RETURN": its first piece reads
+  like a mark with words after it, as RTU-1 (ALT#2) does.
+  - The table's reading is `familyTableGate`'s `wordsNamed`: more than half of the rows' names are words.
+  - Each name is read as the family reads it (`rowIdentityText`, `rowMarkText`). So a table keyed by its rooms whose
+    MARK column lists marks is not a table named by words, and a one-to-one tie is no majority.
+- A slash beside a mark printed as one token lists marks, wherever the row is printed (`markToken`): GENERAL
+  EXHAUST/EF-1, ELECTRICAL ROOM 101/CU-5, (N)EF-1. So is a slash between bare marks (`bareMark`): AHU 1/AHU 2,
+  RTU-G/RTU-H, CV-CHW-BP-A/CV-CHW-BP-B. A printed mark always keeps its own tag in the takeoff and the reconcile.
+  A room's number (101A) and words with a number after them (RETURN 535, the airflow the key appends) are no mark
+  token.
+- The gate now carries how the family reads the name of a row's unit (`identity`: its own identity column, and a
+  row's UNIT MARK or VALVE MARK, AS-79). The takeoff, the reconcile and the table's reading all read by it.
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-80): only 028_TX's DUCT_SILENCER changes, in the takeoff and the
+  reconcile alike.
+  - 10 whole rows come in and 16 fragments go: 22 → 16 units, and 2,625 → 2,619 reconcile rows.
+  - The 16 lines hold 23 silencers, the schedule's own count.
+  - Every other family and document is byte-identical.
+- **The metamorphic check** (takeoff and reconcile, 3 seeds): 1 difference → 0.
+- **Assemblies on 028_TX** (`apply_assemblies` over MCP, deterministic readings):
+  - 55 → 49 units and 89 → 83 records: 22 no-assembly fragments become 16 silencers;
+  - its 1,602 lines, every other unit and every application are byte-identical.
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C
+  dev (227/244), the binding, question and reading evals and the unseen audit's replay identical to AS-80's (058_CA's
+  replay errors as it did).
+- **Held-out** (aggregates only, 0 graphs built), each as with AS-80:
+  - GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented;
+  - held-out 2 334/472;
+  - GATE 5 21/91;
+  - GATE C 35/91.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-81):
+- 028_TX's rows with their QTY: one line each, in the takeoff and the reconcile, in every row order tried. The gate
+  reads the table as named by words.
+- `splitRowMarks`:
+  - rows named by words stay whole;
+  - these split: marks (EF-1/EF-2, AHU-1/HP-1, RTU-1 (ALT#2)/RTU-2, 1-VAV-1/1-VAV-2, CV-CHW-BP-A/CV-CHW-BP-B,
+    HHW-PUMP-1/HHW-PUMP-2), VEST 212's row on its own, filtered readings, and a row led by a coded mark
+    (HHW-PUMP-1/STANDBY PUMP);
+  - a FAN SCHEDULE and an EQUIPMENT SCHEDULE are never read as named by words.
+- The table's reading:
+  - a table keyed by rooms whose MARK column lists marks is not named by words (SL-1 (ALT)/SL-2 is two);
+  - a tie is no majority;
+  - among 028_TX's rows, SL-7/SL-8 splits and SUPPLY/RETURN stays one;
+  - dashed names are no words;
+  - a title naming a general schedule too is no table named by words.
+- Mark tokens: GENERAL EXHAUST/EF-1 and ELECTRICAL ROOM 101/CU-5 split, as before, in the takeoff and the reconcile.
+  OFFICE WING 101/101A - SUPPLY stays one.
+- A family's own identity column names a row before a MARK printed first, in both: a chilled water valve's VALVE
+  MARK, a bypass valve's SYMBOL.
+
+28 mutations each fail a test beyond the baseline's.
+
+**Guard:** web typecheck clean; lint 0 errors (the 3 known warnings); the web suite's 3,960 tests fail only AS-1's three
+base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377 of 380, as at AS-80.
+
+**UI proof** (the dev server started on the change):
+- On 028_TX the Takeoff canvas's reconcile equals `reconcile_schedule_plan` over MCP row for row: DUCT_SILENCER's
+  16 rows with their QTY, FCU 23, DOAS 3, FAN 3, UNIT_HEATER 2 and BOILER 1 (19 checks).
+- Takeoff → Assemblies is byte-identical to `apply_assemblies` over MCP on 028_TX (49 units, 83 records, 1,602
+  lines; 19 checks) and on 069_ID (11 units, 24 records, 127 lines; 17 checks).
+
+**Left as it is (measured, disclosed):**
+- A row of room names printed like marks alone (VEST 212/VEST 214) splits as before: by its shape it lists marks.
+- A row named by words in a table read by its title alone becomes one unit named by its whole text. A plan tag
+  never names such a unit, so the reconcile finds no match for it, as before.

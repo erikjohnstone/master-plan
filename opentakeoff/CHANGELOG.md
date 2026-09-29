@@ -1,5 +1,20 @@
 # Changelog
 
+- **Takeoff and reconcile: a schedule row named by the room it serves is
+  one line.** 028_TX's NOISE CONTROL DUCT SILENCER SCHEDULE names its rows
+  by the room and the air they serve ("GROUP REHEARSAL 112/111 -
+  SUPPLY/RETURN", QTY 2). Split on "/" as a list of marks, its 16 rows (23
+  silencers) became 22 fragments ("111 - SUPPLY", "RETURN 535"), each with
+  the whole row's QTY, one of them depending on the row order, and
+  `apply_assemblies` listed 22 silencers with no assembly. Where no mark
+  rule picks the family's marks, a row named by words, or among rows mostly
+  named so, is now one line. A slash beside a mark printed as one token
+  (GENERAL EXHAUST/EF-1), or between bare marks, still lists marks, so a
+  printed mark keeps its own tag. On the dev corpus only 028_TX's silencers
+  change: 16 lines, 23 silencers, in the takeoff and the reconcile alike
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-81).
+
 - **Takeoff and reconcile: a table titled for two families counts each
   unit once.** A family that reads its schedule by the title alone
   (CONDENSING_UNIT's primary title) took every row of a title that names

@@ -1172,7 +1172,10 @@ const CATCH_ALL_SCHEDULE_RE = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MEC
  * the table's rows (none: every row), `titledAlso` the marks a title also
  * vouches for; `unvouched` says no title vouches for the family here.
  * `coTitled` are the other families a title names too, with their mark
- * rules, where the family reads every row by its title alone (AS-80).
+ * rules, where the family reads every row by its title alone (AS-80);
+ * `wordsNamed` says the rows it reads so are named by words, each one line
+ * (AS-81); and `identity` is how it reads the name of a row's unit, the
+ * options rowIdentityText takes (AS-79).
  * @param {object} table a schedule table, as scheduleTableView gives it
  * @param {object} spec an HVAC_FAMILY_SPECS entry, or a reconcile needle
  *   (whose `title` stands in for a titleRe)
@@ -1262,10 +1265,37 @@ export function familyTableGate(table, spec, family = null) {
   const coTitled = (titleOk || altOk) && !filterRe && family && HVAC_FAMILY_SPECS[family]
     ? titleFamilies(title).filter((named) => named.family !== family)
     : [];
+  // How the family reads the name of a row's unit (rowIdentityText): its own
+  // identity column, and a row's UNIT MARK or VALVE MARK where it prints both
+  // (AS-79). The takeoff and the reconcile read each row by it.
+  const identity = {
+    identityHeaderRe: spec?.identityHeaderRe || null,
+    unitMark: familyReadsUnitMark({ titleOk, altOk, hostOk }, family),
+  };
+  // Rows read with no mark rule picking them, as a title alone vouches for
+  // them, most of them named by words (028_TX's silencers, by the room and
+  // the air they serve): each is one line (AS-81), as splitRowMarks reads.
+  const wordsNamed = !filterRe && !catchAll && tableNamedByWords(table, identity);
   return {
     pass, title, titleOk, altOk, hostOk, blankTitle, genericValveTitle,
-    catchAll, unvouched, filterRe, titledAlso, rowService, coTitled,
+    catchAll, unvouched, filterRe, titledAlso, rowService, coTitled, wordsNamed, identity,
   };
+}
+
+/**
+ * Whether most of a table's rows are named by words, not marks (AS-81): more
+ * than half of the rows that name a unit do so by words before any slash
+ * (namedByWords), each name read as the family reads it (rowIdentityText,
+ * rowMarkText), the text its marks are split from. A table keyed by its rooms
+ * whose MARK column lists marks is no table named by words, and one row
+ * named by words among one of marks is no majority.
+ */
+function tableNamedByWords(table, identity) {
+  const firsts = (table?.rows || []).map((row) => {
+    const rowKey = String(row.key || "").trim().replace(QUOTES_RE, "");
+    return rowMarkPieces(rowMarkText(rowIdentityText(row, identity), rowKey, false), false)[0];
+  }).filter(Boolean);
+  return firsts.filter((first) => namedByWords(first)).length * 2 > firsts.length;
 }
 
 // The families each title names, with the mark rule each reads its rows by.
@@ -1421,14 +1451,65 @@ export function rowMarkText(text, rowKey, willFilter) {
  * A row's marks, before each is normalized (AS-77, shared by the takeoff and
  * the reconcile): split on "/" always and on "," only where a key filter
  * picks the family's marks from a list (DFC-1 , DCU-1), each range or pair
- * expanded (AS-75).
+ * expanded (AS-75). A row a title alone vouches for that is named by words,
+ * not marks, or that sits among rows so named (`wordsNamed`, a table's
+ * familyTableGate reading), is one line: its slash lists no marks (AS-81).
+ * A slash beside a mark printed as one token (GENERAL EXHAUST/EF-1), or
+ * between bare marks (AHU 1/AHU 2), lists marks wherever it is printed, so
+ * a printed mark always keeps its own tag.
  */
-export function splitRowMarks(text, willFilter) {
+export function splitRowMarks(text, willFilter, wordsNamed = false) {
+  const pieces = rowMarkPieces(text, willFilter);
+  if (!willFilter && pieces.length > 1 && !pieces.some((piece) => markToken(piece))
+    && !pieces.every((piece) => bareMark(piece)) && (wordsNamed || namedByWords(pieces[0]))) {
+    return [String(text).trim().replace(QUOTES_RE, "")];
+  }
+  return pieces.flatMap((t) => expandEquipMarks(t));
+}
+
+/** A row's text in the pieces its marks are split from (splitRowMarks). */
+function rowMarkPieces(text, willFilter) {
   return String(text)
     .split(willFilter ? /[/,]/ : "/")
-    .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
-    .filter(Boolean)
-    .flatMap((t) => expandEquipMarks(t));
+    .map((t) => t.trim().replace(QUOTES_RE, ""))
+    .filter(Boolean);
+}
+
+/**
+ * Whether a piece of a row's name is a unit's mark printed as one token
+ * (AS-81): EF-1, CU-5, B1, 1-VAV-1, (N)AHU-1, never a room's number (101A)
+ * or words with a number after them (RETURN 535).
+ */
+function markToken(piece) {
+  const text = String(piece || "").trim();
+  return Boolean(text) && !/\s/.test(text) && numberedMark(normalizeEquipMark(text));
+}
+
+/**
+ * Whether a piece of a row's name is a mark and nothing else (AS-81): one
+ * token once a family token is joined to its number (AHU 1), no words after
+ * it, with a number (EF-1, B1, 1-VAV-1, (N)AHU-1) or a lettered code (RTU-G,
+ * CV-CHW-BP-A). A room printed as a mark is one too (VEST 212).
+ */
+function bareMark(piece) {
+  const joined = String(piece || "").trim().replace(/^([A-Za-z]{1,8})\s+(?=\d)/, "$1");
+  return Boolean(joined) && !/\s/.test(joined)
+    && (/\d/.test(joined) || /^[A-Z]{1,8}(?:-[A-Z0-9]{1,8})+$/i.test(joined));
+}
+
+/**
+ * Whether a row's name before its first slash is words, not a mark (AS-81):
+ * two words of three letters or more, apart, once a mark's own trailing words
+ * are dropped (normalizeEquipMark), as 028_TX's silencer rows are named by the
+ * room and the air they serve ("GROUP REHEARSAL 112/111 - SUPPLY/RETURN", four
+ * silencers on one row). Split on its slashes, each piece was a silencer of
+ * its own ("111 - SUPPLY", "RETURN 535"). A mark with words after it
+ * (RTU-1 (ALT#2)), a building's (1-VAV-1) and a coded one (CV-CHW-BP-A,
+ * HHW-PUMP-1) are marks.
+ */
+function namedByWords(piece) {
+  const mark = normalizeEquipMark(piece);
+  return /\s/.test(mark) && (mark.match(/\b[A-Za-z]{3,}\b/g) || []).length >= 2;
 }
 
 function uniqueFamily(graph, spec, family) {
@@ -1471,9 +1552,7 @@ function uniqueFamily(graph, spec, family) {
       if (!familyRowRead(gate, row, table)) continue;
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
       // The text the row names its unit by, as the reconcile reads it (AS-79).
-      const tag = rowIdentityText(row, {
-        countKeyedIdentCol, identityHeaderRe, unitMark: familyReadsUnitMark(gate, family),
-      });
+      const tag = rowIdentityText(row, { countKeyedIdentCol, ...gate.identity });
       // Always expand slash compounds (CWP-1/CWP-2). Comma-split only when a
       // key filter can pick family marks (DFC-1 , DCU-1). Untagged titled
       // families keep row.key when SYMBOL is a comma list (Baker ERU-1, HP-4).
@@ -1486,7 +1565,7 @@ function uniqueFamily(graph, spec, family) {
       // "RETURN"), measured: 16 real rows became 31 items.
       const tagList = countKeyedIdentCol
         ? [String(working).trim()].filter(Boolean)
-        : splitRowMarks(working, willFilter);
+        : splitRowMarks(working, willFilter, gate.wordsNamed);
       for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
         const canon = one.toUpperCase().replace(/\s+/g, "");
