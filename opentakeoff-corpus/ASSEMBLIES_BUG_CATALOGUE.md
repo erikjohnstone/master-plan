@@ -6109,3 +6109,110 @@ three base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377
 **Left as it is (measured, disclosed):**
 - The extraction's grid label (`classifyGrid`) reads a valve grid's identity column under TAG, MARK or VALVE MARK only
   (above): an untitled valve grid under SYMBOL is labelled as before, while the takeoff reads its valves.
+
+## AS-86 — a row listing one family's units read as one unit, or lost one: "EF-1, 2", "EF-1, EF-2", "EF-1/2", "FOP-8A & B" (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29. A probe of the takeoff on rows that list marks with a comma. Under PUMP SCHEDULE, "P-1, 2" was one
+pump tagged "P-1, 2" (QTY 2); under EXHAUST FAN SCHEDULE, "EF-1, 2" was EF-1 ×2. The reconcile had no row for P-2 or
+EF-2, so a plan's P-2 or EF-2 matched no schedule row. "EF-1 & 2" read EF-1 and EF-2.
+
+On the documents as printed, the extraction's key hides most of it. It keys "FOP-1, 2" as FOP-1/FOP-2, and the takeoff
+prefers that key. But the extraction's `rowKeyOf` (not changed) runs other spellings together: "EF-1, EF-2" and "EF-1 &
+EF-2" as EF-1EF-2, "EF1, 2" as EF12, "EF-1/2" as EF-12, 044_NY's "FOP-8A & B" as FOP-8AB. So a metamorphic check ran on
+the 97 cached dev documents:
+- In each table a family reads, the first two rows its family names by plain marks of one prefix (EF-1, EF-2) were
+  merged into one row listing both (184 tables).
+- The list was printed in each spelling drafters use: "EF-1 & 2", "EF-1 & EF-2", "EF-1, 2", "EF-1,2", "EF-1, EF-2",
+  "EF-1/EF-2", "EF-1/2".
+- The row was keyed as `rowKeyOf` keys that spelling; a spelling it keys no row for ("EF-1 AND 2") was skipped
+  (193 variants).
+
+The takeoff and the reconcile should read the same two units under each spelling as under "EF-1 & 2". 800 family
+readings differed:
+- A comma list lost its second unit (151, and 151 more without the space). Through a key filter the bare 2 of
+  "EF-1, 2" named no unit; elsewhere the takeoff took the key the extraction ran together ("B1, 2" keyed B12).
+- A family its title alone vouches for took the key the extraction ran together over the printed list: "EF-1, EF-2"
+  was EF-1EF-2, one unit (134).
+- After a slash, the 2 of "EF-1/2" named no unit, or a unit named 2 (332).
+- "EF-1 & EF-2", where no mark column prints the row's name, was EF-1EF-2 (32).
+
+On the documents as printed, 044_NY's summer boiler fuel oil pumps FOP-8A & B were one pump, FOP-8AB. The row is a
+skid-mounted automatic duplex, and its note reads "enable both pumps to run simultaneously".
+
+**Fix (`corpusTakeoff.mjs`, the row split the takeoff and the reconcile share, AS-77):**
+- `expandMarkList`: a list of one family's marks, joined by commas, "&" or AND, names each unit.
+  - After the first mark, a bare number continues it ("EF-1, 2": EF-2), and a bare letter continues a mark that
+    prints one ("FOP-8A & B": FOP-8B).
+  - A mark of the first's family letters is itself ("EF-1, EF-2").
+  - Two families' marks (AHU-1, HP-1; Baker's ERU-1, HP-4), one mark, or words are no such list.
+- `splitRowMarks`: once a row is split on "/" (and on "," where a key filter reads it), a bare number or letter
+  continues the mark before it. "EF-1/2", and a filter's "EF-1, 2", name EF-1 and EF-2. After words, it names nothing
+  new.
+- `rowMarkText`: a printed list of one family's marks is read as printed. Only a list of two families' marks gives way
+  to the row's key (Baker's ERU-1).
+- `runTogetherMarks`: where only the key prints the row's name, a key run together from two marks of one family is
+  the two. The family letters and separator print twice (CH-1CH-2, B1B2, UH-1UH-2). A key that prints them once (B12,
+  EF-12, FOP-8AB) is one mark.
+- `rowIdentityText`: the key as printed (AS-84) is now the cell of the key's letters and digits under any header, not
+  only under a mark column's other names. 16_NV prints its furnaces' and condensing units' marks under GENERAL UNIT
+  DATA F ~ and UNIT GENERAL DATA CU ~. 044_NY prints its summer fuel oil pumps' under a header the extraction merged
+  with the table's title (SUMMER BOILER FUEL OIL PUMP SCHEDULE MARK).
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-84): only 044_NY changes. Its FOP-8AB is FOP-8A and FOP-8B, in the
+  takeoff and the reconcile alike (2,654 → 2,655 rows). Every other unit and row is byte-identical.
+- **The metamorphic check:** 800 → 4 differences. The 4 left are itd-d1-lab's and 062_ID's canopy hood schedules
+  under "CH-1/2" (below).
+- **The earlier metamorphic checks:**
+  - header names (AS-84): 0, as before;
+  - titles (AS-83): 312, as before, each a title printed without the word SCHEDULE;
+  - mark spellings (AS-82): 3 → 2. The line that goes is the check's own: it respells mark columns' cells only, and
+    016_NY's untitled boiler listing now reads the cell under another header, still printed with its hyphen.
+- **Grid labels** (`classifyGrid`) on the 1,654 tables: 0 change.
+- **The keyed compile acceptance** (WP1's check, replayed on the 93 keyed dev sets): 39 pass, as before. 044_NY fails
+  as it did. Its key counts 9 pumps; the takeoff counted 11 and now counts 12, and the rendered sheet prints the two
+  pumps (above).
+- **Evals:** the five tiers' attribute evals line for line, but for 044_NY's compile item count in dev 2 (42 → 43).
+  The typical eval (130/244), GATE C dev (227/244), the binding, question and reading evals and the unseen audit's
+  replay are identical to AS-84's; 058_CA's replay runs out of memory as it did.
+- **Held-out** (aggregates only, 0 graphs built), each as with AS-84:
+  - GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented;
+  - held-out 2 334/472;
+  - GATE 5 21/91;
+  - GATE C 35/91.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-86):
+- `expandMarkList` on eight spellings of EF-1 and EF-2, a list of three, a qualified mark's list (SF-P2-1, 2), and a
+  letter's continuation (FOP-8A & B; AHU-1A, 1B). It returns no list for two families' marks, one mark, words, a note,
+  or a family word before its mark (AHU, AHU-2).
+- `splitRowMarks`: "EF-1/2", "FOP-8A/B" and a filter's "EF-1, 2" and "EF-1, 2, 3" continue. "EF-1/A", "GENERAL EXHAUST
+  1, 2" and AS-81's room phrases do not.
+- Keys run together from two marks split (CH-1CH-2, B1B2, UH-1UH-2); B12, EF-12, AHU-1A, FOP-8AB, CV-CHW-BP-A and
+  SF-P1-12 stay one mark.
+- `rowMarkText`: a printed list over its run-together key; Baker's two families' list gives way to its key.
+- In the takeoff and the reconcile alike:
+  - seven spellings of a two-unit row, each keyed as `rowKeyOf` keys it, read EF-1 and EF-2 (QTY 1 each) under a fan
+    schedule's key filter, and P-1 and P-2 under a pump schedule's title;
+  - both under MARK and under 16_NV's merged header;
+  - a canopy hood keyed CH-1CH-2 with no cell reads CH-1 and CH-2;
+  - 044_NY's duplex reads FOP-8A and FOP-8B under its merged header.
+- Negative controls: "CH-1/2", keyed CH-12 with no cell, stays CH-12; Baker's ENERGY RECOVERY UNIT row reads ERU-1.
+
+16 of 16 mutations each fail a test beyond the baseline's. Two of them (a continuation after words, a list led by a
+family word) survived a first run, and the tests `GENERAL EXHAUST 1, 2` and `AHU, AHU-2` were added for them.
+
+**Guard:** web typecheck clean; lint 0 errors (the 3 known warnings); the web suite's 3,972 tests fail only AS-1's
+three base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377 of 380, as at AS-84.
+
+**UI proof:** the dev server started on the change, deterministic readings.
+- On 044_NY the Takeoff canvas's reconcile equals `reconcile_schedule_plan` over MCP row for row: PUMP's 12 rows,
+  FOP-8A and FOP-8B among them, and BOILER's 4 (7 checks).
+- Takeoff → Assemblies is byte-identical to `apply_assemblies` over MCP on 044_NY (43 units, 68 records, 286 lines;
+  18 checks). FOP-8A and FOP-8B each take the pump hook-up and wait for a typical, as the other fuel oil pumps do.
+
+**Left as it is (measured, disclosed):**
+- Where only the key prints a row's name, a key the extraction ran together printing one mark's letters once is one
+  mark: "CH-1/2" keyed CH-12, "EF1, 2" keyed EF12. It cannot be told from a unit numbered 12. The metamorphic check's
+  4 differences are these.
+- A spelling the extraction keys no row for ("EF-1 AND 2", "AHU-1A, 1B" under `rowKeyOf`) was not tested. Any such row
+  the graph holds is read as above.

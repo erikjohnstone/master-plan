@@ -1098,9 +1098,61 @@ export function expandEquipMarkRange(raw) {
 }
 
 /** The marks one printed mark cell names (after its "/" or "," split): a
- * range's every mark, an "&" pair's two, else the mark itself. */
+ * range's every mark, a list's (AS-86), an "&" pair's two, else the mark
+ * itself. */
 export function expandEquipMarks(raw) {
-  return expandEquipMarkRange(raw) ?? expandAmpersandEquipMarks(raw);
+  return expandEquipMarkRange(raw) ?? expandMarkList(raw) ?? runTogetherMarks(raw) ?? expandAmpersandEquipMarks(raw);
+}
+
+/** Two marks of one family the extraction's key ran together (AS-86): it
+ * keys "CH-1 & CH-2" and "CH-1, CH-2" as CH-1CH-2, "B1, B2" as B1B2. Where
+ * no cell prints the row's name (itd-d1-lab's canopy hoods print theirs in
+ * the key alone), the key is all there is. The family letters and separator
+ * printed twice are two marks; a mark printing them once (B12, AHU-1A) is
+ * one. */
+function runTogetherMarks(raw) {
+  const m = String(raw || "").trim().match(/^([A-Z]{1,8})([\s-]?)(\d{1,4}[A-Z]?)\1\2(\d{1,4}[A-Z]?)$/i);
+  return m ? [`${m[1]}${m[2]}${m[3]}`, `${m[1]}${m[2]}${m[4]}`] : null;
+}
+
+/** A mark printed as one token (markToken), or one with a letter after its
+ * number (044_NY's FOP-8A), as a list prints it (AS-86). */
+function listMark(piece) {
+  const t = String(piece || "").trim();
+  return markToken(t) || (/\d[A-Z]$/i.test(t) && markToken(t.slice(0, -1)));
+}
+
+/** The mark a list continues after `prev` (AS-86): a bare number is `prev`
+ * with that number ("EF-1", "2": EF-2), a bare letter `prev` with that letter
+ * where it prints one ("FOP-8A", "B": FOP-8B). Null unless `prev` is a mark
+ * printed as one token (listMark) and the piece a bare number or letter. */
+function continuedMark(prev, piece) {
+  const t = String(piece || "").trim().toUpperCase();
+  if (!t || !listMark(prev)) return null;
+  const m = String(prev).trim().toUpperCase().match(/^(.*?)(\d{1,4})([A-Z]?)$/);
+  if (!m || !isMarkPrefix(m[1])) return null;
+  if (/^\d{1,4}[A-Z]?$/.test(t)) return `${m[1]}${t}`;
+  if (m[3] && /^[A-Z]$/.test(t)) return `${m[1]}${m[2]}${t}`;
+  return null;
+}
+
+/** The marks a list of one family's units names (AS-86): "EF-1, 2", "EF-1,2",
+ * "EF-1, EF-2", "EF-1 AND 2", "FOP-8A & B". Each after the first continues
+ * the one before it (continuedMark) or is a mark of the first's family
+ * letters. Null for anything else: one mark, two families' marks (a row
+ * naming its air handler and heat pump, "AHU-1, HP-1"), words. */
+export function expandMarkList(raw) {
+  const parts = String(raw || "").trim().split(/\s*(?:,|&|\bAND\b)\s*/i);
+  if (parts.length < 2 || parts.some((part) => !part) || !listMark(parts[0])) return null;
+  const letters = markLetters(normalizeEquipMark(parts[0]));
+  const out = [parts[0].trim()];
+  for (const part of parts.slice(1)) {
+    const next = continuedMark(out[out.length - 1], part)
+      ?? (listMark(part) && markLetters(normalizeEquipMark(part)) === letters ? part.trim() : null);
+    if (!next) return null;
+    out.push(next);
+  }
+  return out;
 }
 
 /** A mark's family letters: its first run of two or more letters (SF-P1-4 →
@@ -1537,7 +1589,9 @@ export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeader
     const printed = (header) => String(row.cells[header]?.text || "").replace(QUOTES_RE, "").trim();
     const reads = (text) => marksRead(text).length > 0;
     const keyMarks = marksRead(tag).join(" ");
-    const asPrinted = keyed && synonyms.find((header) => lettersAndDigits(printed(header)) === lettersAndDigits(tag)
+    // The cell a key was read from is the key as printed under any header
+    // (AS-86): 16_NV prints its furnaces' marks under GENERAL UNIT DATA F ~.
+    const asPrinted = keyed && headers.find((header) => header !== markHeader && lettersAndDigits(printed(header)) === lettersAndDigits(tag)
       && reads(printed(header)) && marksRead(printed(header)).join(" ") !== keyMarks);
     if (asPrinted) {
       tag = printed(asPrinted);
@@ -1561,12 +1615,14 @@ export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeader
 
 /**
  * The text a row's marks are split from (AS-77, the takeoff's rule the
- * reconcile shares): a mark cell printing a comma list, in a table no key
- * filter reads, gives way to a row key that prints none (Baker's SYMBOL
- * "ERU-1, HP-4" beside ERU-1; 044_NY's MARK "FOP-1, 2" beside FOP-1/FOP-2).
+ * reconcile shares): a mark cell printing a comma list of two families'
+ * marks, in a table no key filter reads, gives way to a row key that prints
+ * none (Baker's SYMBOL "ERU-1, HP-4" beside ERU-1). A list of one family's
+ * marks is read as printed (AS-86): the extraction keys 044_NY's "FOP-1, 2"
+ * FOP-1/FOP-2, but runs "EF-1, EF-2" together as EF-1EF-2.
  */
 export function rowMarkText(text, rowKey, willFilter) {
-  return !willFilter && /,/.test(text) && rowKey && !/,/.test(rowKey) ? rowKey : text;
+  return !willFilter && /,/.test(text) && rowKey && !/,/.test(rowKey) && !expandMarkList(text) ? rowKey : text;
 }
 
 /**
@@ -1586,7 +1642,11 @@ export function splitRowMarks(text, willFilter, wordsNamed = false) {
     && !pieces.every((piece) => bareMark(piece)) && (wordsNamed || namedByWords(pieces[0]))) {
     return [String(text).trim().replace(QUOTES_RE, "")];
   }
-  return pieces.flatMap((t) => expandEquipMarks(t));
+  // A bare number or letter after a mark continues it (AS-86): "EF-1/2" and,
+  // split for a key filter, "EF-1, 2" name EF-1 and EF-2.
+  const continued = [];
+  for (const piece of pieces) continued.push(continuedMark(continued[continued.length - 1], piece) ?? piece);
+  return continued.flatMap((t) => expandEquipMarks(t));
 }
 
 /** A row's text in the pieces its marks are split from (splitRowMarks). */

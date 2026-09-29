@@ -20,8 +20,9 @@ import {
 import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
   inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks, markSpellings, unitMarkKey, familyMarkRead,
-  isControlValveHeaderShape,
+  isControlValveHeaderShape, expandMarkList, expandEquipMarks, rowMarkText,
 } from "../src/lib/corpusTakeoff.mjs";
+import { rowKeyOf } from "../src/lib/sheetgraph.ts";
 import { classifyGrid } from "../src/lib/gridClassify.mjs";
 import {
   classifyTakeoffIntent,
@@ -2008,3 +2009,84 @@ test("a control valve or damper table reads its units whatever its identity colu
   assert.equal(classifyGrid(labelled("TAG") as unknown as Parameters<typeof classifyGrid>[0]).type, "VALVE_SCHEDULE");
   for (const header of ["SYMBOL", "DESIGNATION", "UNIT NO.", "ID"]) assert.equal(isControlValveHeaderShape(labelled(header)), false, header);
 });
+
+// AS-86: a row that lists one family's units.
+test("a list of one family's marks names each unit, however it is spelled (AS-86)", () => {
+  for (const list of ["EF-1, 2", "EF-1,2", "EF-1, EF-2", "EF-1,EF-2", "EF-1 & 2", "EF-1 & EF-2", "EF-1 AND 2", "EF-1 and EF-2"]) {
+    assert.deepEqual(expandMarkList(list), ["EF-1", "EF-2"], list);
+  }
+  assert.deepEqual(expandMarkList("EF-1, 2, 3"), ["EF-1", "EF-2", "EF-3"]);
+  assert.deepEqual(expandMarkList("SF-P2-1, 2"), ["SF-P2-1", "SF-P2-2"]);
+  // A letter after the number continues as a letter (044_NY's duplex fuel oil
+  // pumps, FOP-8A & B), or with its number (AHU-1A, 1B).
+  assert.deepEqual(expandMarkList("FOP-8A & B"), ["FOP-8A", "FOP-8B"]);
+  assert.deepEqual(expandMarkList("AHU-1A, 1B"), ["AHU-1A", "AHU-1B"]);
+  // Not a list of one family's units: two families' marks (a row naming its
+  // air handler and heat pump), one mark, words, a note.
+  for (const text of ["AHU-1, HP-1", "ERU-1, HP-4", "DFC-1 , DCU-1", "EF-1", "GENERAL EXHAUST, EF-1", "EF-1, NOTE 2", "EF-1 & HP-2", "AHU, AHU-2"]) {
+    assert.equal(expandMarkList(text), null, text);
+  }
+  // A bare number or letter after a "/" continues the mark before it, as
+  // after a comma a key filter splits on; after words or a lone mark with no
+  // letter it names nothing new.
+  assert.deepEqual(splitRowMarks("EF-1/2", false), ["EF-1", "EF-2"]);
+  assert.deepEqual(splitRowMarks("FOP-8A/B", false), ["FOP-8A", "FOP-8B"]);
+  assert.deepEqual(splitRowMarks("EF-1, 2", true), ["EF-1", "EF-2"]);
+  assert.deepEqual(splitRowMarks("EF-1, 2, 3", true), ["EF-1", "EF-2", "EF-3"]);
+  assert.deepEqual(splitRowMarks("EF-1/A", false), ["EF-1", "A"]);
+  assert.deepEqual(splitRowMarks("GENERAL EXHAUST 1, 2", true), ["GENERAL EXHAUST 1", "2"]);
+  assert.deepEqual(splitRowMarks("GROUP REHEARSAL 112/111 - SUPPLY", true), ["GROUP REHEARSAL 112", "111 - SUPPLY"]);
+  // Two marks of one family the extraction's key ran together are two; a mark
+  // printing its letters once is one, however it ends.
+  assert.deepEqual(expandEquipMarks("CH-1CH-2"), ["CH-1", "CH-2"]);
+  assert.deepEqual(expandEquipMarks("B1B2"), ["B1", "B2"]);
+  assert.deepEqual(expandEquipMarks("UH-1UH-2"), ["UH-1", "UH-2"]);
+  for (const one of ["B12", "EF-12", "AHU-1A", "FOP-8AB", "CV-CHW-BP-A", "SF-P1-12"]) assert.deepEqual(expandEquipMarks(one), [one], one);
+  // A printed list of one family's marks is read as printed, not as the key
+  // the extraction ran together; two families' still give way to the key.
+  assert.equal(rowMarkText("EF-1, EF-2", "EF-1EF-2", false), "EF-1, EF-2");
+  assert.equal(rowMarkText("FOP-1, 2", "FOP-1/FOP-2", false), "FOP-1, 2");
+  assert.equal(rowMarkText("ERU-1, HP-4", "ERU-1", false), "ERU-1");
+});
+
+test("a row listing two units reads both in the takeoff and the reconcile, keyed as the extraction keys it (AS-86)", () => {
+  // Each spelling in the mark cell, the row keyed as the extraction keys that
+  // spelling (rowKeyOf: EF-1/EF-2, EF-1EF-2, EF-12...), QTY 2.
+  const spellings = ["EF-1 & 2", "EF-1, 2", "EF-1,2", "EF-1 & EF-2", "EF-1, EF-2", "EF-1/EF-2", "EF-1/2"];
+  const listed = (title: string, header: string, text: string) => ({ tables: [as77Table("m.pdf#5", title, [header, "CFM", "QTY"], [
+    { __key: rowKeyOf(text, "equipment")!.key, [header]: text, CFM: "400", QTY: "2" },
+  ])] });
+  const qty = (graph: object, family: string) => (compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string; scheduled_qty?: number }> }>)[family]?.items
+    .map((i) => `${markKey(i.tag)}=${i.scheduled_qty}`).sort();
+  for (const text of spellings) {
+    // A fan schedule, read through the fan's key filter, and a pump schedule,
+    // read by its title alone; under MARK and under a header the extraction
+    // merged with its group's (16_NV's GENERAL UNIT DATA F ~).
+    for (const header of ["MARK", "GENERAL UNIT DATA F ~"]) {
+      const fans = listed("EXHAUST FAN SCHEDULE", header, text);
+      assert.deepEqual(as77Marks(fans), { FAN: { compile: ["EF1", "EF2"], reconcile: ["EF1", "EF2"] } }, `${text} ${header}`);
+      assert.deepEqual(qty(fans, "FAN"), ["EF1=1", "EF2=1"], `${text} ${header} QTY`);
+      const pumps = listed("PUMP SCHEDULE", header, text.replace(/EF/g, "P"));
+      assert.deepEqual(as77Marks(pumps), { PUMP: { compile: ["P1", "P2"], reconcile: ["P1", "P2"] } }, `${text} ${header} pumps`);
+    }
+  }
+  // Where the key is all the row prints (itd-d1-lab's canopy hoods), a key
+  // the extraction ran together from two marks is read as the two.
+  const keyOnly = (key: string) => ({ tables: [as77Table("m.pdf#12", "CANOPY HOOD SCHEDULE", ["CFM", "REMARKS"], [{ __key: key, CFM: "1800", REMARKS: "1 , 2" }])] });
+  assert.deepEqual(as77Marks(keyOnly(rowKeyOf("CH-1 & CH-2", "equipment")!.key)), { RANGE_HOOD: { compile: ["CH1", "CH2"], reconcile: ["CH1", "CH2"] } });
+  // 044_NY's duplex fuel oil pumps, under a header the extraction merged with
+  // the schedule's title, keyed FOP-8AB.
+  const duplex = { tables: [as77Table("n.pdf#21", "BOILER FUEL OIL PUMP SCHEDULE", ["SUMMER BOILER FUEL OIL PUMP SCHEDULE MARK", "SUMMER BOILER FUEL OIL PUMP SCHEDULE GPH"], [
+    { __key: rowKeyOf("FOP-8A & B", "equipment")!.key, "SUMMER BOILER FUEL OIL PUMP SCHEDULE MARK": "FOP-8A & B", "SUMMER BOILER FUEL OIL PUMP SCHEDULE GPH": "220" },
+  ])] };
+  assert.equal(duplex.tables[0].rows[0].key, "FOP-8AB");
+  assert.deepEqual(as77Marks(duplex), { PUMP: { compile: ["FOP8A", "FOP8B"], reconcile: ["FOP8A", "FOP8B"] } });
+  // Negative controls. A key printing one mark's letters once stays one unit,
+  // with no cell to read it from (CH-1/2 keyed CH-12 names CH-12). A row
+  // naming two families' units under one family's title reads that family's
+  // (Baker's ERU-1, HP-4, keyed ERU-1).
+  assert.deepEqual(as77Marks(keyOnly(rowKeyOf("CH-1/2", "equipment")!.key)), { RANGE_HOOD: { compile: ["CH12"], reconcile: ["CH12"] } });
+  const baker = { tables: [as77Table("o.pdf#8", "ENERGY RECOVERY UNIT SCHEDULE (WITH HEAT PUMP)", ["SYMBOL", "CFM"], [{ __key: "ERU-1", SYMBOL: "ERU-1, HP-4", CFM: "2000" }])] };
+  assert.deepEqual(as77Marks(baker).ERV, { compile: ["ERU1"], reconcile: ["ERU1"] });
+});
+

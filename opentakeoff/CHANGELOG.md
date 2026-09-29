@@ -1,5 +1,22 @@
 # Changelog
 
+- **Takeoff and reconcile: a row listing one family's units names each,
+  however the list is spelled.** "P-1, 2" under a pump schedule was one pump
+  tagged "P-1, 2", "EF-1, 2" under a fan schedule EF-1 twice, "EF-1/2" EF-1
+  alone, and a key the extraction ran together from the list ("EF-1, EF-2"
+  keyed EF-1EF-2) one unit, so a plan's EF-2 matched no schedule row.
+  Merging two rows into one listing both, in seven spellings keyed as the
+  extraction keys each, changed 800 family readings on the 97 dev documents.
+  A comma, "&" or AND list of one family's marks, a bare number or letter
+  after a mark (EF-1/2, FOP-8A & B), and a key run together from two of one
+  family's marks (CH-1CH-2) now name each unit, in the takeoff and the
+  reconcile alike; the key as printed (AS-84) is read from any column that
+  prints it. Two families' marks in one row (AHU-1, HP-1) stay as they were.
+  On the dev corpus only 044_NY changes: its duplex fuel oil pumps FOP-8A &
+  B, one pump FOP-8AB, are two (the reconcile 2,654 -> 2,655 rows), and the
+  check's 800 differences fall to 4 (`corpusTakeoff.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-86).
+
 - **Takeoff and reconcile: a row's mark column is read under any name
   drafters give it.** A row was named by its mark column only under MARK,
   SYMBOL, DESIGNATION and a few other names spelled exactly so; under TAG,
