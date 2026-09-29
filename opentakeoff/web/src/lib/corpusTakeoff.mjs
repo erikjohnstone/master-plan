@@ -1231,7 +1231,10 @@ export function familyTableGate(table, spec, family = null) {
     const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
     if ((blankTitle || genericValveTitle) && blankGate) {
       if (!blankHeaderOk) return null;
-      if (blankServiceHint && headerValveShape) {
+      // Each valve is one water's, whatever the shape of its mark: a space
+      // hid 009_FL's CV 1 from the valve shape, and chilled and hot water
+      // both counted it (AS-82).
+      if (blankServiceHint) {
         const service = valveTableService(table);
         if (service === "MIXED") rowService = blankServiceHint;
         else if (blankServiceHint === "CHW" && service === "HHW") return null;
@@ -1361,22 +1364,70 @@ export function familyMarkRead(gate, spec, one, canon, { countKeyed = false } = 
   let read = 2;
   if (gate.catchAll) {
     read = Math.max(reads(blankKeyRe), reads(keyRe));
+    // A general schedule lists equipment: its marks in any spelling of the
+    // separator between their letters and their number, as below (AS-82).
+    if (!read) read = Math.max(markSpelledRead(blankKeyRe, one), markSpelledRead(keyRe, one));
   } else if (gate.filterRe) {
     read = reads(gate.filterRe);
     if (!read && gate.titledAlso.some((re) => markMatchesKeyRe(re, one, canon))) read = 1;
-  } else if (gate.coTitled?.some((named) => markMatchesKeyRe(named.markRe, one, canon)
-      && !markMatchesKeyRe(named.titledOnlyRe, one, canon))
+    // Under a title that vouches for the family (its own, its other title, a
+    // control valve schedule's), a mark its rules read in another spelling of
+    // the separator between its letters and its number is its too (AS-82):
+    // AHU1 as AHU-1, 066_MT's H 1 as H-1, 16_NV's C-1 as C1. An untitled
+    // table's marks are read as printed (a short glued mark there may be a
+    // level, a hardware set or a sensor).
+    if (!read && (gate.titleOk || gate.altOk || gate.genericValveTitle)) {
+      read = Math.max(markSpelledRead(gate.filterRe, one),
+        gate.titledAlso.some((re) => markSpelledRead(re, one)) ? 1 : 0);
+    }
+  } else if (gate.coTitled?.some((named) => spelledRead(named.markRe, one, canon)
+      && !spelledRead(named.titledOnlyRe, one, canon))
     && ![keyRe, blankKeyRe, spec?.altKeyRe, spec?.titledKeyRe].some((re) => markMatchesKeyRe(re, one, canon))) {
     // Another family the title names reads the mark by its own rule (as
-    // printed or in one of its forms, 1-FCU-1), not one only its own title
-    // reads (FCU's F-1), and none of this family's own rules reads it: it is
-    // that family's unit (AS-80).
+    // printed or in one of its forms, 1-FCU-1, or in another spelling of its
+    // separator, SCU1, as it reads it under that title: AS-82), not one only
+    // its own title reads (FCU's F-1), and none of this family's own rules
+    // reads it: it is that family's unit (AS-80).
     return 0;
   }
   if (!read) return 0;
   if (gate.unvouched && ((!countKeyed && !unvouchedMarkNamesUnit(one))
-    || markMatchesKeyRe(titledOnlyRe, one, canon))) return 0;
+    || spelledRead(titledOnlyRe, one, canon))) return 0;
   return gate.hostOk ? 1 : read;
+}
+
+/**
+ * A mark in each spelling of the separator between its letters and its number
+ * (AS-82): AHU-1, AHU 1 and AHU1, as drafters print one mark. None where the
+ * mark does not begin with letters and a number.
+ */
+export function markSpellings(mark) {
+  const m = String(mark || "").trim().match(/^([A-Z]{1,8})[\s\-]?(\d.*)$/i);
+  return m ? [`${m[1]}-${m[2]}`, `${m[1]} ${m[2]}`, `${m[1]}${m[2]}`] : [];
+}
+
+/** How a mark rule reads a mark in another spelling of the separator after
+ * its letters (AS-82): 2 as printed but for that separator, 1 only in one of
+ * the mark's forms (markFormsForKeyRe), 0 not at all. */
+function markSpelledRead(re, one) {
+  if (!re) return 0;
+  const [printed = "", ...forms] = markFormsForKeyRe(markCanon(one));
+  if (markSpellings(printed).some((s) => re.test(s))) return 2;
+  return forms.some((form) => markSpellings(form).some((s) => re.test(s))) ? 1 : 0;
+}
+
+/** A mark rule's reading of a mark as printed, in its forms or in another
+ * spelling of its separator (AS-82). */
+function spelledRead(re, one, canon) {
+  return markMatchesKeyRe(re, one, canon) || markSpelledRead(re, one) > 0;
+}
+
+/** A unit's key across the tables that list it (AS-82): its mark, upper-cased
+ * without spaces, with the separator between its letters and its number
+ * spelled one way (ET35-1 and ET-35-1 are ET-35-1; AHU-11 and AHU1-1 stay
+ * two). */
+export function unitMarkKey(canon) {
+  return String(canon || "").toUpperCase().replace(/\s+/g, "").replace(/^([A-Z]{1,8})-?(?=\d)/, "$1-");
 }
 
 const QUOTES_RE = /^["'\s]+|["'\s]+$/g;
@@ -1582,10 +1633,10 @@ function uniqueFamily(graph, spec, family) {
         if (!read) continue;
         const widened = read === 1;
         if (mode === "scan") {
-          if (!widened && !countKeyedIdentCol) printedCanons.add(canon);
+          if (!widened && !countKeyedIdentCol) printedCanons.add(unitMarkKey(canon));
           continue;
         }
-        if (widened && printedCanons.has(canon)) continue;
+        if (widened && printedCanons.has(unitMarkKey(canon))) continue;
         // B-3: a count-keyed table emits one line per PHYSICAL ROW. Its rows
         // are not tag-identified, so cross-row dedupe would collapse real,
         // distinct pieces of equipment (16 real silencers -> 2). Ordinary
@@ -1596,8 +1647,10 @@ function uniqueFamily(graph, spec, family) {
           // silencers instead of collapsing into one.
           keys.add(`${canon}#${table.sheet}#${rowIdx}`);
         } else {
-          if (keys.has(canon)) continue;
-          keys.add(canon);
+          // One unit however the separator after its letters is spelled in
+          // each table that lists it (AS-82: 26_CA's ET-35-1 and ET 35-1).
+          if (keys.has(unitMarkKey(canon))) continue;
+          keys.add(unitMarkKey(canon));
         }
         const bbox = identityHeaderRe
           ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)

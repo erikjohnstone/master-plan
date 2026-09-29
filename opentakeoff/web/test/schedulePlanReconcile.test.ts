@@ -19,7 +19,7 @@ import {
 } from "../src/lib/schedulePlanReconcile.mjs";
 import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
-  inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks,
+  inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks, markSpellings, unitMarkKey, familyMarkRead,
 } from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
@@ -1659,4 +1659,128 @@ test("a family's own identity column names a row before a MARK the row prints fi
   const gate = familyTableGate(scheduleTableView(chw.tables[0]), HVAC_FAMILY_SPECS.CHW_CONTROL_VALVE, "CHW_CONTROL_VALVE")!;
   assert.deepEqual(gate.identity, { identityHeaderRe: HVAC_FAMILY_SPECS.CHW_CONTROL_VALVE.identityHeaderRe, unitMark: false });
   assert.equal(gate.wordsNamed, false);
+});
+
+// AS-82: one mark however the separator between its letters and its number
+// is printed (AHU-1, AHU 1, AHU1).
+type Spell = (letters: string, n: string) => string;
+const as82Forms: Record<string, Spell> = {
+  hyphen: (l, n) => `${l}-${n}`, space: (l, n) => `${l} ${n}`, glued: (l, n) => `${l}${n}`,
+};
+
+test("a family reads its marks under its own title in any spelling of the separator after their letters, in the takeoff and the reconcile alike (AS-82)", () => {
+  const graph = (s: Spell) => ({ tables: [
+    as77Table("m.pdf#1", "AIR HANDLING UNIT SCHEDULE", ["MARK", "CFM"], [{ MARK: s("AHU", "1"), CFM: "4000" }, { MARK: s("AHU", "2"), CFM: "3000" }]),
+    as77Table("m.pdf#2", "BOILER SCHEDULE", ["MARK", "MBH"], [{ MARK: s("B", "1"), MBH: "1000" }, { MARK: s("B", "2"), MBH: "1000" }]),
+    as77Table("m.pdf#3", "HUMIDIFIER SCHEDULE", ["PLAN CODE", "LBS/HR"], [{ "PLAN CODE": s("H", "1"), "LBS/HR": "40" }]),
+    as77Table("m.pdf#4", "ENERGY RECOVERY VENTILATOR SCHEDULE", ["MARK", "CFM"], [{ MARK: s("C", "1"), CFM: "900" }]),
+    as77Table("m.pdf#5", "AIR COOLED CHILLER SCHEDULE", ["MARK", "TONS"], [{ MARK: s("CH", "1"), TONS: "120" }]),
+    as77Table("m.pdf#6", "PRESSURE REDUCING VALVE SCHEDULE", ["MARK", "SIZE"], [{ MARK: s("PRV", "1A"), SIZE: "2\"" }]),
+    // The family's other title reads by its other rule (DCU-n), likewise.
+    as77Table("m.pdf#7", "DUCTLESS SPLIT SYSTEM SCHEDULE", ["MARK", "MBH"], [{ MARK: s("DCU", "1"), MBH: "24" }]),
+  ] });
+  const read = Object.fromEntries(Object.entries(as82Forms).map(([name, s]) => [name, as77Marks(graph(s))]));
+  assert.deepEqual(read.space, read.hyphen);
+  assert.deepEqual(read.glued, read.hyphen);
+  const one = (k: string) => ({ compile: [k], reconcile: [k] });
+  assert.deepEqual(read.hyphen.AHU, { compile: ["AHU1", "AHU2"], reconcile: ["AHU1", "AHU2"] });
+  assert.deepEqual(read.hyphen.BOILER, { compile: ["B1", "B2"], reconcile: ["B1", "B2"] });
+  assert.deepEqual(read.hyphen.HUMIDIFIER, one("H1"));
+  assert.deepEqual(read.hyphen.ERV, one("C1"));
+  assert.deepEqual(read.hyphen.AIR_COOLED_CHILLER, one("CH1"));
+  assert.deepEqual(read.hyphen.PRESSURE_REDUCING_VALVE, one("PRV1A"));
+  assert.deepEqual(read.hyphen.CONDENSING_UNIT, one("DCU1"));
+  for (const name of Object.keys(read)) as77Parity(read[name], name);
+  // Read as printed but for the separator ranks as printed; read only in one
+  // of the mark's forms (a building's 1-AHU1), as a widened reading (AS-62).
+  const ahu = HVAC_FAMILY_SPECS.AHU;
+  const ahuGate = familyTableGate(scheduleTableView(graph(as82Forms.glued).tables[0]), ahu, "AHU")!;
+  for (const [one, rank] of [["AHU-1", 2], ["AHU 1", 2], ["AHU1", 2], ["1-AHU1", 1], ["1-AHU-1", 1], ["ACCU1", 0]] as Array<[string, number]>) {
+    assert.equal(familyMarkRead(ahuGate, ahu, one, one.toUpperCase().replace(/\s+/g, "")), rank, one);
+  }
+  assert.deepEqual(markSpellings("AHU 1"), ["AHU-1", "AHU 1", "AHU1"]);
+  assert.deepEqual(markSpellings("1-VAV-1"), []);
+  assert.deepEqual(markSpellings("CV-CHW-BP-A"), []);
+});
+
+test("a general schedule and a control valve schedule read a mark in any spelling of its separator, each valve once under its table's water; an untitled table reads marks as printed (AS-82)", () => {
+  const graph = (s: Spell) => ({ tables: [
+    as77Table("m.pdf#14", "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE", ["MARK", "DESCRIPTION"], [
+      { MARK: s("PF", "1"), DESCRIPTION: "CHEMICAL POT FEEDER" }, { MARK: s("FM", "1"), DESCRIPTION: "FLOW METER" },
+    ]),
+    // 009_FL's HYDRONIC CONTROL VALVE SCHEDULE, which names no water.
+    as77Table("m.pdf#20", "HYDRONIC CONTROL VALVE SCHEDULE", ["MARK", "GPM", "MAX PRESSURE DROP (FT)", "MIN CV", "TYPE"], [
+      { MARK: s("CV", "1"), GPM: "12", "MAX PRESSURE DROP (FT)": "5", "MIN CV": "4", TYPE: "2-WAY" },
+      { MARK: s("CV", "2"), GPM: "8", "MAX PRESSURE DROP (FT)": "5", "MIN CV": "3", TYPE: "2-WAY" },
+    ]),
+  ] });
+  const read = Object.fromEntries(Object.entries(as82Forms).map(([name, s]) => [name, as77Marks(graph(s))]));
+  assert.deepEqual(read.space, read.hyphen);
+  assert.deepEqual(read.glued, read.hyphen);
+  assert.deepEqual(read.hyphen.CHEMICAL_POT_FEEDER, { compile: ["PF1"], reconcile: ["PF1"] });
+  assert.deepEqual(read.hyphen.FLOW_METER, { compile: ["FM1"], reconcile: ["FM1"] });
+  assert.deepEqual(read.hyphen.CHW_CONTROL_VALVE, { compile: ["CV1", "CV2"], reconcile: ["CV1", "CV2"] });
+  assert.equal(read.hyphen.HHW_CONTROL_VALVE, undefined);
+  // The water is the table's for each valve whatever the shape of its mark;
+  // the shape itself is read as printed, so 089_FL's concrete beam CB1 is no
+  // circuit setter (CB-) and 017_MD's DDC matrix's V1 is no valve.
+  for (const key of ["CV-1", "V-1", "CB-1"]) assert.equal(hasValveOrDamperMark({ rows: [{ key }] }), true, key);
+  for (const key of ["CB1", "V1", "VAV1", "AHU-1"]) assert.equal(hasValveOrDamperMark({ rows: [{ key }] }), false, key);
+  // An untitled valve grid whose marks print a space is split by water too.
+  const grid = (mark: string) => ({ tables: [as77Table("m.pdf#21", "", ["MARK", "GPM", "SERVED"], [{ MARK: mark, GPM: "12", SERVED: "AHU-1" }])] });
+  for (const mark of ["CV-1", "CV 1"]) {
+    const marks = as77Marks(grid(mark));
+    assert.deepEqual(marks.CHW_CONTROL_VALVE, { compile: ["CV1"], reconcile: ["CV1"] }, mark);
+    assert.equal(marks.HHW_CONTROL_VALVE, undefined, mark);
+  }
+  // An untitled table's marks are read as printed: B-1 is a boiler there, as
+  // before, a glued B1 (a level, a grid line) is not.
+  const untitled = (mark: string) => ({ tables: [as77Table("m.pdf#27", "", ["MARK", "MBH", "MANUFACTURER"], [{ MARK: mark, MBH: "1000", MANUFACTURER: "X" }])] });
+  assert.deepEqual(as77Marks(untitled("B-1")).BOILER, { compile: ["B1"], reconcile: ["B1"] });
+  assert.equal(as77Marks(untitled("B1")).BOILER, undefined);
+  // A mark only a title of the family vouches for is no unit in a general
+  // schedule, in any spelling: C1 and C-1 are no ERVs there.
+  for (const mark of ["C1", "C-1", "C 1"]) {
+    const general = { tables: [as77Table("m.pdf#9", "EQUIPMENT SCHEDULE", ["MARK", "DESCRIPTION"], [{ MARK: mark, DESCRIPTION: "UNIT" }])] };
+    assert.equal(as77Marks(general).ERV, undefined, mark);
+  }
+});
+
+test("one unit however each table that lists it spells the separator after its letters, citing its own schedule (AS-82)", () => {
+  // 26_CA: ET-35-1 in its EXPANSION TANK schedule, ET 35-1 on a riser diagram
+  // the extraction reads as an untitled table.
+  const tanks = { tables: [
+    as77Table("m.pdf#10", "EXPANSION TANK (SPECIFICATION SECTION 23 41 00)", ["DESIGNATION", "TANK VOLUME (GALLONS)"], [{ DESIGNATION: "ET-35-1", "TANK VOLUME (GALLONS)": "211" }]),
+    as77Table("m.pdf#57", "", ["COL1", "COL2"], [{ __key: "ET 35-1", COL1: "ET 35-1", COL2: "10\" CHWS/R" }]),
+  ] };
+  const items = (compileHvacTakeoff(null, tanks).categories as Record<string, { items: Array<{ tag: string; sheet_id: string }> }>).EXPANSION_TANK.items;
+  assert.deepEqual(items.map((i) => `${i.tag}@${i.sheet_id}`), ["ET-35-1@m.pdf#10"]);
+  assert.equal(unitMarkKey("ET35-1"), unitMarkKey("ET-35-1"));
+  assert.equal(unitMarkKey("AHU 1"), "AHU-1");
+  assert.notEqual(unitMarkKey("AHU-11"), unitMarkKey("AHU1-1"));
+  assert.notEqual(unitMarkKey("1-VAV-1"), unitMarkKey("1-VAV1"));
+  // A glued mark under its own title keeps its schedule's cite where a general
+  // schedule lists it with a hyphen.
+  const ahu = { tables: [
+    as77Table("m.pdf#5", "AIR HANDLING UNIT SCHEDULE", ["MARK", "CFM"], [{ MARK: "AHU1", CFM: "4000" }]),
+    as77Table("m.pdf#9", "EQUIPMENT SCHEDULE", ["MARK", "DESCRIPTION"], [{ MARK: "AHU-1", DESCRIPTION: "AIR HANDLER" }]),
+  ] };
+  const units = (compileHvacTakeoff(null, ahu).categories as Record<string, { items: Array<{ tag: string; sheet_id: string }> }>).AHU.items;
+  assert.deepEqual(units.map((i) => `${i.tag}@${i.sheet_id}`), ["AHU1@m.pdf#5"]);
+  const [row] = reconcileScheduleFamilyFromGraph(ahu, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "AHU")!) as Array<{ tag: string; schedule_cite: { sheet: string } }>;
+  assert.equal(row.schedule_cite.sheet, "m.pdf#5");
+  // A title naming two families: the one whose rule reads the mark in another
+  // spelling holds it, as it holds the hyphenated mark (AS-80).
+  const split = (mark: string) => ({ tables: [as77Table("m.pdf#8", "OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE", ["MARK", "MBH"], [{ MARK: mark, MBH: "36" }])] });
+  for (const mark of ["SCU-1", "SCU1"]) {
+    const marks = as77Marks(split(mark));
+    assert.deepEqual(marks.HEAT_PUMP, { compile: ["SCU1"], reconcile: ["SCU1"] }, mark);
+    assert.equal(marks.CONDENSING_UNIT, undefined, mark);
+  }
+  // A mark the other family reads under its own title only (ERV's C1) makes
+  // no family yield, in any spelling (AS-80).
+  const both = (mark: string) => as77Marks({ tables: [as77Table("m.pdf#8", "GAS-FIRED FURNACE AND ENERGY RECOVERY VENTILATOR SCHEDULE", ["MARK", "CFM"], [{ MARK: mark, CFM: "900" }])] });
+  for (const mark of ["C1", "C-1", "C 1"]) {
+    assert.deepEqual(both(mark), { FURNACE: { compile: ["C1"], reconcile: ["C1"] }, ERV: { compile: ["C1"], reconcile: ["C1"] } }, mark);
+  }
 });

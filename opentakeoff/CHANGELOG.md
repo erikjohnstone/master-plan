@@ -1,5 +1,22 @@
 # Changelog
 
+- **Takeoff and reconcile: a mark is read however the separator after its
+  letters is printed.** Drafters print one mark as AHU-1, AHU 1 and AHU1,
+  but most families' mark rules want one spelling: under its own AIR
+  HANDLING UNIT SCHEDULE a glued AHU1 was no air handler, B1 under the
+  BOILER SCHEDULE no boiler. Respelling the marks of the 97 dev documents
+  changed 196 family readings, on 40 documents losing 1 to 21 units a
+  family without a word. Under a title that vouches for the family, and in
+  a general schedule, a mark its rules read in another spelling is now its
+  own; an untitled table's marks are read as printed. A control valve table
+  that names no water splits its valves by the table's water whatever
+  their marks' shape (009_FL's CV 1 was counted as chilled and as hot
+  water's), and the takeoff keys a unit across its tables by one spelling
+  (26_CA's ET-35-1 and ET 35-1 were two tanks). On the dev corpus only
+  26_CA's expansion tanks change (−1); the check's 196 differences fall to
+  3, each an untitled table (`corpusTakeoff.mjs`, ASSEMBLIES_BUG_CATALOGUE
+  AS-82).
+
 - **Takeoff and reconcile: a schedule row named by the room it serves is
   one line.** 028_TX's NOISE CONTROL DUCT SILENCER SCHEDULE names its rows
   by the room and the air they serve ("GROUP REHEARSAL 112/111 -

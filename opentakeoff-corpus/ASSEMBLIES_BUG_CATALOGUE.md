@@ -5795,3 +5795,103 @@ base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377 of 38
 - A row of room names printed like marks alone (VEST 212/VEST 214) splits as before: by its shape it lists marks.
 - A row named by words in a table read by its title alone becomes one unit named by its whole text. A plan tag
   never names such a unit, so the reconcile finds no match for it, as before.
+
+## AS-82 — a mark printed without its hyphen was no unit under its own schedule's title (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by a metamorphic check of the takeoff and the reconcile on the 97 cached dev documents. Each
+row whose name is a list of plain marks (9,680 row names) was respelled with a hyphen, a space and nothing between
+its letters and its number (AHU-1, AHU 1, AHU1), in its key and its mark cells. Drafters print one mark all three
+ways, and `markKey` already reads them as one, so the takeoff and the reconcile should read the same units under
+all three spellings. Instead, 196 family readings changed:
+- 187 with no separator. Most families' mark rules want a separator after the family's letters: AHU's
+  `^(?:AHU|AC)[\s\-]`, BOILER's `^(?:B[\s\-]|BOILER)`, the chiller's, the water heater's, the cooling tower's, the
+  PRV's and about 30 more. Under its own AIR HANDLING UNIT SCHEDULE, AHU1 was no air handler; B1 under the BOILER
+  SCHEDULE was no boiler, and so on. The whole schedule was missing without a word: on 40 documents the glued
+  spelling lost 1 to 21 units a family.
+- 9 with a space or a hyphen. 066_MT's HUMIDIFIER SCHEDULE reads H-1 but not H 1 (the rule wants a hyphen), and
+  16_NV's ERV schedule reads C1 but not C-1 (its titled rule wants no separator). On 009_FL, its HYDRONIC CONTROL
+  VALVE SCHEDULE names no water. The table's water split its valves only where their marks had a valve's shape
+  (`hasValveOrDamperMark`, "CV-"), so with a space, CV 1 and CV 2 were counted as chilled water's and as hot
+  water's.
+
+A census of units one takeoff counts under two spellings found one on the documents as printed: 26_CA's
+expansion tank ET-35-1 in its EXPANSION TANK schedule (sheet 10), counted again as ET 35-1 from a riser diagram
+(sheet 57) that the extraction reads as an untitled equipment table. The takeoff's key across tables was the mark as
+printed, so the two spellings were two tanks.
+
+**Fix (`corpusTakeoff.mjs`, the gate and mark reading the takeoff and the reconcile share, AS-77):**
+- `markSpellings` gives a mark in each spelling of the separator between its letters and its number.
+- `familyMarkRead`: under a title that vouches for the family (its own, its other title, a control valve
+  schedule's), a mark its rules read in another spelling is its own. So is one in a general schedule (MISCELLANEOUS,
+  EQUIPMENT, SPECIALTY EQUIPMENT, HYDRONIC ACCESSORIES).
+  - The reading ranks as printed; read only in one of the mark's forms (a building's 1-AHU1), it ranks as a widened
+    reading (AS-62).
+  - So a glued mark keeps its own schedule's cite where a general schedule prints it with a hyphen.
+- A mark a family reads under its own title only (ERV's C1) stays no unit in a general schedule, in any spelling.
+- A title naming two families (AS-80) yields a mark to the other family where that family reads it in any
+  spelling.
+- A control valve table that names no water, or has no title, splits its valves by the table's water wherever the
+  family takes its water from the table, whatever the shape of their marks: CV 1 is one water's, as CV-1 is.
+  - The shape itself is still read as printed. Read in any spelling, it made 017_MD's DDC points matrix (V1 to V4)
+    a valve grid, adding a reconcile row, and 089_FL's BOND BEAM/CONCRETE BEAM schedule (CB1) a valve schedule. That
+    widening was measured and dropped.
+- `unitMarkKey`, the takeoff's key for a unit across the tables that list it, spells the separator after a mark's
+  letters one way: ET-35-1 and ET 35-1 are one tank, while AHU-11 and AHU1-1 stay two.
+- An untitled table's marks are read as printed, as before. There a short glued mark (B1, H1) may be a level, a
+  hardware set or a sensor.
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-81): only 26_CA changes. Its riser diagram's ET 35-1 leaves the
+  takeoff (expansion tanks −1). The reconcile (2,619 rows) and every other document are byte-identical.
+- **The metamorphic check:** 196 → 3 differences, each the untitled-table rule:
+  - 016_NY's untitled listing of its boilers holds reconcile rows for B-1 and B-2, and none for a glued B1;
+  - 017_MD's DDC matrix lists H1 and H2; with a hyphen they would read as humidifiers there, as they would before.
+- **The metamorphic order check:** 0 differences, as at AS-81.
+- **Units one takeoff counts under two spellings:** 1 → 0.
+- **Grid labels** (`classifyGrid`, the valve and points-list shapes) on the 1,654 tables: 0 change.
+- **Evals:** the five tiers' attribute evals (line for line, detail included; dev 4 counts 26_CA's 189 compile items
+  for 190), the typical eval (130/244), GATE C dev (227/244), the binding, question and reading evals and the
+  unseen audit's replay identical to AS-81's (058_CA's replay errors as it did).
+- **Held-out** (aggregates only, 0 graphs built), each as with AS-81:
+  - GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented;
+  - held-out 2 334/472;
+  - GATE 5 21/91;
+  - GATE C 35/91.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-82):
+- Under their own titles, in the takeoff and the reconcile, three spellings read alike: AHU, BOILER, HUMIDIFIER,
+  ERV (C1), AIR_COOLED_CHILLER, PRESSURE_REDUCING_VALVE (PRV-1A), and CONDENSING_UNIT under its other title (DCU-1).
+- A general schedule's pot feeder and flow meter read alike too.
+- 009_FL's valve schedule in three spellings: CV1 and CV2 once each, as chilled water's. An untitled valve grid
+  whose marks print a space (CV 1) is chilled water's only, as with CV-1.
+- A mark's shape is read as printed: CV-1, V-1 and CB-1 are valve marks; CB1, V1, VAV1 and AHU-1 are not.
+- Negative controls:
+  - an untitled table's B-1 is a boiler and its B1 is not;
+  - C1, C-1 and C 1 are no ERVs in a general schedule.
+- 26_CA's tank is counted once, citing its schedule; `unitMarkKey` keeps AHU-11 and AHU1-1 apart.
+- A glued AHU1 under its title keeps that schedule's cite, in the takeoff and the reconcile, against a general
+  schedule's AHU-1.
+- A co-titled schedule's SCU1 is a heat pump alone, as SCU-1 is. A furnace and ERV title keeps C1 in both families
+  in every spelling.
+- `familyMarkRead`'s ranks: 2 for AHU-1, AHU 1 and AHU1; 1 for 1-AHU1 and 1-AHU-1; 0 for ACCU1.
+
+16 mutations each fail a test beyond the baseline's.
+
+**Guard:** web typecheck clean; lint 0 errors (the 3 known warnings); the web suite's 3,963 tests fail only AS-1's
+three base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377 of 380, as at AS-81.
+
+**UI proof:** the dev server started on the change, deterministic readings.
+- On 26_CA the Takeoff canvas's reconcile equals `reconcile_schedule_plan` over MCP row for row: EXPANSION_TANK's 9
+  rows, AIR_SEPARATOR's none (7 checks). The reconcile keeps a row for each schedule that lists a unit, so the tank
+  has its schedule's row and its riser diagram's, both the one unit the takeoff counts.
+- Takeoff → Assemblies is byte-identical to `apply_assemblies` over MCP on 26_CA (189 units, 290 records, 2,262
+  lines: the tank and its record fewer than at AS-81, every line the same; 19 checks) and on 069_ID (11 units, 24
+  records, 127 lines; 17 checks).
+
+**Left as it is (measured, disclosed):**
+- An untitled table reads a mark only as printed where the family's rule asks for a separator (above).
+- A mark's valve or damper shape is read as printed (above).
+- The key across tables folds only the separator after a mark's leading letters. A building's mark printed
+  1-AHU-1 in one table and 1-AHU1 in another would be two units. No document on the corpus prints one so.
+- A mark printed with a typographic dash (U+2010 to U+2015, U+2212) is read as printed. A census of the 97
+  documents found none among 19,461 row names and mark cells, and one among 73,941 plan tags.
