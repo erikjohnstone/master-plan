@@ -1,5 +1,41 @@
 # Changelog
 
+- **Control intent: the binder finds more of each unit's control drawings.**
+  On a second tier of ten dev documents from new drafters, the binder bound
+  61% of the drawings their keys give each unit. It now binds 80%, with
+  precision 94.3% → 95.3%. The first tier's dev documents go from 92.9% to
+  93.8%.
+  - A tag printed with a kind before a group and a number ("GWP-A-1",
+    "HX - A - 1", "WHSE-P2") is read in a drawing's text. A qualified mark
+    names only the unit its designator fits, and a schedule that prints the
+    designator over its mark column ("OAU ~", "F ~") decides whose it is.
+  - A schedule's CONTROL SEQUENCE column ("B") binds the one sequence that
+    prints "CONTROL SEQUENCE B (…)". Every VAV box on one set now reaches
+    its AHU sequence's section.
+  - A controls power-supply or wiring drawing stands beside the control
+    diagram instead of losing to it. A union such as "VAV/CAV/AFCV" names
+    its family.
+  - A split system's outdoor unit whose row names its indoor unit ("SERVICE:
+    F-C1") adds that unit's drawings of the kinds it lacks. A title joining
+    two subjects is no longer a condensing unit's that serves another kind.
+  - Siblings are compared without their tag lists. A label list ("FCU-1&2")
+    in a detail about that kind prints each unit it lists.
+  - A chiller plant's drawing that describes its condenser water loop binds
+    the towers and condenser pumps. A row's service that prints a drawing's
+    whole subject ("HEAT RECOVERY CHILLER …") binds it as the system it
+    serves.
+  - A fan described as part of the set's one air handler takes that unit's
+    drawings of the kinds it lacks.
+  - No inherited drawing ever replaces a unit's own proposals. A first cut
+    that let one did, and cut the held-out precision to 59%; it was
+    narrowed before commit and is disclosed.
+  - Held-out, in aggregate: the first tier 11.0% → 26.7% (precision 100%
+    over 18 bindings → 93.5% over 46); held-out 2 unchanged at 23.1%.
+  - The unseen audit's 17 new model calls were recorded, and its 56
+    decisions audited, all right.
+  (`web/src/lib/controlIntent/binding.ts`; CONTROL_INTENT_BUG_CATALOGUE
+  CI-36 to CI-45.)
+
 - **Plan sweep: a unit is looked for as its tag is drawn, and a bare letter
   stands for it only as its shorthand.** A drawn span that is only the
   first letters of a mark ("E" for EF-1, "D" for DAC-1) answered for the

@@ -1,0 +1,60 @@
+{
+ "side": "heldout2",
+ "total": {
+  "packets": 32,
+  "pairs": 147,
+  "pair_hits": 34,
+  "recall": 0.23129251700680273,
+  "recall_without_semantic": 0.2357142857142857,
+  "recall_with_proposals": 0.23129251700680273,
+  "bindings": 47,
+  "confirmed_bindings": 47,
+  "precision": 0.7659574468085106,
+  "precision_with_proposals": 0.7659574468085106,
+  "proposals": 0,
+  "ambiguous": 0,
+  "hits_inside": 0,
+  "hits_containing": 2,
+  "key_packets_not_found": 16,
+  "units_with_packets": 72,
+  "unit_recall": 0.4305555555555556,
+  "unmatched_instances": 3,
+  "none_units_bound": 0,
+  "by_key_kind": {
+   "semantic": {
+    "pairs": 7,
+    "hit": 1
+   },
+   "tag": {
+    "pairs": 59,
+    "hit": 12
+   },
+   "family_detail": {
+    "pairs": 62,
+    "hit": 21
+   },
+   "list_range": {
+    "pairs": 19,
+    "hit": 0
+   }
+  },
+  "by_binding_kind": {
+   "family_detail": {
+    "bindings": 10,
+    "correct": 10,
+    "proposal": 0
+   },
+   "tag_body": {
+    "bindings": 37,
+    "correct": 26,
+    "proposal": 0
+   }
+  },
+  "miss_reasons": {
+   "instance not matched to a schedule row": 2,
+   "key packet not found by the finder": 102,
+   "bound to packets of other kinds only": 1,
+   "no binding at all (tag read)": 8
+  }
+ }
+}

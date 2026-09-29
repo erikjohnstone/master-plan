@@ -7,12 +7,15 @@
 // below is eval-only; no surface imports it.
 //
 //   node --import tsx scripts/control-intent-binding-eval.mjs <corpus-dir> [setId ...]
-//        [--heldout] [--report] [--detail]
+//        [--heldout | --dev2 | --heldout2] [--report] [--detail]
 //
 //   --heldout  the frozen held-out documents: aggregates only (gates; never
 //              tuned on).
-//   --report   write reports/control-intent/03-binding-eval-<dev|heldout>.{json,md}.
-//   --detail   (dev only) every missed and every false binding.
+//   --dev2, --heldout2  the second tier's sides (reports/control-intent/
+//              binding-tier2/01-split.json): documents the assemblies tiers 2
+//              to 5 key, drawn by seed; held-out 2 is scored in aggregate only.
+//   --report   write reports/control-intent/03-binding-eval-<side>.{json,md}.
+//   --detail   (dev sides only) every missed and every false binding.
 //
 // Truth is keys/<set>.binding.csv: one row per (keyed instance, governing
 // packet), or one row with packet "none". Instances are matched to compile
@@ -59,6 +62,8 @@ import { tagKey } from "../../web/src/lib/controlIntent/binding.ts";
 export const BINDING_KEY_COLUMNS = ["sheet", "tag", "family", "packet_sheet", "packet_title", "binding", "note"];
 /** GATE B1 (goals/CONTROL_INTENT.md WP2). */
 export const GATES = { dev: { recall: 0.95, precision: 0.98, unit_recall: 0.95 }, heldout: { recall: 0.85, precision: 0.95 } };
+GATES.dev2 = GATES.dev;
+GATES.heldout2 = GATES.heldout;
 
 function splitCsvLine(line) {
   const out = [];
@@ -270,17 +275,20 @@ async function main() {
   const flag = (f) => argv.includes(f);
   const [corpusDir, ...only] = argv.filter((a) => !a.startsWith("--"));
   if (!corpusDir) {
-    console.error("usage: node --import tsx scripts/control-intent-binding-eval.mjs <corpus-dir> [setId ...] [--heldout] [--report] [--detail]");
+    console.error("usage: node --import tsx scripts/control-intent-binding-eval.mjs <corpus-dir> [setId ...] [--heldout | --dev2 | --heldout2] [--report] [--detail]");
     process.exit(2);
   }
   const corpus = resolve(corpusDir);
-  const side = flag("--heldout") ? "heldout" : "dev";
-  if (flag("--detail") && side === "heldout") {
+  const side = flag("--heldout2") ? "heldout2" : flag("--dev2") ? "dev2" : flag("--heldout") ? "heldout" : "dev";
+  const heldout = side.startsWith("heldout");
+  if (flag("--detail") && heldout) {
     console.error("--detail is dev-only: held-out documents are scored at gates, never tuned on");
     process.exit(2);
   }
-  const split = JSON.parse(readFileSync(join(corpus, "reports", "assemblies", "01-split.json"), "utf8"));
-  const sideSets = split[side].sets;
+  // A tier's sides end in its number; the first tier's are WP0.2's split.
+  const tier = side.match(/\d$/)?.[0];
+  const split = JSON.parse(readFileSync(tier ? join(corpus, "reports", "control-intent", `binding-tier${tier}`, "01-split.json") : join(corpus, "reports", "assemblies", "01-split.json"), "utf8"));
+  const sideSets = split[tier ? side.slice(0, -1) : side].sets;
   const unknown = only.filter((id) => !sideSets.includes(id));
   if (unknown.length) { console.error(`not ${side} documents: ${unknown.join(", ")}`); process.exit(2); }
   const setIds = only.length ? only : sideSets;
@@ -315,7 +323,7 @@ async function main() {
   for (const [k, v] of Object.entries(total.by_binding_kind)) lines.push(`| ${k} | ${v.bindings} | ${v.correct} | ${v.proposal} |`);
   lines.push("", "| missed pairs, why | pairs |", "|---|---:|");
   for (const [k, v] of Object.entries(total.miss_reasons).sort((a, b) => b[1] - a[1])) lines.push(`| ${k} | ${v} |`);
-  if (side === "dev") {
+  if (!heldout) {
     lines.push("", "| set | packets | pairs | recall | bindings | precision |", "|---|---:|---:|---:|---:|---:|");
     for (const r of results) {
       const s = summarize([r]);
@@ -338,9 +346,9 @@ async function main() {
     const dir = join(corpus, "reports", "control-intent");
     mkdirSync(dir, { recursive: true });
     const base = join(dir, `03-binding-eval-${side}`);
-    const json = side === "dev" ? { side, total, results } : { side, total };
+    const json = heldout ? { side, total } : { side, total, results };
     writeFileSync(`${base}.json`, JSON.stringify(json, null, 1));
-    writeFileSync(`${base}.md`, lines.filter((l) => side === "dev" || !l.startsWith("- ")).join("\n") + "\n");
+    writeFileSync(`${base}.md`, lines.filter((l) => !heldout || !l.startsWith("- ")).join("\n") + "\n");
   }
 }
 

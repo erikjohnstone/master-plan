@@ -3,23 +3,23 @@
  "total": {
   "packets": 123,
   "pairs": 323,
-  "pair_hits": 300,
-  "recall": 0.9287925696594427,
-  "recall_without_semantic": 0.9786476868327402,
-  "recall_with_proposals": 0.9411764705882353,
-  "bindings": 347,
-  "confirmed_bindings": 340,
-  "precision": 0.9294117647058824,
-  "precision_with_proposals": 0.9221902017291066,
-  "proposals": 7,
+  "pair_hits": 303,
+  "recall": 0.9380804953560371,
+  "recall_without_semantic": 0.9857651245551602,
+  "recall_with_proposals": 0.9442724458204335,
+  "bindings": 350,
+  "confirmed_bindings": 345,
+  "precision": 0.9246376811594202,
+  "precision_with_proposals": 0.9171428571428571,
+  "proposals": 5,
   "ambiguous": 0,
   "hits_inside": 0,
   "hits_containing": 0,
   "key_packets_not_found": 1,
   "units_with_packets": 210,
-  "unit_recall": 0.919047619047619,
+  "unit_recall": 0.9333333333333333,
   "unmatched_instances": 0,
-  "none_units_bound": 1,
+  "none_units_bound": 2,
   "by_key_kind": {
    "list_range": {
     "pairs": 21,
@@ -31,11 +31,11 @@
    },
    "semantic": {
     "pairs": 42,
-    "hit": 25
+    "hit": 26
    },
    "family_detail": {
     "pairs": 187,
-    "hit": 181
+    "hit": 183
    },
    "cross_reference": {
     "pairs": 16,
@@ -54,9 +54,14 @@
     "proposal": 0
    },
    "family_detail": {
-    "bindings": 164,
-    "correct": 160,
-    "proposal": 7
+    "bindings": 162,
+    "correct": 158,
+    "proposal": 5
+   },
+   "tag_body": {
+    "bindings": 48,
+    "correct": 33,
+    "proposal": 0
    },
    "component_of": {
     "bindings": 25,
@@ -68,11 +73,6 @@
     "correct": 10,
     "proposal": 0
    },
-   "tag_body": {
-    "bindings": 43,
-    "correct": 30,
-    "proposal": 0
-   },
    "sibling": {
     "bindings": 31,
     "correct": 26,
@@ -80,8 +80,8 @@
    }
   },
   "miss_reasons": {
-   "no binding at all (tag read)": 12,
-   "bound as a proposal only": 4,
+   "no binding at all (tag read)": 11,
+   "bound as a proposal only": 2,
    "key packet not found by the finder": 1,
    "bound to another packet of that kind": 6
   }
@@ -695,13 +695,13 @@
      "packet_sheet": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
      "packet_title": "DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)",
      "key_how": "title",
-     "hit": false,
+     "hit": true,
      "hit_any": true,
      "hit_how": "same",
-     "via": "family_detail",
+     "via": "tag_body",
      "matched": true,
      "note": "",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -713,13 +713,13 @@
      "packet_sheet": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
      "packet_title": "DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)",
      "key_how": "title",
-     "hit": false,
+     "hit": true,
      "hit_any": true,
      "hit_how": "same",
-     "via": "family_detail",
+     "via": "tag_body",
      "matched": true,
      "note": "",
-     "bound_same_kind": false,
+     "bound_same_kind": true,
      "bound_any": true,
      "tag_read": true
     },
@@ -731,14 +731,14 @@
      "packet_sheet": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
      "packet_title": "DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)",
      "key_how": "title",
-     "hit": false,
-     "hit_any": false,
-     "hit_how": null,
-     "via": null,
+     "hit": true,
+     "hit_any": true,
+     "hit_how": "same",
+     "via": "tag_body",
      "matched": true,
      "note": "the reheat water pumps of the heating system detail",
-     "bound_same_kind": false,
-     "bound_any": false,
+     "bound_same_kind": true,
+     "bound_any": true,
      "tag_read": true
     },
     {
@@ -1134,9 +1134,9 @@
      "packet_sheet": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
      "packet_title": "DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)",
      "packet_scope": "detail",
-     "kind": "family_detail",
-     "evidence": "\"DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)\" is a detail for its family (HEAT_EXCHANGER); its row does not print \"HEATING\"",
-     "proposal": true,
+     "kind": "tag_body",
+     "evidence": "WHSE-HX1 is printed inside \"DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)\" as a label",
+     "proposal": false,
      "ambiguous": false,
      "correct": true,
      "hit_how": "same",
@@ -1149,9 +1149,39 @@
      "packet_sheet": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
      "packet_title": "DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)",
      "packet_scope": "detail",
-     "kind": "family_detail",
-     "evidence": "\"DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)\" is a detail for its family (HEAT_EXCHANGER); its row does not print \"HEATING\"",
-     "proposal": true,
+     "kind": "tag_body",
+     "evidence": "WHSE-HX2 is printed inside \"DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)\" as a label",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": true,
+     "hit_how": "same",
+     "key_none": false
+    },
+    {
+     "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+     "tag": "WHSE-P1",
+     "family": "PUMP",
+     "packet_sheet": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
+     "packet_title": "DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)",
+     "packet_scope": "detail",
+     "kind": "tag_body",
+     "evidence": "WHSE-P1 is printed inside \"DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)\" as a label",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": false,
+     "hit_how": null,
+     "key_none": true
+    },
+    {
+     "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+     "tag": "WHSE-P2",
+     "family": "PUMP",
+     "packet_sheet": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
+     "packet_title": "DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)",
+     "packet_scope": "detail",
+     "kind": "tag_body",
+     "evidence": "WHSE-P2 is printed inside \"DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM)\" as a label",
+     "proposal": false,
      "ambiguous": false,
      "correct": true,
      "hit_how": "same",
@@ -1415,7 +1445,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -1424,7 +1454,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -1442,7 +1472,7 @@
      "matched": true,
      "why": null,
      "keyed": 1,
-     "hit": 0
+     "hit": 1
     },
     {
      "set": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -2993,6 +3023,21 @@
     }
    ],
    "bindings": [
+    {
+     "set": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+     "tag": "ERV-A-15",
+     "family": "ERV",
+     "packet_sheet": "074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#25",
+     "packet_title": "GRILLES, REGISTERS, DIFFUSERS",
+     "packet_scope": "detail",
+     "kind": "tag_body",
+     "evidence": "ERV-A-15 is printed inside \"GRILLES, REGISTERS, DIFFUSERS\" as a label",
+     "proposal": false,
+     "ambiguous": false,
+     "correct": false,
+     "hit_how": null,
+     "key_none": false
+    },
     {
      "set": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
      "tag": "ERV-A-15",

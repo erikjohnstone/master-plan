@@ -86,7 +86,7 @@
   {
    "id": "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
    "status": "read",
-   "units": 7,
+   "units": 10,
    "packets": 14,
    "applied": 0
   },
@@ -828,15 +828,16 @@
    "family": "UNIT_HEATER",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
     "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
     "text": "LOW VOLTAGE BO ENABLE"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-29",
+   "note": "The value recorded right on 2026-09-26 (agree r0,r1), now with the vision reader agreeing: the binder reads HWUH-A1/A2 printed in the BURN CHAMBER DDC CONTROL DIAGRAM (p26). The HOT WATER UNIT HEATER DDC CONTROL DETAIL (p28) prints LOW VOLTAGE BO ENABLE and FAN MOTOR HWUH, TYP. ALL: the BAS enables every hot water unit heater."
   },
   {
    "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
@@ -844,15 +845,16 @@
    "family": "UNIT_HEATER",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
     "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
     "text": "LOW VOLTAGE BO ENABLE"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-29",
+   "note": "The value recorded right on 2026-09-26 (agree r0,r1), now with the vision reader agreeing: the binder reads HWUH-A1/A2 printed in the BURN CHAMBER DDC CONTROL DIAGRAM (p26). The HOT WATER UNIT HEATER DDC CONTROL DETAIL (p28) prints LOW VOLTAGE BO ENABLE and FAN MOTOR HWUH, TYP. ALL: the BAS enables every hot water unit heater."
   },
   {
    "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
@@ -860,15 +862,16 @@
    "family": "UNIT_HEATER",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
     "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
     "text": "LOW VOLTAGE BO ENABLE"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-29",
+   "note": "The value recorded right on 2026-09-26 (agree r0,r1), now with the vision reader agreeing: the binder reads HWUH-A1/A2 printed in the BURN CHAMBER DDC CONTROL DIAGRAM (p26). The HOT WATER UNIT HEATER DDC CONTROL DETAIL (p28) prints LOW VOLTAGE BO ENABLE and FAN MOTOR HWUH, TYP. ALL: the BAS enables every hot water unit heater."
   },
   {
    "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
@@ -876,15 +879,16 @@
    "family": "UNIT_HEATER",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
     "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
     "text": "LOW VOLTAGE BO ENABLE"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-29",
+   "note": "The value recorded right on 2026-09-26 (agree r0,r1), now with the vision reader agreeing: the binder reads HWUH-A1/A2 printed in the BURN CHAMBER DDC CONTROL DIAGRAM (p26). The HOT WATER UNIT HEATER DDC CONTROL DETAIL (p28) prints LOW VOLTAGE BO ENABLE and FAN MOTOR HWUH, TYP. ALL: the BAS enables every hot water unit heater."
   },
   {
    "set": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
@@ -892,15 +896,16 @@
    "family": "UNIT_HEATER",
    "question": "role",
    "value": "in",
-   "rule": "drawing_read:agree(r0,r1)",
-   "readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands",
+   "rule": "drawing_read:agree(r0,r1,r2)",
+   "readers": "r0:commands r1:commands r2a:commands r2b:commands",
    "cite": {
     "packet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28#p3",
     "sheet": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#28",
     "text": "LOW VOLTAGE BO ENABLE"
    },
    "verdict": "right",
-   "checked": "2026-09-26"
+   "checked": "2026-09-29",
+   "note": "The value recorded right on 2026-09-26 (agree r0,r1), now with the vision reader agreeing: the binder reads HWUH-A1/A2 printed in the BURN CHAMBER DDC CONTROL DIAGRAM (p26). The HOT WATER UNIT HEATER DDC CONTROL DETAIL (p28) prints LOW VOLTAGE BO ENABLE and FAN MOTOR HWUH, TYP. ALL: the BAS enables every hot water unit heater."
   },
   {
    "set": "050_IL_VA_Project_537_17_115_Sterile_Processing",

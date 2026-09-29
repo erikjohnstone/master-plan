@@ -1,31 +1,32 @@
 # Control intent: binding eval (heldout)
 
 packets found: 52; keyed pairs: 191; key packets not found: 15; unmatched instances: 0
-pair recall 11.0% (21/191; without semantic 11.2%; with proposals 42.4%; hits inside 0, containing 0)
-precision 100.0% over 18 confirmed bindings (with proposals 67.1% over 76); proposals 58; ambiguous 12; units keyed "none" but bound 0
-unit recall 20.0% (85 instances with a governing packet)
+pair recall 26.7% (51/191; without semantic 27.3%; with proposals 55.5%; hits inside 0, containing 0)
+precision 93.5% over 46 confirmed bindings (with proposals 71.7% over 99); proposals 53; ambiguous 8; units keyed "none" but bound 0
+unit recall 44.7% (85 instances with a governing packet)
 
 | key kind | pairs | hit | recall |
 |---|---:|---:|---:|
-| tag | 59 | 6 | 10.2% |
-| family_detail | 112 | 8 | 7.1% |
+| tag | 59 | 23 | 39.0% |
+| family_detail | 112 | 15 | 13.4% |
 | semantic | 4 | 0 | 0.0% |
-| list_range | 16 | 7 | 43.8% |
+| list_range | 16 | 13 | 81.3% |
 
 | binding kind | bindings | correct | proposals |
 |---|---:|---:|---:|
-| tag_body | 3 | 3 | 0 |
-| family_detail | 68 | 43 | 58 |
+| tag_body | 34 | 31 | 0 |
+| family_detail | 60 | 35 | 53 |
 | system | 1 | 1 | 0 |
 | list_range | 1 | 1 | 0 |
 | label_list | 3 | 3 | 0 |
 
 | missed pairs, why | pairs |
 |---|---:|
-| bound as a proposal only | 60 |
+| bound as a proposal only | 55 |
 | key packet not found by the finder | 45 |
-| no binding at all (tag read) | 43 |
-| bound to packets of other kinds only | 21 |
+| bound to packets of other kinds only | 19 |
+| no binding at all (tag read) | 18 |
+| bound to another packet of that kind | 2 |
 | no binding at all (tag not read) | 1 |
 
-GATE B1 (heldout): recall 11.0% ≥ 85.0% ✗; precision 100.0% ≥ 95.0% ✓
+GATE B1 (heldout): recall 26.7% ≥ 85.0% ✗; precision 93.5% ≥ 95.0% ✗

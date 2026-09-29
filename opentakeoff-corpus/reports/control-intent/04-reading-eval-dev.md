@@ -1,18 +1,18 @@
 # Reading eval — dev
 
 ```
-READING EVAL (instrument 4) — dev, replayed runs
+READING EVAL (instrument 4) — dev, replayed runs (live top-up)
 
                                            applied-right applied-wrong INVENTED proposal-right proposal-wrong unresolved abstained
-  ALL decisions                                       294              0         0              47               6           8        292
+  ALL decisions                                       294              0         0              48               6           9        291
   absence decisions                                    48              0         0              27               0           0          0
   applied 294, applied-wrong 0.00%, uncited applied 0
 
 per reader (answers on keyed questions):
-  r0     right 319  wrong 2  abstained 325  unverified 0  (key undecided 1)
-  r1     right 508  wrong 27  abstained 71  unverified 39  (key undecided 2)
-  r2a    right 312  wrong 5  abstained 280  unverified 17  (key undecided 2)
-  r2b    right 320  wrong 2  abstained 272  unverified 20  (key undecided 2)
+  r0     right 319  wrong 2  abstained 326  unverified 0  (key undecided 1)
+  r1     right 508  wrong 27  abstained 72  unverified 39  (key undecided 2)
+  r2a    right 314  wrong 3  abstained 280  unverified 18  (key undecided 2)
+  r2b    right 322  wrong 2  abstained 272  unverified 19  (key undecided 2)
   rp     right 15  wrong 0  abstained 0  unverified 0  (key undecided 0)
 
 per set:
@@ -20,16 +20,16 @@ per set:
   bldg5406-hvac-demo                                   64              0         0              14               0           0          4
   094_FL_Orange_County_Regional_History_Ce             32              0         0              14               0           0          0
   040_IL_VA_Solicitation_36C77623B0051_Exp             22              0         0               0               0           0         12
-  itd-d1-lab                                           21              0         0               5               0           2          6
+  itd-d1-lab                                           21              0         0               6               0           3          4
   12_MT_MSU_ReidHall_Renovation                         0              0         0               4               0           0         16
-  031_MO_VA_Project_589A4_20_158_Renovate_              1              0         0               2               2           0         12
+  031_MO_VA_Project_589A4_20_158_Renovate_              1              0         0               2               2           0         13
   004_MO_T2504_03_Interior_and_Exterior_Re              0              0         0               0               1           0          8
   069_ID_ITD_District_2_Laboratory_Heating              2              0         0               0               2           0          5
   074_CA_West_Valley_College_STEM_Classroo              1              0         0               0               0           0          2
   baker-county-eoc                                      0              0         0               0               0           0          2
 
 per question:
-  role                                                122              0         0              13               4           5         24
+  role                                                122              0         0              14               4           6         23
   opt.setpoint_adjust                                  72              0         0               1               0           0         11
   opt.occupancy_sensor                                  5              0         0               9               0           0         63
   opt.window_switch                                    13              0         0               0               0           0         63

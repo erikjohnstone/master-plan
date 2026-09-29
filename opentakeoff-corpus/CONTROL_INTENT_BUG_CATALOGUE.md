@@ -1113,3 +1113,216 @@ failed; 56 applied, all audited, 56 right, 0 wrong; 0 new, 0 gone.
 Its replay then prints "not recorded N" and exits 1, and "decides the same" covers only the recorded calls. From
 here, a change's entry quotes the replay's model-call line. A replay with unrecorded calls is recorded live, and its
 new decisions are audited, before the change's control-intent numbers are called unchanged.
+
+## CI-36: binding tier 2: ten more drafters' documents, and the binder bound 61% of their keyed pairs (MEASURE NOTE)
+
+**Found:** 2026-09-29. The first tier's dev keys cover 11 documents, and its held-out side is essentially three
+(CI-16), so how the binder generalizes had barely been measured. The second tier (`reports/control-intent/binding-tier2/`,
+5b473eb, 243a31b) draws ten dev documents by seed 181 from the assemblies tiers' documents that print HVAC control
+drawings and that this work had already read. Every such document it had not read is held out: nine documents,
+scored in aggregate only. All nineteen were keyed from their control sheets before any binder run on them.
+
+**Cold numbers (the binder at 243a31b):**
+- dev 2 (272 instances, 629 keyed pairs): pair recall 61.2% (385/629), precision 94.3% over 331 confirmed bindings,
+  unit recall 86.5%.
+  - Missed pairs by cause: 88 the finder never found the key's packet; 77 the unit bound to other kinds of packet
+    only; 30 bound to another packet of that kind; 23 no binding though the tag was read; 19 a proposal only;
+    4 instances unmatched; 3 no binding and the tag not read.
+- Held-out 2 (aggregates): 23.1% (34/147), precision 76.6% over 47.
+- The first tier's held-out (aggregates): 11.0% (21/191), precision 100% over 18.
+
+What the misses were, and what was done: CI-37 to CI-43. The first cut of that batch lost precision on the held-out
+side: CI-44.
+
+## CI-37: a qualified mark in a drawing's text ("GWP-A-1", "OAU-B1", "WHSE-P2") was never read, and a schedule's own designator was not asked whose it is (FIXED, next commit)
+
+**Found:** 2026-09-29, dev 2 and dev.
+- 061_IA labels its pumps, exchangers and fans by kind, group and number ("GWP-A-1", "HWP-A-2", "HX-A-1") in the heat
+  recovery and heating water sequences. The body reader took a tag as letters, a dash and a number, so none was read.
+- 031_MO labels "WHSE-HX-1" and "WHSE-P2" in its DUAL HEAT EXCHANGER CONTROLS (HEATING SYSTEM).
+- Reading them unguarded bound 10 wrong units on 16_NV. That set marks an outdoor air unit, a furnace and a condensing
+  unit all "B1", and prints "OAU-B1" and "EF-B1" in its drawings: every B1 took both.
+
+**Fix (`binding.ts`):**
+- The body reader reads a qualified mark as one tag, as titles already did.
+- A qualified mark names only the units its designator fits. The unit's schedule decides that where it prints the
+  designator over its mark column (16_NV's "OAU ~", "F ~", "CU ~": `scheduleDesignator`); otherwise the standard
+  prefix words decide, as before.
+
+**Numbers:** dev 2 +10 pairs, 0 wrong; dev +3 pairs.
+- 1 wrong on dev: 031_MO's drawing labels "WHSE-P1" for a pump its key, from the schedule, says the detail does not
+  draw.
+- 4 wrong on 061_IA: its heat recovery and AHU packets' regions overlap, so the labels in the overlap bind both
+  packets. That is the finder's region, not the binder's reading.
+
+## CI-38: a schedule's CONTROL SEQUENCE column named a sequence the binder never looked for (FIXED, next commit)
+
+**Found:** 2026-09-29, 01_NY. Each VAV box row prints CONTROL SEQUENCE A, B or C. The AHU's sequence sheet prints
+"A. CONTROL SEQUENCE A (CONSTANT VOLUME WITH REHEAT):", "B. …" and "C. …". The key binds all 25 boxes to that
+sequence by cross-reference. The binder read no such column.
+
+**Fix:** a column headed SEQUENCE, SEQ or SOO with a short designator binds the one packet that prints that
+sequence's heading ("SEQUENCE B (", "SEQUENCE NO. 3:"), as a cross-reference to a section. When two packets print
+the heading, neither is bound. The section does not make the unit "named": its other kinds of packet still bind as
+before (the boxes keep their terminal unit diagram).
+
+**Numbers:** dev 2 +25 pairs, 0 wrong.
+
+## CI-39: a terminal box's power-supply schematic was dropped as a less specific variant of its control schematic, and "VAV/CAV/AFCV" named no family (FIXED, next commit)
+
+**Found:** 2026-09-29, 096_IN. M902 prints "VAV/CAV TERMINAL BOX CONTROL SCHEMATIC" and "TERMINAL BOX VAV/CAV/AFCV
+POWER SUPPLY CONTROL SCHEMATIC". The key gives every one of the 30 boxes both. Two things kept the second away:
+- the finder's family read of its title stops at the three-member union;
+- its words POWER SUPPLY were read as an unconfirmed qualifier, and the confirmed schematic beside it outranked it.
+
+**Fix:**
+- A union of designators names the family its members name, when they name exactly one (`familyOf`).
+- A drawing of one aspect of the kind's controls (POWER SUPPLY, POWER WIRING, WIRING, TRANSFORMER) is no variant.
+  It is weighed beside the control diagram, not against it, and its aspect words are no qualifiers.
+
+**Numbers:** dev 2 +30 pairs, 0 wrong.
+
+## CI-40: split systems: the outdoor unit's own row named its indoor half, and a two-subject title bound a condensing unit that serves another kind (FIXED, next commit)
+
+**Found:** 2026-09-29, 16_NV.
+- Its condensing units say whose they are: "SERVICE: F-C1 AND EC-C1" (the furnace marked C1, and a coil the set does
+  not schedule). The pairing read only an indoor row naming its outdoor unit. So the 21 condensing units never took
+  the FURNACE CONTROL DIAGRAM that draws them: the key's 21 missed pairs.
+- Two condensing units, BO1 and BO2, serve the outdoor air unit ("SERVICE: OAU-B1"). They took "FURNACE AND
+  CONDENSING UNIT SEQUENCE OF OPERATION" by family, and that was wrong.
+
+**Fix:**
+- An outdoor unit's row that names exactly one indoor unit pairs them.
+- A split system's outdoor unit that has a packet of its own takes its indoor unit's packets of the kinds it has
+  none of, as `component_of`. Its own proposals stay.
+- A title joining two subjects is an outdoor unit's only when it also names the indoor half that unit serves.
+
+**Numbers:** dev 2 +21 pairs, 2 wrong bindings gone. BO1 and BO2 now bind nothing (CI-44).
+
+## CI-41: siblings were compared with their tag lists, and a label list in a unit's detail printed only its first unit (FIXED, next commit)
+
+**Found:** 2026-09-29.
+- **Siblings.** 009_FL prints "LAB EXHAUST FAN CONTROLS (EF-1, 2, & 3)" beside "LAB EXHAUST FANS DDC POINTS LIST",
+  and 01_NY prints its AHU's diagram and sequence under titles that differ by their tags. Sibling subjects were
+  compared with the tags in them.
+  - Fix: they are compared without tags and lists, when the other title names no other scheduled unit. A family's
+    typical detail (one that some unit of the family with no title of its own takes by family) is never a named
+    unit's sibling.
+- **Label lists.** 06_MO labels its VRF cassette diagram "FCU-1&2". FCU-1 bound as a label; FCU-2 did not, because
+  lists were expanded only in a detail titled for the unit's family.
+  - Fix: a label list prints each unit it lists, in a detail about their kind: its family's, or a title of no family
+    whose subject the row prints ("CASSETTE" in the fan coils' description). The detail must name no other kind of
+    unit. A first cut that read lists in any detail bound fans that an emergency shutdown diagram and an AHU's
+    diagram list (federal-mech, 040_IL), and those are references.
+
+**Numbers:** dev 2 +6 pairs, 0 wrong.
+
+## CI-42: a chiller plant's drawing that describes its condenser water loop, and a row's service that names what a drawing is about (FIXED, next commit)
+
+**Found:** 2026-09-29.
+- **Condenser water.** 012_MO's CHILLED WATER SYSTEM SEQUENCE OF OPERATION says "THE CONDENSER WATER SYSTEM INCLUDES
+  THE CHILLERS, THREE (3) COOLING TOWERS, THREE (3) CONDENSER WATER PUMPS" and runs a COOLING TOWER OPERATION
+  section. The plant rule (CI-27) read its title as the chilled water plant's only.
+  - Fix: a chilled water plant's drawing that names the condenser water gear (COOLING TOWER, CONDENSER WATER
+    PUMP/SYSTEM/LOOP) binds that loop's members too.
+- **Service.** 096_IN's heat recovery chiller pumps print "SYSTEM: HEAT RECOVERY CHILLER CHILLED WATER SIDE" under
+  "HEATING RECOVERY CHILLER CONTROL SCHEMATIC". 061_IA's heat recovery pumps print "SERVICE: HEAT RECOVERY -
+  CONDENSER" under "BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST".
+  - Fix: a row's service cell that prints a drawing's whole subject binds that drawing as the system the unit
+    serves. The subject must be two words or more, set apart from the plant nouns and a verb's -ING. The binding is
+    `system`, made only where no packet of that kind binds the unit, and never for a hydronic plant's drawing (the
+    plant rule's). A domestic hot water recirculation pump now takes the domestic hot water sequence this way. The
+    plant rule's test keeps it off the heating plant's drawings.
+
+**Numbers:** dev 2 +14 pairs, 0 wrong.
+
+## CI-43: a fan its schedule describes as part of the set's one air handler never took the air handler's points list (FIXED, next commit)
+
+**Found:** 2026-09-29, 061_IA. Its EQUIPMENT SCHEDULE describes SF-1 to SF-6 as "AHU SUPPLY FAN" and RF-1 to RF-4 as
+"AHU RETURN FAN". The set schedules one air handler, AHU-A. The fans are printed in the AHU's schematic (sheet 56),
+and the key gives them the AHU POINTS LIST (sheet 57). A sibling on another sheet (the set's one packet of another
+kind about the same subject) would reach it too. It was measured and not adopted: +10 pairs, but it carried the
+overlapping regions of CI-37 into the points list (4 wrong) and cost 2 pairs of the heating plant's points list.
+
+**Fix:** a unit that has a packet of its own, and whose DESCRIPTION or TYPE puts it in the set's one AHU or RTU,
+takes that unit's packets of the kinds it has none of, as `component_of`. With two air handlers, nothing is taken.
+
+**Numbers:** dev 2 +10 pairs, 0 wrong.
+
+## CI-44: the first cut of CI-40 and CI-43 replaced units' own proposals with another unit's packets, and the first tier's held-out precision fell to 59% (FOUND AND NARROWED BEFORE COMMIT; DISCLOSED)
+
+**Found:** 2026-09-29, the first tier's held-out binding eval, read in aggregate only. The first cut of CI-37, CI-40
+and CI-43 gave the `component_of` rule three new ways to find a unit's host:
+- a qualified mark in a SERVICE or LOCATION cell;
+- the outdoor unit's own row;
+- a description naming the set's one air handler.
+
+That rule, for a unit with no confirmed packet, replaces everything the unit has, its own proposals included, with
+the host's packets. On the held-out side:
+
+| | pair recall | precision | notes |
+|---|---:|---:|---|
+| before | 11.0% (21/191) | 100% over 18 | |
+| first cut | 26.7% | 58.9% over 73 | 27 `component_of` bindings, none right; proposal hits fell 60 → 1 |
+
+No held-out row was opened. The aggregate tables by binding kind and miss reason located it. Every non-held-out
+snapshot the scratchpad holds (98 corpus documents and 65 unseen) was then diffed old binder against new, and
+nothing like it appeared: the three new host sources fire on dev 2 alone.
+
+**Change, on principle:**
+- The three new sources only add packets of the kinds a unit lacks, to a unit that already has a confirmed packet of
+  its own. Its proposals stay.
+- The replacing rule keeps exactly its old sources: a location or service cell read as before, and the indoor row's
+  pairing. BO1 and BO2 on 16_NV lose their 2 pairs.
+
+**Disclosure:** this narrowing was prompted by a held-out aggregate. The first tier's held-out side has now informed
+one binder decision (where inherited packets may replace a unit's own), and it is no clean estimate of that rule from
+here. Held-out 2 was unchanged by both cuts, so it informed nothing.
+
+## CI-45: binding tier 2 after CI-37 to CI-44 (MEASURE NOTE)
+
+**Binding eval** (`control-intent-binding-eval.mjs --report`):
+
+| side | pair recall | precision | unit recall |
+|---|---|---|---|
+| dev 2 | 79.7% (501/629; was 61.2%) | 95.3% over 448 (was 94.3% over 331) | 91.7% (was 86.5%) |
+| dev (first tier) | 93.8% (303/323; was 92.9%) | 92.5% over 345 (was 92.9% over 340) | 93.3% (was 91.9%) |
+| the first tier's held-out (aggregates) | 26.7% (51/191; was 11.0%) | 93.5% over 46 (was 100% over 18) | 44.7% (was 20.0%) |
+| held-out 2 (aggregates) | 23.1% (34/147), unchanged | 76.6%, unchanged | |
+
+- dev 2's remaining misses: 88 the finder never found the key's packet (CI-26, held); 19 proposals whose qualifier
+  the row does not print (C5: "WITH BAROMETRIC RELIEF", "C-WING", "SWITCH CONTROLLED"). Confirming them all would be
+  unsafe on these same tiers: the unconfirmed qualifiers of 14 other proposals are right to hold them, among them
+  061_IA's supply and return fans under BID ALTERNATE #2 EXHAUST FAN POINTS LIST and itd-d1-lab's EF-6 under HEAT
+  RELIEF FAN SEQUENCE OF OPERATION. 5 other kinds only;
+  5 no binding; 4 another packet of that kind (CI-37's overlap); 4 instances unmatched (061_IA's EF-2 and EF-3 sit in
+  a table the compile titles differently from the key); 3 tag not read.
+- The first tier's held-out side gains its pairs from tags read in a drawing's text: tag pairs 6 → 23 of 59, list
+  pairs 7 → 13 of 16.
+
+**Other instruments:**
+- **Unseen audit (CI-35's process).** The replay printed "replayed 54, live 0, not recorded 17": 014_MT's unit heaters
+  now bind the BURN CHAMBER DDC CONTROL DIAGRAM that prints HWUH-A1 and HWUH-A2.
+  - The 17 calls were recorded live (R1 gpt-oss-120b, R2 qwen-3.8-27b). The five decisions they change (HWUH-A1 to
+    A5 role "in", now read by all three readers) were checked by hand against the HOT WATER UNIT HEATER DDC CONTROL
+    DETAIL (p28): LOW VOLTAGE BO ENABLE, FAN MOTOR HWUH, TYP. ALL. All five are right.
+  - The record now: replayed 71, live 0, not recorded 0; 56 applied, 56 audited, 56 right, 0 wrong.
+- **Reading eval** (new requests recorded live):
+  - dev: 294 applied, all right, 0 wrong, 0 invented. Proposals right 48 (was 47), wrong 6. R-exact 55/71, unchanged
+    (its gate fails as before).
+  - held-out (aggregates): 5 applied, 0 wrong, 0 invented. Proposals right 16 (was 13), wrong 3 (was 6).
+- **GATE D** (`--live --report`): negative controls, both adversarial swaps, model-off, replay, cost and raster pass.
+  - Family swap: 78 packets rebound to 75 units asked 442 questions; no decision rests on a swapped packet.
+  - Re-run fails as it did (CI-24): 20 of 566 decisions change on a fresh call (3.5%; the committed report had 14 of
+    493). Each change is a reader answering differently on a unit whose bindings this batch did not change (040_IL's
+    UH-1 to UH-6: R1 "not shown" when recorded, "monitors only" now).
+- **GATE C** (the typical eval with the keys' project answers and the recorded readings):
+  - dev: 227/244 exact, as before.
+  - held-out (aggregates): 35/91, as at 9a83964. Its missed options now split 45 nothing read, 12 no reading question,
+    7 on units bound to no control packet (14 at CI-31), 5 proposals only.
+- **Guard** (in the worktree the evals run in, whose `session.ts` is held at ef543cf's content for the graph cache):
+  - web: typecheck, lint, and `npm test` 3,991 tests (+9), failing only the 3 AS-1 tests, as before.
+  - mcp: typecheck; `test:bas` 189/189; the suite 377 of 388. The 8 AS-89 and AS-90 sweep tests need the committed
+    `session.ts`, and pass with it and this binder. The other 2 are the known AS-1 conformance test and navfac's
+    `sweep_schedule_row` timeout.
+  - The shared-path parity tests pass and fail test for test the same with the binder before this batch and after it.
