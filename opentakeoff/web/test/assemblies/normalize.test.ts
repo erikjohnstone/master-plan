@@ -1705,3 +1705,20 @@ test("a row naming several units of one kind prints one QTY for all of them: equ
   const ahu2 = normalizeCompileItem(ahus[1], "AHU", withProject(ahus)(ahus[1], { headers: ["MARK", "QTY", "SUPPLY FAN QTY"] }));
   assert.deepEqual([ahu2.attributes.qty?.value, ahu2.attributes.supply_fan_qty?.value], [1, 2]);
 });
+
+test("a variable speed column asked yes or no, abbreviated or naming the drive, is the motor's drive (AS-76)", () => {
+  // 26_CA's FANS print "VAR. SPEED (Y/N)": Y on 29 fans, N on 6.
+  const fan = (header: string, text: string) => normalizeCompileItem({
+    tag: "SF-P1-1", sheet_id: "m.pdf#10", table_title: "FANS (SPECIFICATION SECTION 23 34 00)",
+    cells: { DESIGNATION: { text: "SF-P1-1", bbox: [0, 0, 1, 1] }, [header]: { text, bbox: [1, 0, 2, 1] } },
+  }, "FAN", null);
+  const vfd = (header: string, text: string) => [fan(header, text).attributes.vfd?.value, fan(header, text).attributes.vfd?.rule];
+  assert.deepEqual(vfd("VAR. SPEED (Y/N)", "Y"), ["yes", "enum.vfd"]);
+  assert.deepEqual(vfd("VAR. SPEED (Y/N)", "N"), ["no", "enum.vfd"]);
+  assert.deepEqual(vfd("VARIABLE SPEED (YES/NO)", "YES"), ["yes", "enum.vfd"]);
+  assert.deepEqual(vfd("VAR SPEED", "N"), ["no", "enum.vfd"]);
+  assert.deepEqual(vfd("VARIABLE SPEED DRIVE", "NO"), ["no", "enum.vfd"]);
+  assert.deepEqual(vfd("VARIABLE SPEED (Y/N)", "ECM"), ["no", "enum.vfd"]);
+  // Reactive power, a variable volume box, a pump's model and a speed are no drive.
+  for (const h of ["VAR", "VAR. VOLUME", "VARIABLE SPEED PUMP MODEL", "SPEED (RPM)"]) assert.equal(fan(h, "Y").attributes.vfd, undefined, h);
+});

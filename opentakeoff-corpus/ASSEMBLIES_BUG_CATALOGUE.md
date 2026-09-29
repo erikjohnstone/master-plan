@@ -5383,3 +5383,39 @@ context carries `marks`. 21 mutations, one per rule or guard: each fails a test.
 - **UI proof** (the dev server started on the change): 26_CA (19 checks; 190 units, 291 records, 1,946 lines), 013_MO
   (9 checks; the parity checks only, as none of its units takes a typical) and 069_ID (17) are byte-identical to
   apply_assemblies over MCP with their CSV sets.
+
+## AS-76 — a variable speed column asked yes or no ("VAR. SPEED (Y/N)") was not read as the motor's drive (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, measuring AS-75 on 26_CA: its FANS (SPECIFICATION SECTION 23 34 00) print each fan's drive under
+"VAR. SPEED (Y/N)", Y or N, and every one of its fans waited between fan-constant and fan-variable on a VFD answer.
+The normalizer's drive column rule read "VARIABLE SPEED" only as a whole header: "VARIABLE SPEED (Y/N)", the
+abbreviated "VAR. SPEED" and "VARIABLE SPEED DRIVE" named no drive (a header census over the cached snapshots, scratch
+as75, found only 26_CA's; 35 rows there, 47 fans since AS-75).
+
+**Fix (`normalize.ts`, the apply path every surface reads):** a variable speed column, abbreviated ("VAR SPEED",
+"VAR. SPEED"), asked yes or no ("(Y/N)", "(YES/NO)") or naming the drive ("VARIABLE SPEED DRIVE"), is a drive column
+as "VARIABLE SPEED" already was: its cell decides (Y or YES a drive, N or NO none, ECM none, as AS-73 reads a drive
+cell). "VAR" alone (reactive power), "VAR. VOLUME", a pump's model and a speed in RPM name none.
+
+**Measured:**
+- **The 98 documents** (an A/B on the snapshots, 26_CA's and 013_MO's at AS-75, against c15e3d0): only 26_CA changes.
+  Its 47 fans read their drive as printed, 34 Y and 13 N (checked on a render of sheet 10: "SF-P1-4 THRU 11" N, the
+  five pairs Y, EF-P1-9, EF-1-1, EF-2-4, EF-3-1 and EF-3-2 N), so 34 apply fan-variable and 13 fan-constant where all
+  waited; 26_CA's lines 1,946 → 2,262. No other attribute or record changes.
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C dev
+  (227/244), the binding, question and reading evals and the unseen audit's replay identical to AS-75's but timings;
+  26_CA's keys cover none of its fans.
+- **Held-out** (aggregates only): GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472, 1 wrong,
+  2 invented; GATE 5 21/91; GATE C 35/91. Each is as with AS-75. As for AS-75, every run read its graphs from cache
+  with `mcp/src/outputs.ts` at c5247e6's content.
+
+**Tests:** normalize.test.ts (AS-76): "VAR. SPEED (Y/N)" Y and N, "VARIABLE SPEED (YES/NO)", "VAR SPEED", "VARIABLE SPEED
+DRIVE", an ECM cell; reactive power, a variable volume, a pump's model and a speed name no drive. 5 mutations (the
+old whole-header rule; VAR., DRIVE or (Y/N) not read; the rule unanchored): each fails the test.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,943 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite (every file but the WP1 test), run twice: in the first 374 of the 376 it
+  counted pass and 1 skips (assembliesKeys.test.mjs's last four tests went uncounted; that file passes 24/24 alone), in
+  the second 377 of 380, navfac's `sweep_schedule_row` over the SDK's 60 s default under load (63.6 s; it passed in the
+  first). The AS-1 conformance test fails in both, as at AS-75.
+- **UI proof** (the dev server started on the change): 26_CA (19 checks; 190 units, 291 records, 2,262 lines) and
+  069_ID (17) are byte-identical to apply_assemblies over MCP with their CSV sets.

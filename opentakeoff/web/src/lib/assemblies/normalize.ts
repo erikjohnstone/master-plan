@@ -493,7 +493,10 @@ export function quantitiesOf(h: string): Quantity[] {
   if (/^(?:REMARKS|ARRANGEMENT|OPERATION|PUMP\s+ARRANGEMENT)$/.test(h)) q.push("arrangement");
   if (/\bDRIVE\b/.test(h) && !/\bFREQ|VARIABLE|VFD\b/.test(h)) q.push("drive");
   if (/^FUEL$|\bFUEL\s+TYPE\b/.test(h)) q.push("fuel");
-  if (/\bVFD\b|\bVAR(?:IABLE)?\s+FREQ|\bVSC\b|\bVSD\b|^VARIABLE\s+SPEED$/.test(h)) q.push("vfd");
+  // A variable speed column, asked yes or no or naming the drive (26_CA's
+  // "VAR. SPEED (Y/N)", "VARIABLE SPEED DRIVE"; AS-76): its cell says whether
+  // the motor's speed is driven.
+  if (/\bVFD\b|\bVAR(?:IABLE)?\s+FREQ|\bVSC\b|\bVSD\b|^VAR(?:IABLE)?\s+SPEED(?:\s+DRIVE)?(?:\s*\((?:Y\s*\/\s*N|YES\s*\/\s*NO)\))?$/.test(h)) q.push("vfd");
   if (/(?:^|\s)EC$|\bECM\b|\bEC\s+MOTORS?$/.test(h)) q.push("ecm");
   if (/\bMOTOR\s+TYPE$/.test(h)) q.push("motor_type");
   // The space the unit is scheduled for, by name ("SPACE: NAME", "ROOM NAME").

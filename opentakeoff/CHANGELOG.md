@@ -1,5 +1,14 @@
 # Changelog
 
+- **Assemblies: a variable speed column asked yes or no.** 26_CA prints
+  each fan's drive under "VAR. SPEED (Y/N)", and the normalizer read a
+  variable speed column only when headed exactly "VARIABLE SPEED", so its
+  47 fans waited between the constant and the variable speed typical on a
+  VFD answer the schedule prints. An abbreviated, yes-or-no or DRIVE
+  variable speed header now reads as the drive column it is: its cell
+  decides. Only 26_CA changes: 34 fans apply fan-variable and 13
+  fan-constant, as printed (`normalize.ts`, ASSEMBLIES_BUG_CATALOGUE AS-76).
+
 - **Takeoff: a row scheduling several units by a range or a qualified
   pair.** A schedule row that names its units as a range ("EF-1 THRU
   EF-4", 26_CA's "SF-P1-4 THRU 11", 013_MO's "CV-7-CV-10") or as a
