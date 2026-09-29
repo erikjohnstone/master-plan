@@ -1,5 +1,25 @@
 # Changelog
 
+- **Takeoff and reconcile: a row's mark column is read under any name
+  drafters give it.** A row was named by its mark column only under MARK,
+  SYMBOL, DESIGNATION and a few other names spelled exactly so; under TAG,
+  EQUIPMENT TAG, UNIT NO., ID or PLAN MARK the extraction's key named it,
+  and that key runs a printed status or pair into the mark ((E) CT-1 is
+  keyed ECT-1, UH-1 & UH-2 UH-1UH-2) or is another column. Renaming the MARK
+  column of the 97 dev documents' tables so changed 196 family readings on 9
+  documents: units lost, counted under the key's mark rather than the
+  printed one, or two counted as one; and a valve table naming no water was
+  no valve table under SYMBOL, DESIGNATION, UNIT NO. or ID. Such a column
+  now names the row where the family reads no mark in the key, or where it
+  prints the key's letters and digits and the family reads other marks
+  there; the family's own reading decides, in the takeoff and the reconcile
+  alike, and the valve and damper gates read the column under any of its
+  names. A split system's OUTDOOR UNIT MARK so names its condensing unit: on
+  the dev corpus 35 come in (036_LA 33, 03_FL 1, 22_GA 1; the reconcile
+  2,619 -> 2,654 rows), every other unit and row unchanged, and the check's
+  196 differences fall to 0 (`corpusTakeoff.mjs`, ASSEMBLIES_BUG_CATALOGUE
+  AS-84).
+
 - **Takeoff and reconcile: a schedule's title is read without what a
   drafter adds to any title.** A status ((N), EXISTING), a discipline
   (MECHANICAL), a continuation ((CONT.), CONTINUED), a sheet count (- 2 OF

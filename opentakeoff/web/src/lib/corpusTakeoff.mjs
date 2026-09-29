@@ -58,7 +58,29 @@ const VALVE_DAMPER_TAG_PREFIXES = [...VALVES, ...ACTUATORS, ...DAMPERS]
 
 // A row's mark columns (AS-79): the takeoff's and the reconcile's identity,
 // and the valve's own where a row prints a UNIT MARK beside its VALVE MARK.
+// Read by the header's name (headerName: UNIT NO. is UNIT NO; AS-84).
 const MARK_HEADER_RE = /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i;
+// The same column under the other names drafters print (AS-84): a bare TAG,
+// TAG NO., EQUIPMENT TAG, EQUIP NO, PLAN MARK, PLAN CODE, ID, OUTDOOR UNIT
+// MARK... Read only where the family reads no mark in the row's name and does
+// in the cell (rowIdentityText): a TAG column can hold a grille's type code
+// (1S, 2R) beside a row keyed by its fan's mark, and the extraction's key is
+// the cleaner where both print one (013_MO's TAG cell runs two rows' ranges
+// together).
+const MARK_HEADER_SYNONYM_RE = /^(?:TAG(?:\s*(?:NO|NUMBER|NAME))?|ID\s*TAG|EQUIP(?:MENT)?\.?\s*(?:TAG|NO|NUMBER|MARK|ID|DESIGNATION)|UNIT\s*(?:NUMBER|ID)|ITEM(?:\s*NUMBER)?|MARK\s*(?:NO|NUMBER)|PLAN\s*(?:MARK|CODE)|(?:INDOOR|OUTDOOR)\s*UNIT\s*MARK|ID|IDENTIFICATION)$/i;
+// A header word naming a table's identity column, for the header shapes that
+// tell a family's valve or damper table where no title names its family
+// (blankHeaderRes; AS-84): its MARK or TAG, SYMBOL, DESIGNATION, or a unit's,
+// item's or equipment's NO. or ID. isControlValveHeaderShape keeps its own
+// words: classifyGrid labels tables by it, and the sheet graph's gap recovery
+// reads that label (pillarGapRecovery.ts), so it is the extraction's.
+const IDENTITY_HEADER_WORD_RE = /\b(?:TAG|MARK|VALVE\s*MARK|SYMBOL|DESIGNATION|(?:UNIT|ITEM|EQUIP(?:MENT)?\.?)\s*(?:NO|NUMBER|ID)|ID|IDENTIFICATION)\b/;
+/** A header's name as the mark rules read it: its spacing collapsed and a
+ * trailing period or colon dropped (UNIT NO.). A number sign stays: 05_MO
+ * prints its fan coils' marks in two columns, MARK ID (FCUC) and MARK # (A). */
+const headerName = (header) => String(header || "").replace(/\s+/g, " ").trim().replace(/\s*[.:]+$/, "");
+/** A name's letters and digits, as the extraction runs a row's key together. */
+const lettersAndDigits = (text) => String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const UNIT_MARK_HEADER_RE = /^UNIT\s*MARK$/i;
 const VALVE_MARK_HEADER_RE = /^VALVE\s*MARK$/i;
 
@@ -1278,6 +1300,7 @@ export function familyTableGate(table, spec, family = null) {
   // How the family reads the name of a row's unit (rowIdentityText): its own
   // identity column, and a row's UNIT MARK or VALVE MARK where it prints both
   // (AS-79). The takeoff and the reconcile read each row by it.
+  /** @type {{ identityHeaderRe: RegExp|null, unitMark: boolean, marksRead?: (text: string) => string[] }} */
   const identity = {
     identityHeaderRe: spec?.identityHeaderRe || null,
     unitMark: familyReadsUnitMark({ titleOk, altOk, hostOk }, family),
@@ -1286,10 +1309,18 @@ export function familyTableGate(table, spec, family = null) {
   // them, most of them named by words (028_TX's silencers, by the room and
   // the air they serve): each is one line (AS-81), as splitRowMarks reads.
   const wordsNamed = !filterRe && !catchAll && tableNamedByWords(table, identity);
-  return {
+  const gate = {
     pass, title, titleOk, altOk, hostOk, blankTitle, genericValveTitle,
     catchAll, unvouched, filterRe, titledAlso, rowService, coTitled, wordsNamed, identity,
   };
+  // The marks the family reads in a row's name, as it reads the row's marks
+  // (AS-84): the name split as the takeoff splits it, each mark read by
+  // familyMarkRead, in its letters and digits.
+  identity.marksRead = (text) => splitRowMarks(String(text || ""), Boolean(catchAll || filterRe), wordsNamed)
+    .map((one) => normalizeEquipMark(one)).filter(Boolean)
+    .filter((one) => familyMarkRead(gate, spec, one, markCanon(one)) > 0)
+    .map((one) => lettersAndDigits(one));
+  return gate;
 }
 
 /**
@@ -1462,26 +1493,59 @@ export function familyReadsUnitMark(gate, family) {
  * type code, 1S or 2R); and the family's own identity column (a control
  * valve's VALVE MARK). A row printing both a UNIT MARK and a VALVE MARK is
  * read by the family, never by their column order (familyReadsUnitMark).
+ * With the family's reading (the gate's marksRead), a mark column under
+ * another name (TAG, EQUIPMENT TAG, ID, OUTDOOR UNIT MARK...) names the row
+ * where the family reads no mark in its name, or prints the key as printed
+ * (AS-84).
  * @param {object} row a schedule table's row
- * @param {{ countKeyedIdentCol?: string|null, identityHeaderRe?: RegExp|null, unitMark?: boolean }} [opts]
+ * @param {{ countKeyedIdentCol?: string|null, identityHeaderRe?: RegExp|null, unitMark?: boolean, marksRead?: ((text: string) => string[])|null }} [opts]
  */
-export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeaderRe = null, unitMark = false } = {}) {
+export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeaderRe = null, unitMark = false, marksRead = null } = {}) {
   let tag = String(row.key || "").trim().replace(QUOTES_RE, "");
+  // Whether the name is still the extraction's key, not a cell as printed.
+  let keyed = true;
   if (countKeyedIdentCol) {
     const ident = String(row.cells?.[countKeyedIdentCol]?.text || "").trim();
-    if (ident) tag = ident;
+    if (ident) { tag = ident; keyed = false; }
   }
   // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
   // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
   // while row.key correctly holds EF-1.
   const headers = Object.keys(row.cells || {});
-  let markHeader = headers.find((header) => MARK_HEADER_RE.test(header));
+  let markHeader = headers.find((header) => MARK_HEADER_RE.test(headerName(header)));
   if (markHeader && (UNIT_MARK_HEADER_RE.test(markHeader) || VALVE_MARK_HEADER_RE.test(markHeader))) {
     const own = unitMark ? UNIT_MARK_HEADER_RE : VALVE_MARK_HEADER_RE;
     markHeader = headers.find((header) => own.test(header)) || markHeader;
   }
   const markCell = markHeader ? String(row.cells[markHeader]?.text || "").trim() : "";
-  if (markCell) tag = markCell.replace(QUOTES_RE, "").trim();
+  if (markCell) { tag = markCell.replace(QUOTES_RE, "").trim(); keyed = false; }
+  // Where the family reads no mark in the row's name, a mark column by another
+  // name whose cell prints one it reads names its unit (AS-84): 03_FL's and
+  // 22_GA's split systems print the outdoor unit's mark (OUTDOOR UNIT MARK
+  // DCU-1) beside the indoor unit's; a mark column under TAG would name 03_FL's
+  // ATU A beside its row key EATUA. The family's own reading decides (the
+  // gate's marksRead), in the takeoff and the reconcile alike; a name it
+  // reads stays. So does a key it reads, unless such a column prints the
+  // key's own letters and digits and the family reads other marks there: the
+  // extraction's key drops what a cell prints around them, a status before
+  // the mark (063_MT's (E) EF- 4 is keyed EEF-4, 067_CA's (N) B950A-AS-1001
+  // NB950A-AS-1001) or the ampersand between two (028_TX's UH-1 & UH-2,
+  // UH-1UH-2), and the cell is the key as printed. Where it only spaces them
+  // otherwise (09_ME's SAC - 1, keyed SAC-1), the key stays.
+  if (marksRead) {
+    const synonyms = headers.filter((header) => header !== markHeader && MARK_HEADER_SYNONYM_RE.test(headerName(header)));
+    const printed = (header) => String(row.cells[header]?.text || "").replace(QUOTES_RE, "").trim();
+    const reads = (text) => marksRead(text).length > 0;
+    const keyMarks = marksRead(tag).join(" ");
+    const asPrinted = keyed && synonyms.find((header) => lettersAndDigits(printed(header)) === lettersAndDigits(tag)
+      && reads(printed(header)) && marksRead(printed(header)).join(" ") !== keyMarks);
+    if (asPrinted) {
+      tag = printed(asPrinted);
+    } else if (synonyms.length && !keyMarks) {
+      const other = synonyms.find((header) => reads(printed(header)));
+      if (other) tag = printed(other);
+    }
+  }
   // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12") — Northport
   // blank return-fan schedule. Still never prefer bare grille-type TAG codes.
   const tagCell = cellText(row, /^TAG$/i);
@@ -2162,7 +2226,7 @@ export const HVAC_FAMILY_SPECS = {
     altKeyRe: /^[A-Z]{1,3}D[\s\-]?\d/i,
     blankKeyRe: /^(?:MD|CD|DMP|OA|RA|EA|SA)[\s\-]/i,
     blankHeaderRes: [
-      /\b(?:TAG|MARK|SYMBOL)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:DAMPER|ACTUATOR|SIZE|AIRFLOW|CFM)\b/,
     ],
   },
@@ -2176,7 +2240,7 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
     blankKeyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:SIZE|MANUFACTURER|MODEL|SERVICE)\b/,
     ],
   },
@@ -2201,7 +2265,7 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:MX|MV|TMV)[\s\-]/i,
     blankKeyRe: /^(?:MX|MV|TMV)[\s\-]/i,
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:SIZE|MANUFACTURER|MODEL|MIXING)\b/,
     ],
   },
@@ -2224,7 +2288,7 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^CV[\s\-]/i,
     blankServiceHint: "CHW",
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW)\b/,
     ],
   },
@@ -2237,7 +2301,7 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^CV[\s\-]/i,
     blankServiceHint: "HHW",
     blankHeaderRes: [
-      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      IDENTITY_HEADER_WORD_RE,
       /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW|HHW|REHEAT|HOT\s*WATER)\b/,
     ],
   },

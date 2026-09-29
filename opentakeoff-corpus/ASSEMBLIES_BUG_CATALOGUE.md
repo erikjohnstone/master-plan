@@ -5996,3 +5996,116 @@ load cut the tier-draw file short; its tests pass alone and in the rerun).
   lists out, and reading its absence as a schedule would trade two misses for two phantom families, so it stays.
 - An (R) status stays (above).
 - A table's own title as the compile reports it (`table_title`) drops a trailing "N OF M" only, as before.
+
+## AS-84 — a mark column printed under another name was not read: TAG, UNIT NO., EQUIPMENT TAG, OUTDOOR UNIT MARK (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by a metamorphic check of the takeoff and the reconcile on the 97 cached dev documents. Each
+table's MARK header was renamed to a name drafters print for the same column: TAG, SYMBOL, UNIT NO., EQUIPMENT TAG,
+DESIGNATION, UNIT TAG, ITEM NO., EQUIP. NO. or ID (2,717 renames). The takeoff and the reconcile should read the same
+units under each. Instead, 196 family readings changed on 9 documents:
+- **The row's name.** A row's name was read from its mark column only under MARK, SYMBOL, VALVE MARK, UNIT MARK, EQUIP.
+  TAG, DESIGNATION, UNIT NO, UNIT TAG or ITEM NO, spelled exactly so; UNIT NO. and ITEM NO. missed on their period.
+  Under any other name the row's key named it, and the extraction's key is not the mark as printed:
+  - it runs a status printed before the mark into it: 088_AZ's (E) CT-1 is keyed ECT-1, 03_FL's (E)ATU A EATUA, 063_MT's
+    (E) VAV-105 EVAV-105 and (E) EF- 4 EEF-4, 067_CA's (N) B950A-AS-1001 NB950A-AS-1001;
+  - it runs a pair together: 028_TX's UH-1 & UH-2 is keyed UH-1UH-2;
+  - or it is another column: 013_MO keys its flow meters by their building (CROSS-TIE, PLANT 1).
+
+  So units were lost (088_AZ's chiller, cooling tower and expansion tank; 03_FL's eight terminal units; 063_MT's two
+  VAV boxes; 013_MO's three flow meters), counted under the key's mark, not the printed one (063_MT's EEF-4 for EF-4,
+  067_CA's three NB950A-... for B950A-...), or two counted as one (028_TX's unit heaters).
+- **The valve tables.** A control valve or damper table that names no water, or has no title, is told by its identity
+  column's header: TAG, MARK or VALVE MARK (a damper's TAG, MARK or SYMBOL). Under SYMBOL, DESIGNATION, UNIT NO.,
+  ITEM NO., EQUIP. NO. or ID, 009_FL's, 072_CA's and 074_CA's valve tables were no valve tables: 2, 22 and 22 valves
+  lost.
+
+On the documents as printed, 232 of the 537 tables a family reads print MARK as their first column. The others print
+SYMBOL (75), TAG (68), DESIGNATION (19), EQUIPMENT TAG (18), TAG NO. (11), UNIT NO. (10), EQUIP NO (8), PLAN MARK (8),
+PLAN CODE (7) and more. And a split system's schedule names two units a row. 22_GA's, 03_FL's and 036_LA's print the
+outdoor unit's mark (OUTDOOR UNIT MARK DCU-1, 01-1-CU-1) beside the indoor unit's (DAC-1, 01-1-DAC-1). The row was the
+fan coil's, and no family read its condensing unit.
+
+**Fix (`corpusTakeoff.mjs`, the row identity the takeoff and the reconcile share, AS-79):**
+- A mark column's header is read by its name (`headerName`): its spacing collapsed and a trailing period or colon
+  dropped, so UNIT NO. is UNIT NO. A number sign stays: 05_MO prints its fan coils' marks in two columns, MARK ID
+  (FCUC) and MARK # (A), and the key joins them.
+- The column's other names (`MARK_HEADER_SYNONYM_RE`): TAG, TAG NO., TAG NAME, ID TAG, EQUIPMENT TAG, EQUIP NO, UNIT
+  NUMBER, ITEM, MARK NUMBER, PLAN MARK, PLAN CODE, INDOOR or OUTDOOR UNIT MARK, ID, IDENTIFICATION. Where the family
+  reads no mark in the row's name, such a column whose cell holds a mark it reads names the unit (`rowIdentityText`).
+  - The family's own reading decides: the gate's `marksRead`, the name split as the takeoff splits it, each mark read
+    by `familyMarkRead`. It applies in the takeoff and the reconcile alike.
+  - A name the family reads stays: a TAG column can hold a grille's type code (1S, 2R) beside a row keyed by its fan's
+    mark.
+- A key the family reads stays too, unless such a column prints the key's letters and digits and the family reads
+  other marks there. That is the key as printed, before the extraction ran its status or its pair together: (E) EF- 4
+  for EEF-4, UH-1 & UH-2 for UH-1UH-2. A cell that only spaces the key otherwise (SAC - 1 for SAC-1) leaves the key.
+- The family gates' header shapes for a valve or damper table no title names (`blankHeaderRes`: the control damper,
+  isolation, mixing, chilled water and hot water valves) read its identity column under any of those names
+  (`IDENTITY_HEADER_WORD_RE`: TAG, MARK, SYMBOL, DESIGNATION, a unit's, item's or equipment's NO. or ID).
+
+**Measured and dropped:**
+- A first version preferred any such column whose cell printed a mark over the row's key. On the documents it lost
+  013_MO's four hot water valves (its TAG cell runs two rows' ranges together, CV-7 - CV-10 CV-1 - CV-6, where the
+  key reads CV-7-CV-10) and 05_MO's six fan coils (MARK # read as MARK). So the family's reading decides.
+- It also widened the valve header shape `classifyGrid` labels tables by (`isControlValveHeaderShape`). That relabelled
+  10 tables on 7 documents: 016_NY's CONTROL DAMPER SCHEDULE (CD) went from an equipment schedule to a valve schedule.
+  The sheet graph's gap recovery reads that label (`pillarGapRecovery.ts`), so the shape belongs to the extraction and
+  stays as it was. Only the family gates' own shapes read the other names.
+- A second version took such a cell wherever it printed the key's letters and digits. On the documents it respaced
+  09_ME's SAC-1 and SCU-1 (SAC - 1) and 043_FL's HWP1-2 and CWP9-10 (HWP 1-2): the same units, spelled worse. So the
+  cell names the row only where the family reads other marks in it.
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-83), in the takeoff and the reconcile alike: 35 condensing units come
+  in, the outdoor units of split systems: 036_LA's 33 (01-1-CU-1 ...), 03_FL's DCU-1 and 22_GA's DCU-1. The reconcile
+  goes from 2,619 to 2,654 rows. Every other unit and row is byte-identical.
+- **The keyed compile acceptance** (WP1's check, replayed on the 93 keyed dev sets): 39 pass, as before. 03_FL's
+  condensing units now match its key (1). 22_GA's and 036_LA's fail as they did: their keys hold none of their split
+  systems' units, and the takeoff counted the fan coils before.
+- **The metamorphic check:** 196 → 0 differences.
+- **Grid labels** (`classifyGrid`, the valve and points-list shapes) on the 1,654 tables: 0 change.
+- **Evals:** the five tiers' attribute evals line for line, but for the compile item counts of the documents the
+  condensing units come in (dev 2: 036_LA's 36 → 69, 03_FL's 29 → 30; dev 4: 22_GA's 37 → 38). The typical eval
+  (130/244), GATE C dev (227/244), the binding, question and reading evals and the unseen audit's replay are identical
+  to AS-83's; 058_CA's replay runs out of memory as it did.
+- **Held-out** (aggregates only, 0 graphs built), each as with AS-83:
+  - GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented;
+  - held-out 2 334/472;
+  - GATE 5 21/91;
+  - GATE C 35/91.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-84):
+- 03_FL's ATU A beside its key EATUA under eleven names of its column, with the family's reading. Without it, only a
+  column named as a mark column names a row. The takeoff and the reconcile read 03_FL's terminal units alike under
+  TAG, EQUIPMENT TAG, TAG NO., UNIT NO. and ID.
+- A name the family reads stays: the grille type code beside EF-3, 013_MO's merged ranges, 05_MO's MARK ID and MARK #.
+  A type code, a lone letter, words or another family's mark names no row.
+- 22_GA's and 03_FL's split systems: the fan coil DAC-1 and the condensing unit DCU-1, with or without a MARK column,
+  and a row listing two of each ("DCU-1 & 2", "DCU-1, DCU-2", "DCU-1 THRU 2"). A fan schedule's MARK beside a TAG of
+  type codes reads its fan alone.
+- 063_MT's (E) EF- 4, 067_CA's (N) B950A-AS-1001, 088_AZ's (E) CT-1 and 028_TX's UH-1 & UH-2 under seven names of the
+  column read as under MARK, however the extraction keyed them. 09_ME's SAC - 1 keeps its key SAC-1; a key beside a
+  cell the family reads no mark in stays; a MARK cell is never replaced.
+- 009_FL's valve table and an untitled valve grid read their valves under SYMBOL, DESIGNATION, UNIT NO., ID, EQUIPMENT
+  TAG and EQUIP. NO. as under MARK. So do untitled damper, isolation valve, mixing valve and hot water valve grids, as
+  under TAG. A table naming no identity column is no valve table. The extraction's valve header shape still asks for
+  TAG, MARK or VALVE MARK.
+
+30 of 31 mutations each fail a test beyond the baseline's. The one left (`marksRead` reading a name whole, not split
+as the takeoff splits it) reads the same on every test, on the 97 documents and in the metamorphic check.
+
+**Guard:** web typecheck clean; lint 0 errors (the 3 known warnings); the web suite's 3,970 tests fail only AS-1's
+three base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377 of 380, as at AS-83.
+
+**UI proof:** the dev server started on the change, deterministic readings.
+- The Takeoff canvas's reconcile equals `reconcile_schedule_plan` over MCP row for row:
+  - 036_LA: CONDENSING_UNIT's 35 rows and FCU's 34 (7 checks);
+  - 03_FL: DCU-1, DAC-1 and VAV's 15, ATU A to ATU N (10 checks);
+  - 22_GA: CONDENSING_UNIT's VRHP-1 and DCU-1, FCU's 9, HEAT_PUMP's 8 (10 checks).
+- Takeoff → Assemblies is byte-identical to `apply_assemblies` over MCP on 036_LA (69 units, 107 records, 1,375
+  lines; 16 checks) and 22_GA (38 units, 53 records, 473 lines; 18 checks). The condensing units are records with no
+  assembly: the starter library prices none, and the report says so.
+
+**Left as it is (measured, disclosed):**
+- The extraction's grid label (`classifyGrid`) reads a valve grid's identity column under TAG, MARK or VALVE MARK only
+  (above): an untitled valve grid under SYMBOL is labelled as before, while the takeoff reads its valves.

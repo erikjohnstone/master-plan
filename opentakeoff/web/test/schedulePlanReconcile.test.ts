@@ -20,7 +20,9 @@ import {
 import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
   inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks, markSpellings, unitMarkKey, familyMarkRead,
+  isControlValveHeaderShape,
 } from "../src/lib/corpusTakeoff.mjs";
+import { classifyGrid } from "../src/lib/gridClassify.mjs";
 import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
@@ -1657,7 +1659,9 @@ test("a family's own identity column names a row before a MARK the row prints fi
   ])] };
   assert.deepEqual(as77Marks(bypass).BYPASS_CONTROL_VALVE, { compile: ["BCV1"], reconcile: ["BCV1"] });
   const gate = familyTableGate(scheduleTableView(chw.tables[0]), HVAC_FAMILY_SPECS.CHW_CONTROL_VALVE, "CHW_CONTROL_VALVE")!;
-  assert.deepEqual(gate.identity, { identityHeaderRe: HVAC_FAMILY_SPECS.CHW_CONTROL_VALVE.identityHeaderRe, unitMark: false });
+  const { marksRead, ...options } = gate.identity;
+  assert.deepEqual(options, { identityHeaderRe: HVAC_FAMILY_SPECS.CHW_CONTROL_VALVE.identityHeaderRe, unitMark: false });
+  assert.deepEqual(marksRead?.("CV-CHW-1"), ["CVCHW1"]);
   assert.equal(gate.wordsNamed, false);
 });
 
@@ -1853,4 +1857,154 @@ test("a family reads its schedule under a decorated title as under the title pri
     as77Table("m.pdf#10", "(R) EXHAUST FANS", ["MARK", "CFM"], [{ MARK: "EF-9", CFM: "400" }]),
   ] };
   assert.deepEqual(as77Marks(none), {});
+});
+
+// AS-84: a row's mark column printed under another name.
+test("a mark column printed under another name names a row whose key the family reads no mark in; a key it reads stays (AS-84)", () => {
+  const row = (cells: Record<string, string>, key: string) => ({ key, cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text }])) });
+  // The family's reading, as the gate gives it: here, a mark of letters and a
+  // number or letter after a hyphen or space, in its letters and digits.
+  const marksRead = (text: string) => (/^(?:ATU|CV|EF|FCUC|VAV|B)[\s-]?[A-Z0-9]/.test(text) ? [text.toUpperCase().replace(/[^A-Z0-9]/g, "")] : []);
+  // 03_FL keys a terminal unit EATUA, the status run into its mark; its column
+  // prints ATU A. Under each name drafters give that column, as under MARK.
+  for (const header of ["MARK", "TAG", "TAG NO.", "EQUIPMENT TAG", "EQUIP NO", "UNIT NO.", "PLAN MARK", "PLAN CODE", "ID", "ITEM NO.", "MARK NUMBER"]) {
+    assert.equal(rowIdentityText(row({ [header]: "ATU A", CFM: "400" }, "EATUA"), { marksRead }), "ATU A", header);
+  }
+  // Without the family's reading, only a column named as a mark column names a row.
+  assert.equal(rowIdentityText(row({ TAG: "ATU A", CFM: "400" }, "EATUA")), "EATUA");
+  // A key the family reads stays: a TAG column of grille type codes beside
+  // the fan's mark, 013_MO's TAG cell running two rows' ranges together, a
+  // mark printed in two columns (05_MO's MARK ID FCUC and MARK # A).
+  assert.equal(rowIdentityText(row({ TAG: "1S", CFM: "200" }, "EF-3"), { marksRead }), "EF-3");
+  assert.equal(rowIdentityText(row({ TAG: "CV-7 - CV-10 CV-1 - CV-6", GPM: "12" }, "CV-7-CV-10"), { marksRead }), "CV-7-CV-10");
+  assert.equal(rowIdentityText(row({ "MARK ID": "FCUC", "MARK #": "A", CFM: "215" }, "FCUC A"), { marksRead }), "FCUC A");
+  // A cell that prints no mark, or none the family reads, names no row: a
+  // type code, a lone letter, words, another family's mark.
+  for (const text of ["1S", "A", "HORIZONTAL CEILING", "AHU-1"]) assert.equal(rowIdentityText(row({ TAG: text, CFM: "200" }, "EATUA"), { marksRead }), "EATUA", text);
+  // UNIT NO. is UNIT NO, whose cell names its row.
+  assert.equal(rowIdentityText(row({ "UNIT NO.": "B-1 & 2", MBH: "1000" }, "B-1/B-2")), "B-1 & 2");
+  // In the takeoff and the reconcile alike: 03_FL's terminal units under each
+  // name of the column read as under MARK.
+  const atus = (header: string) => ({ tables: [as77Table("f.pdf#64", "AIR TERMINAL UNIT SCHEDULE (AHU 2)", [header, "CFM"], [
+    { __key: "EATUA", [header]: "ATU A", CFM: "400" }, { __key: "EATUB", [header]: "ATU B", CFM: "300" },
+  ])] });
+  const byMark = as77Marks(atus("MARK"));
+  assert.deepEqual(byMark, { VAV: { compile: ["ATUA", "ATUB"], reconcile: ["ATUA", "ATUB"] } });
+  for (const header of ["TAG", "EQUIPMENT TAG", "TAG NO.", "UNIT NO.", "ID"]) assert.deepEqual(as77Marks(atus(header)), byMark, header);
+  // 22_GA's DUCTLESS SPLIT SYSTEM SCHEDULE keys each row by its indoor unit
+  // and prints its outdoor unit beside it: the fan coil is DAC-1, the
+  // condensing unit the OUTDOOR UNIT MARK's DCU-1, which no family read.
+  const split = { tables: [as77Table("g.pdf#64", "DUCTLESS SPLIT SYSTEM SCHEDULE", ["INDOOR UNIT MARK", "OUTDOOR UNIT MARK", "MIN. COOLING MBH"], [
+    { "INDOOR UNIT MARK": "DAC-1", "OUTDOOR UNIT MARK": "DCU-1", "MIN. COOLING MBH": "24" },
+  ])] };
+  assert.deepEqual(as77Marks(split), { FCU: { compile: ["DAC1"], reconcile: ["DAC1"] }, CONDENSING_UNIT: { compile: ["DCU1"], reconcile: ["DCU1"] } });
+  // 03_FL's DX COOLING ONLY DUCTLESS SPLIT UNIT SCHEDULE names the indoor unit
+  // under MARK: the condensing unit is its OUTDOOR UNIT MARK's still.
+  const marked = { tables: [as77Table("f.pdf#65", "DX COOLING ONLY DUCTLESS SPLIT UNIT SCHEDULE", ["MARK", "INDOOR UNIT AIRFLOW (CFM)", "OUTDOOR UNIT MARK"], [
+    { MARK: "DAC-1", "INDOOR UNIT AIRFLOW (CFM)": "330", "OUTDOOR UNIT MARK": "DCU-1" },
+  ])] };
+  assert.deepEqual(as77Marks(marked), { FCU: { compile: ["DAC1"], reconcile: ["DAC1"] }, CONDENSING_UNIT: { compile: ["DCU1"], reconcile: ["DCU1"] } });
+  // A row listing two indoor units and their two outdoor units: the cell is
+  // read as the takeoff splits a row's name, one unit a mark.
+  for (const [indoor, outdoor] of [["DAC-1 & 2", "DCU-1 & 2"], ["DAC-1, DAC-2", "DCU-1, DCU-2"], ["DAC-1 THRU 2", "DCU-1 THRU 2"]]) {
+    const pair = { tables: [as77Table("g.pdf#64", "DUCTLESS SPLIT SYSTEM SCHEDULE", ["INDOOR UNIT MARK", "OUTDOOR UNIT MARK", "MIN. COOLING MBH"], [
+      { "INDOOR UNIT MARK": indoor, "OUTDOOR UNIT MARK": outdoor, "MIN. COOLING MBH": "24" },
+    ])] };
+    assert.deepEqual(as77Marks(pair), {
+      FCU: { compile: ["DAC1", "DAC2"], reconcile: ["DAC1", "DAC2"] },
+      CONDENSING_UNIT: { compile: ["DCU1", "DCU2"], reconcile: ["DCU1", "DCU2"] },
+    }, outdoor);
+  }
+  // A name the family reads stays: a fan schedule's MARK beside a TAG of
+  // grille type codes.
+  const fans = { tables: [as77Table("m.pdf#3", "FAN SCHEDULE", ["MARK", "TAG", "CFM"], [{ MARK: "EF-1", TAG: "1S", CFM: "500" }])] };
+  assert.deepEqual(as77Marks(fans), { FAN: { compile: ["EF1"], reconcile: ["EF1"] } });
+});
+
+test("a key the extraction ran together is read as its mark column prints it, under any name of the column (AS-84)", () => {
+  // The extraction keys a row by its mark cell's letters and digits, running
+  // in a status printed before the mark or the ampersand between two:
+  // 063_MT's (E) EF- 4 is keyed EEF-4, 067_CA's (N) B950A-AS-1001
+  // NB950A-AS-1001, 088_AZ's (E) CT-1 ECT-1, 028_TX's UH-1 & UH-2 UH-1UH-2.
+  // Under MARK the cell names the row; under the column's other names too.
+  const keyed = (title: string, header: string, key: string, mark: string) => ({ tables: [as77Table("k.pdf#9", title, [header, "REMARKS"], [
+    { __key: key, [header]: mark, REMARKS: "" },
+  ])] });
+  const cases: Array<[string, string, string, Record<string, string[]>]> = [
+    ["EXHAUST FAN SCHEDULE", "EEF-4", "(E) EF- 4", { FAN: ["EF4"] }],
+    ["PCW AIR SEPARATOR SCHEDULE", "NB950A-AS-1001", "(N) B950A-AS-1001", { AIR_SEPARATOR: ["B950AAS1001"] }],
+    ["COOLING TOWER SCHEDULE", "ECT-1", "(E) CT-1", { COOLING_TOWER: ["CT1"] }],
+    ["UNIT HEATER SCHEDULE", "UH-1UH-2", "UH-1 & UH-2", { UNIT_HEATER: ["UH1", "UH2"] }],
+  ];
+  for (const [title, key, mark, want] of cases) {
+    const byMark = as77Marks(keyed(title, "MARK", key, mark));
+    assert.deepEqual(byMark, Object.fromEntries(Object.entries(want).map(([f, m]) => [f, { compile: m, reconcile: m }])), `${title} MARK`);
+    for (const header of ["TAG", "EQUIPMENT TAG", "TAG NO.", "UNIT NO.", "EQUIP. NO.", "ID", "PLAN MARK"]) {
+      assert.deepEqual(as77Marks(keyed(title, header, key, mark)), byMark, `${title} ${header}`);
+    }
+  }
+  // Where the cell only spaces the key's marks otherwise, the key names the
+  // row as before: 09_ME's SAC - 1 is keyed SAC-1, 043_FL's HWP 1-2 HWP1-2.
+  const tags = (graph: object, family: string) => ({
+    compile: (compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>)[family]?.items.map((i) => i.tag),
+    reconcile: (reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!) as Array<{ tag: string }>).map((r) => r.tag),
+  });
+  const spaced = { tables: [as77Table("m.pdf#7", "MULTI-SPLIT HEAT PUMP INDOOR UNIT PERFORMANCE SCHEDULE", ["TAG", "CORRESPONDING OUTDOOR UNIT", "NOMINAL COOLING (MBH)"], [
+    { __key: "SAC-1", TAG: "SAC - 1", "CORRESPONDING OUTDOOR UNIT": "SCU - 1", "NOMINAL COOLING (MBH)": "12.2" },
+  ])] };
+  assert.deepEqual(tags(spaced, "HEAT_PUMP"), { compile: ["SAC-1"], reconcile: ["SAC-1"] });
+  // So does a key the family reads beside a cell of its letters and digits
+  // that the family reads no mark in.
+  assert.deepEqual(as77Marks(keyed("EXHAUST FAN SCHEDULE", "TAG", "EF-4", "E.F.4")), { FAN: { compile: ["EF4"], reconcile: ["EF4"] } });
+  // A key the family reads beside a column of other letters stays (the
+  // grille type code, 013_MO's merged ranges). And only the extraction's key
+  // is read as printed: a MARK cell is the drafter's own print, and a column
+  // under another name never replaces it, even one printing its letters and
+  // digits with a status.
+  const typeCode = { tables: [as77Table("m.pdf#3", "EXHAUST FAN SCHEDULE", ["TAG", "CFM"], [{ __key: "EF-3", TAG: "1S", CFM: "200" }])] };
+  assert.deepEqual(as77Marks(typeCode), { FAN: { compile: ["EF3"], reconcile: ["EF3"] } });
+  const marked = { tables: [as77Table("m.pdf#3", "EXHAUST FAN SCHEDULE", ["MARK", "EQUIPMENT TAG", "CFM"], [{ __key: "EEF-4", MARK: "EEF-4", "EQUIPMENT TAG": "(E) EF-4", CFM: "200" }])] };
+  assert.deepEqual(tags(marked, "FAN"), { compile: ["EEF-4"], reconcile: ["EEF-4"] });
+});
+
+test("a control valve or damper table reads its units whatever its identity column is called: SYMBOL, DESIGNATION, UNIT NO., ID (AS-84)", () => {
+  // 009_FL's HYDRONIC CONTROL VALVE SCHEDULE names no water.
+  const valves = (header: string) => ({ tables: [as77Table("m.pdf#20", "HYDRONIC CONTROL VALVE SCHEDULE", [header, "GPM", "MAX PRESSURE DROP (FT)", "MIN CV", "TYPE"], [
+    { [header]: "CV-1", GPM: "12", "MAX PRESSURE DROP (FT)": "5", "MIN CV": "4", TYPE: "2-WAY" },
+    { [header]: "CV-2", GPM: "8", "MAX PRESSURE DROP (FT)": "5", "MIN CV": "3", TYPE: "2-WAY" },
+  ])] });
+  const byMark = as77Marks(valves("MARK"));
+  assert.deepEqual(byMark, { CHW_CONTROL_VALVE: { compile: ["CV1", "CV2"], reconcile: ["CV1", "CV2"] } });
+  // An untitled valve grid, likewise.
+  const grid = (header: string) => ({ tables: [as77Table("m.pdf#21", "", [header, "GPM", "SERVED"], [{ [header]: "CV-1", GPM: "12", SERVED: "AHU-1" }])] });
+  assert.deepEqual(as77Marks(grid("TAG")), { CHW_CONTROL_VALVE: { compile: ["CV1"], reconcile: ["CV1"] } });
+  for (const header of ["SYMBOL", "DESIGNATION", "UNIT NO.", "ID", "EQUIPMENT TAG", "EQUIP. NO."]) {
+    assert.deepEqual(as77Marks(valves(header)), byMark, header);
+    assert.deepEqual(as77Marks(grid(header)), as77Marks(grid("TAG")), `untitled ${header}`);
+  }
+  // Negative control: a table naming no identity column is no valve table.
+  assert.deepEqual(as77Marks(valves("DESCRIPTION")), {});
+  assert.deepEqual(as77Marks(grid("DESCRIPTION")), {});
+  // Untitled grids of each family whose identity column tells its table
+  // (blankHeaderRes): a damper's, an isolation valve's, a mixing valve's, a
+  // hot water valve's, under each name as under TAG.
+  const grids: Record<string, (header: string) => object> = {
+    CONTROL_DAMPER: (h) => ({ tables: [as77Table("m.pdf#30", "", [h, "DAMPER TYPE", "CFM"], [{ [h]: "MD-1", "DAMPER TYPE": "OPPOSED BLADE", CFM: "400" }])] }),
+    ISOLATION_VALVE: (h) => ({ tables: [as77Table("m.pdf#31", "", [h, "SERVICE", "CONNECTION"], [{ [h]: "IV-1", SERVICE: "CHW", CONNECTION: "FLANGED" }])] }),
+    MIXING_VALVE: (h) => ({ tables: [as77Table("m.pdf#32", "", [h, "MIXING TEMP", "INLET"], [{ [h]: "TMV-1", "MIXING TEMP": "110", INLET: "3/4" }])] }),
+    HHW_CONTROL_VALVE: (h) => ({ tables: [as77Table("m.pdf#33", "", [h, "HOT WATER", "REHEAT COIL"], [{ [h]: "CV-1", "HOT WATER": "HHW", "REHEAT COIL": "RH-1" }])] }),
+  };
+  for (const [family, of] of Object.entries(grids)) {
+    const byTag = as77Marks(of("TAG"));
+    assert.deepEqual(Object.keys(byTag), [family], family);
+    for (const header of ["SYMBOL", "DESIGNATION", "UNIT NO.", "ID", "EQUIP. NO."]) assert.deepEqual(as77Marks(of(header)), byTag, `${family} ${header}`);
+    assert.deepEqual(as77Marks(of("DESCRIPTION")), {}, `${family} DESCRIPTION`);
+  }
+  // The extraction's own label is unchanged: the valve header shape
+  // classifyGrid labels a table by, which the sheet graph's gap recovery
+  // reads, still asks for TAG, MARK or VALVE MARK.
+  const labelled = (header: string) => as77Table("m.pdf#21", "", [header, "GPM", "SERVED"], [{ [header]: "CV-1", GPM: "12", SERVED: "AHU-1" }]);
+  assert.equal(isControlValveHeaderShape(labelled("TAG")), true);
+  assert.equal(classifyGrid(labelled("TAG") as unknown as Parameters<typeof classifyGrid>[0]).type, "VALVE_SCHEDULE");
+  for (const header of ["SYMBOL", "DESIGNATION", "UNIT NO.", "ID"]) assert.equal(isControlValveHeaderShape(labelled(header)), false, header);
 });
