@@ -20,7 +20,7 @@ import {
 import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
   inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks, markSpellings, unitMarkKey, familyMarkRead,
-  isControlValveHeaderShape, expandMarkList, expandEquipMarks, rowMarkText,
+  isControlValveHeaderShape, expandMarkList, expandEquipMarks, rowMarkText, normalizeEquipMark, plainMark,
 } from "../src/lib/corpusTakeoff.mjs";
 import { rowKeyOf } from "../src/lib/sheetgraph.ts";
 import { classifyGrid } from "../src/lib/gridClassify.mjs";
@@ -2090,3 +2090,138 @@ test("a row listing two units reads both in the takeoff and the reconcile, keyed
   assert.deepEqual(as77Marks(baker).ERV, { compile: ["ERU1"], reconcile: ["ERU1"] });
 });
 
+// AS-85: a footnote mark printed with a unit's mark.
+test("a footnote mark printed with a unit's mark is no part of its name; a status or number in parentheses is (AS-85)", () => {
+  // A star, dagger or superscript number before or after the mark, or a
+  // period after its number, refers to a note.
+  for (const [printed, mark] of [
+    ["AHU-1*", "AHU-1"], ["AHU-1**", "AHU-1"], ["*AHU-1", "AHU-1"], ["** AHU-1", "AHU-1"], ["EF-2†", "EF-2"], ["EF-2‡", "EF-2"],
+    ["P-1¹", "P-1"], ["P-1²³", "P-1"], ["AHU-1.", "AHU-1"], ["AHU-1A.", "AHU-1A"], ["RTU-G†", "RTU-G"], ["CV-CHW-BP-A*", "CV-CHW-BP-A"],
+  ]) {
+    assert.equal(plainMark(printed), mark, printed);
+    assert.equal(normalizeEquipMark(printed), mark, printed);
+  }
+  // Read before the status a mark prints ahead of it.
+  assert.equal(normalizeEquipMark("(N)AHU-1*"), "AHU-1");
+  assert.equal(normalizeEquipMark("*(E)AHU-1"), "AHU-1");
+  // A status or a number in parentheses can tell two units of one mark apart
+  // (069_ID's AHU-1(E); P-1(1) beside P-1(2)), and a word's period is its own.
+  for (const text of ["AHU-1(E)", "P-1(1)", "NO.", "AHU-1", "B1", "*"]) assert.equal(plainMark(text), text, text);
+  // A list of one family's marks reads through a footnote mark on any of them.
+  assert.deepEqual(expandMarkList("EF-1*, 2"), ["EF-1*", "EF-2"]);
+  assert.deepEqual(expandMarkList("EF-1 & 2*"), ["EF-1", "EF-2"]);
+  assert.deepEqual(expandMarkList("FOP-8A* & B"), ["FOP-8A*", "FOP-8B"]);
+  assert.deepEqual(splitRowMarks("EF-1*/2", false).map((one) => normalizeEquipMark(one)), ["EF-1", "EF-2"]);
+  assert.deepEqual(splitRowMarks("EF-1*, 2", true).map((one) => normalizeEquipMark(one)), ["EF-1", "EF-2"]);
+});
+
+test("a unit whose mark cell prints a footnote mark is read by its mark in the takeoff and the reconcile, keyed as the extraction keys it (AS-85)", () => {
+  // The extraction keys a row by its name's letters and digits: EF-1* is
+  // keyed EF-1, and the mark cell still prints EF-1*.
+  const notes: Array<[string, (mark: string) => string]> = [
+    ["star", (m) => `${m}*`], ["stars", (m) => `${m}**`], ["lead", (m) => `*${m}`], ["dagger", (m) => `${m}†`],
+    ["double dagger", (m) => `${m}‡`], ["superscript", (m) => `${m}¹`], ["period", (m) => `${m}.`],
+  ];
+  const tags = (graph: object, family: string) => ((compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>)[family]?.items ?? []).map((i) => i.tag);
+  const rcTags = (graph: object, family: string) => (reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!) as Array<{ tag: string }>).map((r) => r.tag);
+  for (const [what, note] of notes) {
+    assert.equal(rowKeyOf(note("EF-1"), "equipment")?.key, "EF-1", what);
+    // Under a fan schedule's key filter, a pump schedule's title, and a mark
+    // column under another name.
+    for (const header of ["MARK", "TAG"]) {
+      const fans = { tables: [as77Table("m.pdf#5", "EXHAUST FAN SCHEDULE", [header, "CFM"], [
+        { __key: "EF-1", [header]: note("EF-1"), CFM: "400" }, { __key: "EF-2", [header]: "EF-2", CFM: "300" },
+      ])] };
+      assert.deepEqual(as77Marks(fans), { FAN: { compile: ["EF1", "EF2"], reconcile: ["EF1", "EF2"] } }, `${what} ${header}`);
+      assert.deepEqual(tags(fans, "FAN"), ["EF-1", "EF-2"], `${what} ${header}`);
+      assert.deepEqual(rcTags(fans, "FAN").sort(), ["EF-1", "EF-2"], `${what} ${header}`);
+      const pumps = { tables: [as77Table("m.pdf#6", "PUMP SCHEDULE", [header, "GPM"], [{ __key: "P-1", [header]: note("P-1"), GPM: "40" }])] };
+      assert.deepEqual(as77Marks(pumps), { PUMP: { compile: ["P1"], reconcile: ["P1"] } }, `${what} ${header} pumps`);
+    }
+    // A row listing two units with a footnote mark on the list.
+    const listed = { tables: [as77Table("m.pdf#5", "EXHAUST FAN SCHEDULE", ["MARK", "CFM"], [
+      { __key: rowKeyOf(`EF-1 & ${note("2")}`, "equipment")!.key, MARK: `EF-1 & ${note("2")}`, CFM: "400" },
+    ])] };
+    if (what !== "lead") assert.deepEqual(as77Marks(listed), { FAN: { compile: ["EF1", "EF2"], reconcile: ["EF1", "EF2"] } }, `${what} list`);
+  }
+  // Negative controls: 069_ID's existing air handler and boilers, keyed
+  // AHU-1E, B-1E and B-2E, keep the status their SYMBOL prints; P-1(1) and
+  // P-1(2) are two pumps.
+  const existing = { tables: [
+    as77Table("i.pdf#5", "EXISTING AIR HANDLING UNIT SCHEDULE", ["SYMBOL", "TYPE"], [{ __key: "AHU-1E", SYMBOL: "AHU-1(E)", TYPE: "SEMI-CUSTOM" }]),
+    as77Table("i.pdf#5", "EXISTING CONDENSING HOT WATER BOILER SCHEDULE", ["SYMBOL", "FUEL"], [
+      { __key: "B-1E", SYMBOL: "B-1(E)", FUEL: "NATURAL GAS" }, { __key: "B-2E", SYMBOL: "B-2(E)", FUEL: "NATURAL GAS" },
+    ]),
+  ] };
+  assert.deepEqual(tags(existing, "AHU"), ["AHU-1(E)"]);
+  assert.deepEqual(tags(existing, "BOILER"), ["B-1(E)", "B-2(E)"]);
+  assert.deepEqual(rcTags(existing, "BOILER").sort(), ["B-1(E)", "B-2(E)"]);
+  const numbered = { tables: [as77Table("m.pdf#6", "PUMP SCHEDULE", ["MARK", "GPM"], [
+    { __key: rowKeyOf("P-1(1)", "equipment")!.key, MARK: "P-1(1)", GPM: "40" }, { __key: rowKeyOf("P-1(2)", "equipment")!.key, MARK: "P-1(2)", GPM: "40" },
+  ])] };
+  assert.deepEqual(tags(numbered, "PUMP"), ["P-1(1)", "P-1(2)"]);
+});
+
+test("a mark printed with another dash glyph, a no-break space or a zero-width character reads as printed with a hyphen or a space (AS-85)", () => {
+  // A word processor or PDF writer prints a mark's hyphen as another glyph.
+  const glyphs = ["‐", "‑", "‒", "–", "—", "―", "−", "﹘", "﹣", "－"];
+  for (const glyph of glyphs) {
+    assert.equal(plainMark(`AHU${glyph}1`), "AHU-1", glyph);
+    assert.equal(normalizeEquipMark(`SF${glyph}P1${glyph}4`), "SF-P1-4", glyph);
+  }
+  assert.equal(plainMark("AHU 1"), "AHU 1");
+  assert.equal(plainMark("AHU​-1­"), "AHU-1");
+  assert.equal(plainMark("AHU‐" + "1†"), "AHU-1");
+  // A range, a list or a pair printed with another dash reads as one printed with a hyphen.
+  assert.deepEqual(splitRowMarks("EF–1 – EF–4", false).map((one) => normalizeEquipMark(one)), ["EF-1", "EF-2", "EF-3", "EF-4"]);
+  assert.deepEqual(splitRowMarks("EF‐1 THRU EF‐4", false).map((one) => normalizeEquipMark(one)), ["EF-1", "EF-2", "EF-3", "EF-4"]);
+  assert.deepEqual(splitRowMarks("EF–1, 2", true).map((one) => normalizeEquipMark(one)), ["EF-1", "EF-2"]);
+  assert.deepEqual(splitRowMarks("SF‑P2‑1 & 2", false).map((one) => normalizeEquipMark(one)), ["SF-P2-1", "SF-P2-2"]);
+  assert.deepEqual(expandMarkList("EF–1, 2"), ["EF–1", "EF-2"]);
+  // In the takeoff and the reconcile alike: an air handler, two boilers and a
+  // fan printed with each glyph, the row keyed as the extraction keys it
+  // (AHU‐1 is keyed AHU1), read and named as printed with a hyphen.
+  const printed = (dash: string) => ({ tables: [
+    as77Table("m.pdf#4", "AIR HANDLING UNIT SCHEDULE", ["MARK", "CFM"], [{ __key: rowKeyOf(`AHU${dash}1`, "equipment")!.key, MARK: `AHU${dash}1`, CFM: "4000" }]),
+    as77Table("m.pdf#4", "BOILER SCHEDULE", ["MARK", "MBH"], [
+      { __key: rowKeyOf(`B${dash}1`, "equipment")!.key, MARK: `B${dash}1`, MBH: "1000" }, { __key: rowKeyOf(`B${dash}2`, "equipment")!.key, MARK: `B${dash}2`, MBH: "1000" },
+    ]),
+    as77Table("m.pdf#5", "EXHAUST FAN SCHEDULE", ["MARK", "CFM"], [
+      { __key: rowKeyOf(`EF${dash}1`, "equipment")!.key, MARK: `EF${dash}1`, CFM: "400" }, { __key: "EF-2", MARK: "EF-2", CFM: "300" },
+    ]),
+  ] });
+  const tags = (graph: object) => Object.fromEntries(Object.entries(compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string }> }>)
+    .filter(([, c]) => c.items?.length).map(([family, c]) => [family, c.items.map((i) => i.tag).sort()]));
+  const hyphen = printed("-");
+  assert.deepEqual(tags(hyphen), { AHU: ["AHU-1"], BOILER: ["B-1", "B-2"], FAN: ["EF-1", "EF-2"] });
+  for (const glyph of glyphs) {
+    assert.equal(rowKeyOf(`AHU${glyph}1`, "equipment")?.key, "AHU1", glyph);
+    assert.deepEqual(as77Marks(printed(glyph)), as77Marks(hyphen), glyph);
+    assert.deepEqual(tags(printed(glyph)), tags(hyphen), glyph);
+  }
+});
+
+test("a row's identity for the sweep and project_takeoff reads a mark in plain type; a list, a status and a note's number stay as printed (AS-85)", () => {
+  const row = (key: string, cells: Record<string, string>) => ({ key, cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text }])) });
+  // The extraction keys AHU‐1 as AHU1, which answers for no plan's AHU-1: the
+  // row's printed identity, in plain type, does.
+  assert.equal(rowIdentityTag(row("AHU1", { MARK: "AHU‐1", CFM: "4000" })), "AHU-1");
+  assert.equal(rowIdentityTag(row("B1", { SYMBOL: "B−1" })), "B-1");
+  assert.equal(rowIdentityTag(row("AHU2", { MARK: "AHU–2*" })), "AHU-2");
+  assert.equal(rowIdentityTag(row("EF-1", { MARK: "EF-1*" })), "EF-1");
+  assert.equal(rowIdentityTag(row("EF-3", { MARK: "EF-3¹" })), "EF-3");
+  assert.equal(rowIdentityTag(row("P-2", { MARK: "P-2." })), "P-2");
+  assert.equal(rowIdentityTag(row("AHU1", { MARK: "AHU 1" })), "AHU 1");
+  // A list keeps its every mark for the split after it, in plain type; words
+  // keep what they print.
+  assert.equal(rowIdentityTag(row("AHU-1", { MARK: "AHU\u20101, HP\u20101" })), "AHU-1, HP-1");
+  assert.equal(rowIdentityTag(row("EF-1/EF-2", { MARK: "EF-1* & 2" })), "EF-1* & 2");
+  assert.equal(rowIdentityTag(row("DUCT SMOKE DETECTOR", { SYMBOL: "DUCT SMOKE DETECTOR*" })), "DUCT SMOKE DETECTOR*");
+  assert.equal(rowIdentityTag(row("T.0", { MARK: "T.0." })), "T.0.");
+  // A status or number in parentheses, a note's number and a key alone stay.
+  assert.equal(rowIdentityTag(row("AHU-1E", { SYMBOL: "AHU-1(E)" })), "AHU-1(E)");
+  assert.equal(rowIdentityTag(row("P-11", { MARK: "P-1(1)" })), "P-1(1)");
+  assert.equal(rowIdentityTag(row("1", { MARK: "1." })), "1.");
+  assert.equal(rowIdentityTag(row("EF-4", { CFM: "400" })), "EF-4");
+  assert.equal(rowIdentityTag({ key: "", cells: {} }), null);
+});

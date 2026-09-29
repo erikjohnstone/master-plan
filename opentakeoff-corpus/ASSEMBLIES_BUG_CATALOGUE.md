@@ -6216,3 +6216,132 @@ three base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377
   4 differences are these.
 - A spelling the extraction keys no row for ("EF-1 AND 2", "AHU-1A, 1B" under `rowKeyOf`) was not tested. Any such row
   the graph holds is read as above.
+
+## AS-85 — a mark printed with a footnote mark or another dash glyph was lost or named with the glyph: AHU-1*, *AHU-1, EF-2†, P-1¹, AHU-1., AHU‐1, EF–1, P−1 (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by two metamorphic checks of the takeoff and the reconcile on the 97 cached dev documents. A
+drafter marks a unit for a note with a star, a dagger or a superscript number printed against its mark, or ends the
+cell with a period. A word processor or PDF writer prints a mark's hyphen as another glyph: a Unicode hyphen, a
+non-breaking hyphen, a figure, en or em dash, a minus sign or a fullwidth hyphen. The extraction's `rowKeyOf` (not
+changed) keeps a key's letters, digits, hyphens and slashes only, so it keys AHU-1* as AHU-1 and AHU‐1 as AHU1. But
+where a mark column prints the row's name, the takeoff and the reconcile name the unit by that cell (AS-79), and the
+mark rules read the cell as printed:
+- A footnote mark stayed in the unit's name: the unit was AHU-1*. The reconcile's row matched no plan's AHU-1 (markKey
+  AHU1* is not AHU1), and the assemblies' record, its control drawings' binding and the report named AHU-1*.
+- A mark printed with another dash glyph was no mark to most families' rules. The unit was lost, or, where a title
+  vouched for it, named with the glyph (EF–1).
+- The plan sweep (`sweep_schedule_row`, which the reconcile runs for each row and the Takeoff canvas reaches through
+  the same Session) finds a row by its key or its printed identity (`rowIdentityTag`), and the extraction's
+  `rowKeyAnswersFor` (not changed) reads neither AHU1 nor AHU‐1 as AHU-1. So a row printed with another dash glyph had
+  no schedule row for the plan's tag, and `project_takeoff` named its units as printed.
+
+The checks printed each variant on every row a family names by its key, in the cell that prints the key, and keyed the
+row as `rowKeyOf` keys that print (a print it keys no row for, such as "AHU-1 (NOTE 2)", was not tested). The takeoff
+and the reconcile should read the same units, with the same QTY and names, as with the plain mark:
+- **Footnote marks** (1,410 rows): 3,284 family readings differed. There were 384 each for a trailing star, two stars,
+  a dagger, a double dagger, a superscript one and a period, 380 for a leading star, and 600 for a number in
+  parentheses (below). A star after a space (AHU-1 *) already read as the plain mark.
+- **Dash glyphs** (1,333 rows whose name prints a hyphen): 2,667 family readings differed, 381 for each of the seven
+  glyphs. Under each glyph the takeoff lost 404 units on 25 documents (186 terminal units, 42 lab air valves, 24 fan
+  coils, 17 air handlers, 16 fans, 15 boilers...) and named 440 with the glyph; the reconcile lost and renamed its rows
+  alike.
+
+AS-84's first census of footnote marks set the row's key to the decorated mark, 618 differences a decoration; the
+extraction never keys a row so, and these checks key rows as it does.
+
+On the documents as printed, no cell of a row a family reads prints a mark with a footnote mark (3,666 rows): 069_ID's
+existing air handler and boilers print a status in parentheses (AHU-1(E), B-1(E), B-2(E), keyed AHU-1E, B-1E, B-2E;
+read as printed), and 21_VA's boiler model numbers a letter (FTX500 (L)). AS-82's census found no dash glyph among
+19,461 row names and mark cells.
+
+**Fix (`corpusTakeoff.mjs`, the mark reading the takeoff and the reconcile share):**
+- `plainMarkText`: a row's name in plain type. Another dash glyph (U+2010 to U+2015, U+2212, U+FE58, U+FE63, U+FF0D)
+  is a hyphen, a no-break or other wide space a space, and a zero-width character or soft hyphen nothing.
+  `splitRowMarks` reads a row's name so before splitting it, so a range, list or pair printed with another dash
+  ("EF–1 – EF–4", "SF‑P2‑1 & 2") reads as one printed with a hyphen.
+- `plainMark`: a mark in plain type, without its footnote mark. A star, dagger or double dagger before a mark, one of
+  those or a superscript number after it, and a period after its number, are dropped. `normalizeEquipMark` reads every
+  mark through it, so the takeoff's and the reconcile's marks, the family's reading of a mark column (`marksRead`) and
+  the rows left out (`leftOut.ts`) read the unit by its plain mark.
+- A list of one family's marks reads through a footnote mark or dash glyph on any of them (`listMark`,
+  `continuedMark`): "EF-1*, 2", "EF-1 & 2*", "FOP-8A* & B", "EF–1, 2".
+- `rowIdentityTag` (`schedulePlanReconcile.mjs`): a row's identity in plain type. Its dash glyphs and spaces are
+  plain, and a single mark is read without its footnote mark (AHU-1*, AHU–2* are AHU-1, AHU-2). The sweep's row lookup
+  and `project_takeoff` read it. Words, a list and a note's number keep what they print (DUCT SMOKE DETECTOR*, "1.");
+  a first version that read every token so changed 11 identities of prose and legend rows on the corpus, and was
+  narrowed to marks. `mcp/src` is not touched: the sheet-graph cache key covers it.
+- Not a footnote mark, and left as printed: a status or a number in parentheses (069_ID's AHU-1(E); P-1(1) beside
+  P-1(2)), which can tell two units of one mark apart (088_AZ's (E)FC-1 beside FC-1), and a period after a word (NO.).
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-86): the takeoff and the reconcile are byte-identical (2,655 rows).
+  Every table row's identity as `rowIdentityTag` reads it is unchanged (15,640 rows), and so are every document's
+  unscheduled plan tags and alias candidates.
+- **The checks:** footnote marks 3,284 → 600 differences, the 600 the number in parentheses, the same before and after
+  (below); dash glyphs 2,667 → 0.
+- **The earlier metamorphic checks,** each as with AS-86: mark spellings (AS-82) 2, titles (AS-83) 312, header names
+  (AS-84) 0, lists (AS-86) 4. Grid labels (`classifyGrid`) on the 1,654 tables: 0 change. Nothing the sheet graph's
+  build reads from `corpusTakeoff.mjs` reads a mark, so the cached graphs stand.
+- **The keyed compile acceptance** (WP1's check, replayed on the 93 keyed dev sets): 39 pass, as before.
+- **A synthetic set, through the extraction** (a PDF written for this check with PyMuPDF and DejaVu Sans; not a
+  corpus document). M-601 prints an air handler, fan, boiler and pump schedule whose marks are AHU‐1, AHU–2*, EF-1*,
+  EF‑2, EF-3¹, B−1, B-2†, P‐1 and P-2., with notes for the symbols; M-101 is a plan tagging the nine units by their
+  plain marks. The extraction keys the rows AHU1, AHU2, EF-1, EF2, EF-3, B1, B-2, P1 and P-2.
+  - On AS-86 the takeoff lost both air handlers and B-1 and named the six others with their symbols (EF-1*, EF‑2,
+    EF-3¹, B-2†, P‐1, P-2.); the reconcile held no air handler row. `project_takeoff` named all nine as printed, and
+    the plan sweep found no schedule row for five (AHU-1, AHU-2, EF-2, B-1, P-1).
+  - With AS-85 the takeoff, the reconcile, `apply_assemblies` and `project_takeoff` read the nine by their plain
+    marks, and the sweep finds each one's row and its one plan tag. Each stays SCHEDULE_ONLY: the plan's plain boxes
+    are no distinctive symbol, as the sweep's geometry check asks.
+- **Evals:** the five tiers' attribute evals, the typical eval (130/244), GATE C dev (227/244), the binding, question
+  and reading evals and the unseen audit's replay are line for line AS-86's (058_CA's replay runs out of memory as it
+  did).
+- **Held-out** (aggregates only, 0 graphs built), each as with AS-86:
+  - GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented;
+  - held-out 2 334/472;
+  - GATE 5 21/91;
+  - GATE C 35/91.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-85):
+- `plainMark` and `normalizeEquipMark` on twelve footnote prints (a trailing and a leading star, two stars, a dagger
+  and a double dagger, superscripts, a period after a number or its letter, lettered marks) and before a status
+  ((N)AHU-1*, *(E)AHU-1). A status or number in parentheses, a word's period, a plain mark and a lone star stay.
+- Each of ten dash glyphs in AHU‐1 and SF‐P1‐4, a no-break space, a zero-width space and a soft hyphen.
+- Lists and ranges through a footnote mark or dash glyph: "EF-1*, 2", "EF-1 & 2*", "FOP-8A* & B", "EF-1*/2", a filter's
+  "EF-1*, 2", "EF–1 – EF–4", "EF‐1 THRU EF‐4", "EF–1, 2", "SF‑P2‑1 & 2".
+- In the takeoff and the reconcile alike, the row keyed as `rowKeyOf` keys it:
+  - seven footnote marks on EF-1 and P-1, under MARK and TAG, a fan schedule's key filter and a pump schedule's title;
+    a list row "EF-1 & 2*";
+  - each dash glyph on an air handler, two boilers and a fan: read and named as printed with a hyphen.
+- Negative controls: 069_ID's AHU-1(E), B-1(E) and B-2(E) keep their status; P-1(1) and P-1(2) are two pumps.
+- `rowIdentityTag`: AHU‐1 keyed AHU1, B−1, AHU–2*, EF-1*, EF-3¹ and P-2. read as their plain marks; a no-break space
+  as a space; a list in plain type with its footnote marks; words (DUCT SMOKE DETECTOR*), a drawing number (T.0.), a
+  status, a number in parentheses and a note's "1." as printed.
+
+22 of 22 mutations each fail a test beyond the baseline's. Reading parentheses as a footnote mark also fails
+`leftOut.ts`'s test of the rows a compiled row carries.
+
+**Guard:** web typecheck clean; lint 0 errors (the 3 known warnings); the web suite's 3,976 tests fail only AS-1's
+three base-red tests. MCP typecheck clean; `test:bas` passes; the MCP suite 377 of 380, as at AS-86.
+
+**UI proof:** the dev server started on the change, deterministic readings.
+- The synthetic set: with the plan sweep, the Takeoff canvas's reconcile equals `reconcile_schedule_plan` over MCP row
+  for row, status and schedule cite included (13 checks); without it, alike (13 checks). Takeoff → Assemblies is
+  byte-identical to `apply_assemblies` (9 units, 19 records, 141 lines; 19 checks).
+- 069_ID, whose statuses stay: the reconcile equals MCP's (AHU-1(E), B-1(E), B-2(E) and six pumps; 10 checks), and
+  Takeoff → Assemblies `apply_assemblies`'s (11 units, 24 records, 127 lines; 17 checks).
+
+**Left as it is (measured, disclosed):**
+- A number in parentheses glued to a mark (EF-2(1)) is read as printed, as a status is: a drawing may number two units
+  so. Where the mark column is headed otherwise than a mark column, the family reads no mark in the cell and the
+  extraction's key names the row. That key runs the number into the mark: 061_IA's EQUIPMENT SCHEDULE, printing
+  RF-1(1) under TAG, would count RF-11, a unit not printed. The footnote check's 600 differences are these, the same
+  before and after. No dev document prints one; queued as AS-87.
+- A plan tag printed with a dash glyph is the plan reading's (the tag index, extraction's): AS-82's census found one
+  among 73,941.
+- A footnote number drawn as a small raised digit, not a superscript character, was not tested.
+- Found while proving the sweep, and older than this entry: on the dev corpus the sweep's row lookup finds no schedule
+  row for 129 of the reconcile's 2,635 rows, on 11 documents, so those units can match no plan tag. They are rows
+  AS-65, AS-75, AS-84 and AS-86 read: a schedule printed on its side (21_VA, 24), a range or list (26_CA, 53; 013_MO,
+  028_TX, 044_NY), an outdoor unit's mark column (036_LA, 33; 03_FL, 22_GA), and eight return grilles. The lookup is in
+  `session.ts`, which the sheet-graph cache key covers; queued as AS-89.

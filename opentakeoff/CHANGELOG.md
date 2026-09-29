@@ -1,5 +1,25 @@
 # Changelog
 
+- **Takeoff, reconcile and plan sweep: a mark printed with a footnote mark
+  or another dash glyph reads as its plain mark.** A schedule that marks a
+  unit for a note (AHU-1*, *AHU-1, EF-2†, P-1¹, AHU-1.) named the unit with
+  the symbol, and one whose writer printed the mark's hyphen as another
+  glyph (a Unicode hyphen, figure, en or em dash, minus or fullwidth
+  hyphen: AHU‐1, EF–1) lost the unit or named it with the glyph. The
+  extraction keys such rows by their letters and digits, but the takeoff,
+  the reconcile and `project_takeoff` read the mark cell, so a plan's AHU-1
+  matched no schedule row, and the plan sweep found no row for AHU‐1.
+  Printing such marks on the 97 dev documents' family rows, keyed as the
+  extraction keys them, changed 2,684 family readings for footnote marks
+  and 2,667 for dash glyphs (404 units lost on 25 documents under each
+  glyph); now none. A status or number in parentheses (AHU-1(E), P-1(1))
+  stays as printed: it can tell two units of one mark apart. No dev
+  document prints either, and the takeoff, the reconcile and every row's
+  identity read all 97 as before; a synthetic set printing them reads its
+  nine units by their plain marks in the Takeoff canvas, the assemblies
+  panel, the plan sweep and over MCP alike (`corpusTakeoff.mjs`,
+  `schedulePlanReconcile.mjs`, ASSEMBLIES_BUG_CATALOGUE AS-85).
+
 - **Takeoff and reconcile: a row listing one family's units names each,
   however the list is spelled.** "P-1, 2" under a pump schedule was one pump
   tagged "P-1, 2", "EF-1, 2" under a fan schedule EF-1 twice, "EF-1/2" EF-1

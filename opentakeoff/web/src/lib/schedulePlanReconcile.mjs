@@ -7,7 +7,7 @@
  */
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark,
-  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks,
+  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, plainMark, plainMarkText,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
@@ -360,6 +360,31 @@ export function scheduledQtyFromRow(row) {
  * @returns {string|null}
  */
 export function rowIdentityTag(row, identityHeaderRe = null) {
+  const printed = rowIdentityPrint(row, identityHeaderRe);
+  return printed == null ? null : plainIdentity(printed);
+}
+
+/** A unit's mark as one token, in plain type: AHU-1, EF-2A, SF-P1-4, B1. */
+const PLAIN_MARK_TOKEN_RE = /^[A-Z]{1,8}(?:-[A-Z0-9]{1,8})*-?\d{1,4}[A-Z]?$/i;
+
+/**
+ * A row's identity in plain type (AS-85), as the mark rules read a mark: its
+ * dash glyphs and spaces plain (plainMarkText: AHU‐1 is AHU-1), and a mark
+ * printed as one token without the footnote mark printed with it (plainMark:
+ * AHU-1*, EF-2†, P-1¹ are AHU-1, EF-2, P-1). The sweep's row lookup
+ * (session.ts) and project_takeoff read it, so a row printed AHU‐1, which the
+ * extraction keys AHU1, answers for a plan's AHU-1. Words, a list and a
+ * note's number keep what they print (DUCT SMOKE DETECTOR*, "1.").
+ * @param {string} text
+ */
+function plainIdentity(text) {
+  const plain = plainMarkText(text);
+  const mark = plainMark(plain);
+  return mark !== plain && PLAIN_MARK_TOKEN_RE.test(mark) ? mark : plain;
+}
+
+/** The row's identity as printed (rowIdentityTag reads it in plain type). */
+function rowIdentityPrint(row, identityHeaderRe = null) {
   // Return RAW mark text — normalizeEquipMark runs AFTER comma/slash split
   // (parity with compile uniqueFamily). Normalizing "AHU-1, HP-1" first would
   // strip to "AHU-1" and drop the outdoor HP half.

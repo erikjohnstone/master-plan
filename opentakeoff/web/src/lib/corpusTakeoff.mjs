@@ -360,12 +360,44 @@ function buildingLetter(tag) {
 }
 
 /**
+ * A row's name in plain type (AS-85): a dash printed as another glyph (a
+ * hyphen, non-breaking hyphen, figure dash, en or em dash, horizontal bar,
+ * minus or fullwidth hyphen) is a hyphen, a no-break or other wide space a
+ * space, and a zero-width character or soft hyphen nothing. A word
+ * processor or PDF writer prints AHU‐1 or EF–1 for AHU-1 and EF-1, and the
+ * mark rules read the hyphen.
+ */
+export function plainMarkText(raw) {
+  return String(raw || "")
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-")
+    .replace(/[\u00A0\u2002-\u200A\u202F\u205F\u3000]/g, " ")
+    .replace(/[\u00AD\u200B-\u200D\u2060\uFEFF]/g, "")
+    .trim();
+}
+
+/**
+ * A mark as the mark rules read it (AS-85): in plain type (plainMarkText),
+ * and without the footnote mark printed with it. A star, dagger or
+ * superscript number before or after it (AHU-1*, *AHU-1, EF-2†, P-1¹) or a
+ * period after its number (AHU-1.) refers to a note and names no other unit.
+ * A status or number in parentheses (069_ID's AHU-1(E), P-1(1)) is not one
+ * and stays: it can tell two units of one mark apart (088_AZ's (E)FC-1
+ * beside FC-1).
+ */
+export function plainMark(raw) {
+  return plainMarkText(raw)
+    .replace(/^[*\u2020\u2021]+\s*(?=[A-Za-z(])/, "")
+    .replace(/(?<=[A-Za-z0-9])\s*(?:[*\u2020\u2021]+|[\u00B9\u00B2\u00B3\u2070\u2074-\u2079]+)$/, "")
+    .replace(/(?<=\d[A-Za-z]?)\.$/, "");
+}
+
+/**
  * Drawing revision prefixes — "(N)" new, "(E)" existing, "(R)" relocated —
  * often glue into extractor keys (NACC-2 from "(N)ACC-2"). Strip them so
  * family keyRe matches set-agnostic ACC-/ATU-/AHU- marks.
  */
 export function normalizeEquipMark(raw) {
-  let t = String(raw || "").trim();
+  let t = plainMark(raw);
   if (!t) return t;
   t = t.replace(/^\(([NER])\)\s*/i, "");
   // Glued forms when parentheses were dropped: NACC-2, NATUK1, NAHU-1.
@@ -1118,7 +1150,7 @@ function runTogetherMarks(raw) {
 /** A mark printed as one token (markToken), or one with a letter after its
  * number (044_NY's FOP-8A), as a list prints it (AS-86). */
 function listMark(piece) {
-  const t = String(piece || "").trim();
+  const t = plainMark(piece);
   return markToken(t) || (/\d[A-Z]$/i.test(t) && markToken(t.slice(0, -1)));
 }
 
@@ -1127,9 +1159,9 @@ function listMark(piece) {
  * where it prints one ("FOP-8A", "B": FOP-8B). Null unless `prev` is a mark
  * printed as one token (listMark) and the piece a bare number or letter. */
 function continuedMark(prev, piece) {
-  const t = String(piece || "").trim().toUpperCase();
+  const t = plainMark(piece).toUpperCase();
   if (!t || !listMark(prev)) return null;
-  const m = String(prev).trim().toUpperCase().match(/^(.*?)(\d{1,4})([A-Z]?)$/);
+  const m = plainMark(prev).toUpperCase().match(/^(.*?)(\d{1,4})([A-Z]?)$/);
   if (!m || !isMarkPrefix(m[1])) return null;
   if (/^\d{1,4}[A-Z]?$/.test(t)) return `${m[1]}${t}`;
   if (m[3] && /^[A-Z]$/.test(t)) return `${m[1]}${m[2]}${t}`;
@@ -1637,6 +1669,9 @@ export function rowMarkText(text, rowKey, willFilter) {
  * a printed mark always keeps its own tag.
  */
 export function splitRowMarks(text, willFilter, wordsNamed = false) {
+  // In plain type (AS-85), so a range or list printed with another dash
+  // glyph reads as one printed with a hyphen.
+  text = plainMarkText(text);
   const pieces = rowMarkPieces(text, willFilter);
   if (!willFilter && pieces.length > 1 && !pieces.some((piece) => markToken(piece))
     && !pieces.every((piece) => bareMark(piece)) && (wordsNamed || namedByWords(pieces[0]))) {
