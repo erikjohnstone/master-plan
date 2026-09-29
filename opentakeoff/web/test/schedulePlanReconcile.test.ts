@@ -1113,3 +1113,20 @@ test("schedule_plan_reconcile workflow advances survey → reconcile → paint",
   ], goal);
   assert.equal(afterReconcile.phase, "paint");
 });
+
+test("reconcile scaffold holds a row for each unit of a range or pair, its QTY one each where it counts them (AS-75)", () => {
+  // 26_CA's "SF-P1-4 THRU 11" and "SF-P2-1 & 2", as the compile reads them.
+  const row = (key: string, qty?: string) => ({ key, cells: { MARK: { text: key }, ...(qty ? { QTY: { text: qty } } : {}) } });
+  const graph = { tables: [{ kind: "equipment", sheet: "m.pdf#10", title: { text: "FAN SCHEDULE" }, headers: ["MARK", "QTY"],
+    rows: [row("SF-P1-4 THRU 6"), row("SF-P2-1 & 2"), row("EF-1 THRU EF-3", "3"), row("EF-5/EF-6", "3"), row("EF-7", "2")] }] };
+  const rows = reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN")!) as any[];
+  assert.deepEqual(rows.map((r) => r.tag).sort(), ["EF-1", "EF-2", "EF-3", "EF-5", "EF-6", "EF-7", "SF-P1-4", "SF-P1-5", "SF-P1-6", "SF-P2-1", "SF-P2-2"]);
+  const by = (t: string) => rows.find((r) => r.tag === t);
+  assert.equal(by("EF-3").scheduled_qty, 1);
+  assert.equal(by("EF-3").scheduled_qty_basis, "printed_schedule_quantity_per_mark");
+  assert.equal(by("EF-6").scheduled_qty, null);
+  assert.equal(by("EF-6").scheduled_qty_basis, "printed_quantity_for_several_marks");
+  assert.equal(by("EF-7").scheduled_qty, 2);
+  const cats = compileHvacTakeoff(null, graph).categories as Record<string, { items: Array<{ tag: string; scheduled_qty: number | null }> }>;
+  assert.deepEqual(cats.FAN.items.map((i) => `${i.tag}:${i.scheduled_qty}`).sort(), rows.map((r) => `${r.tag}:${r.scheduled_qty}`).sort());
+});

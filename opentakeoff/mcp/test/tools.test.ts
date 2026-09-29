@@ -14,7 +14,9 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { buildServer } from "../server.ts";
 import { Session, sanitizeApprovals } from "../src/session.ts";
 import { openPdf, positionedText } from "../src/pdf.ts";
-import { sweepScheduleRowOutput } from "../src/outputs.ts";
+import { reconcileSchedulePlanOutput, sweepScheduleRowOutput } from "../src/outputs.ts";
+import { HVAC_FAMILY_SPECS } from "../../web/src/lib/corpusTakeoff.mjs";
+import { familyNeedleFromSpecs, reconcileScheduleFamilyFromGraph } from "../../web/src/lib/schedulePlanReconcile.mjs";
 // the canvas's own tally — the same function the marked-set cover prints from
 import { approvalTally } from "../../web/src/lib/approvals.js";
 // the rules engine's own mask builder — the #207 test plants a synthetic
@@ -3202,3 +3204,13 @@ test("sheet_graph: a schedule-role sheet with 0 tables AND heavy embedded raster
 // vectorgrid sidecar a real Session build starts — same shape of bug already
 // fixed in web/test/vectorTakeoffPipeline.test.ts and mcp/test/session.test.ts.
 after(async () => { await shutdownVectorGrid(); });
+
+test("reconcile_schedule_plan's row schema states a QTY read per mark of a row naming several units (AS-75)", () => {
+  const row = (key: string, qty: string) => ({ key, cells: { MARK: { text: key }, QTY: { text: qty } } });
+  const graph = { tables: [{ kind: "equipment", sheet: "m.pdf#1", title: { text: "FAN SCHEDULE" }, headers: ["MARK", "QTY"],
+    rows: [row("EF-1 THRU EF-3", "3"), row("EF-5/EF-6", "3")] }] };
+  const rows = reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN")!) as Array<{ scheduled_qty_basis: string }>;
+  assert.deepEqual([...new Set(rows.map((r) => r.scheduled_qty_basis))].sort(), ["printed_quantity_for_several_marks", "printed_schedule_quantity_per_mark"]);
+  const parsed = reconcileSchedulePlanOutput.rows.safeParse(rows);
+  assert.equal(parsed.success, true, JSON.stringify(parsed.error?.issues?.slice(0, 3)));
+});

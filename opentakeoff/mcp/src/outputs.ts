@@ -410,8 +410,10 @@ export const reconcileSchedulePlanOutput = {
     scheduled_qty: z.number().int().nullable(),
     scheduled_qty_basis: z.enum([
       "printed_schedule_quantity",
+      "printed_schedule_quantity_per_mark",
       "one_per_unique_schedule_row",
       "unparseable_printed_quantity",
+      "printed_quantity_for_several_marks",
       "type_definition_not_quantity",
     ]).optional(),
     scheduled_qty_source_header: z.string().nullable().optional(),

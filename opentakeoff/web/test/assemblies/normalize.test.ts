@@ -1672,3 +1672,36 @@ test("a fan coil's two coil blocks printed under no coil name: TC and TH, and ea
   // evaporator enters warmer than it leaves).
   assert.equal(unit({ "EWT (F)": "56", "LWT (F)": "44", "EWT (F) 2": "56", "LWT (F) 2": "44" }, "AIR-COOLED CHILLER SCHEDULE", "AIR_COOLED_CHILLER").chw_ewt_f, 56);
 });
+
+test("a row naming several units of one kind prints one QTY for all of them: equal to their number, each is one (AS-75)", () => {
+  // The compile makes a unit of each mark of "EF-1 THRU EF-3" or "B-1/B-2",
+  // each with the row's cells; the row's QTY counts them all.
+  const item = (tag: string, key: string, qty: string, family = "FAN", title = "FAN SCHEDULE") => ({
+    family, tag, sheet_id: "m.pdf#1", table_title: title,
+    cells: { MARK: { text: key, bbox: [0, 0, 1, 1] }, QTY: { text: qty, bbox: [1, 0, 2, 1] }, CFM: { text: "500", bbox: [2, 0, 3, 1] } },
+  });
+  const qtyOf = (items: ReturnType<typeof item>[], i: number) => {
+    const n = normalizeCompileItem(items[i], items[i].family, withProject(items)(items[i], { headers: ["MARK", "QTY", "CFM"] }));
+    return [n.attributes.qty?.value, n.attributes.qty?.rule, n.unknown.qty?.reason];
+  };
+  const range = ["EF-1", "EF-2", "EF-3"].map((t) => item(t, "EF-1 THRU EF-3", "3"));
+  assert.deepEqual(qtyOf(range, 1), [1, "count.quantity_per_mark", undefined]);
+  // A QTY that is not their number says nothing of each.
+  const pair = ["EF-5", "EF-6"].map((t) => item(t, "EF-5/EF-6", "3"));
+  assert.deepEqual(qtyOf(pair, 0), [undefined, undefined, "QTY 3 is printed for the 2 marks the row names, not for each"]);
+  // A lone mark's QTY is its own count; a split system's two halves are one
+  // unit of each kind, so the row's QTY is each one's.
+  assert.deepEqual(qtyOf([item("EF-7", "EF-7", "2")], 0), [2, "count.quantity", undefined]);
+  const halves = [item("FC-1", "FC-1 , HP-1", "1", "FCU", "SPLIT SYSTEM SCHEDULE"), item("HP-1", "FC-1 , HP-1", "1", "HEAT_PUMP", "SPLIT SYSTEM SCHEDULE")];
+  assert.deepEqual(qtyOf(halves, 0), [1, "count.quantity", undefined]);
+  // Two rows of one table printing different marks are two rows.
+  const two = [item("EF-8", "EF-8", "2"), item("EF-9", "EF-9", "2")];
+  assert.deepEqual(qtyOf(two, 1), [2, "count.quantity", undefined]);
+  // A count of each unit's own parts is each unit's, however many units the row names.
+  const ahus = ["AHU-1", "AHU-2", "AHU-3"].map((tag) => ({
+    family: "AHU", tag, sheet_id: "m.pdf#2", table_title: "AIR HANDLING UNIT SCHEDULE",
+    cells: { MARK: { text: "AHU-1 THRU AHU-3", bbox: [0, 0, 1, 1] }, QTY: { text: "3", bbox: [1, 0, 2, 1] }, "SUPPLY FAN QTY": { text: "2", bbox: [2, 0, 3, 1] } },
+  }));
+  const ahu2 = normalizeCompileItem(ahus[1], "AHU", withProject(ahus)(ahus[1], { headers: ["MARK", "QTY", "SUPPLY FAN QTY"] }));
+  assert.deepEqual([ahu2.attributes.qty?.value, ahu2.attributes.supply_fan_qty?.value], [1, 2]);
+});

@@ -5290,3 +5290,96 @@ or guard: each fails the test.
   pass and 1 skips, its one failure the AS-1 conformance test.
 - **UI proof** (the dev server started on the change): 14_OR (18 checks; 97 records, 1,648 lines) and 069_ID (17)
   are byte-identical to apply_assemblies over MCP with their CSV sets.
+
+## AS-75 — a row scheduling several units by a range or a qualified pair was counted as one (metamorphic sweep, round 6: order; a census of mark cells) (FIXED — guarded by the evals)
+
+**Found:** 2026-09-28. A sixth metamorphic sweep (scratch meta6/metamorphic6.mjs; the 72 of the 98 eligible documents
+with units, held-out excluded) normalized and applied each project again with its tables' columns, rows and tables in
+seeded new orders (16 seeds; 5,973 tables reordered, 5,878 runs), and each table, then each row, alone. Nothing to fix:
+- **Rows and tables** in any order read and apply alike, record for record.
+- **Columns** in any order read alike but for two things. A record's cite, where a row prints its mark twice (031_MO's
+  VFD schedule, ITEM and a legend-run header); the decisions are the same. And a dual-fuel boiler's rating: 044_NY's
+  four boilers print NATURAL GAS and # 2 OIL ratings, and the rule reads the first-printed fuel's (documented as the
+  primary fuel's). With the oil columns first, the oil rating is read. The only corpus instance prints gas first, and
+  "gas is primary" would be another convention, so the rule stays as it is. Neither changes a record or line.
+- **A table or row alone** changes only what a rule reads from other rows by design: a pump's drive in the VFD
+  schedule, a split system's other half, a note's scope that other rows cite.
+
+Asking what a row names, not how it is ordered, a census of every cached dev graph's mark cells (scratch
+as75/ranges.mjs) found rows that name several units, read as one:
+- **26_CA's FANS (SPECIFICATION SECTION 23 34 00)** print "SF-P1-4 THRU 11" (eight supply fans), and "SF-P2-1 & 2",
+  "SF-P3-1 & 2", "EF-P1-1 & 2", "EF-P2-1 & 2" and "EF-P3-1 & 2" (two each). The compile made one unit of each, tagged
+  with the whole text, since its "&" rule read a mark without a qualifier ("RF-1 & 2") and nothing read a range: 18
+  fans counted as 6. Its SOUND TRAP SCHEDULE's "ST-3-1A THRU 12A" and the B and C banks: 36 silencers as 3.
+- **013_MO's CONTROL VALVES** key a row "CV-7-CV-10": four valves as one, tagged "CV-7-CV-10".
+- A mark cell printing "EF-1 THRU EF-4" or "FCU-1 TO FCU-6" read as its first mark alone (normalizeEquipMark keeps
+  the leading mark); no cached document prints one, but a drafter's typical row often does.
+
+Such a row's plan tags had no schedule row: 26_CA's drawings tag SF-P1-4 and SF-P1-11 (an elevation and a detail),
+which the schedule's "SF-P1-4 THRU 11" row never matched. And a QTY printed for the whole row would have counted each
+expanded unit that many times: apply reads a unit's QTY as its multiplier (none of the 41 split rows the compile
+already made, "B-1/B-2" and the like, prints one; census scratch as75/splitqty.mjs).
+
+**Fix (the shared path: the compile `corpusTakeoff.mjs` and the reconcile scaffold `schedulePlanReconcile.mjs`, which
+every surface reads, and the normalizer):**
+- `expandEquipMarkRange`: a mark cell's range names each of its marks: THRU, THROUGH, TO or "~" between a mark and
+  the same mark with a higher number (the right end prints the mark's prefix again, its trailing tokens, or the number
+  alone; the letter after the number alike; padding kept: VAV-08 to VAV-11). A dash is a range only between two
+  marks printing the whole prefix ("CV-7-CV-10", "CV-7 - CV-10"), since "AHU-1-2" is one mark. Two kinds of mark
+  ("EF-1 THRU SF-4"), a backwards or one-unit range, more than 100 units, or words after the range ("(TYP)") are none.
+- `expandAmpersandEquipMarks` also reads a qualified mark's pair ("SF-P2-1 & 2", "EF-P1-1 & EF-P1-2"); its prefix has
+  a dash, and the right half is the same mark ("ROOM A 101 & 102" and "EF-P1-1 & SF-P1-2" stay whole).
+- The compile and the reconcile expand a row's marks alike (`expandEquipMarks`), so every unit the takeoff counts has
+  its reconcile row.
+- **A row's QTY counts all its marks of one kind** (`sameKindMarks`: "EF-1 THRU EF-4" names four fans; "FC-1 , CU-1" a
+  fan coil and a condensing unit, one of each): a QTY equal to their number is one unit per mark
+  (`scheduled_qty_basis` `printed_schedule_quantity_per_mark`); any other is refused, never divided
+  (`printed_quantity_for_several_marks`, with its reason). The normalizer reads the same (`withProject` counts the
+  units compiled from one row; rule `count.quantity_per_mark`), for the unit count only: a unit's own fan count stays
+  its own. MCP's `reconcile_schedule_plan` output schema states both bases.
+
+**Measured** (A = c5247e6, B = AS-75; cache-only over the 97 cached eligible dev graphs, held-out excluded; scratch
+as75/census75.sh):
+- **The compile:** only 26_CA and 013_MO change. 26_CA: FAN 6 units removed ("SF-P1-4 THRU 11" and the five pairs),
+  18 added (SF-P1-4 to SF-P1-11, SF-P2-1/2, SF-P3-1/2, EF-P1-1/2, EF-P2-1/2, EF-P3-1/2); DUCT_SILENCER 3 removed, 36
+  added (ST-3-1A to ST-3-12C). 013_MO: CHW_CONTROL_VALVE "CV-7-CV-10" becomes CV-7 to CV-10. No other unit is added,
+  removed or changed, and no other compile kind changes but what counts these units: 26_CA's BAS estimator inventory
+  and its estimate-only schedule-derived points (fans 35 → 47 units; never merged into printed totals), and 013_MO's
+  valve takeoff (3 → 6 valves).
+- **The reconcile scaffold** holds the same rows the compile adds (26_CA FAN −6/+18, DUCT_SILENCER −3/+36). Rows left
+  out (10 in 6 schedules), duplicate listings (22 marks) and the blind check are identical; WP1 42 of 93 pass, no set
+  flips. Compile-reconcile parity: the same but 013_MO, where the reconcile holds none of the CONTROL VALVES table's
+  valves before or after (its valve needles read a title naming the water; the compile infers it from the table):
+  its 3 misses become 6, the same gap counted per valve (queued).
+- **Assemblies** (fresh snapshots of the two documents at B against A's): 26_CA 145 → 190 units and 246 → 291
+  records, each new fan waiting between fan-constant and fan-variable on its drive, as its row's old unit did (26_CA
+  prints its fans' drive as "VAR. SPEED (Y/N)", which the normalizer does not read; AS-76), each new silencer with no
+  typical; lines 1,946 as before. 013_MO 7 → 10 units, the valves with no typical; lines 15 as before. No QTY attribute
+  changes.
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C dev
+  (227/244) and the binding, question and reading evals identical to AS-74's but timings; neither document's keys
+  cover these units. The unseen audit replays as recorded ("model calls: replayed 61, live 0, not recorded 0, failed
+  0"; "applied 56: audited 56 (right 56, wrong 0, unaudited 0); new 0; gone 0"); its one other difference is 013_MO's
+  7 → 10 units, applying nothing either way.
+- **Held-out** (aggregates only): GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472, 1 wrong,
+  2 invented; GATE 5 21/91; GATE C 35/91. Each is as with AS-74.
+- **The graph cache:** the sheet-graph cache key covers every file under `mcp/src`, so the one-line schema edit in
+  `outputs.ts` makes every cached graph cold. The evals, held-out runs and the MCP suite ran with that file at
+  c5247e6's content (no graph built; each read from cache); the edit only widens `reconcile_schedule_plan`'s output
+  enum, which no eval reads, and its own test runs with it.
+
+**Tests:** corpusTakeoffVol2Families.test.ts (AS-75): ranges of every form and their negative controls ("AHU-1-2",
+"EF-1 THRU SF-4", backwards, one-unit and overlong ranges, words after one, a qualified pair of two kinds, "ROOM A
+101 & 102"); the compile's units and QTY per mark, refused where it is not their number, a lone mark's QTY and a split
+system's halves kept; one qualified mark one unit. schedulePlanReconcile.test.ts: the reconcile's rows and QTY are
+the compile's. normalize.test.ts: the per-mark QTY rule, a unit's own fan count kept. MCP tools.test.ts: the
+reconcile row schema states both bases (it fails without the enum). assembliesAttrEval.test.mjs: the normalizer's
+context carries `marks`. 21 mutations, one per rule or guard: each fails a test.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,942 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite (every file but the WP1 test) 378 of 380
+  pass and 1 skips, its one failure the AS-1 conformance test, as at AS-74.
+- **Not changed, disclosed:** MCP's schedule-anchored sweep takeoff (`takeoff.ts`) sweeps a row's identity cell as one
+  tag, as it did "B-1/B-2"; the compile, the reconcile and the assemblies read each unit.
+- **UI proof** (the dev server started on the change): 26_CA (19 checks; 190 units, 291 records, 1,946 lines), 013_MO
+  (9 checks; the parity checks only, as none of its units takes a typical) and 069_ID (17) are byte-identical to
+  apply_assemblies over MCP with their CSV sets.

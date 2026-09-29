@@ -943,7 +943,15 @@ export function expandAmpersandEquipMarks(raw) {
   const m = s.match(
     /^([A-Za-z]{1,8})([\s\-]?)(\d+[A-Za-z]?)\s*&\s*(?:([A-Za-z]{1,8})([\s\-]?)?)?(\d+[A-Za-z]?)$/,
   );
-  if (!m) return [s];
+  if (!m) {
+    // A mark with a qualifier before its number (26_CA's "SF-P2-1 & 2",
+    // "EF-P1-1 & EF-P1-2"; AS-75): the right half is the same mark with
+    // another number, printing the prefix again, a trailing part of it, or
+    // the number alone.
+    const q = s.match(/^(.*?[\s\-])(\d{1,4}[A-Za-z]?)\s*&\s*(.*?)(\d{1,4}[A-Za-z]?)$/);
+    if (!q || !q[1].includes("-") || !isMarkPrefix(q[1]) || !prefixRepeats(q[1], q[3])) return [s];
+    return [`${q[1]}${q[2]}`, `${q[1]}${q[4]}`].map((t) => t.replace(/\s+/g, ""));
+  }
   const [, p1, sep1, n1, p2, sep2, n2] = m;
   const leftSep = sep1 || "-";
   const left = `${p1}${leftSep}${n1}`.replace(/\s+/g, "");
@@ -951,6 +959,79 @@ export function expandAmpersandEquipMarks(raw) {
     ? `${p2}${sep2 || "-"}${n2}`.replace(/\s+/g, "")
     : `${p1}${leftSep}${n2}`.replace(/\s+/g, "");
   return [left, right];
+}
+
+/** Whether the text before a mark's number is a mark's prefix: a family's
+ * letters, with any lettered or numbered qualifiers, ending in a separator or
+ * a letter ("EF-", "SF-P1-", "VAV-1-", "1-VAV-", "AHU"). */
+function isMarkPrefix(pre) {
+  const p = String(pre || "").toUpperCase();
+  return /[A-Z]/.test(p) && !/\d$/.test(p) && /^[A-Z0-9]+(?:[\s-][A-Z0-9]+)*[\s-]?$/.test(p);
+}
+
+/** Whether a range's or pair's right end repeats the left mark's prefix: in
+ * full, as its trailing tokens ("1-" of "VAV-1-"), or not at all. */
+function prefixRepeats(pre, tail) {
+  const toks = (x) => String(x || "").toUpperCase().split(/[\s-]+/).filter(Boolean);
+  const p = toks(pre), t = toks(tail);
+  return t.length <= p.length && t.every((x, i) => x === p[p.length - t.length + i]);
+}
+
+/**
+ * The marks a range printed in one mark cell names: one row scheduling
+ * several units of one kind alike ("EF-1 THRU EF-4", "EF-1 THRU 4",
+ * "VAV-1-1 THRU 1-12", "EF-1 ~ 4"; 26_CA's "SF-P1-4 THRU 11" and
+ * "ST-3-1A THRU 12A", 013_MO's "CV-7-CV-10"; AS-75). The right end is the
+ * left mark with a higher number: it prints the mark's prefix again, its
+ * trailing tokens, or the number alone, and the letter after the number
+ * alike. Between two marks a dash is a range only where the right end
+ * prints the whole prefix again, since "AHU-1-2" is one mark. Null for any
+ * other text: two kinds of mark, a backwards range, or more than 100 units.
+ */
+export function expandEquipMarkRange(raw) {
+  const s = String(raw || "").toUpperCase().replace(/[\u2013\u2014]/g, "-").replace(/\s+/g, " ").trim();
+  if (!s || s.length > 48) return null;
+  const splits = [];
+  const word = s.match(/^(.+?)\s+(?:THRU|THROUGH|TO)\s+(.+)$/);
+  if (word) splits.push([word[1], word[2], false]);
+  const tilde = s.match(/^(.+?)\s*~\s*(.+)$/);
+  if (tilde) splits.push([tilde[1], tilde[2], false]);
+  for (let i = s.indexOf("-"); i > 0; i = s.indexOf("-", i + 1)) splits.push([s.slice(0, i).trim(), s.slice(i + 1).trim(), true]);
+  for (const [left, right, dash] of splits) {
+    const l = left.match(/^(.*?)(\d{1,4})([A-Z]?)$/);
+    const r = right.match(/^(.*?)(\d{1,4})([A-Z]?)$/);
+    if (!l || !r) continue;
+    const [, pre, a, sa] = l;
+    const [, tail, b, sb] = r;
+    if (!isMarkPrefix(pre) || sa !== sb || /\d$/.test(tail) || !prefixRepeats(pre, tail)) continue;
+    if (dash && !(tail && prefixRepeats(tail, pre))) continue;
+    const lo = Number(a), hi = Number(b);
+    if (!(hi > lo && hi - lo < 100)) continue;
+    const width = /^0\d/.test(a) ? a.length : 0;
+    return Array.from({ length: hi - lo + 1 }, (_, i) => `${pre}${String(lo + i).padStart(width, "0")}${sa}`);
+  }
+  return null;
+}
+
+/** The marks one printed mark cell names (after its "/" or "," split): a
+ * range's every mark, an "&" pair's two, else the mark itself. */
+export function expandEquipMarks(raw) {
+  return expandEquipMarkRange(raw) ?? expandAmpersandEquipMarks(raw);
+}
+
+/** A mark's family letters: its first run of two or more letters (SF-P1-4 →
+ * SF, B950-AHU-3001 → AHU), else its letters (B-1 → B). */
+export function markLetters(mark) {
+  const s = String(mark || "").toUpperCase();
+  return (s.match(/[A-Z]{2,}/) ?? s.match(/[A-Z]+/))?.[0] ?? "";
+}
+
+/** How many units of one mark's kind the row's mark cell names (AS-75): the
+ * row's printed QTY counts them, never each. "EF-1 THRU EF-4" names four
+ * fans; "FC-1 , HP-1" one fan coil and one heat pump. */
+export function sameKindMarks(tagList, one) {
+  const k = markLetters(one);
+  return Math.max(1, tagList.filter((t) => markLetters(normalizeEquipMark(t)) === k).length);
 }
 
 /** B-3: does this table's row-key column actually IDENTIFY its rows, or is it
@@ -1176,7 +1257,7 @@ function uniqueFamily(graph, {
         .split(willFilter ? /[/,]/ : "/")
         .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
         .filter(Boolean)
-        .flatMap((t) => expandAmpersandEquipMarks(t));
+        .flatMap((t) => expandEquipMarks(t));
       for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
         const canon = one.toUpperCase().replace(/\s+/g, "");
@@ -1246,7 +1327,7 @@ function uniqueFamily(graph, {
         // merges plan-drawn counts onto this same tag — status here is a
         // compile-time-only disclosure (not a ReconcileStatus value) and is
         // superseded once that merge happens.
-        const qtyStatus = scheduledQtyStatusFromRow(row);
+        const qtyStatus = scheduledQtyStatusFromRow(row, { marks: sameKindMarks(tagList, one) });
         items.push({
           tag: one,
           quantity: 1,

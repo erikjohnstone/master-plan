@@ -7,7 +7,7 @@
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import {
-  normalizeEquipMark, expandAmpersandEquipMarks, markMatchesKeyRe, scheduleTableView,
+  normalizeEquipMark, expandEquipMarks, markMatchesKeyRe, scheduleTableView, sameKindMarks,
   isScheduleHeaderJunkMark, isControlValveHeaderShape, unvouchedTableHoldsUnits, unvouchedMarkNamesUnit,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
@@ -258,10 +258,15 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
  * `cells` (`{ header: { text, bbox } }`) and a mcp/src/takeoff.ts TakeoffItem's
  * `schedule_row` (`{ header: string }`, flat text, no bbox) — a cell entry is
  * read as `cell.text` when it's an object, else as the entry itself.
+ *
+ * A row whose mark cell names several units of one kind ("EF-1 THRU EF-4",
+ * "B-1/B-2"; `opts.marks`, AS-75) prints one QTY for all of them: a QTY equal
+ * to that count is one unit per mark; any other QTY says nothing of each
+ * mark's count and is refused, never divided or multiplied.
  * @param {{ cells?: Record<string, { text?: string } | string> }} row
- * @param {{ typeDefinition?: boolean }} [opts]
+ * @param {{ typeDefinition?: boolean, marks?: number }} [opts]
  * @returns {{ qty: number|null, refused: boolean, reason: string|null,
- *   basis: "printed_schedule_quantity"|"one_per_unique_schedule_row"|"unparseable_printed_quantity"|"type_definition_not_quantity",
+ *   basis: "printed_schedule_quantity"|"printed_schedule_quantity_per_mark"|"one_per_unique_schedule_row"|"unparseable_printed_quantity"|"printed_quantity_for_several_marks"|"type_definition_not_quantity",
  *   source_header: string|null, source_text: string|null }}
  */
 export function scheduledQtyStatusFromRow(row, opts = {}) {
@@ -278,6 +283,22 @@ export function scheduledQtyStatusFromRow(row, opts = {}) {
     // A QTY column with an empty or polluted cell is materially different
     // from a schedule with no QTY column. Refuse instead of silently treating
     // the physical row as one unit.
+    const marks = Number.isInteger(opts.marks) && opts.marks > 1 ? opts.marks : 1;
+    if (/^[1-9]\d*$/.test(raw) && marks > 1) return Number(raw) === marks ? {
+      qty: 1,
+      refused: false,
+      reason: null,
+      basis: "printed_schedule_quantity_per_mark",
+      source_header: String(header).trim(),
+      source_text: raw,
+    } : {
+      qty: 1,
+      refused: true,
+      reason: `QTY ${raw} is printed for the ${marks} marks the row names, not for each`,
+      basis: "printed_quantity_for_several_marks",
+      source_header: String(header).trim(),
+      source_text: raw,
+    };
     if (/^[1-9]\d*$/.test(raw)) return {
       qty: Number(raw),
       refused: false,
@@ -863,7 +884,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         .split(willFilter ? /[/,]/ : "/")
         .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
         .filter(Boolean)
-        .flatMap((t) => expandAmpersandEquipMarks(t))
+        .flatMap((t) => expandEquipMarks(t))
         .map((t) => normalizeEquipMark(t))
         .filter(Boolean);
       for (const tag of (tagList.length ? tagList : [rawTag])) {
@@ -914,7 +935,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         seen.add(scopeIdentity);
         held.add(canon);
         const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(title);
-        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly });
+        const qtyStatus = scheduledQtyStatusFromRow(row, { typeDefinition: scheduleDefinitionOnly, marks: sameKindMarks(tagList, tag) });
         const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
         const sweep = sweepByTag.get(rowId) || sweepByTag.get(tag) || {};
         const reportedInstalledQty = Number.isFinite(sweep.installedQty) ? sweep.installedQty : null;

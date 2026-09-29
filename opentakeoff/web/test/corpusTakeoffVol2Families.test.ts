@@ -10,6 +10,9 @@ import {
   markFormsForKeyRe,
   isScheduleHeaderJunkMark,
   compileHvacTakeoff,
+  expandEquipMarkRange,
+  expandEquipMarks,
+  markLetters,
 } from "../src/lib/corpusTakeoff.mjs";
 
 describe("Vol2 RTU packaged title", () => {
@@ -566,5 +569,86 @@ describe("AS-69 a fan-powered terminal unit schedule is a VAV schedule", () => {
     // untitled table, and never a sheet index's fire protection sheet (FP101).
     assert.deepEqual(compile([table("m.pdf#4", "", ["FPB-3-11", "VAV-1"])])("VAV"), ["VAV-1"]);
     assert.deepEqual(compile([table("m.pdf#2", "SHEET INDEX", ["FP101", "M101"], "reference")])("VAV"), []);
+  });
+});
+
+// AS-75: one row scheduling several units of one kind alike prints their
+// marks as a range or a pair ("EF-1 THRU EF-4", 26_CA's "SF-P1-4 THRU 11" and
+// "SF-P2-1 & 2", 013_MO's "CV-7-CV-10"): each is a unit, and the row's QTY
+// counts them all, never each.
+describe("AS-75 a row naming a range or pair of marks schedules each of them", () => {
+  it("expands a range whose right end is the left mark with a higher number", () => {
+    assert.deepEqual(expandEquipMarkRange("EF-1 THRU EF-4"), ["EF-1", "EF-2", "EF-3", "EF-4"]);
+    assert.deepEqual(expandEquipMarkRange("EF-1 THRU 4"), ["EF-1", "EF-2", "EF-3", "EF-4"]);
+    assert.deepEqual(expandEquipMarkRange("fcu-1 to fcu-3"), ["FCU-1", "FCU-2", "FCU-3"]);
+    assert.deepEqual(expandEquipMarkRange("EF-1 THROUGH EF-3"), ["EF-1", "EF-2", "EF-3"]);
+    assert.deepEqual(expandEquipMarkRange("EF-1 ~ 3"), ["EF-1", "EF-2", "EF-3"]);
+    assert.deepEqual(expandEquipMarkRange("SF-P1-4 THRU 11"), ["SF-P1-4", "SF-P1-5", "SF-P1-6", "SF-P1-7", "SF-P1-8", "SF-P1-9", "SF-P1-10", "SF-P1-11"]);
+    assert.deepEqual(expandEquipMarkRange("ST-3-1A THRU 3A"), ["ST-3-1A", "ST-3-2A", "ST-3-3A"]);
+    assert.deepEqual(expandEquipMarkRange("VAV-1-1 THRU 1-3"), ["VAV-1-1", "VAV-1-2", "VAV-1-3"]);
+    assert.deepEqual(expandEquipMarkRange("1-VAV-1 THRU 1-VAV-2"), ["1-VAV-1", "1-VAV-2"]);
+    assert.deepEqual(expandEquipMarkRange("VAV-08 THRU VAV-11"), ["VAV-08", "VAV-09", "VAV-10", "VAV-11"]);
+    // A dash between two marks, the prefix printed again, glued or spaced.
+    assert.deepEqual(expandEquipMarkRange("CV-7-CV-10"), ["CV-7", "CV-8", "CV-9", "CV-10"]);
+    assert.deepEqual(expandEquipMarkRange("CV-7 \u2013 CV-9"), ["CV-7", "CV-8", "CV-9"]);
+  });
+
+  it("reads no range in one qualified mark, two kinds of mark, a backwards or overlong range, or words after it", () => {
+    for (const s of ["AHU-1-2", "HP-1-2", "EF-1 - SUPPLY", "RTU-1 (ALT#2)", "460-3-60", "1-AC-36TEMP", "FCU-01-CG06A", "B950-AHU-3001",
+      "01-1-DAC-1", "05-B-DAC-1", "CV-CHW-BP-A", "EF-1 THRU SF-4", "SF-P1-4 THRU P2-11", "EF-1A THRU EF-4B", "EF-4 THRU EF-1", "EF-1 TO 1",
+      "VAV-1 THRU VAV-500", "(N) EF-1 THRU EF-4", "EF-1 THRU EF-4 (TYP)", "1 TO 4", "EF-1"]) {
+      assert.equal(expandEquipMarkRange(s), null, s);
+    }
+  });
+
+  it("expands a qualified mark's pair, and keeps the pairs and words it read before", () => {
+    assert.deepEqual(expandEquipMarks("SF-P2-1 & 2"), ["SF-P2-1", "SF-P2-2"]);
+    assert.deepEqual(expandEquipMarks("EF-P1-1 & EF-P1-2"), ["EF-P1-1", "EF-P1-2"]);
+    assert.deepEqual(expandEquipMarks("RF-1 & 2"), ["RF-1", "RF-2"]);
+    assert.deepEqual(expandEquipMarks("EF-2 & SF-1"), ["EF-2", "SF-1"]);
+    assert.deepEqual(expandEquipMarks("B & G MODEL SRS-3F"), ["B & G MODEL SRS-3F"]);
+    // A qualified mark's prefix carries a dash; words before a pair of numbers are no mark.
+    assert.deepEqual(expandEquipMarks("ROOM A 101 & 102"), ["ROOM A 101 & 102"]);
+    assert.deepEqual(expandEquipMarks("EF-P1-1 & SF-P1-2"), ["EF-P1-1 & SF-P1-2"]);
+    assert.equal(markLetters("SF-P1-4"), "SF");
+    assert.equal(markLetters("B950-AHU-3001"), "AHU");
+    assert.equal(markLetters("B-1"), "B");
+  });
+
+  const row = (key: string, qty?: string) => ({ key, cells: { MARK: { text: key }, ...(qty ? { QTY: { text: qty } } : {}) } });
+  type Item = { tag: string; scheduled_qty: number | null; scheduled_qty_basis: string; status: string | null };
+  const fans = (rows: unknown[]) => (compileHvacTakeoff(null, { tables: [{ kind: "equipment", sheet: "m.pdf#10", title: { text: "FAN SCHEDULE" }, headers: ["MARK", "QTY"], rows }] })
+    .categories as Record<string, { items: Item[] }>).FAN.items;
+
+  it("compiles each unit of a range or pair, a QTY equal to their number being one each", () => {
+    const items = fans([row("SF-P1-4 THRU 6"), row("SF-P2-1 & 2"), row("EF-1 THRU EF-3", "3"), row("EF-8")]);
+    assert.deepEqual(items.map((i) => i.tag).sort(), ["EF-1", "EF-2", "EF-3", "EF-8", "SF-P1-4", "SF-P1-5", "SF-P1-6", "SF-P2-1", "SF-P2-2"]);
+    const ef2 = items.find((i) => i.tag === "EF-2")!;
+    assert.equal(ef2.scheduled_qty, 1);
+    assert.equal(ef2.scheduled_qty_basis, "printed_schedule_quantity_per_mark");
+    assert.equal(items.find((i) => i.tag === "SF-P1-5")!.scheduled_qty_basis, "one_per_unique_schedule_row");
+  });
+
+  it("refuses a QTY printed for several marks that is not their number, and keeps a lone mark's QTY", () => {
+    const items = fans([row("EF-5/EF-6", "3"), row("EF-7", "2"), row("FC-1 , HP-1", "1")]);
+    const ef5 = items.find((i) => i.tag === "EF-5")!;
+    assert.equal(ef5.scheduled_qty, null);
+    assert.equal(ef5.scheduled_qty_basis, "printed_quantity_for_several_marks");
+    assert.equal(ef5.status, "REFUSED_UNPARSEABLE_QTY");
+    const ef7 = items.find((i) => i.tag === "EF-7")!;
+    assert.equal(ef7.scheduled_qty, 2);
+    assert.equal(ef7.scheduled_qty_basis, "printed_schedule_quantity");
+  });
+
+  it("reads a split system's QTY as each half's: one unit of each kind", () => {
+    // itd-d1-lab's "F-1 , CU-1": a fan coil and its condensing unit, QTY 1.
+    const cats = compileHvacTakeoff(null, { tables: [{ kind: "equipment", sheet: "m.pdf#12", title: { text: "FAN COIL UNIT SCHEDULE" }, headers: ["MARK", "QTY"], rows: [row("FC-1 , CU-1", "1")] }] }).categories as Record<string, { items: Array<{ tag: string; scheduled_qty: number | null; scheduled_qty_basis: string }> }>;
+    const fc1 = cats.FCU.items.find((i) => i.tag === "FC-1")!;
+    assert.deepEqual([fc1.scheduled_qty, fc1.scheduled_qty_basis], [1, "printed_schedule_quantity"]);
+  });
+
+  it("keeps one qualified mark one unit", () => {
+    const cats = compileHvacTakeoff(null, { tables: [{ kind: "equipment", sheet: "m.pdf#11", title: { text: "AIR HANDLING UNIT SCHEDULE" }, rows: [row("AHU-1-2"), row("AHU-3")] }] }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual(cats.AHU.items.map((i) => i.tag).sort(), ["AHU-1-2", "AHU-3"]);
   });
 });

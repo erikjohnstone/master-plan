@@ -172,7 +172,8 @@ test("the normalizer gets the item's family, its table's headers and notes, and 
   scoreSet({ setId: "s", key,
     snapshot: { items: [item({ tag: "P-1" })], tables: [{ sheet: "a.pdf#2", title: "PUMP SCHEDULE", headers: ["MARK", "GPM"], notes }, { sheet: "a.pdf#9", title: "PUMP SCHEDULE", headers: ["X"], notes: [] }] },
     normalize: (it, family, table) => { seen = { family, table }; return { family, tag: it.tag, attributes: {}, unknown: {} }; } });
-  assert.deepEqual(seen, { family: "PUMP", table: { headers: ["MARK", "GPM"], notes, rows: [], codes: {}, legend: {}, families: new Map([["P-1", new Set(["PUMP"])]]) } });
+  // marks: the units of the row's kind its mark cell names (AS-75), one here.
+  assert.deepEqual(seen, { family: "PUMP", table: { headers: ["MARK", "GPM"], notes, rows: [], codes: {}, legend: {}, families: new Map([["P-1", new Set(["PUMP"])]]), marks: 1 } });
 });
 
 test("slices and the gate", () => {

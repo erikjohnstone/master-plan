@@ -1,5 +1,22 @@
 # Changelog
 
+- **Takeoff: a row scheduling several units by a range or a qualified
+  pair.** A schedule row that names its units as a range ("EF-1 THRU
+  EF-4", 26_CA's "SF-P1-4 THRU 11", 013_MO's "CV-7-CV-10") or as a
+  qualified mark's pair ("SF-P2-1 & 2") was counted as one unit, tagged
+  with the whole text or with its first mark, so the count was short and
+  the other marks' plan tags had no schedule row. The compile and the
+  reconcile now read each mark of such a row as a unit, alike; a dash is a
+  range only where both ends print the whole mark ("AHU-1-2" is one mark).
+  A QTY printed on such a row counts all its marks of one kind: equal to
+  their number, each is one unit (`printed_schedule_quantity_per_mark`);
+  otherwise it is refused, never divided (`printed_quantity_for_several_marks`),
+  and the assemblies read the same, so no unit is multiplied by the row's
+  count. On the dev corpus only 26_CA (18 fans where 6 were counted, 36
+  sound traps where 3) and 013_MO (four valves where one) change
+  (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`, `normalize.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-75).
+
 - **Assemblies: a fan coil's two coil blocks printed under no coil name.**
   14_OR's FAN COIL UNITS schedule prints a cooling coil block and a heating
   coil block with blank cells above both, headed "TC (MBH)" and "TH

@@ -30,6 +30,7 @@
 // evidence — no column, no value.
 import { attributeSpec, familyAttributes, unitFactor } from "./attributes";
 import { citedNoteIds, ecmOrDrive, motorRatedForDrive, noteValues, readText, variableSpeed, type ScheduleNote } from "./scheduleNotes";
+import { markLetters } from "../corpusTakeoff.mjs";
 
 export { readText };
 
@@ -64,6 +65,9 @@ export interface TableContext {
   families?: ReadonlyMap<string, ReadonlySet<string>>;
   /** The tables that continue this one ("… (CONT.)"), with their rows. */
   continuation?: ReadonlyArray<{ title: string; headers: readonly string[]; rows: ReadonlyArray<{ key: string; cells: Readonly<Record<string, string>> }> }>;
+  /** How many units of the row's kind its mark cell names, each compiled
+   * from the one row (withProject; AS-75): "EF-1 THRU EF-4" names four. */
+  marks?: number;
 }
 
 /** A drive schedule's row naming a unit as its load: where the unit's VFD
@@ -756,6 +760,8 @@ interface RowContext {
   /** The table prints an indoor unit's columns (dropped from `cols` as the
    * other half's for an outdoor unit). */
   indoorColumns: boolean;
+  /** How many units of its kind the row's mark cell names (TableContext.marks). */
+  marks: number;
 }
 
 /** The one service every medium-named water column of the table names (a
@@ -1480,8 +1486,14 @@ function candidatesOf(col: Column, ctx: RowContext, item: CompileItem): { found:
           : pick(ctx, "qty");
         if (!attr || !col.cell) break;
         const p = parseNumberCell(text);
-        if (p && Number.isInteger(p.n) && p.n >= 1 && p.n <= 100 && !p.words) found.push({ attr, col, value: p.n, printed: printedText, rule: "count.quantity", rank: 0 });
-        else failed.push({ attr, reason: `cell "${text}" is not a count` });
+        if (!(p && Number.isInteger(p.n) && p.n >= 1 && p.n <= 100 && !p.words)) failed.push({ attr, reason: `cell "${text}" is not a count` });
+        // A row naming several units of the unit's kind ("EF-1 THRU EF-4",
+        // "B-1/B-2"; AS-75) prints one QTY for all of them: equal to their
+        // number, each is one unit; else it says nothing of each.
+        else if (attr === "qty" && ctx.marks > 1) {
+          if (p.n === ctx.marks) found.push({ attr, col, value: 1, printed: printedText, rule: "count.quantity_per_mark", rank: 0 });
+          else failed.push({ attr, reason: `QTY ${p.n} is printed for the ${ctx.marks} marks the row names, not for each` });
+        } else found.push({ attr, col, value: p.n, printed: printedText, rule: "count.quantity", rank: 0 });
         break;
       }
       case "rows":
@@ -2488,14 +2500,21 @@ export function withProject(items: ReadonlyArray<CompileItem & { family: string 
   const driven = vfdDrivenTags(items);
   const tableOf = (it: CompileItem) => `${it.sheet_id ?? ""}\u0000${it.table_title ?? ""}`;
   const families = new Map<string, Map<string, Set<string>>>();
+  // The units the compile made of one printed row (its range or list of
+  // marks), which carry the row's cells alike.
+  const rowOf = (it: CompileItem) => `${tableOf(it)}\u0000${JSON.stringify(it.cells ?? {})}`;
+  const rows = new Map<string, string[]>();
   for (const it of items) {
     let byTag = families.get(tableOf(it));
     if (!byTag) families.set(tableOf(it), byTag = new Map());
     let fams = byTag.get(canonKey(it.tag));
     if (!fams) byTag.set(canonKey(it.tag), fams = new Set());
     fams.add(it.family);
+    const row = rows.get(rowOf(it));
+    if (row) row.push(it.tag); else rows.set(rowOf(it), [it.tag]);
   }
-  return (item, table) => table && { ...table, ...(driven.size ? { driven } : {}), families: families.get(tableOf(item)) ?? new Map() };
+  const marks = (item: CompileItem) => (rows.get(rowOf(item)) ?? [item.tag]).filter((t) => markLetters(t) === markLetters(item.tag)).length;
+  return (item, table) => table && { ...table, ...(driven.size ? { driven } : {}), families: families.get(tableOf(item)) ?? new Map(), marks: Math.max(1, marks(item)) };
 }
 
 /** Canonical attributes for one compiled row of `family`. */
@@ -2535,7 +2554,7 @@ export function normalizeCompileItem(item: CompileItem, family: string, table: T
     if (parseElectricalCell(tuple)?.volts) cols.push({ header: group[0].header, h: "ELECTRICAL V/PH/HZ", cell: { text: tuple, bbox: group[0].cell!.bbox }, order: group[0].order });
   }
   const ctx: RowContext = {
-    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null, blockWater: blockWater(cols, family), codes: table?.codes ?? {}, legend: table?.legend ?? {}, paired, half,
+    family, title: item.table_title ?? "", attrs: new Set(attrs), cols, defaultWater: null, blockWater: blockWater(cols, family), codes: table?.codes ?? {}, legend: table?.legend ?? {}, paired, half, marks: table?.marks ?? 1,
     indoorColumns: all.some((c) => INDOOR_WORDS.test(c.h)),
     hasWaterSide: cols.some((c) => quantitiesOf(c.h).some((q) => q === "waterflow" || q === "ewt" || q === "lwt" || q === "ewt_lwt")),
   };
