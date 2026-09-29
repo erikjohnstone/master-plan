@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { applyAssemblies } from "../../src/lib/assemblies/apply.ts";
+import { compileHvacTakeoff } from "../../src/lib/corpusTakeoff.mjs";
 import { pricedFamilies, readsAsMark, rowsLeftOutPriced, scheduleRowsLeftOut } from "../../src/lib/assemblies/leftOut.ts";
 import { sanitizeAssemblyDefinitions } from "../../src/lib/assemblies/schema.ts";
 import { STARTER_DIR } from "../../scripts/assemblies-starter/build.mts";
@@ -109,6 +110,21 @@ test("a title names the families the compile reads it as, never one its exclusio
   assert.equal(left.length, 1);
   assert.ok(left[0].families.includes("FCU"), "a fan coil schedule is FCU's");
   assert.ok(!left[0].families.includes("AHU") && !left[0].families.includes("FAN"), "and neither AHU's nor FAN's");
+});
+
+test("a schedule under a decorated title is named by the families the compile reads the title as, the title as printed (AS-83)", () => {
+  // Read by no family, the rows are named under the families of the title
+  // without its status, discipline, continuation, sheet count or plural.
+  for (const [title, family] of [["(N) EXHAUST FANS - 2 OF 3", "FAN"], ["EXISTING SUPPLY FANS (CONT.)", "FAN"], ["MECHANICAL LOUVER SCHEDULES", "LOUVER"], ["(N) CONDENSATE PUMP", "PUMP"], ["AIRHANDLINGUNITSCHEDULE", "AHU"]]) {
+    const graph = { tables: [table("d.pdf#4", title, ["XY-1", "XY-2"])] };
+    assert.deepEqual(scheduleRowsLeftOut({ categories: {} }, graph), [{ sheet: "d.pdf#4", title, families: [family], rows: 2, marks: ["XY-1", "XY-2"] }], title);
+  }
+  // The compile reads them there, so nothing is left out.
+  const fans = { tables: [table("d.pdf#5", "(N) EXHAUST FANS - 2 OF 3", ["EF-1", "EF-2"])] };
+  assert.deepEqual(scheduleRowsLeftOut(compileHvacTakeoff(null, fans) as unknown as Parameters<typeof scheduleRowsLeftOut>[0], fans), []);
+  // A decoration makes no title a family's that is none as printed.
+  assert.deepEqual(scheduleRowsLeftOut({ categories: {} }, { tables: [table("d.pdf#6", "(N) EXHAUST FAN POINTS LIST", ["EF-1"])] }), []);
+  assert.deepEqual(scheduleRowsLeftOut({ categories: {} }, { tables: [table("d.pdf#7", "MECHANICAL ROOM EXHAUST FANS", ["EF-1"])] }), []);
 });
 
 test("only the families the library prices are kept, and the apply path returns them (a family priced by none adds no record)", () => {

@@ -1,5 +1,22 @@
 # Changelog
 
+- **Takeoff and reconcile: a schedule's title is read without what a
+  drafter adds to any title.** A status ((N), EXISTING), a discipline
+  (MECHANICAL), a continuation ((CONT.), CONTINUED), a sheet count (- 2 OF
+  3), SCHEDULES for SCHEDULE or a hyphen joining two words hid a family
+  whose title rule is the whole title or wants the singular: EXHAUST FANS,
+  CONDENSATE PUMP, FAN POWERED TERMINAL UNIT SCHEDULE, VALVE SCHEDULE and
+  every LOUVER SCHEDULE lost their units, and a transposed schedule under
+  AIR-HANDLING UNIT SCHEDULE read its attribute names as units. Retitling
+  the 97 dev documents' 522 family schedules so changed 158 family readings
+  on 24 documents. The takeoff and the reconcile's shared gate, the
+  transposed view and the left-out notice now read a title without those
+  marks (`familyRuleTitle`), and cite it as printed; an (R), removed or
+  relocated, stays. The dev corpus prints no such title, so its takeoff and
+  reconcile are byte-identical; the check's 158 differences fall to 0
+  (`scheduleTitleMatch.mjs`, `corpusTakeoff.mjs`, `leftOut.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-83).
+
 - **Takeoff and reconcile: a mark is read however the separator after its
   letters is printed.** Drafters print one mark as AHU-1, AHU 1 and AHU1,
   but most families' mark rules want one spelling: under its own AIR

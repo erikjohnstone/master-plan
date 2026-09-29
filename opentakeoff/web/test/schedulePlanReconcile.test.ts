@@ -1784,3 +1784,73 @@ test("one unit however each table that lists it spells the separator after its l
     assert.deepEqual(both(mark), { FURNACE: { compile: ["C1"], reconcile: ["C1"] }, ERV: { compile: ["C1"], reconcile: ["C1"] } }, mark);
   }
 });
+
+// AS-83: a schedule's title read without what a drafter adds to any title: a
+// status, a discipline, a continuation, a sheet count, SCHEDULES for SCHEDULE,
+// a hyphen joining two words.
+const as83Decorations: Record<string, (t: string) => string> = {
+  plain: (t) => t,
+  status: (t) => `(N) ${t}`,
+  existing: (t) => `EXISTING ${t}`,
+  discipline: (t) => `MECHANICAL ${t}`,
+  continued: (t) => `${t} (CONT.)`,
+  continuedWord: (t) => `${t} CONTINUED`,
+  sheet: (t) => `${t} - 2 OF 3`,
+  plural: (t) => t.replace(/\bSCHEDULE\b/, "SCHEDULES"),
+  hyphenated: (t) => t.replace(/^([A-Z]{2,}) (?=[A-Z]{2,})/, "$1-"),
+  all: (t) => `(E) HVAC ${t.replace(/\bSCHEDULE\b/, "SCHEDULES")} (CONTINUED) - SHEET 2 OF 2`,
+};
+
+test("a family reads its schedule under a decorated title as under the title printed plain, in the takeoff and the reconcile alike, citing the title as printed (AS-83)", () => {
+  // Titles from the corpus: 23_GA's EXHAUST FANS, 26_CA's FANS (SPECIFICATION
+  // SECTION 23 34 00) and FAN POWERED TERMINAL UNIT SCHEDULE, 044_NY's
+  // CONDENSATE PUMP, 053_VA's VALVE SCHEDULE, bldg5406's LOU ER SCHEDULE (its
+  // V lost in the extraction), 013_MO's CONTROL VALVES, which names no water,
+  // a general EQUIPMENT SCHEDULE.
+  const graph = (d: (t: string) => string) => ({ tables: [
+    as77Table("m.pdf#1", d("EXHAUST FANS"), ["MARK", "CFM"], [{ MARK: "EF-1", CFM: "650" }, { MARK: "EF-2", CFM: "75" }]),
+    as77Table("m.pdf#2", d("FANS (SPECIFICATION SECTION 23 34 00)"), ["DESIGNATION", "CFM"], [{ DESIGNATION: "SF-3", CFM: "9000" }]),
+    as77Table("m.pdf#3", d("CONDENSATE PUMP"), ["MARK", "GPM"], [{ MARK: "CP-1", GPM: "5" }]),
+    as77Table("m.pdf#4", d("LOU ER SCHEDULE"), ["MARK", "SIZE"], [{ MARK: "L-1", SIZE: "48X36" }]),
+    as77Table("m.pdf#5", d("VALVE SCHEDULE"), ["VALVE MARK", "GPM"], [{ "VALVE MARK": "V-HHW-R-11", GPM: "2" }]),
+    as77Table("m.pdf#6", d("FAN POWERED TERMINAL UNIT SCHEDULE"), ["MARK", "CFM"], [{ MARK: "FPB-1", CFM: "800" }]),
+    as77Table("m.pdf#7", d("EQUIPMENT SCHEDULE"), ["MARK", "DESCRIPTION"], [{ MARK: "AHU-1", DESCRIPTION: "AIR HANDLER" }]),
+    as77Table("m.pdf#8", d("CONTROL VALVES"), ["TAG", "MANUFACTURER", "SERVED", "GPM"], [{ TAG: "CV-7", MANUFACTURER: "BELIMO", SERVED: "B-1", GPM: "12" }]),
+  ] });
+  const read = Object.fromEntries(Object.entries(as83Decorations).map(([name, d]) => [name, as77Marks(graph(d))]));
+  const both = (...marks: string[]) => ({ compile: marks, reconcile: marks });
+  assert.deepEqual(read.plain, {
+    AHU: both("AHU1"), VAV: both("FPB1"), PUMP: both("CP1"), FAN: both("EF1", "EF2", "SF3"),
+    HHW_CONTROL_VALVE: both("VHHWR11"), CHW_CONTROL_VALVE: both("CV7"), LOUVER: both("L1"),
+  });
+  for (const name of Object.keys(as83Decorations)) {
+    assert.deepEqual(read[name], read.plain, name);
+    as77Parity(read[name], name);
+  }
+  // Each unit cites its table's title as printed.
+  const status = graph(as83Decorations.status);
+  const pump = (compileHvacTakeoff(null, status).categories as Record<string, { items: Array<{ tag: string; table_title: string }> }>).PUMP.items;
+  assert.deepEqual(pump.map((i) => [i.tag, i.table_title]), [["CP-1", "(N) CONDENSATE PUMP"]]);
+  const [row] = reconcileScheduleFamilyFromGraph(status, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "PUMP")!) as Array<{ tag: string; schedule_cite: { title: string } }>;
+  assert.equal(row.schedule_cite.title, "(N) CONDENSATE PUMP");
+  const gate = familyTableGate(scheduleTableView(graph(as83Decorations.all).tables[0]), HVAC_FAMILY_SPECS.FAN, "FAN")!;
+  assert.equal(gate.titleOk, true);
+  // A hyphen reads as the space a title's exclusions are written with: an
+  // air handling unit schedule hosts DOAS-1 (AS-63) and a dedicated outdoor
+  // air one does not, however the words are joined.
+  const hosted = (title: string) => as77Marks({ tables: [as77Table("m.pdf#3", title, ["MARK", "CFM"], [{ MARK: "DOAS-1", CFM: "3000" }, { MARK: "AHU-4", CFM: "5000" }])] });
+  assert.deepEqual(hosted("AIR HANDLING UNIT SYSTEM INDEX SCHEDULE"), { AHU: both("AHU4"), DOAS: both("DOAS1") });
+  assert.deepEqual(hosted("AIR-HANDLING UNIT SYSTEM INDEX SCHEDULE"), hosted("AIR HANDLING UNIT SYSTEM INDEX SCHEDULE"));
+  for (const title of ["DEDICATED OUTDOOR-AIR HANDLING UNIT SCHEDULE", "DEDICATED-OUTDOOR-AIR HANDLING UNIT SCHEDULE"]) {
+    assert.deepEqual(hosted(title), hosted("DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE"), title);
+  }
+  // A decoration makes no title a family's that is none as printed: a points
+  // list, a wiring diagram, a status no drafter agrees on ((R): removed or
+  // relocated).
+  const none = { tables: [
+    as77Table("m.pdf#8", "(N) EXHAUST FAN POINTS LIST", ["MARK", "POINT"], [{ MARK: "EF-1", POINT: "START/STOP" }]),
+    as77Table("m.pdf#9", "EXISTING VAV BOX WIRING DIAGRAM - 2 OF 3", ["MARK", "CFM"], [{ MARK: "VAV-1", CFM: "400" }]),
+    as77Table("m.pdf#10", "(R) EXHAUST FANS", ["MARK", "CFM"], [{ MARK: "EF-9", CFM: "400" }]),
+  ] };
+  assert.deepEqual(as77Marks(none), {});
+});

@@ -7,6 +7,7 @@ import test from "node:test";
 import {
   compactScheduleTitle,
   compactScheduleTitleRe,
+  familyRuleTitle,
   queryTitleMatchesNeedle,
   scheduleTitleMatches,
 } from "../src/lib/scheduleTitleMatch.mjs";
@@ -1622,4 +1623,52 @@ test("a title naming a family in words matches it, run together or spaced, and a
   assert.equal(is("CONDENSATE PUMP", PUMP), true);
   assert.equal(is("CONDENSATE PUMP TRAP PACKAGED SCHEDULE", PUMP), false);
   assert.equal(is("AIR/DIRT SEPARATOR SCHEDULE", AIR_SEPARATOR), true);
+});
+
+test("a title as the family rules read it: no status, discipline, continuation or sheet count; SCHEDULES as SCHEDULE; a hyphen joining two words as a space (AS-83)", () => {
+  const read: Array<[string, string]> = [
+    ["(N) EXHAUST FANS", "EXHAUST FANS"],
+    ["(E) AIR HANDLING UNIT SCHEDULE", "AIR HANDLING UNIT SCHEDULE"],
+    ["(EXIST.) PUMP SCHEDULE", "PUMP SCHEDULE"],
+    ["NEW CONDENSATE PUMP", "CONDENSATE PUMP"],
+    ["EXISTING LOU ER SCHEDULE", "LOU ER SCHEDULE"],
+    ["MECHANICAL VALVE SCHEDULE", "VALVE SCHEDULE"],
+    ["HVAC EQUIPMENT SCHEDULE", "EQUIPMENT SCHEDULE"],
+    ["FANS (SPECIFICATION SECTION 23 34 00) (CONT.)", "FANS (SPECIFICATION SECTION 23 34 00)"],
+    ["EXHAUST FANS (CONTINUED)", "EXHAUST FANS"],
+    ["EXHAUST FANS - CONT'D", "EXHAUST FANS"],
+    ["SUPPLY FANS CONTINUED", "SUPPLY FANS"],
+    ["VENTILATION FANS - 2 OF 3", "VENTILATION FANS"],
+    ["EXHAUST FANS (SHEET 2 OF 3)", "EXHAUST FANS"],
+    ["(N)  MECHANICAL EXHAUST FANS (CONT.) - 2 OF 3", "EXHAUST FANS"],
+    ["LOUVER SCHEDULES", "LOUVER SCHEDULE"],
+    ["AIR-HANDLING UNIT SCHEDULE", "AIR HANDLING UNIT SCHEDULE"],
+    ["VAV-BOX WITH HOT WATER REHEAT SCHEDULE", "VAV BOX WITH HOT WATER REHEAT SCHEDULE"],
+    ["WATER-TO-WATER HEAT PUMP SCHEDULE", "WATER TO WATER HEAT PUMP SCHEDULE"],
+  ];
+  for (const [title, rule] of read) assert.equal(familyRuleTitle(title), rule, title);
+  // What is no decoration stays: a word that only begins with one, a mark, a
+  // hyphen beside a number or a lone letter, a number that is no sheet count.
+  for (const title of ["NEWPORT PUMP SCHEDULE", "AHU-1 POINTS LIST", "RTU-G SCHEDULE", "3-WAY VALVE SCHEDULE", "FAN SCHEDULE 2", "CONTROL VALVE SCHEDULE", "MECHANICAL"]) {
+    assert.equal(familyRuleTitle(title), title, title);
+  }
+  // The titles the family rules then read, decorated as drafters print them.
+  const { FAN, PUMP, LOUVER, HHW_CONTROL_VALVE, AHU, VAV } = HVAC_FAMILY_SPECS as Record<string, any>;
+  const is = (title: string, spec: any, re = spec.titleRe) => scheduleTitleMatches(familyRuleTitle(title), re, spec.exclude);
+  for (const t of ["(N) EXHAUST FANS", "EXISTING SUPPLY FANS - 2 OF 3", "FANS (SPECIFICATION SECTION 23 34 00) (CONT.)", "MECHANICAL VENTILATION FANS CONTINUED"]) {
+    assert.equal(scheduleTitleMatches(t, FAN.titleRe, FAN.exclude), false, `${t}: its own rule alone`);
+    assert.equal(is(t, FAN), true, t);
+  }
+  assert.equal(is("(N) CONDENSATE PUMP (CONT.)", PUMP), true);
+  assert.equal(is("LOUVER SCHEDULES", LOUVER), true);
+  assert.equal(is("EXISTING LOU ER SCHEDULE", LOUVER), true);
+  assert.equal(is("MECHANICAL VALVE SCHEDULE", HHW_CONTROL_VALVE, HHW_CONTROL_VALVE.altTitleRe), true);
+  assert.equal(is("VALVE SCHEDULES", HHW_CONTROL_VALVE, HHW_CONTROL_VALVE.altTitleRe), true);
+  assert.equal(is("VAV-BOX WITH HOT WATER REHEAT SCHEDULE", VAV), true);
+  assert.equal(is("AIR-HANDLING UNIT SCHEDULE", AHU), true);
+  // A decoration never makes a title a family's: what the rule refuses as
+  // printed it refuses decorated.
+  for (const t of ["(N) EQUIPMENT CONNECTION SCHEDULE - EXHAUST FANS", "EXISTING AIR HANDLING UNIT FANS", "(N) EXHAUST FAN POINTS", "MECHANICAL ROOM EXHAUST FANS"]) assert.equal(is(t, FAN), false, t);
+  for (const t of ["(N) VAV BOX CONNECTION SCHEDULE", "VAV-BOX CONTROL DIAGRAM", "EXISTING VAV BOX WIRING DIAGRAM - 2 OF 3"]) assert.equal(is(t, VAV), false, t);
+  assert.equal(is("(N) CONDENSATE PUMP TRAP PACKAGED SCHEDULE", PUMP), false);
 });

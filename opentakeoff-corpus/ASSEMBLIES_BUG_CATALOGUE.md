@@ -5895,3 +5895,104 @@ three base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377
   1-AHU-1 in one table and 1-AHU1 in another would be two units. No document on the corpus prints one so.
 - A mark printed with a typographic dash (U+2010 to U+2015, U+2212) is read as printed. A census of the 97
   documents found none among 19,461 row names and mark cells, and one among 73,941 plan tags.
+
+## AS-83 — a schedule's title printed with a status, a discipline, a continuation, a sheet count, a plural or a hyphen hid its family (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by a metamorphic check of the takeoff and the reconcile on the 97 cached dev documents. Each
+table a family reads under its own title (522 tables) was retitled as drafters print the same title:
+- a status before it ((N), EXISTING) or a discipline (MECHANICAL);
+- a continuation after it ((CONT.), CONTINUED) or a sheet count (- 2 OF 3);
+- SCHEDULES for SCHEDULE;
+- a hyphen joining two words (AIR-HANDLING, FAN-POWERED, or the title's first two words);
+- lower case.
+
+The takeoff and the reconcile should read the same units per family under each. Instead, 158 family readings
+changed on 24 documents:
+- A family whose title rule is the whole title lost its schedule under any decoration. FAN's EXHAUST FANS, SUPPLY
+  FANS and VENTILATION FANS (23_GA, 072_CA, 074_CA, 097_UT, 14_OR; 26_CA's 47 fans under FANS (SPECIFICATION SECTION
+  23 34 00), which allows one parenthetical). PUMP's CONDENSATE PUMP (044_NY). VAV's FAN POWERED TERMINAL UNIT
+  SCHEDULE (26_CA's 73 boxes). The control valves' VALVE SCHEDULE (053_VA's 38 hot water valves under MECHANICAL
+  VALVE SCHEDULE or VALVE SCHEDULES).
+- SCHEDULES lost the louver schedules of 13 documents and two louvered penthouse schedules
+  (`\bLOUVERS?\s*SCHEDULE\b` and `\bPENTHOUSE\s+SCHEDULE\b` want the singular).
+- The soft match, which reads a title run together or with a glyph lost (bldg5406's LOU ER SCHEDULE), missed it
+  once a word was added before it.
+- The transposed view (AS-65) tested a family's title rule on the title as printed, strictly, while the gate reads
+  the soft form. Under AIR-HANDLING UNIT SCHEDULE, 21_VA's and 040_IL's transposed air handler schedules were read
+  by the gate but not turned on their sides, and their three air handlers were lost. With the first two words
+  hyphenated (PUMP-SCHEDULE, FAN-SCHEDULE), 21_VA lost 22 units, and 16 attribute names became pumps and fans
+  (APPROX EFFICIENCY PERCENT, MOTOR HORSEPOWER, FAN SPEED RPM).
+- The left-out notice (AS-61) named a schedule's families by the title rules on the title as printed, strictly, so
+  under a decorated title it named none.
+
+And a hyphen escaped the exclusions written with a space: under DEDICATED OUTDOOR-AIR HANDLING UNIT SCHEDULE, the
+DOAS family's host rule (AS-63, an air handling unit schedule's DOAS-1) read DOAS-1, which DEDICATED OUTDOOR AIR
+HANDLING UNIT SCHEDULE excludes.
+
+**Fix (the title the takeoff and the reconcile's shared gate reads, AS-77):**
+- `familyRuleTitle` (`scheduleTitleMatch.mjs`) reads a title as the family rules read it:
+  - without a status ((N), (E), NEW, EXISTING), a discipline (MECHANICAL, HVAC), a continuation ((CONT.), - CONT'D,
+    CONTINUED) or a sheet count (2 OF 3, SHEET 2 OF 3), however many are printed;
+  - with SCHEDULES read as SCHEDULE, and a hyphen joining two words as a space. No title rule needs a hyphen there.
+  - An (R) stays: drafters print it for removed and for relocated.
+- `familyTableGate` (`corpusTakeoff.mjs`) reads by it each family's title and other title, its host title, the
+  general schedules' titles, a control valve title that names no water, and the families a title names (AS-80). The
+  table shows and cites its title as printed.
+- The transposed view reads a family's title as the gate does: that form, and the soft match.
+- The left-out notice (`leftOut.ts`) names a schedule's families as the gate reads its title.
+- `scheduleTitleMatches` itself is unchanged: the control-intent evidence finder, `query_table` and the agent loop
+  read titles by it for other questions.
+
+**Measured:**
+- **The 97 cached dev documents** (A/B against AS-82): the takeoff and the reconcile (2,619 rows) are byte-identical.
+  No title on the corpus prints a decoration that hid its family: of its 1,564 table titles, the five with a status
+  are 067_CA's (N) PUMP, HEAT EXCHANGER and VFD SCHEDULE, which their families read anyway.
+- **The left-out notice** on the 97 documents: 22 schedules and 54 rows, identical.
+- **The metamorphic check** (11 variants, 522 titled tables): 472 → 312 differences. Every decoration's 158 → 0.
+  The 312 left drop the word SCHEDULE (below).
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C dev
+  (227/244), the binding, question and reading evals and the unseen audit's replay (56 decisions audited, 56 right)
+  identical to AS-82's; 058_CA's replay runs out of memory as it did.
+- **Held-out** (aggregates only, 0 graphs built), each as with AS-82:
+  - GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented;
+  - held-out 2 334/472;
+  - GATE 5 21/91;
+  - GATE C 35/91.
+
+**Tests:**
+- scheduleTitleMatch.test.ts (AS-83): `familyRuleTitle` on 18 decorated titles, several decorations stacked; what is
+  no decoration stays (NEWPORT, AHU-1, RTU-G, 3-WAY, FAN SCHEDULE 2); the rules read FAN's, PUMP's, LOUVER's, the
+  valves', VAV's and AHU's titles decorated, and refuse a connection schedule, a points list, a room's fans, a wiring
+  diagram.
+- schedulePlanReconcile.test.ts (AS-83): eight corpus title shapes under ten decorations read the same units, in
+  the takeoff and the reconcile alike, citing the title as printed. The DOAS host reads a hyphenated title as the
+  spaced one. A points list, a wiring diagram and an (R) title stay no family's.
+- transposedSchedule.test.ts (AS-83): AIR-HANDLING UNIT SCHEDULE, (N) AIR HANDLING UNIT SCHEDULE - 2 OF 2 and
+  MECHANICAL AIR HANDLING UNIT SCHEDULES (CONT.) are read one unit a column, as the plain title is, in the takeoff,
+  the reconcile and the notice; (N) EXHAUST FANS too; a points list stays as extracted.
+- leftOut.test.ts (AS-83): rows under a decorated title are named by its family; read by the compile, none.
+
+25 of 26 mutations each fail a test beyond the baseline's. The one left reads the families a title names (AS-80)
+from the title as printed; on every title the corpus and the tests print, those are the same families, as the
+families that share a title have title rules no decoration changes.
+
+**Guard:** web typecheck clean; lint 0 errors (the 3 known warnings); the web suite's 3,967 tests fail only AS-1's three
+base-red tests. MCP typecheck clean; `test:bas` 133/133; the MCP suite 377 of 380, as at AS-82 (a first run under
+load cut the tier-draw file short; its tests pass alone and in the rerun).
+
+**UI proof:** the dev server started on the change, deterministic readings.
+- The Takeoff canvas's reconcile equals `reconcile_schedule_plan` over MCP row for row on 21_VA (its transposed
+  schedules' AHU, PUMP, FAN, BOILER, UNIT_HEATER and CONDENSING_UNIT; 19 checks), 23_GA (EXHAUST FANS; 7), 053_VA
+  (VALVE SCHEDULE; 7) and 044_NY (CONDENSATE PUMP, LOUVER SCHEDULE; 7).
+- Takeoff → Assemblies is byte-identical to `apply_assemblies` over MCP on 21_VA (87 units, 162 records, 2,871
+  lines; 18 checks) and 23_GA (4 units, 9 records, 72 lines; 17 checks), as at AS-82.
+
+**Left as it is (measured, disclosed):**
+- A title printed without the word SCHEDULE (BOILER for BOILER SCHEDULE): 312 differences in the check, in 28
+  families whose title rules need the word. On the 97 documents as printed, five tables are titled so. Two are
+  schedules the takeoff misses: 097_UT's COMBINATION LOUVER (L-1, L-2) and 030_NY's DOMESTIC DRAWDOWN TANK. Two would
+  be misread with SCHEDULE added: 26_CA's RELIEF AND INTAKE HOOD (printed twice) as range hoods, and 013_MO's
+  CROSS-TIE PUMP, whose rows are points (CTP-C, CTP-FLT, CTP-ST), as pumps. The word keeps notes, legends and points
+  lists out, and reading its absence as a schedule would trade two misses for two phantom families, so it stays.
+- An (R) status stays (above).
+- A table's own title as the compile reports it (`table_title`) drops a trailing "N OF M" only, as before.

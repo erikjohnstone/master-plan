@@ -6,7 +6,7 @@
  * Versioned: changing family rules after VALIDATING starts requires a truth
  * CHANGELOG + reset to 0/5.
  */
-import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
+import { scheduleTitleMatches, familyRuleTitle } from "./scheduleTitleMatch.mjs";
 import { scheduledQtyStatusFromRow } from "./schedulePlanReconcile.mjs";
 import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
 import { disciplineOfSheetNumber } from "./symbolsweep.ts";
@@ -551,7 +551,11 @@ function transposedScheduleView(table) {
   const rows = table?.rows || [];
   if (headers.length < 2 || !rows.length) return null;
   const title = String(table.title?.text || "");
-  if (!Object.values(HVAC_FAMILY_SPECS).some((s) => s.titleRe?.test(title) && !s.exclude?.test(title))) return null;
+  // Its title read as the family gate reads it (AS-83): without a status,
+  // discipline, continuation or sheet count, and in its soft form, so an
+  // AIR-HANDLING UNIT SCHEDULE printed on its side is read one unit a column.
+  const ruleTitle = familyRuleTitle(title);
+  if (!Object.values(HVAC_FAMILY_SPECS).some((s) => scheduleTitleMatches(ruleTitle, s.titleRe, s.exclude))) return null;
   // A points list is never a schedule of units, however it is laid out.
   if (isBasPointsListTitle(title) || isBasPointsListTable(table)) return null;
   let L = -1;
@@ -1200,8 +1204,11 @@ export function familyTableGate(table, spec, family = null) {
   // (Transbay RAH-/WFU- tables extract without a recoverable caption).
   // General schedules: same gate — only families with keyRe may claim rows.
   // titledOnly: skip blank/catch-all entirely (FIN_TUBE FTR vs filter panels).
-  const titleOk = Boolean(titleRe) && scheduleTitleMatches(title, titleRe, exclude);
-  const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, exclude);
+  // The title the family's rules read, without a status, discipline,
+  // continuation or sheet count (AS-83); the table shows and cites its own.
+  const ruleTitle = familyRuleTitle(title);
+  const titleOk = Boolean(titleRe) && scheduleTitleMatches(ruleTitle, titleRe, exclude);
+  const altOk = Boolean(altTitleRe) && scheduleTitleMatches(ruleTitle, altTitleRe, exclude);
   const blankTitle = !title.trim();
   // A titled-but-service-unqualified "CONTROL VALVE(S)" table is the same
   // problem as a blank title for CHW_CONTROL_VALVE/HHW_CONTROL_VALVE
@@ -1210,13 +1217,13 @@ export function familyTableGate(table, spec, family = null) {
   // doesn't state it. Scoped to blankServiceHint families only so no other
   // family's blank-title handling (LOUVER, FIN_TUBE, etc.) is touched.
   const genericValveTitle = Boolean(blankServiceHint) && !blankTitle
-    && isGenericControlValveTitle(title);
-  const catchAll = CATCH_ALL_SCHEDULE_RE.test(title);
+    && isGenericControlValveTitle(ruleTitle);
+  const catchAll = CATCH_ALL_SCHEDULE_RE.test(ruleTitle);
   const blankGate = blankKeyRe || keyRe;
   const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
   const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
   const hostOk = Boolean(host?.titleRe) && !titleOk && !altOk
-    && scheduleTitleMatches(title, host.titleRe, host.exclude);
+    && scheduleTitleMatches(ruleTitle, host.titleRe, host.exclude);
   // Read by its marks alone: no title vouches for the family here (AS-66).
   const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAll);
   let pass = 2;
@@ -1266,7 +1273,7 @@ export function familyTableGate(table, spec, family = null) {
   // A title that names another family too, whose own mark rule reads its
   // rows ("OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE"; AS-80).
   const coTitled = (titleOk || altOk) && !filterRe && family && HVAC_FAMILY_SPECS[family]
-    ? titleFamilies(title).filter((named) => named.family !== family)
+    ? titleFamilies(ruleTitle).filter((named) => named.family !== family)
     : [];
   // How the family reads the name of a row's unit (rowIdentityText): its own
   // identity column, and a row's UNIT MARK or VALVE MARK where it prints both

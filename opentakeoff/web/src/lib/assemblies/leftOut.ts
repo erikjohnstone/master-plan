@@ -10,6 +10,7 @@
 // them alike rather than price fewer units without a word. It changes no
 // unit, count or line.
 import { HVAC_FAMILY_SPECS, isBasPointsListTable, isBasPointsListTitle, isScheduleHeaderJunkMark, normalizeEquipMark, scheduleTableView } from "../corpusTakeoff.mjs";
+import { familyRuleTitle, scheduleTitleMatches } from "../scheduleTitleMatch.mjs";
 import { isEquipTag } from "../equiptags";
 import { familiesOf, type AssemblyDefinition } from "./schema";
 
@@ -62,10 +63,13 @@ export function readsAsMark(key: string): boolean {
       || isEquipTag(p.replace(/^([A-Z]{2,8})(\d{1,3})(?=[-.]\d)/i, "$1-$2")));
 }
 
-/** The families a schedule's title names, as the compile reads titles. */
-function titleFamilies(title: string): string[] {
+/** The families a schedule's title names, as the compile reads titles:
+ * without its status, discipline, continuation or sheet count, and in its
+ * soft form (AS-83). */
+function titleFamilies(rawTitle: string): string[] {
+  const title = familyRuleTitle(rawTitle);
   return Object.entries(HVAC_FAMILY_SPECS as Record<string, { titleRe?: RegExp; exclude?: RegExp }>)
-    .filter(([, s]) => s.titleRe?.test(title) && !s.exclude?.test(title))
+    .filter(([, s]) => s.titleRe != null && scheduleTitleMatches(title, s.titleRe, s.exclude))
     .map(([family]) => family);
 }
 

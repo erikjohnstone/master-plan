@@ -304,3 +304,33 @@ test("a points list's served unit printed only across a transposed schedule is f
   assert.equal(target.prefer_schedule_title, "FAN SCHEDULE");
   assert.equal(target.prefer_schedule_sheet, "v.pdf#51");
 });
+
+test("a transposed schedule under a decorated or hyphenated title is read one unit a column, as under its title printed plain (21_VA's AIR HANDLING UNIT SCHEDULE; AS-83)", () => {
+  const ahus = (title: string) => transposed("v.pdf#50", title, null, "DESIGNATION", ["AHU-1", "AHU-2"], [
+    { label: "AREA SERVED", values: ["GYMNASIUM", "OFFICES"] },
+    { label: "SUPPLY AIR CFM", values: ["8,000", "4,500"] },
+    { label: "MANUFACTURER", values: ["TRANE", "TRANE"] },
+  ]);
+  const plain = compiled([ahus("AIR HANDLING UNIT SCHEDULE")]);
+  assert.deepEqual(tagsOf(plain, "AHU"), ["AHU-1", "AHU-2"]);
+  for (const title of ["AIR-HANDLING UNIT SCHEDULE", "(N) AIR HANDLING UNIT SCHEDULE - 2 OF 2", "MECHANICAL AIR HANDLING UNIT SCHEDULES (CONT.)"]) {
+    const t = ahus(title);
+    assert.notEqual(scheduleTableView(t), t, `${title}: read on its side`);
+    const c = compiled([t]);
+    assert.deepEqual(c.AHU.items.map(reading), plain.AHU.items.map(reading), title);
+    assert.deepEqual(Object.values(c).flatMap((f) => f.items.map((i) => i.tag)).sort(), ["AHU-1", "AHU-2"], `${title}: no attribute is a unit`);
+    const rows = reconcileScheduleFamilyFromGraph({ tables: [t] }, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "AHU")!) as Array<{ tag: string }>;
+    assert.deepEqual(rows.map((r) => r.tag), ["AHU-1", "AHU-2"], `${title}: the reconcile's rows`);
+    assert.deepEqual(scheduleRowsLeftOut({ categories: {} }, { tables: [t] })[0]?.marks, ["AHU-1", "AHU-2"], `${title}: the notice's rows`);
+  }
+  // A family whose title rule is the whole title (EXHAUST FANS) reads it
+  // decorated too.
+  const fansN = transposed("v.pdf#51", "(N) EXHAUST FANS", null, "DESIGNATION", ["EF-1", "EF-3"], [
+    { label: "AREA SERVED", values: ["TOILET EXHAUST", "EVIDENCE STORAGE"] },
+    { label: "CAPACITY - CFM", values: ["650", "630"] },
+  ]);
+  assert.deepEqual(tagsOf(compiled([fansN]), "FAN"), ["EF-1", "EF-3"]);
+  // A points list stays as extracted however it is titled.
+  const list = transposed("v.pdf#52", "(N) AIR HANDLING UNIT POINTS LIST", null, "DESIGNATION", ["AHU-1", "AHU-2"], [{ label: "SUPPLY FAN STATUS", values: ["DI", "DI"] }]);
+  assert.equal(scheduleTableView(list), list);
+});
