@@ -7,7 +7,7 @@
  */
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark,
-  familyTableGate, familyMarkRead, rowMarkText, splitRowMarks,
+  familyTableGate, familyMarkRead, familyRowRead, rowMarkText, splitRowMarks,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
@@ -839,6 +839,9 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     if (gate.pass !== pass) continue;
     const { title } = gate;
     for (const row of table.rows || []) {
+      // In a valve table whose rows name both waters, the row's own, as the
+      // takeoff reads it (AS-78).
+      if (!familyRowRead(gate, row, table)) continue;
       const rawTag = rowIdentityTag(row, needle?.identityHeaderRe || null);
       if (!rawTag) continue;
       // The takeoff's split of a row's marks (AS-77).

@@ -1,5 +1,20 @@
 # Changelog
 
+- **Takeoff: a valve's water from its own row.** A valve schedule whose
+  title names no water ("CONTROL VALVES", "EQUIPMENT CONTROL VALVES", or
+  none) was read as one water for the whole table, its headers' or its
+  marks', else chilled. 072_CA's and 074_CA's print SERVICE "CHW, …" and
+  "HHW, …" row by row, and all 22 valves each were chilled water's, so the
+  valve takeoff's Service column said CHW for ten heating valves each;
+  013_MO's boiler valves were chilled too. A row's own service, system,
+  fluid or served cell now names its water (CHW, CHWS/R, HHW, HHWS/R,
+  HW, hot, heating or chilled water, reheat, steam; a pump's mark names
+  none): where the rows name one water it is the table's, where they name
+  both each row is its own, and otherwise the headers and marks decide as
+  before. On the dev corpus 26 valves on three documents move to hot
+  water, in the takeoff and the reconcile alike (`corpusTakeoff.mjs`,
+  ASSEMBLIES_BUG_CATALOGUE AS-78).
+
 - **Reconcile: the schedule↔plan reconcile reads tables by the takeoff's
   own gate.** The reconcile scaffold kept its own copy of the takeoff's
   table gate, and the copy had drifted: it held no row for a CONTROL

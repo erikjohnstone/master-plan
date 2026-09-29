@@ -5482,3 +5482,51 @@ form is asserted too. 15 mutations of the shared gate and of the reconcile's cal
   valves, 11 fans), 044_NY (FOP-1 to FOP-4 among 11 pumps), 25_WA (no humidifier), 017_MD (H-A-3 once), 043_FL (no
   damper) and 009_FL (CV-1, CV-2); 40 checks. Takeoff → Assemblies on 013_MO (9 checks) and 069_ID (17) is
   byte-identical to apply_assemblies over MCP.
+
+## AS-78 — a valve table whose title names no water was read as one water, though its rows print their own (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, with AS-77. The takeoff reads a valve table whose title names no water (untitled, or CONTROL
+VALVE(S) with no CHW or HHW) as one water for the whole table: its headers', else the first mark that names one, else
+chilled water. A census of every such table over the 97 cached dev documents found four:
+- 072_CA's and 074_CA's EQUIPMENT CONTROL VALVES print SERVICE "CHW, FC-A-2" and "HHW, FC-A-2" row by row (checked on
+  a render of 072_CA's sheet 26), yet all 22 valves each were chilled water's: the valve takeoff's Service column (and
+  the estimator document and the HIT export, which read it) said CHW for ten heating-coil valves each;
+- 013_MO's CONTROL VALVES print SERVICE "HHW/BOILER" on every row (a render of sheet 20). The extraction lost that
+  column, but its cross-tie row's EQUIPMENT SERVED, "CROSS-TIE HHWS/R", survives; its six valves were chilled water's;
+- 009_FL's HYDRONIC CONTROL VALVE SCHEDULE prints no water anywhere (FLUID "WATER").
+
+**Fix (`corpusTakeoff.mjs`, in the gate AS-77 made shared, so the takeoff and the reconcile alike):**
+`valveRowService` reads the water a row names in its own service, system, fluid or served cell: CHW, CHWS, CHWR,
+CHILLED or COOLING WATER; HHW, HHWS, HHWR, HW, HWS, HWR, HOT or HEATING (HOT) WATER, REHEAT, STEAM. A pump's or a unit's
+mark (CHWP-1, HWP-2) names none, nor does a cell that names both. `valveTableService` keeps the headers' water first;
+else the water the rows name, where they name one; "MIXED" where they name both, each row then read by its own
+(`familyRowRead`, a row that names none by the table's marks, or chilled); else the marks', or chilled, as before.
+
+**Measured** (an A/B over the 97 cached dev documents against AS-77):
+- **26 valves on 3 documents** move from CHW_CONTROL_VALVE to HHW_CONTROL_VALVE, in the takeoff and the reconcile
+  alike; nothing else changes. 072_CA's and 074_CA's ten heating-coil valves each (CV-HC-FC-A-2 to -7, -13-1, -17-1,
+  -18-1, -20-1), 12 chilled and 10 hot; 013_MO's CV-7 to CV-12, all hot. CV-HC-FC-A-8 stays chilled water's: its
+  SERVICE prints "CHW, EV-A-8" (the drafter's, as printed). 009_FL's CV-1 and CV-2 print no water and stay chilled
+  water's, the takeoff's default, which no print backs; disclosed here.
+- **Assemblies:** the moved valves are units no typical applies to (controls: no assembly); only their family changes.
+  Records and lines are as before (013_MO 14 and 15; 072_CA and 074_CA 61 and 628 each).
+- **WP1 acceptance:** 42 of the 93 cached dev sets pass, as before; none flips and no message changes (the three sets'
+  keys record no control valve).
+- **Evals:** the five tiers' attribute evals (line for line, detail included), the typical eval (130/244), GATE C dev
+  (227/244), the binding, question and reading evals and the unseen audit's replay identical to AS-77's.
+- **Held-out** (aggregates only): GATE 2 held-out 905/1,008 exact, 0 wrong, 2 invented; held-out 2 334/472; GATE 5
+  21/91; GATE C 35/91; each as with AS-77.
+
+**Tests:** schedulePlanReconcile.test.ts (AS-78): `valveRowService` on SERVICE, EQUIPMENT SERVED, SYSTEM and FLUID
+cells, supply and return spellings, a pump's and a unit's mark, both waters, a REMARKS cell and plain WATER; and on the
+takeoff and the reconcile alike, 072_CA's mixed table (row by row, a row that names none by its marks), 013_MO's (the
+one row's water names the table's), a header that names the water deciding still, rows serving pumps (no water:
+chilled) and a titled table staying its family's. The mixed-table test fails on AS-77. 12 mutations each fail a test.
+- **Guard:** web typecheck clean, lint 0 errors (the 3 known warnings); the web suite's 3,951 tests fail only AS-1's
+  three base-red tests. MCP: typecheck clean; `test:bas` 133/133; the suite 377 of 380, as at AS-77 (AS-1's conformance
+  test, and navfac's `sweep_schedule_row` over the SDK's 60 s default under load, 63.8 s).
+- **UI proof** (the dev server started on the change): on 013_MO, 072_CA, 074_CA and 009_FL the Takeoff canvas's
+  reconcile equals `reconcile_schedule_plan` over MCP row for row, its valve takeoff's counts equal
+  `compile_corpus_takeoff`'s water by water (0 and 6; 12 and 10; 12 and 10; 2 and 0), and the Takeoff panel lists
+  every valve (40 checks). Takeoff → Assemblies on 013_MO (9 checks), 074_CA (18) and 069_ID (17) is byte-identical to
+  apply_assemblies over MCP.

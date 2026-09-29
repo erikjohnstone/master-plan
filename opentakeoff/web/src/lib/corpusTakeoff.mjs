@@ -901,11 +901,14 @@ export function extractEmbeddedCoils(table) {
   return results;
 }
 
+const VALVE_HOT_HEADER_RE = /\b(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT|STEAM)\b/;
+const VALVE_COLD_HEADER_RE = /\b(?:CHW|CHILLED\s*WATER|COOLING\s*WATER)\b/;
+
 /** Infer schedule service from header blob + sample marks on untitled valve tables. */
 export function inferValveServiceFromTable(table) {
   const blob = tableHeaderBlob(table);
-  if (/\b(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT|STEAM)\b/.test(blob)) return "HHW";
-  if (/\b(?:CHW|CHILLED\s*WATER|COOLING\s*WATER)\b/.test(blob)) return "CHW";
+  if (VALVE_HOT_HEADER_RE.test(blob)) return "HHW";
+  if (VALVE_COLD_HEADER_RE.test(blob)) return "CHW";
   // Real bug, found and fixed 2026-09-02 in self-review: bare /HW/i tested
   // against a real row tag like "CHW-1" matches — "CHW-1" contains "HW" as
   // a substring — so a genuinely chilled-water valve fell through to the
@@ -917,6 +920,50 @@ export function inferValveServiceFromTable(table) {
     if (/\bHHW\b|REHEAT|\bHW\b/i.test(tag)) return "HHW";
   }
   return "CHW";
+}
+
+// The columns a valve row names its water in: SERVICE "CHW, FC-A-2" (072_CA's
+// and 074_CA's EQUIPMENT CONTROL VALVES), SERVED "CROSS-TIE HHWS/R" (013_MO's
+// CONTROL VALVES), a SYSTEM or FLUID.
+const VALVE_ROW_SERVICE_HEADER_RE = /\b(?:SERVICE|SYSTEM|FLUID|MEDI(?:UM|A)|PIPING|SERVED|SERVES)\b/i;
+// A water named outright, with its supply and return spellings; a pump's or a
+// unit's mark (CHWP-1, HWP-1) names none.
+const VALVE_ROW_HOT_RE = /\b(?:H?HW[SR]?|HOT\s*WATER|HEATING\s*(?:HOT\s*)?WATER|REHEAT|STEAM)\b/i;
+const VALVE_ROW_COLD_RE = /\b(?:CHW[SR]?|CHILLED\s*WATER|COOLING\s*WATER)\b/i;
+
+/**
+ * The water a valve schedule's row names in its own service, system, fluid
+ * or served cell (AS-78): "HHW", "CHW", or null where it names none, or both.
+ */
+export function valveRowService(row) {
+  let hot = false;
+  let cold = false;
+  for (const [header, cell] of Object.entries(row?.cells || {})) {
+    if (!VALVE_ROW_SERVICE_HEADER_RE.test(String(header || ""))) continue;
+    const text = String(cell?.text ?? (typeof cell === "string" ? cell : ""));
+    if (VALVE_ROW_HOT_RE.test(text)) hot = true;
+    if (VALVE_ROW_COLD_RE.test(text)) cold = true;
+  }
+  return hot === cold ? null : hot ? "HHW" : "CHW";
+}
+
+/**
+ * The water of a valve table whose title names none (AS-78): its headers',
+ * as before; else the one its rows' service cells name, or "MIXED" where
+ * they name both (072_CA's EQUIPMENT CONTROL VALVES: SERVICE "CHW, FC-A-2"
+ * and "HHW, FC-A-2" row by row), each row then its own; else its marks', or
+ * chilled water (inferValveServiceFromTable). The takeoff had read the whole
+ * table as the headers' or marks' water, so 072_CA's and 074_CA's heating
+ * valves were chilled water's, and 013_MO's boiler valves too.
+ */
+export function valveTableService(table) {
+  const blob = tableHeaderBlob(table);
+  if (!VALVE_HOT_HEADER_RE.test(blob) && !VALVE_COLD_HEADER_RE.test(blob)) {
+    const named = new Set((table?.rows || []).map((row) => valveRowService(row)).filter(Boolean));
+    if (named.size > 1) return "MIXED";
+    if (named.size === 1) return [...named][0];
+  }
+  return inferValveServiceFromTable(table);
 }
 
 // Real, found-live gap (2026-09-02, 074_CA_West_Valley_College_STEM_Classroom_HVAC):
@@ -1156,6 +1203,8 @@ export function familyTableGate(table, spec) {
   // Read by its marks alone: no title vouches for the family here (AS-66).
   const unvouched = !(titleOk || altOk || hostOk) && (blankTitle || catchAll);
   let pass = 2;
+  // A valve table whose rows name both waters is read row by row (AS-78).
+  let rowService = null;
   if (titleOk || altOk) {
     pass = 1;
   } else if (!hostOk) {
@@ -1166,9 +1215,10 @@ export function familyTableGate(table, spec) {
     if ((blankTitle || genericValveTitle) && blankGate) {
       if (!blankHeaderOk) return null;
       if (blankServiceHint && headerValveShape) {
-        const inferred = inferValveServiceFromTable(table);
-        if (blankServiceHint === "CHW" && inferred === "HHW") return null;
-        if (blankServiceHint === "HHW" && inferred !== "HHW") return null;
+        const service = valveTableService(table);
+        if (service === "MIXED") rowService = blankServiceHint;
+        else if (blankServiceHint === "CHW" && service === "HHW") return null;
+        else if (blankServiceHint === "HHW" && service !== "HHW") return null;
       }
     } else if (!(catchAll && keyGated)) {
       return null;
@@ -1195,8 +1245,19 @@ export function familyTableGate(table, spec) {
   const titledAlso = titleOk && keyRe ? [blankKeyRe, titledKeyRe].filter(Boolean) : [];
   return {
     pass, title, titleOk, altOk, hostOk, blankTitle, genericValveTitle,
-    catchAll, unvouched, filterRe, titledAlso,
+    catchAll, unvouched, filterRe, titledAlso, rowService,
   };
+}
+
+/**
+ * Whether a family's gate reads a row of its table (AS-78, for the takeoff
+ * and the reconcile alike): in a valve table whose rows name both waters, a
+ * row is the family's its own cell names, and one that names none the
+ * table's, by its headers and marks.
+ */
+export function familyRowRead(gate, row, table) {
+  if (!gate.rowService) return true;
+  return (valveRowService(row) || inferValveServiceFromTable(table)) === gate.rowService;
 }
 
 /**
@@ -1293,6 +1354,8 @@ function uniqueFamily(graph, spec) {
     let rowIdx = -1;
     for (const row of table.rows || []) {
       rowIdx++;
+      // In a valve table whose rows name both waters, the row's own (AS-78).
+      if (!familyRowRead(gate, row, table)) continue;
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
       let tag = rowKey;
       if (countKeyedIdentCol) {

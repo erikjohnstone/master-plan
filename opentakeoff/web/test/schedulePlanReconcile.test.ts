@@ -17,7 +17,7 @@ import {
   servedEquipmentTag,
   unscheduledTagsAndAliasCandidates,
 } from "../src/lib/schedulePlanReconcile.mjs";
-import { HVAC_FAMILY_SPECS, compileHvacTakeoff } from "../src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService } from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
@@ -1259,4 +1259,63 @@ test("reconcile scaffold and takeoff read the same marks of every family, over t
     read += Object.values(byFamily).reduce((n, m) => n + m.compile.length, 0);
   }
   assert.ok(read > 500, `the battery reads units (${read})`);
+});
+
+test("a valve row names its water in its own service cell; a unit's mark names none (AS-78)", () => {
+  const row = (cells: Record<string, string>) => ({ cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text }])) });
+  assert.equal(valveRowService(row({ SERVICE: "CHW, FC-A-2" })), "CHW");
+  assert.equal(valveRowService(row({ SERVICE: "HHW, FC-A-2" })), "HHW");
+  assert.equal(valveRowService(row({ "EQUIPMENT SERVED": "CROSS-TIE HHWS/R" })), "HHW");
+  assert.equal(valveRowService(row({ SERVICE: "HHW/BOILER" })), "HHW");
+  assert.equal(valveRowService(row({ SYSTEM: "HEATING HOT WATER" })), "HHW");
+  assert.equal(valveRowService(row({ FLUID: "STEAM" })), "HHW");
+  assert.equal(valveRowService(row({ SERVICE: "CHILLED WATER" })), "CHW");
+  assert.equal(valveRowService(row({ SERVICE: "CHWR" })), "CHW");
+  // A pump's or a unit's mark, both waters, a cell no service column holds,
+  // or a fluid that names neither: no water.
+  assert.equal(valveRowService(row({ SERVED: "CHWP-1" })), null);
+  assert.equal(valveRowService(row({ SERVED: "HWP-2" })), null);
+  assert.equal(valveRowService(row({ SERVICE: "CHW/HHW CHANGEOVER" })), null);
+  assert.equal(valveRowService(row({ REMARKS: "SEE CHW RISER" })), null);
+  assert.equal(valveRowService(row({ FLUID: "WATER" })), null);
+});
+
+test("a valve table whose title names no water is read by the water its rows print, row by row where they print both, in the takeoff and the reconcile alike (AS-78)", () => {
+  // 072_CA's and 074_CA's EQUIPMENT CONTROL VALVES print SERVICE "CHW, FC-A-2"
+  // and "HHW, FC-A-2" row by row; CV-HC-FC-A-8's prints CHW, and is read as
+  // printed. A row that prints no water is the table's, by its marks.
+  const mixed = { tables: [as77Table("m.pdf#26", "EQUIPMENT CONTROL VALVES", ["MARK", "MANUFACTURER & MODEL", "SERVICE", "FLOW RATE [GPM]", "VALVE CV"], [
+    { MARK: "CV-CC-FC-A-2", "MANUFACTURER & MODEL": "BELIMO B209", SERVICE: "CHW, FC-A-2", "FLOW RATE [GPM]": "1.3", "VALVE CV": "0.8" },
+    { MARK: "CV-HC-FC-A-2", "MANUFACTURER & MODEL": "BELIMO B208", SERVICE: "HHW, FC-A-2", "FLOW RATE [GPM]": "0.6", "VALVE CV": "0.46" },
+    { MARK: "CV-HC-FC-A-8", "MANUFACTURER & MODEL": "BELIMO B209", SERVICE: "CHW, EV-A-8", "FLOW RATE [GPM]": "1.2", "VALVE CV": "0.8" },
+    { MARK: "CV-9", "MANUFACTURER & MODEL": "BELIMO B209", SERVICE: "-", "FLOW RATE [GPM]": "1.0", "VALVE CV": "0.8" },
+  ])] };
+  assert.deepEqual(as77Marks(mixed), {
+    CHW_CONTROL_VALVE: { compile: ["CV9", "CVCCFCA2", "CVHCFCA8"], reconcile: ["CV9", "CVCCFCA2", "CVHCFCA8"] },
+    HHW_CONTROL_VALVE: { compile: ["CVHCFCA2"], reconcile: ["CVHCFCA2"] },
+  });
+  // 013_MO's CONTROL VALVES: the one row that names a water ("CROSS-TIE
+  // HHWS/R") names the table's, as its SERVICE column, lost to the
+  // extraction, prints HHW/BOILER on every row.
+  const one = { tables: [as77Table("m.pdf#20", "CONTROL VALVES", ["TAG", "MANUFACTURER", "MODEL", "SERVED", "GPM", "SIZE"], [
+    { TAG: "CV-7", MANUFACTURER: "CSC", MODEL: "NIBCO/BELIMO", SERVED: "B-001 THRU 006", GPM: "-", SIZE: "4\"" },
+    { TAG: "CV-11", MANUFACTURER: "CSC", MODEL: "NIBCO/BELIMO", SERVED: "CROSS-TIE HHWS/R", GPM: "-", SIZE: "8\"" },
+  ])] };
+  assert.deepEqual(as77Marks(one), { HHW_CONTROL_VALVE: { compile: ["CV11", "CV7"], reconcile: ["CV11", "CV7"] } });
+  // A header that names the water still decides the whole table.
+  const header = { tables: [as77Table("m.pdf#20", "CONTROL VALVES", ["TAG", "HHW GPM", "SERVICE"], [
+    { TAG: "CV-1", "HHW GPM": "4", SERVICE: "CHW" }, { TAG: "CV-2", "HHW GPM": "4", SERVICE: "HHW" },
+  ])] };
+  assert.deepEqual(as77Marks(header), { HHW_CONTROL_VALVE: { compile: ["CV1", "CV2"], reconcile: ["CV1", "CV2"] } });
+  // Rows that serve pumps name no water: the table's marks decide, chilled.
+  const pumps = { tables: [as77Table("m.pdf#20", "CONTROL VALVES", ["TAG", "SERVED", "GPM"], [
+    { TAG: "CV-1", SERVED: "CHWP-1", GPM: "40" }, { TAG: "CV-2", SERVED: "HWP-2", GPM: "30" },
+  ])] };
+  assert.deepEqual(as77Marks(pumps), { CHW_CONTROL_VALVE: { compile: ["CV1", "CV2"], reconcile: ["CV1", "CV2"] } });
+  // A title that names the water is the family's own, whatever a row prints.
+  const titled = { tables: [as77Table("m.pdf#20", "CHW CONTROL VALVE SCHEDULE", ["VALVE MARK", "SERVICE", "GPM"], [
+    { "VALVE MARK": "CV-1", SERVICE: "HHW", GPM: "4" },
+  ])] };
+  assert.deepEqual(as77Marks(titled).CHW_CONTROL_VALVE, { compile: ["CV1"], reconcile: ["CV1"] });
+  assert.equal(as77Marks(titled).HHW_CONTROL_VALVE, undefined);
 });
