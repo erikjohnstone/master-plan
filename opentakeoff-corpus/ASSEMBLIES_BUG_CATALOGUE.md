@@ -6345,3 +6345,90 @@ three base-red tests. MCP typecheck clean; `test:bas` passes; the MCP suite 377 
   AS-65, AS-75, AS-84 and AS-86 read: a schedule printed on its side (21_VA, 24), a range or list (26_CA, 53; 013_MO,
   028_TX, 044_NY), an outdoor unit's mark column (036_LA, 33; 03_FL, 22_GA), and eight return grilles. The lookup is in
   `session.ts`, which the sheet-graph cache key covers; queued as AS-89.
+
+## AS-89 — the plan sweep found no schedule row for a unit whose row answers by neither its key nor its printed identity: 129 reconcile rows on 11 dev documents (a schedule printed on its side, a range or pair, an outdoor unit's mark column, a grille's size run into its symbol) (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by a census of the reconcile's rows on the 97 cached dev documents. Of the 2,635 rows the
+reconcile holds (one per family and mark), the plan sweep (`sweep_schedule_row`, which the reconcile runs for each
+row and the Takeoff canvas reaches through the same Session) found no schedule row for 129, on 11 documents, and
+refused each before looking at a plan: "No schedule row". The sweep finds a row by the extraction's key or the row's
+printed identity (`rowKeyAnswersFor`, not changed). The reconcile reads its units through the takeoff's family gate,
+mark reading and split (AS-65, AS-77, AS-79, AS-84, AS-86), which name units no key or identity answers for:
+- **A schedule printed on its side** (24 rows): 21_VA's air-cooled chiller, boiler, pump, fan, unit heater and
+  condensing unit schedules. The extracted rows are the attributes; the reconcile reads the view's row per unit.
+- **A row naming a range or pair** (59): 26_CA's "SF-P1-4 THRU 11", "ST-3-1A THRU 12A" and "SF-P3-1 & 2" (keyed
+  SF-P3-12), 013_MO's "CV-7 - CV-10", 044_NY's "FOP-8A & B" (keyed FOP-8AB).
+- **An outdoor unit printed beside its indoor unit's mark** (35): 036_LA's 33 condensing units, 03_FL's and 22_GA's
+  DCU-1, under OUTDOOR UNIT MARK. The row's key and identity are the indoor unit's.
+- **A grille's symbol with its size run in by the extraction** (10): "R-1 8"Ø", "R-1 30X6" on itd-d1-lab, 062_ID and
+  18_OR.
+- **A silencer line named by the room it serves** (1): 028_TX's VEST 212 (AS-81).
+
+**Fix (the shared reconcile and sweep: `schedulePlanReconcile.mjs`, `session.ts`):**
+- `scheduleRowsReadingMark`: the rows the reconcile reads a unit from, each with its table, the mark as read and the
+  families reading it, from every family's reading by `reconcileScheduleFamilyFromGraph` itself (its `sources`
+  option records where each unit is read; its rows are unchanged). A transposed schedule's row is its view's. It is
+  read once per graph, and again when the graph's tables change (a graph still being built gains tables).
+- `sweepScheduleRow`: where no row answers by key or identity, the row the reading holds. Such a row can name other
+  units: an outdoor unit's row names its indoor unit, a range row names the range, a transposed column can name a
+  pair (21_VA's "ACU-1 / ACCU-3"). So the unit is swept by its own mark alone:
+  - Never by another mark the row prints. Where the unit's tag is drawn on no plan sheet, the sweep refuses. It no
+    longer tries the row's mark cells, identity or key, nor the other mark of a pair. A first version tried them,
+    as the sweep does for a row found by key, and an outdoor unit drawn nowhere would have been counted as its row's
+    indoor unit.
+  - Its table's units are the marks its own families read there, for the checks that count and corroborate against
+    them. They are never the other family's units its row names: an indoor unit's tag drawn with the same marker
+    never corroborates the condensing unit.
+  - A drawn span is told apart from, and a match labeled with, any mark the set's schedules name
+    (`scheduleMarkVocabulary`: every row's identity and every unit the reading reads). A bare prefix answers for a
+    mark only where no other scheduled mark shares it (`spanAnswersFor`, not changed). 03_FL's plans print a bare "D"
+    37 times beside its one DCU-1; with the unit's own family's marks alone, each would have answered for it.
+  - The drawing groups defining the mark are those of the tables it is read in. A unit two buildings' schedules
+    name is swept on its own building's plans.
+  - Every change is gated on this fallback: a row found by key or identity is swept exactly as before.
+
+**Measured:**
+- **The 129 rows**, through `reconcile_schedule_plan` on the cached graphs. Before: 129 SCHEDULE_ONLY with "No
+  schedule row". After: 35 MATCH, with each installed count from the unit's own plan tags. These are 21_VA's 24
+  transposed units, the grilles (itd-d1-lab R-1, R-3, R-4; 062_ID R-1, R-3, R-4; 18_OR R-1, R-2), 22_GA's DCU-1 and
+  26_CA's ST-3-1A and ST-3-1B. The other 94 carry the sweep's own reason: 75 are drawn on no plan sheet, 18 are drawn
+  but own no distinctive geometry, and 1 is drawn on schematic sheets only. Called directly, the sweep swept all 129
+  by their own marks and none by another.
+- **The takeoff and the reconcile** on the 97 dev documents are byte-identical (2,655 rows).
+- **Tests.** Web tests cover `scheduleRowsReadingMark` on the dev shapes: a range, a pair keyed run together, an
+  outdoor unit's column, a grille's symbol and FOP-8A & B. They check that no key or identity answers for these,
+  that every reconcile row is found on the table it cites, and negative controls (ZZ-9, a bare DCU, units beside a
+  range). They check the families, including a mark two families read (AS-80's CU-HP1), and that the reconcile is
+  unchanged with the option. They check the re-read when a table is added, the copies it hands out, the vocabulary
+  (a bare "D" and "DCU" answer no DCU-1), and a transposed schedule's view row. MCP tests use two fixtures
+  (`schedule-row-reading.pdf`, `schedule-row-reading-groups.pdf`, made by
+  `scripts/make-schedule-row-reading-fixture.mjs`):
+  - DCU-1 counts on its own tag. The same-shaped triangles labeled DAC-1 and EF-3 are excluded, and neither
+    corroborates it. The bare "D" and "DCU" callouts are no occurrence.
+  - DCU-2, drawn nowhere, is refused and never swept as its row's AC-2.
+  - EF-2 is found from the row "EF-1 - EF-3". ZZ still has no row.
+  - The reconcile's rows are MATCH and SCHEDULE_ONLY as the plans show.
+  - Two buildings' DCU-1 each count on their own building's plans.
+  - A transposed pair column's DCU-3 is refused and never swept as its AC-2. The text layer reads no transposed
+    table, so the test puts the table in the sheet graph as the vector-grid path reads it.
+- **Mutation battery:** 22 of 23 mutants killed beyond the baseline (10 in the reading, 13 in the sweep). The
+  survivor applies the fallback's guards to rows found by key or identity too, so it changes only that main path. No
+  test pins the main path's behaviour where the reading also holds the row; the byte-identical corpus A/B does.
+  Whether the set-wide vocabulary should reach the main path is AS-90: there, a one-row table lets a bare prefix
+  answer (the fixture's bare "D" answers for DAC-1).
+- **Guard** (the full change; `outputs.ts` held back as before):
+  - Web: typecheck, lint (the same 3 warnings as before), and 3,980 tests. The 3 that fail failed before: B-11,
+    B-12 and multi-building.
+  - MCP: typecheck and `test:bas`. The suite runs 384 tests; the 2 that fail failed before (the finish plan's #87
+    and the navfac timeout). The shared-path files that use no held-out document ran 7 tests and skipped 12 whose
+    rejoined PDFs are not in this checkout.
+- **Evals:** every dev gate is identical to AS-85's: the attributes on all five tiers, the typicals, GATE C, the
+  binding, the questions, the readings and the unseen audit. The held-out and held-out 2 aggregates are identical,
+  with 0 graphs built. `session.ts` was held back in the eval trees: it is in the sheet-graph cache key, and the
+  evals never call the sweep.
+- **UI proof:** the Takeoff canvas's reconcile with the plan sweep, against `reconcile_schedule_plan`, row for row
+  with each installed quantity, on the AS-89 code:
+  - 21_VA: six families, 27 rows, 25 MATCH, the transposed units among them (19 checks).
+  - 22_GA: VRHP-1 and DCU-1 MATCH (4 checks).
+  - itd-d1-lab's grilles: 10 of 11 MATCH (4 checks).
+- **Correction:** AS-85's note counted eight return grilles among the 129; there are ten.

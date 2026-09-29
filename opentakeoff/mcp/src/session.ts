@@ -53,7 +53,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
-import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, rowIdentityTag, scheduleCountMultiplier } from '../../web/src/lib/schedulePlanReconcile.mjs';
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, rowIdentityTag, scheduleCountMultiplier, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -4234,6 +4234,20 @@ export class Session {
         scheduleAliasNote = `Plan mark "${t}" resolves to the schedule's sole strict numbered extension "${canonKey(numbered[0].r.key)}"; no competing numbered row exists.`;
       }
     }
+    // The rows the reconcile reads this unit from (AS-89), by the takeoff's
+    // own gate, mark reading and split: a schedule printed on its side, a
+    // row naming a range or list of units, an outdoor unit's mark column, a
+    // mark the extraction ran a size into ("R-1 8\"Ø"). None answers by its
+    // key or printed identity, and the reconcile held rows the sweep had no
+    // schedule row for.
+    const readRows = rowHits.length ? [] : scheduleRowsReadingMark(graph, t);
+    const readHits: { tb: ScheduleTable; r: ScheduleTable["rows"][number] }[] = readRows.map(({ table, row }) => ({ tb: table, r: row }));
+    if (!rowHits.length) rowHits = readHits;
+    // Such a row's key, identity and mark cells may name other units (the
+    // indoor unit of an outdoor unit's row, the range the unit is one of):
+    // the unit is swept by its own mark alone, and the other units the
+    // reading reads are its siblings.
+    const readByMark = readHits.length > 0;
     if (!rowHits.length) {
       const found = graph.tables.map((x) => {
         const keys = x.rows.map((row) => row.key).slice(0, 12).join(", ");
@@ -4492,6 +4506,13 @@ export class Session {
         ? [candidate.drawing_group]
         : [];
     }));
+    // A row the reconcile's reading found answers by neither key nor
+    // identity: the groups defining the mark are those of the tables it is
+    // read in (AS-89).
+    for (const { tb: candidate } of readHits) {
+      const title = (candidate.title?.text || "").toUpperCase().replace(/\s+/g, " ").trim();
+      if (selectedTitle && title === selectedTitle && candidate.drawing_group) localDefinitionGroups.add(candidate.drawing_group);
+    }
     const drawingGroupScope = tb.drawing_group && localDefinitionGroups.size >= 2
       ? tb.drawing_group
       : null;
@@ -4500,15 +4521,30 @@ export class Session {
     // split-system pair's two component marks are each the row's OWN
     // identity, not another row's competing tag.
     const selectedRowIdentity = identityOf(r);
-    const ownMarks = new Set(canonKey(selectedRowIdentity).split("/").map((s) => s.trim()).filter(Boolean));
-    const tableSiblingKeys = [...new Set(tb.rows.flatMap((row) =>
-      canonKey(identityOf(row)).split("/").map((s) => s.trim()).filter(Boolean)))];
+    const ownMarks = readByMark
+      ? new Set([t])
+      : new Set(canonKey(selectedRowIdentity).split("/").map((s) => s.trim()).filter(Boolean));
+    // A row found by the reading (AS-89): its table's units are the marks the
+    // families reading this one read there, never another family's its row
+    // also names (an outdoor unit's row names its indoor unit); a drawn span
+    // is told apart from, and a match labeled with, any mark the set's
+    // schedules name, every unit the reading reads among them.
+    const readFamilies = readRows.filter((hit) => hit.table === tb && hit.row === r).flatMap((hit) => hit.families);
+    const readSiblingKeys = readByMark ? [...new Set(scheduleMarksRead(graph, tb, readFamilies).map(canonKey))] : [];
+    const setMarks = readByMark ? scheduleMarkVocabulary(graph) : [];
+    const tableSiblingKeys = readByMark
+      ? readSiblingKeys
+      : [...new Set(tb.rows.flatMap((row) =>
+        canonKey(identityOf(row)).split("/").map((s) => s.trim()).filter(Boolean)))];
+    const markVocab = readByMark ? setMarks : tableSiblingKeys;
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
     const siblings = opts.evaluationFast
       ? []
-      : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(identityOf(row)).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
+      : readByMark
+        ? setMarks.filter((k) => markKey(k) !== markKey(t)).sort()
+        : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(identityOf(row)).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
     const airDeviceTable = isRepeatableAirDeviceSchedule(table);
     const individuallyMarkedTable = isIndividuallyMarkedEquipmentSchedule(table, opts.equipmentFamily || "");
@@ -4550,7 +4586,7 @@ export class Session {
       }
     }
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
-      this.tagOccurrencesOnSheet(sh, key, airDeviceTable, tableSiblingKeys);
+      this.tagOccurrencesOnSheet(sh, key, airDeviceTable, markVocab);
     // Plan-drawn form may keep spaces / omit revision prefixes while the
     // schedule row.key is glued (`NATUK1` vs plan `ATU K1` — Hurlburt). Prefer
     // any identity form that is actually drawn before refusing no-plan-tag.
@@ -4565,17 +4601,17 @@ export class Session {
       };
       addCand(tRaw);
       addCand(t);
-      for (const [header, cell] of Object.entries(r.cells || {})) {
+      for (const [header, cell] of Object.entries(readByMark ? {} : r.cells || {})) {
         if (!/^(MARK|SYMBOL|TAG|EQUIP(?:\.?\s*TAG)?|DESIGNATION)$/i.test(header)) continue;
         const raw = String(cell?.text || "").trim();
         if (!raw) continue;
         addCand(raw.replace(/^\(([NER])\)\s*/i, ""));
       }
-      addCand(selectedRowIdentity);
+      if (!readByMark) addCand(selectedRowIdentity);
       // A control-valve schedule's row.key may be UNIT MARK while its own
       // device identity is VALVE MARK. Never fall back from an undrawn valve
       // mark to the served equipment tag and count the AHU/FCU as a valve.
-      if (canonKey(r.key) === canonKey(selectedRowIdentity)) addCand(r.key);
+      if (!readByMark && canonKey(r.key) === canonKey(selectedRowIdentity)) addCand(r.key);
       const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
       if (!hasOcc(t)) {
         for (const cand of planTagCandidates) {
@@ -5033,9 +5069,13 @@ export class Session {
     const crossCandidates: (Corro & { tag: string })[] = [];
     if (!opts.verifyTaggedGeometry && !corroCandidates.length) {
       const rowKeys = (k: string) => canonKey(k).split("/").map((s) => s.trim()).filter(Boolean);
-      const tableSiblingKeys = [...new Set(
-        tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
-      )].sort();
+      // A row found by the reading stands in only a unit its own families
+      // read in its table (AS-89), never the other family its row names.
+      const tableSiblingKeys = readByMark
+        ? readSiblingKeys.filter((k) => markKey(k) !== markKey(t)).sort()
+        : [...new Set(
+          tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
+        )].sort();
       const withDist = tableSiblingKeys
         .map((k) => ({ k, occ: occOf(anchorSheet, k) }))
         .filter((e) => e.occ.length > 0)

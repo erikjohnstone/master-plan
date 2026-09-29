@@ -2996,6 +2996,142 @@ test("sweep_schedule_row: a tag drawn twice in two real, incompatible convention
     "the standard uncorroborated-evidence disclosure fires, same as a singly-drawn tag");
 });
 
+// ── AS-89: a unit's schedule row that answers by neither its key nor its
+// printed identity — an outdoor unit printed beside its indoor unit's mark,
+// a unit a range names — is found by the reconcile's own reading of the
+// schedules, and the unit is swept by its own mark alone: never by another
+// unit its row names, never corroborated by it, never answered by a bare
+// callout another scheduled mark shares. Fixture
+// (test/fixtures/schedule-row-reading.pdf,
+// scripts/make-schedule-row-reading-fixture.mjs): split system schedules
+// keyed by the indoor unit's MARK (DAC-1; AC-2) whose TAG column names the
+// condensing unit (DCU-1; DCU-2), a FAN SCHEDULE row "EF-1 - EF-3", and a
+// MECHANICAL PLAN drawing DAC-1 and EF-3 with the same triangle as DCU-1,
+// AC-2 with a house, EF-2 with a hexagon, bare "D" and "DCU" callouts, and
+// DCU-2 nowhere.
+const ROWREAD = fileURLToPath(new URL("./fixtures/schedule-row-reading.pdf", import.meta.url));
+test("sweep_schedule_row finds the row the reconcile reads a unit from, and sweeps the unit by its own mark alone (AS-89)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: ROWREAD });
+
+  const dcu1 = await call(client, "sweep_schedule_row", { tag: "DCU-1" });
+  assert.equal(dcu1.isError, false, dcu1.data?.error);
+  assert.equal(dcu1.data.tag, "DCU-1");
+  assert.equal(dcu1.data.row.table, "DUCTLESS SPLIT SYSTEM SCHEDULE");
+  assert.equal(dcu1.data.found, 1);
+  // its one tag: the bare "D" and "DCU" callouts are no DCU-1 — DAC-1 and
+  // DCU-2 share them
+  assert.equal(dcu1.data.anchor.occurrences, 1);
+  // the indoor unit's triangle is its own unit's, and EF-3's — a unit only
+  // the reading names — its: excluded as labeled, never counted, never the
+  // corroborator
+  assert.deepEqual(dcu1.data.sheets.flatMap((p: any) => p.excluded.map((e: any) => e.tag)).sort(), ["DAC-1", "EF-3"]);
+  assert.equal(dcu1.data.anchor.corroborated, false);
+  assert.equal(dcu1.data.anchor.corroborated_tag, undefined);
+
+  // drawn nowhere: refused, never swept as the AC-2 its row names nor at a
+  // callout
+  const dcu2 = await call(client, "sweep_schedule_row", { tag: "DCU-2" });
+  assert.equal(dcu2.isError, true);
+  assert.match(dcu2.data.error, /Schedule row "DCU-2" \(SPLIT SYSTEM AIR CONDITIONING SCHEDULE on schedule-row-reading\.pdf#4\) cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
+
+  // one of the units the row "EF-1 - EF-3" names
+  const ef2 = await call(client, "sweep_schedule_row", { tag: "EF-2" });
+  assert.equal(ef2.isError, false, ef2.data?.error);
+  assert.equal(ef2.data.tag, "EF-2");
+  assert.equal(ef2.data.row.table, "FAN SCHEDULE");
+  assert.equal(ef2.data.found, 1);
+
+  // a mark no family reads is still no schedule row
+  const zz = await call(client, "sweep_schedule_row", { tag: "ZZ" });
+  assert.equal(zz.isError, true);
+  assert.match(zz.data.error, /No schedule row "ZZ" in the set/);
+});
+
+test("reconcile_schedule_plan counts a unit on its own row's plan tags where the row answers by neither key nor identity: DCU-1 and EF-2 match, DCU-2 is never AC-2 (AS-89)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: ROWREAD });
+  const row = (r: any) => ({ tag: r.tag, status: r.status, scheduled_qty: r.scheduled_qty, installed_qty: r.installed_qty });
+
+  const cu = await call(client, "reconcile_schedule_plan", { family: "CONDENSING_UNIT" });
+  assert.equal(cu.isError, false);
+  assert.deepEqual(cu.data.rows.map(row), [
+    { tag: "DCU-1", status: "MATCH", scheduled_qty: 1, installed_qty: 1 },
+    { tag: "DCU-2", status: "SCHEDULE_ONLY", scheduled_qty: 1, installed_qty: null },
+  ]);
+  assert.match(cu.data.rows[1].reason, /cannot be geometrically anchored/);
+
+  const fans = await call(client, "reconcile_schedule_plan", { family: "FAN" });
+  assert.equal(fans.isError, false);
+  assert.deepEqual(fans.data.rows.map(row), [
+    { tag: "EF-1", status: "SCHEDULE_ONLY", scheduled_qty: 1, installed_qty: null },
+    { tag: "EF-2", status: "MATCH", scheduled_qty: 1, installed_qty: 1 },
+    { tag: "EF-3", status: "MATCH", scheduled_qty: 1, installed_qty: 1 },
+    { tag: "EF-4", status: "SCHEDULE_ONLY", scheduled_qty: 1, installed_qty: null },
+  ]);
+  for (const r of fans.data.rows) assert.doesNotMatch(String(r.reason || ""), /No schedule row/, r.tag);
+});
+
+// Two buildings' split system schedules under one title, each naming DCU-1
+// in its TAG column (test/fixtures/schedule-row-reading-groups.pdf): DCU-1 is
+// drawn on BLDG A's plan, only its indoor unit DAC-1 on BLDG B's.
+const ROWREAD_GROUPS = fileURLToPath(new URL("./fixtures/schedule-row-reading-groups.pdf", import.meta.url));
+test("a unit its reading finds in two buildings' schedules is swept on its own building's plans: BLDG B's DCU-1 never borrows BLDG A's (AS-89)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: ROWREAD_GROUPS });
+
+  const both = await call(client, "sweep_schedule_row", { tag: "DCU-1" });
+  assert.equal(both.isError, true);
+  assert.match(both.data.error, /Ambiguous: 2 schedule rows carry the key "DCU-1"/);
+
+  const a = await call(client, "sweep_schedule_row", { tag: "DCU-1", prefer_schedule_sheet: "schedule-row-reading-groups.pdf#3" });
+  assert.equal(a.isError, false, a.data?.error);
+  assert.equal(a.data.row.drawing_group, "BLDG A");
+  assert.equal(a.data.found, 1);
+  assert.ok(a.data.skipped.some((s: any) => s.sheet === "schedule-row-reading-groups.pdf#2" && /drawing group BLDG B/.test(s.reason)));
+
+  const b = await call(client, "sweep_schedule_row", { tag: "DCU-1", prefer_schedule_sheet: "schedule-row-reading-groups.pdf#4" });
+  assert.equal(b.isError, true);
+  assert.match(b.data.error, /Schedule row "DCU-1" \(DUCTLESS SPLIT SYSTEM SCHEDULE on schedule-row-reading-groups\.pdf#4\) cannot be geometrically anchored/);
+
+  const cu = await call(client, "reconcile_schedule_plan", { family: "CONDENSING_UNIT" });
+  assert.equal(cu.isError, false);
+  assert.deepEqual(cu.data.rows.map((r: any) => [r.schedule_cite.sheet, r.tag, r.status, r.installed_qty]), [
+    ["schedule-row-reading-groups.pdf#3", "DCU-1", "MATCH", 1],
+    ["schedule-row-reading-groups.pdf#4", "DCU-1", "SCHEDULE_ONLY", null],
+  ]);
+});
+
+// A transposed schedule's column naming an indoor/outdoor pair (21_VA's
+// "ACU-1 / ACCU-3"), as the vector-grid extraction reads one: the text layer
+// reads no transposed table, so the test puts it in the sheet graph itself.
+test("a transposed column naming an indoor/outdoor pair sweeps the outdoor unit by its own mark alone: DCU-3 drawn nowhere is never its AC-2 (AS-89)", async () => {
+  const session = new Session();
+  const [ct, st] = InMemoryTransport.createLinkedPair();
+  await buildServer(session).connect(st);
+  const client = new Client({ name: "test-client", version: "0.0.0" });
+  await client.connect(ct);
+  await call(client, "load_plan", { path: ROWREAD });
+  const graph = await session.graphForPipeline();
+  const box = (text: string, x0: number, y0: number, x1: number, y1: number) => ({ text, bbox: [x0, y0, x1, y1] as [number, number, number, number] });
+  const units = ["AC-2 / DCU-3", "AC-4 / DCU-4"];
+  const attrs: Array<[string, string[]]> = [["MANUFACTURER", ["DAIKIN", "DAIKIN"]], ["COOLING CAPACITY - BTUH", ["18000", "24000"]], ["VOLTAGE/PHASE", ["208/1", "208/1"]]];
+  graph.tables.push({
+    kind: "reference", sheet: "schedule-row-reading.pdf#4", title: { text: "DUCTLESS SPLIT SYSTEM UNIT SCHEDULE", bbox: [100, 60, 400, 80] },
+    headers: ["DESIGNATION", ...units],
+    rows: attrs.map(([label, values], i) => ({
+      key: label,
+      cells: Object.fromEntries([["DESIGNATION", box(label, 100, 100 + 30 * i, 300, 130 + 30 * i)], ...values.map((v, j) => [units[j], box(v, 300 + 100 * j, 100 + 30 * i, 400 + 100 * j, 130 + 30 * i)])]),
+    })),
+  } as any);
+
+  // found on the column's row, and refused there: its drawn AC-2 is not it
+  const dcu3 = await call(client, "sweep_schedule_row", { tag: "DCU-3" });
+  assert.equal(dcu3.isError, true);
+  assert.match(dcu3.data.error, /Schedule row "DCU-3" \(DUCTLESS SPLIT SYSTEM UNIT SCHEDULE on schedule-row-reading\.pdf#4\) cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
+});
+
+
 // ── sweep_schedule_row cross-tag corroboration: the uniquely-tagged family
 // (VAV-1, VAV-2, VAV-3, … one tag per physical box, never repeated) has no
 // same-tag sibling occurrence to corroborate against — a sibling ROW from the

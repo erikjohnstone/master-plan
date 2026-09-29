@@ -1,5 +1,26 @@
 # Changelog
 
+- **Plan sweep: a unit whose schedule row answers by neither its key nor its
+  printed identity is swept on the row the reconcile reads it from, by its
+  own mark alone.** The reconcile reads units the sweep's row lookup could
+  not find: a schedule printed on its side, a row naming a range or pair
+  (EF-1 - EF-3, FOP-8A & B), an outdoor unit printed beside its indoor
+  unit's mark (DCU-1 on the row keyed DAC-1), and a grille symbol the
+  extraction ran its size into (R-1 8"Ø). On the 97 dev documents, 129 of
+  the reconcile's 2,635 rows, on 11 documents, were refused "No schedule
+  row" before the sweep looked at a plan. Each is now swept on its own row:
+  35 match their plan tags (21_VA's 24 transposed units among them), and
+  the other 94 are refused for what the plans show. Such a row can name
+  other units. So the sweep never counts the row's other marks (an outdoor
+  unit drawn nowhere is refused, never counted as its indoor unit), and
+  never lets another family's tag corroborate the unit. Any mark the
+  set's schedules name is kept apart from it: a bare "D" is no DCU-1 where
+  DAC-1 is scheduled. A unit two buildings' schedules name is swept on its
+  own building's plans. A row found by its key or identity is swept as
+  before, and the takeoff and the reconcile read all 97 documents
+  byte-identically (`schedulePlanReconcile.mjs`, `session.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-89).
+
 - **Takeoff, reconcile and plan sweep: a mark printed with a footnote mark
   or another dash glyph reads as its plain mark.** A schedule that marks a
   unit for a note (AHU-1*, *AHU-1, EF-2†, P-1¹, AHU-1.) named the unit with

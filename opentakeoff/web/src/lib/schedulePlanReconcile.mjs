@@ -8,6 +8,7 @@
 import {
   normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark,
   familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, plainMark, plainMarkText,
+  HVAC_FAMILY_SPECS,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
 import { tagIndexFor } from "./tagIndex.ts";
@@ -834,8 +835,11 @@ export function summarizeReconcile(rows) {
  *   HVAC_FAMILY_SPECS entry (familyNeedleFromSpecs), read by the takeoff's
  *   own gate (familyTableGate, AS-77)
  * @param {Map<string, { installedQty?: number|null, itemStatus?: string, reason?: string, failureType?: string, planCites?: object[] }>} [sweepByTag]
+ * @param {{ sources?: Map<string, Array<{ table: any, row: any, tag: string, families: string[] }>>|null }} [opts]
+ *   sources: filled with the table and row each unit is read from, by its
+ *   markKey (scheduleRowsReadingMark; AS-89)
  */
-export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
+export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map(), { sources = null } = {}) {
   const rows = [];
   const seen = new Set();
   // The marks the scaffold holds a row for, in any table (AS-62).
@@ -1001,12 +1005,124 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
               ? "This schedule row defines a repeatable air-device type; it does not state project quantity. Installed quantity is grounded from plan callouts."
               : null),
         });
+        // The table and row this unit's row is read from, the mark read and
+        // the family reading it, for the plan sweep (scheduleRowsReadingMark;
+        // AS-89).
+        if (sources) {
+          const hits = sources.get(canon) || [];
+          const hit = hits.find((h) => h.table === table && h.row === row);
+          if (!hit) hits.push({ table, row, tag, families: [family] });
+          else if (!hit.families.includes(family)) hit.families.push(family);
+          sources.set(canon, hits);
+        }
       }
     }
   }
   } // end titled-first / blank-fallback passes
   } // end scan / emit
   return rows;
+}
+
+/** Each graph's reading: its schedule rows by the marks the reconcile reads
+ * in them, and the marks read in each table. */
+const SCHEDULE_READINGS = new WeakMap();
+
+/** The graph's reading by every family, read once per graph, and again if
+ * its tables are no longer the ones read (a graph still being built gains
+ * tables). */
+function scheduleReading(graph) {
+  const tables = graph && typeof graph === "object" && Array.isArray(graph.tables) ? graph.tables : null;
+  if (!tables) return null;
+  let read = SCHEDULE_READINGS.get(graph);
+  if (!read || read.tables.length !== tables.length || read.tables.some((table, i) => table !== tables[i])) {
+    const byMark = new Map();
+    for (const family of Object.keys(HVAC_FAMILY_SPECS)) {
+      const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+      if (needle) reconcileScheduleFamilyFromGraph(graph, needle, new Map(), { sources: byMark });
+    }
+    const byTable = new Map();
+    for (const [canon, hits] of byMark) {
+      for (const { table, tag, families } of hits) {
+        const marks = byTable.get(table) || new Map();
+        const mark = marks.get(canon) || { tag, families: new Set() };
+        for (const family of families) mark.families.add(family);
+        marks.set(canon, mark);
+        byTable.set(table, marks);
+      }
+    }
+    read = { tables: [...tables], byMark, byTable, vocabulary: null };
+    SCHEDULE_READINGS.set(graph, read);
+  }
+  return read;
+}
+
+/**
+ * The schedule rows the reconcile reads a unit's mark from (AS-89), each
+ * with its table, the mark as read and the families reading it: every
+ * family's rows, read by the takeoff's own gate, mark reading and split, as
+ * reconcileScheduleFamilyFromGraph holds them. The plan sweep (session.ts
+ * sweepScheduleRow) finds a row by the extraction's key or its printed
+ * identity; a unit the reconcile holds whose row answers by neither (a
+ * schedule printed on its side, a row naming a range or list of units, an
+ * outdoor unit's mark column, a mark the extraction ran a size into) is
+ * found here. A transposed schedule's row is its view's, one per unit.
+ * @param {object|null|undefined} graph the sheet graph
+ * @param {string} tag the unit's mark
+ * @returns {Array<{ table: any, row: any, tag: string, families: string[] }>}
+ */
+export function scheduleRowsReadingMark(graph, tag) {
+  return (scheduleReading(graph)?.byMark.get(markKey(tag)) || []).map((hit) => ({ ...hit, families: [...hit.families] }));
+}
+
+/**
+ * The marks the reconcile reads in a table (a transposed schedule's view, as
+ * scheduleRowsReadingMark returns it), by the given families or by any, or
+ * in every table of the graph: one spelling per unit (AS-89).
+ * @param {object|null|undefined} graph the sheet graph
+ * @param {object|null} [table]
+ * @param {string[]|null} [families]
+ * @returns {string[]}
+ */
+export function scheduleMarksRead(graph, table = null, families = null) {
+  const read = scheduleReading(graph);
+  if (!read) return [];
+  const out = new Map();
+  for (const [t, marks] of read.byTable) {
+    if (table && t !== table) continue;
+    for (const [canon, { tag, families: by }] of marks) {
+      if (families && ![...by].some((family) => families.includes(family))) continue;
+      if (!out.has(canon)) out.set(canon, tag);
+    }
+  }
+  return [...out.values()];
+}
+
+/**
+ * Every mark the set's schedules name (AS-89): each row's key or printed
+ * identity as the plan sweep reads it, split on "/", and every unit the
+ * reconcile's reading reads, spaces dropped and upper-cased. The vocabulary
+ * a drawn span is told apart from where the sweep looks for a unit its
+ * reading found: a bare prefix answers for a mark only where no other mark
+ * shares it (markid.ts spanAnswersFor), so a bare "D" is no DCU-1 where
+ * DAC-1 is scheduled, nor "DCU" where DCU-2 is, whichever table names them.
+ * @param {object|null|undefined} graph the sheet graph
+ * @returns {string[]}
+ */
+export function scheduleMarkVocabulary(graph) {
+  const read = scheduleReading(graph);
+  if (!read) return [];
+  if (!read.vocabulary) {
+    const canon = (text) => String(text || "").trim().toUpperCase().replace(/\s+/g, "");
+    const marks = new Set();
+    for (const table of graph.tables) {
+      for (const row of table?.rows || []) {
+        for (const part of canon(rowIdentityTag(row) || row.key).split("/")) if (part.trim()) marks.add(part.trim());
+      }
+    }
+    for (const mark of scheduleMarksRead(graph)) if (canon(mark)) marks.add(canon(mark));
+    read.vocabulary = [...marks];
+  }
+  return [...read.vocabulary];
 }
 
 /** Map user family word → schedule needle via HVAC_FAMILY_SPECS (set-agnostic). */

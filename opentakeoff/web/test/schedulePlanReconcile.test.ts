@@ -14,6 +14,9 @@ import {
   reconcileRowsToCsv,
   attachDiagramCorroboration,
   rowIdentityTag,
+  scheduleMarksRead,
+  scheduleMarkVocabulary,
+  scheduleRowsReadingMark,
   servedEquipmentTag,
   unscheduledTagsAndAliasCandidates,
 } from "../src/lib/schedulePlanReconcile.mjs";
@@ -22,13 +25,13 @@ import {
   inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks, markSpellings, unitMarkKey, familyMarkRead,
   isControlValveHeaderShape, expandMarkList, expandEquipMarks, rowMarkText, normalizeEquipMark, plainMark,
 } from "../src/lib/corpusTakeoff.mjs";
-import { rowKeyOf } from "../src/lib/sheetgraph.ts";
+import { rowKeyAnswersFor, rowKeyOf } from "../src/lib/sheetgraph.ts";
 import { classifyGrid } from "../src/lib/gridClassify.mjs";
 import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
 } from "../src/lib/takeoffWorkflow.js";
-import { markKey } from "../src/lib/markid.ts";
+import { markKey, spanAnswersFor } from "../src/lib/markid.ts";
 
 
 test("row identity prefers VALVE MARK over UNIT MARK (Pillar C valve join)", () => {
@@ -2224,4 +2227,108 @@ test("a row's identity for the sweep and project_takeoff reads a mark in plain t
   assert.equal(rowIdentityTag(row("1", { MARK: "1." })), "1.");
   assert.equal(rowIdentityTag(row("EF-4", { CFM: "400" })), "EF-4");
   assert.equal(rowIdentityTag({ key: "", cells: {} }), null);
+});
+
+// AS-89: the plan sweep (session.ts sweepScheduleRow) finds a unit's row by
+// the extraction's key or the row's printed identity; a unit the reconcile
+// holds from a row answering by neither is found by the reconcile's own
+// reading. Shapes from the dev corpus: 26_CA's range and a pair keyed run
+// together, 22_GA's outdoor unit printed beside its indoor unit's mark,
+// itd-d1-lab's grille symbol with its size run in, 044_NY's FOP-8A & B.
+const as89Graph = () => ({ tables: [
+  as77Table("m.pdf#10", "FAN SCHEDULE", ["MARK", "CFM"], [
+    { MARK: "SF-P1-4 THRU 6", CFM: "9000" }, { MARK: "SF-P3-1 & 2", __key: "SF-P3-12", CFM: "10000" }, { MARK: "EF-7", CFM: "200" },
+  ]),
+  as77Table("m.pdf#11", "DUCTLESS SPLIT SYSTEM SCHEDULE", ["INDOOR UNIT MARK", "OUTDOOR UNIT MARK", "MIN. SEER"], [
+    { "INDOOR UNIT MARK": "DAC-1", "OUTDOOR UNIT MARK": "DCU-1", "MIN. SEER": "13" },
+    { "INDOOR UNIT MARK": "DAC-2", "OUTDOOR UNIT MARK": "DCU-2", "MIN. SEER": "13" },
+  ]),
+  as77Table("m.pdf#12", "RETURN & EXHAUST GRILLE SCHEDULE", ["SYMBOL", "NOMINAL SIZE"], [
+    { SYMBOL: 'R-1 8"Ø', "NOMINAL SIZE": "10X10" }, { SYMBOL: "R-2 30x6", __key: "R-2 30X6", "NOMINAL SIZE": "30X6" },
+  ]),
+  as77Table("m.pdf#13", "BOILER FUEL OIL PUMP SCHEDULE", ["MARK", "GPH"], [{ MARK: "FOP-8A & B", __key: "FOP-8AB", GPH: "220" }]),
+] });
+/** Whether a row answers for the mark as the sweep's own lookup reads it. */
+const as89Answers = (graph: { tables: Array<{ rows: any[] }> }, mark: string) =>
+  graph.tables.some((tb) => tb.rows.some((r) => rowKeyAnswersFor(r.key || "", mark) || rowKeyAnswersFor(String(rowIdentityTag(r) || r.key || ""), mark)));
+
+test("the sweep's row for a unit whose row answers by neither key nor identity is the row the reconcile reads it from: a range, a pair, an outdoor unit's column, a grille's symbol (AS-89)", () => {
+  const graph = as89Graph();
+  const found = (mark: string) => scheduleRowsReadingMark(graph, mark).map((h: any) => `${h.table.title.text} | ${h.row.key} | ${h.tag} | ${h.families.join(",")}`);
+  const cases: Array<[string, string]> = [
+    ["SF-P1-5", "FAN SCHEDULE | SF-P1-4 THRU 6 | SF-P1-5 | FAN"],
+    ["SF-P3-2", "FAN SCHEDULE | SF-P3-12 | SF-P3-2 | FAN"],
+    ["DCU-2", "DUCTLESS SPLIT SYSTEM SCHEDULE | DAC-2 | DCU-2 | CONDENSING_UNIT"],
+    ["R-1", 'RETURN & EXHAUST GRILLE SCHEDULE | R-1 8"Ø | R-1 | GRD'],
+    ["FOP-8B", "BOILER FUEL OIL PUMP SCHEDULE | FOP-8AB | FOP-8B | PUMP"],
+  ];
+  for (const [mark, want] of cases) {
+    assert.equal(as89Answers(graph, mark), false, `${mark}: no key or identity answers for it`);
+    assert.deepEqual(found(mark), [want], mark);
+  }
+  // A mark in any spelling the reading keys alike.
+  assert.deepEqual(found("DCU 2"), found("DCU-2"));
+  // Every unit the reconcile holds is found on the table its row cites.
+  for (const family of Object.keys(HVAC_FAMILY_SPECS)) {
+    for (const row of reconcileScheduleFamilyFromGraph(graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!) as any[]) {
+      assert.deepEqual(scheduleRowsReadingMark(graph, row.tag).map((h: any) => h.table.title.text), [row.schedule_cite.title], `${family} ${row.tag}`);
+    }
+  }
+  // Nothing for a mark no family reads, the indoor unit's letters alone, or a
+  // unit beside the range.
+  for (const mark of ["ZZ-9", "DCU", "SF-P1-7", "SF-P1-3", "R-3", "FOP-8C", "EF-8"]) assert.deepEqual(found(mark), [], mark);
+  // The units the families reading a unit read in its table are its siblings;
+  // the indoor unit its row also names is another family's.
+  const split = scheduleTableView(graph.tables[1]);
+  assert.deepEqual(scheduleMarksRead(graph, split).sort(), ["DAC-1", "DAC-2", "DCU-1", "DCU-2"]);
+  assert.deepEqual(scheduleRowsReadingMark(graph, "DAC-1").map((h: any) => h.families), [["FCU"]]);
+  assert.deepEqual(scheduleMarksRead(graph, split, ["CONDENSING_UNIT"]), ["DCU-1", "DCU-2"]);
+  assert.deepEqual(scheduleMarksRead(graph, scheduleTableView(graph.tables[0]), ["FAN"]), ["SF-P1-4", "SF-P1-5", "SF-P1-6", "SF-P3-1", "SF-P3-2", "EF-7"]);
+  assert.deepEqual(scheduleMarksRead(graph).sort(), ["DAC-1", "DAC-2", "DCU-1", "DCU-2", "EF-7", "FOP-8A", "FOP-8B", "R-1", "R-2", "SF-P1-4", "SF-P1-5", "SF-P1-6", "SF-P3-1", "SF-P3-2"]);
+  // A mark two families read from one row (AS-80's CU-HP1) is both's, and
+  // each family's units in the table are its siblings.
+  const both = { tables: [as77Table("m.pdf#136", "OUTDOOR AIR-COOLED HEAT PUMP OR CONDENSING UNIT SCHEDULE", as80Headers,
+    ["HP-2", "CU-1", "AC-1", "CU-HP1"].map(as80Row))] };
+  assert.deepEqual(scheduleRowsReadingMark(both, "CU-HP1").map((h: any) => h.families), [["CONDENSING_UNIT", "HEAT_PUMP"]]);
+  const combined = scheduleTableView(both.tables[0]);
+  assert.deepEqual(scheduleMarksRead(both, combined, ["HEAT_PUMP"]).sort(), ["CU-HP1", "HP-2"]);
+  assert.deepEqual(scheduleMarksRead(both, combined, ["CONDENSING_UNIT"]).sort(), ["AC-1", "CU-1", "CU-HP1"]);
+});
+
+test("reading a graph's rows for the sweep leaves the reconcile as it was, and reads again once the graph gains a table (AS-89)", () => {
+  const graph = as89Graph();
+  for (const family of Object.keys(HVAC_FAMILY_SPECS)) {
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family)!;
+    assert.deepEqual(reconcileScheduleFamilyFromGraph(graph, needle, new Map(), { sources: new Map() }), reconcileScheduleFamilyFromGraph(graph, needle), family);
+  }
+  assert.deepEqual(scheduleRowsReadingMark(graph, "EF-9"), []);
+  graph.tables.push(as77Table("m.pdf#14", "FAN SCHEDULE", ["MARK", "CFM"], [{ MARK: "EF-9 & 10", __key: "EF-910", CFM: "300" }]));
+  assert.deepEqual(scheduleRowsReadingMark(graph, "EF-9").map((h: any) => h.row.key), ["EF-910"]);
+  assert.deepEqual(scheduleRowsReadingMark(graph, "DCU-1").map((h: any) => h.row.key), ["DAC-1"]);
+  // What it returns is a copy: editing it edits no later reading.
+  scheduleRowsReadingMark(graph, "DCU-1")[0].families.push("FAN");
+  assert.deepEqual(scheduleRowsReadingMark(graph, "DCU-1")[0].families, ["CONDENSING_UNIT"]);
+  assert.deepEqual(scheduleRowsReadingMark(null, "DCU-1"), []);
+  assert.deepEqual(scheduleMarksRead({}), []);
+});
+
+test("a unit the reading finds is told apart from every mark the set's schedules name: a bare D or DCU is no DCU-1 where DAC-1 or DCU-2 is scheduled (AS-89)", () => {
+  const graph = as89Graph();
+  const vocabulary = scheduleMarkVocabulary(graph);
+  // Rows' identities as the sweep reads them (the printed pair, not the key
+  // run together), and every unit read.
+  for (const mark of ["DAC-1", "DAC-2", "SF-P3-1&2", "FOP-8A&B", "DCU-1", "DCU-2", "SF-P1-5", "SF-P3-2", "R-1", "FOP-8B"]) {
+    assert.ok(vocabulary.includes(mark), mark);
+  }
+  assert.ok(!vocabulary.includes("SF-P3-12"), "a key run together names no unit");
+  assert.equal(spanAnswersFor("D", "DCU-1", vocabulary), false);
+  assert.equal(spanAnswersFor("DCU", "DCU-1", vocabulary), false);
+  assert.equal(spanAnswersFor("DCU-1", "DCU-1", vocabulary), true);
+  // 03_FL's plans print a bare "D" 37 times beside its one DCU-1: with the
+  // unit's own family's marks alone (DCU-1), each would answer for it.
+  assert.equal(spanAnswersFor("D", "DCU-1", ["DCU-1"]), true);
+  // Its own copy.
+  vocabulary.push("ZZ-1");
+  assert.ok(!scheduleMarkVocabulary(graph).includes("ZZ-1"));
+  assert.deepEqual(scheduleMarkVocabulary(null), []);
 });

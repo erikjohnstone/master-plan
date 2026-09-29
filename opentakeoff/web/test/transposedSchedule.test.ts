@@ -10,7 +10,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { compileBasTakeoff, compileHvacTakeoff, HVAC_FAMILY_SPECS, scheduleTableView } from "../src/lib/corpusTakeoff.mjs";
-import { familyNeedleFromSpecs, reconcileScheduleFamilyFromGraph, unscheduledTagsAndAliasCandidates } from "../src/lib/schedulePlanReconcile.mjs";
+import { familyNeedleFromSpecs, reconcileScheduleFamilyFromGraph, scheduleMarksRead, scheduleRowsReadingMark, unscheduledTagsAndAliasCandidates } from "../src/lib/schedulePlanReconcile.mjs";
 import { scheduleRowsLeftOut } from "../src/lib/assemblies/leftOut.ts";
 
 type Cell = { text: string; bbox: number[] };
@@ -333,4 +333,23 @@ test("a transposed schedule under a decorated or hyphenated title is read one un
   // A points list stays as extracted however it is titled.
   const list = transposed("v.pdf#52", "(N) AIR HANDLING UNIT POINTS LIST", null, "DESIGNATION", ["AHU-1", "AHU-2"], [{ label: "SUPPLY FAN STATUS", values: ["DI", "DI"] }]);
   assert.equal(scheduleTableView(list), list);
+});
+
+test("the plan sweep finds a transposed schedule's unit on its view's row, one per unit, citing the unit's column (AS-89)", () => {
+  // 21_VA's schedules: no extracted row is a unit (each is an attribute), so
+  // no key or printed identity answers for EF-5; the view the reconcile reads
+  // has its row.
+  const graph = { tables: [fans()] };
+  const view = scheduleTableView(graph.tables[0]);
+  assert.ok(graph.tables[0].rows.every((row) => !/^EF/.test(row.key)));
+  const hits = scheduleRowsReadingMark(graph, "EF-5");
+  assert.equal(hits.length, 1);
+  assert.equal(hits[0].table, view);
+  assert.equal(hits[0].row.key, "EF-5");
+  assert.deepEqual(hits[0].families, ["FAN"]);
+  // The unit's column (EF-2, EF-5 is printed at x 400-500), its attributes by label.
+  assert.deepEqual([hits[0].row.cells.MARK.bbox[0], hits[0].row.cells.MARK.bbox[2]], [400, 500]);
+  assert.equal(hits[0].row.cells["CAPACITY - CFM"].text, "75");
+  assert.deepEqual(scheduleMarksRead(graph, view, ["FAN"]), ["EF-1", "EF-2", "EF-5", "EF-3"]);
+  assert.deepEqual(scheduleRowsReadingMark(graph, "AREA SERVED"), [], "an attribute is no unit");
 });
