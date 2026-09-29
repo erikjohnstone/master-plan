@@ -360,7 +360,7 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
 import { placementLabelFamily, labelPlacements, reconcileSweepLabels, positionMatchesToClosestReading, arbitrateAffineAgainstRigidLabels, sweepTransformCompetition, LABEL_CORROBORATION_SCORE_LOW, canonicalLabelFamily, LABEL_TOKEN_RE, type PlacementLabel, type SweepTransformCompetition } from "../../web/src/lib/symbollabels.ts";
-import { markKey, spanAnswersFor } from "../../web/src/lib/markid.ts";
+import { isBarePrefix, markKey, markLetters, spanAnswersFor } from "../../web/src/lib/markid.ts";
 import { isEquipTag } from "../../web/src/lib/equiptags.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
@@ -1051,6 +1051,7 @@ export class Session {
     }
     this.graph = null;   // the sheet graph (#87) indexes the OLD document set
     this.tagOccurrenceCache.clear();
+    this.vocabularyIds.clear();
     this.roomTagCache.clear();
     this.viewLandmarkCache.clear();
 
@@ -4052,24 +4053,47 @@ export class Session {
    * loadPlan clears it whenever the document set changes. */
   private tagOccurrenceCache = new Map<string, Map<string, TagOcc[]>>();
 
-  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false, vocab: readonly string[] = []): TagOcc[] {
+  /** A set's marks are passed on every occurrence lookup of a sweep; each
+   * distinct vocabulary gets a short id once, so a cache key never carries
+   * the thousands of marks a large set schedules. */
+  private vocabularyIds = new Map<string, string>();
+
+  private vocabularyId(vocab: readonly string[]): string {
+    const joined = [...vocab].sort().join(",");
+    let id = this.vocabularyIds.get(joined);
+    if (!id) {
+      id = `set${this.vocabularyIds.size + 1}`;
+      this.vocabularyIds.set(joined, id);
+    }
+    return id;
+  }
+
+  /** A span that is a bare prefix of the key ("E" for EF-1, isBarePrefix)
+   * answers as `vocab` allows, unless `barePrefix` says more. With a set's
+   * vocabulary (`{ marks, id }`) the key is looked for as drawn first (its
+   * text, compound run, authored count, split, stacked or chained runs), and
+   * a bare prefix answers only on a sheet that draws it no other way, as a
+   * shorthand: the key's whole family letters, two or more, that no mark of
+   * the set shares. "never" wants the key itself: no bare prefix answers. */
+  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false, vocab: readonly string[] = [], barePrefix: { marks: readonly string[]; id: string } | "never" | null = null): TagOcc[] {
     let byKey = this.tagOccurrenceCache.get(sh.key);
     if (!byKey) {
       byKey = new Map();
       this.tagOccurrenceCache.set(sh.key, byKey);
     }
-    const cacheKey = (allowFamilyQuorum ? `${key}\0family-quorum` : key) + (vocab.length ? `\0${[...vocab].sort().join(",")}` : "");
+    const cacheKey = (allowFamilyQuorum ? `${key}\0family-quorum` : key) + (vocab.length ? `\0${[...vocab].sort().join(",")}` : "")
+      + (barePrefix === "never" ? "\0never" : barePrefix ? `\0${barePrefix.id}` : "");
     const cached = byKey.get(cacheKey);
     if (cached) return cached;
     if (!sh.spans) sh.spans = textSpans(sh.page);
-    const exact = sh.spans
-      .filter((sp) => spanAnswersFor(sp.str, key, vocab))
-      .map((sp) => ({
-        cx: (sp.x0 + sp.x1) / 2,
-        cy: (sp.y0 + sp.y1) / 2,
-        h: Math.max(sp.y1 - sp.y0, 6),
-        bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
-      }));
+    const answering = sh.spans.filter((sp) => spanAnswersFor(sp.str, key, vocab));
+    const occurrenceOf = (sp: TextSpan): TagOcc => ({
+      cx: (sp.x0 + sp.x1) / 2,
+      cy: (sp.y0 + sp.y1) / 2,
+      h: Math.max(sp.y1 - sp.y0, 6),
+      bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
+    });
+    const exact = (barePrefix ? answering.filter((sp) => !isBarePrefix(sp.str, key)) : answering).map(occurrenceOf);
     // Explicit `(N) TAG` fragments are safe to merge alongside bare exact
     // spans because their authored count prefix makes them independently
     // identifiable. The broader fragment match remains a fallback below.
@@ -4082,12 +4106,20 @@ export class Session {
       ? familyQuorumFragmentedTagOcc(sh.spans, key)
       : fragmentedTagOcc(sh.spans, key);
     const deepHyphen = deepHyphenChainTagOcc(sh.spans, key);
+    // Last, a bare prefix as the key's shorthand: its family's letters whole.
+    const letters = markLetters(key);
+    const shorthand = (): TagOcc[] => barePrefix && barePrefix !== "never" && letters.length >= 2
+      ? answering
+        .filter((sp) => isBarePrefix(sp.str, key) && markKey(sp.str) === letters && spanAnswersFor(sp.str, key, barePrefix.marks))
+        .map(occurrenceOf)
+      : [];
+    const orShorthand = (found: TagOcc[]): TagOcc[] => (found.length ? found : shorthand());
     const occurrences = dedupedMerged.length
       ? dedupedMerged
       : (splitHyphen.length ? splitHyphen
         : fragmented.length ? fragmented
           : deepHyphen.length ? deepHyphen
-            : familySuffixTagOcc(sh.spans, key));
+            : orShorthand(familySuffixTagOcc(sh.spans, key)));
     occurrences.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     byKey.set(cacheKey, occurrences);
     return occurrences;
@@ -4132,9 +4164,14 @@ export class Session {
         }
       }
     }
+    // A landmark is a mark drawn as itself, never a bare prefix of one
+    // (AS-90). Looked up with no vocabulary, every bare letter stood for
+    // every mark it begins (98% of the dev corpus's landmarks), and a plan's
+    // grid letters, drawn at both ends of its grid lines, read as a second
+    // view of the same area beside the first.
     const landmarks: TaggedViewLandmark[] = [];
     for (const key of [...keys].sort()) {
-      for (const occurrence of this.tagOccurrencesOnSheet(sh, key)) {
+      for (const occurrence of this.tagOccurrencesOnSheet(sh, key, false, [], "never")) {
         landmarks.push({ tag: key, at: [occurrence.cx, occurrence.cy] });
       }
     }
@@ -4537,6 +4574,15 @@ export class Session {
       : [...new Set(tb.rows.flatMap((row) =>
         canonKey(identityOf(row)).split("/").map((s) => s.trim()).filter(Boolean)))];
     const markVocab = readByMark ? setMarks : tableSiblingKeys;
+    // Every unit is looked for as drawn first, its bare letters only as a
+    // shorthand, the whole of its family's letters that no mark the set
+    // schedules shares (AS-90): told apart from its own table's marks alone,
+    // a bare "D" answered for DAC-1 where the set also schedules DCU-1, and a
+    // bare "B" hid B-1's stacked tag.
+    const setMarkVocab = (() => {
+      const marks = scheduleMarkVocabulary(graph);
+      return { marks, id: this.vocabularyId(marks) };
+    })();
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
@@ -4586,7 +4632,7 @@ export class Session {
       }
     }
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
-      this.tagOccurrencesOnSheet(sh, key, airDeviceTable, markVocab);
+      this.tagOccurrencesOnSheet(sh, key, airDeviceTable, markVocab, setMarkVocab);
     // Plan-drawn form may keep spaces / omit revision prefixes while the
     // schedule row.key is glued (`NATUK1` vs plan `ATU K1` — Hurlburt). Prefer
     // any identity form that is actually drawn before refusing no-plan-tag.

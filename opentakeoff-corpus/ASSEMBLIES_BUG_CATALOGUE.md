@@ -6432,3 +6432,88 @@ mark reading and split (AS-65, AS-77, AS-79, AS-84, AS-86), which name units no 
   - 22_GA: VRHP-1 and DCU-1 MATCH (4 checks).
   - itd-d1-lab's grilles: 10 of 11 MATCH (4 checks).
 - **Correction:** AS-85's note counted eight return grilles among the 129; there are ten.
+
+## AS-90 — the plan sweep counted a bare prefix of a mark as its tag ("E" for EF-1, "D" for DAC-1) wherever no other mark of the mark's own table began with it, which hid tags drawn in pieces; the same-sheet repeated-view check took every bare letter as a landmark (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, queued from AS-89 (its fixture's bare "D" answered for DAC-1 on the sweep's main path), and
+measured by a census of the plan sheets of the 97 cached dev documents:
+- The sweep (`sweep_schedule_row`, which the reconcile runs for each row and the Takeoff canvas reaches through the
+  same Session) told a drawn span apart from the marks of the swept mark's own table only. `spanAnswersFor`
+  (markid.ts, not changed) lets a bare prefix answer for a mark when no other mark of that vocabulary begins with
+  it, so in a one-row table, or a table whose rows begin with different letters, every bare letter of the mark
+  answered. 8,590 spans answered for 172 of the reconcile's units on 54 documents though another scheduled mark
+  shares the letters (8,498 single letters: "E" 3,491 times, "A" 1,900, "R" 522, "S" 499). Another 979 answered for
+  65 units no other mark shares them with, mostly a part of a family's letters ("E" 272 times for 030_NY's grille
+  type EG, "DO" for 22_GA's DOAS-1, "OD" for 047_NC's ODU-1) or letters of lettering: 066_MT's T-1 took 22 "T"s from
+  the architect's circular stamp, 008_MO's L-1 its "L"s from the centerline symbols of "℄ OF COLUMN".
+- A bare span counted as the tag kept the sweep from looking for the tag drawn in pieces, which it does only where
+  no span answers. 03_FL's boiler B-1 is tagged "B" over "1" in a split hexagon with a leader to the unit; nine bare
+  "B"s on its plans stood in for it, none owns the boiler's geometry, and the reconcile refused the row. Stacked tags
+  elsewhere were cited by their top line only.
+- The reconcile's geometry check accepts only a label equal to the whole tag, so no bare letter made a MATCH. But the
+  refusals counted them ("CHWP-1 has 77 exact plan-tag occurrences": 76 were "C"s), and the sweep called directly
+  (the MCP tool) placed units at other units' letters: on the fixture below, BP-1 at the boiler's "B", SP-1 at an air
+  device's "S", AC-1 and B-1 at a plan's grid letters.
+- The same-sheet repeated-view check (`dedupeAlignedSameSheetViews`, fed by `viewLandmarksOnSheet`) looked marks up
+  with no vocabulary, so every bare letter answered for every mark it begins: 256,711 of the 262,954 landmarks on the
+  97 documents (98%). On 031_MO's FIRST FLOOR PLAN - MECHANICAL, one view, the grid letters at both ends of its grid
+  lines read as a second view of the same area, and the RG-24 return grille in OIT CLOSET W05B was dropped as a
+  repeat of another.
+
+**Fix (the sweep both surfaces use: `session.ts`; `markid.ts`):**
+- `isBarePrefix` and `markLetters` (markid.ts, pure): a span that is only the first letters of a mark, the one kind of
+  span `spanAnswersFor` lets answer for a mark other than the mark itself; and the letters a mark's family is written
+  with, up to its first digit or separator ("ET" for ET-1, "AHU" for AHU-A).
+- `tagOccurrencesOnSheet`, with the set's marks (`scheduleMarkVocabulary`, AS-89): a unit's tag is looked for as
+  drawn first (its text, a compound run, an authored count, split, stacked or chained runs). Only on a sheet that
+  draws it no other way does a bare prefix answer, as a shorthand: the family's letters whole, two or more, that no
+  mark the set schedules shares ("ET" for the only ET-1; never "E", never a lone "B" for B-1). A unit found by its key
+  or identity and one found by the reconcile's reading (AS-89) are looked up alike.
+- A view landmark is a mark drawn as itself, never a bare prefix.
+- Each vocabulary is keyed in the occurrence cache by a short id, so a vocabulary that grows (a graph gaining tables
+  after a sweep) is never answered from occurrences found against the smaller one.
+
+**Measured (the reconcile with the plan sweep, every row of every family, on the 97 dev documents; every changed
+row read, the new matches, the sixth grille and the stamp on the drawings):**
+- In steps, each over all 2,655 rows: the set's marks for the sweep's bare prefixes (117 rows change), the set's
+  marks for the landmarks too (1 more: RG-24), landmarks never a bare prefix (the same 2,655 rows), the tag as drawn
+  first with the shorthand rule (21 more rows: 6 stacked tags cited whole, 15 refusals). Run again on the final code:
+  identical row for row.
+- In all, 134 of 2,655 rows change, on 44 documents; none is worse:
+  - Three units drawn once now MATCH, each checked on its sheet: 03_FL's B-1 (the split hexagon); 088_AZ's ET-1
+    ("(E)ET-1" boxed beside the existing tank, where 744 bare "E"s had stood for it); 063_MT's EF-4 ("(E) EF-4" on
+    the existing inline fan; 20 bare letters). EF-4's cited geometry is its label's underline, not the fan: the
+    tag-attached geometry check accepts it, as before (not changed here).
+  - 031_MO's RG-24: 6 instances, as drawn (5 before).
+  - 18 matches keep their count and cite the whole stacked tag, not its top line: itd-d1-lab's and 062_ID's AS-1,
+    ET-1, PF-1, FM-1 and BCV-1, 03_FL's HWP-1, AS-1 and ET-1, 18_OR's HP-1 to HP-4, 083_MA's ERV-2.
+  - 17 refusals say where the tag is drawn (detail, schematic, demolition or unclassed sheets), where they counted
+    bare letters on plans.
+  - 95 refusals count only the unit's own tags (03_FL's CHWP-1 77 → 1, 05_MO's AC-57 160 → 8, 072_CA's ERV-A-15
+    140 → 1); no count rises.
+- Called directly the sweep was not measured over the corpus (an exhaustive sweep takes about a minute a unit); the
+  fixtures pin it.
+- **Tests** (2 web, 4 MCP; the MCP tests on two fixtures `make-schedule-row-reading-fixture.mjs` makes,
+  `schedule-bare-prefix.pdf` and `schedule-bare-landmarks.pdf`; each MCP test fails on the code before):
+  - `isBarePrefix` is exactly the span `spanAnswersFor` admits for a mark it is not; `markLetters` reads a family's
+    letters (ET-1, AHU-A, WHSE-AHU-1; none for 1-VAV-1).
+  - B-1's one tag is its stacked "B" over "1", both lines, never its top line or the bare "B"s; BP-1 is found at its
+    own tag, never the boiler's "B"; CP-1, whose letters no other mark shares, is cited as its whole stack; SP-1,
+    drawn nowhere, is refused, never found at the air device "S"; the type mark S, drawn as printed, counts though
+    SP-1 begins with S; ET-1, tagged "ET" alone, is found by its shorthand.
+  - ET-1's "ET" no longer answers once the graph gains a table scheduling ET-2 after a first sweep.
+  - The reconcile's reasons count a unit's own tags; on the AS-89 fixture DAC-1 is drawn once, not twice.
+  - One plan view with grid letters at both ends of its grid lines keeps all three RG-1 grilles, and neither AC-1 nor
+    B-1 is found at the grid letters.
+- **Mutation battery:** 9 of 12 mutants killed. The three survivors: vocabulary ids kept across loaded documents
+  (memory only), the cache key without the landmark's "never" (no other lookup of a mark without a vocabulary is
+  left), and landmarks by the shorthand rule (the corpus is identical with every set-unique bare prefix a landmark
+  and with none).
+- **Guard** (`outputs.ts` held back as before):
+  - Web: typecheck, lint, and 3,982 tests; the 3 that fail failed before (B-11, B-12 and multi-building).
+  - MCP: typecheck and `test:bas` (189). The suite runs 388 tests; the 2 that fail failed before (the finish plan's
+    #87, and navfac's sweep, which fails alone on the code before as well, at 69 s against the SDK's 60 s). The
+    shared-path files that use no held-out document ran 7 tests and skipped 12.
+- **Evals:** not run again. No eval calls the sweep, `markid.ts` only gains two functions, and `session.ts` is held
+  back in the eval trees (it is in the sheet-graph cache key).
+- **UI proof:** the canvas's reconcile with the plan sweep equals MCP's, row for row with installed quantities, on itd-d1-lab (16 checks; its stacked tags), 03_FL (13; B-1 matches) and 031_MO (4; RG-24 counts 6).

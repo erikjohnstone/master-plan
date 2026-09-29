@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  markKey, marksEqual, dedupeMarks, spanAnswersFor, pickMarkHits, compoundTagOcc, MARK_CLUSTER_K,
+  markKey, marksEqual, dedupeMarks, spanAnswersFor, isBarePrefix, markLetters, pickMarkHits, compoundTagOcc, MARK_CLUSTER_K,
 } from "../src/lib/markid.ts";
 
 const box = (str: string, x0: number, y0: number, w = str.length * 5, h = 8) =>
@@ -63,6 +63,42 @@ test("spanAnswersFor: a UNIQUE bare prefix of one qualified mark may resolve", (
   assert.equal(spanAnswersFor("WH", "WH-1", unique), true);
   // but not when a second sibling appears
   assert.equal(spanAnswersFor("WH", "WH-1", ["WH-1", "WH-2"]), false);
+});
+
+test("isBarePrefix: the letters a mark begins with, never the mark itself, its compound run or another mark", () => {
+  // the one kind of span spanAnswersFor lets answer for a mark it is not
+  assert.equal(isBarePrefix("WH", "WH-1"), true);
+  assert.equal(isBarePrefix("W", "WH-1"), true);
+  assert.equal(isBarePrefix("d", "DAC-1"), true);
+  assert.equal(isBarePrefix("AHU", "AHU-A"), true);
+  // the mark itself, however spelled
+  assert.equal(isBarePrefix("WH-1", "WH-1"), false);
+  assert.equal(isBarePrefix("WH 1", "WH-1"), false);
+  assert.equal(isBarePrefix("S", "S"), false);
+  // a compound run of the mark, a longer mark, a number, another mark
+  assert.equal(isBarePrefix("R1 /C-11", "R1"), false);
+  assert.equal(isBarePrefix("WH1A", "WH-1"), false);
+  assert.equal(isBarePrefix("1", "WH-1"), false);
+  assert.equal(isBarePrefix("EF", "WH-1"), false);
+  assert.equal(isBarePrefix("", "WH-1"), false);
+  // every span spanAnswersFor admits for a mark it is not is a bare prefix
+  for (const have of ["W", "WH", "WH-1", "WH 1", "WH-1 /C-2", "WH1A", "WX", "1"]) {
+    const answers = spanAnswersFor(have, "WH-1", ["WH-1"]);
+    const itself = markKey(have) === markKey("WH-1") || compoundTagOcc(have, "WH-1");
+    assert.equal(answers && !itself, isBarePrefix(have, "WH-1"), have);
+  }
+});
+
+test("markLetters: the letters a mark's family is written with, up to its first digit or separator", () => {
+  assert.equal(markLetters("ET-1"), "ET");
+  assert.equal(markLetters("et1"), "ET");
+  assert.equal(markLetters("AHU-A"), "AHU");
+  assert.equal(markLetters("WHSE-AHU-1"), "WHSE");
+  assert.equal(markLetters("B-1"), "B");
+  assert.equal(markLetters(" DOAS 1 "), "DOAS");
+  assert.equal(markLetters("EG"), "EG");
+  assert.equal(markLetters("1-VAV-1"), "");
+  assert.equal(markLetters(""), "");
 });
 
 test("pickMarkHits: twin-alias spellings on ONE device collapse to one hit", () => {

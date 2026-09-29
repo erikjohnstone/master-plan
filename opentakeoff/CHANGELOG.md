@@ -1,5 +1,30 @@
 # Changelog
 
+- **Plan sweep: a unit is looked for as its tag is drawn, and a bare letter
+  stands for it only as its shorthand.** A drawn span that is only the
+  first letters of a mark ("E" for EF-1, "D" for DAC-1) answered for the
+  mark wherever no other mark of the mark's own table began with them. On
+  the 97 dev documents 8,590 such spans answered for 172 of the reconcile's
+  units though another scheduled mark shares the letters, and 979 more for
+  65 units where none does: mostly a part of a family's letters ("E" for
+  the grille type EG, "DO" for DOAS-1), or letters of a stamp's lettering.
+  They counted as the unit's plan tags, and where they did, the sweep never
+  looked for the tag drawn in pieces: 03_FL's boiler B-1, tagged "B" over
+  "1", was refused behind nine bare "B"s. The sweep now looks for a tag as
+  drawn first (its text, a compound run, an authored count, split, stacked
+  or chained runs). A bare prefix answers only on a sheet that draws the tag
+  no other way, as the family's letters whole ("ET" for the only ET-1,
+  never "E"), two or more, that no mark the set schedules shares. The
+  same-sheet check for a second view of one area read every bare letter as
+  a landmark (98% of its landmarks), and a plan's grid letters as a second
+  view: a landmark is a mark drawn as itself now. Over the reconcile's
+  2,655 rows 134 change, on 44 documents, none for the worse. Three units
+  drawn once now match (03_FL's B-1, 063_MT's EF-4, 088_AZ's ET-1).
+  031_MO's RG-24 counts the sixth grille a false second view had dropped.
+  18 matches cite their whole stacked tag, and 112 refusals count and cite
+  only the unit's own tags (`session.ts`, `markid.ts`,
+  ASSEMBLIES_BUG_CATALOGUE AS-90).
+
 - **Plan sweep: a unit whose schedule row answers by neither its key nor its
   printed identity is swept on the row the reconcile reads it from, by its
   own mark alone.** The reconcile reads units the sweep's row lookup could

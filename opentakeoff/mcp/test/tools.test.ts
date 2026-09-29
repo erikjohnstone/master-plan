@@ -3131,6 +3131,157 @@ test("a transposed column naming an indoor/outdoor pair sweeps the outdoor unit 
   assert.match(dcu3.data.error, /Schedule row "DCU-3" \(DUCTLESS SPLIT SYSTEM UNIT SCHEDULE on schedule-row-reading\.pdf#4\) cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
 });
 
+// ── AS-90: a drawn span other than a mark itself — a bare prefix — answers
+// for the mark only where no other mark the set schedules shares it, not just
+// no other mark of the mark's own table: in a one-row table every bare letter
+// of the mark answered (03_FL's plans print "B" nine times beside its one
+// boiler B-1), and a bare span counted as the tag kept the stacked tag ("B"
+// over "1") from being read at all. An exact mark, and a prefix no other
+// scheduled mark shares, still answer. Fixture
+// (test/fixtures/schedule-bare-prefix.pdf,
+// scripts/make-schedule-row-reading-fixture.mjs): B-1 tagged "B" over "1",
+// bare "B" callouts elsewhere, BP-1 (PUMP SCHEDULE) tagged as printed; SP-1
+// scheduled beside it and drawn nowhere; CP-1 tagged "CP" over "1"; the air
+// device type S drawn twice as printed; ET-1 tagged "ET" alone.
+const BARE = fileURLToPath(new URL("./fixtures/schedule-bare-prefix.pdf", import.meta.url));
+test("a bare prefix another scheduled mark shares is no unit's tag: B-1's stacked tag is read, BP-1 is never the boiler's B, SP-1 never the air device S (AS-90)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: BARE });
+
+  // B-1's one tag is its stacked "B" over "1", both lines — never its top
+  // line alone, nor the bare "B" callouts BP-1 shares
+  const b1 = await call(client, "sweep_schedule_row", { tag: "B-1" });
+  assert.equal(b1.isError, false, b1.data?.error);
+  assert.equal(b1.data.found, 1);
+  assert.equal(b1.data.anchor.occurrences, 1);
+  assert.equal(b1.data.tag_citations.length, 1);
+  const stack = b1.data.tag_citations[0].bbox;
+  assert.equal(stack.x0, 258.4);
+  assert.ok(stack.y1 - stack.y0 > 30, `the stacked tag spans two lines: ${JSON.stringify(stack)}`);
+
+  // CP-1's letters are no other mark's, and its tag is still the whole
+  // stack: the mark as drawn is looked for before its letters
+  const cp1 = await call(client, "sweep_schedule_row", { tag: "CP-1" });
+  assert.equal(cp1.isError, false, cp1.data?.error);
+  assert.equal(cp1.data.anchor.occurrences, 1);
+  const cpStack = cp1.data.tag_citations[0].bbox;
+  assert.ok(cpStack.y1 - cpStack.y0 > 30, `the stacked tag spans two lines: ${JSON.stringify(cpStack)}`);
+
+  // BP-1 is found at its own tag, never at the boiler's "B"
+  const bp1 = await call(client, "sweep_schedule_row", { tag: "BP-1" });
+  assert.equal(bp1.isError, false, bp1.data?.error);
+  assert.equal(bp1.data.found, 1);
+  assert.equal(bp1.data.anchor.occurrences, 1);
+  assert.deepEqual(bp1.data.tag_citations.map((c: any) => c.bbox.x0), [608.4]);
+
+  // SP-1 is drawn nowhere: the "S" callouts are the air device type S's
+  const sp1 = await call(client, "sweep_schedule_row", { tag: "SP-1" });
+  assert.equal(sp1.isError, true);
+  assert.match(sp1.data.error, /Schedule row "SP-1" \(PUMP SCHEDULE on schedule-bare-prefix\.pdf#3\) cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
+
+  // the type mark S, drawn as printed, answers though SP-1 begins with S
+  const s = await call(client, "sweep_schedule_row", { tag: "S" });
+  assert.equal(s.isError, false, s.data?.error);
+  assert.equal(s.data.found, 2);
+  assert.equal(s.data.anchor.occurrences, 2);
+
+  // a shorthand still answers where the sheet draws the mark no other way:
+  // ET-1 tagged "ET", its family's letters whole, no other mark's
+  const et1 = await call(client, "sweep_schedule_row", { tag: "ET-1" });
+  assert.equal(et1.isError, false, et1.data?.error);
+  assert.equal(et1.data.found, 1);
+  assert.equal(et1.data.anchor.occurrences, 1);
+});
+
+test("a mark the set's schedules gain after a sweep is told apart at once: ET-1's bare \"ET\" no longer answers once ET-2 is scheduled (AS-90)", async () => {
+  const session = new Session();
+  const [ct, st] = InMemoryTransport.createLinkedPair();
+  await buildServer(session).connect(st);
+  const client = new Client({ name: "test-client", version: "0.0.0" });
+  await client.connect(ct);
+  await call(client, "load_plan", { path: BARE });
+
+  const before = await call(client, "sweep_schedule_row", { tag: "ET-1" });
+  assert.equal(before.isError, false, before.data?.error);
+  assert.equal(before.data.found, 1);
+
+  // the graph gains a table after the first sweep, as a later read of a
+  // schedule sheet lands, and it schedules ET-2: "ET" is shared now
+  const graph = await session.graphForPipeline();
+  const box = (text: string, x0: number, y0: number, x1: number, y1: number) => ({ text, bbox: [x0, y0, x1, y1] as [number, number, number, number] });
+  graph.tables.push({
+    kind: "equipment", sheet: "schedule-bare-prefix.pdf#4", title: { text: "GLYCOL EXPANSION TANK SCHEDULE", bbox: [100, 300, 500, 320] },
+    headers: ["MARK", "GALLONS"],
+    rows: [{ key: "ET-2", cells: { MARK: box("ET-2", 100, 340, 160, 360), GALLONS: box("30", 300, 340, 330, 360) } }],
+  } as any);
+
+  const after = await call(client, "sweep_schedule_row", { tag: "ET-1" });
+  assert.equal(after.isError, true);
+  assert.match(after.data.error, /Schedule row "ET-1" \(EXPANSION TANK SCHEDULE on schedule-bare-prefix\.pdf#4\) cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
+});
+
+test("the reconcile's reasons count a unit's own tags, never a bare prefix another scheduled mark shares (AS-90)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: BARE });
+  const row = (r: any) => ({ tag: r.tag, status: r.status, installed_qty: r.installed_qty });
+
+  const pumps = await call(client, "reconcile_schedule_plan", { family: "PUMP" });
+  assert.equal(pumps.isError, false);
+  assert.deepEqual(pumps.data.rows.map(row), [
+    { tag: "BP-1", status: "MATCH", installed_qty: 1 },
+    { tag: "SP-1", status: "SCHEDULE_ONLY", installed_qty: null },
+    { tag: "CP-1", status: "SCHEDULE_ONLY", installed_qty: null },
+  ]);
+  assert.match(pumps.data.rows[1].reason, /cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
+  assert.match(pumps.data.rows[2].reason, /^Schedule row "CP-1" has 1 exact plan-tag occurrence,/);
+
+  const boilers = await call(client, "reconcile_schedule_plan", { family: "BOILER" });
+  assert.equal(boilers.isError, false);
+  assert.equal(boilers.data.rows.length, 1);
+  assert.match(boilers.data.rows[0].reason, /^Schedule row "B-1" has 1 exact plan-tag occurrence,/);
+
+  // and on the AS-89 set: DAC-1's one-row table no longer lets the bare "D"
+  // (DCU-1, DCU-2 share it) stand as a second DAC-1
+  await call(client, "load_plan", { path: ROWREAD });
+  const dac1 = await call(client, "sweep_schedule_row", { tag: "DAC-1" });
+  assert.equal(dac1.isError, false, dac1.data?.error);
+  assert.equal(dac1.data.found, 1);
+  assert.equal(dac1.data.anchor.occurrences, 1);
+  assert.match(dac1.data.note, /drawn exactly once/);
+});
+
+// One plan view whose grid letters A to D stand at both ends of its grid
+// lines, beside a schedule whose marks each begin with one of them, no other
+// mark with the same (test/fixtures/schedule-bare-landmarks.pdf): a letter is
+// no mark's landmark, so the view is never read as a second view of the same
+// area and no RG-1 is dropped as its repeat (031_MO's first floor plan lost
+// one of six RG-24 grilles so); nor is it any unit's tag.
+const BARE_LANDMARKS = fileURLToPath(new URL("./fixtures/schedule-bare-landmarks.pdf", import.meta.url));
+test("grid letters are no landmarks and no unit's tags: one plan view keeps every RG-1, and AC-1 and B-1 are drawn nowhere (AS-90)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: BARE_LANDMARKS });
+
+  const rg1 = await call(client, "sweep_schedule_row", { tag: "RG-1" });
+  assert.equal(rg1.isError, false, rg1.data?.error);
+  assert.equal(rg1.data.found, 3);
+  assert.deepEqual(rg1.data.sheets.flatMap((s: any) => s.redundant_view || []), []);
+
+  const grd = await call(client, "reconcile_schedule_plan", { family: "GRD" });
+  assert.equal(grd.isError, false);
+  assert.deepEqual(grd.data.rows.map((r: any) => [r.tag, r.status, r.installed_qty]), [
+    ["RG-1", "MATCH", 3],
+    ["SG-1", "SCHEDULE_ONLY", null],
+  ]);
+
+  // a grid letter is no unit's tag either: a part of AC-1's letters, or
+  // the whole of B-1's but a single letter
+  for (const tag of ["AC-1", "B-1"]) {
+    const unit = await call(client, "sweep_schedule_row", { tag });
+    assert.equal(unit.isError, true, tag);
+    assert.match(unit.data.error, /cannot be geometrically anchored — its tag is not drawn on any plan sheet/, tag);
+  }
+});
+
 
 // ── sweep_schedule_row cross-tag corroboration: the uniquely-tagged family
 // (VAV-1, VAV-2, VAV-3, … one tag per physical box, never repeated) has no
