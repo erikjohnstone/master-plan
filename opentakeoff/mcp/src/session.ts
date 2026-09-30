@@ -53,7 +53,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
-import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markZeroRespellings, rowIdentityTag, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark } from '../../web/src/lib/schedulePlanReconcile.mjs';
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markZeroRespellings, rowIdentityTag, rowNamesEachUnitOnce, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -324,7 +324,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, hasSymbolSweepPlanEvidence, affineOptionsFromWire, AFFINE_WIRE_DEFAULT, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, keptIndividualView, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, hasSymbolSweepPlanEvidence, affineOptionsFromWire, AFFINE_WIRE_DEFAULT, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 import { groundExactTagsToVectorGeometry, type TaggedVectorGroundingResult } from "../../web/src/lib/taggedVectorGrounding.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
@@ -4682,9 +4682,12 @@ export class Session {
     const airDeviceTable = isRepeatableAirDeviceSchedule(table);
     // A unit family's own schedule names one unit per mark too, where the
     // row schedules one (isUnitFamilyTable; AS-96): 040_IL's terminal air
-    // boxes, drawn on every phase plan, are one box each.
+    // boxes, drawn on every phase plan, are one box each. So does its row
+    // naming a range or list of one family's marks, one unit each (AS-106):
+    // 26_CA's SF-P1-4 THRU 11.
     const individuallyMarkedTable = isIndividuallyMarkedEquipmentSchedule(table, opts.equipmentFamily || "")
-      || (isUnitFamilyTable(tb) && scheduledQtyFromRow(r) === 1 && rowNamesOneUnitOnce(r, selectedRowIdentity));
+      || (isUnitFamilyTable(tb) && scheduledQtyFromRow(r) === 1 && rowNamesOneUnitOnce(r, selectedRowIdentity))
+      || (isUnitFamilyTable(tb) && rowNamesEachUnitOnce(r, selectedRowIdentity, t));
 
     // 2. plan-view sheets (planViewSheetKeys), and every drawn occurrence of
     // the tag on them outside every table region
@@ -4802,15 +4805,38 @@ export class Session {
         }
       }
     }
+    // The trade whose schedule this is: a unit another trade's plan tags for
+    // its own connections (a plumbing plan's condensate drain, an electrical
+    // plan's disconnect) is that trade's reference to it, counted on the
+    // unit's own trade's sheet wherever that sheet draws it (AS-104).
+    const ownTrade = disciplineOfSheetNumber(this.sheets.get(tb.sheet)?.sheetNumber)?.[0] ?? null;
+    // the verified matches whose mark touches a room sensor's ring (AS-105)
+    const sensorLabelled = new WeakSet<object>();
+    // The mark as its row prints it, where the print has a word space the
+    // sweep's key drops (AS-107): 011_IL prints "HP 12-1", and its zoning and
+    // power plans letter it as two runs, "HP 12" and "-1", which the tag
+    // reader joins only under the printed spelling. Like the reader's own
+    // tiers, it is read on a sheet only where the key reads nothing, and a
+    // unit's view read under the key ranks before one read only so.
+    const printedMark = tRaw !== t && /\s/.test(tRaw) && canonKey(tRaw) === t ? tRaw : null;
+    const printedLettering = new WeakSet<TagOcc>();
+    const occOfMark = (sh: SheetState): TagOcc[] => {
+      const found = occOf(sh, t);
+      if (found.length || !printedMark) return found;
+      const printed = occOf(sh, printedMark);
+      for (const occurrence of printed) printedLettering.add(occurrence);
+      return printed;
+    };
+    const printedView = new WeakSet<object>();
     if (drawingGroupScope) {
       const ambiguousUngrouped = ungroupedPlanSheets
-        .map((sh) => ({ sh, occurrences: occOf(sh, t) }))
+        .map((sh) => ({ sh, occurrences: occOfMark(sh) }))
         .filter((entry) => entry.occurrences.length > 0);
       if (ambiguousUngrouped.length) {
         throw new UserError(`The mark "${t}" is independently defined in drawing groups ${[...localDefinitionGroups].join(", ")}, but ${ambiguousUngrouped.map((entry) => `${entry.sh.key} (${entry.occurrences.length} occurrence${entry.occurrences.length === 1 ? "" : "s"})`).join(", ")} has no authored drawing-group title. Those placements cannot be assigned to ${drawingGroupScope} without guessing.`);
       }
     }
-    const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
+    const occBySheet = planSheets.map((sh) => ({ sh, occ: occOfMark(sh) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
     if (!totalOcc) {
       // Not drawn on any PLAN sheet — but a schematic/legend/detail/etc
@@ -5094,6 +5120,10 @@ export class Session {
           lum: geometry.lum,
           width: entry.sh.widthPx,
           height: entry.sh.heightPx,
+          // A mark the labeler reads no token for ("HP 12-1", FPB over 3-11)
+          // is its own occurrence's token where the row names one unit per
+          // mark (AS-102).
+          occurrenceTokens: individuallyMarkedTable,
         });
         taggedVectorBySheet.set(entry.sh.key, grounded);
         if (!selected && grounded.matches.length) selected = { sh: entry.sh, match: grounded.matches[0] };
@@ -5793,20 +5823,26 @@ export class Session {
             lum: g2.lum,
             width: sh.widthPx,
             height: sh.heightPx,
+            occurrenceTokens: individuallyMarkedTable,
           });
-        matches = grounded.matches.map((match) => ({
-          at: match.fingerprint.center,
-          // This lane verifies exact source-tag ownership of a distinctive
-          // vector body rather than comparing it to a repeated template.
-          // `attachment_via`/distance disclose that different score meaning.
-          score: 1,
-          rotation: 0,
-          mirrored: false,
-          tag_at: match.occurrence.bbox,
-          geometry_bbox: match.geometry_bbox,
-          attachment_via: match.label.via,
-          attachment_distance_px: match.label.distance_px,
-        }));
+        matches = grounded.matches.map((match) => {
+          const counted = {
+            at: match.fingerprint.center,
+            // This lane verifies exact source-tag ownership of a distinctive
+            // vector body rather than comparing it to a repeated template.
+            // `attachment_via`/distance disclose that different score meaning.
+            score: 1,
+            rotation: 0,
+            mirrored: false,
+            tag_at: match.occurrence.bbox,
+            geometry_bbox: match.geometry_bbox,
+            attachment_via: match.label.via,
+            attachment_distance_px: match.label.distance_px,
+          };
+          if (match.sensor_label) sensorLabelled.add(counted);
+          if (printedLettering.has(match.occurrence)) printedView.add(counted);
+          return counted;
+        });
         withheld = [];
         excluded = [];
         text_only = grounded.text_only.map((entry) => ({
@@ -6067,10 +6103,12 @@ export class Session {
           ...(m.tag_at?.length === 4 ? { tagAt: [(m.tag_at[0] + m.tag_at[2]) / 2, (m.tag_at[1] + m.tag_at[3]) / 2] as Point } : {}),
           level: planLevelOfTitle(planTitleOf.get(ps.state.key) || ""),
           rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
+          ord: ps.state.ord,
+          ...(printedView.has(m) ? { printed: true } : {}),
         });
       }
     }
-    const redundant = dedupeCrossDisciplineRoomViews(dedupInstances);
+    const redundant = dedupeCrossDisciplineRoomViews(dedupInstances, ownTrade);
     if (redundant.length) {
       const redundantSet = new Map<CountedMatch, RedundantRoomView<CountedMatch>>(redundant.map((r) => [r.id, r]));
       for (const ps of perSheet) {
@@ -6090,8 +6128,14 @@ export class Session {
     if (individuallyMarkedTable) {
       const all = perSheet.flatMap((sheet) => sheet.matches.map((match) => ({ sheet, match })));
       if (all.length > 1) {
-        const kept = all.slice().sort((a, b) =>
-          b.match.score - a.match.score || a.sheet.state.ord - b.sheet.state.ord)[0];
+        const kept = keptIndividualView(all.map((entry) => ({
+          entry,
+          trade: disciplineOfSheetNumber(entry.sheet.state.sheetNumber)?.[0] ?? null,
+          sensorLabel: sensorLabelled.has(entry.match),
+          printed: printedView.has(entry.match),
+          score: entry.match.score,
+          ord: entry.sheet.state.ord,
+        })), ownTrade)!.entry;
         for (const entry of all) {
           if (entry === kept) continue;
           entry.sheet.matches = entry.sheet.matches.filter((match) => match !== entry.match);
@@ -6199,7 +6243,7 @@ export class Session {
       // is false: no geometry search ran there, and their scale cannot
       // explain this tagged result. Exhaustive mode still reports every
       // genuinely searched unscaled sheet exactly as before.
-      && (!opts.evaluationFast || occOf(p.state, t).length > 0));
+      && (!opts.evaluationFast || occOfMark(p.state).length > 0));
     if (rowAssumed.length) {
       notes.push(`${rowAssumed.map((p) => p.state.key).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorSheet.key} or on them, so a different drawn scale there is a live explanation for the zero. set_scale on both ends to rule it out.`);
     }

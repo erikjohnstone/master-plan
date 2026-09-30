@@ -12,7 +12,9 @@
 //        [--check] [--fast] [--runs DIR] [--report] [--detail]
 //
 //   --check    the check side (reports/reconcile/01-split.json): documents
-//              keyed but never tuned on; aggregates only.
+//              keyed but never tuned on; aggregates only: the totals, and
+//              which documents errored, never a document's own numbers (on
+//              screen, in the progress line or in the report).
 //   --fast     the evaluation-fast lane (tagged sweep only); the default is the
 //              production lane (full sweep), as the UI runs it.
 //   --runs DIR read each set's reconcile output from DIR/<set>.json when there,
@@ -83,7 +85,7 @@ for (const id of setIds) {
     process.stderr.write(`· ${id} …\n`);
     try { output = await runReconcile(id); } catch (e) { console.error(`  ${e.message}`); results.push({ id, error: e.message }); continue; }
     if (cached) { mkdirSync(runsDir, { recursive: true }); writeFileSync(cached, JSON.stringify(output)); }
-    process.stderr.write(`  ${id}: ${output.rows?.length ?? 0} reconcile rows in ${Math.round((Date.now() - t0) / 1000)}s\n`);
+    process.stderr.write(`  ${id}: ${side === "check" ? "run" : `${output.rows?.length ?? 0} reconcile rows`} in ${Math.round((Date.now() - t0) / 1000)}s\n`);
   }
   results.push({ id, ...scoreReconcileSet(key, output) });
 }
@@ -107,12 +109,17 @@ L.push(`  an unscheduled tag named on the review list: ${T.unscheduled_listed ??
 L.push(`  review list entries on examined sheets: ${T.review_listed ?? 0}; an unscheduled unit's tag ${T.review_unscheduled ?? 0} (${pct(T.review_unscheduled, T.review_listed)}), a scheduled unit's tag ${T.review_scheduled ?? 0}, no unit tag ${T.review_not_a_unit ?? 0}`);
 L.push(`  likely-units list: names ${T.unscheduled_units_listed ?? 0}/${T.unscheduled ?? 0} unscheduled tags (${pct(T.unscheduled_units_listed, T.unscheduled)}); ${T.units_listed ?? 0} entries on examined sheets: an unscheduled unit's tag ${T.units_unscheduled ?? 0} (${pct(T.units_unscheduled, T.units_listed)}), a scheduled unit's tag ${T.units_scheduled ?? 0}, no unit tag ${T.units_not_a_unit ?? 0}`);
 L.push("");
+if (side === "check") {
+  const errored = results.filter((r) => r.error);
+  L.push(`Aggregates only: no document's own numbers are shown.${errored.length ? ` Errored: ${errored.map((r) => r.id).join(", ")}.` : ""}`);
+} else {
 L.push("| set | units | unmatched | drawn found/missed | by its tag | cited not drawn | placements key/pipe/agree | count exact | links | unscheduled listed | review list unit/all |");
 L.push("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|");
 for (const r of results) {
   if (r.error) { L.push(`| ${r.id} | error: ${r.error} |`); continue; }
   const s = r.summary;
   L.push(`| ${r.id} | ${s.units} | ${s.unmatched} | ${s.drawn_tp}/${s.drawn_fn} | ${s.tag_drawn_tp}/${s.tag_drawn_tp + s.tag_drawn_fn} | ${s.drawn_fp} | ${s.key_placements}/${s.pipeline_placements}/${s.placement_hits} | ${s.count_exact}/${s.units - s.unmatched} | ${s.linked}/${s.links} | ${s.unscheduled_listed}/${s.unscheduled} | ${s.review_unscheduled}/${s.review_listed} |`);
+}
 }
 if (flag("--detail")) {
   for (const r of ok) {
@@ -131,7 +138,8 @@ if (flag("--report")) {
   mkdirSync(dir, { recursive: true });
   const base = join(dir, `02-reconcile-eval-${side}${fast ? "-fast" : ""}`);
   const heldAggregate = side === "check";
-  writeFileSync(`${base}.json`, JSON.stringify({ side, fast, totals: T, sets: heldAggregate ? results.map((r) => ({ id: r.id, error: r.error, summary: r.summary })) : results }, null, 1) + "\n");
+  writeFileSync(`${base}.json`, JSON.stringify({ side, fast, totals: T, sets: heldAggregate ? results.map((r) => ({ id: r.id, error: r.error })) : results }, null, 1) + "\n");
   writeFileSync(`${base}.md`, `# Reconcile eval — ${side}${fast ? " (fast lane)" : ""}\n\n\`\`\`\n${text}\n\`\`\`\n`);
 }
-process.exit(0);
+// exit once stdout has drained: exiting at once cuts a long reply short when piped
+process.stdout.write("", () => process.exit(0));

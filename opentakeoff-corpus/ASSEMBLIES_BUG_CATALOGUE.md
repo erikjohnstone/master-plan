@@ -6959,3 +6959,209 @@ fallback. Everything else holds:
     sheet or score of a check document was seen, and AS-98 comes from 26_CA's dev rows.
   - Scorer revisions: the first added a metric (drawn units found by their tag); the later ones (AS-98's range match,
     AS-99's pair match) re-score every earlier run byte-identically.
+
+## AS-102 — a unit's exact tag printed with a word space, or stacked over its number, was never checked against its leader or its body: 136 dev units read as tag text only (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the reconcile eval's misses after AS-101. 136 of the 151 dev units counted short were
+AMBIGUOUS: the sweep had found the unit's exact tag on its plan, but the geometry check never ran.
+- **Why.** `groundExactTagsToVectorGeometry` (taggedVectorGrounding.ts) checks a tag's own leader and adjacent body
+  through the shared labeler (symbollabels.ts). The labeler offers a label token only for single runs without a word
+  space, or for a family stacked over a lone number that repeats across the sheet. So these tags had no token, and no
+  leader or body was ever looked at:
+  - a mark printed with a word space: 011_IL's 15 heat pumps ("HP 12-1" in a hexagon, the leader's arrow on the unit);
+  - a family stacked over a hyphenated number: 26_CA's fan-powered boxes and fans ("FPB" over "3-11", "SF" over
+    "2-1"; 105 units);
+  - the same shapes on 004_MO and itd-d1-lab.
+
+**Fix (the shared path: `taggedVectorGrounding.ts`, `symbollabels.ts`, `session.ts`):** where the labeler reads no
+token for an occurrence the sweep's tag reader found, the occurrence itself is the source token
+(`exactOccurrenceToken`). It carries its box and its runs' lettering height and rotation. Label assignment
+(`labelPlacements`' new `exactTokens`, used only with `restrictToPreferredLabel`) puts it through the identical
+adjacency and leader gates, and a token the labeler does read is never replaced.
+
+Reading every change of a first version (all 12 dev documents: 132 units fixed, 2 broken, 6 moved) set three bounds:
+- **Only for a row naming one unit per mark** (the sweep's individually marked rows, `occurrenceTokens`). A type
+  mark's label may also name what a thermostat's control line serves: 016_NY's fin tube FT-A, 4 of its 10 labels at
+  thermostat lines, counted 10 against the key's 6. A type mark keeps the labeler's reading alone.
+- **Only for an occurrence printing the whole mark.** Its spacing may differ, and a line break may stand for its
+  hyphen, but no printed character may be missing. So never:
+  - a shorthand the reader accepted: federal-mech's abbreviation list "AHU" (AIR HANDLING UNIT) for AHU-1 took the
+    count off the enlarged plan;
+  - the mark without its hyphen: federal-mech's column grid bubble "B2" verified as boiler B-2.
+- **Equipment reach only where the labeler's own rule reads an instance.** The token takes the mark's letters as its
+  family only where the labeler's instance rule reads the mark with its word space read as the separator (HP 12-1 as
+  HP-12-1). A type mark such as "CD 1" stays a plain token, and an instrument function's letters never count.
+
+**Measured:** with AS-104 to AS-107, under AS-107.
+
+## AS-104 — a unit drawn on several sheets was counted on whichever sheet's key sorted first, another trade's plan included (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading AS-102's changes. itd-d1-lab tags CU-1 and LEF-1 on its mechanical roof plan (M2.0),
+and on its plumbing roof plan (P3.0) as background to the roof piping. The same-location redraw collapse
+(`collapseGroup`) kept the sheet drawing the unit most, and on a tie the sheet whose key sorted first: "…pdf#24"
+before "…pdf#6". So the plumbing plan counted the units.
+
+**Fix (the shared path: `symbolsweep.ts`, `session.ts`):** a unit drawn on several sheets is kept, in this order:
+1. on its own trade's sheet: the discipline letter of its schedule sheet's number. Another trade's plan tags a unit it
+   serves for its own connections (a plumbing plan's condensate drain, an electrical plan's disconnect);
+2. then on the sheet drawing it most (or, for an individually marked unit, the best geometry);
+3. then on the earlier sheet in page order. The key string decides only what page order cannot.
+
+The rule applies in `collapseGroup` (every path of `dedupeCrossDisciplineRoomViews`) and in the sweep's
+one-unit-per-mark collapse.
+
+**Measured and not adopted (AS-103):** reading a row naming several marks (a split system's SS-1/SSCU-1) as one unit
+per mark, so repeats of each mark collapse like an individually marked unit's. It fixed no dev unit: itd-d1-lab's
+split rows print their marks run together ("F-1CU-1") and already count one per mark. It broke one: 040_IL's
+SS-1/SSCU-1 row prints no QTY and stands for two systems, drawn as two SS-1 and two SSCU-1 on one plan, which it
+collapsed to one each. Not adopted.
+
+## AS-105 — a rooftop unit lettered at its thermostat on the floor plan below took the unit's count from the roof plan drawing it (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading AS-104's changes. 004_MO's mechanical floor plans (M-104, p36) letter each rooftop unit's
+mark beside the thermostat that controls it, a circled T: RTU-1 to RTU-7 and DOAS-1. The key: the units are not drawn
+there; the mechanical roof plan (p37) draws each with its tag. Every one of those labels verified against ink that is
+not the unit: the thermostat's own circle (five), a supply diffuser, a dashed line, a section cut's bubble. Both sheets
+are the units' own trade, so AS-104 kept p36 by page order.
+
+**Measured and not adopted: a mark touching a thermostat verifies no body.** It broke three counts on 040_IL: unit
+heaters UH-1 and UH-4 and the terminal box TAB-108 went from MATCH to AMBIGUOUS. A unit's own tag is lettered beside
+its own thermostat as a sensor's label is: 040_IL's UH-2 tag touches its unit-mounted thermostat's ring (0.06 letter
+heights), where 004_MO's labels touch theirs at 0 to 0.13. No distance tells them apart.
+
+**Fix (the shared path: `taggedVectorGrounding.ts`, `symbolsweep.ts`, `session.ts`):** the signal only ranks a unit's
+verified views, never removes one.
+- A verified match whose mark touches a ringed room sensor's lettering (T, TS, TC, HS, RH, CO2, ZS, ZNS, ZNT: the
+  room-mounted functions of the labeler's own embedded instrument vocabulary) within a quarter of its letter height is
+  flagged `sensor_label`. The ring is ink crossing all four half-axes from the lettering's centre, within a letter
+  height of it.
+- Where an individually marked unit is verified on several views, `keptIndividualView` keeps its own trade's view
+  (AS-104), then a view whose mark is not a sensor's label, then the best geometry, then the earlier page.
+
+It chooses only among the unit's own verified views, so no count changes. 040_IL's unit heater tags sit 0.3 (UH-4) and
+0.62 (UH-1) letter heights from their thermostats and are not flagged. RTU-1 to RTU-7 now count on the roof plan.
+DOAS-1 still counts on p36, flagged: its label sits where the roof plan draws the unit, so the redraw collapse
+(`collapseGroup`), which reads trade and count and not the flag, decides it first. Carrying the flag into that collapse
+was measured and not adopted: it moved DOAS-1 to p37, and 040_IL's UH-2, whose own tag touches its thermostat, off the
+view the key counts.
+
+## AS-106 — the units a range or list row names were never read one unit per mark: 26_CA's SF-P1-4 THRU 11 stayed tag text (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the dev misses after AS-105. 26_CA's FANS table schedules fans by rows naming several
+marks: "SF-P1-4 THRU 11" (QTY 8), "EF-P1-1 & 2", "SF-P2-1 & 2" and the like. The whole-set reconcile holds a row for
+each unit (AS-98), and the sweep finds each unit's tag on its plan ("SF" over "P1-4"). But none verified against its
+fan: the exact occurrence becomes its own token only where the row names one unit per mark (AS-102), and
+`rowNamesOneUnitOnce` refuses any row name with THRU, "&", "/" or a list. The same plans' single rows (SF-P1-1 to
+SF-P1-3) verified.
+
+**Fix (the shared path: `schedulePlanReconcile.mjs`, `session.ts`):** `rowNamesEachUnitOnce`. A unit family's row
+names each of several units once when:
+- its name is a range or list of one family's marks, the swept mark among them (`expandEquipMarks`, as the takeoff
+  reads it: AS-75, AS-86);
+- it schedules one unit per mark: a QTY printed for the marks together, or none (`scheduledQtyStatusFromRow`);
+- no word says they are typical units, and no placeholder stands for a level.
+
+Two families' marks name no one unit per mark. 040_IL's SS-1/SSCU-1, a split system's indoor and outdoor pair, stands
+for two systems (AS-103, not adopted, broke it).
+
+**Measured:** with AS-102, AS-104, AS-105 and AS-107, under AS-107.
+
+## AS-107 — a mark its row prints with a word space, lettered on a plan in runs, was never read there: 011_IL's zoning and power plans left 24 heat pump tags unlinked (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, reading the dev link misses after AS-106. 011_IL's HEAT PUMP SCHEDULE prints its marks with a word
+space ("HP 12-1"). Its duct plan (MH-101) and piping plan letter each as one run. Its zoning plan (MH-100, 12 labels, each
+at the thermostat its unit serves) and its electrical power plan (EP-101, 12 relocated units) letter each as three runs:
+"HP 12", "-", "1".
+- The sweep reads a row's mark with its spaces removed (HP12-1). The tag reader's fragment joins compare the runs'
+  text with hyphens removed but spaces kept, so "HP 12" never starts HP12-1, and neither plan's tags were read.
+- The sweep falls back to the row's printed spelling only when its key is drawn nowhere, and HP12-1 is drawn on the
+  duct plan. So the 24 tags were never linked to their rows, though the key links them (the zoning labels as views of
+  the unit, the power plan's as the electrical trade's reference to it).
+
+**Fix (the shared path: `session.ts`, `symbolsweep.ts`):** where a row prints its mark with a word space, the sweep
+reads the printed spelling too.
+- It reads it on a sheet only where the key reads nothing, as the tag reader's own tiers fall back.
+- A view read only so ranks after a view read under the key: in the redraw collapse (`collapseGroup`, after the
+  unit's own trade) and in the one-unit-per-mark choice (`keptIndividualView`, after the unit's own trade and a
+  thermostat's label).
+
+**Measured and not adopted.** Reading both spellings on every sheet with no precedence moved 11 of 011_IL's heat pumps
+off their duct plan: the zoning plan's labels verify against a leader's arrowhead or the thermostat's ring, 5 to 18 px
+across, and the zoning plan comes first in the set. Ranking the unit's verified views by the size of the body instead
+still moved 7, three to the zoning plan and four to the piping plan, whose bodies include the piping connections.
+
+**Measured** (AS-102 and AS-104 to AS-107 together; the 12 dev documents, each on its cached graph, as the dev report
+runs them; 4d16d7e → this commit, `reports/reconcile/02-reconcile-eval-dev.md`):
+
+| | 4d16d7e | this commit |
+|---|---:|---:|
+| drawn units found / missed | 278 / 149 | 407 / 20 |
+| unit counts exact | 310/462 (67.1%) | 439/462 (95.0%) |
+| counted over / under | 1 / 151 | 1 / 22 |
+| placements recall / precision | 54.6% / 86.6% | 84.6% / 91.1% |
+| placements on a keyed view: recall / precision | 62.4% / 99.0% | 90.9% / 98.0% |
+| by its tag: found / missed | 414 / 13 | 414 / 13 |
+| by its tag on a keyed view: recall / precision | 94.7% / 89.8% | 93.5% / 96.1% |
+| drawn tags linked to their row | 959/1215 (78.9%) | 983/1215 (80.9%) |
+
+The review list and the likely-units list are unchanged. Reading every changed unit: 129 fixed and none broken
+(26_CA 104, 011_IL 15, 004_MO 5, itd-d1-lab 5). Seven kept their count and moved to the key's view: 004_MO's RTU-1 to
+RTU-7 were cited on the plumbing roof plan (p26, the gas piping to them) and now count on the mechanical roof plan
+(p37). 24 of 011_IL's tags now link to their rows (AS-107); no other link changed. By its tag on a keyed view falls by
+6: six of the units under the known limit below were tag text on both sheets and are now verified, one each, on the
+section's sheet.
+
+**Check side** (the 8 documents keyed before any score, never tuned on; totals only,
+`reports/reconcile/02-reconcile-eval-check.md`), 4d16d7e → this commit:
+- drawn units found: 185 → 208 of 224;
+- unit counts exact: 83.0% → 91.1% (under 44 → 21, over 4 → 4);
+- placements recall 71.1% → 81.8%, precision 88.2% → 90.8%;
+- on a keyed view: recall 77.7% → 87.2%, precision 96.4% → 96.8%;
+- by its tag on a keyed view: precision 87.2% → 96.8%.
+
+Links (77.4%), the review list and the likely-units list are unchanged. This scorer re-scores 4d16d7e's check runs
+byte-identically.
+
+**Known limit: a tag in a section view on a plan sheet.** The graph has no view regions, so the sweep cannot tell a
+section drawn on a plan sheet from the plan beside it. 26_CA's level sheets draw the fans of the levels above in their
+sections (SF-63-1, EF-64-1, AC-64-1, SF-62-2), its p12 draws SF-P1-2 and EF-P1-9 in a section, and 004_MO's p36
+draws GEF-1 in its exhaust hood section. Those units count right (one each), cited on the section's sheet rather than
+the plan drawing them. Reading a sheet's view titles into regions is the fix, not attempted here.
+
+**Known misses, measured and left.** 26_CA's CAV-X-1 (8 units) is printed "VAV-X-1" on its plans. 12_MT's FC-1A to FC-4B
+are tagged FC 1-1 to FC 2-2 (the key relates them by order), and its FT-1 and FT-4 stack "FT" over their numbers
+beside a pipe label on the same row, which the tag reader's fragment chain meets first (`fragmentedTagOcc`, first in
+content order; its own comment records why that selection is not reordered). 14_OR's HWP-1 and HWP-2 are tagged HP-1
+and HP-2. itd-d1-lab's EF-4 is tagged "EF 5". 004_MO's structural framing plan names its rooftop units in leader notes
+("NEW RTU #1 ON NEW CURB"). 24_IA suffixes marks with a room number (FCU-00-022D).
+
+**Tests.** Web: 14 new tests, each run on the code before it.
+- AS-102: 7. Three fail on the code before (a spaced mark and a stacked mark follow their leaders; the labeler's
+  instance reading). Three fail on its first version, without the bounds (a shorthand, a type mark's row and a mark
+  missing its hyphen are never exact tokens). One guards the adjacency gate and passes on every version (a spaced mark
+  with no distinctive body stays tag text).
+- AS-104, AS-105: 4 (the own-trade redraw, the kept view, a thermostat's ring flags a mark, only a room sensor's ring
+  does), each failing on the code before; ring, gap and vocabulary mutations each fail the last.
+- AS-106: 1 (the row policy: ranges, lists, QTY, TYPICAL, a placeholder, two families), failing before.
+- AS-107: 2 (the kept view and the redraw collapse rank a printed-only view last), failing before.
+
+MCP: 2 new fixtures from the fixture generator, which reproduces every existing fixture byte for byte. A range row's
+units verify (AS-106), and a zoning plan earlier in the set, lettering HP 12-1 in runs, is read and kept as a repeat
+view while the duct plan counts the unit (AS-107); each fails on the code before. The AS-90 test's bare-prefix fixture
+draws CP-1 as "CP" over "1" under its pump, and B-1 as "B" over "1" under its boiler: both were AMBIGUOUS and are now
+MATCH, installed 1, cited at that symbol (the test pins both boxes). The bare "B" callouts still count for nothing. The
+test's AMBIGUOUS contract now reads the air device type S, whose two tags stay tag text.
+
+**UI proof.** The Takeoff canvas's reconcile (`window.__opentakeoff.reconcileSchedulePlan`, the Agent tool's path)
+against `reconcile_schedule_plan` over MCP, per family and for the whole set, row by row with placements, links and
+the likely-units list (`uiproof/as106`): 011_IL (HEAT_PUMP, 15 rows, 66 links; the whole set, 169 rows), 004_MO (RTU,
+DOAS and the whole set) and itd-d1-lab (AHU, CONDENSING_UNIT, FAN and the whole set) pass all 39 checks. 26_CA's FAN
+reconcile over MCP takes 1,355 s (47 rows: 46 MATCH, 1 AMBIGUOUS), past the canvas's three-minute post-index limit on
+its shared Session run (`vite.corpusTakeoffApi.js`). The canvas then falls back to per-row sweeps, and those default to
+the tag-only reading (`evaluationFast: opts.evaluationFast !== false`), where MCP and the canvas's other two paths
+default to the full sweep: it reports the 46 as AMBIGUOUS. That default predates this batch; the batch's verified
+matches widen the gap. It is AS-117.
+
+**Scorer (disclosed, eval-only).** `reconcile-eval.mjs --check` prints and writes the totals and which documents
+errored, never a document's own numbers. It also exits once its output has drained: exiting at once cut a long piped
+reply short. Rescoring 4d16d7e's dev runs with it gives byte-identical output.

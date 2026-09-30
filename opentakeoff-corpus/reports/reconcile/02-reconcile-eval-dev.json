@@ -5,23 +5,23 @@
   "units": 534,
   "unmatched": 72,
   "duplicate_rows": 8,
-  "drawn_tp": 278,
-  "drawn_fn": 149,
+  "drawn_tp": 407,
+  "drawn_fn": 20,
   "drawn_fp": 0,
   "drawn_tn": 35,
-  "count_exact": 310,
+  "count_exact": 439,
   "count_over": 1,
-  "count_under": 151,
+  "count_under": 22,
   "key_placements": 474,
-  "pipeline_placements": 299,
-  "placement_hits": 259,
-  "placement_located": 296,
+  "pipeline_placements": 440,
+  "placement_hits": 401,
+  "placement_located": 431,
   "tag_drawn_tp": 414,
   "tag_drawn_fn": 13,
-  "tag_observations": 500,
-  "tag_located": 449,
+  "tag_observations": 461,
+  "tag_located": 443,
   "links": 1215,
-  "linked": 959,
+  "linked": 983,
   "unscheduled": 47,
   "unscheduled_listed": 33,
   "unscheduled_linked_to_a_row": 1,
@@ -42,21 +42,21 @@
     "units": 14,
     "unmatched": 0,
     "duplicate_rows": 0,
-    "drawn_tp": 8,
-    "drawn_fn": 5,
+    "drawn_tp": 13,
+    "drawn_fn": 0,
     "drawn_fp": 0,
     "drawn_tn": 1,
-    "count_exact": 9,
+    "count_exact": 14,
     "count_over": 0,
-    "count_under": 5,
+    "count_under": 0,
     "key_placements": 13,
-    "pipeline_placements": 8,
-    "placement_hits": 0,
-    "placement_located": 7,
+    "pipeline_placements": 13,
+    "placement_hits": 11,
+    "placement_located": 11,
     "tag_drawn_tp": 13,
     "tag_drawn_fn": 0,
-    "tag_observations": 24,
-    "tag_located": 12,
+    "tag_observations": 13,
+    "tag_located": 11,
     "links": 42,
     "linked": 35,
     "unscheduled": 9,
@@ -77,16 +77,16 @@
      "unit": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39|GUH - 1",
      "matched": true,
      "row_tag": "GUH - 1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#33",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -103,11 +103,6 @@
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
-      },
-      {
-       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26",
-       "key": 0,
        "pipeline": 1
       }
      ]
@@ -125,11 +120,6 @@
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
-      },
-      {
-       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26",
-       "key": 0,
        "pipeline": 1
       }
      ]
@@ -147,11 +137,6 @@
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
-      },
-      {
-       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26",
-       "key": 0,
        "pipeline": 1
       }
      ]
@@ -169,11 +154,6 @@
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
-      },
-      {
-       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26",
-       "key": 0,
        "pipeline": 1
       }
      ]
@@ -191,11 +171,6 @@
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
-      },
-      {
-       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26",
-       "key": 0,
        "pipeline": 1
       }
      ]
@@ -213,11 +188,6 @@
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
-      },
-      {
-       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26",
-       "key": 0,
        "pipeline": 1
       }
      ]
@@ -235,11 +205,6 @@
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
-      },
-      {
-       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26",
-       "key": 0,
        "pipeline": 1
       }
      ]
@@ -270,16 +235,21 @@
      "unit": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39|GEF - 1",
      "matched": true,
      "row_tag": "GEF - 1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
+     "pipeline": 1,
      "located": 0,
      "sheets": [
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
        "pipeline": 0
+      },
+      {
+       "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36",
+       "key": 0,
+       "pipeline": 1
       }
      ]
     },
@@ -287,16 +257,16 @@
      "unit": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#39|EF - 1",
      "matched": true,
      "row_tag": "EF - 1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -304,16 +274,16 @@
      "unit": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31|SP - 1",
      "matched": true,
      "row_tag": "SP - 1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#21",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -321,16 +291,16 @@
      "unit": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31|HWRP - 1",
      "matched": true,
      "row_tag": "HWRP - 1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#21",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -2602,20 +2572,20 @@
     "units": 37,
     "unmatched": 0,
     "duplicate_rows": 0,
-    "drawn_tp": 28,
-    "drawn_fn": 9,
+    "drawn_tp": 33,
+    "drawn_fn": 4,
     "drawn_fp": 0,
     "drawn_tn": 0,
-    "count_exact": 28,
+    "count_exact": 33,
     "count_over": 0,
-    "count_under": 9,
+    "count_under": 4,
     "key_placements": 37,
-    "pipeline_placements": 28,
-    "placement_hits": 28,
-    "placement_located": 28,
+    "pipeline_placements": 33,
+    "placement_hits": 33,
+    "placement_located": 33,
     "tag_drawn_tp": 36,
     "tag_drawn_fn": 1,
-    "tag_observations": 43,
+    "tag_observations": 39,
     "tag_located": 36,
     "links": 55,
     "linked": 54,
@@ -3011,16 +2981,16 @@
      "unit": "itd-d1-lab-mechanical.pdf#15|AHU-1",
      "matched": true,
      "row_tag": "AHU-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "itd-d1-lab-mechanical.pdf#6",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -3028,16 +2998,16 @@
      "unit": "itd-d1-lab-mechanical.pdf#14|CU-1",
      "matched": true,
      "row_tag": "CU-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "itd-d1-lab-mechanical.pdf#6",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -3062,16 +3032,16 @@
      "unit": "itd-d1-lab-mechanical.pdf#13|LEF-1",
      "matched": true,
      "row_tag": "LEF-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "itd-d1-lab-mechanical.pdf#6",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -3232,16 +3202,16 @@
      "unit": "itd-d1-lab-mechanical.pdf#13|HUM-1",
      "matched": true,
      "row_tag": "HUM-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "itd-d1-lab-mechanical.pdf#7",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -3249,16 +3219,16 @@
      "unit": "itd-d1-lab-mechanical.pdf#14|EH-5",
      "matched": true,
      "row_tag": "EH-5",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "itd-d1-lab-mechanical.pdf#7",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     }
@@ -4171,23 +4141,23 @@
     "units": 15,
     "unmatched": 0,
     "duplicate_rows": 0,
-    "drawn_tp": 0,
-    "drawn_fn": 15,
+    "drawn_tp": 15,
+    "drawn_fn": 0,
     "drawn_fp": 0,
     "drawn_tn": 0,
-    "count_exact": 0,
+    "count_exact": 15,
     "count_over": 0,
-    "count_under": 15,
+    "count_under": 0,
     "key_placements": 15,
-    "pipeline_placements": 0,
-    "placement_hits": 0,
-    "placement_located": 0,
+    "pipeline_placements": 15,
+    "placement_hits": 15,
+    "placement_located": 15,
     "tag_drawn_tp": 15,
     "tag_drawn_fn": 0,
-    "tag_observations": 30,
+    "tag_observations": 15,
     "tag_located": 15,
     "links": 81,
-    "linked": 57,
+    "linked": 81,
     "unscheduled": 0,
     "unscheduled_listed": 0,
     "unscheduled_linked_to_a_row": 0,
@@ -4206,16 +4176,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-1",
      "matched": true,
      "row_tag": "HP 12-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4223,16 +4193,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-2",
      "matched": true,
      "row_tag": "HP 12-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4240,16 +4210,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-3",
      "matched": true,
      "row_tag": "HP 12-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4257,16 +4227,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-4",
      "matched": true,
      "row_tag": "HP 12-4",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4274,16 +4244,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-5",
      "matched": true,
      "row_tag": "HP 12-5",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4291,16 +4261,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-6",
      "matched": true,
      "row_tag": "HP 12-6",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4308,16 +4278,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-7",
      "matched": true,
      "row_tag": "HP 15-7",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4325,16 +4295,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-8",
      "matched": true,
      "row_tag": "HP 15-8",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4342,16 +4312,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-9",
      "matched": true,
      "row_tag": "HP 15-9",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4359,16 +4329,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 24-10",
      "matched": true,
      "row_tag": "HP 24-10",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4376,16 +4346,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 24-11",
      "matched": true,
      "row_tag": "HP 24-11",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4393,16 +4363,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 36-12",
      "matched": true,
      "row_tag": "HP 36-12",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4410,16 +4380,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 42-13",
      "matched": true,
      "row_tag": "HP 42-13",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4427,16 +4397,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 42-14",
      "matched": true,
      "row_tag": "HP 42-14",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -4444,16 +4414,16 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 48-15",
      "matched": true,
      "row_tag": "HP 48-15",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     }
@@ -4870,7 +4840,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-4",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4879,7 +4849,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-9",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4888,7 +4858,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-7",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4897,7 +4867,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-6",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4906,7 +4876,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-5",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4915,7 +4885,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-8",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4924,7 +4894,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 24-11",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4933,7 +4903,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-3",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4942,7 +4912,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-2",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4951,7 +4921,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-1",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4960,7 +4930,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 24-10",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -4969,7 +4939,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 42-13",
      "view": "view-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5086,7 +5056,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-1",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5095,7 +5065,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-2",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5104,7 +5074,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-3",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5113,7 +5083,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 12-4",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5122,7 +5092,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-8",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5131,7 +5101,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 15-9",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5140,7 +5110,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 24-10",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5149,7 +5119,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 24-11",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5158,7 +5128,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 36-12",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5167,7 +5137,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 42-13",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5176,7 +5146,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 42-14",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     },
     {
@@ -5185,7 +5155,7 @@
      "unit": "011_IL_VA_Hines_Finance_Center_Renovation.pdf#16|HP 48-15",
      "view": "discipline-repeat",
      "counts": "no",
-     "linked": false,
+     "linked": true,
      "row": true
     }
    ],
@@ -5608,21 +5578,21 @@
     "units": 193,
     "unmatched": 71,
     "duplicate_rows": 0,
-    "drawn_tp": 16,
-    "drawn_fn": 106,
+    "drawn_tp": 120,
+    "drawn_fn": 2,
     "drawn_fp": 0,
     "drawn_tn": 0,
-    "count_exact": 14,
+    "count_exact": 118,
     "count_over": 1,
-    "count_under": 107,
+    "count_under": 3,
     "key_placements": 158,
-    "pipeline_placements": 33,
-    "placement_hits": 31,
-    "placement_located": 31,
+    "pipeline_placements": 149,
+    "placement_hits": 142,
+    "placement_located": 142,
     "tag_drawn_tp": 121,
     "tag_drawn_fn": 1,
-    "tag_observations": 160,
-    "tag_located": 148,
+    "tag_observations": 151,
+    "tag_located": 143,
     "links": 280,
     "linked": 153,
     "unscheduled": 0,
@@ -5887,16 +5857,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-1-1",
      "matched": true,
      "row_tag": "EF-1-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#12",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -5937,16 +5907,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-2-1",
      "matched": true,
      "row_tag": "SF-2-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#13",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -5954,16 +5924,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-2-2",
      "matched": true,
      "row_tag": "SF-2-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#13",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -5971,16 +5941,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-2-3",
      "matched": true,
      "row_tag": "SF-2-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#13",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6012,16 +5982,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-3",
      "matched": true,
      "row_tag": "EF-2-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#13",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6029,16 +5999,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-4",
      "matched": true,
      "row_tag": "EF-2-4",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#13",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6046,16 +6016,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-11",
      "matched": true,
      "row_tag": "FPB-3-11",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6063,16 +6033,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-12",
      "matched": true,
      "row_tag": "FPB-3-12",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6080,16 +6050,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-13",
      "matched": true,
      "row_tag": "FPB-3-13",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6097,16 +6067,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-14",
      "matched": true,
      "row_tag": "FPB-3-14",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6114,16 +6084,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-15",
      "matched": true,
      "row_tag": "FPB-3-15",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6131,16 +6101,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-16",
      "matched": true,
      "row_tag": "FPB-3-16",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6148,16 +6118,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-17",
      "matched": true,
      "row_tag": "FPB-3-17",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6165,16 +6135,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-18",
      "matched": true,
      "row_tag": "FPB-3-18",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6182,16 +6152,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-21",
      "matched": true,
      "row_tag": "FPB-3-21",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6199,16 +6169,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-22",
      "matched": true,
      "row_tag": "FPB-3-22",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6216,16 +6186,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-23",
      "matched": true,
      "row_tag": "FPB-3-23",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6233,16 +6203,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-24",
      "matched": true,
      "row_tag": "FPB-3-24",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6250,16 +6220,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-25",
      "matched": true,
      "row_tag": "FPB-3-25",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6267,16 +6237,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-26",
      "matched": true,
      "row_tag": "FPB-3-26",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6284,16 +6254,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-27",
      "matched": true,
      "row_tag": "FPB-3-27",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6301,16 +6271,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-28",
      "matched": true,
      "row_tag": "FPB-3-28",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#14",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6339,16 +6309,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-11",
      "matched": true,
      "row_tag": "FPB-4-11",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6356,16 +6326,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-12",
      "matched": true,
      "row_tag": "FPB-4-12",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6373,16 +6343,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-13",
      "matched": true,
      "row_tag": "FPB-4-13",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6390,16 +6360,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-14",
      "matched": true,
      "row_tag": "FPB-4-14",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6407,16 +6377,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-15",
      "matched": true,
      "row_tag": "FPB-4-15",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6424,16 +6394,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-16",
      "matched": true,
      "row_tag": "FPB-4-16",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6441,16 +6411,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-17",
      "matched": true,
      "row_tag": "FPB-4-17",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6458,16 +6428,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-18",
      "matched": true,
      "row_tag": "FPB-4-18",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6475,16 +6445,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-19",
      "matched": true,
      "row_tag": "FPB-4-19",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6492,16 +6462,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-21",
      "matched": true,
      "row_tag": "FPB-4-21",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6509,16 +6479,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-22",
      "matched": true,
      "row_tag": "FPB-4-22",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6526,16 +6496,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-23",
      "matched": true,
      "row_tag": "FPB-4-23",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6543,16 +6513,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-24",
      "matched": true,
      "row_tag": "FPB-4-24",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6560,16 +6530,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-25",
      "matched": true,
      "row_tag": "FPB-4-25",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6577,16 +6547,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-26",
      "matched": true,
      "row_tag": "FPB-4-26",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6594,16 +6564,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-27",
      "matched": true,
      "row_tag": "FPB-4-27",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6611,16 +6581,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-28",
      "matched": true,
      "row_tag": "FPB-4-28",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6628,16 +6598,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-29",
      "matched": true,
      "row_tag": "FPB-4-29",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#15",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6649,16 +6619,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-101",
      "matched": true,
      "row_tag": "FPB-5-101",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6666,16 +6636,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-102",
      "matched": true,
      "row_tag": "FPB-5-102",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6683,16 +6653,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-103",
      "matched": true,
      "row_tag": "FPB-5-103",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6700,16 +6670,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-104",
      "matched": true,
      "row_tag": "FPB-5-104",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6717,16 +6687,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-105",
      "matched": true,
      "row_tag": "FPB-5-105",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6734,16 +6704,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-106",
      "matched": true,
      "row_tag": "FPB-5-106",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6751,16 +6721,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-107",
      "matched": true,
      "row_tag": "FPB-5-107",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6768,16 +6738,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-108",
      "matched": true,
      "row_tag": "FPB-5-108",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6785,16 +6755,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-109",
      "matched": true,
      "row_tag": "FPB-5-109",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6802,16 +6772,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-110",
      "matched": true,
      "row_tag": "FPB-5-110",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6819,16 +6789,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-111",
      "matched": true,
      "row_tag": "FPB-5-111",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6836,16 +6806,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-201",
      "matched": true,
      "row_tag": "FPB-5-201",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6853,16 +6823,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-202",
      "matched": true,
      "row_tag": "FPB-5-202",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6870,16 +6840,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-203",
      "matched": true,
      "row_tag": "FPB-5-203",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6887,16 +6857,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-204",
      "matched": true,
      "row_tag": "FPB-5-204",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6904,16 +6874,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-205",
      "matched": true,
      "row_tag": "FPB-5-205",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6921,16 +6891,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-206",
      "matched": true,
      "row_tag": "FPB-5-206",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6938,16 +6908,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-207",
      "matched": true,
      "row_tag": "FPB-5-207",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6955,16 +6925,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-208",
      "matched": true,
      "row_tag": "FPB-5-208",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6972,16 +6942,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-209",
      "matched": true,
      "row_tag": "FPB-5-209",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -6989,16 +6959,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-210",
      "matched": true,
      "row_tag": "FPB-5-210",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7006,16 +6976,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-211",
      "matched": true,
      "row_tag": "FPB-5-211",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#16",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7169,16 +7139,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-101",
      "matched": true,
      "row_tag": "FPB-61-101",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7186,16 +7156,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-102",
      "matched": true,
      "row_tag": "FPB-61-102",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7203,16 +7173,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-103",
      "matched": true,
      "row_tag": "FPB-61-103",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7220,16 +7190,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-104",
      "matched": true,
      "row_tag": "FPB-61-104",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7237,16 +7207,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-105",
      "matched": true,
      "row_tag": "FPB-61-105",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7254,16 +7224,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-106",
      "matched": true,
      "row_tag": "FPB-61-106",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7271,16 +7241,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-107",
      "matched": true,
      "row_tag": "FPB-61-107",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7288,16 +7258,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-108",
      "matched": true,
      "row_tag": "FPB-61-108",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7305,16 +7275,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-109",
      "matched": true,
      "row_tag": "FPB-61-109",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7322,16 +7292,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-201",
      "matched": true,
      "row_tag": "FPB-61-201",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7339,16 +7309,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-202",
      "matched": true,
      "row_tag": "FPB-61-202",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7356,16 +7326,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-203",
      "matched": true,
      "row_tag": "FPB-61-203",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7373,16 +7343,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-204",
      "matched": true,
      "row_tag": "FPB-61-204",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7390,16 +7360,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-205",
      "matched": true,
      "row_tag": "FPB-61-205",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7407,16 +7377,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-206",
      "matched": true,
      "row_tag": "FPB-61-206",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7424,16 +7394,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-207",
      "matched": true,
      "row_tag": "FPB-61-207",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7441,16 +7411,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-208",
      "matched": true,
      "row_tag": "FPB-61-208",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#35",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7462,16 +7432,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-62-1",
      "matched": true,
      "row_tag": "EF-62-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#36",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7496,16 +7466,21 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-62-2",
      "matched": true,
      "row_tag": "SF-62-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
+     "pipeline": 1,
      "located": 0,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#36",
        "key": 1,
        "pipeline": 0
+      },
+      {
+       "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#34",
+       "key": 0,
+       "pipeline": 1
       }
      ]
     },
@@ -7513,16 +7488,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-62-3",
      "matched": true,
      "row_tag": "SF-62-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#36",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7579,16 +7554,21 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-63-1",
      "matched": true,
      "row_tag": "SF-63-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
+     "pipeline": 1,
      "located": 0,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#37",
        "key": 1,
        "pipeline": 0
+      },
+      {
+       "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#36",
+       "key": 0,
+       "pipeline": 1
       }
      ]
     },
@@ -7596,16 +7576,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-63-2",
      "matched": true,
      "row_tag": "SF-63-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#37",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7613,16 +7593,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-63-3",
      "matched": true,
      "row_tag": "SF-63-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#37",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7634,16 +7614,21 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-64-1",
      "matched": true,
      "row_tag": "EF-64-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
+     "pipeline": 1,
      "located": 0,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#38",
        "key": 1,
        "pipeline": 0
+      },
+      {
+       "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#36",
+       "key": 0,
+       "pipeline": 1
       }
      ]
     },
@@ -7651,16 +7636,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-64-1",
      "matched": true,
      "row_tag": "SF-64-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#38",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7668,16 +7653,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-64-2",
      "matched": true,
      "row_tag": "SF-64-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#38",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7707,16 +7692,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11",
      "matched": true,
      "row_tag": "SF-P1-4 + SF-P1-5 + SF-P1-6 + SF-P1-7 + SF-P1-8 + SF-P1-9 + SF-P1-10 + SF-P1-11",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 8,
      "key": 8,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 8,
+     "located": 8,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#39",
        "key": 8,
-       "pipeline": 0
+       "pipeline": 8
       }
      ]
     },
@@ -7724,16 +7709,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-1",
      "matched": true,
      "row_tag": "SF-P1-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#39",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7741,16 +7726,21 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-2",
      "matched": true,
      "row_tag": "SF-P1-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
+     "pipeline": 1,
      "located": 0,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#39",
        "key": 1,
        "pipeline": 0
+      },
+      {
+       "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#12",
+       "key": 0,
+       "pipeline": 1
       }
      ]
     },
@@ -7758,16 +7748,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-3",
      "matched": true,
      "row_tag": "SF-P1-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#39",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7775,16 +7765,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P1-1 & 2",
      "matched": true,
      "row_tag": "EF-P1-1 + EF-P1-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 2,
      "key": 2,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 2,
+     "located": 2,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#39",
        "key": 2,
-       "pipeline": 0
+       "pipeline": 2
       }
      ]
     },
@@ -7792,16 +7782,21 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P1-9",
      "matched": true,
      "row_tag": "EF-P1-9",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
+     "pipeline": 1,
      "located": 0,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#39",
        "key": 1,
        "pipeline": 0
+      },
+      {
+       "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#12",
+       "key": 0,
+       "pipeline": 1
       }
      ]
     },
@@ -7884,16 +7879,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P2-1 & 2",
      "matched": true,
      "row_tag": "SF-P2-1 + SF-P2-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 2,
      "key": 2,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 2,
+     "located": 2,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#40",
        "key": 2,
-       "pipeline": 0
+       "pipeline": 2
       }
      ]
     },
@@ -7901,16 +7896,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P2-3",
      "matched": true,
      "row_tag": "SF-P2-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#40",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7918,16 +7913,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P2-1 & 2",
      "matched": true,
      "row_tag": "EF-P2-1 + EF-P2-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 2,
      "key": 2,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 2,
+     "located": 2,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#40",
        "key": 2,
-       "pipeline": 0
+       "pipeline": 2
       }
      ]
     },
@@ -7960,16 +7955,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P3-1 & 2",
      "matched": true,
      "row_tag": "SF-P3-1 + SF-P3-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 2,
      "key": 2,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 2,
+     "located": 2,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#41",
        "key": 2,
-       "pipeline": 0
+       "pipeline": 2
       }
      ]
     },
@@ -7977,16 +7972,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P3-3",
      "matched": true,
      "row_tag": "SF-P3-3",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#41",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -7994,16 +7989,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P3-1 & 2",
      "matched": true,
      "row_tag": "EF-P3-1 + EF-P3-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 2,
      "key": 2,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 2,
+     "located": 2,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#41",
        "key": 2,
-       "pipeline": 0
+       "pipeline": 2
       }
      ]
     },
@@ -8031,16 +8026,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-1",
      "matched": true,
      "row_tag": "EF-2-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#42",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -8068,16 +8063,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-2",
      "matched": true,
      "row_tag": "EF-2-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#43",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -8085,16 +8080,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-3-1",
      "matched": true,
      "row_tag": "EF-3-1",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#44",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },
@@ -8102,16 +8097,16 @@
      "unit": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-3-2",
      "matched": true,
      "row_tag": "EF-3-2",
-     "status": "AMBIGUOUS",
-     "installed_qty": null,
+     "status": "MATCH",
+     "installed_qty": 1,
      "key": 1,
-     "pipeline": 0,
-     "located": 0,
+     "pipeline": 1,
+     "located": 1,
      "sheets": [
       {
        "sheet": "26_CA_TransbayTower_Mechanical_64Sheets.pdf#44",
        "key": 1,
-       "pipeline": 0
+       "pipeline": 1
       }
      ]
     },

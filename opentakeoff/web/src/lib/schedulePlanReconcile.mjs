@@ -6,7 +6,7 @@
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
 import {
-  normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark, expandEquipMarkRange, expandMarkList,
+  normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark, expandEquipMarkRange, expandMarkList, expandEquipMarks, markLetters,
   familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey,
   HVAC_FAMILY_SPECS,
 } from "./corpusTakeoff.mjs";
@@ -655,6 +655,31 @@ const TYPE_MARK_FAMILIES = new Set(["GRD", "LOUVER", "LOUVERED_PENTHOUSE", "FIN_
 export function rowNamesOneUnitOnce(row, mark) {
   const name = String(mark || "").toUpperCase();
   if (!name || /[\/&,]|\bTHRU\b|\bTO\b/.test(name) || /(?:^|[-\s])X(?:[-\s]|$)/.test(name)) return false;
+  const TYPICAL = /\bTYP(?:ICAL|\.)?\b/i;
+  return !Object.entries(row?.cells || {}).some(([header, cell]) => TYPICAL.test(header) || TYPICAL.test(String(cell && typeof cell === "object" ? cell.text : cell || "")));
+}
+
+/**
+ * Whether a unit family's row names each of several units once (AS-106): its
+ * name is a range or list of one family's marks with the swept mark among
+ * them (26_CA's "SF-P1-4 THRU 11" and "EF-P1-1 & 2"; expandEquipMarks), it
+ * schedules one unit per mark (a QTY printed for the marks together, or none;
+ * scheduledQtyStatusFromRow), and no word says they are typical units nor
+ * does a placeholder stand for a level. Two families' marks name no one unit
+ * per mark: 040_IL's SS-1/SSCU-1, a split system's indoor and outdoor pair,
+ * stands for two systems (AS-103).
+ * @param {{ cells?: Record<string, { text?: string } | string> }} row
+ * @param {string} name the row's name
+ * @param {string} mark the mark swept
+ */
+export function rowNamesEachUnitOnce(row, name, mark) {
+  const marks = expandEquipMarks(String(name || "").toUpperCase());
+  const keys = marks.map((m) => markKey(m));
+  if (marks.length < 2 || new Set(keys).size !== marks.length || !keys.includes(markKey(mark))) return false;
+  if (new Set(marks.map((m) => markLetters(normalizeEquipMark(m)))).size !== 1) return false;
+  if (marks.some((m) => /(?:^|[-\s])X(?:[-\s]|$)/.test(m))) return false;
+  const status = scheduledQtyStatusFromRow(row, { marks: marks.length });
+  if (status.refused || status.qty !== 1) return false;
   const TYPICAL = /\bTYP(?:ICAL|\.)?\b/i;
   return !Object.entries(row?.cells || {}).some(([header, cell]) => TYPICAL.test(header) || TYPICAL.test(String(cell && typeof cell === "object" ? cell.text : cell || "")));
 }

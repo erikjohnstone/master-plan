@@ -1,0 +1,109 @@
+%PDF-1.5
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 5 0 R /Resources << /Font << /F1 3 0 R /F2 10 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 519 >>
+stream
+BT /F1 14 Tf 40 580 Td (LEVEL 2 - MECHANICAL HVAC ZONING PLAN) Tj ET
+1 w
+30 30 552 540 re S
+0.5 w
+150 400 m 198 400 l S
+198 400 m 198 424 l S
+198 424 m 150 424 l S
+150 424 m 150 400 l S
+150 400 m 198 424 l S
+150 424 m 198 400 l S
+BT /F1 10 Tf 155.26 388 Td (HP 12) Tj ET
+BT /F2 10 Tf 183.45 388 Td (-) Tj ET
+BT /F1 10 Tf 187.18 388 Td (1) Tj ET
+350 400 m 398 400 l S
+398 400 m 398 424 l S
+398 424 m 350 424 l S
+350 424 m 350 400 l S
+350 400 m 398 424 l S
+350 424 m 398 400 l S
+BT /F1 10 Tf 355.66 388 Td (HP 12-2) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 7 0 R /Resources << /Font << /F1 3 0 R /F2 10 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 445 >>
+stream
+BT /F1 14 Tf 40 580 Td (LEVEL 2 - MECHANICAL HVAC DUCT PLAN) Tj ET
+1 w
+30 30 552 540 re S
+0.5 w
+150 400 m 198 400 l S
+198 400 m 198 424 l S
+198 424 m 150 424 l S
+150 424 m 150 400 l S
+150 400 m 198 424 l S
+150 424 m 198 400 l S
+BT /F1 10 Tf 155.66 388 Td (HP 12-1) Tj ET
+350 400 m 398 400 l S
+398 400 m 398 424 l S
+398 424 m 350 424 l S
+350 424 m 350 400 l S
+350 400 m 398 424 l S
+350 424 m 398 400 l S
+BT /F1 10 Tf 355.66 388 Td (HP 12-2) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 9 0 R /Resources << /Font << /F1 3 0 R /F2 10 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 589 >>
+stream
+BT /F1 14 Tf 40 580 Td (HEAT PUMP SCHEDULE) Tj ET
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 150 540 Td (QTY) Tj ET
+BT /F1 9 Tf 200 540 Td (TONS) Tj ET
+BT /F1 9 Tf 280 540 Td (SEER) Tj ET
+BT /F1 9 Tf 360 540 Td (SERVICE) Tj ET
+BT /F1 9 Tf 50 515 Td (HP 12-1) Tj ET
+BT /F1 9 Tf 150 515 Td (1) Tj ET
+BT /F1 9 Tf 200 515 Td (2) Tj ET
+BT /F1 9 Tf 280 515 Td (14) Tj ET
+BT /F1 9 Tf 360 515 Td (DIRECTOR) Tj ET
+BT /F1 9 Tf 50 490 Td (HP 12-2) Tj ET
+BT /F1 9 Tf 150 490 Td (1) Tj ET
+BT /F1 9 Tf 200 490 Td (3) Tj ET
+BT /F1 9 Tf 280 490 Td (14) Tj ET
+BT /F1 9 Tf 360 490 Td (OPEN OFFICE) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique >>
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000000334 00000 n 
+0000000904 00000 n 
+0000001041 00000 n 
+0000001537 00000 n 
+0000001674 00000 n 
+0000002314 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+2393
+%%EOF

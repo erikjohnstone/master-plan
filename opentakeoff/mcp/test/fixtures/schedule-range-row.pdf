@@ -1,0 +1,97 @@
+%PDF-1.5
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 708 >>
+stream
+BT /F1 14 Tf 40 580 Td (MECHANICAL PLAN) Tj ET
+1 w
+30 30 552 552 re S
+0.5 w
+126 400 m 138 400 l S
+138 400 m 144 410 l S
+144 410 m 138 420 l S
+138 420 m 126 420 l S
+126 420 m 120 410 l S
+120 410 m 126 400 l S
+BT /F1 10 Tf 123.6 384 Td (FPB) Tj ET
+BT /F1 10 Tf 120.8 373.5 Td (P1-1) Tj ET
+306 400 m 318 400 l S
+318 400 m 324 410 l S
+324 410 m 318 420 l S
+318 420 m 306 420 l S
+306 420 m 300 410 l S
+300 410 m 306 400 l S
+BT /F1 10 Tf 303.6 384 Td (FPB) Tj ET
+BT /F1 10 Tf 300.8 373.5 Td (P1-2) Tj ET
+306 200 m 318 200 l S
+318 200 m 324 210 l S
+324 210 m 318 220 l S
+318 220 m 306 220 l S
+306 220 m 300 210 l S
+300 210 m 306 200 l S
+BT /F1 10 Tf 303.6 184 Td (FPB) Tj ET
+BT /F1 10 Tf 300.8 173.5 Td (P1-3) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 873 >>
+stream
+BT /F1 14 Tf 40 580 Td (FAN POWERED TERMINAL UNIT SCHEDULE) Tj ET
+0.5 w
+44 555 m 470 555 l S
+44 530 m 470 530 l S
+44 505 m 470 505 l S
+44 480 m 470 480 l S
+44 455 m 470 455 l S
+44 455 m 44 555 l S
+190 455 m 190 555 l S
+270 455 m 270 555 l S
+350 455 m 350 555 l S
+470 455 m 470 555 l S
+BT /F1 9 Tf 50 540 Td (MARK) Tj ET
+BT /F1 9 Tf 200 540 Td (HP) Tj ET
+BT /F1 9 Tf 280 540 Td (QTY) Tj ET
+BT /F1 9 Tf 360 540 Td (SERVICE) Tj ET
+BT /F1 9 Tf 50 515 Td (FPB-P1-1 THRU 3) Tj ET
+BT /F1 9 Tf 200 515 Td (1/4) Tj ET
+BT /F1 9 Tf 280 515 Td (3) Tj ET
+BT /F1 9 Tf 360 515 Td (OFFICES) Tj ET
+BT /F1 9 Tf 50 490 Td (FPB-P2-1) Tj ET
+BT /F1 9 Tf 200 490 Td (1/3) Tj ET
+BT /F1 9 Tf 280 490 Td (1) Tj ET
+BT /F1 9 Tf 360 490 Td (LOBBY) Tj ET
+BT /F1 9 Tf 50 465 Td (FPB-P2-2) Tj ET
+BT /F1 9 Tf 200 465 Td (1/3) Tj ET
+BT /F1 9 Tf 280 465 Td (1) Tj ET
+BT /F1 9 Tf 360 465 Td (CONFERENCE) Tj ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000317 00000 n 
+0000001076 00000 n 
+0000001202 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+2126
+%%EOF

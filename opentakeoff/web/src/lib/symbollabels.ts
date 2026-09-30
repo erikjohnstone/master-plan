@@ -108,6 +108,14 @@ export interface LabelPlacementOptions {
    * matches held the tags `1-VAV-4/10/12/16` that named the real
    * thermostats). Omitted, or `true`, means eligible — today's behavior. */
   eligible?: boolean[];
+  /** Exact-tag verification only (with `restrictToPreferredLabel`): source
+   * tokens the caller's own tag reader has already established as occurrences
+   * of the preferred label where `labelTokens` reads none, such as a mark
+   * printed with a word space ("HP 12-1") or stacked over its number ("FPB"
+   * over "3-11") without the repeated convention stacked tokens need. Each
+   * goes through the identical adjacency/leader gates; one overlapping a
+   * token `labelTokens` does read is ignored, so no reading is replaced. */
+  exactTokens?: LabelSpan[];
 }
 
 const canonicalLabel = (label: string): string => label.trim().toUpperCase().replace(/[–—−]/g, "-").replace(/\s+/g, "");
@@ -193,7 +201,7 @@ const EMBEDDED_INSTRUMENT_FAMILIES = new Set([
  * sheet's instrument convention before they enter label assignment. */
 const REPEATED_BARE_INSTRUMENT_FAMILIES = new Set(["AI", "AO", "CS", "DI", "DO", "SS", "T"]);
 
-const isStackedInstrumentFamily = (family?: string): boolean =>
+export const isStackedInstrumentFamily = (family?: string): boolean =>
   !!family && EMBEDDED_INSTRUMENT_FAMILIES.has(canonicalLabel(family));
 
 const isEmbeddedLabelToken = (token: LabelSpan): boolean =>
@@ -216,7 +224,7 @@ const placementInsideEmbeddedToken = (token: LabelSpan, x: number, y: number): b
       && y >= token.y0 - pad && y <= token.y1 + pad;
   })();
 
-const isEquipmentInstanceLabel = (label: string): boolean => {
+export const isEquipmentInstanceLabel = (label: string): boolean => {
   const tag = canonicalLabel(label);
   return !isBasControlLabel(tag) && (isEquipTag(tag) || isFloorPrefixedEquipmentTag(tag))
     && (tag.split("-").length >= 3 || canonicalLabelFamily(tag) !== tag);
@@ -993,9 +1001,15 @@ export function labelPlacements(
 ): (PlacementLabel | null)[] {
   const preferred = options.preferredLabel ? canonicalLabel(options.preferredLabel) : null;
   const allTokens = labelTokens(spans);
-  const tokens = options.restrictToPreferredLabel && preferred
+  const read = options.restrictToPreferredLabel && preferred
     ? allTokens.filter((token) => canonicalLabel(token.str) === preferred)
     : allTokens;
+  const overlaps = (a: LabelSpan, b: LabelSpan): boolean =>
+    Math.min(a.x1, b.x1) > Math.max(a.x0, b.x0) && Math.min(a.y1, b.y1) > Math.max(a.y0, b.y0);
+  const tokens = options.restrictToPreferredLabel && preferred && options.exactTokens?.length
+    ? [...read, ...options.exactTokens.filter((token) =>
+      canonicalLabel(token.str) === preferred && !read.some((known) => overlaps(known, token)))]
+    : read;
   if (!tokens.length || !placements.length) return placements.map(() => null);
 
   const edges: LabelEdge[] = [];

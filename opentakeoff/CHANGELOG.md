@@ -1,5 +1,32 @@
 # Changelog
 
+- **Schedule ↔ plan reconcile: a unit found by its tag is verified against
+  its drawn body far more often, and counts on its own view.** Measured on
+  the twelve keyed dev documents (4d16d7e → this commit):
+  - Drawn units found: 278 → 407 of 427. Unit counts exact: 67.1% → 95.0%
+    (under-counts 151 → 22, over-counts 1 → 1). Placements recall 54.6% →
+    84.6%, precision 86.6% → 91.1%. Drawn tags linked to their row: 78.9%
+    → 80.9%.
+  - A mark printed with a word space ("HP 12-1") or stacked over its
+    number ("FPB" over "3-11", "SF" over "P1-4") is checked against its
+    leader and its body as a single-run tag is, where the row names one
+    unit per mark. A shorthand, a type mark's label and a mark printed
+    without its hyphen never are.
+  - A row naming several units by a range or list of one family's marks
+    ("SF-P1-4 THRU 11", "EF-P1-1 & 2") names each unit once.
+  - A mark a row prints with a word space is also found where a plan
+    letters it in runs ("HP 12", "-", "1"), and links to its row there;
+    the unit still counts on the view that reads its mark whole.
+  - A unit drawn on several sheets counts on its own trade's sheet (a
+    plumbing plan's gas piping to a rooftop unit is the plumbing trade's
+    reference to it), and a view where its mark is lettered at a
+    thermostat ranks after its other views.
+  - Nothing a schedule is read from changes: table extraction and sheet
+    roles are untouched.
+  (`web/src/lib/taggedVectorGrounding.ts`, `symbollabels.ts`,
+  `symbolsweep.ts`, `schedulePlanReconcile.mjs`; `mcp/src/session.ts`;
+  `mcp/scripts/reconcile-eval.mjs`; ASSEMBLIES_BUG_CATALOGUE AS-102 to
+  AS-107; `opentakeoff-corpus/reports/reconcile/`.)
 - **Schedule ↔ plan reconcile: a scheduled unit is found where it is drawn,
   and a drawn tag traced to its row, far more often, in both directions.**
   Measured on twelve dev documents keyed from their drawings (new reconcile

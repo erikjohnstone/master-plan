@@ -65,6 +65,8 @@ const OUT_GROUPS = join(FIXTURES, "schedule-row-reading-groups.pdf");
 const OUT_BARE = join(FIXTURES, "schedule-bare-prefix.pdf");
 const OUT_LANDMARKS = join(FIXTURES, "schedule-bare-landmarks.pdf");
 const OUT_PLANVIEW = join(FIXTURES, "schedule-plan-view.pdf");
+const OUT_RANGE = join(FIXTURES, "schedule-range-row.pdf");
+const OUT_SPACED = join(FIXTURES, "schedule-spaced-mark.pdf");
 
 const fmt = (v) => (Math.round(v * 100) / 100).toString();
 function place(segs, [px, py]) {
@@ -120,19 +122,22 @@ const PAGES = [
   ],
 ];
 
-function writePdf(out, pages) {
+function writePdf(out, pages, { secondFont = false } = {}) {
   const objects = [
     `<< /Type /Catalog /Pages 2 0 R >>`,
     `<< /Type /Pages /Kids [${pages.map((_, i) => `${4 + i * 2} 0 R`).join(" ")}] /Count ${pages.length} >>`,
     `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>`,
   ];
+  // a second face, last, for a fixture whose runs switch fonts (F2)
+  const f2 = secondFont ? ` /F2 ${4 + pages.length * 2} 0 R` : "";
   for (let i = 0; i < pages.length; i++) {
     const stream = pages[i].join("\n");
     objects.push(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents ${5 + i * 2} 0 R /Resources << /Font << /F1 3 0 R >> >> >>`,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents ${5 + i * 2} 0 R /Resources << /Font << /F1 3 0 R${f2} >> >> >>`,
       `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
     );
   }
+  if (secondFont) objects.push(`<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique >>`);
   let pdf = "%PDF-1.5\n";
   const offsets = [];
   objects.forEach((body, i) => {
@@ -270,3 +275,71 @@ writePdf(OUT_GROUPS, GROUP_PAGES);
 writePdf(OUT_BARE, BARE_PAGES);
 writePdf(OUT_LANDMARKS, LANDMARK_PAGES);
 writePdf(OUT_PLANVIEW, PLANVIEW_PAGES);
+
+// One row naming three terminal units by a range (AS-106): 26_CA's FAN
+// POWERED TERMINAL UNIT SCHEDULE, a unit family's table its title does not
+// already mark one unit per mark, whose row "FPB-P1-1 THRU 3" schedules QTY
+// 3, one per mark; each box tagged "FPB" over "P1-1", "P1-2", "P1-3" under its
+// own symbol, as 26_CA tags SF-P1-4 THRU 11 (a lettered qualifier line the
+// labeler reads no stacked token for).
+const RANGE_PAGES = [
+  [
+    title("MECHANICAL PLAN"),
+    "1 w",
+    "30 30 552 552 re S",
+    "0.5 w",
+    ...place(HEXAGON, [120, 400]), ...stacked(["FPB", "P1-1"], [132, 400]),
+    ...place(HEXAGON, [300, 400]), ...stacked(["FPB", "P1-2"], [312, 400]),
+    ...place(HEXAGON, [300, 200]), ...stacked(["FPB", "P1-3"], [312, 200]),
+  ],
+  [
+    title("FAN POWERED TERMINAL UNIT SCHEDULE"),
+    // ruled, as 26_CA's schedule is: its range row reads as one cell
+    "0.5 w",
+    ...[555, 530, 505, 480, 455].map((y) => `44 ${y} m 470 ${y} l S`),
+    ...[44, 190, 270, 350, 470].map((x) => `${x} 455 m ${x} 555 l S`),
+    cell("MARK", 50, 540), cell("HP", 200, 540), cell("QTY", 280, 540), cell("SERVICE", 360, 540),
+    cell("FPB-P1-1 THRU 3", 50, 515), cell("1/4", 200, 515), cell("3", 280, 515), cell("OFFICES", 360, 515),
+    cell("FPB-P2-1", 50, 490), cell("1/3", 200, 490), cell("1", 280, 490), cell("LOBBY", 360, 490),
+    cell("FPB-P2-2", 50, 465), cell("1/3", 200, 465), cell("1", 280, 465), cell("CONFERENCE", 360, 465),
+  ],
+];
+writePdf(OUT_RANGE, RANGE_PAGES);
+
+// A mark its row prints with a word space, lettered on one plan in runs
+// (AS-107): 011_IL's HEAT PUMP SCHEDULE prints "HP 12-1"; its duct plan
+// letters it as one run, and its zoning plan, earlier in the set, as "HP 12",
+// "-" and "1", which the sweep's key (HP12-1) never joins. Both plans draw
+// the same two heat pumps, crossed boxes, each tag centred under its unit.
+const HEAT_PUMP = [[0, 0, 48, 0], [48, 0, 48, 24], [48, 24, 0, 24], [0, 24, 0, 0], [0, 0, 48, 24], [0, 24, 48, 0]];
+const runsUnder = (runs, [px, py]) => {
+  // Helvetica 10 pt widths; the runs sit 0.4 pt apart on one baseline, each
+  // its own text object and the face switching between them, so the text
+  // layer keeps them apart as 011_IL's does
+  const total = runs.reduce((sum, [, width]) => sum + width, 0) + 0.4 * (runs.length - 1);
+  let x = px + 24 - total / 2;
+  return runs.map(([text, width], i) => {
+    const op = `BT /F${i % 2 ? 2 : 1} 10 Tf ${fmt(x)} ${fmt(py - 12)} Td (${text}) Tj ET`;
+    x += width + 0.4;
+    return op;
+  });
+};
+const heatPumpPlan = (planTitle, hp1Runs) => [
+  title(planTitle),
+  "1 w",
+  "30 30 552 540 re S",
+  "0.5 w",
+  ...place(HEAT_PUMP, [150, 400]), ...runsUnder(hp1Runs, [150, 400]),
+  ...place(HEAT_PUMP, [350, 400]), ...runsUnder([["HP 12-2", 36.68]], [350, 400]),
+];
+const SPACED_PAGES = [
+  heatPumpPlan("LEVEL 2 - MECHANICAL HVAC ZONING PLAN", [["HP 12", 27.79], ["-", 3.33], ["1", 5.56]]),
+  heatPumpPlan("LEVEL 2 - MECHANICAL HVAC DUCT PLAN", [["HP 12-1", 36.68]]),
+  [
+    title("HEAT PUMP SCHEDULE"),
+    cell("MARK", 50, 540), cell("QTY", 150, 540), cell("TONS", 200, 540), cell("SEER", 280, 540), cell("SERVICE", 360, 540),
+    cell("HP 12-1", 50, 515), cell("1", 150, 515), cell("2", 200, 515), cell("14", 280, 515), cell("DIRECTOR", 360, 515),
+    cell("HP 12-2", 50, 490), cell("1", 150, 490), cell("3", 200, 490), cell("14", 280, 490), cell("OPEN OFFICE", 360, 490),
+  ],
+];
+writePdf(OUT_SPACED, SPACED_PAGES, { secondFont: true });

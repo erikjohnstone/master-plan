@@ -23,6 +23,7 @@ import {
   planOtherCites,
   isUnitFamilyTable,
   markZeroRespellings,
+  rowNamesEachUnitOnce,
   rowNamesOneUnitOnce,
   rowUnitMarks,
   rowReconcileUnits,
@@ -2495,6 +2496,24 @@ test("a unit family's row names one unit once: never a typical row, a placeholde
   assert.equal(rowNamesOneUnitOnce(row({ MARK: "EF-1 & 2" }), "EF-1 & 2"), false);
   // an X that is the mark's letters, not a placeholder
   assert.equal(rowNamesOneUnitOnce(row({ MARK: "HX-1" }), "HX-1"), true);
+});
+
+test("a unit family's row naming a range or list of one family's marks names each unit once (AS-106)", () => {
+  const row = (cells: Record<string, string>) => ({ cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text }])) });
+  // 26_CA's fans: a range with its QTY printed for the marks together, a pair
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "SF-P1-4 THRU 11", QTY: "8" }), "SF-P1-4 THRU 11", "SF-P1-4"), true);
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "SF-P1-4 THRU 11", QTY: "8" }), "SF-P1-4 THRU 11", "SFP1-11"), true);
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "EF-P1-1 & 2" }), "EF-P1-1 & 2", "EF-P1-2"), true);
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "EF-1, 2, 3" }), "EF-1, 2, 3", "EF-3"), true);
+  // a mark the row does not name, a quantity other than one per mark, typical units
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "SF-P1-4 THRU 11" }), "SF-P1-4 THRU 11", "SF-P1-12"), false);
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "EF-1 THRU 4", QTY: "8" }), "EF-1 THRU 4", "EF-2"), false);
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "EF-1 THRU 4", REMARKS: "TYPICAL" }), "EF-1 THRU 4", "EF-2"), false);
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "CAV-X-1 THRU 3" }), "CAV-X-1 THRU 3", "CAV-X-2"), false);
+  // one mark (AS-96's rule), two families' marks: 040_IL's split system stands for two systems
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "EF-1" }), "EF-1", "EF-1"), false);
+  assert.equal(rowNamesEachUnitOnce(row({ SYMBOL: "SS-1/SSCU-1" }), "SS-1/SSCU-1", "SS-1"), false);
+  assert.equal(rowNamesEachUnitOnce(row({ MARK: "AHU-1, HP-1" }), "AHU-1, HP-1", "AHU-1"), false);
 });
 
 // AS-98: a whole-set reconcile row naming several units reconciles each.

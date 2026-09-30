@@ -3343,26 +3343,34 @@ test("the reconcile's reasons count a unit's own tags, never a bare prefix anoth
 
   const pumps = await call(client, "reconcile_schedule_plan", { family: "PUMP" });
   assert.equal(pumps.isError, false);
-  // CP-1's one exact tag owns no marker geometry: tag text, cited and counted
-  // as observed, installed quantity unknown (AMBIGUOUS, the reconcile's
-  // exact_plan_tag contract), never a unit drawn nowhere
+  // CP-1's "CP" over "1" is its whole mark, stacked under the pump it names:
+  // verified against that symbol (AS-102), one pump installed and cited
+  // there, never a unit drawn nowhere
   assert.deepEqual(pumps.data.rows.map(row), [
     { tag: "BP-1", status: "MATCH", installed_qty: 1 },
     { tag: "SP-1", status: "SCHEDULE_ONLY", installed_qty: null },
-    { tag: "CP-1", status: "AMBIGUOUS", installed_qty: null },
+    { tag: "CP-1", status: "MATCH", installed_qty: 1 },
   ]);
   assert.match(pumps.data.rows[1].reason, /cannot be geometrically anchored — its tag is not drawn on any plan sheet/);
-  assert.equal(pumps.data.rows[2].tagged_plan_qty, 1);
-  assert.equal(pumps.data.rows[2].plan_tag_cites.length, 1);
-  assert.match(pumps.data.rows[2].reason, /^1 exact plan-tag observation was not verified against matching symbol geometry/);
+  assert.deepEqual(pumps.data.rows[2].plan_cites.map((c: any) => c.bbox), [{ x0: 600, y0: 584, x1: 648, y1: 624 }]);
 
-  // B-1's stacked "B" over "1" alone: the bare "B" callouts are no B-1
+  // B-1's stacked "B" over "1" alone, verified against the boiler over it:
+  // the bare "B" callouts are no B-1
   const boilers = await call(client, "reconcile_schedule_plan", { family: "BOILER" });
   assert.equal(boilers.isError, false);
-  assert.equal(boilers.data.rows.length, 1);
-  assert.equal(boilers.data.rows[0].status, "AMBIGUOUS");
-  assert.equal(boilers.data.rows[0].tagged_plan_qty, 1);
-  assert.equal(boilers.data.rows[0].plan_tag_cites.length, 1);
+  assert.deepEqual(boilers.data.rows.map(row), [{ tag: "B-1", status: "MATCH", installed_qty: 1 }]);
+  assert.deepEqual(boilers.data.rows[0].plan_cites.map((c: any) => c.bbox), [{ x0: 240, y0: 376, x1: 288, y1: 424 }]);
+
+  // the air device type S keeps its own two tags, never SP-1's; a type
+  // mark's tags stay tag text: cited and counted as observed, installed
+  // quantity unknown (AMBIGUOUS, the reconcile's exact_plan_tag contract)
+  const devices = await call(client, "reconcile_schedule_plan", { family: "GRD" });
+  assert.equal(devices.isError, false);
+  const s = devices.data.rows.find((r: any) => r.tag === "S");
+  assert.deepEqual(row(s), { tag: "S", status: "AMBIGUOUS", installed_qty: null });
+  assert.equal(s.tagged_plan_qty, 2);
+  assert.equal(s.plan_tag_cites.length, 2);
+  assert.match(s.reason, /^2 exact plan-tag observations were not verified against matching symbol geometry/);
 
   // and on the AS-89 set: DAC-1's one-row table no longer lets the bare "D"
   // (DCU-1, DCU-2 share it) stand as a second DAC-1
@@ -3624,4 +3632,41 @@ test("reconcile_schedule_plan's row schema states a QTY read per mark of a row n
   assert.deepEqual([...new Set(rows.map((r) => r.scheduled_qty_basis))].sort(), ["printed_quantity_for_several_marks", "printed_schedule_quantity_per_mark"]);
   const parsed = reconcileSchedulePlanOutput.rows.safeParse(rows);
   assert.equal(parsed.success, true, JSON.stringify(parsed.error?.issues?.slice(0, 3)));
+});
+
+// A unit family's row naming several units by a range (AS-106,
+// test/fixtures/schedule-range-row.pdf): a FAN POWERED TERMINAL UNIT SCHEDULE
+// prints "FPB-P1-1 THRU 3", QTY 3, one per mark, and each box is tagged "FPB"
+// over "P1-1" under its own symbol, as 26_CA tags SF-P1-4 THRU 11: a lettered
+// qualifier line the labeler reads no stacked token for. The row names each
+// unit once, so the mark's own occurrence is its token (AS-102) and verifies
+// against the box it is lettered under.
+const RANGE = fileURLToPath(new URL("./fixtures/schedule-range-row.pdf", import.meta.url));
+test("a row naming a range of one family's marks verifies each unit's own tag (AS-106)", async () => {
+  // the reconcile's lane: each exact tag verified against its own body
+  const session = new Session();
+  await session.loadPlan(RANGE);
+  const fpb = await session.sweepScheduleRow("FPB-P1-1", { commit: false, verifyTaggedGeometry: true });
+  assert.equal(fpb.found, 1);
+  assert.equal(fpb.anchor?.grounding_basis, "tag_attached_vector");
+  assert.equal(fpb.anchor?.occurrences, 1);
+});
+
+// A mark its row prints with a word space, lettered on an earlier plan as
+// runs (AS-107): 011_IL's zoning plan letters HP 12-1 "HP 12", "-", "1", which
+// the sweep's key (HP12-1) never joins; its duct plan letters it as one run.
+const SPACED = fileURLToPath(new URL("./fixtures/schedule-spaced-mark.pdf", import.meta.url));
+test("a mark printed with a word space and lettered in runs is its row's view, counted on the view read under the key (AS-107)", async () => {
+  const session = new Session();
+  await session.loadPlan(SPACED);
+  const hp = await session.sweepScheduleRow("HP 12-1", { commit: false, verifyTaggedGeometry: true });
+  assert.equal(hp.found, 1);
+  const [zoning, duct] = hp.sheets;
+  assert.match(duct.sheet, /#2$/);
+  assert.equal(duct.found, 1);
+  // the zoning plan's runs are read and verified, and kept as a repeat view
+  assert.equal(zoning.found, 0);
+  const repeats = (zoning as { redundant_view?: { kept_sheet: string }[] }).redundant_view;
+  assert.equal(repeats?.length, 1);
+  assert.equal(repeats?.[0].kept_sheet, duct.sheet);
 });

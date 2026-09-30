@@ -139,3 +139,188 @@ test("repeated exact tags each own one local vector body", () => {
   assert.equal(result.text_only.length, 0);
   assert.deepEqual(result.matches.map((match) => match.label.token_bbox), occurrences.map((entry) => entry.bbox));
 });
+
+// AS-102: the sweep's tag reader reads a mark the shared labeler offers no
+// token for, and the occurrence itself is then the source token.
+test("a mark printed with a word space follows its literal leader (AS-102)", () => {
+  // 011_IL prints each heat pump's mark in a hexagon as "HP 12-1", the
+  // leader's arrow on the unit; the labeler reads no token with a space.
+  const tag = span("HP 12-1", 96, 196, 56, 17);
+  const occurrence = { cx: 124, cy: 204.5, h: 17, bbox: [96, 196, 152, 213] as [number, number, number, number] };
+  const result = groundExactTagsToVectorGeometry({
+    tag: "HP 12-1",
+    occurrences: [occurrence],
+    spans: [tag],
+    segs: [...square(195, 195, 16), 156, 205, 195, 203],
+    lum: Uint8Array.from([219, 219, 219, 219, 0]),
+    width: 500,
+    height: 400,
+    occurrenceTokens: true,
+  });
+  assert.equal(result.matches.length, 1);
+  assert.equal(result.text_only.length, 0);
+  assert.equal(result.matches[0].label.via, "leader");
+  assert.deepEqual(result.matches[0].label.token_bbox, occurrence.bbox);
+  assert.deepEqual(result.matches[0].geometry_bbox, [195, 195, 211, 211]);
+});
+
+test("a family stacked over its number follows its literal leader (AS-102)", () => {
+  // 26_CA prints each fan-powered box's mark as FPB over 3-11; one such
+  // block is no repeated stacked convention, and the labeler reads none.
+  const top = span("FPB", 100, 180, 30, 17);
+  const bottom = span("3-11", 98, 200, 34, 17);
+  const occurrence = { cx: 115, cy: 198.5, h: 37, bbox: [98, 180, 132, 217] as [number, number, number, number] };
+  const result = groundExactTagsToVectorGeometry({
+    tag: "FPB-3-11",
+    occurrences: [occurrence],
+    spans: [top, bottom],
+    // The body's ink clears the equipment floor of twice the block's height.
+    segs: [...square(215, 184, 28), 136, 198, 215, 197],
+    lum: Uint8Array.from([219, 219, 219, 219, 0]),
+    width: 500,
+    height: 400,
+    occurrenceTokens: true,
+  });
+  assert.equal(result.matches.length, 1);
+  assert.equal(result.matches[0].label.via, "leader");
+  assert.deepEqual(result.matches[0].label.token_bbox, occurrence.bbox);
+  assert.deepEqual(result.matches[0].geometry_bbox, [215, 184, 243, 212]);
+});
+
+test("a spaced mark with no distinctive body stays text-only (AS-102)", () => {
+  const tag = span("HP 12-1", 80, 90, 56, 17);
+  const occurrence = { cx: 108, cy: 98.5, h: 17, bbox: [80, 90, 136, 107] as [number, number, number, number] };
+  const result = groundExactTagsToVectorGeometry({
+    tag: "HP 12-1",
+    occurrences: [occurrence],
+    spans: [tag],
+    segs: [140, 99, 150, 99, 150, 99, 160, 105, 160, 105, 170, 105],
+    width: 300,
+    height: 200,
+    occurrenceTokens: true,
+  });
+  assert.equal(result.matches.length, 0);
+  assert.equal(result.text_only.length, 1);
+});
+
+test("a spaced mark takes the labeler's own instance reading, its space read as the separator (AS-102)", () => {
+  // A body 58 px from the text: inside an equipment instance's reach, past a
+  // type mark's. "AHU 1" reads as AHU-1, an instance; "CD 1" as CD-1, a
+  // repeatable type mark, and gains no reach for its space.
+  const run = (mark: string) => groundExactTagsToVectorGeometry({
+    tag: mark,
+    occurrences: [{ cx: 115, cy: 108.5, h: 17, bbox: [100, 100, 130, 117] }],
+    spans: [span(mark, 100, 100, 30, 17)],
+    segs: square(165, 100, 16),
+    width: 400,
+    height: 300,
+    occurrenceTokens: true,
+  });
+  assert.equal(run("AHU 1").matches.length, 1);
+  assert.equal(run("CD 1").matches.length, 0);
+});
+
+test("a shorthand the tag reader accepted is never an exact token (AS-102)", () => {
+  // federal-mech's abbreviation list prints "AHU" (AIR HANDLING UNIT); the
+  // sweep's reader may take it for AHU-1 on a sheet drawing AHU-1 no other
+  // way, but exact-tag verification verifies only the whole printed mark.
+  const tag = span("AHU", 96, 196, 30, 17);
+  const occurrence = { cx: 111, cy: 204.5, h: 17, bbox: [96, 196, 126, 213] as [number, number, number, number] };
+  const result = groundExactTagsToVectorGeometry({
+    tag: "AHU-1",
+    occurrences: [occurrence],
+    spans: [tag],
+    segs: [...square(195, 195, 16), 130, 205, 195, 203],
+    lum: Uint8Array.from([219, 219, 219, 219, 0]),
+    width: 500,
+    height: 400,
+    occurrenceTokens: true,
+  });
+  assert.equal(result.matches.length, 0);
+  assert.equal(result.text_only.length, 1);
+});
+
+test("a row naming no one unit per mark keeps the labeler's reading alone (AS-102)", () => {
+  // 016_NY's FT-A (a fin tube type) also labels four thermostat control
+  // lines: without occurrenceTokens an unread mark stays text, as before.
+  const tag = span("HP 12-1", 96, 196, 56, 17);
+  const occurrence = { cx: 124, cy: 204.5, h: 17, bbox: [96, 196, 152, 213] as [number, number, number, number] };
+  const result = groundExactTagsToVectorGeometry({
+    tag: "HP 12-1",
+    occurrences: [occurrence],
+    spans: [tag],
+    segs: [...square(195, 195, 16), 156, 205, 195, 203],
+    lum: Uint8Array.from([219, 219, 219, 219, 0]),
+    width: 500,
+    height: 400,
+  });
+  assert.equal(result.matches.length, 0);
+  assert.equal(result.text_only.length, 1);
+});
+
+test("a mark printed without its hyphen is never an exact token (AS-102)", () => {
+  // federal-mech's column grid bubble "B2" is read by the sweep as boiler
+  // B-2 (a mark read however its separator is printed); verifying it would
+  // count the boiler at a grid line.
+  const tag = span("B2", 96, 196, 20, 17);
+  const occurrence = { cx: 106, cy: 204.5, h: 17, bbox: [96, 196, 116, 213] as [number, number, number, number] };
+  const result = groundExactTagsToVectorGeometry({
+    tag: "B-2",
+    occurrences: [occurrence],
+    spans: [tag],
+    segs: [...square(125, 195, 16)],
+    width: 500,
+    height: 400,
+    occurrenceTokens: true,
+  });
+  assert.equal(result.matches.length, 0);
+  assert.equal(result.text_only.length, 1);
+});
+
+// A thermostat's circled T lettered with the unit it serves (004_MO's p36
+// floor plans: "RTU-3" beside a T, the rooftop unit itself on the roof plan).
+const ring = (cx: number, cy: number, r: number): number[] => Array.from({ length: 16 }, (_, i) => {
+  const a = (i / 16) * 2 * Math.PI, b = ((i + 1) / 16) * 2 * Math.PI;
+  return [cx + r * Math.cos(a), cy + r * Math.sin(a), cx + r * Math.cos(b), cy + r * Math.sin(b)];
+}).flat();
+const sensorLabelCase = (extra: { spans?: ReturnType<typeof span>[]; segs?: number[] }) => {
+  const tag = span("RTU-3", 96, 196, 40, 17);
+  const occurrence = { cx: 116, cy: 204.5, h: 17, bbox: [96, 196, 136, 213] as [number, number, number, number] };
+  const body = square(195, 195, 16);
+  const leader = [140, 205, 195, 203];
+  const segs = [...body, ...leader, ...(extra.segs ?? [])];
+  return groundExactTagsToVectorGeometry({
+    tag: "RTU-3",
+    occurrences: [occurrence],
+    spans: [tag, ...(extra.spans ?? [])],
+    segs,
+    lum: Uint8Array.from([219, 219, 219, 219, 0, ...Array.from({ length: (extra.segs?.length ?? 0) / 4 }, () => 0)]),
+    width: 500,
+    height: 400,
+    occurrenceTokens: true,
+  });
+};
+
+test("a mark touching a thermostat's ring still verifies, flagged as that sensor's label (AS-105)", () => {
+  const result = sensorLabelCase({ spans: [span("T", 80, 208, 8, 17)], segs: ring(84, 216.5, 11) });
+  assert.equal(result.matches.length, 1);
+  assert.deepEqual(result.matches[0].label.token_bbox, [96, 196, 136, 213]);
+  assert.equal(result.matches[0].sensor_label, true);
+});
+
+test("only a room sensor's ring the mark touches flags it (AS-105)", () => {
+  // no sensor beside the mark, a bare T, a thermostat half a letter height
+  // off (040_IL's unit heaters, tagged beside their own thermostats), one out
+  // of reach, a keyed note's ringed number
+  for (const extra of [
+    {},
+    { spans: [span("T", 80, 208, 8, 17)] },
+    { spans: [span("T", 70, 208, 8, 17)], segs: ring(74, 216.5, 11) },
+    { spans: [span("T", 20, 262, 8, 17)], segs: ring(24, 270.5, 11) },
+    { spans: [span("3", 80, 208, 8, 17)], segs: ring(84, 216.5, 11) },
+  ]) {
+    const result = sensorLabelCase(extra);
+    assert.equal(result.matches.length, 1, JSON.stringify(extra.spans ?? []));
+    assert.equal(result.matches[0].sensor_label, undefined, JSON.stringify(extra.spans ?? []));
+  }
+});

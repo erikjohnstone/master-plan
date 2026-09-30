@@ -3678,6 +3678,12 @@ export interface RoomSweepInstance<Id> {
   rooms: RoomCandidate[];
   sheetWidthPx: number;
   sheetHeightPx: number;
+  /** The sheet's place in the set: the earlier sheet keeps a redraw that
+   * trade and count leave tied (AS-104). */
+  ord?: number;
+  /** Read only under the row's printed spelling (AS-107): a sheet whose
+   * instances are all so read keeps a redraw only where no other can. */
+  printed?: boolean;
 }
 export interface RedundantRoomView<Id> {
   id: Id;
@@ -3854,8 +3860,8 @@ const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
  * not see. `keptDiscipline` is still reported (read off the kept sheet's own
  * instances) so callers/tests that care which TRADE view survived keep
  * working unchanged. */
-function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id }>(
-  group: A[], describeRoom: (kept: A) => string,
+function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id; ord?: number; printed?: boolean }>(
+  group: A[], describeRoom: (kept: A) => string, ownTrade: string | null = null,
 ): RedundantRoomView<Id>[] {
   const levels = new Set(group.flatMap((entry) => {
     const level = (entry as A & { level?: string | null }).level;
@@ -3868,10 +3874,16 @@ function collapseGroup<Id, A extends { discipline: string | null; sheet: string;
     if (arr) arr.push(a); else bySheet.set(a.sheet, [a]);
   }
   if (bySheet.size < 2) return [];
-  let keptSheet = "", keptGroup: A[] = [];
-  for (const [sheet, arr] of [...bySheet.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-    if (arr.length > keptGroup.length) { keptSheet = sheet; keptGroup = arr; }
-  }
+  // The unit's own trade's view keeps the redraw (AS-104), then a view read
+  // under the sweep's own key (AS-107), then the view drawing it most, then
+  // the earlier sheet; a sheet's key string (where "#24" sorted before "#6")
+  // decides only what page order cannot.
+  const otherTrade = (arr: A[]): number => ownTrade && arr[0].discipline?.[0] !== ownTrade ? 1 : 0;
+  const printedOnly = (arr: A[]): number => arr.every((a) => a.printed) ? 1 : 0;
+  const ordOf = (arr: A[]): number => arr[0].ord ?? Number.MAX_SAFE_INTEGER;
+  const [keptSheet, keptGroup] = [...bySheet.entries()].sort(([sa, a], [sb, b]) =>
+    otherTrade(a) - otherTrade(b) || printedOnly(a) - printedOnly(b) || b.length - a.length
+    || ordOf(a) - ordOf(b) || sa.localeCompare(sb))[0];
   const keptDisc = keptGroup[0].discipline!;
   const out: RedundantRoomView<Id>[] = [];
   for (const [sheet, arr] of bySheet) {
@@ -3913,7 +3925,27 @@ function redrawDistance<Id>(a: RoomSweepInstance<Id>, b: RoomSweepInstance<Id>):
   return a.tagAt && b.tagAt ? Math.min(byGeometry, Math.hypot(a.tagAt[0] - b.tagAt[0], a.tagAt[1] - b.tagAt[1])) : byGeometry;
 }
 
-export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
+/** One view of an individually marked unit the sweep verified: its sheet's
+ * trade (the discipline letter of its sheet number), whether its mark there
+ * touches a room sensor's ring (AS-105), its geometry score, its page order. */
+export interface IndividualView { trade: string | null; sensorLabel?: boolean; printed?: boolean; score: number; ord: number }
+
+/** The view an individually marked unit counts on, of the views the sweep
+ * verified: its own trade's sheet (AS-104), then a view whose mark does not
+ * touch a room sensor's ring (AS-105: a thermostat lettered with the unit it
+ * serves stands where the sensor is, as 004_MO's floor plans letter each
+ * rooftop unit at its thermostat), then the best geometry, then the earlier
+ * page. It only chooses among the unit's verified views, so it never changes
+ * how many units a row counts. */
+export function keptIndividualView<V extends IndividualView>(views: V[], ownTrade: string | null): V | undefined {
+  const otherTrade = (view: V): number => ownTrade && view.trade !== ownTrade ? 1 : 0;
+  return views.slice().sort((a, b) => otherTrade(a) - otherTrade(b)
+    || (a.sensorLabel ? 1 : 0) - (b.sensorLabel ? 1 : 0)
+    || (a.printed ? 1 : 0) - (b.printed ? 1 : 0)
+    || b.score - a.score || a.ord - b.ord)[0];
+}
+
+export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[], ownTrade: string | null = null): RedundantRoomView<Id>[] {
   type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
   const attributed: Attributed[] = [];
   const unattributed: RoomSweepInstance<Id>[] = [];
@@ -3959,7 +3991,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   }
   const out: RedundantRoomView<Id>[] = [];
   for (const group of byRoom.values()) {
-    out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()));
+    out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim(), ownTrade));
   }
 
   // Asymmetric attribution fallback: one drawing can carry a readable room
@@ -4001,7 +4033,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   for (const cluster of mixedClusters.values()) {
     if (cluster.length < 2) continue;
     cluster.forEach((entry) => mixedHandled.add(entry.id));
-    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(one view has no readable room — same-location redraw)"));
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(one view has no readable room — same-location redraw)", ownTrade));
   }
 
   // Coordinate-proximity fallback — ONLY for instances no room could be
@@ -4031,7 +4063,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
     if (arr) arr.push(proximityCandidates[i]); else clusters.set(r, [proximityCandidates[i]]);
   }
   for (const cluster of clusters.values()) {
-    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)", ownTrade));
   }
 
   // Paired discipline-overlay fallback. AIA sheet series commonly preserve
@@ -4075,7 +4107,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
       if (arr) arr.push(group[i]); else registered.set(r, [group[i]]);
     }
     for (const cluster of registered.values()) {
-      const collapsed = collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(paired discipline-overlay sheets)");
+      const collapsed = collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(paired discipline-overlay sheets)", ownTrade);
       for (const entry of collapsed) {
         if (!alreadyRedundant.has(entry.id)) {
           alreadyRedundant.add(entry.id);
