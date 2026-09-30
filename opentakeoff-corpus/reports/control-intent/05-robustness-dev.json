@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T21:13:46.299Z",
+  "generated_at": "2026-09-30T19:53:08.746Z",
   "live": true,
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -159,34 +159,34 @@
     },
     "swap": {
       "family": {
-        "swaps": 81,
-        "units": 78,
-        "questions": 463,
+        "swaps": 89,
+        "units": 84,
+        "questions": 510,
         "rest": 0,
         "applied": 0,
         "proposal": 0,
         "unresolved": 0,
         "elsewhere": 2,
         "elsewhere_applied": 2,
-        "answers": 55,
-        "unverified": 55,
-        "calls": 19,
+        "answers": 62,
+        "unverified": 62,
+        "calls": 0,
         "applied_list": [],
         "not_applied_share": 1,
         "pass": true
       },
       "tag": {
         "swaps": 19,
-        "units": 18,
-        "questions": 72,
+        "units": 17,
+        "questions": 69,
         "rest": 0,
         "applied": 0,
         "proposal": 0,
         "unresolved": 0,
         "elsewhere": 0,
         "elsewhere_applied": 0,
-        "answers": 26,
-        "unverified": 26,
+        "answers": 20,
+        "unverified": 20,
         "calls": 0,
         "applied_list": [],
         "not_applied_share": 1,
@@ -227,8 +227,8 @@
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
           "identical": true,
-          "lines": 225,
-          "replayed": 19,
+          "lines": 881,
+          "replayed": 29,
           "not_recorded": 0
         },
         {
@@ -242,7 +242,7 @@
           "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
           "identical": true,
           "lines": 298,
-          "replayed": 11,
+          "replayed": 9,
           "not_recorded": 0
         },
         {
@@ -255,8 +255,8 @@
         {
           "id": "12_MT_MSU_ReidHall_Renovation",
           "identical": true,
-          "lines": 147,
-          "replayed": 1,
+          "lines": 264,
+          "replayed": 2,
           "not_recorded": 0
         },
         {
@@ -284,7 +284,7 @@
           "id": "itd-d1-lab",
           "identical": true,
           "lines": 117,
-          "replayed": 36,
+          "replayed": 41,
           "not_recorded": 0
         }
       ],
@@ -294,58 +294,58 @@
       "rows": [
         {
           "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
-          "decisions": 60,
-          "changed": 0,
+          "decisions": 66,
+          "changed": 6,
           "calls": 4,
-          "tokens": 16525,
+          "tokens": 16279,
           "wall_s": 1
         },
         {
           "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
           "decisions": 18,
-          "changed": 0,
-          "calls": 18,
-          "tokens": 151769,
-          "wall_s": 36
+          "changed": 1,
+          "calls": 17,
+          "tokens": 128187,
+          "wall_s": 37
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "decisions": 39,
-          "changed": 6,
-          "calls": 19,
-          "tokens": 176614,
-          "wall_s": 59
+          "decisions": 97,
+          "changed": 10,
+          "calls": 29,
+          "tokens": 177046,
+          "wall_s": 26
         },
         {
           "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
           "decisions": 4,
-          "changed": 0,
+          "changed": 2,
           "calls": 12,
-          "tokens": 106746,
-          "wall_s": 23
+          "tokens": 70527,
+          "wall_s": 12
         },
         {
           "id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
           "decisions": 45,
           "changed": 0,
-          "calls": 11,
-          "tokens": 45521,
-          "wall_s": 11
+          "calls": 9,
+          "tokens": 35194,
+          "wall_s": 7
         },
         {
           "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
           "decisions": 60,
-          "changed": 0,
+          "changed": 4,
           "calls": 9,
-          "tokens": 89652,
-          "wall_s": 27
+          "tokens": 65606,
+          "wall_s": 16
         },
         {
           "id": "12_MT_MSU_ReidHall_Renovation",
-          "decisions": 4,
+          "decisions": 9,
           "changed": 0,
-          "calls": 1,
-          "tokens": 3204,
+          "calls": 2,
+          "tokens": 6400,
           "wall_s": 1
         },
         {
@@ -353,136 +353,271 @@
           "decisions": 2,
           "changed": 0,
           "calls": 1,
-          "tokens": 4960,
+          "tokens": 5227,
           "wall_s": 1
         },
         {
           "id": "bldg5406-hvac-demo",
           "decisions": 97,
           "changed": 1,
-          "calls": 35,
-          "tokens": 302392,
-          "wall_s": 113
+          "calls": 34,
+          "tokens": 271537,
+          "wall_s": 93
         },
         {
           "id": "federal-mech",
-          "decisions": 179,
-          "changed": 11,
-          "calls": 62,
-          "tokens": 462737,
-          "wall_s": 126
+          "decisions": 180,
+          "changed": 12,
+          "calls": 63,
+          "tokens": 468109,
+          "wall_s": 118
         },
         {
           "id": "itd-d1-lab",
-          "decisions": 56,
-          "changed": 5,
-          "calls": 37,
-          "tokens": 280377,
-          "wall_s": 94
+          "decisions": 53,
+          "changed": 0,
+          "calls": 41,
+          "tokens": 248255,
+          "wall_s": 80
         }
       ],
-      "decisions": 564,
-      "changed": 23,
-      "share": 0.040780141843971635,
+      "decisions": 631,
+      "changed": 36,
+      "share": 0.05705229793977813,
       "changes": [
         {
-          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "UH-1",
-          "question": "role",
-          "from": "applied \"in\"",
-          "to": "unresolved null",
-          "from_readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:commands r1:monitors_only r2a:commands r2b:commands"
+          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+          "tag": "RTU - 2",
+          "question": "opt.differential_economizer",
+          "from": "none",
+          "to": "proposal true",
+          "from_readers": "",
+          "to_readers": "r0:not_shown r1:yes"
+        },
+        {
+          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+          "tag": "RTU -1",
+          "question": "opt.differential_economizer",
+          "from": "none",
+          "to": "proposal true",
+          "from_readers": "",
+          "to_readers": "r0:not_shown r1:yes"
+        },
+        {
+          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+          "tag": "RTU -3",
+          "question": "opt.differential_economizer",
+          "from": "none",
+          "to": "proposal true",
+          "from_readers": "",
+          "to_readers": "r0:not_shown r1:yes"
+        },
+        {
+          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+          "tag": "RTU -4",
+          "question": "opt.differential_economizer",
+          "from": "none",
+          "to": "proposal true",
+          "from_readers": "",
+          "to_readers": "r0:not_shown r1:yes"
+        },
+        {
+          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+          "tag": "RTU -6",
+          "question": "opt.differential_economizer",
+          "from": "none",
+          "to": "proposal true",
+          "from_readers": "",
+          "to_readers": "r0:not_shown r1:yes"
+        },
+        {
+          "id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+          "tag": "RTU -7",
+          "question": "opt.differential_economizer",
+          "from": "none",
+          "to": "proposal true",
+          "from_readers": "",
+          "to_readers": "r0:not_shown r1:yes"
+        },
+        {
+          "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+          "tag": "WHSE-AHU-1",
+          "question": "opt.duct_smoke_detectors",
+          "from": "unresolved null",
+          "to": "proposal false",
+          "from_readers": "r0:no r1:yes r2a:not_shown r2b:not_shown",
+          "to_readers": "r0:no r1:not_shown r2a:not_shown r2b:not_shown"
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "UH-2",
-          "question": "role",
-          "from": "applied \"in\"",
-          "to": "unresolved null",
-          "from_readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:commands r1:monitors_only r2a:commands r2b:commands"
+          "tag": "TAB-102",
+          "question": "opt.setpoint_adjust",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "UH-3",
-          "question": "role",
-          "from": "applied \"in\"",
-          "to": "unresolved null",
-          "from_readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:commands r1:monitors_only r2a:commands r2b:commands"
+          "tag": "TAB-102",
+          "question": "opt.reheat_water_temps",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "UH-4",
-          "question": "role",
-          "from": "applied \"in\"",
-          "to": "unresolved null",
-          "from_readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:commands r1:monitors_only r2a:commands r2b:commands"
+          "tag": "TAB-104",
+          "question": "opt.setpoint_adjust",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "UH-5",
-          "question": "role",
-          "from": "applied \"in\"",
-          "to": "unresolved null",
-          "from_readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:commands r1:monitors_only r2a:commands r2b:commands"
+          "tag": "TAB-104",
+          "question": "opt.reheat_water_temps",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
         },
         {
           "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-          "tag": "UH-6",
+          "tag": "TAB-105",
+          "question": "opt.setpoint_adjust",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+          "tag": "TAB-105",
+          "question": "opt.reheat_water_temps",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+          "tag": "TAB-106",
+          "question": "opt.setpoint_adjust",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+          "tag": "TAB-106",
+          "question": "opt.reheat_water_temps",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+          "tag": "TAB-107",
+          "question": "opt.setpoint_adjust",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+          "tag": "TAB-107",
+          "question": "opt.reheat_water_temps",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+          "tag": "CWP-1",
           "question": "role",
           "from": "applied \"in\"",
-          "to": "unresolved null",
-          "from_readers": "r0:commands r1:not_shown r2a:commands r2b:commands",
-          "to_readers": "r0:commands r1:monitors_only r2a:commands r2b:commands"
+          "to": "proposal \"in\"",
+          "from_readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands(unverified)",
+          "to_readers": "r0:commands r1:commands(unverified) r2a:commands(unverified) r2b:commands(unverified)"
+        },
+        {
+          "id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+          "tag": "CWP-2",
+          "question": "role",
+          "from": "applied \"in\"",
+          "to": "proposal \"in\"",
+          "from_readers": "r0:commands r1:commands r2a:commands(unverified) r2b:commands(unverified)",
+          "to_readers": "r0:commands r1:commands(unverified) r2a:commands(unverified) r2b:commands(unverified)"
+        },
+        {
+          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+          "tag": "AHU-04",
+          "question": "opt.relief_damper",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:not_shown r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+          "tag": "AHU-05",
+          "question": "opt.relief_damper",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:not_shown r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+          "tag": "AHU-06",
+          "question": "opt.duct_smoke_detectors",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:absent r2b:not_shown",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+          "tag": "AHU-08",
+          "question": "opt.relief_damper",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:not_shown r2a:not_shown r2b:absent",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
         },
         {
           "id": "bldg5406-hvac-demo",
           "tag": "AHU-1",
+          "question": "opt.occupancy_sensor",
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:absent r1:absent r2a:absent r2b:not_shown",
+          "to_readers": "r0:absent r1:absent r2a:absent r2b:absent"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "AHU-1",
           "question": "opt.freezestat_to_bas",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:not_shown r1:yes r2a:yes r2b:yes",
-          "to_readers": "r0:not_shown r1:not_shown r2a:yes r2b:yes"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "AHU-1",
-          "question": "opt.dedicated_min_oa",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:yes r1:yes r2a:yes r2b:yes",
-          "to_readers": "r0:yes r2a:yes(unverified) r2b:yes"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "AHU-1",
-          "question": "opt.relief_damper",
-          "from": "proposal true",
-          "to": "none",
-          "from_readers": "r0:not_shown r1:yes r2a:not_shown r2b:not_shown",
-          "to_readers": ""
-        },
-        {
-          "id": "federal-mech",
-          "tag": "AHU-1",
-          "question": "opt.enthalpy_economizer",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown",
-          "to_readers": "r0:yes r2a:not_shown r2b:not_shown"
+          "from": "proposal false",
+          "to": "applied false",
+          "from_readers": "r0:no r1:not_shown r2a:no r2b:no(unverified)",
+          "to_readers": "r0:no r1:no r2a:not_shown r2b:no(unverified)"
         },
         {
           "id": "federal-mech",
           "tag": "AHU-1",
           "question": "opt.duct_smoke_detectors",
           "from": "proposal true",
-          "to": "unresolved null",
+          "to": "applied true",
           "from_readers": "r0:yes r1:not_shown r2a:not_shown r2b:not_shown",
-          "to_readers": "r0:yes r2a:no(unverified) r2b:not_shown"
+          "to_readers": "r0:yes r1:yes r2a:not_shown r2b:not_shown"
         },
         {
           "id": "federal-mech",
@@ -491,16 +626,7 @@
           "from": "proposal true",
           "to": "applied true",
           "from_readers": "r0:yes r1:yes(unverified) r2a:not_shown r2b:yes",
-          "to_readers": "r0:yes r2a:yes r2b:yes"
-        },
-        {
-          "id": "federal-mech",
-          "tag": "CH-1",
-          "question": "role",
-          "from": "unresolved null",
-          "to": "proposal \"out\"",
-          "from_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:monitors_only(unverified) r2a:commands r2b:commands",
-          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:monitors_only r2a:commands r2b:not_shown"
+          "to_readers": "r0:yes r1:yes(unverified) r2a:yes r2b:yes"
         },
         {
           "id": "federal-mech",
@@ -509,7 +635,7 @@
           "from": "unresolved null",
           "to": "applied \"in\"",
           "from_readers": "r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands",
-          "to_readers": "r0:commands r1:commands r2a:commands r2b:not_shown"
+          "to_readers": "r0:commands r1:commands r2a:not_shown r2b:commands"
         },
         {
           "id": "federal-mech",
@@ -518,7 +644,25 @@
           "from": "unresolved null",
           "to": "applied \"in\"",
           "from_readers": "r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands",
-          "to_readers": "r0:commands r1:commands r2a:commands r2b:not_shown"
+          "to_readers": "r0:commands r1:commands r2a:not_shown r2b:commands"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "CWP-1",
+          "question": "role",
+          "from": "proposal \"in\"",
+          "to": "applied \"in\"",
+          "from_readers": "r0:not_shown r1:not_shown r2a:commands r2b:commands",
+          "to_readers": "r0:not_shown r1:commands r2a:commands r2b:commands"
+        },
+        {
+          "id": "federal-mech",
+          "tag": "CWP-2",
+          "question": "role",
+          "from": "proposal \"in\"",
+          "to": "applied \"in\"",
+          "from_readers": "r0:not_shown r1:not_shown r2a:commands r2b:commands",
+          "to_readers": "r0:not_shown r1:commands r2a:commands r2b:commands"
         },
         {
           "id": "federal-mech",
@@ -543,64 +687,37 @@
           "tag": "EF-1",
           "question": "opt.motorized_damper",
           "from": "unresolved null",
-          "to": "applied true",
+          "to": "proposal true",
           "from_readers": "r0:yes r1:no r2a:yes r2b:yes",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:yes"
+          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:yes(unverified)"
         },
         {
-          "id": "itd-d1-lab",
-          "tag": "EH-1",
-          "question": "opt.fan_status",
+          "id": "federal-mech",
+          "tag": "EF-4",
+          "question": "opt.motorized_damper",
           "from": "applied true",
           "to": "proposal true",
-          "from_readers": "r0:yes r1:yes r2a:yes r2b:not_shown",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:not_shown"
+          "from_readers": "r0:yes r1:not_shown r2a:yes r2b:yes",
+          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:yes(unverified)"
         },
         {
-          "id": "itd-d1-lab",
-          "tag": "EH-2",
-          "question": "opt.fan_status",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:yes r1:yes r2a:yes r2b:not_shown",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:not_shown"
-        },
-        {
-          "id": "itd-d1-lab",
-          "tag": "EH-3",
-          "question": "opt.fan_status",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:yes r1:yes r2a:yes r2b:not_shown",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:not_shown"
-        },
-        {
-          "id": "itd-d1-lab",
-          "tag": "EH-4",
-          "question": "opt.fan_status",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:yes r1:yes r2a:yes r2b:not_shown",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:not_shown"
-        },
-        {
-          "id": "itd-d1-lab",
-          "tag": "EH-6",
-          "question": "opt.fan_status",
-          "from": "applied true",
-          "to": "proposal true",
-          "from_readers": "r0:yes r1:yes r2a:yes r2b:not_shown",
-          "to_readers": "r0:yes r1:not_shown r2a:yes r2b:not_shown"
+          "id": "federal-mech",
+          "tag": "AHU-1",
+          "question": "role",
+          "from": "none",
+          "to": "proposal \"in\"",
+          "from_readers": "",
+          "to_readers": "r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands(unverified) r2a:commands r2b:commands"
         }
       ],
       "pass": false
     },
     "cost": {
-      "calls": 209,
-      "tokens": 1640497,
-      "max_wall_s": 126,
-      "total_wall_s": 492,
-      "recorded_at": "2026-09-29T19:35:06.569Z",
+      "calls": 221,
+      "tokens": 1492367,
+      "max_wall_s": 118,
+      "total_wall_s": 392,
+      "recorded_at": "2026-09-30T19:51:21.988Z",
       "pass": true
     },
     "raster": {

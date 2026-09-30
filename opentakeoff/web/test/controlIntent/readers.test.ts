@@ -105,6 +105,20 @@ test("R0: the negation guard reads a negated device as its absence; a trap is ne
   assert.equal(b.answer, "absent", "SMOKE MODE is not a smoke detector");
 });
 
+test("R0: a points list's software-function columns (TEMPERATURE ECONOMIZER, ENTHALPY ECONOMIZER) name what each column marks, not what the unit has", () => {
+  // 05_MO's VA points lists print SCHEDULE START / STOP … ENTHALPY ECONOMIZER
+  // as columns and mark them row by row (CI-64).
+  const header = packet("pts", "AHU POINTS LIST", [
+    sp("SCHEDULE START / STOP FUNCTION", 900, 60), sp("TEMPERATURE ECONOMIZER", 1300, 60), sp("ENTHALPY ECONOMIZER", 1300, 90),
+    sp("OUTSIDE AIR DAMPER D-1 AO", 100, 200), sp("SUPPLY FAN STATUS BI-1", 100, 230),
+  ], "points");
+  const said = packet("seq", "AHU SEQUENCE OF OPERATION", [sp("THE ECONOMIZER SHALL BE ENABLED WHEN THE OUTDOOR AIR ENTHALPY IS BELOW SETPOINT.", 100, 100)], "sequence");
+  const [a] = readR0({ tag: "AHU-1", family: "AHU" }, [bound(header)], [opt("enthalpy_economizer")], TERM_LIST);
+  assert.notEqual(a.answer, "yes", "a column's label is no reading");
+  const [b] = readR0({ tag: "AHU-1", family: "AHU" }, [bound(header), bound(said, "family_detail")], [opt("enthalpy_economizer")], TERM_LIST);
+  assert.equal(b.answer, "yes", "a sequence that says so still does");
+});
+
 test("R0: a monitored point is the unit's own points list's to decide: a duct detector the list omits is no BAS point; one it lists is; a proposal's list decides nothing", () => {
   const seq = packet("seq", "AHU SEQUENCE OF OPERATION", [sp("WHEN SMOKE IS DETECTED BY DUCT SMOKE DETECTOR, SD, THE FANS SHALL STOP AND AN ALARM SHALL BE SENT TO THE FIRE ALARM SYSTEM.", 100, 100)], "sequence");
   const omits = packet("pts", "POINTS LIST FOR AHU", [sp("SUPPLY FAN STATUS BI-1", 100, 100), sp("MIXED AIR LOW LIMIT BI-2", 100, 130)], "points");
@@ -188,6 +202,22 @@ test("namesUnit: a shared packet names a pump by what its own row calls its kind
   assert.equal(rowKindWords({ "AREA SERVED": "BOILER PUMP ROOM" }, "PUMP"), null, "the noun must head the phrase");
   assert.equal(rowKindWords({ SERVICE: "BOILER PUMP NO. 1" }, "PUMP"), "BOILER PUMP");
   assert.equal(rowKindWords({ "AREA SERVED": "BOILER PUMP (B-1)" }, "FAN"), null, "only the family's own noun");
+});
+
+test("a title that leads with the letters the set marks another kind of unit by is about that kind: no absence through it (CI-65)", () => {
+  // GATE D's adversarial swap: 040_IL's terminal air boxes' sequence
+  // ("TAB CONTROL W / HOT WATER REHEAT … - TAB-C", their CONTROL TYPE),
+  // bound to the air handler AHU-15, applied a role and 13 options as absent.
+  const scheduled = [{ tag: "AHU-15", family: "AHU" }, { tag: "TAB-102", family: "VAV" }, { tag: "TAB-104", family: "VAV" }];
+  const tab = packet("p1", "TAB CONTROL W / HOT W ATER REHEAT AND ROOM PRESSURE TAB CONTROL - TAB-C", [sp("THE DDC SHALL MODULATE THE REHEAT VALVE", 100, 100)], "sequence");
+  const ahu = { tag: "AHU-15", family: "AHU" };
+  const why = aboutOthers(bound(tab, "cross_reference"), ahu, scheduled)!;
+  assert.match(why, /about VAV \(TAB, as the set marks them\), not AHU/);
+  assert.equal(readR0(ahu, [{ ...bound(tab, "cross_reference"), aboutOthers: why }], [opt("co2_sensor")], TERM_LIST)[0].answer, "not_shown", "no absence through the boxes' sequence");
+  assert.equal(aboutOthers(bound(tab, "cross_reference"), { tag: "TAB-102", family: "VAV" }, scheduled), null, "the boxes' own");
+  // Letters the marks of two kinds share, or no mark carries, name no kind.
+  assert.equal(aboutOthers(bound(tab, "cross_reference"), ahu, [...scheduled, { tag: "TAB-1", family: "FCU" }]), null);
+  assert.equal(aboutOthers(bound(packet("p2", "BAS CONTROL SEQUENCE - TYPE C", [], "sequence"), "cross_reference"), ahu, scheduled), null);
 });
 
 test("R0 + combine: a packet the print says is about other units is not the unit's own, however it is bound (CI-23)", () => {

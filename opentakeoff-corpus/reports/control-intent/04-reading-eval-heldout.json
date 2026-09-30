@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T21:00:45.176Z",
+  "generated_at": "2026-09-30T20:02:06.865Z",
   "side": "heldout",
   "documents": [
     "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
@@ -23,10 +23,10 @@
       "applied-right": 5,
       "applied-wrong": 0,
       "INVENTED": 0,
-      "proposal-right": 16,
-      "proposal-wrong": 3,
+      "proposal-right": 20,
+      "proposal-wrong": 0,
       "unresolved": 0,
-      "abstained": 258
+      "abstained": 263
     },
     "applied": 5,
     "applied_wrong_rate": 0,
@@ -44,30 +44,30 @@
       "r0": {
         "right": 9,
         "wrong": 0,
-        "abstained": 273,
+        "abstained": 279,
         "unverified": 0,
         "undecided-key": 0
       },
       "r1": {
-        "right": 152,
-        "wrong": 9,
-        "abstained": 34,
-        "unverified": 50,
+        "right": 155,
+        "wrong": 4,
+        "abstained": 32,
+        "unverified": 60,
         "undecided-key": 37
       },
       "r2a": {
-        "right": 30,
-        "wrong": 3,
-        "abstained": 57,
-        "unverified": 21,
-        "undecided-key": 3
+        "right": 40,
+        "wrong": 0,
+        "abstained": 48,
+        "unverified": 27,
+        "undecided-key": 5
       },
       "r2b": {
-        "right": 34,
-        "wrong": 3,
-        "abstained": 55,
-        "unverified": 19,
-        "undecided-key": 3
+        "right": 44,
+        "wrong": 0,
+        "abstained": 47,
+        "unverified": 24,
+        "undecided-key": 5
       }
     }
   }

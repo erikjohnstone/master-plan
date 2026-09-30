@@ -377,7 +377,9 @@ test("a title's qualifiers are the unit's: another subject joined by AND, the fa
   ]);
   assert.deepEqual(of(split, 0), ["soo:family_detail", "fdia:family_detail"], "the furnace takes the furnace-and-condensing-unit sequence");
   assert.deepEqual(of(split, 1), ["soo:family_detail"], "so does the condensing unit: FURNACE is the other subject, not its qualifier");
-  assert.deepEqual(of(split, 2), ["fcu:family_detail:proposal"], "HEATING AND COOLING name no second kind of unit: they stay qualifiers");
+  assert.deepEqual(of(split, 2), ["fcu:family_detail"]);
+  assert.match(split.get(2)![0].evidence, /does not print "HEATING", "COOLING"; the family's one diagram detail, for its one unit$/,
+    "HEATING AND COOLING name no second kind of unit: they stay qualifiers, and the set's one fan coil unit takes its family's one diagram (CI-58)");
 
   const spell = bindPackets([
     packet("vav", "VAV/CAV TERMINAL BOX CONTROL SCHEMATIC", "diagram"),
@@ -687,15 +689,25 @@ test("an air handler detail with minimum outside air is the unit's where its row
   const moa = [packet("d", "VARIABLE AIR VOLUME AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR CONTROL DIAGRAM", "diagram")];
   const filled = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "AIR FLOW": "VAV", "AIR FLOW SUPPLY CFM": "13500", "AIR FLOW MIN OA CFM": "1920" })]);
   assert.deepEqual(filled.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["d", false]]);
-  const none = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "AIR FLOW": "VAV", "AIR FLOW SUPPLY CFM": "13500" })]);
-  assert.deepEqual(none.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["d", true]]);
+  const none = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "AIR FLOW": "VAV", "AIR FLOW SUPPLY CFM": "13500", "AIR FLOW MIN OA CFM": "1920" }),
+    unit(1, "AHU-2", "AHU", "AIR HANDLING UNIT SCHEDULE", { "AIR FLOW": "VAV", "AIR FLOW SUPPLY CFM": "9000" })]);
+  assert.deepEqual(none.get(1)?.map((x) => [x.packet, Boolean(x.proposal)]), [["d", true]], "no minimum outdoor airflow beside a row that fills one");
+  // The set's one air handler and its family's one diagram: the family's one
+  // detail (CI-58), with MINIMUM and OUTSIDE AIR read as unprinted qualifiers.
+  const one = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "AIR FLOW": "VAV", "AIR FLOW SUPPLY CFM": "13500" })]);
+  assert.deepEqual(one.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["d", false]]);
+  assert.match(one.get(0)![0].evidence, /does not print "MINIMUM", "OUTSIDE AIR"; the family's one diagram detail, for its one unit$/);
   const vav = [packet("r", "VAV ROOFTOP UNIT CONTROLS DIAGRAM", "diagram")];
   const rtu = (i: number, tag: string) => unit(i, tag, "RTU", "ROOFTOP UNIT SCHEDULE", { "AIRFLOW CFM": "3520" });
   const boxes = [unit(5, "VAV-1", "VAV", "VARIABLE-AIR-VOLUME BOX SCHEDULE"), unit(6, "VAV-2", "VAV", "VARIABLE-AIR-VOLUME BOX SCHEDULE")];
   const only = bindPackets(vav, [rtu(0, "ACU-6"), ...boxes]);
   assert.deepEqual(only.get(0)?.map((x) => [x.packet, Boolean(x.proposal)]), [["r", false]]);
   assert.match(only.get(0)![0].evidence, /set's one air handler, and the set schedules VAV units/);
-  assert.deepEqual(bindPackets(vav, [rtu(0, "ACU-6")]).get(0)?.map((x) => Boolean(x.proposal)), [true], "no VAV units: a proposal");
+  const lone = bindPackets(vav, [rtu(0, "ACU-6")]).get(0)!;
+  assert.deepEqual(lone.map((x) => Boolean(x.proposal)), [false], "no VAV units: the family's one diagram (CI-58), not a VAV reading");
+  assert.doesNotMatch(lone[0].evidence, /VAV units/);
+  const cvPeer = bindPackets(vav, [rtu(0, "RTU-1"), unit(1, "RTU-2", "RTU", "ROOFTOP UNIT SCHEDULE", { "AIRFLOW CFM": "3520", TYPE: "CONSTANT VOLUME" })]);
+  assert.deepEqual([0, 1].map((i) => cvPeer.get(i)?.map((x) => Boolean(x.proposal))), [[true], [true]], "a constant volume peer speaks against VAV: no VAV units, both proposals");
   const two = bindPackets(vav, [rtu(0, "RTU-1"), rtu(1, "RTU-2"), unit(5, "VAV-1", "VAV", "VAV BOX SCHEDULE", { SYSTEM: "RTU-2" })]);
   assert.deepEqual([0, 1].map((i) => two.get(i)?.map((x) => Boolean(x.proposal))), [[true], [false]]);
 });
@@ -733,7 +745,10 @@ test("the new readings stay narrow: a sequence phrase that is the family's own n
   assert.deepEqual(other.get(0)?.map((x) => Boolean(x.proposal)), [true], "the VAV units' system is another air handler");
   const moa = [packet("d", "AIR HANDLING UNIT WITH MINIMUM OUTSIDE AIR CONTROL DIAGRAM", "diagram")];
   const temps = bindPackets(moa, [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE", { "HEATING COIL MIN OA TEMP F": "0" }), unit(1, "AHU-2", "AHU", "AIR HANDLING UNIT SCHEDULE", { "HEATING COIL MIN OA TEMP F": "-5" })]);
-  assert.deepEqual([0, 1].map((i) => temps.get(i)?.map((x) => Boolean(x.proposal))), [[true], [true]]);
+  // A temperature is no minimum airflow: MINIMUM and OUTSIDE AIR stay
+  // unprinted qualifiers, and the two units take their family's one diagram
+  // as that (CI-58).
+  assert.ok([0, 1].every((i) => /does not print "MINIMUM", "OUTSIDE AIR"; the family's one diagram detail, taken by each of its 2 units$/.test(temps.get(i)![0].evidence)));
   const panel = bindPackets([packet("fcs", "FAN COIL UNIT SEQUENCE OF OPERATION", "sequence")], [unit(0, "FCU-1", "FCU", "FAN COIL UNIT SCHEDULE", { MODEL: "FXUQ24", "ELEC PANEL": "HP1" }), unit(1, "HP-1", "HEAT_PUMP", "HEAT PUMP SCHEDULE")]);
   assert.equal(panel.get(1), undefined, "a panel named HP1 is no heat pump");
   const motor = bindPackets([packet("s", "AIR HANDLING UNIT SEQUENCE OF OPERATION", "sequence")], [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(1, "RF-1", "FAN", "FAN SCHEDULE", { "UNIT SERVED": "AHU-1", "MOTOR SERVICE FACTOR": "1.15" }), unit(2, "RF-3", "FAN", "FAN SCHEDULE", { SERVICE: "RETURN AIR", "UNIT SERVED": "AHU-1" })]);
@@ -743,4 +758,251 @@ test("the new readings stay narrow: a sequence phrase that is the family's own n
     [unit(0, "EF-1", "FAN", "EXHAUST FAN SCHEDULE", { "CONTROL SEQUENCE": "SWITCH CONTROLLED" }), unit(1, "EF-2", "FAN", "EXHAUST FAN SCHEDULE")]);
   assert.deepEqual(fans.get(0)?.map((x) => [x.packet, x.kind]), [["sw", "cross_reference"]]);
   assert.deepEqual(fans.get(1)?.map((x) => x.packet).sort(), ["bas", "sw"]);
+});
+
+test("a family's one detail is its units'; a detail naming another service is not a unit's; a part never inherits its host's controller; a points table of one diagram's devices is that diagram's; a section's packet is the innermost", () => {
+  // CI-58: every unit of the family took the detail as its only one of the
+  // kind; two details of the kind keep both proposals.
+  const erv = (ps: ReturnType<typeof packet>[]) => bindPackets(ps, [unit(0, "ERV-C1", "ERV", "ENERGY RECOVERY VENTILATOR SCHEDULE"), unit(1, "ERV-C2", "ERV", "ENERGY RECOVERY VENTILATOR SCHEDULE")]);
+  const c = packet("c", "C-WING ERV CONTROL DIAGRAM", "diagram");
+  assert.deepEqual([0, 1].map((i) => erv([c]).get(i)?.map((x) => [x.packet, Boolean(x.proposal)])), [[["c", false]], [["c", false]]]);
+  assert.match(erv([c]).get(0)![0].evidence, /the family's one diagram detail, taken by each of its 2 units$/);
+  assert.ok([0, 1].every((i) => erv([c, packet("d", "D-WING ERV CONTROL DIAGRAM", "diagram")]).get(i)!.every((x) => x.proposal)));
+  // CI-60: a pump or fan whose own schedule names another service.
+  const dw = bindPackets([packet("dw", "DOMESTIC WATER BOOSTER PUMP SEQUENCE", "sequence")],
+    [unit(0, "CP-1", "PUMP", "CONDENSATE PUMP SCHEDULE"), unit(1, "P-1", "PUMP", "PUMP SCHEDULE", { SERVICE: "HEATING HOT WATER" }), unit(2, "P-2", "PUMP", "PUMP SCHEDULE"),
+      unit(3, "P-3", "PUMP", "PUMP SCHEDULE", { SERVICE: "DOMESTIC WATER" })]);
+  assert.deepEqual([0, 1, 2, 3].map((i) => dw.get(i)?.map((x) => [x.packet, Boolean(x.proposal)])), [undefined, undefined, [["dw", true]], [["dw", true]]],
+    "a condensate pump and a heating water pump take no domestic water booster sequence; a domestic water pump whose row prints no BOOSTER, a proposal");
+  const hw = bindPackets([packet("hw", "HEATING WATER PUMP SEQUENCE", "sequence")], [unit(0, "HWP-1", "PUMP", "PUMP SCHEDULE", { SERVICE: "HOT WATER" }), unit(1, "BP-1", "PUMP", "BOILER PUMP SCHEDULE")]);
+  assert.deepEqual([0, 1].map((i) => hw.get(i)?.map((x) => x.packet)), [["hw"], ["hw"]], "HOT WATER and a boiler's pump are heating water");
+  const cwp = bindPackets([packet("cw", "CONDENSER WATER PUMP SEQUENCE", "sequence")], [unit(0, "CWP-1", "PUMP", "PUMP SCHEDULE")]);
+  assert.deepEqual(cwp.get(0)?.map((x) => x.packet), ["cw"], "a tag prefix is no service: CWP is a chilled or a condenser water pump");
+  const ex = bindPackets([packet("ex", "EXHAUST FAN POINTS LIST", "points")],
+    [unit(0, "SF-1", "FAN", "FAN SCHEDULE", { SERVICE: "SUPPLY AIR" }), unit(1, "EF-1", "FAN", "FAN SCHEDULE", { SERVICE: "TOILET EXHAUST" }), unit(2, "F-3", "FAN", "FAN SCHEDULE")]);
+  assert.deepEqual([0, 1, 2].map((i) => ex.get(i)?.map((x) => [x.packet, Boolean(x.proposal)])), [undefined, [["ex", false]], [["ex", true]]]);
+  // CI-61: a split system's outdoor unit takes its indoor unit's diagram, not
+  // a detail of the indoor unit's own controller; the furnace takes all three.
+  const split = bindPackets([packet("soo", "FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION", "sequence"), packet("fdia", "FURNACE CONTROL DIAGRAM", "diagram"), packet("fctl", "FURNACE CONTROLLER", "detail")],
+    [unit(0, "F-1", "FURNACE", "FURNACE SCHEDULE", { "CONDENSING UNIT": "CU-1" }), unit(1, "CU-1", "CONDENSING_UNIT", "CONDENSING UNIT SCHEDULE")]);
+  assert.deepEqual(split.get(0)?.map((x) => [x.packet, x.kind]), [["soo", "family_detail"], ["fdia", "family_detail"], ["fctl", "family_detail"]]);
+  assert.deepEqual(split.get(1)?.map((x) => [x.packet, x.kind]), [["soo", "family_detail"], ["fdia", "component_of"]]);
+  // CI-59: a points table titled with no subject whose device marks are all
+  // printed in one diagram on its sheet, and in no other, is that diagram's.
+  const io = (marks: string[]) => bindPackets([
+    packet("d1", "AHU-1 CONTROL DIAGRAM", "diagram", [sp("T-7", 100, 100), sp("T-8", 200, 100), sp("VR-1", 300, 100), sp("D-5", 400, 100)], { region: [0, 0, 1000, 500] }),
+    packet("d2", "AHU-2 CONTROL DIAGRAM", "diagram", [sp("T-9", 100, 600), sp("VR-2", 300, 600)], { region: [0, 500, 1000, 1000] }),
+    packet("io", "INPUT/OUTPUT SUMMARY", "points", marks.map((m, i) => sp(`${m} TEMPERATURE SENSOR`, 1100, 100 + i * 25)), { region: [1050, 0, 1600, 1000] }),
+  ], [unit(0, "AHU-1", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(1, "AHU-2", "AHU", "AIR HANDLING UNIT SCHEDULE")]);
+  assert.deepEqual([0, 1].map((i) => io(["T-7", "T-8", "VR-1", "D-5"]).get(i)?.map((x) => [x.packet, x.kind])), [[["d1", "tag"], ["io", "sibling"]], [["d2", "tag"]]]);
+  assert.deepEqual([0, 1].map((i) => io(["T-7", "T-9"]).get(i)?.map((x) => x.packet)), [["d1"], ["d2"]], "devices of two diagrams: neither's");
+  // CI-59: of nested packets printing a sequence's heading, the innermost.
+  const heading = sp("B. CONTROL SEQUENCE B (VAV WITH REHEAT)", 120, 300);
+  const nested = bindPackets([
+    packet("outer", "AIR HANDLING UNIT SEQUENCE OF OPERATION", "sequence", [heading, sp("THE UNIT SHALL START", 120, 330)]),
+    packet("inner", "B. CONTROL SEQUENCE B (VAV WITH REHEAT)", "sequence", [heading], { region: [100, 290, 900, 600] }),
+  ], [unit(0, "VAV-1", "VAV", "VAV BOX SCHEDULE", { "CONTROL SEQUENCE": "B" })]);
+  assert.deepEqual(nested.get(0)?.map((x) => [x.packet, x.kind]), [["inner", "cross_reference"]]);
+});
+
+test("a part takes the drawings of a host the set does not schedule, or of its own designation under the set's convention; a title's letters before a spaced mark are its qualifier", () => {
+  const acu = [
+    packet("a1", "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101", "diagram"),
+    packet("a2", "AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101", "diagram"),
+    packet("a36", "AIR CONDITIONING UNIT (ACU-A-3, ACU A-4, ACU A-5, AND ACU A-6) - BUILDING 101", "diagram"),
+  ];
+  // CI-55: a row's SERVICE names a host no schedule carries; a bare "A-1" is
+  // a zone or a room as often as a unit.
+  const coil = (i: number, tag: string, service: string) => unit(i, tag, "DUCT_MOUNTED_COIL", "HEATING COIL SCHEDULE", { SERVICE: service });
+  const host = bindPackets(acu, [coil(0, "HC-A-1", "ACU-A-1"), coil(1, "HC-A-4", "ACU-A-4"), coil(2, "HC-3", "A-1")]);
+  assert.deepEqual([0, 1, 2].map((i) => host.get(i)?.map((x) => [x.packet, x.kind, Boolean(x.proposal)])), [[["a1", "component_of", false]], [["a36", "component_of", false]], undefined]);
+  assert.match(host.get(0)![0].evidence, /names ACU-A-1 \(SERVICE\), which the set does not schedule/);
+  // CI-56: supply fans whose schedule prints no owner take the host of their
+  // own designation where every part that names one follows it; one row
+  // naming another's host withdraws the convention.
+  const parts = [coil(0, "HC-A-1", "ACU-A-1"), coil(1, "HC-A-2", "ACU-A-2"),
+    unit(2, "E-A-1", "FAN", "RETURN FAN SCHEDULE", { SERVICE: "ACU-A-1" }), unit(3, "E-A-2", "FAN", "RETURN FAN SCHEDULE", { SERVICE: "ACU-A-2" })];
+  const supply = [unit(4, "S-A-1", "FAN", "SUPPLY FAN SCHEDULE", { CFM: "4000" }), unit(5, "S-A-2", "FAN", "SUPPLY FAN SCHEDULE", { CFM: "4000" })];
+  const conv = bindPackets(acu, [...parts, ...supply]);
+  assert.deepEqual([4, 5].map((i) => conv.get(i)?.map((x) => [x.packet, x.kind])), [[["a1", "component_of"]], [["a2", "component_of"]]]);
+  assert.match(conv.get(4)![0].evidence, /the set's 4 parts that name theirs each name the ACU of their own designation/);
+  const against = bindPackets(acu, [...parts, unit(6, "E-A-3", "FAN", "RETURN FAN SCHEDULE", { SERVICE: "ACU-A-1" }), ...supply]);
+  assert.deepEqual([4, 5].map((i) => against.get(i)), [undefined, undefined]);
+  // CI-57: "ACU A-7" is ACU-A-7, never the return fan marked E-A-7; a list's
+  // later marks carry the qualifier; a word the set names no kind by
+  // qualifies nothing.
+  const keys = (t: string, sched: string[], kinds: string[]) => titleTags(t, sched.map((x) => tagKey(x)!), new Set(kinds)).map((x) => `${x.key.qualifier ?? ""}|${x.key.prefix}-${x.key.n}`);
+  assert.deepEqual(keys("ACU A-7 CONTROL DIAGRAM", ["E-A-7"], ["ACU", "E"]), ["ACU|A-7"]);
+  assert.deepEqual(keys("ACU A-3, A-4 AND A-5 SEQUENCE", ["E-A-4"], ["ACU"]), ["ACU|A-3", "ACU|A-4", "ACU|A-5"]);
+  assert.deepEqual(keys("UNIT A-1 CONTROL DIAGRAM", ["A-1"], ["ACU"]), ["|A-1"]);
+  const fan = bindPackets([packet("d7", "ACU A-7 CONTROL DIAGRAM", "diagram")], [unit(0, "E-A-7", "FAN", "RETURN FAN SCHEDULE", { SERVICE: "ACU-A-7" })]);
+  assert.deepEqual(fan.get(0)?.map((x) => [x.packet, x.kind]), [["d7", "component_of"]], "the return fan takes its host's diagram as a part, not by its own mark");
+});
+
+test("a mark with a building's number before it is a tag: a title naming its mark, with or without the number, is the unit's; another building's is not", () => {
+  // 05_MO: 1-AC-15 and 1-AC-28 each have a points list "(APPLIES TO AC-15)"
+  // and a sequence "(1-AC-15)"; the untitled list beside AC-57's sequence is
+  // AC-57's, not theirs (CI-63).
+  assert.deepEqual(tagKey("1-AC-15"), { prefix: "AC", n: 15, suffix: "", qualifier: "1" });
+  const ps = [
+    packet("p15", "AHU POINTS LIST (APPLIES TO AC-15)", "points"), packet("s15", "SEQUENCE OF OPERATION FOR VAV AIR HANDLING UNIT", "sequence", [], { subtitle: "(1-AC-15)" }),
+    packet("p28", "AHU POINTS LIST (APPLIES TO AC-28)", "points"), packet("p57", "AHU POINTS LIST", "points"),
+    packet("s57", "SEQUENCE OF OPERATION FOR VAV AIR HANDLING UNIT", "sequence", [], { subtitle: "(1-AC-57)" }), packet("x", "2-AC-15 CONTROL DIAGRAM", "diagram"),
+  ];
+  const b = bindPackets(ps, [unit(0, "1-AC-15", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(1, "1-AC-28", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(2, "AC-57", "AHU", "AIR HANDLING UNIT SCHEDULE")]);
+  assert.deepEqual(b.get(0)?.map((x) => [x.packet, x.kind]), [["p15", "tag"], ["s15", "tag"]]);
+  assert.deepEqual(b.get(1)?.map((x) => [x.packet, x.kind]), [["p28", "tag"]]);
+  assert.deepEqual(b.get(2)?.map((x) => x.packet).includes("s57"), true);
+  assert.ok(![0, 1, 2].some((i) => b.get(i)?.some((x) => x.packet === "x")), "building 2's AC-15 is none of these");
+});
+
+test("a building's number before a mark is read wherever a mark is: a diagram's label, a row naming the other half of a split system; it is never a designator", () => {
+  const kinds = (b: ReturnType<typeof bindPackets>, i: number) => (b.get(i) ?? []).map((x) => `${x.packet}:${x.kind}`);
+  // A family's diagram labelled with one air handler's mark is that unit's
+  // by its label, as "AC-15" would be (CI-63); the other takes it as its
+  // family's.
+  const d = packet("d", "AIR HANDLING UNIT CONTROL DIAGRAM", "diagram", [sp("1-AC-15", 100, 100)]);
+  const labelled = bindPackets([d], [unit(0, "1-AC-15", "AHU", "AIR HANDLING UNIT SCHEDULE"), unit(1, "1-AC-28", "AHU", "AIR HANDLING UNIT SCHEDULE")]);
+  assert.deepEqual([0, 1].map((i) => kinds(labelled, i)), [["d:tag_body"], ["d:family_detail"]]);
+  // The halves of a split system, paired by a row that names the other with
+  // its building's number: the indoor unit's row, or the outdoor unit's
+  // SERVICE.
+  const fd = packet("fd", "1-F-3 CONTROL DIAGRAM", "diagram");
+  const fromIndoor = bindPackets([fd], [
+    unit(0, "1-F-3", "FURNACE", "FURNACE SCHEDULE", { "CONDENSING UNIT": "1-CU-3" }), unit(1, "1-CU-3", "CONDENSING_UNIT", "CONDENSING UNIT SCHEDULE"),
+  ]);
+  assert.deepEqual(kinds(fromIndoor, 1), ["fd:component_of"]);
+  const fromOutdoor = bindPackets([fd], [
+    unit(0, "1-F-3", "FURNACE", "FURNACE SCHEDULE"), unit(1, "1-CU-3", "CONDENSING_UNIT", "CONDENSING UNIT SCHEDULE", { SERVICE: "1-F-3" }),
+  ]);
+  assert.deepEqual(kinds(fromOutdoor, 1), ["fd:component_of"]);
+  // Or a bare mark the halves share, after the building's number
+  // ("SERVICE: 1-C1"): the one indoor unit of that mark, whose diagram the
+  // outdoor unit bound to its own sequence takes; never a guess between two.
+  const pair = [packet("seq", "FURNACE AND CONDENSING UNIT SEQUENCE OF OPERATION", "sequence"), packet("cd", "FURNACE CONTROL DIAGRAM", "diagram")];
+  const halves = [unit(0, "C1", "FURNACE", "FURNACE SCHEDULE", { "F ~": "C1" }), unit(1, "C1", "CONDENSING_UNIT", "CONDENSING UNIT SCHEDULE", { "CU ~": "C1", SERVICE: "1-C1" })];
+  const shared = bindPackets(pair, halves);
+  assert.deepEqual(kinds(shared, 1), ["seq:family_detail", "cd:component_of"]);
+  assert.match(shared.get(1)![1].evidence, /is the outdoor unit of C1/);
+  assert.deepEqual(kinds(bindPackets(pair, [...halves, unit(2, "C1", "ERV", "ENERGY RECOVERY VENTILATOR SCHEDULE", { "ERV ~": "C1" })]), 1), ["seq:family_detail"]);
+  // A number before a mark says where the unit is, never what it is: the
+  // furnace B1, whose schedule prints its marks under "F ~", is a title's
+  // "1-B1" (a designator it does not print, "OAU-B1", says it is not).
+  const b1 = bindPackets([packet("t", "1-B1 CONTROL DIAGRAM", "diagram"), packet("o", "OAU-B1 CONTROL DIAGRAM", "diagram")], [unit(0, "B1", "FURNACE", "FURNACE SCHEDULE", { "F ~": "B1" })]);
+  assert.deepEqual(kinds(b1, 0), ["t:tag"]);
+});
+
+test("vocabulary: INPUT/OUTPUT lists, P&IDs and a unit's controller name control evidence; a points list needs no subject; lighting is another trade's", () => {
+  assert.equal(packetKind("INPUT/OUTPUT SUMMARY"), "points");
+  assert.equal(packetKind("BAS INPUT/OUTPUT POINT LIST"), "points");
+  assert.equal(packetKind("CONTROLS POINTS LIST"), "points");
+  assert.equal(packetKind("HEATING WATER SYSTEM P&ID"), "diagram");
+  assert.equal(packetKind("PIPING AND INSTRUMENTATION DIAGRAM - AHU-1"), "diagram");
+  assert.equal(packetKind("PIPING DIAGRAM - AHU-1"), null);
+  assert.equal(packetKind("FURNACE CONTROLLER"), "detail");
+  assert.equal(packetKind("VAV CONTROLLER MOUNTING DETAIL"), null);
+  assert.equal(packetKind("LIGHT CONTROLS"), null);
+  assert.equal(packetKind("LIGHTING CONTROL DIAGRAM"), null);
+  assert.equal(packetKind("LIGHTING AND EXHAUST FAN CONTROL DIAGRAM"), "diagram");
+  assert.equal(packetKind("HVAC CONTROLS"), null);
+});
+
+test("two titles side by side on one baseline, each run to a second line, are two titles", () => {
+  const spans = [
+    sp("BUILDING B OUTSIDE AIR SEQUENCE OF", 100, 100, 48), sp("OPERATION", 100, 158, 48),
+    sp("ROOFTOP UNIT WITH BAROMETRIC RELIEF", 1190, 100, 48), sp("SEQUENCE OF OPERATION (BID ALTERNATE 1)", 1190, 158, 48),
+    ...para(120, 250, 10, "THE OUTSIDE AIR UNIT SHALL START WHEN THE BUILDING IS OCCUPIED"),
+    ...para(1210, 250, 10, "THE ROOFTOP UNIT SHALL MODULATE ITS ECONOMIZER TO MAINTAIN SETPOINT"),
+  ];
+  const titles = findPackets("s.pdf#20", spans).map((p) => p.title);
+  assert.ok(titles.includes("BUILDING B OUTSIDE AIR SEQUENCE OF OPERATION"), titles.join(" | "));
+  assert.ok(titles.includes("ROOFTOP UNIT WITH BAROMETRIC RELIEF SEQUENCE OF OPERATION (BID ALTERNATE 1)"), titles.join(" | "));
+});
+
+test("a points table's title set on two lines, or in two overlapping runs, inside the table the graph extracted, is its title", () => {
+  const table = [sp("NAME", 520, 240, 25), sp("DESCRIPTION", 900, 240, 25), sp("BI1", 520, 280, 25), sp("FAN STATUS", 600, 280, 25), sp("BO1", 520, 320, 25), sp("FAN START/STOP", 600, 320, 25)];
+  const twoLines = [sp("SCHEDULED EXHAUST FAN", 640, 110, 50), sp("DDC POINTS LIST", 700, 170, 50), ...table, ...para(3000, 100, 12)];
+  const a = findPackets("s.pdf#21", twoLines, [{ title: "SCHEDULED EXHAUST FAN DDC POINTS LIST", region: [500, 100, 1400, 400] }]);
+  assert.deepEqual(a.map((p) => [p.kind, p.title]), [["points", "SCHEDULED EXHAUST FAN DDC POINTS LIST"]]);
+  // "DDC POINTS LIST SUMMARY " ends past where "- CHILLED WATER SYSTEM" starts.
+  const w = "DDC POINTS LIST SUMMARY ".length * 0.55 * 28;
+  const overlapping = [sp("DDC POINTS LIST SUMMARY ", 600, 110, 28), sp("- CHILLED WATER SYSTEM", 600 + w - 24, 110, 28), ...table, ...para(3000, 100, 12, "THE CHILLER SHALL START ON A CALL FOR COOLING FROM THE BAS")];
+  const b = findPackets("s.pdf#22", overlapping, [{ title: "DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM", region: [500, 100, 1400, 400] }]);
+  assert.deepEqual(b.map((p) => [p.kind, p.title]), [["points", "DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM"]]);
+});
+
+test("a points table's title centred over its header row heads the table", () => {
+  const spans = [
+    sp("BAS INPUT/OUTPUT POINT LIST", 3471, 1474, 28), sp("TAG", 3080, 1531, 28), sp("POINT NAME", 3408, 1531, 28), sp("AI", 3838, 1531, 28), sp("AO", 3919, 1531, 28),
+    sp("CH-1", 3080, 1571, 28), sp("CHILLER STATUS", 3408, 1571, 28),
+    // The page's body text is the title's size: the title is a body-size heading.
+    ...Array.from({ length: 12 }, (_, i) => sp("THE CHILLED WATER PLANT SHALL BE ENABLED BY THE BAS SCHEDULE", 300, 300 + i * 34, 28)),
+  ];
+  const packets = findPackets("s.pdf#23", spans, [{ title: "BAS INPUT/OUTPUT POINT LIST", region: [3054, 1456, 4245, 2570] }]);
+  assert.ok(packets.some((p) => p.kind === "points" && p.title === "BAS INPUT/OUTPUT POINT LIST"), packets.map((p) => p.title).join(" | "));
+});
+
+test("a points title printed as the first row of the table the graph extracted heads that table, whatever text is printed right above it", () => {
+  // 01_NY's first INPUT/OUTPUT SUMMARY, under the air handler's sequence (CI-59).
+  const spans = [
+    ...Array.from({ length: 8 }, (_, i) => sp("THE AIR HANDLING UNIT SHALL MAINTAIN THE SUPPLY AIR TEMPERATURE SETPOINT", 3060, 1200 + i * 23)),
+    sp("INPUT/OUTPUT SUMMARY", 3100, 1392, 25),
+    sp("POINT", 3070, 1440), sp("DESCRIPTION", 3200, 1440), sp("AI", 3700, 1440), sp("AO", 3780, 1440),
+    ...["T-7 SUPPLY AIR TEMPERATURE", "T-8 MIXED AIR TEMPERATURE", "VR-1 SUPPLY FAN SPEED", "D-5 OUTSIDE AIR DAMPER"].map((r, i) => sp(r, 3070, 1480 + i * 30)),
+  ];
+  const io = findPackets("s.pdf#87", spans, [{ title: "INPUT/OUTPUT SUMMARY", region: [3050, 1388, 4000, 1650] }]).find((p) => p.title === "INPUT/OUTPUT SUMMARY");
+  assert.equal(io?.direction, "below_title");
+  assert.ok(io!.region[1] >= 1388 && io!.region[3] >= 1600, `the table's rows, not the sequence above: ${io!.region}`);
+});
+
+test("a caption under a sparse diagram lettered at a quarter turn is its caption; on a sheet of control drawings one kind of control content confirms it", () => {
+  const spans = [
+    sp("CONTROLS SYMBOLS", 549, 442, 38), sp("TEMPERATURE SENSOR", 560, 520, 19),
+    sp("RETURN FAN", 3873, 600, 19), sp("TEMPERATURE SENSOR", 3800, 700, 19), sp("PRE FILTER", 3767, 941, 19, 90), sp("FINAL FILTER", 3889, 941, 19, 90),
+    sp("AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101", 3782, 1260, 25),
+    sp("RETURN FAN", 3873, 1605, 19), sp("OUTSIDE AIR TEMPERATURE SENSORS (TYP)", 3700, 1700, 19),
+    sp("AIR CONDITIONING UNIT (ACU-A-2) - BUILDING 101", 3782, 2674, 25),
+    ...para(1000, 600, 10, "PROVIDE NEW CONTROL POINTS FOR THE EXISTING AIR CONDITIONING UNITS AS SHOWN"),
+  ];
+  const packets = findPackets("s.pdf#24", spans);
+  const a1 = packets.find((p) => p.title === "AIR CONDITIONING UNIT (ACU-A-1) - BUILDING 101");
+  assert.ok(a1, packets.map((p) => p.title).join(" | "));
+  assert.equal(a1!.direction, "above_title");
+  assert.ok(a1!.spans.some((s) => s.str === "PRE FILTER"));
+});
+
+test("a heading whose subject the line under it repeats heads that block; a sequence about its own subject is never part of another drawing's caption", () => {
+  const spans = [
+    sp("CHILLED WATER SYSTEM", 3326, 38, 57), sp("CHILLED WATER SYSTEM CONTROL SEQUENCE (CH-1, CHP-1, CHP-2):", 3350, 157, 21),
+    ...para(3350, 190, 30, "CHILLED WATER PUMPS OPERATE IN A LEAD / LAG CONFIGURATION WHEN THE SYSTEM IS ON"),
+    sp("FAN COIL UNITS", 3326, 1899, 57), sp("FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE", 3348, 2022, 21),
+    ...para(3348, 2055, 8, "THE FAN COIL UNIT SHALL CYCLE ITS FAN TO MAINTAIN THE SPACE SETPOINT"),
+  ];
+  const titles = findPackets("s.pdf#25", spans).map((p) => p.title);
+  assert.ok(titles.includes("CHILLED WATER SYSTEM CONTROL SEQUENCE (CH-1, CHP-1, CHP-2):"), titles.join(" | "));
+  assert.ok(titles.includes("FAN COIL UNITS - SEQUENCE OF OPERATION & BAS INTERFACE"), titles.join(" | "));
+  // A body-size sequence heading about another subject in a caption's lane is its own packet.
+  const lane = [
+    sp("DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE", 356, 1750, 28),
+    ...Array.from({ length: 20 }, (_, i) => sp("THE DOAS SHALL START ON A CALL FROM THE BAS AND MODULATE ITS VALVE", 356, 1790 + i * 34, 28)),
+    sp("DOAS 3", 900, 2480, 28), sp("SUPPLY AIR TEMPERATURE SENSOR", 1200, 2520, 28), sp("VFD", 1600, 2560, 28),
+    sp("DOAS 3 P&ID", 1352, 2683, 50),
+  ];
+  const lt = findPackets("s.pdf#26", lane).map((p) => p.title);
+  assert.ok(lt.includes("DOAS 3 P&ID"), lt.join(" | "));
+  assert.ok(lt.includes("DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE"), lt.join(" | "));
+});
+
+test("a caption over a schedule the graph extracted is the schedule's title; over a points table, control evidence", () => {
+  const sched = [
+    // A schedule that prints control words (VFD, BAS) in its cells.
+    sp("TAG", 300, 200, 19), sp("CFM", 500, 200, 19), sp("VFD", 700, 200, 19), sp("BAS", 800, 200, 19), sp("EF-1", 300, 240, 19), sp("2400", 500, 240, 19), sp("YES", 700, 240, 19),
+    sp("EXHAUST FANS", 400, 400, 41), ...para(2000, 200, 12, "PROVIDE EACH FAN WITH A DISCONNECT SWITCH AND A STATUS CONTACT"),
+  ];
+  assert.deepEqual(findPackets("s.pdf#27", sched, [{ title: "EXHAUST FANS", region: [280, 180, 900, 280] }]).map((p) => p.title), []);
+  const points = [
+    sp("POINT", 300, 200, 19), sp("AI", 500, 200, 19), sp("BO", 600, 200, 19), sp("BI", 700, 200, 19), sp("SUPPLY FAN STATUS", 300, 240, 19), sp("SENSOR", 500, 240, 19),
+    sp("VARIABLE AIR VOLUME AHU (AHU-1)", 300, 400, 41), ...para(2000, 200, 12, "THE AIR HANDLER SHALL START ON THE OCCUPANCY SCHEDULE AND RUN"),
+  ];
+  assert.ok(findPackets("s.pdf#28", points, [{ title: "VARIABLE AIR VOLUME AHU (AHU-1)", region: [280, 180, 900, 280] }]).some((p) => p.title === "VARIABLE AIR VOLUME AHU (AHU-1)"));
 });

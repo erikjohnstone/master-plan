@@ -29,7 +29,8 @@
     "dev-interlock": "dev documents of 5 drafters interlock equipment with other equipment (ace-inc, casco-diversified, imeg, musgrove-engineering, smithgroup)",
     "dev-wire-to": "dev documents of 2 drafters print a wiring callout beside a safety device: 'WIRE TO STARTER' (atkins 094), 'WIRED TO THE VFD' (smithgroup federal-mech)",
     "ufgs-230900-names": "UFGS 23 09 00 and 23 09 23.02 name the building control system and its parts: DDC, Building Control System (BCS), Utility Monitoring and Control System (UMCS)",
-    "dev-bas-commands": "dev documents of 3 drafters make the control system the subject of a control act: 'THE BMS SHALL …' (smithgroup federal-mech), 'THE DDC CONTROLLER SHALL …' (musgrove-engineering itd-d1-lab), 'FMCS SHALL …' (imeg 040)"
+    "dev-bas-commands": "dev documents of 3 drafters make the control system the subject of a control act: 'THE BMS SHALL …' (smithgroup federal-mech), 'THE DDC CONTROLLER SHALL …' (musgrove-engineering itd-d1-lab), 'FMCS SHALL …' (imeg 040)",
+    "unseen-points-function-columns": "a VA points list prints the software functions as columns (SCHEDULE START / STOP, DUTY CYCLE, TEMPERATURE ECONOMIZER, ENTHALPY ECONOMIZER, TEMPERATURE RESET, DEMAND LIMITING …) and marks each column row by row; a column's label names what the column marks, not what the unit has (an unseen document, 05_MO, sheets 50, 52 and 54; CI-64)"
   },
   "role": {
     "not_connected": [
@@ -535,6 +536,15 @@
           ]
         }
       ],
+      "traps": [
+        {
+          "id": "function_column",
+          "re": "^\\s*(?:TEMPERATURE|ENTHALPY|DRY[-\\s]?BULB)\\s+ECONOMI[SZ]\\w*\\s*$|\\b(?:TEMPERATURE|ENTHALPY|DRY[-\\s]?BULB)\\s+ECONOMI[SZ]\\w*(?:\\s+(?:TEMPERATURE|ENTHALPY|DRY[-\\s]?BULB)\\s+ECONOMI[SZ]\\w*)+",
+          "sources": [
+            "unseen-points-function-columns"
+          ]
+        }
+      ],
       "yes": [
         {
           "id": "enthalpy",
@@ -576,6 +586,15 @@
           "sources": [
             "lib",
             "ufgs-230993-pts"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "function_column",
+          "re": "^\\s*(?:TEMPERATURE|ENTHALPY|DRY[-\\s]?BULB)\\s+ECONOMI[SZ]\\w*\\s*$|\\b(?:TEMPERATURE|ENTHALPY|DRY[-\\s]?BULB)\\s+ECONOMI[SZ]\\w*(?:\\s+(?:TEMPERATURE|ENTHALPY|DRY[-\\s]?BULB)\\s+ECONOMI[SZ]\\w*)+",
+          "sources": [
+            "unseen-points-function-columns"
           ]
         }
       ],

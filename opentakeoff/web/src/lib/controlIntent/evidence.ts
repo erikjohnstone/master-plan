@@ -116,7 +116,7 @@ export function pageLines(spans: readonly NoteSpan[]): Line[] {
         // A lone number (a detail bubble's "3", a list's "A.") joins text only
         // across a word space: a caption's detail number is not its title.
         const lone = LONE_NUMBER.test(l.text) || LONE_NUMBER.test(clean(it.s.str));
-        if (d <= 0.35 * lo && hi / lo <= 1.35 && gap >= -0.6 * lo && gap <= (lone ? 0.5 * lo : 1.2 * hi) && d < bestD) { best = l; bestD = d; }
+        if (d <= 0.35 * lo && hi / lo <= 1.35 && gap >= -lo && gap <= (lone ? 0.5 * lo : 1.2 * hi) && d < bestD) { best = l; bestD = d; }
       }
       if (best) {
         best.box = union(best.box, it.box);
@@ -156,11 +156,16 @@ const word = (w: string, plural = false) => `\\b${loose(w)}${plural ? "(?: ?S)?"
 const rx = (s: string) => new RegExp(s, "i");
 
 const K_SEQUENCE = rx(word("SEQUENCE", true));
-const K_POINTS = rx(`${word("POINT", true)}\\s+(?:${word("LIST")}|${word("SCHEDULE")}|${word("SUMMARY")})|${word("POINT")}\\s+${word("FUNCTION")}\\s+${word("SCHEDULE")}|\\bI\\s?\\/\\s?O\\s+(?:${word("LIST")}|${word("SCHEDULE")}|${word("SUMMARY")})`);
-const K_DIAGRAM = rx(`${word("SCHEMATIC", true)}|${word("DIAGRAM", true)}`);
+/** A piping and instrumentation diagram, abbreviated ("DOAS 3 P&ID"). */
+const P_AND_ID = "\\bP\\s?&\\s?I\\s?D\\b";
+const K_POINTS = rx(`${word("POINT", true)}\\s+(?:${word("LIST")}|${word("SCHEDULE")}|${word("SUMMARY")})|${word("POINT")}\\s+${word("FUNCTION")}\\s+${word("SCHEDULE")}|\\bI\\s?\\/\\s?O\\s+(?:${word("LIST")}|${word("SCHEDULE")}|${word("SUMMARY")})|${word("INPUT", true)}\\s?\\/\\s?${word("OUTPUT", true)}\\s+(?:${word("POINT", true)}\\s+)?(?:${word("LIST")}|${word("SCHEDULE")}|${word("SUMMARY")})`);
+const K_DIAGRAM = rx(`${word("SCHEMATIC", true)}|${word("DIAGRAM", true)}|${P_AND_ID}`);
 /** CONTROL(S) as what a detail is about ("EXHAUST FAN CONTROL"), not as part
  * of a device's name ("CONTROL VALVE", "CONTROL PANEL"). */
 const K_CONTROL = rx(`${word("CONTROL", true)}(?!\\s+(?:VALVES?|DAMPERS?|PANELS?|WIRING|POWER|TRANSFORMERS?|RELAYS?|BOX(?:ES)?|CABINETS?|STATIONS?|ROOMS?|JOINTS?|DEVICES?|CONDUIT)\\b)|${word("MONITORING")}`);
+/** A unit's controller named as what a detail is about ("FURNACE CONTROLLER"), not where one is mounted. */
+const K_CONTROLLER = rx(`${word("CONTROLLER", true)}`);
+const MOUNTING = /\b(?:MOUNTING|MOUNTED|INSTALLATION|SUPPORTS?|HANGING|HANGERS?|ROUGH-?IN|ENCLOSURES?|LOCATIONS?)\b/;
 /** A diagram titled without CONTROL ("HOT WATER SYSTEM DIAGRAM") may be a
  * piping or flow diagram: it is a control packet only over control content. */
 const CONTROL_WORD = rx(`${word("CONTROL", true)}|${word("SEQUENCE", true)}|${word("POINT", true)}`);
@@ -168,7 +173,7 @@ const CONTROL_WORD = rx(`${word("CONTROL", true)}|${word("SEQUENCE", true)}|${wo
  * other things, title-block and index headings, piping and riser diagrams,
  * and the other trades' "control" (seismic and vibration control, noise
  * control, erosion and sediment control). */
-const NOT_PACKET = rx(`${word("LEGEND", true)}|${word("SYMBOL", true)}|${word("ABBREVIATION", true)}|${word("ARCHITECTURE")}|${word("RISER", true)}|${word("NETWORK")}|${word("WIRING")}|${word("SPECIFICATION", true)}|${word("INDEX")}|${word("NOTE", true)}|${word("PIPING")}|${word("FLOW")}\\s+${word("DIAGRAM")}|${word("KEY")}\\s+${word("PLAN")}|${word("SEISMIC")}|${word("VIBRATION")}|${word("NOISE")}|${word("EROSION")}|${word("SEDIMENT")}`);
+const NOT_PACKET = rx(`${word("LEGEND", true)}|${word("SYMBOL", true)}|${word("ABBREVIATION", true)}|${word("ARCHITECTURE")}|${word("RISER", true)}|${word("NETWORK")}|${word("WIRING")}|${word("SPECIFICATION", true)}|${word("INDEX")}|${word("NOTE", true)}|${word("PIPING")}(?!\\s+${word("AND")}\\s+${word("INSTRUMENTATION")})|${word("FLOW")}\\s+${word("DIAGRAM")}|${word("KEY")}\\s+${word("PLAN")}|${word("SEISMIC")}|${word("VIBRATION")}|${word("NOISE")}|${word("EROSION")}|${word("SEDIMENT")}`);
 const SCHEDULE_WORD = rx(word("SCHEDULE", true));
 /** A drawing of how something is built, not how it is controlled. */
 const INSTALLATION = /\b(?:DETAILS?|SECTIONS?|ELEVATIONS?|PLANS?|MOUNTING|INSTALLATION|SUPPORTS?|HANGING|HANGERS?|CONNECTIONS?|PIPING|DUCTWORK|ROUGH-?IN|ENLARGED|ISOMETRIC)\b/;
@@ -181,7 +186,11 @@ const ROW_NUMBER = /^\(?\d{1,3}(?:\.\d{1,2})*[.)]?\s+\S/;
 const GENERIC = new Set(("HVAC MECHANICAL MECH TEMPERATURE TEMP DDC BAS BMS EMS EMCS FMCS BUILDING AUTOMATION MANAGEMENT "
   + "SYSTEM SYSTEMS TYPICAL TYP DETAIL DETAILS SCHEDULE SCHEDULES SEQUENCE SEQUENCES OPERATION OPERATIONS OF FOR AND WITH "
   + "THE A AN TO IN ON AT BY CONTROL CONTROLS DIAGRAM DIAGRAMS SCHEMATIC SCHEMATICS POINT POINTS LIST FUNCTION SUMMARY "
-  + "I/O IO MONITORING NO SCALE NTS DRAWING DRAWINGS SHEET PLAN PLANS").split(" "));
+  + "I/O IO INPUT OUTPUT INPUTS OUTPUTS INPUT/OUTPUT INPUTS/OUTPUTS MONITORING NO SCALE NTS DRAWING DRAWINGS SHEET PLAN PLANS "
+  + "CONTROLLER CONTROLLERS").split(" "));
+/** Subjects of the other trades' control: a title about nothing else is
+ * none of this trade's. */
+const OTHER_TRADE = new Set("LIGHT LIGHTS LIGHTING DAYLIGHT DAYLIGHTING".split(" "));
 /** Words a letter-spaced line is repaired to: the title vocabulary and the
  * words of the compile's schedule-title rules. */
 const VOCAB = new Set<string>([...GENERIC, ...("SECONDARY PRIMARY CHILLED HEATING COOLING WATER HOT PUMP PUMPS FAN FANS EXHAUST SUPPLY "
@@ -218,7 +227,7 @@ export function repairSpacing(text: string): string {
 /** A title's subject words: what it is about, the discipline and the kind of
  * drawing left out. */
 export function subjectWords(title: string): string[] {
-  return repairSpacing(title).replace(/[():,;&]/g, " ").split(/\s+/)
+  return repairSpacing(title).replace(new RegExp(P_AND_ID, "gi"), " ").replace(/[():,;&]/g, " ").split(/\s+/)
     .map((w) => w.replace(/^[-–—.]+|[-–—.]+$/g, ""))
     .filter((w) => w && /[A-Z0-9]/.test(w) && !GENERIC.has(w));
 }
@@ -230,12 +239,19 @@ export function subjectWords(title: string): string[] {
 export function packetKind(title: string, opts: { titled?: boolean } = {}): PacketKind | null {
   const t = repairSpacing(title);
   if (!t || t.length > 180 || NOT_PACKET.test(t)) return null;
-  const kind: PacketKind | null = K_SEQUENCE.test(t) ? "sequence" : K_POINTS.test(t) ? "points" : K_DIAGRAM.test(t) ? "diagram" : K_CONTROL.test(t) ? "detail" : null;
+  const kind: PacketKind | null = K_SEQUENCE.test(t) ? "sequence" : K_POINTS.test(t) ? "points" : K_DIAGRAM.test(t) ? "diagram"
+    : K_CONTROL.test(t) || (K_CONTROLLER.test(t) && !MOUNTING.test(t)) ? "detail" : null;
   if (!kind) return null;
   if (kind !== "points" && SCHEDULE_WORD.test(t)) return null;
   if (SENTENCE.test(t) || (!opts.titled && /\.\s*$/.test(t) && t.split(" ").length >= 6)) return null;
   if (t.split(" ").length > 22) return null;
-  return subjectWords(t).length ? kind : null;
+  // Another trade's controls ("LIGHT CONTROLS" in an electrical legend).
+  const subject = subjectWords(t);
+  if (subject.length && subject.every((w) => OTHER_TRADE.has(w))) return null;
+  // A points list needs no subject of its own ("BAS INPUT/OUTPUT POINT LIST"
+  // over a family detail's table); any other title naming only the kind of
+  // drawing names the discipline ("HVAC CONTROLS").
+  return subject.length || kind === "points" ? kind : null;
 }
 
 /** A printed equipment tag: letters, an optional dash, a number ("VAV-1",
@@ -325,8 +341,8 @@ const DETAIL_NUMBER = /^[A-Z]{0,2}\d{1,3}[A-Z]?$/;
 const CONTENT: RegExp[] = [
   /^(?:AI|AO|BI|BO|DI|DO|AV|BV)$/,
   /\bSHALL\b.*\b(?:MODULATE|ENABLE|DISABLE|START|STOP|MAINTAIN|OPEN|CLOSE|CONTROL|MONITOR|CYCLE|STAGE|INDEX)/,
-  /\b(?:CONTROLLER|DDC|BAS|BMS|EMS|EMCS|FMCS|THERMOSTAT|T-?STAT|SET\s?POINT)\b/,
-  /\b(?:SENSOR|ACTUATOR|VFD|STATUS|ALARM|CURRENT\s+SWITCH|START\/STOP)\b/,
+  /\b(?:CONTROLLERS?|DDC|BAS|BMS|EMS|EMCS|FMCS|THERMOSTATS?|T-?STATS?|SET\s?POINTS?)\b/,
+  /\b(?:SENSORS?|ACTUATORS?|VFDS?|STATUS|ALARMS?|CURRENT\s+SWITCH(?:ES)?|START\/STOP)\b/,
 ];
 
 interface Strip { right?: number; bottom?: number }
@@ -445,9 +461,15 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   const strip = titleBlockStrip(all, W, H);
   const sheetNo = sheetNumberOf(spans);
   const tableBoxes = tables.map((t) => ({ ...t, compact: compactTitle(t.title) }));
-  // Text inside an extracted table's body is table text, never a title.
+  // Text inside an extracted table's body is table text, never a title; a
+  // line of the table's own title, at its top, is its title (a title set on
+  // two lines, each line only part of it).
+  const titleLine = (l: Line, t: { region: Box; compact: string }) => {
+    const c = compactTitle(l.text);
+    return c === t.compact || (c.length >= 6 && t.compact.includes(c) && l.dev[1] <= t.region[1] + 4 * (l.dev[3] - l.dev[1]));
+  };
   const inTable = (l: Line) => tableBoxes.some((t) => l.dev[0] >= t.region[0] - 1 && l.dev[2] <= t.region[2] + 1 && l.dev[1] >= t.region[1] - 1 && l.dev[3] <= t.region[3] + 1
-    && compactTitle(l.text) !== t.compact);
+    && !titleLine(l, t));
   const lines = all.filter((l) => !inStrip(l.dev, strip));
   const byRot = new Map<number, Line[]>();
   for (const l of lines) (byRot.get(l.rot) ?? byRot.set(l.rot, []).get(l.rot)!).push(l);
@@ -476,10 +498,22 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   // 1. Titles. Big lines, alone on their baseline (a table row in a large
   //    font has cells beside it), stacked when a title runs to more lines.
   const titles: Title[] = [];
-  const isolated = (l: Line) => !sameRot(l.rot).some((o) => o !== l && Math.abs(o.h - l.h) <= 0.15 * l.h
-    && Math.abs((o.box[1] + o.box[3]) / 2 - (l.box[1] + l.box[3]) / 2) <= 0.35 * l.h
-    && !DETAIL_NUMBER.test(o.text) && !SCALE_NOTE.test(o.text)
-    && ((o.box[0] >= l.box[2] && o.box[0] - l.box[2] <= 6 * l.h) || (o.box[2] <= l.box[0] && l.box[0] - o.box[2] <= 6 * l.h)));
+  const stackedUnder = (l: Line) => sameRot(l.rot).find((n) => n !== l && Math.abs(n.h - l.h) <= 0.15 * l.h
+    && n.box[1] - l.box[3] >= -0.2 * l.h && n.box[1] - l.box[3] <= 0.6 * l.h
+    && (Math.abs(n.box[0] - l.box[0]) <= l.h || Math.abs((n.box[0] + n.box[2]) / 2 - (l.box[0] + l.box[2]) / 2) <= l.h));
+  const namesEvidence = (l: Line) => {
+    if (packetKind(l.text, { titled: true })) return true;
+    const n = stackedUnder(l);
+    return Boolean(n && packetKind(`${l.text} ${n.text}`, { titled: true }));
+  };
+  const isolated = (l: Line) => {
+    const beside = sameRot(l.rot).filter((o) => o !== l && Math.abs(o.h - l.h) <= 0.15 * l.h
+      && Math.abs((o.box[1] + o.box[3]) / 2 - (l.box[1] + l.box[3]) / 2) <= 0.35 * l.h
+      && !DETAIL_NUMBER.test(o.text) && !SCALE_NOTE.test(o.text)
+      && ((o.box[0] >= l.box[2] && o.box[0] - l.box[2] <= 6 * l.h) || (o.box[2] <= l.box[0] && l.box[0] - o.box[2] <= 6 * l.h)));
+    if (!beside.length) return true;
+    return beside.every((o) => Math.max(o.box[0] - l.box[2], l.box[0] - o.box[2]) >= 2 * l.h) && namesEvidence(l);
+  };
   const hasWord = (l: Line) => /[A-Z]{3,}/i.test(l.text);
   const big = lines.filter((l) => l.h >= 1.2 * body && hasWord(l) && !ROW_NUMBER.test(l.text) && !DETAIL_NUMBER.test(l.text) && !SCALE_NOTE.test(l.text)
     && !SUBTITLE.test(l.text) && !inTable(l) && isolated(l))
@@ -517,7 +551,7 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     const above = rows.filter((o) => o !== l && Math.abs(o.h - l.h) <= 0.3 * l.h && uOverlap(o.box, l.box) > 0.3 * Math.min(o.box[2] - o.box[0], l.box[2] - l.box[0])
       && l.box[1] - o.box[3] >= -0.2 * l.h && l.box[1] - o.box[3] <= 1.2 * l.h);
     const below = rows.some((o) => o !== l && o.box[1] - l.box[3] >= -0.2 * l.h && o.box[1] - l.box[3] <= 3 * l.h
-      && o.box[0] >= l.box[0] - 2 * l.h && o.box[0] <= l.box[0] + 4 * l.h);
+      && ((o.box[0] >= l.box[0] - 2 * l.h && o.box[0] <= l.box[0] + 4 * l.h) || uOverlap(o.box, l.box) > 0));
     if (!below) return null;
     if (!above.length) return "free";
     return named && above.every((o) => /[.:;]\s*$/.test(o.text)) ? "after" : null;
@@ -547,6 +581,19 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   //    list's title goes with the nearer block of body text (a line of six
   //    words or more; a scale note or a parenthetical subtitle belongs to the
   //    title), failing that the nearer line of any kind.
+  /** Lines at another angle printed right above a title set level (a
+   * diagram's labels along its ducts and pipes), in device space. */
+  const labelsAbove = (t: Title, limit: number) => t.rot === 0 && lines.some((o) => o.rot !== 0
+    && o.dev[0] < t.dev[2] + 2 * t.h && o.dev[2] > t.dev[0] - 2 * t.h && t.dev[1] - o.dev[3] >= -0.2 * t.h && t.dev[1] - o.dev[3] <= limit);
+  /** The gap to the nearest line above (-1) or below (1) a title, at any
+   * angle for a level title (device space), within a limit. */
+  const nearestAny = (t: Title, dir: 1 | -1, limit: number) => {
+    const pool = t.rot === 0 ? lines.filter((o) => !t.lines.includes(o) && o.dev[0] < t.dev[2] + 2 * t.h && o.dev[2] > t.dev[0] - 2 * t.h).map((o) => o.dev)
+      : sameRot(t.rot).filter((o) => !t.lines.includes(o) && o.box[0] < t.box[2] + 2 * t.h && o.box[2] > t.box[0] - 2 * t.h).map((o) => o.box);
+    const tb = t.rot === 0 ? t.dev : t.box;
+    const gs = pool.map((b) => dir > 0 ? b[1] - tb[3] : tb[1] - b[3]).filter((g) => g >= -0.2 * t.h && g <= limit);
+    return gs.length ? Math.min(...gs) : Infinity;
+  };
   const isBody = (o: Line) => (wordCount(o.text) >= 6 || (wordCount(o.text) >= 4 && /[.:;]\s*$/.test(o.text))) && !SCALE_NOTE.test(o.text) && !SUBTITLE.test(o.text);
   const owned = (o: Line) => SCALE_NOTE.test(o.text) || SUBTITLE.test(o.text) || DETAIL_NUMBER.test(o.text);
   /** How far below (or above) a text title its block may start. */
@@ -554,6 +601,17 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   for (const t of titles) {
     if (t.caption) { t.direction = "above_title"; continue; }
     if (t.heads) { t.direction = "below_title"; continue; }
+    // A points title printed as the first row of a table the sheet graph
+    // extracted under that title (inside its border, at its top) heads the
+    // table, whatever is printed above it (01_NY's first "INPUT/OUTPUT
+    // SUMMARY", under the air handler's sequence text) (CI-59).
+    if (t.kind === "points" && t.rot === 0 && tableBoxes.some((tb) => tb.compact === compactTitle(t.text)
+      && t.dev[1] >= tb.region[1] - 0.5 * t.h && t.dev[1] <= tb.region[1] + 2 * t.h && tb.region[3] > t.dev[3] + 2 * t.h
+      && t.dev[0] >= tb.region[0] - 1 && t.dev[2] <= tb.region[2] + 1)) {
+      t.direction = "below_title";
+      t.tableHead = true;
+      continue;
+    }
     // A title printed at the top of a points table, inside its border, has
     // the table's header row right under it: it heads the table, whatever
     // is printed above (often the table before it).
@@ -572,7 +630,17 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     };
     const textKind = t.kind === "sequence" || t.kind === "points" || t.generic;
     if (!textKind) {
-      t.direction = gap(() => true, -1, Math.max(8 * t.h, 6 * body)) < Infinity ? "above_title" : "below_title";
+      const limit = Math.max(8 * t.h, 6 * body);
+      const subject = subjectWords(t.text);
+      const under = near.filter((o) => o.box[1] - t.box[3] >= -0.2 * t.h && o.box[1] - t.box[3] <= 2.5 * Math.max(t.h, body)).sort((a, b) => a.box[1] - b.box[1])[0];
+      const underSubject = under ? subjectWords(under.text) : [];
+      if (subject.length && under && packetKind(under.text) && subject.every((w) => underSubject.includes(w))) { t.direction = "below_title"; continue; }
+      if (gap(() => true, -1, limit) < Infinity || labelsAbove(t, limit)) { t.direction = "above_title"; continue; }
+      // Nothing right above: the nearer of the drawing above it and the text
+      // below it, at any angle, within twice that window (a caption under a
+      // sparse diagram, with the next detail further down).
+      const above = nearestAny(t, -1, 2 * limit), below = nearestAny(t, 1, 2 * limit);
+      t.direction = above < below ? "above_title" : "below_title";
       continue;
     }
     const win = textWindow(t);
@@ -685,9 +753,27 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
   // 4. Packets: titles that name control evidence, and keyword-less
   //    captions of two words or more that name equipment over control content.
   const contentHits = (r: Box, rot: number) => {
-    const text = sameRot(rot).filter((l) => l.box[0] >= r[0] - 1 && l.box[2] <= r[2] + 1 && l.box[1] >= r[1] - 1 && l.box[3] <= r[3] + 1).map((l) => repairSpacing(l.text));
+    const text = [
+      ...sameRot(rot).filter((l) => l.box[0] >= r[0] - 1 && l.box[2] <= r[2] + 1 && l.box[1] >= r[1] - 1 && l.box[3] <= r[3] + 1),
+      ...(rot === 0 ? lines.filter((l) => l.rot !== 0 && l.dev[0] >= r[0] - 1 && l.dev[2] <= r[2] + 1 && l.dev[1] >= r[1] - 1 && l.dev[3] <= r[3] + 1) : []),
+    ].map((l) => repairSpacing(l.text));
     return CONTENT.filter((c) => text.some((s) => c.test(s) || s.split(" ").some((w) => c.test(w)))).length;
   };
+  // A page of control drawings: its title block's drawing title names
+  // controls, or, with none read, one of its own titles does ("CONTROLS
+  // SYMBOLS" over a sheet of unit diagrams). A schedule or legend sheet is
+  // none, whatever one of its tables is called.
+  /** A table whose columns are a points list's (its header row, or I/O
+   * types): a caption over it titles control evidence; over any other
+   * extracted table it titles a schedule. */
+  const pointsTable = (r: Box) => {
+    const inR = all.filter((l) => l.dev[0] >= r[0] - 1 && l.dev[2] <= r[2] + 1 && l.dev[1] >= r[1] - 1 && l.dev[3] <= r[3] + 1).map((l) => repairSpacing(l.text));
+    if (inR.some((t) => POINTS_HEADER.test(t))) return true;
+    const io = new Set(inR.flatMap((t) => t.split(/\s+/)).filter((w) => /^(?:AI|AO|BI|BO|DI|DO)$/.test(w)));
+    return io.size >= 2;
+  };
+  const sheetTitle = sheetTitleOf(spans);
+  const controlsPage = sheetTitle ? CONTROL_WORD.test(repairSpacing(sheetTitle)) : titles.some((t) => CONTROL_WORD.test(repairSpacing(t.text)));
   for (const t of titles) {
     if (inStrip(t.dev, strip)) continue;
     const region = t.direction === "above_title" ? captionRegion(t) : headingRegion(t);
@@ -696,12 +782,13 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     if (t.kind && (t.kind !== "diagram" || CONTROL_WORD.test(text) || contentHits(region, t.rot) >= 2)) {
       t.packet = t.kind;
     } else if (!t.kind && !t.generic && (t.caption || t.big) && wordCount(text) >= 2 && text.replace(/\s+/g, "") !== sheetNo
+      && !(t.rot === 0 && tableBoxes.some((tb) => tb.compact === compactTitle(text) && !pointsTable(tb.region)))
       && !NOT_PACKET.test(text) && !INSTALLATION.test(text) && !SENTENCE.test(text) && !SCHEDULE_WORD.test(text)
-      && ((text.match(TAG_TOKEN) ?? []).length > 0 || subjectFamily(text)) && contentHits(region, t.rot) >= 2) {
+      && ((text.match(TAG_TOKEN) ?? []).length > 0 || subjectFamily(text)) && contentHits(region, t.rot) >= (controlsPage ? 1 : 2)) {
       t.packet = t.tableHead ? "points" : "diagram";
     }
   }
-  return { lines, body, strip, titles, sheetTitle: sheetTitleOf(spans), regions };
+  return { lines, body, strip, titles, sheetTitle, regions };
 }
 
 const compactTitle = (s: string) => String(s ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -723,8 +810,9 @@ export function findPackets(sheet: string, spans: readonly NoteSpan[], tables: r
   // A heading inside a caption's detail is part of it: a body-size heading
   // always (a section), a big one when it names the same subject.
   const inside = (t: Title, r: Box) => t.box[0] >= r[0] - t.h && t.box[2] <= r[2] + t.h && t.box[1] >= r[1] - 0.2 * t.h && t.box[3] <= r[3] + 0.2 * t.h;
+  const ownSubject = (t: Title, o: Title) => (t.kind === "sequence" || t.kind === "points") && subjectWords(t.text).length > 0 && !sameSubject(t, o);
   const partOfCaption = (t: Title) => t.direction === "below_title" && entries.some(([o, r]) => o !== t && o.rot === t.rot && o.direction === "above_title"
-    && inside(t, r) && (!t.big || sameSubject(t, o)));
+    && inside(t, r) && (t.big ? sameSubject(t, o) : !ownSubject(t, o)));
   const kept: Array<{ t: Title | null; rot: number; box: Box; title: string; kind: PacketKind; direction: Packet["direction"]; scope: Packet["scope"]; detail?: string; subtitle?: string }> = [];
   for (const [t, r] of entries) {
     if (partOfCaption(t)) continue;

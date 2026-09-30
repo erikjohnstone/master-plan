@@ -4,15 +4,15 @@
 READING EVAL (instrument 4) — dev, replayed runs
 
                                            applied-right applied-wrong INVENTED proposal-right proposal-wrong unresolved abstained
-  ALL decisions                                       296              0         0              46               5          10        291
+  ALL decisions                                       296              0         0              44               5           9        292
   absence decisions                                    48              0         0              27               0           0          0
   applied 296, applied-wrong 0.00%, uncited applied 0
 
 per reader (answers on keyed questions):
-  r0     right 320  wrong 1  abstained 326  unverified 0  (key undecided 1)
-  r1     right 508  wrong 27  abstained 72  unverified 39  (key undecided 2)
-  r2a    right 314  wrong 3  abstained 280  unverified 18  (key undecided 2)
-  r2b    right 322  wrong 2  abstained 272  unverified 19  (key undecided 2)
+  r0     right 319  wrong 1  abstained 326  unverified 0  (key undecided 0)
+  r1     right 507  wrong 27  abstained 72  unverified 39  (key undecided 1)
+  r2a    right 313  wrong 1  abstained 282  unverified 18  (key undecided 1)
+  r2b    right 320  wrong 2  abstained 275  unverified 17  (key undecided 1)
   rp     right 15  wrong 0  abstained 0  unverified 0  (key undecided 0)
 
 per set:
@@ -20,7 +20,7 @@ per set:
   bldg5406-hvac-demo                                   64              0         0              14               0           0          4
   094_FL_Orange_County_Regional_History_Ce             32              0         0              14               0           0          0
   040_IL_VA_Solicitation_36C77623B0051_Exp             22              0         0               0               0           0         12
-  itd-d1-lab                                           21              0         0               6               0           3          4
+  itd-d1-lab                                           21              0         0               4               0           2          5
   12_MT_MSU_ReidHall_Renovation                         0              0         0               4               0           0         16
   031_MO_VA_Project_589A4_20_158_Renovate_              3              0         0               0               1           1         13
   004_MO_T2504_03_Interior_and_Exterior_Re              0              0         0               0               1           0          8
@@ -29,13 +29,13 @@ per set:
   baker-county-eoc                                      0              0         0               0               0           0          2
 
 per question:
-  role                                                123              0         0              13               4           6         23
+  role                                                123              0         0              12               4           5         24
   opt.setpoint_adjust                                  72              0         0               1               0           0         11
   opt.occupancy_sensor                                  5              0         0               9               0           0         63
   opt.window_switch                                    13              0         0               0               0           0         63
   opt.co2_sensor                                       27              0         0               0               0           0         47
   opt.reheat_water_temps                                0              0         0               0               0           0         58
-  opt.motorized_damper                                 11              0         0               1               0           1          0
+  opt.motorized_damper                                 11              0         0               0               0           1          0
   opt.scr_heat                                          9              0         0               1               0           0          1
   opt.duct_smoke_detectors                              2              0         0               6               0           1          0
   opt.freezestat_to_bas                                 5              0         0               1               0           0          1

@@ -104,8 +104,10 @@ export function ownPacket(b: Binding, all: readonly Binding[]): boolean {
  * units, or null (CI-23). The binder's claim is checked against the packet:
  * its title (with its subtitle) names scheduled units by tag and not the
  * unit ("… EXHAUST FAN (EF-1 THRU EF-3)" bound to VAV-4), or the subject its
- * title's head names ("X WITH Y" is about X) is another kind of equipment
- * than the unit's ("UNIT HEATER - CONTROL DIAGRAM" bound to a VAV box),
+ * title's head names ("X WITH Y" is about X), in words or by the letters of
+ * the set's marks, is another kind of equipment than the unit's ("UNIT
+ * HEATER - CONTROL DIAGRAM" bound to a VAV box; "TAB CONTROL …" to an air
+ * handler, where the set marks its terminal air boxes TAB-102 …),
  * neither one of the title's subjects joined by AND nor a part the unit's
  * row prints (a drive: `parts`). A family detail is checked as the binder
  * takes one: its title names the unit's family (or a part its row prints),
@@ -128,8 +130,15 @@ export function aboutOthers(bp: { packet: Pick<Packet, "title" | "subtitle">; bi
   const typical = bp.binding.kind === "family_detail" && Boolean(unit.family) && named.every((m) => byMark.get(m)!.includes(unit.family!));
   if (named.length && !typical) return `its title names ${[...new Set(named)].slice(0, 3).join(", ")}, not ${unit.tag}`;
   const co = coSubjects(bp.packet.title);
-  const subject = subjectFamily(bp.packet.title.split(/\s+(?:WITH|W\/)\s+/)[0]);
-  if (subject && unit.family && subject !== unit.family && !parts.has(subject) && !co.has(unit.family)) return `its title is about ${subject}, not ${unit.family}`;
+  const head = bp.packet.title.split(/\s+(?:WITH|W\/)\s+/)[0];
+  // A head that names no kind in words may lead with the letters the set's
+  // marks of one kind carry: its own name for them ("TAB CONTROL W / HOT
+  // WATER REHEAT …" over the terminal air boxes TAB-102 …, CI-65).
+  const lead = head.trim().match(/^[A-Z]{2,6}(?=\s|$)/)?.[0];
+  const marked = new Set(lead ? scheduled.filter((s) => tagKey(s.tag)?.prefix === lead).map((s) => s.family) : []);
+  const inWords = subjectFamily(head);
+  const subject = inWords ?? (marked.size === 1 ? [...marked][0] : null);
+  if (subject && unit.family && subject !== unit.family && !parts.has(subject) && !co.has(unit.family)) return `its title is about ${subject}${inWords ? "" : ` (${lead}, as the set marks them)`}, not ${unit.family}`;
   if (bp.binding.kind === "family_detail" && unit.family && row) {
     const family = subjectFamily(bp.packet.title);
     const fits = family === unit.family || co.has(unit.family) || (family !== null && parts.has(family)) || (family === null && scheduleNamesSubject(bp.packet.title, row));

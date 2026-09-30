@@ -1,19 +1,19 @@
 {
  "side": "heldout2",
  "total": {
-  "packets": 32,
+  "packets": 38,
   "pairs": 147,
   "pair_hits": 34,
   "recall": 0.23129251700680273,
   "recall_without_semantic": 0.2357142857142857,
   "recall_with_proposals": 0.23129251700680273,
-  "bindings": 47,
-  "confirmed_bindings": 47,
-  "precision": 0.7659574468085106,
-  "precision_with_proposals": 0.7659574468085106,
+  "bindings": 56,
+  "confirmed_bindings": 56,
+  "precision": 0.7678571428571429,
+  "precision_with_proposals": 0.7678571428571429,
   "proposals": 0,
   "ambiguous": 0,
-  "hits_inside": 0,
+  "hits_inside": 6,
   "hits_containing": 2,
   "key_packets_not_found": 16,
   "units_with_packets": 72,
@@ -45,8 +45,18 @@
     "proposal": 0
    },
    "tag_body": {
-    "bindings": 37,
-    "correct": 26,
+    "bindings": 41,
+    "correct": 30,
+    "proposal": 0
+   },
+   "sibling": {
+    "bindings": 4,
+    "correct": 2,
+    "proposal": 0
+   },
+   "tag": {
+    "bindings": 1,
+    "correct": 1,
     "proposal": 0
    }
   },

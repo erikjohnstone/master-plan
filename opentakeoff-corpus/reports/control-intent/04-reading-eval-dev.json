@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T20:59:37.807Z",
+  "generated_at": "2026-09-30T20:03:27.616Z",
   "side": "dev",
   "documents": [
     "004_MO_T2504_03_Interior_and_Exterior_Renovation",
@@ -34,10 +34,10 @@
       "applied-right": 296,
       "applied-wrong": 0,
       "INVENTED": 0,
-      "proposal-right": 46,
+      "proposal-right": 44,
       "proposal-wrong": 5,
-      "unresolved": 10,
-      "abstained": 291
+      "unresolved": 9,
+      "abstained": 292
     },
     "applied": 296,
     "applied_wrong_rate": 0,
@@ -53,32 +53,32 @@
     "uncited_applied": 0,
     "readers": {
       "r0": {
-        "right": 320,
+        "right": 319,
         "wrong": 1,
         "abstained": 326,
         "unverified": 0,
-        "undecided-key": 1
+        "undecided-key": 0
       },
       "r1": {
-        "right": 508,
+        "right": 507,
         "wrong": 27,
         "abstained": 72,
         "unverified": 39,
-        "undecided-key": 2
+        "undecided-key": 1
       },
       "r2a": {
-        "right": 314,
-        "wrong": 3,
-        "abstained": 280,
+        "right": 313,
+        "wrong": 1,
+        "abstained": 282,
         "unverified": 18,
-        "undecided-key": 2
+        "undecided-key": 1
       },
       "r2b": {
-        "right": 322,
+        "right": 320,
         "wrong": 2,
-        "abstained": 272,
-        "unverified": 19,
-        "undecided-key": 2
+        "abstained": 275,
+        "unverified": 17,
+        "undecided-key": 1
       },
       "rp": {
         "right": 15,
@@ -129,10 +129,10 @@
         "applied-right": 21,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 6,
+        "proposal-right": 4,
         "proposal-wrong": 0,
-        "unresolved": 3,
-        "abstained": 4
+        "unresolved": 2,
+        "abstained": 5
       },
       "12_MT_MSU_ReidHall_Renovation": {
         "applied-right": 0,
@@ -212,7 +212,7 @@
         "applied-right": 33,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 3,
+        "proposal-right": 1,
         "proposal-wrong": 0,
         "unresolved": 1,
         "abstained": 3
@@ -241,8 +241,8 @@
         "INVENTED": 0,
         "proposal-right": 5,
         "proposal-wrong": 0,
-        "unresolved": 1,
-        "abstained": 8
+        "unresolved": 0,
+        "abstained": 9
       },
       "BOILER": {
         "applied-right": 2,
@@ -322,10 +322,10 @@
         "applied-right": 123,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 13,
+        "proposal-right": 12,
         "proposal-wrong": 4,
-        "unresolved": 6,
-        "abstained": 23
+        "unresolved": 5,
+        "abstained": 24
       },
       "opt.setpoint_adjust": {
         "applied-right": 72,
@@ -376,7 +376,7 @@
         "applied-right": 11,
         "applied-wrong": 0,
         "INVENTED": 0,
-        "proposal-right": 1,
+        "proposal-right": 0,
         "proposal-wrong": 0,
         "unresolved": 1,
         "abstained": 0

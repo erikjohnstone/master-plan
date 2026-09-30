@@ -1,5 +1,43 @@
 # Changelog
 
+- **Control drawings: each unit is linked to far more of its own sequences,
+  diagrams and points lists, on documents no rule was drawn from.**
+  Measured with the binding eval on every tier (8d46f5c → this commit, the
+  same runner on both):
+  - The first tier's held-out (aggregates only): pair recall 26.7% →
+    68.1%, precision 93.5% → 94.7%; units with a governing drawing linked
+    44.7% → 88.2%. Held-out 2: 23.1%, precision 76.6% → 76.8% (its misses
+    are drawings the finder never finds, next).
+  - Dev 2: 80.1% → 95.7%, precision 95.3% → 96.9%. Dev 3 (keyed after
+    the first rules): 40.0% → 53.5%, precision 79.9% → 94.8%. Dev:
+    96.9%, precision 91.4% → 91.7%.
+  - The finder reads points lists that name no subject ("INPUT/OUTPUT
+    SUMMARY"), a table's title set inside the table, P&IDs, a unit's
+    controller detail, side-by-side titles run to two lines and captions
+    under sparse diagrams; another trade's controls are left out.
+  - A family's one detail of a kind is its units' own when every unit
+    took it and nothing in a row or the set speaks against its qualifier;
+    a pump or fan detail naming another service than the unit's schedule
+    is not its; a part takes the drawings of a host the set does not
+    schedule, or of its own designation where the set names parts that
+    way; a points table listing one diagram's devices is that diagram's.
+  - A mark with a building's number before it ("1-AC-15", "40-AHU-2") is
+    read as the unit's mark in titles, labels and rows, so those units
+    find their own drawings. A points list's function columns ("ENTHALPY
+    ECONOMIZER") are not read as the unit's options.
+  - A drawing whose title leads with the letters the set marks another
+    kind of unit by ("TAB CONTROL …" over boxes marked TAB-102) is not
+    trusted as an air handler's own: GATE D's adversarial swap passes
+    again (0 of 510 questions decided through a swapped drawing).
+  - Readings: dev 296 applied, 0 wrong; held-out 5 applied, 0 wrong, 20
+    proposals right, 0 wrong; the unseen audit 59 applied, 59 right.
+  - Nothing a schedule is read from changes: table extraction, sheet
+    roles, tag reading and the reconcile are untouched.
+  (`web/src/lib/controlIntent/evidence.ts`, `binding.ts`,
+  `readers/r0.ts`, `termlist/v1.json`; CONTROL_INTENT_BUG_CATALOGUE CI-26,
+  CI-55 to CI-65; goal C5 amended; `opentakeoff-corpus/reports/
+  control-intent/03-binding-eval-*`, `04-reading-eval-*`,
+  `05-robustness-dev`, `06-unseen-audit`.)
 - **Schedule ↔ plan reconcile: a unit found by its tag is verified against
   its drawn body far more often, and counts on its own view.** Measured on
   the twelve keyed dev documents (4d16d7e → this commit):

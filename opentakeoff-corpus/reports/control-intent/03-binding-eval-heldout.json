@@ -1,33 +1,33 @@
 {
  "side": "heldout",
  "total": {
-  "packets": 52,
+  "packets": 64,
   "pairs": 191,
-  "pair_hits": 51,
-  "recall": 0.2670157068062827,
-  "recall_without_semantic": 0.2727272727272727,
-  "recall_with_proposals": 0.5549738219895288,
-  "bindings": 99,
-  "confirmed_bindings": 46,
-  "precision": 0.9347826086956522,
-  "precision_with_proposals": 0.7171717171717171,
-  "proposals": 53,
+  "pair_hits": 130,
+  "recall": 0.680628272251309,
+  "recall_without_semantic": 0.6951871657754011,
+  "recall_with_proposals": 0.6858638743455497,
+  "bindings": 131,
+  "confirmed_bindings": 114,
+  "precision": 0.9473684210526315,
+  "precision_with_proposals": 0.8320610687022901,
+  "proposals": 17,
   "ambiguous": 8,
-  "hits_inside": 0,
-  "hits_containing": 0,
-  "key_packets_not_found": 15,
+  "hits_inside": 5,
+  "hits_containing": 34,
+  "key_packets_not_found": 12,
   "units_with_packets": 85,
-  "unit_recall": 0.4470588235294118,
+  "unit_recall": 0.8823529411764706,
   "unmatched_instances": 0,
   "none_units_bound": 0,
   "by_key_kind": {
    "tag": {
     "pairs": 59,
-    "hit": 23
+    "hit": 42
    },
    "family_detail": {
     "pairs": 112,
-    "hit": 15
+    "hit": 74
    },
    "semantic": {
     "pairs": 4,
@@ -35,19 +35,19 @@
    },
    "list_range": {
     "pairs": 16,
-    "hit": 13
+    "hit": 14
    }
   },
   "by_binding_kind": {
    "tag_body": {
-    "bindings": 34,
-    "correct": 31,
+    "bindings": 57,
+    "correct": 55,
     "proposal": 0
    },
    "family_detail": {
     "bindings": 60,
-    "correct": 35,
-    "proposal": 53
+    "correct": 40,
+    "proposal": 17
    },
    "system": {
     "bindings": 1,
@@ -63,14 +63,19 @@
     "bindings": 3,
     "correct": 3,
     "proposal": 0
+   },
+   "sibling": {
+    "bindings": 9,
+    "correct": 9,
+    "proposal": 0
    }
   },
   "miss_reasons": {
-   "key packet not found by the finder": 45,
-   "bound to packets of other kinds only": 19,
-   "no binding at all (tag read)": 18,
-   "bound as a proposal only": 55,
-   "bound to another packet of that kind": 2,
+   "key packet not found by the finder": 28,
+   "bound to packets of other kinds only": 17,
+   "no binding at all (tag read)": 6,
+   "bound as a proposal only": 1,
+   "bound to another packet of that kind": 8,
    "no binding at all (tag not read)": 1
   }
  }
