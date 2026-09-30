@@ -1,0 +1,13 @@
+# itd-d1-lab.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+itd-d1-lab-mechanical.pdf#3,HVAC FLOOR PLAN,M,new,yes,"M1.0; view HVAC PLAN (ductwork with EH, HC, F and DFC tags); Lab Mechanical 120 drawn untagged and referred to enlarged plan 2/M3.0"
+itd-d1-lab-mechanical.pdf#4,EXHAUST FLOOR PLAN,M,new,yes,"M1.1; view EXHAUST PLAN (EF-1 to EF-3 tagged; air valves, hoods and lab equipment tags out of scope)"
+itd-d1-lab-mechanical.pdf#5,HYDRONIC FLOOR PLAN,M,new,yes,M1.2; view HYDRONIC PLAN (HC tags with CV control valves repeat the M1.0 coils)
+itd-d1-lab-mechanical.pdf#6,MECHANICAL ROOF PLAN,M,roof,yes,M2.0; view HVAC Roof Plan
+itd-d1-lab-mechanical.pdf#7,ENLARGED MECHANICAL PLAN,M,enlarged,yes,M3.0; view 2 ENLARGED MECHANICAL PLAN of Lab Mechanical 120 (only tagged view of that room); view 1 on the sheet is the heating water piping schematic (diagram not a plan view)
+itd-d1-lab-mechanical.pdf#22,FOUNDATION PLUMBING PLAN,P,new,yes,P1.0; view PLUMBING FOUNDATION PLAN; searched and no HVAC unit tags drawn
+itd-d1-lab-mechanical.pdf#23,PLUMBING FLOOR PLAN,P,new,yes,P2.0; F-1 and DFC-1 tagged for their condensate drains
+itd-d1-lab-mechanical.pdf#24,PLUMBING ROOF PLAN,P,roof,yes,P3.0; AHU-1 CU-1 DCU-1 LEF-1 tagged as background to roof piping
+itd-d1-lab-mechanical.pdf#25,ENLARGED PLUMBING PLAN,P,enlarged,yes,P4.0; view 1 ENLARGED MECHANICAL ROOM PLUMBING PLAN of Lab Mechanical 120 (B-1 B-2 HUM-1 tagged for gas and water connections)
+itd-d1-lab-mechanical.pdf#29,FIRE SPRINKLER FLOOR PLAN,FP,new,yes,FS1.0; searched and no HVAC unit tags drawn

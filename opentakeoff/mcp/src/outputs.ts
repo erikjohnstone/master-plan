@@ -477,6 +477,13 @@ export const reconcileSchedulePlanOutput = {
       grounding_basis: z.literal("exact_authored_diagram_tag"),
       schedule_binding_status: z.enum(["bound", "ambiguous", "unbound"]),
     })).optional(),
+    plan_other_cites: z.array(z.object({
+      sheet: z.string(),
+      at: z.array(z.number()).optional(),
+      bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional(),
+      reason: z.enum(["repeat_view", "unattached_tag", "demolition_view"]),
+      counted_on: z.string().optional(),
+    })).optional().describe("AS-92: every other drawn occurrence of this row's own mark on a plan-like sheet that the row does not count — the same unit on another plan view (repeat_view; counted_on names the sheet that counts it), the mark's text with no attached symbol (unattached_tag), the mark on a demolition plan (demolition_view). Links from a drawn tag to its row, never installed quantity"),
     reference_tag_cites: z.array(z.object({
       sheet: z.string(), role: z.string(), bbox: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }), text: z.string(),
     })).optional().describe("Every non-plan drawn occurrence of this row's mark (schematic/legend/detail/etc) — a citation, never installed evidence; present only when sweep_schedule_row returned status: reference_only"),
@@ -487,6 +494,8 @@ export const reconcileSchedulePlanOutput = {
   })),
   unscheduled_tags: z.array(drawnTagWire).optional()
     .describe("WP6: every drawn tag occurrence (sheet callouts excluded) whose key never appears as any schedule row's own identity anywhere in the set. A review list — never changes any row's quantity or status."),
+  unscheduled_units: z.array(drawnTagWire).optional()
+    .describe("AS-93: the likely units among unscheduled_tags — drawn on a plan or demolition plan sheet, outside every table and sheet callout, and shaped like a unit of a scheduled family (the same letters and form as a unit mark an equipment schedule prints). A review list — never changes any row's quantity or status."),
   alias_candidates: z.array(z.object({
     drawn: z.string(), nearest_row_key: z.string(), distance: z.literal(1),
   })).optional().describe("WP6: for every distinct drawn key, the nearest schedule-row key exactly one letter-edit away (never a digit edit), when one exists — a likely typo/OCR spelling drift between the drawing and the schedule, or between two schedule rows. A review list — never changes any row's quantity or status."),

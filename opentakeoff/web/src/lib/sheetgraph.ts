@@ -61,6 +61,28 @@ const isVertical = (s: GraphSpan): boolean =>
 // Apostrophes arrive both ways: ASCII ' and the typographic ’ (U+2019 —
 // pdf.js maps a Type1 quoteright there), so every CONT'D pattern accepts both.
 const SCHEDULE_TITLE_RE = /^[A-Z][A-Z ()/&.'’-]* SCHEDULE( *[-–] *[A-Z0-9 ()/&.'’-]+)?( *\(?(?:CONTINUATION|CONTINUED|CONT['’]?D?)\.?\)?)?$/;
+// A plan title with a level, floor, area, phase or option between its
+// discipline word and PLAN ("MECHANICAL LEVEL 34 PLAN", "FIRST FLOOR
+// MECHANICAL REMODEL PLAN", "HVAC ZONE PLAN - LEVEL 1", "LEVEL 2 - MECHANICAL
+// HVAC ZONING PLAN"): the plan signals below admit the discipline word only
+// next to PLAN, after "- LEVEL n", or with ENLARGED, so such a sheet scored no
+// role, or the role of a DETAILS/SECTIONS callout, an ELEVATION mention, a
+// legend box or a riser-diagram note printed beside the plan, and every unit
+// tag drawn on it went unswept (the reconcile keys, AS-91). The whole short
+// span must be the title: at most three words before the discipline word, at
+// most four between it and PLAN(S), and after it only a " - LEVEL(S)/FLOOR/
+// AREA/PHASE..." range. Never a sentence or a note fragment (SHALL, SEE, PER,
+// IN, FOR, WITH, TO, AND...), a key plan, a demolition or removals plan (its
+// own role), or a diagram/schedule/detail/section/elevation/riser/notes/
+// legend title. It decides only a sheet the signals leave without a
+// schedule, demolition or plan role (classifySheetRole), so no table the
+// schedule role gates and no demolition or plan sheet can change.
+const PLAN_DISCIPLINE = "(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)";
+const PLAN_TITLE_WITH_QUALIFIERS_RE = new RegExp(
+  "^(?!.*\\b(?:SHALL|SEE|REFER|PROVIDE|VERIFY|COORDINATE|INSTALL|FOR|WITH|TO|FROM|AND|OR|PER|IN|ON|AT|BY|AS|OF|THE|THIS|ALL|ARE|IS|BE|NOT|KEY\\s+PLAN|DEMO(?:LITION)?|REMOVALS?|DIAGRAMS?|SCHEDULES?|DETAILS?|SECTIONS?|ELEVATIONS?|RISERS?|SCHEMATICS?|NOTES?|LEGENDS?)\\b)"
+  + "(?:[A-Z0-9#&'./()-]+\\s+){0,3}" + PLAN_DISCIPLINE + "(?:\\s+[A-Z0-9#&'./()-]+){1,4}?\\s+PLANS?"
+  + "(?:\\s*[-\u2013:]\\s*(?:LEVELS?|FLOORS?|AREAS?|PHASES?|ZONES?|BUILDINGS?|BLDG\\.?|WINGS?)\\b[^,;]{0,20})?$",
+);
 const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // Real, found live (baker-county-eoc's own sheet #36, immediately after the
   // "- LEVEL N PLAN" fix above started matching MORE titles): a SHEET INDEX
@@ -353,7 +375,13 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
 // never a title in its own right.
 const REFERENCE_RE = /^(SEE|REFER|NOTED|AS SHOWN)\b|REFER TO|^PER\b(?:\s+\S+){2,}|\bFOR\s+(?:[A-Z]+\s+){0,3}(?:LEGEND|ABBREVIATIONS|SYMBOLS|NOTES)\b|^\d{3}\s+FOR\b/;
 
-export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
+/** The role the title and content signals give — classifySheetRole's first
+ * pass, before a plan title decides an unknown or incidental sheet. Every
+ * extractor reads this one (the drawn-delta hunt, table routing in the
+ * vector stack, room-tag suppression), so the plan-title pass, which decides
+ * only where drawn tags count, never changes an extracted table, room or
+ * diagram. */
+export function classifySheetRoleBySignals(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
   const hits: Array<{ role: SheetRole; conf: number; span: GraphSpan }> = [];
   for (const sp of sheet.spans) {
     const u = norm(sp.str);
@@ -374,6 +402,236 @@ export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confide
     role: best.role,
     confidence: dissent ? best.conf / 2 : best.conf,
     evidence: { sheet: sheet.key, text: best.span.str.trim(), bbox: bboxOf(best.span) },
+  };
+}
+
+// A plan title with no PLAN word: a level and a discipline, as the whole
+// title or as dash-separated parts with at most an area/phase qualifier
+// ("FIRST FLOOR - SECTOR A - HVAC", "MECHANICAL MEZZANINE - SECTOR A",
+// "BASEMENT - PIPING - ALL PHASES", "PIPE BASEMENT - PIPING - PHASE 2") — a
+// floor's discipline sheet is a plan of that floor. Every part must be one of
+// those three kinds, so a detail, riser or section title naming a floor
+// ("ROOF CURB - MECHANICAL UNIT", "HVAC RISER - LEVEL 2") never reads as one.
+const TITLE_LEVEL = "(?:(?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|GROUND|MAIN|UPPER|LOWER|\\d{1,2}(?:ST|ND|RD|TH))\\s+(?:FLOOR|LEVEL)|(?:LEVEL|FLOOR)\\s+[A-Z]?\\d{1,3}[A-Z]?|(?:[A-Z]+\\s+)?(?:BASEMENT|MEZZANINE|PENTHOUSE|ATTIC|CELLAR)|(?:LOW\\s+|HIGH\\s+)?ROOF|CRAWL\\s*SPACE|INTERSTITIAL)";
+const TITLE_DISCIPLINE = "(?:HVAC|MECHANICAL|PIPING|HYDRONICS?|VENTILATION|DUCTWORK|SHEET\\s*METAL|PLUMBING|ELECTRICAL|POWER|LIGHTING|FIRE\\s+PROTECTION|FIRE\\s+ALARM|SPRINKLERS?)";
+const LEVEL_PART_RE = new RegExp(`^${TITLE_LEVEL}$`);
+const DISCIPLINE_PART_RE = new RegExp(`^${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?$`);
+const LEVEL_DISCIPLINE_PART_RE = new RegExp(`^(?:${TITLE_LEVEL}\\s+${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?|${TITLE_DISCIPLINE}(?:\\s+${TITLE_DISCIPLINE})?\\s+${TITLE_LEVEL})$`);
+const TITLE_QUALIFIER_PART_RE = /^(?:(?:SECTOR|AREA|ZONE|WING|PART|PHASE|UNIT|BUILDING|BLDG\.?|OPTION|ALTERNATE|BID\s+ALTERNATE|DEDUCT\s+ALTERNATE)\s+[A-Z0-9]{1,3}|ALL\s+PHASES|NEW\s+WORK|REMODEL|RENOVATION|OVERALL|ENLARGED|PARTIAL|NORTH|SOUTH|EAST|WEST|[A-Z]\d?)$/;
+const NOT_A_PLAN_TITLE_RE = /\b(?:DEMO(?:LITION)?|REMOVALS?|EXISTING|DETAILS?|SECTIONS?|ELEVATIONS?|RISERS?|DIAGRAMS?|SCHEMATICS?|SCHEDULES?|NOTES?|LEGENDS?|KEY)\b/;
+function isLevelDisciplineTitle(u: string): boolean {
+  if (NOT_A_PLAN_TITLE_RE.test(u)) return false;
+  const parts = u.split(/\s+[-–—:]\s+|\s*[–—]\s*/).map((part) => part.trim()).filter(Boolean);
+  if (!parts.length || parts.length > 4) return false;
+  let level = false, discipline = false;
+  for (const part of parts) {
+    if (LEVEL_DISCIPLINE_PART_RE.test(part)) level = discipline = true;
+    else if (LEVEL_PART_RE.test(part)) level = true;
+    else if (DISCIPLINE_PART_RE.test(part)) discipline = true;
+    else if (!TITLE_QUALIFIER_PART_RE.test(part)) return false;
+  }
+  return level && discipline;
+}
+
+// A demolition plan's own title with no PLAN word (AS-101): a level and a
+// discipline with a demolition word, as the whole title or among its
+// dash-separated parts ("BASEMENT DEMOLITION - VENTILATION - PHASE 3",
+// "LEVEL 2 HVAC DEMOLITION"). The DEMOLITION PLAN signal needs the PLAN word,
+// so 040_IL's five phase demolition plans scored no role at all, and the tags
+// drawn there never linked to their rows as demolition views. The title less
+// its one demolition word must be a level-and-discipline title
+// (isLevelDisciplineTitle), so a demolition note, detail or keynote list
+// ("DEMOLITION NOTES", "DEMO KEYNOTES - FIRST FLOOR HVAC") never reads as one.
+const DEMOLITION_WORD_RE = /\b(?:DEMOLITION|DEMO|REMOVALS?)\b/;
+function isLevelDisciplineDemolitionTitle(u: string): boolean {
+  if (!DEMOLITION_WORD_RE.test(u)) return false;
+  const rest = u.replace(/\s*\b(?:DEMOLITION|DEMO|REMOVALS?)\b\s*/, " ").replace(/\s+/g, " ").trim()
+    .replace(/^[-\u2013\u2014:]\s*|\s*[-\u2013\u2014:]$/g, "").replace(/\s+[-\u2013\u2014:]\s+[-\u2013\u2014:]\s+/g, " - ");
+  return !DEMOLITION_WORD_RE.test(rest) && isLevelDisciplineTitle(rest);
+}
+
+const quarterTurn = (sp: GraphSpan): number => (((Math.round((sp.rot ?? 0) / 90) * 90) % 360) + 360) % 360;
+/** A span's text height in its own reading frame. */
+const textHeight = (sp: GraphSpan): number => (quarterTurn(sp) % 180 === 90 ? sp.w : sp.h) || 0;
+
+/** The sheet's short phrases a title can be: each span; the words of one
+ * baseline joined while the gap stays a word space; and up to three such
+ * phrases stacked in one block (the same text height, tight leading,
+ * overlapping or aligned) joined in reading order — a title block prints
+ * "MECHANICAL LEVEL" over "34 PLAN", and each span alone is no title.
+ * Quarter-turned text is read in its own frame; h is the text height. */
+export function titlePhrases(spans: GraphSpan[]): Array<{ text: string; bbox: Bbox; h: number }> {
+  type Phrase = { str: string; rot: number; x0: number; x1: number; y: number; h: number; bbox: Bbox; words: number };
+  const out: Array<{ text: string; bbox: Bbox; h: number }> = [];
+  const byRot = new Map<number, Phrase[]>();
+  for (const sp of spans) {
+    const str = (sp.str || "").trim();
+    if (!str) continue;
+    const rot = quarterTurn(sp);
+    const along = rot % 180 === 90 ? sp.h || 0 : sp.w || 0, h = textHeight(sp);
+    out.push({ text: str, bbox: bboxOf(sp), h });
+    if (str.length > 60 || h <= 0) continue;
+    const cx = sp.x + (sp.w || 0) / 2, cy = sp.y + (sp.h || 0) / 2;
+    const [lx, ly] = rot === 90 ? [cy, -cx] : rot === 270 ? [-cy, cx] : rot === 180 ? [-cx, -cy] : [cx, cy];
+    const word = { str, rot, x0: lx - along / 2, x1: lx + along / 2, y: ly, h, bbox: bboxOf(sp), words: 1 };
+    (byRot.get(rot) ?? byRot.set(rot, []).get(rot)!).push(word);
+  }
+  for (const words of byRot.values()) {
+    // baseline lines, then phrases along each line while the gap stays a word space
+    words.sort((p, q) => p.y - q.y);
+    const lines: Phrase[][] = [];
+    let cur: Phrase[] = [], cy = 0;
+    for (const w of words) {
+      if (cur.length && Math.abs(w.y - cy) > Math.max(0.35 * w.h, 1)) { lines.push(cur); cur = []; }
+      cur.push(w);
+      cy = cur.reduce((sum, q) => sum + q.y, 0) / cur.length;
+    }
+    if (cur.length) lines.push(cur);
+    const phrases: Phrase[] = [];
+    for (const line of lines) {
+      line.sort((p, q) => p.x0 - q.x0);
+      let ph: Phrase | null = null;
+      for (const w of line) {
+        const gap = ph ? w.x0 - ph.x1 : Infinity;
+        if (ph && Math.abs(ph.h - w.h) <= 0.3 * Math.max(ph.h, w.h) && gap >= -0.2 * ph.h && gap <= ph.h) {
+          ph.str += ` ${w.str}`; ph.x1 = Math.max(ph.x1, w.x1); ph.bbox = merge(ph.bbox, w.bbox); ph.words++;
+        } else {
+          ph = { ...w };
+          phrases.push(ph);
+        }
+      }
+    }
+    for (const ph of phrases) if (ph.words > 1) out.push({ text: ph.str, bbox: ph.bbox, h: ph.h });
+    // up to three phrases stacked in one block: the same text height, tight
+    // leading, and overlapping, centred or left-aligned
+    phrases.sort((p, q) => p.y - q.y);
+    const below = (i: number): number => {
+      const a = phrases[i];
+      for (let j = i + 1; j < phrases.length && phrases[j].y - a.y <= 1.9 * a.h; j++) {
+        const b = phrases[j];
+        if (b.y - a.y < 0.9 * a.h || Math.abs(b.h - a.h) > 0.15 * Math.max(a.h, b.h)) continue;
+        const overlap = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0);
+        if (overlap >= 0.5 * Math.min(a.x1 - a.x0, b.x1 - b.x0)
+          || Math.abs((a.x0 + a.x1) / 2 - (b.x0 + b.x1) / 2) <= a.h || Math.abs(a.x0 - b.x0) <= a.h) return j;
+      }
+      return -1;
+    };
+    for (let i = 0; i < phrases.length; i++) {
+      let text = phrases[i].str, bbox = phrases[i].bbox, k = i;
+      for (let n = 1; n < 3; n++) {
+        k = below(k);
+        if (k < 0) break;
+        text += ` ${phrases[k].str}`; bbox = merge(bbox, phrases[k].bbox);
+        out.push({ text, bbox, h: Math.min(phrases[i].h, phrases[k].h) });
+      }
+    }
+  }
+  return out;
+}
+
+// An enlarged or partial plan's own title on an engineering sheet, named by
+// the room or area it enlarges and no discipline word ("BOILER ROOM -
+// ENLARGED", "ENLARGED PLANS", "KITCHEN ENLARGED PLAN"), or a plan title that
+// prints its discipline after a dash ("MEZZANINE MECH ROOM PLAN - HVAC"): a
+// mechanical room's boilers, pumps and heat exchangers are often tagged on
+// such a plan alone (14_OR's M320). The sheet number's discipline designator
+// (M, MH, P, E, FP...) says it is an engineering plan; an architect's
+// enlarged restroom, stair or casework plans (A-401) stay as the signals left
+// them. Never a section, elevation, detail, diagram, riser, schedule,
+// demolition, notes or legend title, nor a sentence (SEE ENLARGED PLAN...),
+// nor a sheet that also titles such views (a details sheet's "ENLARGED PLAN
+// A" beside its PLAN VIEW and ELEVATION VIEW; a demolition sheet's temporary
+// installation plan), nor the first words of a longer title that is one
+// ("BUILDING 2 FLOOR 1 - ENLARGED" over "GROUNDING LAYOUT DEMOLITION").
+const MEP_SHEET_NUMBER_RE = /^(?:M|MH|MP|MD|MS|H|HV|P|PL|PD|FP|FA|E|ED|EP|EL)\s*[-.]?\s*\d/;
+const NOT_PLAN_VIEW_WORD_RE = /\b(?:SHALL|SEE|REFER|PROVIDE|VERIFY|COORDINATE|INSTALL|THE|THIS|ARE|IS|BE|NOT|KEY\s+PLAN|DEMO(?:LITION)?|REMOVALS?|DIAGRAMS?|SCHEDULES?|DETAILS?|SECTIONS?|ELEVATIONS?|RISERS?|SCHEMATICS?|NOTES?|LEGENDS?|ONE[-\s]?LINE|SINGLE[-\s]?LINE|GROUNDING)\b/;
+const ENLARGED_PLAN_TITLE_RE = /^(?:(?:.*\s)?(?:ENLARGED|PARTIAL)\s(?:.*\s)?PLANS?(?:\s*[-\u2013]\s*.{1,30})?|.*\bPLANS?\s*[-\u2013]\s*(?:ENLARGED|PARTIAL)\b.*|.{2,40}\s[-\u2013]\s(?:ENLARGED|PARTIAL)(?:\s+PLANS?)?)$/;
+const PLAN_DISCIPLINE_SUFFIX_RE = new RegExp(`^.{2,40}\\bPLANS?\\s*[-\u2013]\\s*${TITLE_DISCIPLINE}$`);
+const COMPETING_VIEW_RE = /\b(?:SECTIONS?|ELEVATIONS?|DETAILS?|DIAGRAMS?|RISERS?|DEMO(?:LITION)?|SCHEMATICS?)\b/;
+/** The sheet's enlarged or partial plan title, or its dash-discipline plan
+ * title, on an engineering sheet whose title-height phrases name no other
+ * kind of view (see ENLARGED_PLAN_TITLE_RE). */
+function enlargedPlanTitle(sheetNumber: string | null | undefined, phrases: Array<{ text: string; bbox: Bbox; h: number }>): { text: string; bbox: Bbox } | null {
+  if (!MEP_SHEET_NUMBER_RE.test(norm(sheetNumber || ""))) return null;
+  const texts = phrases.map((p) => norm(p.text).replace(/\s+/g, " "));
+  if (texts.some((u) => COMPETING_VIEW_RE.test(u) && !REFERENCE_RE.test(u) && u.length <= 60)) return null;
+  for (let i = 0; i < phrases.length; i++) {
+    const u = texts[i];
+    if (u.length < 4 || u.length > 60 || NOT_PLAN_VIEW_WORD_RE.test(u) || REFERENCE_RE.test(u)) continue;
+    if (!ENLARGED_PLAN_TITLE_RE.test(u) && !PLAN_DISCIPLINE_SUFFIX_RE.test(u)) continue;
+    if (texts.some((v) => v !== u && v.includes(u) && NOT_PLAN_VIEW_WORD_RE.test(v))) continue;
+    return { text: phrases[i].text, bbox: phrases[i].bbox };
+  }
+  return null;
+}
+
+// Roles a plan title decided in classifySheetRole's second pass never
+// overrides: a schedule sheet's role gates its table extraction, and a
+// demolition or plan sheet already has the answer the title would give.
+const PLAN_TITLE_DEFERS_TO = new Set<SheetRole>(["schedule", "demolition", "plan"]);
+// A sheet list prints other sheets' titles ("M211 FIRST FLOOR - SECTOR A -
+// HVAC" in a legend sheet's SHEET KEY), so a page carrying one never takes
+// its role from a plan title.
+const SHEET_LIST_TITLE_RE = /\b(?:SHEET|DRAWING)S?\s+(?:INDEX|LIST|KEY|SCHEDULE)\b|\b(?:INDEX|LIST)\s+OF\s+(?:DRAWINGS|SHEETS)\b/;
+
+/** A plan view's own title on a sheet, whatever role the signals give it: a
+ * plan title with qualifiers or a level-and-discipline title, printed as a
+ * title (among the sheet's largest text: at least its 80th-percentile height
+ * and a fifth above its median, so a note's second line, "GIRT SEE CAB" over
+ * "ROOF LEVEL PLAN", or a panel schedule's circuit, "PENTHOUSE LIGHTING",
+ * never counts), and never on a page that carries a sheet list.
+ * classifySheetRole decides an unknown or incidental sheet by it; a schedule
+ * sheet that also draws a plan ("LEVEL 2 - MECHANICAL HVAC DUCT PLAN AND
+ * SCHEDULES") keeps its schedule role, and the sweep reads its plan view by
+ * it (AS-94). */
+export function sheetPlanViewTitle(sheet: SheetSpans): Evidence | null {
+  const phrases = titleHeightPhrases(sheet);
+  if (!phrases) return null;
+  const title = phrases.find(({ text }) => {
+    const u = norm(text).replace(/\s+/g, " ");
+    return u.length >= 4 && u.length <= 60 && !REFERENCE_RE.test(u)
+      && (PLAN_TITLE_WITH_QUALIFIERS_RE.test(u) || isLevelDisciplineTitle(u));
+  }) ?? enlargedPlanTitle(sheet.sheet_number, phrases);
+  return title ? { sheet: sheet.key, text: title.text, bbox: title.bbox } : null;
+}
+
+/** The phrases printed as a title on a sheet: among its largest text (at
+ * least its 80th-percentile height and a fifth above its median), none on a
+ * page that carries a sheet list (sheetPlanViewTitle). */
+function titleHeightPhrases(sheet: SheetSpans): Array<{ text: string; bbox: Bbox; h: number }> | null {
+  if (sheet.spans.some((sp) => SHEET_LIST_TITLE_RE.test(norm(sp.str)))) return null;
+  const heights = sheet.spans.map(textHeight).filter((h) => h > 0).sort((a, b) => a - b);
+  if (!heights.length) return null;
+  const minTitleHeight = Math.max(0.95 * heights[Math.floor(0.8 * (heights.length - 1))], 1.2 * heights[Math.floor(0.5 * (heights.length - 1))]);
+  return titlePhrases(sheet.spans).filter(({ h }) => h >= minTitleHeight);
+}
+
+/** A demolition plan's own title on a sheet (isLevelDisciplineDemolitionTitle),
+ * printed as a title (titleHeightPhrases); AS-101. */
+function sheetDemolitionViewTitle(sheet: SheetSpans): Evidence | null {
+  const title = titleHeightPhrases(sheet)?.find(({ text }) => {
+    const u = norm(text).replace(/\s+/g, " ");
+    return u.length >= 4 && u.length <= 60 && !REFERENCE_RE.test(u) && isLevelDisciplineDemolitionTitle(u);
+  });
+  return title ? { sheet: sheet.key, text: title.text, bbox: title.bbox } : null;
+}
+
+export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
+  const bySignals = classifySheetRoleBySignals(sheet);
+  // an index page's own SHEET INDEX title (unknown at 0.95) stands too
+  if (PLAN_TITLE_DEFERS_TO.has(bySignals.role) || (bySignals.role === "unknown" && bySignals.confidence > 0)) return bySignals;
+  // A plan title first, then a demolition plan's title (AS-101). Neither pass
+  // makes or unmakes a schedule sheet, the one role an extractor reads from
+  // this function (the schedule-role table readers), so no table changes.
+  const title = sheetPlanViewTitle(sheet);
+  const demolition = title ? null : sheetDemolitionViewTitle(sheet);
+  if (!title && !demolition) return bySignals;
+  // the same dissent rule as the signals: a competing role within 0.1 halves it
+  const conf = title ? 0.85 : 0.9;
+  return {
+    role: title ? "plan" : "demolition",
+    confidence: bySignals.confidence >= conf - 0.1 ? conf / 2 : conf,
+    evidence: (title ?? demolition)!,
   };
 }
 
@@ -8513,9 +8771,12 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   // kinds, and two reclassified-to-equipment fragments no longer look
   // distinct without this.
   const reclassified = new Set<ScheduleTable>();
+  // what the extractors read (classifySheetRoleBySignals): room-tag suppression below
+  const extractionRoles = new Map<string, ReturnType<typeof classifySheetRole>>();
   for (const s of withText) {
     const role = classifySheetRole(s);
     roles.set(s.key, role);
+    extractionRoles.set(s.key, classifySheetRoleBySignals(s));
     // A real 2-(or more-)up sheet layout is split into independently-
     // processed column bands here — see bandedSheets' own comment. A sheet
     // with no proven such layout gets back `[s]`, the same object, so every
@@ -9055,7 +9316,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const found: RoomTag[] = [];
   const callouts: DetailCallout[] = [];
   for (const s of withText) {
-    const role = roles.get(s.key)!;
+    const role = extractionRoles.get(s.key)!;
     // Read tags unless the sheet is CONFIDENTLY something that carries room
     // numbers as table content rather than as drawing tags. A weak guess must
     // not suppress the reading: a real finish plan whose title block the role

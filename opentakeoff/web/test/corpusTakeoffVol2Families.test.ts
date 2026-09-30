@@ -572,6 +572,37 @@ describe("AS-69 a fan-powered terminal unit schedule is a VAV schedule", () => {
   });
 });
 
+// AS-96: a terminal air box schedule is a VAV schedule (040_IL's TERMINAL AIR
+// BOX SCHEDULE - SINGLE DUCT - PHASE 2, AIR TERMINAL BOX in the other order),
+// and under the family's own title a terminal air box's mark (TAB-n) is a VAV unit.
+describe("AS-96 a terminal air box schedule is a VAV schedule", () => {
+  const row = (key: string) => ({ key, cells: { MARK: { text: key } } });
+  const table = (sheet: string, title: string, keys: string[], kind = "equipment") => ({ kind, sheet, title: { text: title }, rows: keys.map(row) });
+  const compile = (tables: unknown[]) => {
+    const cats = compileHvacTakeoff(null, { tables }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    return (f: string) => (cats[f]?.items || []).map((i) => i.tag).sort();
+  };
+
+  it("reads a terminal air box title, and its TAB marks", () => {
+    const tags = compile([
+      table("m.pdf#48", "TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2", ["TAB-101", "TAB-102"]),
+      table("m.pdf#48", "TERMINAL AIR BOX SCHEDULE - EXHAUST - PHASE 2", ["TAB-101E"]),
+      table("m.pdf#48", "TERMINAL AIR BOX SCHEDULE - SINGLE DUCT REHEAT - BID ALTERNATE 3", ["TAB-116"]),
+    ]);
+    assert.deepEqual(tags("VAV"), ["TAB-101", "TAB-101E", "TAB-102", "TAB-116"]);
+  });
+
+  it("reads no terminal air box schedule in a box's controls, wiring, points or details, and no TAB mark outside the family's own title", () => {
+    const tags = compile([
+      table("m.pdf#20", "TERMINAL AIR BOX CONTROL DIAGRAM", ["TAB-1"]),
+      table("m.pdf#21", "TERMINAL AIR BOX WIRING DETAIL", ["TAB-2"]),
+      table("m.pdf#22", "TERMINAL AIR BOX POINTS LIST", ["TAB-3"]),
+      table("m.pdf#23", "", ["TAB-4", "VAV-1"]),
+    ]);
+    assert.deepEqual(tags("VAV"), ["VAV-1"]);
+  });
+});
+
 // AS-75: one row scheduling several units of one kind alike prints their
 // marks as a range or a pair ("EF-1 THRU EF-4", 26_CA's "SF-P1-4 THRU 11" and
 // "SF-P2-1 & 2", 013_MO's "CV-7-CV-10"): each is a unit, and the row's QTY

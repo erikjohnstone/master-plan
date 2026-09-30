@@ -1,0 +1,59 @@
+# 25_WA_DouglasCounty_Courthouse_HVAC_DDC.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, check).
+# Authored 2026-09-30 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#11,(E) FC-30,unscheduled,1,no,demolition,existing fan coil in first floor mech room grid 4/A-B; drawn solid (remains); no schedule row; (E) FC-13 on this sheet is a thermostat label and is not listed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#11,(E) AC-1,unscheduled,1,no,demolition,existing AC unit with leader in room grid 1-2/C-D; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,(E) FC-26,unscheduled,1,no,demolition,callout reads DEMO (E) FC-26; leader to dashed fan coil being removed in 1950 addition; thermostat labels (E) FC-3/4/5/7/8/10 not listed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#12,(E) FC-27,unscheduled,1,no,demolition,callout reads DEMO (E) FC-27; leader to dashed fan coil being removed in 1950 addition
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-1,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-2,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-3,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-4,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-5,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-6,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-7,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-8,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-9,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-10,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-11,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-12,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#14,FC-13,unscheduled,1,no,demolition,existing attic fan coil drawn solid (remains) on demo plan; no schedule row; counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,CH-1,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|CH-1,1,yes,new,tag inside new chiller outline on extended pad with electrical keyed note 2; CH-1 on M4.06 p20 is a detail
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-10A,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|HP-10,1,yes,new,A = indoor unit per split-system schedule note; leader to ducted air handler in 1950 addition
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-10B,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|HP-10,1,yes,new,B = outdoor unit per split-system schedule note; leader to unit on grade
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-20A,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|HP-20,1,yes,new,A = indoor ceiling cassette in maint office
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-20B,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|HP-20,1,yes,new,B = outdoor unit on grade
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,HP-30,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|HP-30,1,yes,new,VRF outdoor unit on grade with leader
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,EH-20,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|EH-20,1,yes,new,ceiling electric heater in maint office
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,(E) FC-30,unscheduled,1,yes,existing,existing fan coil to remain in mech room; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,(E) AC-1,unscheduled,1,yes,existing,existing AC unit to remain with leader; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-3,unscheduled,1,no,view-repeat,room label naming the attic fan coil serving the room grid 1-2/A-B; not at a unit; unit counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-7,unscheduled,1,no,view-repeat,room label naming the attic fan coil serving the room grid 1-2/C-D; not at a unit; unit counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#15,FC-10,unscheduled,1,no,view-repeat,room label naming the attic fan coil serving the room grid 3-4/C-D; not at a unit; unit counted on p18
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-8-1,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-8-1,1,yes,new,tag with leader to ceiling cassette in commissioners offices
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-2,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-15-2,1,yes,new,tag with leader to ceiling cassette in commissioners offices
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-3,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-15-3,1,yes,new,tag with leader to ceiling cassette in commissioners offices
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-8-4,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-8-4,1,yes,new,tag with leader to ceiling cassette in commissioners offices
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-5,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-15-5,1,yes,new,tag with leader to ceiling cassette in commissioners offices
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-6,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-15-6,1,yes,new,tag with leader to ceiling cassette in commissioners offices
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,CC-15-7,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-15-7,1,yes,new,tag with leader to ceiling cassette in commissioners offices
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,DOAS-30,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|DOAS-30,1,yes,new,tag with leader to ERV; the DOAS-30 front view detail title on the sheet is not counted
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,DH-30,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|EH-30,1,yes,new,"misprint: DH-30 names no row; it is the duct heater in the DOAS-30 8/8L supply duct = EH-30 (duct electric heater serving DOAS-3(0), 8x8)"
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#16,BC-30,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|BC-1,1,yes,new,"misprint: plans and section A call the HP-30 branch controller BC-30; VRF schedule, E0.01 and M4.09 call it BC-1; only BC controller in set"
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,CC-8-9,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|CC-8-9,1,yes,new,tag with leader to ceiling cassette in jury hallway
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#17,AH-30-8,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#5|AH-30-8,1,yes,new,tag with leader to air handler in jury room; thermostat labels (E) FC-1/2/6/9/11/12 not listed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,REF-1,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|REF-1,1,yes,new,inline relief fan in attic; REF-1 VFD and REF-2 VFD labels are drives and not listed
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-1,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-2,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-3,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-4,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-5,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-6,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-7,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-8,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-9,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-10,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-11,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-12,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#18,FC-13,unscheduled,1,yes,existing,existing attic fan coil to remain; no schedule row
+25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#19,REF-2,25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4|REF-2,1,yes,new,callout 20x20L* UP TO REF-2 ON ROOF with electrical keyed note 1 at the duct riser; fan sits on the roof above (no roof plan in set); REF-2 VFD on p18 not counted

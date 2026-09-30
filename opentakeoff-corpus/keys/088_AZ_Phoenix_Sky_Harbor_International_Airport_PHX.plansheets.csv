@@ -1,0 +1,133 @@
+# 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, check).
+# Authored 2026-09-30 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#12,HORIZONTAL AND VERTICAL CONTROL PLAN,other,site,no,survey control plan (MSGN0012); page has no text layer; not searched
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#13,HORIZONTAL AND VERTICAL CONTROL PLAN,other,site,no,survey control plan (MSGN0013); page has no text layer; not searched
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#16,SITE PLAN,M,site,yes,RCC chilled water route to existing plant; pump station boxed with callout 1/RBME0401; no unit tags
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,FLOOR PLAN - LEVEL 1 - AREA A,M,new,yes,mechanical room RBST142
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,FLOOR PLAN - LEVEL 1 - AREA D,M,new,yes,ATC/electrical/ATS/UPS rooms
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#19,FLOOR PLAN - LEVEL 2.5 - AREA A,M,new,yes,IDF and fire control rooms
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#20,FLOOR PLAN - LEVEL 2.5 - AREA D,M,roof,yes,view titled FLOOR PLAN - LEVEL 2 - AREA D; roof plan of the low roof over level 1 area D (roof hatch; EF-1 on roof curb; OA intake down thru roof)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,FLOOR PLAN - PLATFORM - LEVEL 4 - AREA A,M,new,yes,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,FLOOR PLAN - PLATFORM - LEVEL 4 - AREA B,M,new,yes,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#23,FLOOR PLAN - ROOF LEVEL - AREA A,M,roof,yes,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#24,FLOOR PLAN - ROOF LEVEL - AREA B,M,roof,yes,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,PIPING PLAN - LEVEL 1 - AREA A,M,new,yes,piping plan of the area on p17
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,PIPING PLAN - LEVEL 1 - AREA D,M,new,yes,piping plan of the area on p18
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#27,PIPING PLAN - LEVEL 2.5 - AREA A,M,new,yes,piping plan of the area on p19
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,ENLARGED PUMP STATION,M,enlarged,yes,enlarged piping plan of the pump room in the existing building (only plan of it) plus 3D views
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#41,LIGHTING FLOOR PLAN - LEVEL 1 - AREA A AND AREA D,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#42,LIGHTING DEMOLITION PLAN,E,demolition,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#43,LIGHTING FLOOR PLAN - AREA A,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#44,LIGHTING FLOOR PLAN - AREA D,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#45,LIGHTING FLOOR PLAN - BACK-OF-HOUSE DETAILS,E,enlarged,yes,enlarged plans of L1 electrical/ATC rooms and mechanical room; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#46,LIGHTING FLOOR PLAN - LEVEL 2.5 SITE PLAN - AREA A AND PUMP ROOM,E,mixed,yes,level 2.5 parking plan + enlarged pump room plan; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#47,LIGHTING FLOOR PLAN - PLATFORM LEVEL,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#48,LIGHTING FLOOR PLAN - PLATFORM LEVEL - AREA A,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#49,LIGHTING FLOOR PLAN - PLATFORM LEVEL - AREA B,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#50,LIGHTING FLOOR PLAN - PLATFORM LEVEL - AREA C,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#51,LIGHTING FLOOR PLAN - CORE BUILDING AND IDF ROOM,E,enlarged,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#53,POWER SITE PLAN - LEVEL 1 / GROUND - AREA A AND AREA D,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#54,POWER SITE PLAN - LEVEL 2 / LOW ROOF - AREA A AND AREA D,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#55,POWER SITE PLAN - LEVEL 4 / PLATFORM LEVEL,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#56,POWER SITE PLAN - LEVEL 4 / PLATFORM LEVEL - AREA A,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#57,POWER SITE PLAN - LEVEL 4 / PLATFORM LEVEL - AREA B,E,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#58,POWER SITE PLAN - LEVEL 4 / PLATFORM LEVEL,E,new,yes,view: area C; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#59,POWER SITE PLAN - VERTICAL CIRCULATION CORE AND IDF ROOM,E,enlarged,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#60,POWER SITE PLAN - BACK-OF-HOUSE DETAILS,E,enlarged,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#61,POWER SITE PLAN - IDF ROOM AND PUMP ROOM DETAILS,E,enlarged,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,MECHANICAL POWER FLOOR PLAN - LEVEL 1 - AREA A AND AREA D,E,new,yes,electrical connection plan; unit labels are discipline repeats
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,MECHANICAL POWER FLOOR PLAN - BACK-OF-HOUSE DETAILS,E,enlarged,yes,enlarged electrical connection plans of electrical/ATC rooms and mechanical room
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#66,MECHANICAL POWER FLOOR PLAN - PLATFORM LEVEL,E,new,yes,no unit labels
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#67,MECHANICAL POWER FLOOR PLAN - PLATFORM LEVEL - AREA A,E,new,yes,ceiling fans drawn without labels (keynote M02)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#68,MECHANICAL POWER FLOOR PLAN - PLATFORM LEVEL - AREA B,E,new,yes,ceiling fans drawn without labels (keynote M02)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,MECHANICAL POWER FLOOR PLAN - CORE BUILDING AND IDF ROOM AND PUMP ROOM,E,enlarged,yes,four enlarged electrical connection plans
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#70,MECHANICAL POWER FLOOR PLAN - ROOF LEVEL,E,roof,yes,smoke exhaust fans drawn with disconnects but no unit labels
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#71,ELECTRICAL YARD DETAIL,E,site,yes,plan view of the rental car center electrical yard; no unit tags
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#90,RCC PERMANENT LIGHTING PLAN,E,site,no,RSEL0201 site lighting plan; page has no text layer; not searched
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#92,PLUMBING SITE PLAN,P,site,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#93,BELOW SLAB - FLOOR PLAN - LEVEL 1 - AREA A,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#94,BELOW SLAB - FLOOR PLAN - LEVEL 1 - AREA B,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#95,BELOW SLAB - FLOOR PLAN - LEVEL 1 - AREA D,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#96,FLOOR PLAN - LEVEL 1 - AREA A,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#97,FLOOR PLAN - LEVEL 1 - AREA B,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#98,FLOOR PLAN - LEVEL 1 - AREA D,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#99,FLOOR PLAN - LEVEL 2 - AREA A,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#100,FLOOR PLAN - LEVEL 3 - AREA A,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#101,FLOOR PLAN - LEVEL 3 AREA C,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#102,FLOOR PLAN - LEVEL 4 - AREA A,P,new,yes,plus 3D of janitor closet; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#103,FLOOR PLAN - LEVEL 4 - AREA B,P,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#104,FLOOR PLAN - ROOF LEVEL - AREA A,P,roof,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#105,FLOOR PLAN - ROOF LEVEL - AREA B,P,roof,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#112,FIRE SPRINKLER PLAN - LEVEL 1 - AREA A,FP,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#113,FIRE SPRINKLER PLAN - LEVEL 1 - AREA D,FP,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#114,FIRE SPRINKLER PLAN - LEVEL 2.5 - AREA A,FP,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#115,FIRE SPRINKLER PLAN - PLATFORM LEVEL - AREA A,FP,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#116,FIRE SPRINKLER PLAN - PLATFORM LEVEL - AREA B,FP,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#117,FIRE SPRINKLER PLAN - PLATFORM LEVEL - AREA C,FP,new,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#122,FIRE ALARM PLAN - LEVEL 1 - AREA A,other,new,yes,fire alarm; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#123,FIRE ALARM PLAN - LEVEL 1 - AREA D,other,new,yes,fire alarm; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#124,FIRE ALARM PLAN - LEVEL 2.5 - AREA A,other,new,yes,fire alarm; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#125,FIRE ALARM PLAN - PLATFORM LEVEL - AREA A,other,new,yes,fire alarm; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#126,FIRE ALARM PLAN - LEVEL PLATFORM - AREA B,other,new,yes,fire alarm; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#127,FIRE ALARM PLAN - PLATFORM LEVEL - AREA C,other,new,yes,fire alarm; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#129,LIFE SAFETY PLAN - LEVEL 1 - OVERALL,other,new,yes,life safety; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#130,LIFE SAFETY PLAN - LEVEL 2.5 - OVERALL,other,new,yes,life safety; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#131,LIFE SAFETY PLAN - PLATFORM LEVEL - OVERALL,other,new,yes,life safety; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#133,KEY MAP,other,new,yes,communications key map of the platform level; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#134,SITE PLAN - LEVEL 1 - GROUND - AREA A AND AREA D,other,new,yes,communications; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#135,SITE PLAN - LEVEL 4 - PLATFORM - AREA A,other,new,yes,communications; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#136,SITE PLAN - LEVEL 4 - PLATFORM - AREA B,other,new,yes,communications; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#137,SITE PLAN - LEVEL 4 - PLATFORM - AREA C,other,new,yes,communications; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#138,"SITE PLAN - LEVEL 1 - ENLARGED PLAN - ATC, ELECTRICAL, AND MECHANICAL ROOMS",other,enlarged,yes,communications; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#139,"SITE PLAN - COMMUNICATIONS ENLARGED PLAN - CORE BUILDING, IDF ROOM AND PUMP ROOM",other,enlarged,yes,communications; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#141,PRIMARY STATION FEEDER SITE PLAN,E,site,yes,text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#142,KEY MAP,E,new,yes,lighting key map of the platform level; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#155,OVERALL CALLOUT PLANS - VISITOR PARKING LEVEL,other,new,yes,mass notification; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#156,OVERALL CALLOUT PLANS - PLATFORM LEVEL,other,new,yes,mass notification callout floor plan and ceiling plan; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#157,ENLARGED FLOOR PLANS - PLATFORM LEVEL (AREA A),other,enlarged,yes,mass notification; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#158,ENLARGED FLOOR PLANS - PLATFORM LEVEL (AREA B),other,enlarged,yes,mass notification; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#159,ENLARGED REFLECTED CEILING PLANS - PLATFORM LEVEL (AREA A),other,enlarged,yes,mass notification; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#160,ENLARGED REFLECTED CEILING PLANS - PLATFORM LEVEL (AREA B),other,enlarged,yes,mass notification; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#161,ENLARGED PLANS - IDF ROOM,other,enlarged,yes,mass notification; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#172,FLOOR PLAN - APRON - LEVEL 3 - AREA E,A,new,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#173,ENLARGED PLANS - STAIR,A,enlarged,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#174,ENLARGED PLANS - STAIR,A,enlarged,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#182,FUTURE BAGGAGE CLAIM LEVEL FLOOR LOADING MAPS,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#183,FUTURE ARRIVIALS LEVEL FLOOR LOADING MAPS,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#184,FUTURE DEPARTURES LEVEL FLOOR LOADING MAPS,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#185,FUTURE SECURITY AND BRIDGE LEVEL FLOOR LOADING MAPS,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#186,FUTURE CONCOURSE BRIDGE / TERMINAL ROOF BELOW GUIDEWAY FLOOR LOADING MAPS,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#187,FUTURE TERMINAL ROOF FLOOR LOADING MAPS,other,roof,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#188,FUTURE STATION PLATFORM AND ROOF LEVEL FLOOR LOADING MAPS,other,mixed,yes,structural; station platform level plan + station roof plan; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#189,OVERALL GUIDEWAY LEVEL,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#190,GUIDEWAY LEVEL AREA A,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#191,GUIDEWAY LEVEL AREA B,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#192,GUIDEWAY LEVEL AREA C,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#193,GUIDEWAY LEVEL AREA D,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#194,GUIDEWAY LEVEL AREA E,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#195,GUIDEWAY LEVEL AREA F,other,new,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#199,ENLARGED PLANS - AREA E EMERGENCY STAIR FRAMING,other,enlarged,yes,structural; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#200,PARTIAL GUIDEWAY PLANS AND SECTIONS,other,enlarged,yes,structural partial plans plus sections; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#208,GUIDEWAY LEVEL AREA A,P,new,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#209,GUIDEWAY LEVEL AREA B,P,new,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#210,GUIDEWAY LEVEL AREA C,P,new,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#211,GUIDEWAY LEVEL AREA D,P,new,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#212,GUIDEWAY LEVEL AREA E,P,new,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#213,GUIDEWAY LEVEL AREA F,P,new,yes,West Terminal Station; text layer searched for HVAC unit tags; none
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#217,GENERAL NOTES,A,site,yes,COB central plant; notes sheet whose main drawing is a site plan; no unit tags
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#218,"FLOOR PLAN, ROOF PLAN, ELEVATIONS, SECTION",A,mixed,yes,COB floor plan and roof plan plus elevations and section; equipment drawn untagged
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#224,DEMOLITION PLAN,other,demolition,yes,COB structural; no unit tags
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#225,FOUNDATION PLAN,other,new,yes,COB structural; chiller pad labels
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#226,FRAMING PLAN,other,new,yes,COB structural framing plan + cooling tower framing plan
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#235,SITE PLAN,M,site,yes,COB mechanical site plan; CHW piping only; no unit tags
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#236,HVAC DEMOLITION PLAN,M,demolition,yes,COB central plant
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,HVAC PLAN,M,new,yes,COB central plant; primary plan for the plant equipment
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,PIPING DEMOLITION PLAN,M,demolition,yes,COB central plant
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PIPING PLAN,M,new,yes,COB central plant; piping plan of the area on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#250,LIGHTING FLOOR PLAN,E,new,yes,COB; equipment drawn untagged
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#251,POWER FLOOR PLAN,E,new,yes,COB; equipment drawn untagged (disconnect labels only)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#252,GROUNDING FLOOR PLAN,E,new,yes,COB; equipment drawn untagged
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#258,DEMOLITION PLAN,P,demolition,yes,COB plumbing demolition
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,WASTE AND VENT FLOOR PLAN,P,new,yes,COB
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#260,DOMESTIC SERVICES FLOOR PLAN,P,new,yes,COB

@@ -68,6 +68,14 @@ const MARK_HEADER_RE = /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG
 // the cleaner where both print one (013_MO's TAG cell runs two rows' ranges
 // together).
 const MARK_HEADER_SYNONYM_RE = /^(?:TAG(?:\s*(?:NO|NUMBER|NAME))?|ID\s*TAG|EQUIP(?:MENT)?\.?\s*(?:TAG|NO|NUMBER|MARK|ID|DESIGNATION)|UNIT\s*(?:NUMBER|ID)|ITEM(?:\s*NUMBER)?|MARK\s*(?:NO|NUMBER)|PLAN\s*(?:MARK|CODE)|(?:INDOOR|OUTDOOR)\s*UNIT\s*MARK|ID|IDENTIFICATION)$/i;
+// The same column under a group heading (AS-95): the extraction joins a
+// two-row header, so 12_MT's split system schedule prints its outdoor and
+// indoor units' marks under OUTDOOR UNIT DATA PLAN CODE and INDOOR UNIT DATA
+// PLAN CODE (and keys each row by its MANUF. cell, DAIKIN), and 18_OR's
+// indoor fan coil units under HEAT PUMP SYMBOL and FAN COIL SYMBOL. Read as a
+// synonym is read, and as the reconcile's row identity only where the key
+// prints no mark at all (rowIdentityTag).
+const GROUPED_MARK_HEADER_RE = /^\S.*\s(?:PLAN\s*(?:MARK|CODE)|(?:UNIT|EQUIP(?:MENT)?\.?)\s*(?:MARK|TAG)|MARK|SYMBOL|TAG|DESIGNATION)$/i;
 // A header word naming a table's identity column, for the header shapes that
 // tell a family's valve or damper table where no title names its family
 // (blankHeaderRes; AS-84): its MARK or TAG, SYMBOL, DESIGNATION, or a unit's,
@@ -79,6 +87,13 @@ const IDENTITY_HEADER_WORD_RE = /\b(?:TAG|MARK|VALVE\s*MARK|SYMBOL|DESIGNATION|(
  * trailing period or colon dropped (UNIT NO.). A number sign stays: 05_MO
  * prints its fan coils' marks in two columns, MARK ID (FCUC) and MARK # (A). */
 const headerName = (header) => String(header || "").replace(/\s+/g, " ").trim().replace(/\s*[.:]+$/, "");
+/** A mark column's name under a group heading (AS-95): OUTDOOR UNIT DATA
+ * PLAN CODE, FAN COIL SYMBOL — never a mark column's own name or synonym.
+ * @param {string} header */
+export function isGroupedMarkHeader(header) {
+  const name = headerName(header);
+  return GROUPED_MARK_HEADER_RE.test(name) && !MARK_HEADER_RE.test(name) && !MARK_HEADER_SYNONYM_RE.test(name);
+}
 /** A name's letters and digits, as the extraction runs a row's key together. */
 const lettersAndDigits = (text) => String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const UNIT_MARK_HEADER_RE = /^UNIT\s*MARK$/i;
@@ -1617,7 +1632,7 @@ export function rowIdentityText(row, { countKeyedIdentCol = null, identityHeader
   // UH-1UH-2), and the cell is the key as printed. Where it only spaces them
   // otherwise (09_ME's SAC - 1, keyed SAC-1), the key stays.
   if (marksRead) {
-    const synonyms = headers.filter((header) => header !== markHeader && MARK_HEADER_SYNONYM_RE.test(headerName(header)));
+    const synonyms = headers.filter((header) => header !== markHeader && (MARK_HEADER_SYNONYM_RE.test(headerName(header)) || isGroupedMarkHeader(header)));
     const printed = (header) => String(row.cells[header]?.text || "").replace(QUOTES_RE, "").trim();
     const reads = (text) => marksRead(text).length > 0;
     const keyMarks = marksRead(tag).join(" ");
@@ -1729,7 +1744,7 @@ function namedByWords(piece) {
   return /\s/.test(mark) && (mark.match(/\b[A-Za-z]{3,}\b/g) || []).length >= 2;
 }
 
-function uniqueFamily(graph, spec, family) {
+function uniqueFamily(graph, spec, family, onEmit = null) {
   const { identityHeaderRe } = spec;
   const keys = new Set();
   const items = [];
@@ -1845,6 +1860,8 @@ function uniqueFamily(graph, spec, family) {
         // compile-time-only disclosure (not a ReconcileStatus value) and is
         // superseded once that merge happens.
         const qtyStatus = scheduledQtyStatusFromRow(row, { marks: sameKindMarks(tagList, one) });
+        // A count-keyed table's rows are pieces named by where they are, no unit's mark.
+        if (!countKeyedIdentCol) onEmit?.(row, one, sameKindMarks(tagList, one));
         items.push({
           tag: one,
           quantity: 1,
@@ -1961,16 +1978,19 @@ export const HVAC_FAMILY_SPECS = {
     // VAV BOX WITH HOT WATER REHEAT SCHEDULE) and a variable volume terminal
     // (061_IA's VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE; AS-68), and a
     // title that begins with a fan-powered terminal, box or unit (26_CA's FAN
-    // POWERED TERMINAL UNIT SCHEDULE; AS-69), never a box's connections,
-    // wiring, points or details.
-    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL|^\s*(?:(?:SERIES|PARALLEL|VAV|HOT\s+WATER|ELECTRIC)\s+){0,2}FAN[\s\-]*POWERED\s+(?:VAV\s+|AIR\s+)?(?:TERMINAL(?:\s+UNITS?)?|BOX(?:ES)?|UNITS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)/i,
+    // POWERED TERMINAL UNIT SCHEDULE; AS-69), or a terminal air box (040_IL's
+    // TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2, AIR TERMINAL BOX in
+    // the other order; AS-96), never a box's connections, wiring, points or
+    // details.
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|\bTERMINAL\s+AIR\s+BOX(?:ES)?\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE|\bVAV\s+(?:BOX(?:ES)?|TERMINALS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)|\bVARIABLE\s+VOLUME\s+(?:(?:SUPPLY|EXHAUST|RETURN)\s+)?TERMINAL|^\s*(?:(?:SERIES|PARALLEL|VAV|HOT\s+WATER|ELECTRIC)\s+){0,2}FAN[\s\-]*POWERED\s+(?:VAV\s+|AIR\s+)?(?:TERMINAL(?:\s+UNITS?)?|BOX(?:ES)?|UNITS?)\b(?!.*\b(?:CONNECTIONS?|ELECTRICAL|WIRING|CONTROLS?|POINTS?|SEQUENCES?|DIAGRAMS?|DETAILS?)\b)/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor;
     // TU-* terminal units numbered under an AIR TERMINAL UNIT title (AS-62).
     keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU|TU(?=[\s\-]?\d))/i,
     // Under the family's own title, a fan-powered box (26_CA's FPB-3-11 under
-    // FAN POWERED TERMINAL UNIT SCHEDULE; AS-69).
-    titledKeyRe: /^(?:FPB|FPTU|FPVAV|FPV|FPU|FP|[SP]FPB|[SP]FP|[SP]FTU)(?=[\s\-]?\d)/i,
+    // FAN POWERED TERMINAL UNIT SCHEDULE; AS-69) and a terminal air box
+    // (040_IL's TAB-101, TAB-101E; AS-96).
+    titledKeyRe: /^(?:FPB|FPTU|FPVAV|FPV|FPU|FP|[SP]FPB|[SP]FP|[SP]FTU|TAB)(?=[\s\-]?\d)/i,
   },
   RTU: {
     // PACKAGED EQUIPMENT SCHEDULE (RTU) — common finish/replacement sheets.
@@ -3107,6 +3127,29 @@ function sheetRecords(sessionOrSheets, graph) {
     sheetNumber: s.sheetNumber ?? s.number ?? null,
     title: s.title || null,
   }));
+}
+
+/**
+ * The units the takeoff counts from each schedule row (AS-99): every HVAC
+ * family's reading, as compileHvacTakeoff counts it (uniqueFamily, with its
+ * gates, row readings, mark rules and dedupe across tables), keyed by the
+ * row it reads. A row naming a split system's indoor and outdoor units
+ * (12_MT's HP-1 beside FC-1A; "F-1 , CU-1") or a pair of one family's units
+ * ("B-1 & 2") names each; a unit counted from another table first is not
+ * this row's. The whole-set reconcile names a row's units by it
+ * (rowReconcileUnits).
+ * @param {{ tables?: object[] }} graph
+ * @returns {Map<object, Array<{ tag: string, family: string, marks: number }>>}
+ */
+export function takeoffUnitsByRow(graph) {
+  const byRow = new Map();
+  for (const [name, spec] of Object.entries(HVAC_FAMILY_SPECS)) {
+    uniqueFamily(graph, spec, name, (row, tag, marks) => {
+      if (!byRow.has(row)) byRow.set(row, []);
+      byRow.get(row).push({ tag, family: name, marks });
+    });
+  }
+  return byRow;
 }
 
 export function compileHvacTakeoff(sessionOrSheets, graph) {

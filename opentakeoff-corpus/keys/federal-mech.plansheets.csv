@@ -1,0 +1,9 @@
+# federal-mech.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+federal-attachment4-mechanical.pdf#2,HVAC ZONE LEGEND,M,new,yes,"M2.1 ground floor HVAC zone plan: zones hatched and labelled by the unit serving each (VAV-n, FCU-1, UH-1, DX-n); zone legend table below the plan"
+federal-attachment4-mechanical.pdf#3,GROUND FLOOR AIR TERMINALS,M,new,yes,M2.2 ground floor air terminal plan: diffuser/grille tags and CFM only; no HVAC unit tags; mechanical room drawn empty
+federal-attachment4-mechanical.pdf#4,GROUND FLOOR DUCT PLAN,M,new,yes,"M2.3 ground floor duct plan: VAV-1..58, FCU-1, EV-1..6, CP-1..6 tagged; mechanical room equipment drawn untagged (refers to 1/M4.1); room schedule tables on the sheet"
+federal-attachment4-mechanical.pdf#5,ROOF PLAN,M,roof,yes,M2.4 roof plan: EF-1..4 and CU-1..6 tagged; ALP-1..3 louvered penthouses out of scope
+federal-attachment4-mechanical.pdf#6,GROUND FLOOR HVAC PIPING PLAN,M,mixed,yes,M3.1 views: 1 ground floor HVAC piping plan (new work; VAV/FCU/EV/CP repeat p4; FTR-1/1B/2/2B only here) and 2 utility yard (site area; CH-1 in its enclosure)
+federal-attachment4-mechanical.pdf#7,MECHANICAL ROOM ENLARGED PIPING AND DUCT PLANS,M,enlarged,yes,M4.1 views: 1 mechanical room enlarged duct plan and 2 mechanical room enlarged piping plan; the same ten units tagged in both; floor plans p4/p6 show them untagged

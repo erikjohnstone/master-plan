@@ -290,7 +290,12 @@ Sixty-four tools, in the order an agent tends to reach for them:
   `status` (matched / schedule-only / plan-only / …), citing both the
   schedule row and the plan ink. Report both quantities and the status per
   line, never the schedule count alone—the same discipline as `export_report`
-  below.
+  below. A tag found drawn as text only, with no symbol verified, is AMBIGUOUS
+  with each occurrence in `plan_tag_cites`; every other drawn occurrence of a
+  row's mark it does not count (the same unit on another view, bare tag text,
+  a demolition plan) is in `plan_other_cites`, a link and never a quantity; and
+  `unscheduled_units` is the short review list of drawn marks no schedule lists
+  that read as a scheduled family's unit, beside the full `unscheduled_tags`.
   For a controls estimate, `apply_assemblies` then proposes each scheduled
   unit's controls typical and mechanical hook-up (options, variables, lines,
   each citing its schedule row and library rule) on the same shared path as

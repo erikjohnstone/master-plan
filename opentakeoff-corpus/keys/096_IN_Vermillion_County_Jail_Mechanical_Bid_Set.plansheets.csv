@@ -1,0 +1,19 @@
+# 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, check).
+# Authored 2026-09-30 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#2,FIRST FLOOR THERMAL ZONE DIAGRAM,M,new,yes,"M012 zoning plan (view LEVEL 1 THERMAL ZONE DIAGRAM, 1/16in) of the whole first floor, units A/B/C; zone and equipment labels are view repeats"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#3,SECOND FLOOR THERMAL ZONE DIAGRAM,M,new,yes,M023 zoning plan (1/8in) of the unit C pod upper level; zone labels are view repeats
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#4,FIRST FLOOR DEMOLITION PLAN - UNIT A - MECHANICAL,M,demolition,yes,M110A; no HVAC unit tags
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#5,FIRST FLOOR DEMOLITION PLAN - UNIT B - MECHANICAL,M,demolition,yes,M110B; no HVAC unit tags
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#6,OVERALL ATTIC DEMOLITION FLOOR PLAN - MECHANICAL,M,demolition,yes,M120 (view title OVERALL ATTIC FLOOR DEMOLITION PLAN - MECHANICAL); no HVAC unit tags
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#7,FIRST FLOOR PLAN - UNIT A - DUCTWORK,M,new,yes,M210A 1/8in; overlaps unit B past the thick dashed unit A/B line (units east of it counted on M210B)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#8,FIRST FLOOR PLAN - UNIT B - DUCTWORK,M,new,yes,"M210B 1/8in; mechanical room C166, chiller yard and kitchen; overlaps units A and C past the thick dashed unit lines"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#9,FIRST FLOOR PLAN - UNIT C - DUCTWORK,M,new,yes,"M210C 1/8in, pod first floor and its grade-mounted equipment"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#10,SECOND FLOOR PLAN - UNIT C - DUCTWORK,M,new,yes,"M220C 1/8in, pod second floor"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#11,JAIL ROOF PLAN - MECHANICAL,M,roof,yes,M230 3/32in; GEF-1 and GEF-2
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#12,POD ROOF PLAN - MECHANICAL,M,roof,yes,M230C 1/8in; PEF-1..PEF-6
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#13,FIRST FLOOR PLAN - UNIT A - PIPING,M,new,yes,M310A 1/8in; repeats the M210A units
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#14,FIRST FLOOR PLAN - UNIT B - PIPING,M,new,yes,"M310B 1/8in; the only plan of the HRCP and HCP-3/HCP-4 pumps, otherwise repeats M210B"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#15,FIRST FLOOR PLAN - UNIT C - PIPING,M,new,yes,"M310C 1/8in; the only plan of HCP-1, otherwise repeats M210C"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#16,SECOND FLOOR PLAN - UNIT C - PIPING,M,new,yes,M320C 1/8in; repeats M220C
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#18,ENLARGED PLANS - MECHANICAL PIPING,M,enlarged,yes,M500 view MECHANICAL ROOM - UNIT B - PIPING at 1/4in; repeats M210B/M310B units

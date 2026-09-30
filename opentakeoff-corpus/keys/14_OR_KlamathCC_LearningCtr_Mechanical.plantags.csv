@@ -1,0 +1,118 @@
+# 14_OR_KlamathCC_LearningCtr_Mechanical.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, dev).
+# Authored 2026-09-29 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,DOAS-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-1,1,yes,new,tag with leader to unit on mezzanine sector A
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,DOAS-3,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-3,1,yes,new,tag with leader to unit on mezzanine sector A
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,DOAS-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-2,1,yes,new,tag with leader to unit on mezzanine sector B
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,DOAS-4,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-4,1,yes,new,tag with leader to unit on mezzanine sector B
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-1,1,no,view-repeat,overall 1/16in mezzanine plan; same unit counted on sector plan M213 p7
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-2,1,no,view-repeat,overall 1/16in mezzanine plan; same unit counted on sector plan M214 p8
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-3,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-3,1,no,view-repeat,overall 1/16in mezzanine plan; same unit counted on sector plan M213 p7
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,DOAS-4,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-4,1,no,view-repeat,overall 1/16in mezzanine plan; same unit counted on sector plan M214 p8
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,DOAS-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-1,1,no,view-repeat,hydronic piping plan; same unit counted on M213 p7
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,DOAS-3,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-3,1,no,view-repeat,hydronic piping plan; same unit counted on M213 p7
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,DOAS-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-2,1,no,view-repeat,hydronic piping plan; same unit counted on M214 p8
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,DOAS-4,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|DOAS-4,1,no,view-repeat,hydronic piping plan; same unit counted on M214 p8
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,CH-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|CH-1,1,yes,new,utility court
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,CH-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|CH-1,1,no,view-repeat,hydronic piping plan; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,CH-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|CH-1,1,no,enlarged-repeat,enlarged plan; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,MAU-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|MAU-1,1,yes,new,utility court
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,MAU-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|MAU-1,1,no,view-repeat,hydronic piping plan; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,MAU-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|MAU-1,1,no,enlarged-repeat,enlarged plan; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,MAU-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|MAU-1,1,no,enlarged-repeat,enlarged gas plan; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,HP-01,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HP-01,1,yes,new,outdoor unit at utility court wall
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,HP-01,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HP-01,1,no,view-repeat,hydronic piping plan; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HP-01,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HP-01,1,no,enlarged-repeat,tag with leader; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,HP-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HP-02,1,yes,new,drawn HP-2 (schedule HP-02); outdoor unit on exterior wall with keynote 3 housekeeping pad; pairs with FC-02 in MDF
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,HP-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HP-02,1,no,view-repeat,drawn HP-2 (schedule HP-02); hydronic/refrigerant plan; same unit as on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-01,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|FC-01,1,yes,new,wall unit in MDF 121
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-01,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|FC-01,1,no,view-repeat,hydronic piping plan; same unit as on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-02,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|FC-02,1,yes,new,wall unit in MDF (KCC) 203
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-02,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|FC-02,1,no,view-repeat,hydronic piping plan; same unit as on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,EH-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|EH-1,1,yes,new,tag with leader to wall heater in boiler room 149
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,EH-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|EH-2,1,yes,new,fire riser 167
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,EH-3,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|EH-3,1,yes,new,tag with leader to wall heater in vestibule 100
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,B-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|B-1,1,yes,new,boiler drawn untagged on M211; tagged only on enlarged plan
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,B-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|B-2,1,yes,new,boiler drawn untagged on M211; tagged only on enlarged plan
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,B-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|B-1,1,no,enlarged-repeat,enlarged gas plan; same unit as on M320 p12
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,B-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|B-2,1,no,enlarged-repeat,enlarged gas plan; same unit as on M320 p12
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,BP-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|BP-1,1,yes,new,boiler pump at B-1
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,BP-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|BP-2,1,yes,new,boiler pump at B-2
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,CHP-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|CHP-1,1,yes,new,CHP-1 and CHP-2 each have a leader to one in-line pump symbol on the CHW pipe
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,CHP-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|CHP-2,1,yes,new,CHP-1 and CHP-2 each have a leader to one in-line pump symbol on the CHW pipe
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HP-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HWP-1,1,yes,new,"drawn HP-1 at an in-line pump on the HW pipe beside HS-1 (boiler room); the boiler room's other pumps are tagged BP/CHP/SP, so HP-1 = secondary HW pump HWP-1; HP-01 heat pump is tagged separately outdoors"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HP-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HWP-2,1,yes,new,drawn HP-2 at the same in-line pump symbol as HP-1 (two leaders); read as secondary HW pump HWP-2; heat pump HP-02 is outdoors on M212
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,SP-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|SP-1,1,yes,new,snowmelt pump
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,SP-2,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|SP-2,1,yes,new,snowmelt pump
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,HX-1,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#3|HX-1,1,yes,new,snowmelt heat exchanger
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-101,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-101,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-102,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-102,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-103,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-103,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-104,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-104,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-105,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-105,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-106,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-106,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-107,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-107,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-108,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-108,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-109,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-109,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FC-204,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-204,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-201,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-201,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-202,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-202,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-203,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-203,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-206,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-206,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-207,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-207,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-208,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-208,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-209,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-209,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FC-210,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-210,1,yes,new,row of the FAN COIL UNITS schedule on p2; counted here
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-101,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-101,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-102,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-102,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-103,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-103,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-104,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-104,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-105,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-105,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-106,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-106,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-107,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-107,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-108,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-108,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-109,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-109,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,FC-204,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-204,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-201,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-201,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-202,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-202,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-203,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-203,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-206,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-206,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-207,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-207,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-208,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-208,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-209,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-209,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,FC-210,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-210,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; mezzanine plan shows the unit below; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-101,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-101,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-102,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-102,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-103,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-103,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-104,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-104,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-105,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-105,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-106,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-106,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-107,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-107,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-108,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-108,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-109,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-109,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-201,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-201,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-202,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-202,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-203,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-203,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-206,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-206,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-207,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-207,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-208,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-208,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-209,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-209,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,FC-210,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-210,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; overall mezzanine plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-101,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-101,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-102,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-102,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-103,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-103,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-104,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-104,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-105,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-105,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-106,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-106,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-107,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-107,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-108,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-108,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FC-109,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-109,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M211 p5
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-201,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-201,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-202,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-202,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-203,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-203,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-206,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-206,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-207,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-207,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-208,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-208,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-209,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-209,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FC-210,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|FC-210,1,no,view-repeat,row of the FAN COIL UNITS schedule on p2; hydronic piping plan; counted on M212 p6
+,,14_OR_KlamathCC_LearningCtr_Mechanical.pdf#2|KEF-1,0,no,not_drawn,only on the EXHAUST FANS schedule p2 and named KEF-01 in the p16 kitchen hood sequence; the roof plan M231 in the p1 sheet index is not in this set

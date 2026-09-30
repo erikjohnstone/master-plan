@@ -1,0 +1,30 @@
+# 004_MO_T2504_03_Interior_and_Exterior_Renovation.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#4,EXISTING FOUNDATION PLAN,other,existing,yes,"structural S-101: partial existing basement and foundation plans plus details; searched, no HVAC unit tags"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#5,EXISTING ROOF FRAMING PLAN,other,existing,yes,structural S-102: existing framing plan with leader notes naming the new RTU #1-#7 and MAU #1 curbs; typical RTU framing details
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#7,CODE DATA AND LIFE SAFETY,A,new,yes,life safety plan and mechanical room life safety plan beside code data; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#8,DEMO FLOOR PLAN,A,demolition,yes,demolition plan and demo plan of mechanical room; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#9,FLOOR PLAN,A,new,yes,"floor plan, mechanical room plan, enlarged door plans; no HVAC unit tags"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#10,ROOF PLANS,A,mixed,yes,"demo roof plan and roof plan (kitchen and classroom wing); units marked by keynotes only, no unit tags"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#13,ENLARGED FLOOR PLANS,A,enlarged,yes,demolition and new enlarged restroom/shower/locker plans; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#19,REFLECTED CEILING PLAN,A,new,yes,reflected ceiling plan and mechanical room RCP; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#21,PLUMBING BASEMENT PLAN,P,mixed,yes,plumbing mechanical room plan (new) and plumbing demo mechanical room plan
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#22,PLUMBING SANITARY & VENT DEMO PLAN,P,demolition,yes,no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#23,PLUMBING DOMESTIC WATER DEMO PLAN,P,demolition,yes,no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#24,PLUMBING SANITARY & VENT PLAN,P,new,yes,no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#25,PLUMBING DOMESTIC WATER PLAN,P,new,yes,no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#26,PLUMBING ROOF PLAN,P,mixed,yes,demo plumbing roof plan (existing RTUs untagged) and plumbing roof plan (gas piping to tagged RTUs and DOAS)
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#27,PLUMBING ENLARGED RESTROOM PLAN,P,enlarged,yes,enlarged domestic water and sanitary restroom plans; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#33,MECHANICAL BASEMENT PLAN,M,mixed,yes,"mechanical basement plan (new) and mechanical demo basement plan (boiler/pump/tank untagged, keyed notes A-E); section at exterior stair well"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#34,MECHANICAL DEMO FLOOR PLAN,M,demolition,yes,demolition floor plans north and south; radiators to demolish are untagged
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#35,MECHANICAL DEMO ROOF PLAN,M,demolition,yes,demo HVAC roof plans north and south
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#36,MECHANICAL FLOOR PLAN,M,new,yes,floor plans north and south; section at exhaust hoods and classroom ductwork soffit section (tags there are not placements)
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#37,MECHANICAL ROOF PLAN,M,roof,yes,mechanical roof plans north and south
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#42,ELECTRICAL BASEMENT DEMO PLAN,E,demolition,yes,no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#43,ELECTRICAL FIRST FLOOR DEMO PLAN,E,demolition,yes,first floor demo plan and enlarged kitchen demo plan; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#44,LIGHTING PLAN,E,new,yes,lighting plan and basement lighting plan; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#45,POWER AND SYSTEMS PLAN,E,new,yes,power plan; no HVAC unit tags
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#46,ROOFTOP POWER PLAN,E,roof,yes,"rooftop power plan with tagged RTUs, DOAS, GEF, EF"
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#47,ENLARGED POWER AND SYSTEMS PLANS,E,enlarged,yes,basement power plan and enlarged kitchen power and systems plan; CaptiveAire wiring details
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#48,ELECTRICAL SITE PLAN,E,site,yes,no HVAC unit tags

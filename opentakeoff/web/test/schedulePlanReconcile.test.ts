@@ -19,11 +19,20 @@ import {
   scheduleRowsReadingMark,
   servedEquipmentTag,
   unscheduledTagsAndAliasCandidates,
+  unscheduledUnitCandidates,
+  planOtherCites,
+  isUnitFamilyTable,
+  markZeroRespellings,
+  rowNamesOneUnitOnce,
+  rowUnitMarks,
+  rowReconcileUnits,
+  reconcileUnitKey,
 } from "../src/lib/schedulePlanReconcile.mjs";
 import {
   HVAC_FAMILY_SPECS, compileHvacTakeoff, valveRowService, rowIdentityText, familyReadsUnitMark, hasValveOrDamperMark,
   inferValveServiceFromTable, familyTableGate, scheduleTableView, splitRowMarks, markSpellings, unitMarkKey, familyMarkRead,
-  isControlValveHeaderShape, expandMarkList, expandEquipMarks, rowMarkText, normalizeEquipMark, plainMark,
+  isControlValveHeaderShape, expandMarkList, expandEquipMarks, rowMarkText, normalizeEquipMark, plainMark, isGroupedMarkHeader,
+  takeoffUnitsByRow,
 } from "../src/lib/corpusTakeoff.mjs";
 import { rowKeyAnswersFor, rowKeyOf } from "../src/lib/sheetgraph.ts";
 import { classifyGrid } from "../src/lib/gridClassify.mjs";
@@ -2331,4 +2340,225 @@ test("a unit the reading finds is told apart from every mark the set's schedules
   vocabulary.push("ZZ-1");
   assert.ok(!scheduleMarkVocabulary(graph).includes("ZZ-1"));
   assert.deepEqual(scheduleMarkVocabulary(null), []);
+});
+
+test("unscheduledUnitCandidates: the likely units are a takeoff family's own mark form on a plan, never grid, detail, zone, circuit, room, damper or air-device marks (AS-93)", () => {
+  const fans = { kind: "equipment", title: { text: "FAN SCHEDULE" }, rows: ["EF-1", "EF-2", "EF-12"].map((k) => ({ key: k, cells: { MARK: { text: k } } })) };
+  const pumps = { kind: "equipment", title: { text: "PUMP SCHEDULE" }, rows: [{ key: "P-1", cells: { MARK: { text: "P-1" } } }] };
+  const dampers = { kind: "equipment", title: { text: "DAMPER SCHEDULE" }, rows: [{ key: "D-1", cells: { MARK: { text: "D-1" } } }] };
+  const grilles = { kind: "equipment", title: { text: "DIFFUSER, REGISTER AND GRILLE SCHEDULE" }, rows: [{ key: "S1", cells: { MARK: { text: "S1" } } }] };
+  const ahus = { kind: "equipment", title: { text: "AIR HANDLING UNIT SCHEDULE" }, rows: [{ key: "AHU-1", cells: { MARK: { text: "AHU-1" } } }] };
+  const graph = {
+    tables: [fans, pumps, dampers, grilles, ahus],
+    tags: [
+      tagFixture({ text: "EF-25", key: "EF25" }), // a fan no schedule lists: listed
+      tagFixture({ text: "EF 30", key: "EF30", sheet: "set.pdf#2", role: "demolition" }), // existing, on a demolition plan: listed
+      tagFixture({ text: "EF-26", key: "EF26", role: "detail" }), // in a detail: not a plan
+      tagFixture({ text: "EF-27", key: "EF27", in_table: { sheet: "set.pdf#1", title: null } }), // table text
+      tagFixture({ text: "P9", key: "P9" }), // a one-letter mark without the pumps' hyphen: a callout
+      tagFixture({ text: "P-9", key: "P9" }), // a pump form: listed
+      tagFixture({ text: "D57", key: "D57" }), // a detail callout
+      tagFixture({ text: "D-9", key: "D9" }), // a damper: no takeoff family reads the damper schedule
+      tagFixture({ text: "S7", key: "S7" }), // a grille type mark, not a unit
+      tagFixture({ text: "AHU-1-Z-2", key: "AHU1Z2" }), // a zone label: another form
+      tagFixture({ text: "T.1", key: "T1" }), // a grid bubble: no scheduled family
+      tagFixture({ text: "PP-1-24", key: "PP124" }), // a circuit: no scheduled family
+      tagFixture({ text: "EF-1", key: "EF1" }), // scheduled: never in either list
+    ],
+  };
+  const { unscheduled_tags } = unscheduledTagsAndAliasCandidates(graph);
+  assert.ok(unscheduled_tags.some((t: any) => t.text === "D57"), "the full review list keeps every unscheduled mark");
+  assert.ok(unscheduled_tags.some((t: any) => t.text === "D-9"), "and every unscheduled damper mark");
+  assert.deepEqual(unscheduledUnitCandidates(graph).map((t: any) => t.text), ["EF-25", "EF 30", "P-9"]);
+});
+
+test("planOtherCites: a row's mark on a repeat view, as unattached text, and on a demolition plan links to it, never counts (AS-92)", () => {
+  const sweep = {
+    sheets: [
+      { sheet: "set.pdf#4", matches: [{ at: [10, 10] }], redundant_view: [], text_only: [{ at: [50, 50] }] },
+      { sheet: "set.pdf#6", matches: [], redundant_view: [{ at: [20, 20], tag_at: { x0: 18, y0: 18, x1: 24, y1: 22 }, kept_sheet: "set.pdf#4" }], text_only: [] },
+    ],
+  };
+  const graph = { tags: [
+    tagFixture({ text: "AHU-1", key: "AHU1", sheet: "set.pdf#2", role: "demolition", bbox: [100, 100, 110, 104] }),
+    tagFixture({ text: "AHU-1", key: "AHU1", sheet: "set.pdf#9", role: "schedule", in_table: { sheet: "set.pdf#9", title: "AIR HANDLING UNIT SCHEDULE" } }),
+    tagFixture({ text: "AHU-1", key: "AHU1", sheet: "set.pdf#8", role: "detail" }),
+  ] };
+  assert.deepEqual(planOtherCites(sweep, graph, "AHU-1"), [
+    { sheet: "set.pdf#4", at: [50, 50], reason: "unattached_tag" },
+    { sheet: "set.pdf#6", at: [20, 20], bbox: { x0: 18, y0: 18, x1: 24, y1: 22 }, reason: "repeat_view", counted_on: "set.pdf#4" },
+    { sheet: "set.pdf#2", at: [105, 102], bbox: { x0: 100, y0: 100, x1: 110, y1: 104 }, reason: "demolition_view" },
+  ]);
+  // a sweep that threw still links the demolition plan
+  assert.deepEqual(planOtherCites(null, graph, "AHU-1").map((c) => c.reason), ["demolition_view"]);
+  // the reconcile row carries them, and its counted cites and status are untouched
+  const [row] = reconcileRowsFromTakeoffItems([{
+    tag: "AHU-1", equipment_type: "AHU", category: "equipment", schedule: { sheet: "set.pdf#9", kind: "equipment", title: "AIR HANDLING UNIT SCHEDULE" },
+    schedule_row: { MARK: "AHU-1" }, quantity: 1, drawing_locations: [{ sheet: "set.pdf#4", at: [10, 10] }], siblings_excluded: [],
+    corroborated: false, status: "resolved", source: "schedule_row", quantity_basis: "tag_attached_vector",
+    plan_other_locations: planOtherCites(sweep, graph, "AHU-1"),
+  }] as any);
+  assert.equal(row.status, "MATCH");
+  assert.equal(row.installed_qty, 1);
+  assert.deepEqual(row.plan_cites.map((c: any) => c.sheet), ["set.pdf#4"]);
+  assert.deepEqual(row.plan_other_cites.map((c: any) => c.reason), ["unattached_tag", "repeat_view", "demolition_view"]);
+});
+
+// AS-101: a mark on a demolition plan read as the sweep reads it (011_IL's
+// "HP 12-1", which the graph's tag index does not read) links to its row,
+// once however many readings find it.
+test("planOtherCites: a demolition plan's tag the sweep reads links to its row, once (AS-101)", () => {
+  const graph = { tags: [tagFixture({ text: "AHU-1", key: "AHU1", sheet: "set.pdf#2", role: "demolition", bbox: [100, 100, 110, 104] })] };
+  const read = [
+    { sheet: "set.pdf#2", at: [105, 102] as [number, number], bbox: { x0: 100, y0: 100, x1: 110, y1: 104 } },
+    { sheet: "set.pdf#3", at: [40, 40] as [number, number], bbox: { x0: 35, y0: 38, x1: 45, y1: 42 } },
+  ];
+  assert.deepEqual(planOtherCites(null, graph, "AHU-1", read), [
+    { sheet: "set.pdf#2", at: [105, 102], bbox: { x0: 100, y0: 100, x1: 110, y1: 104 }, reason: "demolition_view" },
+    { sheet: "set.pdf#3", at: [40, 40], bbox: { x0: 35, y0: 38, x1: 45, y1: 42 }, reason: "demolition_view" },
+  ]);
+  // with no session reading, the tag index's alone, as before
+  assert.deepEqual(planOtherCites(null, graph, "AHU-1").map((c) => c.sheet), ["set.pdf#2"]);
+});
+
+// AS-95: a mark column under a group heading. 12_MT's SPLIT SYSTEM HEAT PUMP
+// SCHEDULE joins a two-row header, so its outdoor and indoor units' marks
+// print under OUTDOOR UNIT DATA PLAN CODE and INDOOR UNIT DATA PLAN CODE, and
+// the extraction keys every row by its MANUF. cell, DAIKIN.
+test("a mark column under a group heading names the units a row's key names none of (AS-95)", () => {
+  for (const h of ["OUTDOOR UNIT DATA PLAN CODE", "INDOOR UNIT DATA PLAN CODE", "FAN COIL SYMBOL", "HEAT PUMP SYMBOL", "AIR HANDLER PLAN MARK", "EXHAUST FAN MARK", "SUPPLY UNIT TAG"]) {
+    assert.equal(isGroupedMarkHeader(h), true, h);
+  }
+  // a mark column's own names and synonyms are read as they always were; a
+  // word that only ends in the letters is none
+  for (const h of ["MARK", "PLAN CODE", "UNIT MARK", "EQUIPMENT TAG", "SYMBOL", "REMARKS", "TRADEMARK", "NOTES", "OUTDOOR UNIT DATA MODEL NUMBER"]) {
+    assert.equal(isGroupedMarkHeader(h), false, h);
+  }
+  const headers = ["MANUF.", "OUTDOOR UNIT DATA PLAN CODE", "OUTDOOR UNIT DATA MODEL NUMBER", "INDOOR UNIT DATA PLAN CODE", "INDOOR UNIT DATA TYPE"];
+  const rows = [["HP-1", "FC-1A"], ["HP-1", "FC-1B"], ["HP-2", "FC-4A"]].map(([hp, fc]) => ({
+    __key: "DAIKIN", "MANUF.": "DAIKIN", "OUTDOOR UNIT DATA PLAN CODE": hp, "OUTDOOR UNIT DATA MODEL NUMBER": "RXTQ36TBVJU",
+    "INDOOR UNIT DATA PLAN CODE": fc, "INDOOR UNIT DATA TYPE": "CEILING CASSETTE",
+  }));
+  const graph = { tables: [as77Table("m.pdf#28", "SPLIT SYSTEM HEAT PUMP SCHEDULE", headers, rows)] };
+  // each family reads its own units, in the takeoff and the reconcile alike:
+  // HP-1, the outdoor unit of two rows, once
+  assert.deepEqual(as77Marks(graph), {
+    FCU: { compile: ["FC1A", "FC1B", "FC4A"], reconcile: ["FC1A", "FC1B", "FC4A"] },
+    HEAT_PUMP: { compile: ["HP1", "HP2"], reconcile: ["HP1", "HP2"] },
+  });
+  // the whole-set reconcile names each row by the first such column that prints a mark
+  assert.deepEqual(graph.tables[0].rows.map((row) => rowIdentityTag(row)), ["HP-1", "HP-1", "HP-2"]);
+  // a key that prints a mark keeps naming its row
+  const keyed = as77Table("m.pdf#29", "FAN SCHEDULE", ["MARK", "SERVED UNIT TAG"], [{ MARK: "EF-1", "SERVED UNIT TAG": "AHU-1" }]);
+  assert.equal(rowIdentityTag(keyed.rows[0]), "EF-1");
+  // a key with no mark and no such column stays the key
+  const plain = as77Table("m.pdf#30", "FAN SCHEDULE", ["MANUFACTURER", "CFM"], [{ MANUFACTURER: "GREENHECK", CFM: "400" }]);
+  assert.equal(rowIdentityTag(plain.rows[0]), "GREENHECK");
+});
+
+// AS-96: a unit family's own schedule names one unit a mark, as an
+// individually marked schedule's title says; never a type-mark family's.
+test("a unit family's own schedule is individually marked; grilles, louvers, fin tube, doors and air devices are not (AS-96)", () => {
+  const t = (title: string, key: string) => as77Table("m.pdf#1", title, ["MARK", "CFM"], [{ MARK: key, CFM: "100" }]);
+  for (const [title, key] of [["TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2", "TAB-101"], ["FANS (SPECIFICATION SECTION 23 34 00)", "SF-P1-1"],
+    ["VOLUME CONTROL BOX SCHEDULE", "VAV-1"], ["FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)", "FPB-3-11"], ["EXHAUST FANS", "KEF-1"]]) {
+    assert.equal(isUnitFamilyTable(t(title, key)), true, title);
+  }
+  for (const [title, key] of [["GRILLE, REGISTER, AND DIFFUSER SCHEDULE", "S1-1"], ["LOUVER SCHEDULE", "L-1"], ["FIN TUBE RADIATION SCHEDULE", "FTR-1"],
+    ["DOOR SCHEDULE", "101"], ["AIR DEVICE SCHEDULE", "S-1"], ["", "EF-1"]]) {
+    assert.equal(isUnitFamilyTable(t(title, key)), false, title || "(untitled)");
+  }
+});
+
+// AS-97: a plan may drop or add the zero a schedule pads a mark's number with.
+test("a mark's zero respellings: its numbers unpadded, its last number padded, a lone zero kept (AS-97)", () => {
+  assert.deepEqual(markZeroRespellings("HP-02"), ["HP-2"]);
+  assert.deepEqual(markZeroRespellings("HP-2"), ["HP-02"]);
+  assert.deepEqual(markZeroRespellings("AHU-010"), ["AHU-10"]);
+  assert.deepEqual(markZeroRespellings("VAV-1-01"), ["VAV-1-1"]);
+  assert.deepEqual(markZeroRespellings("VAV-1-1"), ["VAV-1-01"]);
+  assert.deepEqual(markZeroRespellings("EF-12"), []);
+  assert.deepEqual(markZeroRespellings("FCU-00"), []);
+  assert.deepEqual(markZeroRespellings("RTU-A"), []);
+});
+
+test("a unit family's row names one unit once: never a typical row, a placeholder mark or a pair (AS-96)", () => {
+  const row = (cells: Record<string, string>) => ({ cells: Object.fromEntries(Object.entries(cells).map(([h, text]) => [h, { text }])) });
+  assert.equal(rowNamesOneUnitOnce(row({ MARK: "TAB-101", CFM: "400" }), "TAB-101"), true);
+  // 26_CA's CAV-X-2, a toilet exhaust box on each of its TYPICAL FLOORS
+  assert.equal(rowNamesOneUnitOnce(row({ DESIGNATION: "CAV-X-2", "TYPICAL FLOORS": "3-4, 6-34" }), "CAV-X-2"), false);
+  assert.equal(rowNamesOneUnitOnce(row({ DESIGNATION: "CAV-2-1", "TYPICAL FLOORS": "2" }), "CAV-2-1"), false);
+  assert.equal(rowNamesOneUnitOnce(row({ MARK: "VAV-X-1", CFM: "450" }), "VAV-X-1"), false);
+  assert.equal(rowNamesOneUnitOnce(row({ MARK: "FCU-1", REMARKS: "TYP. OF 4" }), "FCU-1"), false);
+  // 040_IL's split system: its indoor and outdoor units
+  assert.equal(rowNamesOneUnitOnce(row({ SYMBOL: "SS-1/SSCU-1" }), "SS-1/SSCU-1"), false);
+  assert.equal(rowNamesOneUnitOnce(row({ MARK: "EF-1 & 2" }), "EF-1 & 2"), false);
+  // an X that is the mark's letters, not a placeholder
+  assert.equal(rowNamesOneUnitOnce(row({ MARK: "HX-1" }), "HX-1"), true);
+});
+
+// AS-98: a whole-set reconcile row naming several units reconciles each.
+test("a row naming a range or a list of one family's units names each, with its share of the row (AS-98)", () => {
+  assert.deepEqual(rowUnitMarks("SF-P1-4 THRU 7"), ["SF-P1-4", "SF-P1-5", "SF-P1-6", "SF-P1-7"].map((tag) => ({ tag, marks: 4 })));
+  assert.deepEqual(rowUnitMarks("EF-P1-1 & 2"), [{ tag: "EF-P1-1", marks: 2 }, { tag: "EF-P1-2", marks: 2 }]);
+  assert.deepEqual(rowUnitMarks("WCU-2-1 ,2"), [{ tag: "WCU-2-1", marks: 2 }, { tag: "WCU-2-2", marks: 2 }]);
+  // one mark, two families' marks, words: one unit, as printed
+  assert.deepEqual(rowUnitMarks("AHU-1"), [{ tag: "AHU-1", marks: 1 }]);
+  assert.deepEqual(rowUnitMarks("AHU-1, HP-1"), [{ tag: "AHU-1, HP-1", marks: 1 }]);
+  assert.deepEqual(rowUnitMarks("SS-1/SSCU-1"), [{ tag: "SS-1/SSCU-1", marks: 1 }]);
+  assert.deepEqual(rowUnitMarks(""), []);
+  // the row's printed QTY counts them all, never each
+  const [one] = reconcileRowsFromTakeoffItems([{
+    tag: "EF-P1-1", equipment_type: "Fan", category: "equipment", schedule: { sheet: "s.pdf#10", kind: "equipment", title: "FANS" },
+    schedule_row: { MARK: "EF-P1-1 & 2", QTY: "2" }, row_marks: 2, quantity: 1, drawing_locations: [{ sheet: "s.pdf#39", at: [1, 1] }],
+    siblings_excluded: [], corroborated: false, status: "resolved", source: "schedule_row", quantity_basis: "tag_attached_vector",
+  }] as any);
+  assert.equal(one.scheduled_qty, 1);
+  assert.equal(one.scheduled_qty_basis, "printed_schedule_quantity_per_mark");
+});
+
+// AS-99: a whole-set reconcile row stands for every unit the takeoff counts
+// from it, as the takeoff reads the row (takeoffUnitsByRow).
+test("a whole-set row stands for each unit the takeoff counts from it: a split system's pair, a pair of one family's units, an indoor unit beside its outdoor unit (AS-99)", () => {
+  const u = (tag: string, marks = 1) => ({ tag, marks });
+  // a name the takeoff reads as several units: those units, never one unit drawn nowhere
+  assert.deepEqual(rowReconcileUnits("F-1 , CU-1", [u("F-1"), u("CU-1")]), [u("F-1"), u("CU-1")]);
+  assert.deepEqual(rowReconcileUnits("B-1/B-2", [u("B-1", 2), u("B-2", 2)]), [u("B-1", 2), u("B-2", 2)]);
+  assert.deepEqual(rowReconcileUnits("FOP-8AB", [u("FOP-8A", 2), u("FOP-8B", 2)]), [u("FOP-8A", 2), u("FOP-8B", 2)]);
+  // an outdoor unit's row counts its indoor units too; its name stays
+  assert.deepEqual(rowReconcileUnits("HP-5", [u("FC-1"), u("FC-2")]), [u("HP-5"), u("FC-1"), u("FC-2")]);
+  // a unit another row of the set names keeps that row
+  assert.deepEqual(rowReconcileUnits("HP-5", [u("FC-1"), u("FC-2")], new Set([reconcileUnitKey("FC 1")])), [u("HP-5"), u("FC-2")]);
+  // a name that prints the unit counted from it in another spelling stands as it is
+  assert.deepEqual(rowReconcileUnits("(E) CT-1", [u("CT-1")]), [u("(E) CT-1")]);
+  assert.deepEqual(rowReconcileUnits("CV-FCU-1-HHW", [u("FCU-1"), u("CV-FCU-1-HHW")]), [u("CV-FCU-1-HHW")]);
+  assert.deepEqual(rowReconcileUnits("FC-1 , HP-1", [u("FC-1")]), [u("FC-1 , HP-1")]);
+  // a name no unit is counted from, and a list the name schedules itself
+  assert.deepEqual(rowReconcileUnits("AHU-1", []), [u("AHU-1")]);
+  assert.deepEqual(rowReconcileUnits("EF-1 & 2", [u("EF-1", 2), u("EF-2", 2)]), [u("EF-1", 2), u("EF-2", 2)]);
+  // a mark run on into a longer number is not the name's
+  assert.deepEqual(rowReconcileUnits("FC-10", [u("FC-1")]), [u("FC-10"), u("FC-1")]);
+
+  // 12_MT's split system heat pumps: the takeoff counts each indoor unit and
+  // the outdoor unit of two rows once, from its first row
+  const headers = ["MANUF.", "OUTDOOR UNIT DATA PLAN CODE", "OUTDOOR UNIT DATA MODEL NUMBER", "INDOOR UNIT DATA PLAN CODE", "INDOOR UNIT DATA TYPE"];
+  const rows = [["HP-1", "FC-1A"], ["HP-1", "FC-1B"], ["HP-2", "FC-4A"]].map(([hp, fc]) => ({
+    __key: "DAIKIN", "MANUF.": "DAIKIN", "OUTDOOR UNIT DATA PLAN CODE": hp, "OUTDOOR UNIT DATA MODEL NUMBER": "RXTQ36TBVJU",
+    "INDOOR UNIT DATA PLAN CODE": fc, "INDOOR UNIT DATA TYPE": "CEILING CASSETTE",
+  }));
+  const graph = { tables: [as77Table("m.pdf#28", "SPLIT SYSTEM HEAT PUMP SCHEDULE", headers, rows)] };
+  const byRow = takeoffUnitsByRow(graph);
+  const table = graph.tables[0];
+  assert.deepEqual(table.rows.map((row) => (byRow.get(row) ?? []).map((c) => `${c.family}:${c.tag}`).sort()),
+    [["FCU:FC-1A", "HEAT_PUMP:HP-1"], ["FCU:FC-1B"], ["FCU:FC-4A", "HEAT_PUMP:HP-2"]]);
+  // the whole-set reconcile's rows: HP-1 once (the loop's scope dedupe), each indoor unit
+  const seen = new Set<string>();
+  const units = table.rows.flatMap((row) => rowReconcileUnits(rowIdentityTag(row) ?? "", byRow.get(row) ?? []))
+    .filter(({ tag }) => !seen.has(tag) && !!seen.add(tag)).map(({ tag }) => tag);
+  assert.deepEqual(units, ["HP-1", "FC-1A", "FC-1B", "HP-2", "FC-4A"]);
+  // the takeoff counts exactly these, and no other
+  assert.deepEqual(as77Marks(graph), {
+    FCU: { compile: ["FC1A", "FC1B", "FC4A"], reconcile: ["FC1A", "FC1B", "FC4A"] },
+    HEAT_PUMP: { compile: ["HP1", "HP2"], reconcile: ["HP1", "HP2"] },
+  });
 });

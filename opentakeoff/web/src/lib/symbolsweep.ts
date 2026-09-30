@@ -3664,6 +3664,12 @@ export interface RoomSweepInstance<Id> {
    *  attribution never guessed, so the instance never enters the dedup. */
   discipline: string | null;
   at: Point;
+  /** The centre of the occurrence's own tag text, when known. Overlays of
+   * one floor print a unit's tag where it was (040_IL's piping plans and
+   * ventilation plan print SS-1 within 4 px of each other) while the matched
+   * symbol geometry may be anchored at another point of the unit, up to
+   * 120 px away; either position registers the redraw (AS-100). */
+  tagAt?: Point;
   /** This occurrence's own sheet's rooms (sheetgraph.ts's roomTags output)
    *  and its full page size, so "nearest room" can be bounded to a plausible
    *  fraction of the sheet rather than ever crediting a room that merely
@@ -3900,6 +3906,13 @@ export function planLevelOfTitle(title: string): string | null {
   return null;
 }
 
+/** How far apart two cross-sheet occurrences sit: their matched geometry, or
+ * their own tag text where both are known (AS-100), whichever is nearer. */
+function redrawDistance<Id>(a: RoomSweepInstance<Id>, b: RoomSweepInstance<Id>): number {
+  const byGeometry = Math.hypot(a.at[0] - b.at[0], a.at[1] - b.at[1]);
+  return a.tagAt && b.tagAt ? Math.min(byGeometry, Math.hypot(a.tagAt[0] - b.tagAt[0], a.tagAt[1] - b.tagAt[1])) : byGeometry;
+}
+
 export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
   type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
   const attributed: Attributed[] = [];
@@ -3912,7 +3925,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
     for (let j = i + 1; j < instances.length; j++) {
       if (instances[i].sheet === instances[j].sheet
         || differentKnownLevels(instances[i], instances[j])
-        || Math.hypot(instances[i].at[0] - instances[j].at[0], instances[i].at[1] - instances[j].at[1]) > 30) continue;
+        || redrawDistance(instances[i], instances[j]) > 30) continue;
       const key = sheetPair(instances[i].sheet, instances[j].sheet);
       tightPairCounts.set(key, (tightPairCounts.get(key) || 0) + 1);
     }
@@ -3964,7 +3977,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   const attributedIds = new Set(attributed.map((entry) => entry.id));
   for (let i = 0; i < mixed.length; i++) {
     for (let j = i + 1; j < mixed.length; j++) {
-      const distance = Math.hypot(mixed[i].at[0] - mixed[j].at[0], mixed[i].at[1] - mixed[j].at[1]);
+      const distance = redrawDistance(mixed[i], mixed[j]);
       const asymmetric = attributedIds.has(mixed[i].id) !== attributedIds.has(mixed[j].id);
       // Extremely tight registration overrides contradictory nearest-room
       // reads only when another pair independently registers the same two
@@ -4005,7 +4018,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       if (!differentKnownLevels(proximityCandidates[i], proximityCandidates[j])
-        && Math.hypot(proximityCandidates[i].at[0] - proximityCandidates[j].at[0], proximityCandidates[i].at[1] - proximityCandidates[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+        && redrawDistance(proximityCandidates[i], proximityCandidates[j]) <= COORD_ATTRIBUTION_MAX_PX) {
         const ri = find(i), rj = find(j);
         if (ri !== rj) parent[ri] = rj;
       }

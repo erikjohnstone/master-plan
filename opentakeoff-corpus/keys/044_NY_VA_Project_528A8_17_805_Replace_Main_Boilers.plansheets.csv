@@ -1,0 +1,3 @@
+# 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, check).
+# Authored 2026-09-30 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note

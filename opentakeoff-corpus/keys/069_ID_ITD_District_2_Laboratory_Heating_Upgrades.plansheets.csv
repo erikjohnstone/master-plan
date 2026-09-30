@@ -1,0 +1,5 @@
+# 069_ID_ITD_District_2_Laboratory_Heating_Upgrades.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, check).
+# Authored 2026-09-30 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#3,MECHANICAL FLOOR PLANS,M,mixed,yes,"sheet M1.0; view 1 LOFT MECHANICAL DEMOLITION PLAN (demolition) and view 2 LOFT MECHANICAL NEW WORK PLAN (new) of the same mech loft 201/201A; plus demolition and new-work keyed notes"
+069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#9,MECHANICAL POWER PLAN,E,mixed,yes,"sheet E1.0; view 1 ELECTRICAL LOFT DEMO PLAN (demolition) and view 2 ELECTRICAL LOFT NEW PLAN (new) of the same mech loft; repeats the M1.0 equipment hexagon tags for power connections; searched for HVAC unit tags"

@@ -1,0 +1,29 @@
+# baker-county-eoc.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, check).
+# Authored 2026-09-30 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+baker-county-eoc-bidset.pdf#4,CODE PLAN,other,new,yes,"G010 CODE ANALYSIS (General sheet by the architect): code/life-safety plan of the addition with code review text, occupancy schedule and plumbing fixture count; text layer and render searched, no HVAC unit tags"
+baker-county-eoc-bidset.pdf#6,EXISTING CONDITIONS AND SITE DEMOLITION PLAN,other,demolition,yes,"C1.0 civil, no text layer: site plan of existing conditions with site demolition construction notes; render searched, no HVAC unit tags"
+baker-county-eoc-bidset.pdf#7,SITE IMPROVEMENT PLAN,other,site,yes,"C2.0 civil, no text layer; render searched, no HVAC unit tags"
+baker-county-eoc-bidset.pdf#8,PRECISE GRADING PLAN,other,site,yes,"C3.0 civil, no text layer: three enlarged entrance grading plans (ramp entrances 1-3) and an aerial key map; render searched, no HVAC unit tags"
+baker-county-eoc-bidset.pdf#9,SURFACE WATER RETENTION PLAN,other,site,yes,"C4.0 civil, no text layer; render searched, no HVAC unit tags"
+baker-county-eoc-bidset.pdf#10,EROSION AND SEDIMENTATION CONTROL PLAN,other,site,yes,"ESC1 civil, no text layer; render searched, no HVAC unit tags"
+baker-county-eoc-bidset.pdf#11,DEMO PLAN,A,demolition,yes,A001 DEMOLITION PLAN: view 2 demo plan + view 1 exterior demo elevation; only HVAC item is keynote 2.03 (demo existing room exhaust vent grille and ducting); no HVAC unit tags
+baker-county-eoc-bidset.pdf#12,OVERALL FLOOR PLAN,A,new,yes,A100; existing building shaded (NO WORK); no HVAC unit tags
+baker-county-eoc-bidset.pdf#13,FLOOR PLAN,A,new,yes,A101; no HVAC unit tags
+baker-county-eoc-bidset.pdf#14,REFLECTED CEILING PLAN - LEVEL 01,A,new,yes,A111; mini-split head and ceiling heat pump units marked only by keynotes 23.02 and 23.07; no HVAC unit tags
+baker-county-eoc-bidset.pdf#15,ROOF PLAN,A,roof,yes,A121; rooftop equipment marked only by keynote 23.01 and generic MECH EQUIP AREA labels; no HVAC unit tags
+baker-county-eoc-bidset.pdf#19,ENLARGED RESTROOMS,A,enlarged,yes,A401 ENLARGED PLANS: enlarged restroom plan + 12 interior elevations + fixture basis of design table (keynote 10.15 wall heater); no HVAC unit tags
+baker-county-eoc-bidset.pdf#27,FINISH FLOOR PLAN,A,new,yes,A631 FINISH SCHEDULE: finish floor plan + room finish schedule; no HVAC unit tags
+baker-county-eoc-bidset.pdf#31,0-FOUNDATION PLAN,other,new,yes,S2.0 structural; no HVAC unit tags
+baker-county-eoc-bidset.pdf#32,3-ROOF FRAMING PLAN,other,roof,yes,S2.1 structural; roof openings drawn untagged; no HVAC unit tags
+baker-county-eoc-bidset.pdf#38,MECHANICAL - LEVEL 1 PLAN,M,new,yes,"M1.01; FCU-1, FCU-2, ERV-01, EWH-1, EWH-2 tagged; duct notes naming RTU-1, RTU-2 and EF-1 are note text, not placements; existing building drawn with room names only"
+baker-county-eoc-bidset.pdf#39,MECHANICAL - ROOF PLAN,M,roof,yes,"M1.21; RTU-1, RTU-2, CU-1, CU-2, EF-1 tagged; existing roof drawn as outline only (gas connection flag note)"
+baker-county-eoc-bidset.pdf#44,PLUMBING - UNDERGROUND PLAN,P,new,yes,P1.00; no HVAC unit tags
+baker-county-eoc-bidset.pdf#45,PLUMBING - LEVEL 1 PLAN,P,new,yes,P1.01; FCU-2 outline drawn untagged in IDF; HB-1 is plumbing; no HVAC unit tags
+baker-county-eoc-bidset.pdf#46,PLUMBING - ROOF PLAN,P,roof,yes,P1.21; rooftop equipment outlines drawn untagged; RD-1 and HB-2 are plumbing; no HVAC unit tags
+baker-county-eoc-bidset.pdf#47,PLUMBING - LEVEL 1 ENLARGED PLAN,P,enlarged,yes,P4.01; WH-1 and fixture tags are plumbing; no HVAC unit tags
+baker-county-eoc-bidset.pdf#53,ELECTRICAL DEMOLITION - LEVEL 1 PLAN,E,demolition,yes,ED1.01; no HVAC unit tags
+baker-county-eoc-bidset.pdf#54,ELECTRICAL LIGHTING - LEVEL 1 PLAN,E,new,yes,EL1.01; no HVAC unit tags
+baker-county-eoc-bidset.pdf#55,ELECTRICAL POWER - LEVEL 1 PLAN,E,new,yes,"EP1.01; ERV-01, FCU-1, EWH-1, EWH-2 tagged (discipline repeats of M1.01); FCU-2 outline drawn untagged beside switch C-24,26; WH-1 is plumbing"
+baker-county-eoc-bidset.pdf#56,ELECTRICAL POWER - ROOF PLAN,E,roof,yes,"EP1.21 ELECTRICAL - ROOF PLAN; RTU-1, RTU-2, CU-1, CU-2, EF-1 tagged (discipline repeats of M1.21)"
+baker-county-eoc-bidset.pdf#63,SYSTEM COMMUNICATION - LEVEL 1 PLAN,other,new,yes,T1.01 telecom; no HVAC unit tags

@@ -1,0 +1,15 @@
+# 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#6,FURNITURE INSTALLATION PLAN (N.I.C.),A,new,yes,"AI101 FURNITURE & EQUIPMENT (NIC); text layer searched, no HVAC unit tags"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#7,FLOORING MATERIAL PLAN,A,mixed,yes,"AI102 FINISH PLAN: view 1 flooring material plan + view 2 toilet room typical flooring plan (enlarged); text layer searched, no HVAC unit tags"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#9,PLUMBING DEMOLITION PLAN,P,demolition,yes,"PD101; text layer searched, no HVAC unit tags"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#10,PLUMBING UNDER SLAB PLAN,P,new,yes,"P-101; text layer searched, no HVAC unit tags"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#11,PLUMBING FLOOR PLAN,P,new,yes,"P-102; boilers drawn untagged (BOILERS BY MECH.); DWH-1 is plumbing; no HVAC unit tags"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#13,MECHANICAL DEMOLITION PLAN,M,demolition,yes,"MD101; removed equipment marked only by keyed notes 1-5, no unit tags"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#14,MECHANICAL FLOOR PLAN,M,new,yes,"M-101 HVAC FLOOR PLANS; also section 2 through laboratory 004 (no tags)"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#15,ENLARGED MECHANICAL ROOM PLAN,M,enlarged,yes,"M-401: view 1 enlarged mechanical room plan (1/2 in scale) is the only plan view; view 2 is titled ENLARGED MECHANICAL ROOM PLAN but draws a section/elevation; view 4 mechanical room section; view 3 AHU section detail"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#20,ELECTRICAL DEMOLITION FLOOR PLAN,E,demolition,yes,"ED101; P-1/P-2/P-3/R-1/R-2 there are electrical panels, not pumps; no HVAC unit tags"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#21,LIGHTING FLOOR PLAN,E,new,yes,"E-101; no HVAC unit tags (P-3 is a panel)"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#22,POWER AND COMMUNICATIONS FLOOR PLAN,E,new,yes,"E-102; equipment connection labels for ACCU-1, AHU-1, B-1, B-2, P-1, P-2, F-1, F-2 (P-3, PP-x, R-2 are panels)"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#23,"FIRE ALARM, SECURITY & SPEAKER FLOOR PLAN",E,new,yes,"E-103; no HVAC unit tags"

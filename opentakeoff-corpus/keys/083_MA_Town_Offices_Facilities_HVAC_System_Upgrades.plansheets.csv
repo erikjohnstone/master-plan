@@ -1,0 +1,12 @@
+# 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, check).
+# Authored 2026-09-30 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#2,NURSE'S OFFICE CEILING PLAN,A,enlarged,yes,"sheet ACT1.0; enlarged reflected ceiling plan of the nurse's suite (new ACT ceiling grid, about twice the 1/8 in floor plan scale); searched, no HVAC unit tags"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#8,HVAC DEMO FIRST FLOOR,M,demolition,yes,"sheet HD1.0; view 1 First Floor Demo Plan (exhaust ductwork and registers removed); duct labels TO RF-21, UP TO RF-8, UP TO RF-11 and TO RF-14 point to roof fans and are not placements; no unit tags"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#9,HVAC DEMO ROOF PLAN,M,demolition,yes,"sheet HD1.1; view 1 Roof Plan (roof demolition): RF-8, RF-11 and RF-21 E.T.B.R.; EX RF-6, EX RF-7, EX RF-9 and EX RF-10 remain"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#10,HVAC FIRST FLOOR,M,new,yes,"sheet H2.0; view 1 First Floor Plan (new ductwork, FCU-1 to FCU-4, ERV-1 and its duct heater); keynotes and general notes on the sheet are not placements"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#11,HVAC ROOF PLAN,M,roof,yes,"sheet H2.1; view 1 Roof Plan (new ERV-2 and HP-1, HP-2, HP-3; existing roof fans EX RF-6, 7, 9, 10)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#12,HVAC FIRST FLOOR PIPING,M,new,yes,"sheet H3.0; view 1 First Floor Plan (refrigerant and condensate piping to the same FCUs as H2.0); piping note naming HP-1/HP-2/HP-3 is not a placement"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#13,HVAC ROOF PIPING PLAN,M,roof,yes,"sheet H3.1; view 1 Roof Plan (refrigerant piping; same roof units as H2.1)"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#16,ELECTRICAL OVERALL PLAN,E,new,yes,"sheet E0.3; view 1 Overall Plan at 1 in = 20 ft (area of work and new panel PP1 feeder routing); searched, no HVAC unit tags"
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#17,ELECTRICAL FLOOR PLANS,E,mixed,yes,"sheet E1.0; views: 1 First Floor Plan A (partial first floor, new power to the FCUs, ERV-1 and its heater), 2 Roof Plan (new power to ERV-2 and HP-1, HP-2, HP-3; existing roof fans)"

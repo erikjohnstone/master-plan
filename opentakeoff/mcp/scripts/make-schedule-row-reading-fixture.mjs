@@ -44,6 +44,16 @@
 // plan; and a grid letter is no unit's tag, though B-1's family is written
 // with it alone (AS-90).
 //
+// And test/fixtures/schedule-plan-view.pdf: a schedule sheet that also draws
+// a plan (AS-94), as 011_IL's MH-101 "LEVEL 2 - MECHANICAL HVAC DUCT PLAN AND
+// SCHEDULES" prints its heat pumps' schedule beside the duct plan that
+// places them: its FAN SCHEDULE gives the sheet the schedule role, and its
+// plan view, titled LEVEL 2 - MECHANICAL HVAC DUCT PLAN, draws EF-1 and EF-2.
+// And a roof plan (plan role) drawing EF-3, with an EXHAUST FAN SCHEDULE in
+// its corner printing EF-3 and EF-4: a tag inside a table region is the
+// table's row text, never a placement, so EF-3 counts once and EF-4, printed
+// only in that table, is drawn nowhere.
+//
 //   node scripts/make-schedule-row-reading-fixture.mjs
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -54,6 +64,7 @@ const OUT = join(FIXTURES, "schedule-row-reading.pdf");
 const OUT_GROUPS = join(FIXTURES, "schedule-row-reading-groups.pdf");
 const OUT_BARE = join(FIXTURES, "schedule-bare-prefix.pdf");
 const OUT_LANDMARKS = join(FIXTURES, "schedule-bare-landmarks.pdf");
+const OUT_PLANVIEW = join(FIXTURES, "schedule-plan-view.pdf");
 
 const fmt = (v) => (Math.round(v * 100) / 100).toString();
 function place(segs, [px, py]) {
@@ -227,7 +238,35 @@ const LANDMARK_PAGES = [
   ],
 ];
 
+// A schedule sheet's own plan view, and a table in a plan sheet's corner (AS-94).
+const PLANVIEW_PAGES = [
+  [
+    title("LEVEL 2 - MECHANICAL HVAC DUCT PLAN"),
+    "1 w",
+    "30 30 552 540 re S",
+    "0.5 w",
+    ...place(TRIANGLE, [120, 420]), tagText("EF-1", [132, 420]),
+    ...place(HEXAGON, [300, 420]), tagText("EF-2", [312, 420]),
+    `BT /F1 12 Tf 330 200 Td (FAN SCHEDULE) Tj ET`,
+    cell("MARK", 330, 180), cell("CFM", 400, 180), cell("HP", 450, 180), cell("SERVICE", 490, 180),
+    cell("EF-1", 330, 160), cell("200", 400, 160), cell("1/4", 450, 160), cell("TOILET", 490, 160),
+    cell("EF-2", 330, 140), cell("400", 400, 140), cell("1/2", 450, 140), cell("JANITOR", 490, 140),
+  ],
+  [
+    title("MECHANICAL ROOF PLAN"),
+    "1 w",
+    "30 30 552 540 re S",
+    "0.5 w",
+    ...place(HOUSE, [150, 400]), tagText("EF-3", [160, 400]),
+    `BT /F1 12 Tf 330 200 Td (EXHAUST FAN SCHEDULE) Tj ET`,
+    cell("MARK", 330, 180), cell("CFM", 400, 180), cell("HP", 450, 180), cell("SERVICE", 490, 180),
+    cell("EF-3", 330, 160), cell("800", 400, 160), cell("1", 450, 160), cell("KITCHEN", 490, 160),
+    cell("EF-4", 330, 140), cell("600", 400, 140), cell("3/4", 450, 140), cell("GARAGE", 490, 140),
+  ],
+];
+
 writePdf(OUT, PAGES);
 writePdf(OUT_GROUPS, GROUP_PAGES);
 writePdf(OUT_BARE, BARE_PAGES);
 writePdf(OUT_LANDMARKS, LANDMARK_PAGES);
+writePdf(OUT_PLANVIEW, PLANVIEW_PAGES);

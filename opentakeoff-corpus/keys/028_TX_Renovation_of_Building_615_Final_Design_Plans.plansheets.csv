@@ -1,0 +1,3 @@
+# 028_TX_Renovation_of_Building_615_Final_Design_Plans.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note

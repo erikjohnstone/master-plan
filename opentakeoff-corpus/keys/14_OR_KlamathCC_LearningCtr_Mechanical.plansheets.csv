@@ -1,0 +1,13 @@
+# 14_OR_KlamathCC_LearningCtr_Mechanical.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#4,MECHANICAL MEZZANINE,M,new,yes,M202 overall mezzanine plan at 1/16in; sector plans M213/M214 repeat it at 1/8in
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#5,FIRST FLOOR - SECTOR A - HVAC,M,new,yes,M211 sector plan 1/8in; the set has no M201 overall first floor plan
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#6,FIRST FLOOR - SECTOR B - HVAC,M,new,yes,M212 sector plan 1/8in
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#7,MECHANICAL MEZZANINE - SECTOR A,M,new,yes,M213 sector plan 1/8in of the area on M202
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#8,MECHANICAL MEZZANINE - SECTOR B,M,new,yes,M214 sector plan 1/8in of the area on M202
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#9,LEVEL 1 - SNOWMELT,M,new,yes,"M302 sheet title FIRST FLOOR - SNOWMELT; snowmelt tubing plan, no HVAC unit tags"
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#10,FIRST FLOOR - SECTOR A - HYDRONIC,M,new,yes,M311 hydronic piping plan of the M211 area
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#11,FIRST FLOOR - SECTOR B - HYDRONIC,M,new,yes,M312 hydronic piping plan of the M212 area
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#12,BOILER ROOM - ENLARGED,M,enlarged,yes,M320 sheet title ENLARGED PLANS; boiler room and utility court at 3/8in
+14_OR_KlamathCC_LearningCtr_Mechanical.pdf#13,ENLARGED GAS,M,enlarged,yes,M401 sheet title FIRST FLOOR - GAS; views ENLARGED GAS and ENLARGED GAS SECTOR B at 1/4in plus gas connection schedule

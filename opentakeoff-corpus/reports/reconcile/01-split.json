@@ -1,0 +1,48 @@
+{
+ "seed": 187,
+ "pool": 34,
+ "dev": {
+  "sets": [
+   "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+   "itd-d1-lab",
+   "011_IL_VA_Hines_Finance_Center_Renovation",
+   "26_CA_TransbayTower_Mechanical_64Sheets",
+   "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+   "14_OR_KlamathCC_LearningCtr_Mechanical",
+   "federal-mech",
+   "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+   "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+   "12_MT_MSU_ReidHall_Renovation",
+   "24_IA_JohnsonCounty_Courthouse",
+   "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile"
+  ]
+ },
+ "check": {
+  "sets": [
+   "071_ME_BGS_Project_3809_Health_Science_Center",
+   "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+   "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+   "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+   "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+   "baker-county-eoc",
+   "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+   "25_WA_DouglasCounty_Courthouse_HVAC_DDC"
+  ]
+ },
+ "rest": [
+  "bldg5406-hvac-demo",
+  "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+  "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+  "06_MO_NatlGuard_JeffCity_CST_Addition",
+  "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+  "16_NV_CarsonValleyMS_HVAC_Replacement",
+  "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+  "21_VA_OrangeCounty_PublicSafetyBldg",
+  "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+  "22_GA_Valdosta_FireStation8_100CD",
+  "03_FL_HurlburtField_ChildDevCenter",
+  "28_WA_KCHA_PublicHousing_HVAC"
+ ]
+}

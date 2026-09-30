@@ -293,6 +293,35 @@ test("dedupeCrossDisciplineRoomViews: same tag, same room, two different-discipl
   assert.match(redundant[0].room, /120/);
 });
 
+// AS-100: overlays of one floor (a piping plan, its phase plan, the
+// ventilation plan) print a unit's tag where it was, while the matched symbol
+// geometry may be anchored at another point of the unit: 040_IL's SS-1 tags
+// sit within 4 px of each other on three sheets, its matched geometry up to
+// 120 px apart. The tag's own position registers the redraw.
+test("dedupeCrossDisciplineRoomViews: the same tag printed at the same spot on two sheets of a floor is one unit, wherever its geometry was matched (AS-100)", () => {
+  const withTag = (id: number, sheet: string, at: Point, tagAt: Point, level: string | null = null): RoomSweepInstance<number> =>
+    ({ ...inst(id, sheet, "M", at, []), tagAt, level });
+  // two units, each tagged at the same spot on both sheets; geometry 118 px and 42 px apart
+  const redundant = dedupeCrossDisciplineRoomViews([
+    withTag(1, "M200.0", [2492, 1097], [2460, 978]), withTag(2, "M200.0", [2560, 980], [2544, 978]),
+    withTag(3, "M200.2", [2507, 1108], [2456, 978]), withTag(4, "M200.2", [2589, 951], [2542, 978]),
+  ]);
+  assert.deepEqual(redundant.map((r) => [r.id, r.keptSheet]).sort(), [[3, "M200.0"], [4, "M200.0"]]);
+  // without the tags the geometry alone registers one pair of the two
+  const geometryOnly = dedupeCrossDisciplineRoomViews([
+    inst(1, "M200.0", "M", [2492, 1097], []), inst(2, "M200.0", "M", [2560, 980], []),
+    inst(3, "M200.2", "M", [2507, 1108], []), inst(4, "M200.2", "M", [2589, 951], []),
+  ]);
+  assert.deepEqual(geometryOnly.map((r) => r.id), [3]);
+  // negative controls: two known different levels never merge; tags far apart are two units
+  assert.equal(dedupeCrossDisciplineRoomViews([
+    withTag(1, "M101", [2492, 1097], [2460, 978], "1"), withTag(2, "M102", [2507, 1108], [2460, 978], "2"),
+  ]).length, 0);
+  assert.equal(dedupeCrossDisciplineRoomViews([
+    withTag(1, "M200.0", [1000, 1000], [1000, 950]), withTag(2, "M200.2", [3000, 2000], [3000, 1950]),
+  ]).length, 0);
+});
+
 test("dedupeCrossDisciplineRoomViews: negative control — same tag, DIFFERENT rooms, different disciplines — both real, both kept", () => {
   const instances = [
     inst(1, "M3.0", "M", [1010, 1010], [ROOM]),

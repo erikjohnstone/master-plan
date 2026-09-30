@@ -1,0 +1,284 @@
+# 26_CA_TransbayTower_Mechanical_64Sheets.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, dev).
+# Authored 2026-09-29 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,CAV-2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-2-1,1,yes,new,flag tag with leader to CAV box
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,CAV-2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-2-2,1,yes,new,flag tag with leader to CAV box
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,CAV-2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-2-3,1,yes,new,flag tag with leader to CAV box
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,CAV-5-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-5-1,1,yes,new,flag tag with leader to CAV box; CAV 18-2 in the L4-L6 section at right is not a placement
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,CAV X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,hexagon stacked CAV over X-2 at the level 4 WOMEN'S toilet exhaust box (typical details put CAV-X-2 in the men's room)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,CAV 18-2,ambiguous,1,yes,new,"hexagon CAV over 18-2 (misprinted: no CAV-18-2 row) at the level 4 MEN'S toilet exhaust box; a scheduled unit, 26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1 or 26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2 (both scheduled for floors 3-4, 6-34); the other L4 box is tagged CAV X-2, so elimination favours CAV-X-1 but the drawing does not say"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#17,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; typical plan levels 6-16
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#17,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); typical plan levels 6-16"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#18,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; level 17
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#18,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); level 17"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#19,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; level 18
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#19,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); level 18"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#20,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; typical plan levels 19-30
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#20,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); typical plan levels 19-30"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#21,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; level 31
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#21,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); level 31"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#22,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; level 32
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#22,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); level 32"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#23,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; level 33
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#23,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); level 33"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,yes,new,flag tag at men's toilet exhaust box; level 34
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,yes,new,"drawn VAV-X-1 (no VAV-X-1 row in any schedule); women's toilet exhaust box = CAV-X-1 (floors 3-4, 6-34); level 34"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#25,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; level 35
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; level 36
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#27,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; typical plan levels 37-48
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#28,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; level 49
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#29,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; level 50
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#30,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; level 51
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#31,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; typical plan levels 52-54
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#32,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; typical plan levels 55-58
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#33,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; typical plan levels 59-60
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#34,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,yes,new,flag tag at toilet exhaust box; level 61
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,no,view-repeat,level 61 alternate plan repeats the level 61 unit counted on p34
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#49,CAV-X-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-3,1,no,enlarged-repeat,typical toilet room layout 35-61; repeats floor-plan units
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#49,CAV-X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-2,1,no,enlarged-repeat,typical men's toilet room layout levels 6-34; repeats floor-plan units
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#49,VAV-X-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|CAV-X-1,1,no,enlarged-repeat,typical women's toilet room layout levels 6-34 (drawn VAV-X-1 = CAV-X-1); repeats floor-plan units
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#12,EF 1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-1-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#12,FCU 1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-1-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#12,FCU 1-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-1-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#12,AC 1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|AC-1-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,AHU 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-2-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,AHU 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-2-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,SF 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-2-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,SF 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-2-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,SF 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-2-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,BCU 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|BCU-2-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,BCU 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|BCU-2-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,BCU 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|BCU-2-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,BCU 2-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|BCU-2-4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,FCU 2-6,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-2-6,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,FCU 2-5,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-2-5,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,EF 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#13,EF 2-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-11,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-11,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-12,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-12,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-13,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-13,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-14,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-14,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-15,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-15,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-16,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-16,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-17,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-17,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-18,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-18,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-21,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-21,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-22,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-22,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-23,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-23,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-24,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-24,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-25,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-25,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-26,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-26,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-27,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-27,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,FPB 3-28,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-3-28,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,AHU 3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-3-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,AHU 3-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-3-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#14,TF 3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|TF-3-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-11,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-11,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-12,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-12,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-13,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-13,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-14,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-14,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-15,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-15,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-16,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-16,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-17,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-17,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-18,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-18,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-19,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-19,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-21,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-21,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-22,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-22,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-23,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-23,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-24,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-24,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-25,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-25,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-26,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-26,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-27,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-27,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-28,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-28,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,FPB 4-29,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-4-29,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,AHU 4-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-4-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#15,AHU 4-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-4-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-101,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-101,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-102,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-102,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-103,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-103,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-104,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-104,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-105,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-105,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-106,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-106,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-107,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-107,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-108,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-108,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-109,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-109,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-110,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-110,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-111,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-111,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-201,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-201,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-202,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-202,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-203,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-203,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-204,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-204,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-205,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-205,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-206,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-206,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-207,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-207,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-208,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-208,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-209,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-209,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-210,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-210,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FPB 5-211,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-5-211,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,AHU 5-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-5-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,AHU 5-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-5-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#16,FCU 5-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-5-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#17,AHU 6-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 6 instance of row AHU-(6-33)-1; typical plan levels 6-16
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#17,AHU 6-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 6 instance of row AHU-(6-33)-2; typical plan levels 6-16
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#18,AHU 17-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 17 instance of row AHU-(6-33)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#18,AHU 17-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 17 instance of row AHU-(6-33)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#19,AHU 18-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 18 instance of row AHU-(6-33)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#19,AHU 18-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 18 instance of row AHU-(6-33)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#20,AHU 19-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 19 instance of row AHU-(6-33)-1; typical plan levels 19-30
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#20,AHU 19-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 19 instance of row AHU-(6-33)-2; typical plan levels 19-30
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#21,AHU 31-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 31 instance of row AHU-(6-33)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#21,AHU 31-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 31 instance of row AHU-(6-33)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#22,AHU 32-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 32 instance of row AHU-(6-33)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#22,AHU 32-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 32 instance of row AHU-(6-33)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#23,AHU 33-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 33 instance of row AHU-(6-33)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#23,AHU 33-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(6-33)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 33 instance of row AHU-(6-33)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,AHU 34-1,"26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(34,35)-1",1,yes,new,"scheduled row not in info.json instance list; tri-path AHU; level 34 instance of row AHU-(34,35)-1"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,AHU 34-2,"26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(34,35)-2",1,yes,new,"scheduled row not in info.json instance list; tri-path AHU; level 34 instance of row AHU-(34,35)-2"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#25,AHU 35-1,"26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(34,35)-1",1,yes,new,"scheduled row not in info.json instance list; tri-path AHU; level 35 instance of row AHU-(34,35)-1"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#25,AHU 35-2,"26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(34,35)-2",1,yes,new,"scheduled row not in info.json instance list; tri-path AHU; level 35 instance of row AHU-(34,35)-2"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,AHU 36-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(36-49)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 36 instance of row AHU-(36-49)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,AHU X-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(36-49)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU drawn with typical tag AHU X-2 on level 36; row AHU-(36-49)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#27,AHU 37-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(36-49)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 37 instance of row AHU-(36-49)-1; typical plan levels 37-48
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#27,AHU 37-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(36-49)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 37 instance of row AHU-(36-49)-2; typical plan levels 37-48
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#28,AHU 49-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(36-49)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 49 instance of row AHU-(36-49)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#28,AHU 49-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(36-49)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 49 instance of row AHU-(36-49)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#29,AHU 50-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(50-54)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 50 instance of row AHU-(50-54)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#29,AHU 50-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(50-54)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 50 instance of row AHU-(50-54)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#30,AHU 51-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(50-54)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 51 instance of row AHU-(50-54)-1
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#30,AHU 51-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(50-54)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 51 instance of row AHU-(50-54)-2
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#31,AHU 52-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(50-54)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 52 instance of row AHU-(50-54)-1; typical plan levels 52-54; west AHU in MECHANICAL 2 drawn but untagged on this sheet
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#32,AHU 56-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(55-58)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 56 instance of row AHU-(55-58)-1; typical plan levels 55-58
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#32,AHU 56-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(55-58)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 56 instance of row AHU-(55-58)-2; typical plan levels 55-58
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#33,AHU 59-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(59-61)-1,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 59 instance of row AHU-(59-61)-1; typical plan levels 59-60
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#33,AHU 59-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(59-61)-2,1,yes,new,scheduled row not in info.json instance list; tri-path AHU; level 59 instance of row AHU-(59-61)-2; typical plan levels 59-60
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#34,AHU 61-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(59-61)-1,1,yes,new,"level 61 instance of the tri-path row AHU-(59-61)-1: p9 tri-path note 1 and AHU (COOLING) note 6 make the tri-path AHU the base design for level 61 and the overhead-only AHU-61-1 & 2 an alternate, drawn untagged on p35 M2.61A"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#34,AHU 61-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-(59-61)-2,1,yes,new,"level 61 instance of the tri-path row AHU-(59-61)-2: p9 tri-path note 1 and AHU (COOLING) note 6 make the tri-path AHU the base design for level 61 and the overhead-only AHU-61-1 & 2 an alternate, drawn untagged on p35 M2.61A"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#18,FCU 17-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-17-1&2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#18,FCU 17-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-17-1&2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#21,AC 31-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|AC-31-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#21,ACCU 31-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|ACCU-31-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#22,AC 32-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|AC-32-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#22,ACCU 32-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|ACCU-32-2,1,yes,new,scheduled row not in info.json instance list; drawn ACCU 32-1; the AC table pairs AC-32-1 with condensing unit ACCU-32-2 (LEVEL 32); no ACCU-32-1 row
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#23,FCU 33-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-33-1&2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#23,FCU 33-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-33-1&2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,FCU 34-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-34-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,SHWP 34-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|SHWP-34-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,SHWP 34-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|SHWP-34-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,HEX 35-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|HEX-34-1,1,yes,new,tag misprinted HEX 35-1 on the level 34 plan; the unit is the L34 secondary heating-water heat exchanger (p9 schedule HEX-34-1 L34 / HEATING WATER; p57 riser shows HEX 34-1 at LEVEL 34 beside SHWP 34-1/34-2); HEX-35-1 is tagged and counted on the L35 plan p25
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#24,HEX 35-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|HEX-34-2,1,yes,new,tag misprinted HEX 35-2 on the level 34 plan; the unit is the L34 secondary heating-water heat exchanger (p9 schedule HEX-34-2 L34 / HEATING WATER; p57 riser shows HEX 34-2 at LEVEL 34 beside SHWP 34-1/34-2); HEX-35-2 is tagged and counted on the L35 plan p25
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#25,HEX 35-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|HEX-35-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#25,HEX 35-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|HEX-35-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,FCU 36-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-36-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,CHWP 36-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CHWP-36-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,CHWP 36-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CHWP-36-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#26,CHWP 36-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CHWP-36-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#28,FCU 49-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-49-1&2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#28,FCU 49-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-49-1&2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-101,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-101,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-102,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-102,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-103,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-103,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-104,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-104,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-105,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-105,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-106,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-106,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-107,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-107,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-108,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-108,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-109,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-109,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-201,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-201,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-202,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-202,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-203,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-203,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-204,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-204,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-205,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-205,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-206,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-206,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-207,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-207,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#35,FPB 61-208,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|FPB-61-208,1,yes,new,scheduled row not in info.json instance list; stacked FPB over number; bid-alternate plan M2.61A (overhead-only alternate)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,AHU 62-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|AHU-62-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,EF 62-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-62-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,SF 62-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-62-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,SF 62-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-62-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,SF 62-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-62-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,FCU 62-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-62-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,FCU 62-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-62-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,AC 62-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|AC-62-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,CWP 62-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CWP-62-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,CWP 62-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CWP-62-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,CWP 62-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CWP-62-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#36,CWP 62-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CWP-62-4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,CT 63-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CT-R-1,1,yes,new,"scheduled row not in info.json instance list; drawn CT 63-1; schedule designations are CT-R-1..4 (four identical cells), matched by number"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,CT 63-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CT-R-2,1,yes,new,"scheduled row not in info.json instance list; drawn CT 63-2; schedule designations are CT-R-1..4 (four identical cells), matched by number"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,CT 63-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CT-R-3,1,yes,new,"scheduled row not in info.json instance list; drawn CT 63-3; schedule designations are CT-R-1..4 (four identical cells), matched by number"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,CT 63-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CT-R-4,1,yes,new,"scheduled row not in info.json instance list; drawn CT 63-4; schedule designations are CT-R-1..4 (four identical cells), matched by number"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,SF 63-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-63-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,SF 63-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-63-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,SF 63-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-63-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#37,ACCU 63-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|ACCU-63-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#38,EF 64-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-64-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#38,SF 64-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-64-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#38,SF 64-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-64-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#38,AC 64-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|AC-64-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-5,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-6,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-7,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-8,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-9,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-10,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-11,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-4 THRU 11,1,yes,new,scheduled row not in info.json instance list; PG&E vault fan
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,SF P1-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P1-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,EF P1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P1-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,EF P1-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P1-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,EF P1-9,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P1-9,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,FCU P1-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-P1-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,BCU P1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|BCU-P1-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,AC P1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|AC-P1-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#39,ACCU P1-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|ACCU-P1-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,TF P2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|TF-P2-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,TF P2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|TF-P2-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,FCU P2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-P2-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,BCU P2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|BCU-P2-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,ACCU P2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|ACCU-P2-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,SF P2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P2-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,SF P2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P2-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,SF P2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P2-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,EF P2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P2-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#40,EF P2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P2-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,ACCU P3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|ACCU-P3-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,AC P3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|AC-P3-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,BCU P3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|BCU-P3-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,SF P3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P3-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,SF P3-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P3-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,SF P3-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|SF-P3-3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,EF P3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P3-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#41,EF P3-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-P3-1 & 2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,B 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|B-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,B 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|B-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,B 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|B-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,B 2-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|B-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,PHWP 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|PHWP-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,PHWP 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|PHWP-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,PHWP 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|PHWP-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,PHWP 2-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|PHWP-2-1 THRU 4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,SHWP 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|SHWP-2-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,SHWP 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|SHWP-2-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,SHWP 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|SHWP-2-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,HX 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|HEX-2-1,1,yes,new,scheduled row not in info.json instance list; drawn HX 2-1; scheduled as HEX-2-1 (L2 heating water); HX 2-1 in the riser section at top is not a placement
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,HX 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|HEX-2-2,1,yes,new,scheduled row not in info.json instance list; drawn HX 2-2; scheduled as HEX-2-2 (L2 heating water)
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,EF 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,EF 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-3,1,no,enlarged-repeat,scheduled row not in info.json instance list; also tagged on level 2 plan p13
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#42,EF 2-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-4,1,no,enlarged-repeat,scheduled row not in info.json instance list; also tagged on level 2 plan p13
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CHWP 2-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CHWP-2-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CHWP 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CHWP-2-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CHWP 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CHWP-2-1 THRU 3,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CHWP 2-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|CHWP-2-4,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CH 2-1,"26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|WCU-2-1 ,2",1,yes,new,"scheduled row not in info.json instance list; drawn CH 2-1; chillers scheduled as WCU; row WCU-2-1 ,2 covers WCU-2-1 and WCU-2-2"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CH 2-2,"26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|WCU-2-1 ,2",1,yes,new,"scheduled row not in info.json instance list; drawn CH 2-2; chillers scheduled as WCU; row WCU-2-1 ,2 covers WCU-2-1 and WCU-2-2"
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CH 2-3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|WCU-2-3,1,yes,new,scheduled row not in info.json instance list; drawn CH 2-3; chillers scheduled as WCU
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,CH 2-4,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|WCU-2-4,1,yes,new,scheduled row not in info.json instance list; drawn CH 2-4; chillers scheduled as WCU (alternate-only unit per schedule note 5); CH 2-4 in the p44 facade section is not a placement
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,EF 2-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-2-2,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#43,FCU 2-5,26_CA_TransbayTower_Mechanical_64Sheets.pdf#9|FCU-2-5,1,no,enlarged-repeat,scheduled row not in info.json instance list; also tagged on level 2 plan p13
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#44,EF 3-1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-3-1,1,yes,new,scheduled row not in info.json instance list
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#44,EF 3-2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#10|EF-3-2,1,yes,new,scheduled row not in info.json instance list; bid alternate M-20 per schedule
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#48,RAD 1,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|RFH-1-1,1,yes,new,scheduled row not in info.json instance list; hexagon RAD 1 at radiant floor manifold (ET-1-1 row names it RAD-1-1 MANIFOLD); matched to radiant floor zone RFH-1-1 by number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#48,RAD 2,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|RFH-1-2,1,yes,new,scheduled row not in info.json instance list; hexagon RAD 2 at radiant floor manifold (ET-1-2 row names it RAD-1-2 MANIFOLD); matched to radiant floor zone RFH-1-2 by number
+26_CA_TransbayTower_Mechanical_64Sheets.pdf#48,RAD 3,26_CA_TransbayTower_Mechanical_64Sheets.pdf#11|RFH-1-3,1,yes,new,scheduled row not in info.json instance list; hexagon RAD 3 at radiant floor manifold (ET-1-3 row names it RAD-1-3 MANIFOLD); matched to radiant floor zone RFH-1-3 by number

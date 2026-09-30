@@ -1,0 +1,21 @@
+# 011_IL_VA_Hines_Finance_Center_Renovation.plansheets.csv — the set's plan sheets, for the schedule<->plan reconcile key (reconcile tier 1, dev).
+# Authored 2026-09-29 from the sheets' titles and renders, never pipeline output.
+sheet,title,discipline,kind,examined,note
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#3,LEVEL 2 - LIFE SAFETY PLAN,other,new,yes,"GI-011 life safety floor plan with room schedule and legend; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#4,LEVEL 2 - DEMOLITION FLOOR PLAN,A,demolition,yes,"AD-100; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#5,LEVEL 2 - DEMOLITION REFLECTED CEILING PLAN,A,demolition,yes,"AD-200; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#6,LEVEL 2 - FLOOR PLAN - DIMENSION PLAN,A,new,yes,"AE-100; floor plan plus window/door/partition types and schedules; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#7,LEVEL 2 - FLOOR PLAN - FF&E,A,new,yes,"AE-101; floor plan plus workstation enlarged views WS-1A..WS-5; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#8,LEVEL 2 - FLOOR PLAN - FLOOR FINISH,A,new,yes,"AE-102; finish plan plus finish legend and signage types; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#9,LEVEL 2 - REFLECTED CEILING PLAN,A,new,yes,"AE-200; RCP plus ceiling sections; rendered and text searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#12,LEVEL 2 - FIRE PROTECTION PLAN,FP,new,yes,"FP-100; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#14,LEVEL 2 - MECHANICAL HVAC DEMOLITION PLAN,M,demolition,yes,"MD-100; all 15 existing heat pumps tagged at their pre-renovation locations (D2 disconnect/store for relocation, D5 remain)"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#15,LEVEL 2 - MECHANICAL HVAC ZONING PLAN,M,new,yes,"MH-100; zoning plan; HP tags here label relocated thermostats (T), not the units"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#16,LEVEL 2 - MECHANICAL HVAC DUCT PLAN AND SCHEDULES,M,new,yes,MH-101; duct plan (counting view for the heat pumps) plus EXISTING HEAT PUMP SCHEDULE and diffuser schedule
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#17,LEVEL 2 - MECHANICAL HVAC PIPING PLAN,M,new,yes,MH-102; piping plan repeating the 15 heat pump tags
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#20,LEVEL 2 - BREAK ROOM PLUMBING ENLARGED PLAN,P,enlarged,yes,"P-100; enlarged break room plan plus plumbing fixture schedule and piping detail; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#22,LEVEL 2 - ELECTRICAL POWER DEMOLITION PLAN,E,demolition,yes,"EPD-101; 12 relocated heat pumps tagged at existing locations (keynote 12 disconnect); ACCU2 DISCONNECT (ETR) label in elec room is a disconnect, not a unit"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#23,LEVEL 2 - ELECTRICAL LIGHTING DEMOLITION PLAN,E,demolition,yes,"EPD-102; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#24,LEVEL 2 - ELECTRICAL POWER PLAN,E,new,yes,"EP-101; 12 relocated heat pumps tagged at new locations (keynote 14 reconnect); ACCU2 DISCONNECT (ETR) label is a disconnect, not a unit"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#25,LEVEL 2 - ELECTRICAL LIGHTING PLAN,E,new,yes,"EP-102; text layer searched, no HVAC unit tags"
+011_IL_VA_Hines_Finance_Center_Renovation.pdf#26,LEVEL 2 - ELECTRICAL DATA AND SECURITY PLAN,E,new,yes,"EP-103; data/security floor plan (new work) plus fire alarm riser diagram and sequence-of-operations matrix, which are not plan views; ACCU2 DISCONNECT (ETR) label only; no HVAC unit tags"

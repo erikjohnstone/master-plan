@@ -1,5 +1,41 @@
 # Changelog
 
+- **Schedule ↔ plan reconcile: a scheduled unit is found where it is drawn,
+  and a drawn tag traced to its row, far more often, in both directions.**
+  Measured on twelve dev documents keyed from their drawings (new reconcile
+  keys, adjudicated, and a reconcile eval): 534 scheduled units, 1,215 tags
+  drawn on plans.
+  - Units found on the plans by their tag: 198 of 414 → 414 of 427; with
+    their symbol geometry verified: 198 → 278. Unit counts exact: 43.2% →
+    67.1%, and over-counts 37 → 1. Placements on the unit's own view: 80.6%
+    → 99.0% precise.
+  - Drawn tags linked to their schedule row: 18.6% → 78.9%. A new
+    likely-units list names 23 of the 47 drawn units no schedule lists, at
+    55% precision (the full review list: 1%).
+  - Plan sheets the role signals missed get their role from their own
+    title: a level between the discipline and PLAN, no PLAN word, a zoning
+    plan, an enlarged room plan, a demolition plan. A unit tagged but not
+    verified by its symbol is reported as tag text, never as drawn nowhere.
+  - A schedule sheet's own plan view is swept, and a schedule's text is
+    never a placement. Every drawn repeat of a unit (another view, bare tag
+    text, a demolition plan) links to its row without counting.
+  - The whole-set reconcile holds a row for each unit a row names or the
+    takeoff counts from it: ranges ("SF-P1-4 THRU 11"), pairs, and split
+    systems' indoor units.
+  - A unit family's mark drawn on several plan views is one unit. Overlaid
+    views register by the tag's own position. Marks under a group heading
+    ("OUTDOOR UNIT DATA PLAN CODE") and a zero-padded mark drawn without
+    its zero are read.
+  - Nothing a schedule is read from changes: every extracted table is
+    byte-identical (the guard: 34 documents). The assemblies' takeoff gains
+    42 units on 3 documents (terminal air boxes; split systems' heat pumps
+    and fan coils) and loses none. Attribute, typical and binding evals are
+    unchanged (one more control packet found on one document).
+  (`web/src/lib/sheetgraph.ts`, `schedulePlanReconcile.mjs`,
+  `corpusTakeoff.mjs`, `symbolsweep.ts`; `mcp/src/session.ts`, `takeoff.ts`,
+  `outputs.ts`; `mcp/scripts/reconcile-eval.mjs`; ASSEMBLIES_BUG_CATALOGUE
+  AS-91 to AS-101; `opentakeoff-corpus/reports/reconcile/`.)
+
 - **Control intent: terminal units, air handlers and their parts find more
   of their own control drawings.** The binder's first-tier dev documents go
   from 93.8% to 96.9% of the drawings their keys give each unit, and the

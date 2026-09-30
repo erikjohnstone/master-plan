@@ -6517,3 +6517,445 @@ row read, the new matches, the sixth grille and the stamp on the drawings):**
 - **Evals:** not run again. No eval calls the sweep, `markid.ts` only gains two functions, and `session.ts` is held
   back in the eval trees (it is in the sheet-graph cache key).
 - **UI proof:** the canvas's reconcile with the plan sweep equals MCP's, row for row with installed quantities, on itd-d1-lab (16 checks; its stacked tags), 03_FL (13; B-1 matches) and 031_MO (4; RG-24 counts 6).
+
+## AS-91 — the reconcile keys: a plan sheet whose title the role signals missed went unswept, and a unit's exact tag drawn with no verified marker read as a unit drawn nowhere (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by the schedule↔plan reconcile keys, new in this batch. The keys are
+`keys/<set>.plansheets.csv` and `keys/<set>.plantags.csv` for 12 dev documents: 534 scheduled units and 1,215 drawn
+tags on examined plan sheets. They were authored from renders and the text layer, never pipeline output. An
+independent second reader checked each one, and every disagreement was adjudicated row by row
+(`reports/reconcile/01-key-adjudication.md`). The reconcile eval (`scripts/reconcile-eval.mjs`, below) scores both
+directions against them.
+
+At the base the reconcile found 198 of the 414 units the keys draw on a plan, and linked 226 of the 1,215 drawn tags to
+their rows. The misses, read by cause:
+- **Plan sheets with no plan role.** The role signals admit a discipline word only in these cases:
+  - next to PLAN;
+  - after "- LEVEL n";
+  - with ENLARGED.
+
+  So these floor plans scored unknown:
+  - a level between the discipline and PLAN ("MECHANICAL LEVEL 34 PLAN", printed as "MECHANICAL LEVEL" over
+    "34 PLAN");
+  - no PLAN word ("FIRST FLOOR - SECTOR A - HVAC", "BASEMENT - PIPING - ALL PHASES");
+  - a zoning plan ("LEVEL 2 - MECHANICAL HVAC ZONING PLAN").
+
+  Others took the role of something printed beside the plan: a DETAILS or SECTIONS callout, an ELEVATION mention, a
+  legend box, a riser note. The sweep reads plan-role sheets only, so every unit tag drawn on these sheets went
+  unswept. Examples: 26_CA's typical-floor mechanical plans, 040_IL's phase plans, 011_IL's zoning plan.
+- **Enlarged plans titled by the room they enlarge** ("BOILER ROOM - ENLARGED" on 14_OR's M320, "KITCHEN ENLARGED
+  PLAN"). A mechanical room's boilers, pumps and heat exchangers are often tagged there and nowhere else.
+- **An exact tag with no verified marker was thrown as a unit drawn nowhere.** Where the sweep found the row's exact
+  tag on plan sheets but no distinctive geometry attached to it, it threw ("has 1 exact plan-tag occurrence, but none
+  owns …"). The reconcile could then only report SCHEDULE_ONLY. Examples: 26_CA's flagged terminal units, 011_IL's
+  leader-tagged heat pumps.
+
+**Fix (the shared path: `sheetgraph.ts`, `session.ts`):**
+- `classifySheetRoleBySignals` is the old role, and what every extractor reads: table routing in the vector stack,
+  the schedule-role table readers, room-tag suppression.
+- `classifySheetRole` adds a second pass that decides only a sheet the signals leave without a schedule, demolition or
+  plan role. It gives the plan role to a sheet with a plan view's own title printed as a title (`sheetPlanViewTitle`:
+  among the sheet's largest text, never on a page with a sheet list). Such a title is one of:
+  - a plan title with a level, floor, area, phase or option between its discipline word and PLAN;
+  - a level-and-discipline title with no PLAN word;
+  - up to three stacked title lines read as one (`titlePhrases`);
+  - an enlarged or partial plan's title ("BOILER ROOM - ENLARGED", "ENLARGED PLANS", "MEZZANINE MECH ROOM PLAN -
+    HVAC"). This one counts only on an engineering sheet (an M, MH, P, FP or E… sheet number) whose title-height text
+    names no section, elevation, detail, diagram, riser, demolition or schematic.
+
+  It never counts a sentence, a key plan, a demolition or removals title, or a notes, legend, schedule, detail,
+  section, elevation, riser or diagram title.
+- The second pass never makes or unmakes a schedule sheet, the one role an extractor reads from it, so no table can
+  change. The guard proves it (AS-101).
+- The sweep now returns an exact tag with no verified marker as unverified tag text, never a thrown error:
+  - every occurrence is cited (`plan_tag_cites`);
+  - `tagged_plan_qty` is their count, and the installed quantity is unknown;
+  - the status is AMBIGUOUS, with the reason "N exact plan-tag observation(s) were not verified against matching
+    symbol geometry".
+
+**Measured** (the batch AS-91 to AS-101 is measured together under AS-101; this entry's step):
+- Census of the plan-title pass over the 90 non-held-out cached documents (3,593 pages): 165 pages take the plan role
+  (84 unknown, 62 detail, 8 legend, 6 schematic, 5 elevation). No schedule, demolition or plan page changes. Every flip
+  was read.
+- The enlarged-plan titles add 8 pages: 031_MO M-100, 03_FL P8, 04_NV FA101, 078_US E-500, 14_OR M320, 082_OR M320,
+  21_VA M-402, and one page of 096_IN, a reconcile check document (counted, not read). They came after three false
+  flips of a first version were closed: a details sheet's "ENLARGED PLAN A", a grounding demolition sheet, and a
+  demolition sheet's temporary plan.
+- 04_NV's E-400 keeps its schedule role and gains a plan view ("BUILDING 2 FLOOR 1 - ENLARGED"), which the sweep reads
+  (AS-94).
+- The reconcile on the 12 keyed dev documents, base → this step:
+
+  | metric | base | this step |
+  |---|---:|---:|
+  | drawn units found, geometry verified | 198 | 263 |
+  | found by their tag, of 414 | 198 | 390 |
+  | drawn tags linked, of 1,215 | 226 | 490 |
+  | unit count exact, of 447 | 193 (43.2%) | 252 (56.4%) |
+
+  The enlarged titles, measured apart on 14_OR: found 31 → 40 of 42, count exact 32 → 41 of 43, links 97 → 109 of
+  114.
+
+## AS-92 — a drawn tag the sweep saw but did not count linked to no row: another view of the same unit, tag text with no symbol, a demolition plan (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by the plan → row direction of the reconcile keys. After AS-91, 490 of the 1,215 drawn tags on
+examined plan sheets linked to their rows. A reconcile row cited only the placements it counted. The sweep saw many
+more of the row's own tags and set them aside, each for a reason, and none of them reached the row:
+- the same unit drawn again on another plan view: an enlarged plan, another trade's plan, a piping plan beside the duct
+  plan (the sweep's `redundant_view`);
+- the mark's text with no attached symbol (`text_only`);
+- the mark on a demolition plan, which the sweep never reads.
+
+A reader starting from the drawing (a tag on a plan: whose row is it?) found no answer for any of them. Examples:
+- federal-mech's air handler, boilers and pumps: the enlarged mechanical room plan p7 beside the floor plans;
+- 040_IL's terminal air boxes: every phase plan;
+- 009_FL's VAV boxes: p15, p16 and the demolition plan p14.
+
+**Fix (`schedulePlanReconcile.mjs`, `takeoff.ts`, `outputs.ts`; both surfaces):**
+- `planOtherCites` gives each reconcile row `plan_other_cites` (MCP: `plan_other_locations` on the takeoff item).
+  These are every other drawn occurrence of the row's own mark on a plan-like sheet that the row does not count:
+  - `repeat_view`, with `counted_on` naming the sheet that counts the unit;
+  - `unattached_tag`;
+  - `demolition_view`: from the graph's tag index, and from AS-101's reader.
+- Links only: never installed quantity, never a status.
+
+**Measured:** drawn tags linked 490 → 821 of 1,215 (40.3% → 67.6%). This step measured AS-92 to AS-94 together; the
+links are AS-92's.
+
+## AS-93 — the review list of unscheduled tags was 3,210 entries long on 12 documents, 1% of them unscheduled units (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by the reconcile keys:
+- The keys name 47 unscheduled HVAC units drawn on examined plan sheets. These are existing units no schedule lists,
+  and units the schedules leave out.
+- The reconcile's review list (`unscheduled_tags`: drawn marks no schedule row lists) named 33 of them.
+- Among its 3,210 entries on those sheets, 33 (1.0%) were unscheduled units, 64 were scheduled units' tags, and 3,113
+  were no unit at all: room numbers, grid bubbles, sheet and detail references, zone labels, circuits, door and
+  luminaire marks.
+- An estimator cannot read 3,210 entries to find 33.
+
+**Fix (`schedulePlanReconcile.mjs`; `unscheduled_units` in the reconcile and takeoff outputs):**
+- `unscheduledUnitCandidates` lists the likely units among `unscheduled_tags`: drawn on a plan or demolition plan
+  sheet, outside every table and sheet callout, and shaped like a unit of a scheduled family. That means the same
+  letters and the same form as a unit mark that an HVAC family's own schedule prints. Tables that don't count:
+  - a door or luminaire schedule;
+  - a repeatable air-device schedule;
+  - a grille, louver, fin-tube, filter or strainer type schedule.
+- A one-letter family must also match the schedule's separator: a plan's "P9" callout is no pump P-1, and "P-9" would
+  be one.
+- A review list: it never changes a row's quantity or status. `unscheduled_tags` is unchanged beside it.
+
+**Measured:** the likely-units list names 17 of the 47 unscheduled units, in 34 entries: 17 unscheduled units (50%),
+14 scheduled units' tags, 3 no unit. With AS-101's demolition plans it names 23 of 47, in 42 entries: 23 (54.8%), 16,
+3. The full review list is unchanged: 33 of 47, 1.0% of its entries.
+
+## AS-94 — a schedule sheet's own plan view went unswept, and a schedule's text on a plan sheet counted as placements (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by the reconcile keys:
+- **A schedule sheet that also draws a plan.** federal-mech's p4 is the floor plan the key places CP-1 to CP-6
+  and EV-5 and EV-6 on. It prints a Room Schedule, so its role is schedule, and the sweep reads plan-role sheets only.
+  Every tag on it went unswept, and each unit was counted on p6, the piping plan, instead. 011_IL's MH-101 is "LEVEL 2
+  - MECHANICAL HVAC DUCT PLAN AND SCHEDULES". Its role gates its tables' extraction (AS-91), so it cannot change.
+- **A schedule on a plan sheet counted as placements.** Its rows' own marks, printed in the table, were read as
+  drawn tags: 011_IL's door schedule rows D02 to D11 counted twice on p6.
+
+**Fix (`session.ts`; the sweep both surfaces use):**
+- `planViewSheetKeys` is the one set of sheets whose plan views show installed work: plan-role sheets, and schedule
+  sheets whose own plan title `sheetPlanViewTitle` reads. The sweep reads it, and so do the mark census, the scale
+  commit and installation notes.
+- A tag inside a schedule is never a placement of any row, whichever row's mark it prints (`scheduleRegionsOn`).
+  - A schedule is a table of two or more rows, or one titled in words, with its continuation parts.
+  - A one-row table titled by a mark or a number is none. The extraction reads a plan's flag tag or dimension string
+    that way: 26_CA's "FSD-X-4" over "CAV-X-3 04 35" on six typical floors, federal-mech's "341.1-2", 011_IL's
+    "4'-4" 5" 1'-3"". The tags such a table covers stay placements.
+  - A schedule's other columns name other rows' marks. 011_IL's DOOR SCHEDULE (21 rows) prints D1 and D2, the marks
+    of its light fixture schedule's rows. That text is never a placement either.
+  - The mark census (count_marks) keeps reading every table's region, as it did.
+
+**Measured:**
+- Placements agreeing with the key 180 → 239. Most of the gain is federal-mech, 24 → 89, where each pump is now
+  counted on p4.
+- A first version excluded only tables that listed the swept mark as a row's own. The dev A/B caught two problems:
+  - It re-admitted the door schedule's D1 and D2 as 19 placements of those light fixtures, and 009_FL's schedule
+    text on p30 as unattached tags.
+  - It admitted a panel schedule's "TOTAL DEMAND:" as tag text.
+
+  The schedule rule replaced it. With the final rule, the flag-tag tables no longer hide anything: 26_CA's CAV-X-3
+  and FSD-X-4 each regain 6 placements (p25 to p27, p31 to p33), and federal-mech's CP-5, CP-6, EV-5 and EV-6 are
+  counted on p4, their keyed sheet, with p6 a repeat view.
+
+## AS-95 — a split system's marks printed under a group heading were no row's identity: 12_MT's outdoor and indoor units, keyed by their manufacturer (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by the reconcile keys on 12_MT:
+- Its SPLIT SYSTEM HEAT PUMP SCHEDULE prints each pair's marks under a two-row header, which the extraction joins:
+  OUTDOOR UNIT DATA PLAN CODE (HP-1, HP-2) and INDOOR UNIT DATA PLAN CODE (FC-1A…). It keys each row by its MANUF.
+  cell, DAIKIN.
+- The takeoff read no unit from the table, and the reconcile held one row, "DAIKIN", drawn nowhere.
+- 18_OR's INDOOR FAN COIL UNITS prints the same shape under HEAT PUMP SYMBOL and FAN COIL SYMBOL.
+
+**Fix (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`):**
+- `isGroupedMarkHeader`: a mark column's name under a group heading ("… PLAN CODE", "… SYMBOL", "… UNIT MARK"), never
+  a mark column's own name or synonym.
+- The takeoff reads it as a mark synonym is read.
+- The reconcile's row identity (`rowIdentityTag`) takes it only where the row's key prints no mark at all.
+
+**Measured:**
+- Compile census, base against the final code on all 104 non-held-out cached documents: 12_MT gains HP-1 and HP-2
+  and five fan coils (FC-1A, FC-1B, FC-1C, FC-4A, FC-4B), and 18_OR gains FC-1 to FC-4. Each was checked against its
+  row.
+- The reconcile holds HP-1 and HP-2 where it held "DAIKIN".
+
+## AS-96 — a terminal air box schedule was no family's table, and a unit family's mark drawn on several plan views counted once per view (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, by the reconcile keys:
+- 040_IL's TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2 (and its PHASE 4, EXHAUST and BID ALTERNATE tables)
+  schedule 31 boxes, TAB-101 to TAB-202. No takeoff family read the title or the TAB marks: 0 units.
+- A unit family's own schedule names one unit per mark. The sweep counted a mark drawn on several plan views once per
+  view unless the table's title said it was individually marked. Examples:
+  - 040_IL's boxes, drawn on every phase plan: up to 6 each;
+  - itd-d1-lab's heating coils HC-1 to HC-9, on p3 and p5: 2 each;
+  - 009_FL's duct heaters EDH-1 to EDH-5;
+  - 016_NY's CD-3, CD-5 and CD-9;
+  - 14_OR's MAU-1 and 24_IA's ECP-1.
+
+  Count over-runs: 42 of 447 units.
+
+**Fix (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`, `session.ts`):**
+- The VAV family reads a terminal air box title in either word order. Words that say the table is about a box's
+  connections, wiring, points or details are excluded. The TAB marks are read under that title.
+- `isUnitFamilyTable`: a table a unit family reads by its own title, never a type-mark family's or a repeatable air
+  device schedule.
+- `rowNamesOneUnitOnce` is true only for a row with one mark:
+  - no placeholder for a level or room (26_CA's CAV-X-2);
+  - no word that the unit is typical, repeated floor by floor or room by room (its TYPICAL FLOORS column,
+    "3-4, 6-34");
+  - never a pair.
+
+  Such a row of such a table names one unit, and the sweep keeps one placement. The others are repeat views, linked
+  (AS-92).
+
+**Measured:**
+- Count over 42 → 0; exact 253/447 → 296/449.
+- Placements on a keyed view of their unit: precision 74.1% → 99.3%.
+- Compile census: 040_IL gains its 31 boxes as VAV units. No other document changes.
+
+## AS-97 — a mark whose number the schedule pads with a zero, drawn without it (14_OR's HP-02 tagged HP-2), was drawn nowhere (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29, 14_OR: its schedule lists HP-02, and its floor plans tag the unit HP-2. The sweep found no
+tag, and the row was SCHEDULE_ONLY.
+
+**Fix (`schedulePlanReconcile.mjs`, `session.ts`):**
+- `markZeroRespellings`: the mark with each number unpadded (HP-02 → HP-2), and with its last number padded to two
+  digits (HP-2 → HP-02). A lone zero stays.
+- The sweep tries these after every printed form of the row, and only where no row of the set is named so.
+
+**Measured:** HP-02 MATCH, on p6. No other row changes.
+
+## AS-98 — the whole-set reconcile held one row for a schedule row naming several units by a range or a list, drawn nowhere as named (FIXED — guarded by the evals)
+
+**Found:** 2026-09-29. The takeoff and the family reconcile read a range or a list as its units (AS-75, AS-86). The
+whole-set reconcile held the printed name as one unit, and that name is drawn nowhere:
+- 26_CA's "SF-P1-4 THRU 11" (eight supply fans), "EF-P1-1 & 2" and the sound traps "ST-3-1A THRU 12A";
+- 028_TX's "UH-1 & UH-2".
+
+**Fix (`schedulePlanReconcile.mjs`, `takeoff.ts`):**
+- `rowUnitMarks`: each mark of a range or a list of one family's marks. The row's printed QTY counts the units all
+  together (`row_marks`), never each.
+- The whole-set reconcile holds one row per unit, as the family reconcile does.
+
+**Measured:** no reconcile row 85 → 83, found by their tag 393 → 399 of 416.
+
+**Scorer:** a unit the key names by the whole range is matched to the rows of its marks together (`matchRows`). The
+key is unchanged. Re-scored, every earlier run is identical.
+
+## AS-99 — the whole-set reconcile held no row for a unit the takeoff counts from another unit's row: a split system's indoor unit, each of a pair (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, by the reconcile keys. The takeoff counts some units from a row whose name prints another unit
+or both. The whole-set reconcile held only the name:
+- 12_MT's HP-1 row counts FC-1A, FC-1B and FC-1C;
+- itd-d1-lab's "DFC-1 , DCU-1" and "F-1 , CU-1";
+- 016_NY's "B-1/B-2";
+- 040_IL's "SS-1/SSCU-1".
+
+11 keyed units had no row.
+
+**Fix (`corpusTakeoff.mjs`, `schedulePlanReconcile.mjs`, `takeoff.ts`):**
+- `takeoffUnitsByRow`: every unit the takeoff counts from each schedule row, keyed by the row. It reads each family's
+  own `uniqueFamily` reading, with an emit callback; the compile is byte-identical with and without it on all 104
+  documents.
+- `rowReconcileUnits`: the units a whole-set row stands for.
+  - The units its name schedules (AS-98), and each unit the takeoff counts from it that the name does not print and
+    no other row of the set names.
+  - A name the takeoff reads as several units, printing some of them and never itself one, stands for those units
+    ("F-1 , CU-1", "B-1/B-2").
+  - A name that prints the one unit counted from it in another spelling stands as it is: "(E) CT-1",
+    "CV-FCU-1-HHW" beside FCU-1.
+
+**Measured:**
+- Census over all 104 non-held-out cached documents: whole-set rows 6,431 → 6,475, on 15 documents, every change
+  read. The changes are split-system pairs, one family's pairs and lists, indoor units beside outdoor units, and DCU-1
+  beside DAC-1.
+- On the keys: no reconcile row 83 → 72; found by their tag 408 of 416 → 414 of 427.
+
+**Scorer:** a key unit named by a pair the takeoff splits ("SS-1/SSCU-1") is matched to its parts' rows together. The
+key is unchanged, and re-scoring base through the step before this one is byte-identical.
+
+## AS-100 — a unit drawn on two sheets that overlay the same area registered as one unit only when its symbols aligned, not its tags (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, 040_IL:
+- Its phase plans overlay one floor. The cross-sheet repeat check (`dedupeCrossDisciplineRoomViews`) registers two
+  sheets' instances by the matched geometry's position.
+- A unit's symbol attaches at different points on the two sheets (a leader's end, a box corner), while its tag text
+  sits at the same place on both. The pair missed the 30 px tight-pair test, and the unit counted twice.
+
+**Fix (`symbolsweep.ts`, `session.ts`):** an instance carries its tag text's centre (`tagAt`). Two instances' distance
+is the nearer of their geometry and their tag text, in the tight-pair count, the mixed pairing and the proximity
+fallback. Everything else holds:
+- a floor on another level never merges (`planLevelOfTitle`);
+- a tag far from its twin never merges;
+- the paired view-stem fallback is unchanged.
+
+**Measured:**
+- Count over 1 → 0; exact 309 → 310 of 462; keyed-view precision 97.0% → 99.3%.
+- The registration also undoes a false merge: 26_CA's FSD-X-7 on p20 was a repeat of p19, another typical
+  floor, and it now counts on both. Every changed row was read.
+
+## AS-101 — a demolition plan titled with no PLAN word had no role, and a unit's tag on a demolition plan linked to its row only where the graph's tag index read it (FIXED — guarded by the evals)
+
+**Found:** 2026-09-30, by the reconcile keys:
+- 040_IL's "BASEMENT DEMOLITION - VENTILATION - PHASE 1" and ten more, 01_NY's "SECOND FLOOR - HVAC - DEMOLITION -
+  PHASE 1" and eleven more, and 049_IL's plumbing demolition plans scored unknown or detail. So their tags were no
+  demolition view and linked to nothing: 54 keyed drawn tags on 040_IL alone.
+- The graph's tag index reads no mark printed with a space before a hyphenated number. 011_IL's demolition plans tag
+  its heat pumps "HP 12-1": 13 tags on p14, 10 more on p22.
+
+**Fix (`sheetgraph.ts`, `session.ts`, `schedulePlanReconcile.mjs`, `takeoff.ts`):**
+- `classifySheetRole`'s second pass (AS-91) gives the demolition role to a sheet with a demolition plan's own title
+  printed as a title, where no plan title is read (`sheetDemolitionViewTitle`). That is a level-and-discipline title
+  with DEMOLITION, DEMO or REMOVAL(S) (`isLevelDisciplineDemolitionTitle`).
+  - Never notes, keynotes or details, a level with no discipline ("ROOF DEMOLITION"), or a view with a detail
+    number.
+  - It never makes or unmakes a schedule sheet.
+- `Session.demolitionTagOccurrences`: a unit's mark on the set's demolition plans, read as the sweep reads a plan's
+  tags (`tagOccurrencesOnSheet`, told apart from every mark the set schedules).
+  - It reads only outside every schedule (AS-94), and outside every sheet number the tag index knows
+    (`sheet_callout`: 004_MO's P-102 in its own title block).
+  - It reads only a unit's mark, a letter and a digit. A panel's circuit number, a word (LIGHTING, RETURN) or a
+    cleanout's CO names no unit.
+- The reconcile's `planOtherCites` adds them as `demolition_view`, once each beside the tag index's own.
+
+**Measured:**
+- Census over the 90 non-held-out cached documents: 26 pages take the demolition role (24 unknown, 2 detail). Each
+  title was read, and all 26 are demolition plans: 040_IL 11, 01_NY 12, 049_IL 3. No schedule or plan page changes.
+- On the keys: links 871 → 959 of 1,215 (040_IL +54, 011_IL +23, and others); likely units named 17 → 23 of 47.
+- A first version read any row's name and so linked junk rows: circuit numbers "1" to "59" from panel schedules
+  (40 cites for "1" on one sheet), LIGHTING, a sheet index's P-001 to P-103 in their own title blocks. It changed no
+  keyed number; the dev A/B's row-by-row diff caught it, and the mark and sheet-number rules above closed it.
+
+**Measured (AS-91 to AS-101 together), the reconcile eval on the 12 keyed dev documents:**
+- Setup, disclosed: the production lane (full sweep), run on each document's cached sheet graph. Its tables are
+  identical to a fresh build's (the guard), and its sheet roles were recomputed by the final classifier. A re-roled
+  graph reproduces a fresh build of the final code exactly (checked on 14_OR).
+
+| | base | final |
+|---|---:|---:|
+| keyed units with no reconcile row | 87 of 534 | 72 of 534 |
+| drawn units found, geometry verified | 198 of 414 | 278 of 427 |
+| drawn units found by their tag (verified or tag text) | 198 of 414 | 414 of 427 |
+| placements: recall / precision | 25.8% / 48.0% | 54.6% / 86.6% |
+| placements on a keyed view of the unit: recall / precision | 43.4% / 80.6% | 62.4% / 99.0% |
+| unit count exact | 193 of 447 (43.2%) | 310 of 462 (67.1%) |
+| units over-counted | 37 | 1 |
+| drawn tags linked to their row (plan → row) | 226 of 1,215 (18.6%) | 959 of 1,215 (78.9%) |
+| unscheduled units on the review list | 33 of 47 | 33 of 47 |
+| likely-units list: unscheduled units named / its precision | — | 23 of 47 / 54.8% |
+
+- In steps (each cumulative; scored by the final scorer):
+
+  | run | no row | found (verified) | by its tag | count exact | over | links |
+  |---|---:|---:|---:|---:|---:|---:|
+  | base | 87 | 198 | 198/414 | 193/447 | 37 | 226 |
+  | + AS-91 | 87 | 263 | 390/414 | 252/447 | 43 | 490 |
+  | + AS-92 to AS-94 | 87 | 264 | 390/414 | 253/447 | 42 | 821 |
+  | + AS-95 to AS-97 | 85 | 267 | 393/416 | 296/449 | 0 | 827 |
+  | + AS-98 | 83 | 267 | 399/416 | 298/451 | 1 | 845 |
+  | + enlarged plan titles (AS-91) | 83 | 276 | 408/416 | 307/451 | 1 | 857 |
+  | + AS-99 | 72 | 278 | 414/427 | 309/462 | 1 | 871 |
+  | + AS-100 | 72 | 278 | 414/427 | 310/462 | 0 | 871 |
+  | + AS-101, AS-94 final | 72 | 278 | 414/427 | 310/462 | 1 | 959 |
+
+  The last over-count is 26_CA's CAV-X-3 on p35, an alternate plan of a floor p34 draws (below).
+- Every changed row was read at every step: status, quantity, placements by sheet, links by reason.
+- **Remaining misses, each read:**
+  - 26_CA: 71 units are in schedules the extraction reads no table from (extraction, not changed here).
+  - 12_MT's plans relabel its fan coils (FC-1A drawn "FC 1-1", FC-4A "FC 2-1").
+  - 14_OR's hot water pumps HWP-1 and HWP-2 are drawn "HP-1" and "HP-2".
+  - 011_IL's heat pumps are drawn as "HP 12" shorthand on p15, p22 and p24, and have no verified marker (tag text,
+    AMBIGUOUS).
+  - federal-mech's p2 HVAC ZONE LEGEND is a zone plan whose 66 tags have no plan role.
+  - 26_CA's CAV-X-3 is drawn on p35, an alternate plan whose room reads differ from p34's.
+
+  None is closed by a rule that would not generalize.
+- **Guard** (tables): every extracted table is byte-identical, base against the new classifier. Rooms are identical
+  on every document.
+  - 30 documents by the guard: fresh builds of the base and of the AS-91 classifier, digests compared.
+  - The final classifier differs from that one on 34 pages of 11 documents (census). The 10 of them that build on this
+    machine were built with the final code and compared table by table: 031_MO, 03_FL, 04_NV, 14_OR, 078_US, 082_OR,
+    21_VA, 040_IL, 049_IL, and 096_IN (counted, not read).
+  - 34 documents in all. 01_NY's builds run out of memory on this machine, base and new alike, so its tables rest on
+    the rule, and none of its schedule pages changes role (census).
+
+  The other role-dependent fields change as the roles do:
+  - each sheet's role, confidence and evidence;
+  - each tag's role;
+  - the L3.5 topology summary (`vector_topology`), which the vector pipeline computes on plan, demolition, schematic
+    and unknown sheets. A sheet that leaves detail, legend or elevation gains its node and edge counts: 013_MO and
+    061_IA among the 30. Its only readers are the estimator document's `pipeline_topology` report and a no-op branch
+    of `enrichSystemTags` (vectorTakeoffPipeline.ts says so).
+- **Compile** (`compileHvacTakeoff`, the assemblies' takeoff), base against final on all 104 non-held-out cached
+  documents:
+  - 3 change, each only by units added: 040_IL +31 VAV (AS-96); 12_MT +2 heat pumps and +5 fan coils (AS-95); 18_OR
+    +4 fan coils (AS-95).
+  - Totals 3,136 → 3,178 units. No check document changes.
+- **Evals:**
+  - Attribute eval identical on all 7 tiers: dev, dev 2 to dev 5, held-out and held-out 2 (aggregates).
+  - Typical eval identical on dev and held-out.
+  - Binding eval identical on dev 2, dev 3, held-out and held-out 2. Dev finds one packet more on 040_IL (for its
+    terminal air boxes, now VAV units), and its keyed pairs are unchanged (16 of 16).
+  - Takeoff eval (`buildPlanSetTakeoff` scored against the takeoff keys, run seeded as the reconcile eval is):
+    - federal-mech: 100 → 101 of 102 exact (VAV-48 counted), |Δ| 2 → 1.
+    - itd-d1-lab: 78 → 86 of 116 exact, |Δ| 69 → 61. Keyed units missing 2 → 0: F-1 and DFC-1 are rows now
+      (AS-99), and HC-1 to HC-9 count once each (AS-96).
+    - bldg5406-hvac-demo: 21 of 28 exact and |Δ| 22 both. Its ET-1 counts 1 (was 2). Its key's single line for the
+      split system "AC-1/ACCU-1" now meets AC-1 and ACCU-1 apart (AS-99), which the scorer reads as one line missing
+      and two added. The key is unchanged, and the assemblies' takeoff counts the two apart too, at base as now.
+    - baker-county-eoc (a reconcile check document, aggregate only): 23 of 40 exact, |Δ| 81, unchanged.
+- **Tests:** 14 new web tests, 3 new MCP tests, and the scorer's 6. The MCP tests run on
+  `schedule-plan-view.pdf`, which `make-schedule-row-reading-fixture.mjs` makes. Each rule's test fails on the code
+  before it; the schedule-region test also fails on both earlier rules (every table, and tables listing the mark).
+  - Web: typecheck, lint, and 4,012 tests. The 3 that fail failed before (B-11, B-12, multi-building).
+  - MCP: typecheck, and `test:bas` 189 of 189.
+  - The MCP suite: 413 tests, 401 pass. The failures:
+    - conformance's two known failures (the finish plan's #87; navfac's sweep at the SDK's 60 s);
+    - 7 of crossCorpusWorkflow's WP1 compile snapshots, on documents whose compile output this batch leaves
+      byte-identical (the compile reads no sheet role; the WP1 acceptance failures noted since AS-62).
+
+    Both files keep their table sidecars alive after their last test, so they are run with `--test-force-exit`.
+- **UI proof:** the Takeoff canvas's reconcile equals MCP's `reconcile_schedule_plan` row for row, per family and for
+  the whole set: status, quantities, placements, tag text, links (`plan_other_cites`) and the likely-units list. 35
+  checks:
+  - 14_OR: heat pumps and boilers; 85 rows, 75 links.
+  - 12_MT: fan coils and heat pumps; 95 rows.
+  - 040_IL: VAV; 82 rows, 846 links.
+- **Disclosures:**
+  - Two censuses read cached graphs stored under content-hash names, which the held-out filter (a file-name regex) did
+    not screen:
+    - census7 (AS-95) wrote table excerpts of 089_FL, 032_PA and 047_NC;
+    - census9 (AS-99) printed the row names its rule would add on 036_LA and 067_CA.
+
+    Both rules were written from dev rows before the censuses ran, and neither changed for them. The lines were
+    removed, and every later census resolves hashed names through a sha256 map and skips held-out documents.
+  - The early role censuses classified every page of every set, held-out included, for the table guard. They were
+    used in aggregate only, and the 134 held-out per-page files were set aside unopened.
+  - A key grep meant for the dev keys also read two check keys' range-style unit ids (044_NY, 069_ID). No placement,
+    sheet or score of a check document was seen, and AS-98 comes from 26_CA's dev rows.
+  - Scorer revisions: the first added a metric (drawn units found by their tag); the later ones (AS-98's range match,
+    AS-99's pair match) re-score every earlier run byte-identically.

@@ -192,7 +192,9 @@ schedule tables directly off the sheet graph and returns one compiled envelope (
 drawn on the plan sheets and returns one row per tag carrying `scheduled_qty`, `installed_qty`,
 and a `status` (matched / schedule-only / plan-only / …) with citations both ways. Report both
 quantities and the status per line — never just the schedule count — the same "never a numbers
-report alone" discipline as the standard finish above.
+report alone" discipline as the standard finish above. `plan_other_cites` links a row to its
+mark's other drawn occurrences (another view, bare tag text, a demolition plan) without counting
+them, and `unscheduled_units` is the short list of drawn units no schedule lists to raise.
 
 **A controls (BAS) estimate of that equipment** continues with `apply_assemblies`. It applies an
 assembly library to every scheduled unit: its controls typical and its mechanical hook-up, with

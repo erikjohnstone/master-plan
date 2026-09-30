@@ -12,7 +12,7 @@ import { tableRegionViaSidecar, tableStructureViaSidecar } from "../../web/src/l
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, classifySheetRoleBySignals, sheetPlanViewTitle, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, sheetDrawingGroup, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { tagIndexFor } from "../../web/src/lib/tagIndex.ts";
 import { pageRegions, type PageRegion } from "../../web/src/lib/controlIntent/zonePlan.ts";
 import type { AnswerEvent } from "../../web/src/lib/controlIntent/journal.ts";
@@ -53,7 +53,7 @@ import { discoverBasNarratives, type BasNarrativeDiscovery } from "../../web/src
 import { basRestoreJson, readBasRestorePlan, type BasRestorePlan } from '../../web/src/lib/basRestore.ts';
 import type { BasSourceInventoryItem } from '../../web/src/lib/basSourceRetention.ts';
 import { readBasOriginalFile } from './basOriginalFile.ts';
-import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, rowIdentityTag, scheduleCountMultiplier, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark } from '../../web/src/lib/schedulePlanReconcile.mjs';
+import { countPrefixedScheduleTagOccurrences, hasRepeatableAirDevicePlacementQuorum, isIndividuallyMarkedEquipmentSchedule, isRepeatableAirDeviceSchedule, isUnitFamilyTable, markZeroRespellings, rowIdentityTag, rowNamesOneUnitOnce, scheduleCountMultiplier, scheduledQtyFromRow, scheduleMarksRead, scheduleMarkVocabulary, scheduleRowsReadingMark } from '../../web/src/lib/schedulePlanReconcile.mjs';
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -2851,13 +2851,14 @@ export class Session {
       }
     }
 
-    // plan-role sheets only (the sheet graph decides), skips disclosed
+    // plan-view sheets only (planViewSheetKeys), skips disclosed
     const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
+    const planViews = this.planViewSheetKeys(graph);
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     const planSheets: SheetState[] = [];
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key) ?? "unknown";
-      if (role === "plan") planSheets.push(sh);
+      if (planViews.has(sh.key)) planSheets.push(sh);
       else {
         skipped.push({
           sheet: sh.key, role,
@@ -2873,11 +2874,7 @@ export class Session {
 
     // a tag inside a schedule table's own region is that table's row label
     const tableRegions = new Map<string, Bbox[]>();
-    for (const tb of graph.tables) {
-      const arr = tableRegions.get(tb.sheet) ?? [];
-      arr.push(tb.region);
-      tableRegions.set(tb.sheet, arr);
-    }
+    for (const sh of planSheets) tableRegions.set(sh.key, this.tableRegionsOn(graph, sh.key));
 
     const VAL_RE = /^[0-9][0-9,]{0,6}$/;
     type Hit = { at: Point; value: string; sheet: string };
@@ -4149,6 +4146,96 @@ export class Session {
    * every row's same-sheet multi-view collapse. */
   private viewLandmarkCache = new Map<string, TaggedViewLandmark[]>();
 
+  private planViewCache = new WeakMap<SheetGraph, Set<string>>();
+  /** The sheets whose plan views show installed work (AS-94): plan-role
+   * sheets, and schedule sheets that also draw a plan (their own plan title,
+   * sheetPlanViewTitle: "LEVEL 2 - MECHANICAL HVAC DUCT PLAN AND SCHEDULES").
+   * The sweep, the mark census, the scale commit and installation notes all
+   * read this one set; a tag inside a schedule is its text on any of them
+   * (scheduleRegionsOn; the mark census, count_marks, reads every table's
+   * region, tableRegionsOn). */
+  planViewSheetKeys(graph: SheetGraph): Set<string> {
+    let keys = this.planViewCache.get(graph);
+    if (keys) return keys;
+    keys = new Set<string>();
+    for (const g of graph.sheets) {
+      if (g.role === "plan") { keys.add(g.key); continue; }
+      if (g.role !== "schedule") continue;
+      const state = this.sheets.get(g.key);
+      if (!state) continue;
+      if (!state.spans) state.spans = textSpans(state.page);
+      const spans: GraphSpan[] = state.spans.map((span) => ({
+        str: span.str, x: span.x0, y: span.y0, w: span.x1 - span.x0, h: span.y1 - span.y0,
+        ...(span.rot ? { rot: span.rot } : {}),
+      }));
+      if (sheetPlanViewTitle({ key: g.key, sheet_number: state.sheetNumber, spans })) keys.add(g.key);
+    }
+    this.planViewCache.set(graph, keys);
+    return keys;
+  }
+
+  /** A unit's mark drawn on the set's demolition plans (AS-101), read as the
+   * sweep reads a plan's tags (tagOccurrencesOnSheet, told apart from every
+   * mark the set schedules), outside every schedule (scheduleRegionsOn) and
+   * every sheet number the graph's tag index knows (sheet_callout: 004_MO's
+   * P-102 in its own title block). The reconcile links each to its row as a
+   * demolition view (planOtherCites), never as installed quantity. The
+   * graph's tag index reads no mark printed with a space before a hyphenated
+   * number (011_IL's "HP 12-1" on its demolition plan), which the sweep
+   * reads. A unit's mark prints a letter and a digit: a panel's circuit
+   * number, a word (LIGHTING, RETURN) or a cleanout's CO names no unit
+   * drawn for demolition. */
+  demolitionTagOccurrences(graph: SheetGraph, tag: string): Array<{ sheet: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }> {
+    const key = String(tag || "").trim();
+    if (!/[A-Z]/i.test(key) || !/\d/.test(key)) return [];
+    const demolition = new Set(graph.sheets.filter((g) => g.role === "demolition").map((g) => g.key));
+    if (!demolition.size) return [];
+    const marks = scheduleMarkVocabulary(graph);
+    const setVocab = { marks, id: this.vocabularyId(marks) };
+    const callouts = (graph.tags ?? []).filter((t) => t.sheet_callout && demolition.has(t.sheet));
+    const out: Array<{ sheet: string; at: [number, number]; bbox: { x0: number; y0: number; x1: number; y1: number } }> = [];
+    for (const sh of this.sheetList()) {
+      if (!demolition.has(sh.key)) continue;
+      const regions = [...this.scheduleRegionsOn(graph, sh.key), ...callouts.filter((t) => t.sheet === sh.key).map((t) => t.bbox)];
+      for (const o of this.tagOccurrencesOnSheet(sh, key, false, marks, setVocab)) {
+        if (regions.some((r) => o.cx >= r[0] && o.cx <= r[2] && o.cy >= r[1] && o.cy <= r[3])) continue;
+        out.push({ sheet: sh.key, at: [round1(o.cx), round1(o.cy)], bbox: Session.wireBox(o.bbox) });
+      }
+    }
+    return out;
+  }
+
+  /** The regions of the schedules on a sheet, continuation parts included: a
+   * tag printed there is a schedule's own text, never a placement of any
+   * row's unit (AS-94) — its own row's mark, or a mark in another column
+   * (011_IL's DOOR SCHEDULE prints D1 and D2, the marks of its light fixture
+   * schedule's rows). A schedule is a table of two or more rows, or one
+   * titled in words. A plan's flag tag or dimension string the extraction
+   * read as a one-row table titled by a mark or a number (26_CA's "FSD-X-4"
+   * over "CAV-X-3 04 35" on six typical-floor plans, federal-mech's
+   * "341.1-2") is none, and the tags it covers stay placements. */
+  private scheduleRegionsOn(graph: SheetGraph, key: string): Bbox[] {
+    const out: Bbox[] = [];
+    for (const tb of graph.tables) {
+      if (!(tb.sheet === key || (tb.parts ?? []).some((part) => part.sheet === key))) continue;
+      if (!(tb.rows.length >= 2 || /\b[A-Z]{4,}\b/i.test(tb.title?.text || ""))) continue;
+      if (tb.sheet === key && tb.region) out.push(tb.region);
+      for (const part of tb.parts ?? []) if (part.sheet === key && part.region && part.sheet !== tb.sheet) out.push(part.region);
+    }
+    return out;
+  }
+
+  /** Every extracted table's region on a sheet, continuation parts included:
+   * a tag printed there is the table's own row text, never a placement. */
+  private tableRegionsOn(graph: SheetGraph, key: string): Bbox[] {
+    const out: Bbox[] = [];
+    for (const tb of graph.tables) {
+      if (tb.sheet === key && tb.region) out.push(tb.region);
+      for (const part of tb.parts ?? []) if (part.sheet === key && part.region && part.sheet !== tb.sheet) out.push(part.region);
+    }
+    return out;
+  }
+
   private viewLandmarksOnSheet(sh: SheetState, graph: SheetGraph): TaggedViewLandmark[] {
     const cached = this.viewLandmarkCache.get(sh.key);
     if (cached) return cached;
@@ -4593,17 +4680,23 @@ export class Session {
         : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(identityOf(row)).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
     const airDeviceTable = isRepeatableAirDeviceSchedule(table);
-    const individuallyMarkedTable = isIndividuallyMarkedEquipmentSchedule(table, opts.equipmentFamily || "");
+    // A unit family's own schedule names one unit per mark too, where the
+    // row schedules one (isUnitFamilyTable; AS-96): 040_IL's terminal air
+    // boxes, drawn on every phase plan, are one box each.
+    const individuallyMarkedTable = isIndividuallyMarkedEquipmentSchedule(table, opts.equipmentFamily || "")
+      || (isUnitFamilyTable(tb) && scheduledQtyFromRow(r) === 1 && rowNamesOneUnitOnce(r, selectedRowIdentity));
 
-    // 2. plan-role sheets, and every drawn occurrence of the tag on them
+    // 2. plan-view sheets (planViewSheetKeys), and every drawn occurrence of
+    // the tag on them outside every table region
     const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
     const planTitleOf = new Map(graph.sheets.map((g) => [g.key, g.evidence?.text || ""] as const));
+    const planViews = this.planViewSheetKeys(graph);
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     const planSheets: SheetState[] = [];
     const ungroupedPlanSheets: SheetState[] = [];
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key) ?? "unknown";
-      if (role === "plan") {
+      if (planViews.has(sh.key)) {
         const planGroup = graph.sheets.find((sheet) => sheet.key === sh.key)?.drawing_group;
         if (!drawingGroupScope || planGroup === drawingGroupScope) planSheets.push(sh);
         else if (!planGroup) {
@@ -4631,8 +4724,19 @@ export class Session {
         });
       }
     }
+    // A tag inside a schedule is its text (scheduleRegionsOn), never a
+    // placement, on a plan sheet with a corner schedule as on a schedule
+    // sheet's own plan view.
+    const regionsBySheet = new Map<string, Bbox[]>();
+    const outsideTables = (sh: SheetState, found: TagOcc[]): TagOcc[] => {
+      let regions = regionsBySheet.get(sh.key);
+      if (!regions) regionsBySheet.set(sh.key, regions = this.scheduleRegionsOn(graph, sh.key));
+      return regions.length
+        ? found.filter((o) => !regions!.some((r) => o.cx >= r[0] && o.cx <= r[2] && o.cy >= r[1] && o.cy <= r[3]))
+        : found;
+    };
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
-      this.tagOccurrencesOnSheet(sh, key, airDeviceTable, markVocab, setMarkVocab);
+      outsideTables(sh, this.tagOccurrencesOnSheet(sh, key, airDeviceTable, markVocab, setMarkVocab));
     // Plan-drawn form may keep spaces / omit revision prefixes while the
     // schedule row.key is glued (`NATUK1` vs plan `ATU K1` — Hurlburt). Prefer
     // any identity form that is actually drawn before refusing no-plan-tag.
@@ -4658,6 +4762,12 @@ export class Session {
       // device identity is VALVE MARK. Never fall back from an undrawn valve
       // mark to the served equipment tag and count the AHU/FCU as a valve.
       if (!readByMark && canonKey(r.key) === canonKey(selectedRowIdentity)) addCand(r.key);
+      // A zero the schedule pads a mark's number with, or the plan does
+      // (14_OR schedules HP-02 and tags it HP-2 on its floor plans): the mark
+      // with its numbers unpadded, and with its last number padded to two
+      // digits, last, where no row of the set is named so (AS-97).
+      const rowNamed = new Set(graph.tables.flatMap((x) => x.rows.map((row) => canonKey(identityOf(row)))));
+      for (const variant of markZeroRespellings(t)) if (!rowNamed.has(canonKey(variant))) addCand(variant);
       const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
       if (!hasOcc(t)) {
         for (const cand of planTagCandidates) {
@@ -4989,7 +5099,69 @@ export class Session {
         if (!selected && grounded.matches.length) selected = { sh: entry.sh, match: grounded.matches[0] };
       }
       if (!selected) {
-        throw new UserError(`Schedule row "${t}" has ${totalOcc} exact plan-tag occurrence${totalOcc === 1 ? "" : "s"}, but none owns distinctive adjacent or leader-connected vector geometry. The tag is retained for review; installed quantity remains unknown.`);
+        // The exact tag IS drawn on these plan sheets; only its marker
+        // geometry went unverified. Return every occurrence as unverified tag
+        // text (the reconcile's tag_text_only evidence: AMBIGUOUS, installed
+        // quantity unknown, each occurrence cited), never as a thrown error
+        // the reconcile could only report as a unit drawn nowhere.
+        const cells: Record<string, string> = {};
+        for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+        const cellCitations = Object.fromEntries(Object.entries(r.cells).map(([header, cell]) => [
+          header,
+          { text: cell.text, bbox: Session.wireBox(cell.bbox) },
+        ]));
+        const firstCell = r.cells[Object.keys(r.cells)[0]];
+        const first = withOcc[0].occ[0];
+        return {
+          tag: t,
+          search_scope: "tagged_only" as const,
+          unlabeled_audit_complete: false,
+          row: {
+            sheet: tb.sheet,
+            table,
+            key: t,
+            ...(drawingGroupScope ? { drawing_group: drawingGroupScope } : {}),
+            cells,
+            cell_citations: cellCitations,
+            citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
+          },
+          tag_citations: withOcc.flatMap(({ sh, occ }) => occ.map((entry) => ({ sheet: sh.key, bbox: Session.wireBox(entry.bbox) }))),
+          anchor: {
+            sheet: withOcc[0].sh.key,
+            at: [round1(first.cx), round1(first.cy)] as [number, number],
+            rect: first.bbox.map(round1),
+            segments: 0,
+            length_px: 0,
+            corroborated: false,
+            occurrences: totalOcc,
+            grounding_basis: "exact_plan_tag" as const,
+          },
+          found: 0,
+          sheets: planSheets.map((sh) => {
+            const occurrences = occBySheet.find((entry) => entry.sh === sh)?.occ || [];
+            return {
+              sheet: sh.key,
+              found: 0,
+              matches: occurrences.map((entry) => ({
+                at: [round1(entry.cx), round1(entry.cy)] as [number, number],
+                score: 1,
+                rotation: 0,
+                mirrored: false,
+                tag_at: Session.wireBox(entry.bbox),
+                counted_from: "explicit_label" as const,
+              })),
+              withheld: [],
+              excluded: [],
+              text_only: [],
+              candidates: { considered: 0, dropped: 0 },
+              complete: true,
+              elapsed_ms: 0,
+            };
+          }),
+          complete: true,
+          skipped,
+          note: `Schedule row "${t}" has ${totalOcc} exact plan-tag occurrence${totalOcc === 1 ? "" : "s"}, but none owns distinctive adjacent or leader-connected vector geometry. Each occurrence is cited as unverified tag text; installed quantity remains unknown.`,
+        };
       }
       anchorSheet = selected.sh;
       anchor = selected.match.occurrence;
@@ -5891,6 +6063,8 @@ export class Session {
       for (const m of ps.matches) {
         dedupInstances.push({
           id: m, sheet: ps.state.key, sheetNumber: ps.state.sheetNumber, discipline, at: m.at,
+          // the tag text's own centre registers a redraw too (AS-100)
+          ...(m.tag_at?.length === 4 ? { tagAt: [(m.tag_at[0] + m.tag_at[2]) / 2, (m.tag_at[1] + m.tag_at[3]) / 2] as Point } : {}),
           level: planLevelOfTitle(planTitleOf.get(ps.state.key) || ""),
           rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
         });
@@ -7196,7 +7370,8 @@ export class Session {
         const spans = s.spans.map((t) => ({ str: t.str, x: t.x0, y: t.y0, w: t.x1 - t.x0, h: t.y1 - t.y0, ...(t.rot ? { rot: t.rot } : {}) }));
         let segs: number[] | undefined;
         if (spans.some((t) => /^\d{1,2}$/.test(t.str.trim()))) {
-          const role = classifySheetRole({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
+          // the extraction role (classifySheetRoleBySignals), as for every extractor
+          const role = classifySheetRoleBySignals({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
           if (role === "plan" || role === "schedule" || role === "demolition" || role === "schematic" || role === "unknown") {
             if (vecBudget <= 0) skippedHeavy++;
             else if (s.geo) { segs = s.geo.segs; vecBudget -= segs.length / 4; }
@@ -7341,7 +7516,10 @@ export class Session {
       out.push({
         key: sh.key,
         sheet_number: state.sheetNumber ?? null,
-        role: sh.role,
+        // The vector stack routes tables, topology and diagrams by the
+        // extraction role (classifySheetRoleBySignals); a plan title decides
+        // only where drawn tags count (graph.sheets[].role).
+        role: classifySheetRoleBySignals({ key: sh.key, sheet_number: state.sheetNumber, spans }).role,
         spans,
         ...(segs?.length ? { segs } : {}),
         width: state.widthPx,
@@ -8406,7 +8584,7 @@ export class Session {
     bbox: { x0: number; y0: number; x1: number; y1: number };
   }>> {
     const graph = await this.graphForPipeline();
-    const planKeys = new Set(graph.sheets.filter((sheet) => sheet.role === "plan").map((sheet) => sheet.key));
+    const planKeys = this.planViewSheetKeys(graph);
     const escaped = tag.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const pattern = new RegExp(`(?:^|[^A-Z0-9])${escaped}\\s+ON\\s+(?:FLOOR|LEVEL)\\s+([A-Z0-9]+)`, "i");
     const byLevel = new Map<string, {

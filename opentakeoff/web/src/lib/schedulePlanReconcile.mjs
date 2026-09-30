@@ -6,8 +6,8 @@
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
 import {
-  normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark,
-  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, plainMark, plainMarkText,
+  normalizeEquipMark, scheduleTableView, sameKindMarks, isScheduleHeaderJunkMark, expandEquipMarkRange, expandMarkList,
+  familyTableGate, familyMarkRead, familyRowRead, rowIdentityText, rowMarkText, splitRowMarks, plainMark, plainMarkText, isGroupedMarkHeader, unitMarkKey,
   HVAC_FAMILY_SPECS,
 } from "./corpusTakeoff.mjs";
 import { markKey } from "./markid.ts";
@@ -423,7 +423,104 @@ function rowIdentityPrint(row, identityHeaderRe = null) {
   }
   // Parity with compile uniqueFamily — extractor often puts the mark on row.key.
   const key = String(row?.key || "").trim();
+  // A key that prints no mark (12_MT keys its split systems by their MANUF.
+  // cell, DAIKIN) gives way to the first mark column under a group heading
+  // whose cell prints one (OUTDOOR UNIT DATA PLAN CODE: HP-1; AS-95).
+  if (!/\d/.test(key)) {
+    for (const [header, cell] of Object.entries(row?.cells || {})) {
+      if (!isGroupedMarkHeader(header)) continue;
+      const t = String(cell?.text || "").trim();
+      if (/^[A-Z]{1,8}[\s\-]?\d/i.test(t)) return t;
+    }
+  }
   return key || null;
+}
+
+/**
+ * The units a whole-set reconcile row's name schedules (AS-98): each mark of
+ * a range or a list of one family's marks, as the takeoff and the family
+ * reconcile read the row (AS-75, AS-86) — 26_CA's "SF-P1-4 THRU 11" is eight
+ * supply fans, "EF-P1-1 & 2" two exhaust fans, "WCU-2-1 ,2" two chillers —
+ * and the number of the row's units of that mark's kind (sameKindMarks: the
+ * row's printed QTY counts them all, never each). Any other name is one unit.
+ * @param {string} identity the row's name (rowIdentityTag)
+ * @returns {Array<{ tag: string, marks: number }>}
+ */
+export function rowUnitMarks(identity) {
+  const name = String(identity || "").trim();
+  const marks = (expandEquipMarkRange(name) ?? expandMarkList(name) ?? []).map((m) => String(m).trim()).filter(Boolean);
+  if (marks.length < 2) return name ? [{ tag: name, marks: 1 }] : [];
+  return [...new Set(marks)].map((tag) => ({ tag, marks: sameKindMarks(marks, tag) }));
+}
+
+/** The key two spellings of one unit's mark share (AS-99): the takeoff's own
+ * (unitMarkKey), in plain type. */
+export function reconcileUnitKey(tag) {
+  return unitMarkKey(plainMark(String(tag || "")).toUpperCase().replace(/\s+/g, ""));
+}
+
+/**
+ * Whether a row's name prints a mark (AS-99): the mark's letter and number
+ * groups in order, whatever separates them, starting after no letter or
+ * digit and never run on into a longer number ("FC-1" is in "(E) FC-1",
+ * "CV-FCU-1-HHW" holds FCU-1, "FC-10" never holds FC-1). `whole` also
+ * forbids a letter after it ("FOP-8AB" holds FOP-8A only as a part).
+ */
+function nameHoldsMark(name, mark, whole) {
+  const groups = String(plainMark(String(mark || "")) || "").toUpperCase().match(/[A-Z]+|\d+/g);
+  if (!groups?.length) return false;
+  const re = new RegExp(`(?:^|[^A-Z0-9])${groups.join("[^A-Z0-9]*")}${whole ? "(?![A-Z0-9])" : "(?![0-9])"}`);
+  return re.test(String(plainMark(String(name || "")) || "").toUpperCase());
+}
+
+/**
+ * The units a whole-set reconcile row stands for (AS-99): the units its name
+ * schedules (rowUnitMarks), and each unit the takeoff counts from the row
+ * (takeoffUnitsByRow) that its name does not print and no row of the set
+ * names (a split system's indoor unit beside its outdoor unit: 12_MT's HP-1
+ * row counts FC-1A). A name the takeoff reads as several units, printing
+ * one or more of them and never itself one ("F-1 , CU-1", "B-1/B-2" for
+ * "B-1 & 2"), stands for those units, each once, never for one unit drawn
+ * nowhere. A name that prints the one unit counted from it in another
+ * spelling ("(E) CT-1", "CV-FCU-1-HHW" beside FCU-1) stands as it is.
+ * @param {string} identity the row's name (rowIdentityTag)
+ * @param {Array<{ tag: string, marks: number }>} counted the takeoff's units from the row
+ * @param {Set<string>} [namedElsewhere] reconcileUnitKey of every unit a row of the set names
+ * @returns {Array<{ tag: string, marks: number }>}
+ */
+export function rowReconcileUnits(identity, counted = [], namedElsewhere = new Set()) {
+  const named = rowUnitMarks(identity);
+  if (!counted.length) return named;
+  const countedKeys = new Set(counted.map((u) => reconcileUnitKey(u.tag)));
+  const compound = named.length === 1 && counted.length > 1 && !countedKeys.has(reconcileUnitKey(named[0].tag))
+    && counted.some((u) => nameHoldsMark(named[0].tag, u.tag, false));
+  const units = compound ? [] : [...named];
+  for (const u of counted) {
+    const key = reconcileUnitKey(u.tag);
+    if (units.some((v) => reconcileUnitKey(v.tag) === key)) continue;
+    if (!compound && (named.some((v) => nameHoldsMark(v.tag, u.tag, true)) || namedElsewhere.has(key))) continue;
+    units.push({ tag: u.tag, marks: u.marks });
+  }
+  return units;
+}
+
+/**
+ * A mark as a plan may print it with the zero its number is padded with
+ * dropped or added (AS-97): 14_OR schedules HP-02 and tags it HP-2 on its
+ * floor plans. The mark with each number unpadded (HP-02 → HP-2, AHU-010 →
+ * AHU-10), and with its last number padded to two digits (HP-2 → HP-02). A
+ * lone zero stays (FCU-00). The sweep tries them after every printed form
+ * of the row, and only where no row of the set is named so.
+ * @param {string} mark
+ * @returns {string[]}
+ */
+export function markZeroRespellings(mark) {
+  const t = String(mark || "").trim();
+  const out = [];
+  for (const variant of [t.replace(/(^|[^0-9])0+(?=[1-9])/g, "$1"), t.replace(/(^|[^0-9])([1-9])(?!\d)(?!.*\d)/, "$10$2")]) {
+    if (variant && variant !== t && !out.includes(variant)) out.push(variant);
+  }
+  return out;
 }
 
 /**
@@ -542,6 +639,152 @@ export function unscheduledTagsAndAliasCandidates(graph) {
   return { unscheduled_tags, alias_candidates };
 }
 
+/** HVAC families whose schedule marks are types repeated for every device,
+ * never one unit's mark. */
+const TYPE_MARK_FAMILIES = new Set(["GRD", "LOUVER", "LOUVERED_PENTHOUSE", "FIN_TUBE_RADIATION", "FILTER", "STRAINER"]);
+
+/**
+ * Whether a unit family's row names one unit once (AS-96): one mark, no
+ * placeholder for a level or room (26_CA's CAV-X-2), and no word that it is
+ * a typical unit repeated floor by floor or room by room (its TYPICAL FLOORS
+ * column: "3-4, 6-34"). A split system's indoor and outdoor pair (040_IL's
+ * SS-1/SSCU-1) names two.
+ * @param {{ cells?: Record<string, { text?: string } | string> }} row
+ * @param {string} mark the row's name
+ */
+export function rowNamesOneUnitOnce(row, mark) {
+  const name = String(mark || "").toUpperCase();
+  if (!name || /[\/&,]|\bTHRU\b|\bTO\b/.test(name) || /(?:^|[-\s])X(?:[-\s]|$)/.test(name)) return false;
+  const TYPICAL = /\bTYP(?:ICAL|\.)?\b/i;
+  return !Object.entries(row?.cells || {}).some(([header, cell]) => TYPICAL.test(header) || TYPICAL.test(String(cell && typeof cell === "object" ? cell.text : cell || "")));
+}
+
+const unitFamilyTableCache = new WeakMap();
+/**
+ * A table a unit family reads by its own title (familyTableGate's titled
+ * pass): its rows name units one by one, as an individually marked
+ * schedule's title says (isIndividuallyMarkedEquipmentSchedule) — 040_IL's
+ * TERMINAL AIR BOX SCHEDULE, 26_CA's FANS and FAN POWERED TERMINAL UNIT
+ * SCHEDULE, federal-mech's VOLUME CONTROL BOX SCHEDULE. Never a type-mark
+ * family's table (grilles, louvers, fin tube, filters, strainers) nor a
+ * repeatable air device schedule (AS-96).
+ * @param {object} printed a sheet graph table
+ * @returns {boolean}
+ */
+export function isUnitFamilyTable(printed) {
+  if (!printed || typeof printed !== "object") return false;
+  const cached = unitFamilyTableCache.get(printed);
+  if (cached !== undefined) return cached;
+  const table = scheduleTableView(printed);
+  const hit = !!table && !isRepeatableAirDeviceSchedule(table.title?.text || "")
+    && Object.entries(HVAC_FAMILY_SPECS).some(([name, spec]) => !TYPE_MARK_FAMILIES.has(name) && familyTableGate(table, spec, name)?.pass === 1);
+  unitFamilyTableCache.set(printed, hit);
+  return hit;
+}
+
+/**
+ * A mark's form for the review list: its letter and number groups, with the
+ * separators drafters vary (a hyphen, a space, none) read alike and a dot or
+ * slash kept, so "EF-25", "EF 25" and "EF25" share a form while a grid bubble
+ * "B.1" or a zone label "AHU-1-Z-2" do not share one with a unit mark.
+ * `hyphen` says whether a separator stands between the leading letters and
+ * the first number ("D-1" has one; a detail callout "D57" does not).
+ * @param {string} text
+ */
+function unitMarkForm(text) {
+  const upper = String(text || "").toUpperCase().trim();
+  const groups = upper.match(/[A-Z]+|\d+|[./]/g) || [];
+  if (!groups.length || !/^[A-Z]+$/.test(groups[0]) || !groups.some((g) => /^\d+$/.test(g))) return null;
+  return {
+    letters: groups[0],
+    form: groups.map((g) => (/^[A-Z]+$/.test(g) ? "A" : /^\d+$/.test(g) ? "9" : g)).join(""),
+    hyphen: /^[A-Z]+[\s\-‐-―−]+\d/.test(upper),
+  };
+}
+
+/**
+ * The review list's likely units (AS-93): drawn tags on plan and demolition
+ * plan sheets, outside every table and sheet callout, that no schedule row
+ * lists (unscheduledTagsAndAliasCandidates) yet read as a unit of a scheduled
+ * family: the same letters and the same form as a unit mark an HVAC unit
+ * schedule prints (a table an HVAC family reads, familyTableGate; a door or
+ * luminaire schedule's marks and a grille, louver, fin-tube or filter type
+ * schedule's marks are no units). A one-letter family must also match the
+ * schedule's separator (a plan's "P9" callout is not a pump "P-1", as "P-9"
+ * would be). A drawn EF-25 beside
+ * a fan schedule of EF-1 to EF-12 is listed; a room number, a grid bubble, a
+ * sheet or detail reference, a zone label or a circuit is not. A review list
+ * like unscheduled_tags: it never changes any row's quantity or status.
+ * @param {{tables?: object[], tags?: object[]}} graph
+ * @param {object[]} [unscheduledTags] unscheduledTagsAndAliasCandidates(graph).unscheduled_tags
+ */
+export function unscheduledUnitCandidates(graph, unscheduledTags = unscheduledTagsAndAliasCandidates(graph).unscheduled_tags) {
+  /** family (letters|form) -> separator flags seen in the schedules */
+  const families = new Map();
+  for (const printed of graph?.tables || []) {
+    const table = scheduleTableView(printed);
+    if (!table || isRepeatableAirDeviceSchedule(table.title?.text || "")) continue;
+    if (!Object.entries(HVAC_FAMILY_SPECS).some(([name, spec]) => !TYPE_MARK_FAMILIES.has(name) && familyTableGate(table, spec, name))) continue;
+    for (const row of table.rows || []) {
+      for (const raw of [rowIdentityTag(row), row?.key]) {
+        for (const mark of String(raw || "").split(/[/,]/)) {
+          const f = unitMarkForm(mark);
+          if (!f) continue;
+          const id = `${f.letters}|${f.form}`;
+          if (!families.has(id)) families.set(id, new Set());
+          families.get(id).add(f.hyphen);
+        }
+      }
+    }
+  }
+  return (unscheduledTags || []).filter((t) => {
+    if ((t.role !== "plan" && t.role !== "demolition") || t.in_table || t.sheet_callout) return false;
+    const f = unitMarkForm(t.text);
+    const seps = f && families.get(`${f.letters}|${f.form}`);
+    return !!seps && (f.letters.length >= 2 || seps.has(f.hyphen));
+  });
+}
+
+/** @typedef {{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number }, reason: "repeat_view" | "unattached_tag" | "demolition_view", counted_on?: string }} PlanOtherCite */
+
+/**
+ * Every other drawn occurrence of a row's own mark on a plan-like sheet that
+ * the row does not count (AS-92), so each drawn tag links to its row: the
+ * same unit drawn again on another view (an enlarged plan, another trade's
+ * plan, a piping plan beside the duct plan — the sweep's redundant views,
+ * each naming the sheet that counts it), the mark's own text with no attached
+ * symbol beside counted ones, and the mark on a demolition plan. Links only,
+ * never installed quantity. On a demolition plan the mark is read as the
+ * sweep reads it (Session.demolitionTagOccurrences, AS-101) where the caller
+ * has a session, and as the graph's tag index reads it besides.
+ * @param {object|null} sweep sweep_schedule_row's result (null when it threw)
+ * @param {{tags?: object[]}} graph
+ * @param {string} tag the row's mark as swept
+ * @param {Array<{ sheet: string, at: [number, number], bbox?: { x0: number, y0: number, x1: number, y1: number } }>} [demolitionOccurrences]
+ * @returns {PlanOtherCite[]}
+ */
+export function planOtherCites(sweep, graph, tag, demolitionOccurrences = []) {
+  /** @type {PlanOtherCite[]} */
+  const out = [];
+  for (const ps of sweep?.sheets || []) {
+    for (const m of ps.redundant_view || []) {
+      out.push({ sheet: ps.sheet, at: m.at, ...(m.tag_at ? { bbox: m.tag_at } : {}), reason: "repeat_view", ...(m.kept_sheet ? { counted_on: m.kept_sheet } : {}) });
+    }
+    for (const t of ps.text_only || []) out.push({ sheet: ps.sheet, at: t.at, reason: "unattached_tag" });
+  }
+  const round1 = (v) => Math.round(v * 10) / 10;
+  const demolition = (demolitionOccurrences || []).map((o) => ({ sheet: o.sheet, at: o.at, ...(o.bbox ? { bbox: o.bbox } : {}), reason: "demolition_view" }));
+  // one cite a drawn tag, however many readings find it
+  const seen = (sheet, at) => demolition.some((d) => d.sheet === sheet && Math.hypot(d.at[0] - at[0], d.at[1] - at[1]) <= 5);
+  for (const dt of tag ? tagIndexFor(graph?.tags || [], tag) : []) {
+    if (dt.role !== "demolition" || dt.in_table || dt.sheet_callout) continue;
+    const at = [round1((dt.bbox[0] + dt.bbox[2]) / 2), round1((dt.bbox[1] + dt.bbox[3]) / 2)];
+    if (seen(dt.sheet, at)) continue;
+    demolition.push({ sheet: dt.sheet, at, bbox: { x0: dt.bbox[0], y0: dt.bbox[1], x1: dt.bbox[2], y1: dt.bbox[3] }, reason: "demolition_view" });
+  }
+  return [...out, ...demolition];
+}
+
 /**
  * Build reconcile rows from buildPlanSetTakeoff items (installed sweep path).
  * @param {Array<object>} items TakeoffItem[]
@@ -587,8 +830,10 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     // path does; a synthesized/legend-only item with no backing row still
     // defaults to 1 (one row = one unit), unchanged.
     const scheduleDefinitionOnly = isRepeatableAirDeviceSchedule(item.schedule?.title || "");
+    // A unit of a row naming several (AS-98): the row's printed QTY counts
+    // them all, never each.
     const qtyStatus = item.schedule_row
-      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly })
+      ? scheduledQtyStatusFromRow({ cells: item.schedule_row }, { typeDefinition: scheduleDefinitionOnly, ...(item.row_marks > 1 ? { marks: item.row_marks } : {}) })
       : scheduledQtyStatusFromRow({ cells: {} });
     const scheduledQty = qtyStatus.refused ? null : qtyStatus.qty;
     // A refused/error sweep proves only that installed quantity could not be
@@ -677,6 +922,7 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
         ...(loc.reason ? { reason: loc.reason } : {}),
         ...(loc.hold ? { hold: loc.hold } : {}),
       })),
+      ...(item.plan_other_locations?.length ? { plan_other_cites: item.plan_other_locations } : {}),
       ...(item.reference_tags?.length ? { reference_tag_cites: item.reference_tags } : {}),
       ...(item.served_equipment_cites?.length ? { served_equipment_cites: item.served_equipment_cites } : {}),
       reason: qtyStatus.reason || item.reason || fail?.detail
@@ -992,6 +1238,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
           plan_cites: sweep.planCites || [],
           plan_tag_cites: sweep.planTagCites || [],
           plan_candidate_cites: sweep.planCandidateCites || [],
+          ...(sweep.planOtherCites?.length ? { plan_other_cites: sweep.planOtherCites } : {}),
           ...(sweep.referenceTagCites?.length ? { reference_tag_cites: sweep.referenceTagCites } : {}),
           ...(servedEquipmentCites.length ? { served_equipment_cites: servedEquipmentCites } : {}),
           reason: qtyStatus.reason || sweep.reason
@@ -1226,6 +1473,7 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
           referenceTagCites: (r.reference_tags || []).map((rt) => ({
             sheet: rt.sheet, role: rt.role, bbox: rt.bbox, text: rt.text,
           })),
+          planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? []),
         });
         processed++;
         opts.onProgress?.({
@@ -1297,12 +1545,14 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
         planCites: geometryCites,
         planTagCites,
         planCandidateCites: candidateCites,
+        planOtherCites: planOtherCites(r, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? []),
       });
     } catch (e) {
       sweepByTag.set(row.row_id || row.tag, {
         installedQty: null,
         itemStatus: "refused",
         reason: e?.message || String(e),
+        planOtherCites: planOtherCites(null, graph, row.tag, session?.demolitionTagOccurrences?.(graph, row.tag) ?? []),
       });
     }
     processed++;

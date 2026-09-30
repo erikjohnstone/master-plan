@@ -1,0 +1,137 @@
+# 088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.plantags.csv — schedule<->plan reconcile truth: each HVAC unit tag drawn on an examined plan sheet, the scheduled unit it denotes, and how many times it is drawn (reconcile tier 1, check).
+# Authored 2026-09-30 from renders and the PDF text layer, never pipeline output. A key that looks wrong later is catalogued, never edited.
+sheet,drawn,unit,placements,counts,view,note
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,AHU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|AHU-1,1,yes,new,"tag box in the AHU, mechanical room RBST142"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,EDH-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EDH-1,1,yes,new,tag box at the duct heater
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,FCU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|FCU-1,1,yes,new,"tag box at the FCU, mechanical room RBST142"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,CU-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-4,1,yes,new,tag box under the CU outside the mechanical room
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#17,CU-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-5,1,yes,new,tag box under the CU outside the mechanical room
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,FC-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-1,1,yes,new,"rotated tag at the ducted FC, ATC room RBST140"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,FC-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-2,1,yes,new,electrical room RBST141
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,FC-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-3,1,yes,new,"wall FC, ATS room RBST143"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,CU-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-3,1,yes,new,tag box under the CU at the matchline
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,CU-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-2,1,yes,new,tag box under the CU at the matchline
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#18,CU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-1,1,yes,new,tag box under the CU at the matchline
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#19,FC-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-4,1,yes,new,"wall FC, IDF RBST245"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#19,FC-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-5,1,yes,new,"wall FC, fire control RBST246"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#20,EF-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EF-1,1,yes,new,tag box at the roof fan on the low roof (PROVIDE ROOF CURB)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-2,1,yes,new,"ceiling fan at the area A/B matchline, hub inside area A; also drawn on p22"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-3,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-5,1,yes,new,"ceiling fan at the area A/B matchline, hub inside area A; also drawn on p22"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,CF-6,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-6,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#21,EF-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EF-2,1,yes,new,tag box in the core (6in EA)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-1,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-4,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-2,1,no,view-repeat,fan cut by the matchline at the sheet edge; same unit as on p21
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#22,CF-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|CF-5,1,no,view-repeat,fan cut by the matchline at the sheet edge; same unit as on p21
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#23,SEF-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|SEF-3,1,yes,new,tag box on the roof curb
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#23,SEF-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|SEF-4,1,yes,new,tag box on the roof curb
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#24,SEF-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|SEF-1,1,yes,new,tag box on the roof curb
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#24,SEF-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|SEF-2,1,yes,new,tag box on the roof curb
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,AHU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|AHU-1,1,no,view-repeat,piping plan; same unit as on p17
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,FCU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|FCU-1,1,no,view-repeat,piping plan; same unit as on p17
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,CU-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-4,1,no,view-repeat,piping plan; same unit as on p17
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#25,CU-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-5,1,no,view-repeat,piping plan; same unit as on p17
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,FC-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-1,1,no,view-repeat,piping plan; same unit as on p18
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,FC-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-2,1,no,view-repeat,piping plan; same unit as on p18
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,FC-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-3,1,no,view-repeat,piping plan; same unit as on p18
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,CU-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-3,1,no,view-repeat,piping plan; same unit as on p18
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,CU-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-2,1,no,view-repeat,piping plan; same unit as on p18
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#26,CU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-1,1,no,view-repeat,piping plan; same unit as on p18
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#27,FC-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-4,1,no,view-repeat,piping plan; same unit as on p19
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#27,FC-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-5,1,no,view-repeat,piping plan; same unit as on p19
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,EF-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EF-3,1,yes,new,"tag box with leader to the wall fan, pump room RBST 147"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,CHWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CHWP-2,1,yes,new,tag box at the pump
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,CHWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CHWP-1,1,yes,new,tag box at the pump
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,FCU-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|FCU-2,1,yes,new,"tag box at the ceiling FCU, pump room RBST 147"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#28,SP-1,unscheduled,1,yes,new,sump pump in the sump pit (leader note SUMP PUMP (SP-1) WEIL SN-1408); no schedule row in the set; judgment: kept in scope as a pump
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-3,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-2,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-4,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#64,CU-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-5,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,EF-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EF-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FC-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FC-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-2,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FC-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-3,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-2,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-3,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,AHU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|AHU-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,EDH-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EDH-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,FCU-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|FCU-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-5,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#65,CU-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CU-4,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#67,EF-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EF-2,1,no,discipline-repeat,"electrical connection plan label, janitor room RBST460"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,FC-5,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-5,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,EF-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EF-2,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,FC-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|FC-4,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,EF-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#30|EF-3,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,CHWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CHWP-2,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#69,CHWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#31|CHWP-1,1,no,discipline-repeat,electrical connection plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#225,CH-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CH-1,1,no,discipline-repeat,structural pad label CH-1 (14800 LBS MAX)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#225,CH-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CH-2,1,no,discipline-repeat,structural pad label CH-2 (14800 LBS MAX)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#225,EXISTING CH-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CH-3,1,no,discipline-repeat,structural pad label EXISTING CH-3 (13400 LBS MAX) TO BE REUSED AND RELOCATED TO NEW CONCRETE PAD
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#226,EXISTING CT-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CT-1,1,no,discipline-repeat,cooling tower framing plan leader note EXISTING CT-1 (7140 LBS MAX) TO REMAIN
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#226,CT-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-2,1,no,discipline-repeat,shared leader note CT-2 & CT-3 (7250 LBS MAX) on the cooling tower framing plan
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#226,CT-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-3,1,no,discipline-repeat,shared leader note CT-2 & CT-3 (7250 LBS MAX) on the cooling tower framing plan
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#236,(E) FC-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-2,1,no,demolition,existing FC at its old location; leader note TO BE RELOCATED SEE ACME0201
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#236,(E) FC-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-1,1,no,demolition,existing FC at its old location; leader note TO BE RELOCATED SEE ACME0201
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#236,(E)EF-2,unscheduled,1,no,demolition,existing fan to be replaced with the new fan EF-1 of the p247 fan schedule; no row for EF-2
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CWP-1,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CWP-2,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CWP-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CWP-3,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E)FC-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-2,1,yes,new,existing FC relocated to its new location
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E) CT-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CT-1,1,yes,new,"existing tower to remain, raised on new framing"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-1,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-2,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-3,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,PCHWP-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-4,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E)FC-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-1,1,yes,new,existing FC relocated to its new location
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-1,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-2,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-3,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,SCHWP-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-4,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CT-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-2,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CH-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CH-1,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CT-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-3,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,CH-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CH-2,1,yes,new,
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,EF-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|EF-1,1,yes,new,"inline fan in the exhaust duct (COB fan schedule, not RCC EF-1)"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#237,(E) CH-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CH-3,1,yes,new,existing chiller relocated on its new pad
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E) CWP-1,unscheduled,1,no,demolition,existing condenser water pump hatched for removal (demo note 4); schedule CWP-1 is a new pump
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E) CWP-2,unscheduled,1,no,demolition,existing condenser water pump hatched for removal (demo note 4); schedule CWP-2 is a new pump
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E)PCHP-2,unscheduled,1,no,demolition,existing primary pump hatched for removal (demo note 4)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E)PCHP-1,unscheduled,1,no,demolition,existing primary pump hatched for removal (demo note 4)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E) CT-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CT-1,1,no,demolition,existing tower to remain; demo note 8 relocate on elevated supports
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E)HX-1,unscheduled,1,no,demolition,existing heat exchanger hatched for removal (demo note 9)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E) CT-2,unscheduled,1,no,demolition,existing tower hatched for removal; schedule CT-2 is a new tower
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E)SCHP-1,unscheduled,1,no,demolition,existing secondary pump hatched for removal (demo note 4)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E)SCHP-2,unscheduled,1,no,demolition,existing secondary pump hatched for removal (demo note 4)
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E) CH-1,unscheduled,1,no,demolition,existing chiller hatched for removal; schedule CH-1 is a new chiller
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#238,(E) CH-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CH-3,1,no,demolition,"misnumbered existing chiller: demo note 5 EXISTING CHILLER CH-2 TO REMAIN and relocate; it is the only existing chiller in the schedule, (E) CH-3 (p225 EXISTING CH-3 TO BE REUSED AND RELOCATED)"
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CWP-1,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CWP-2,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CWP-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CWP-3,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-3,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-2,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E)FC-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-2,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-1,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,PCHWP-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|PCHWP-4,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E) CT-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CT-1,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E)FC-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-1,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-1,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CH-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CH-1,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CT-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-2,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-2,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-3,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,SCHWP-4,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|SCHWP-4,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CH-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CH-2,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,CT-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-3,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#239,(E) CH-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CH-3,1,no,view-repeat,piping plan; same unit as on p237
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#258,CT-2,unscheduled,1,no,demolition,leader note EXISTING COOLING TOWER CT-2 TO BE REMOVED ... NEW COOLING TOWER CT-2 at the hatched existing tower; judgment: the existing tower
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,(E)FC-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-2,1,no,discipline-repeat,plumbing plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,(E) CT-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|(E) CT-1,1,no,discipline-repeat,plumbing plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,(E)FC-1,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#247|(E)FC-1,1,no,discipline-repeat,plumbing plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,CT-2,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-2,1,no,discipline-repeat,plumbing plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#259,CT-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-3,1,no,discipline-repeat,plumbing plan label
+088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#260,CT-3,088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.pdf#246|CT-3,1,no,discipline-repeat,plumbing plan label NEW COOLING TOWER CT-3
