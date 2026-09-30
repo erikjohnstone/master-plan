@@ -1,0 +1,14 @@
+# 012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.project.csv — project-question truth for the CONTROL_INTENT goal (goals/CONTROL_INTENT.md, catalogue v1).
+# Authored 2026-09-30 from the set's own PDF text and renders and its sets.json project description, never
+# from pipeline output, with the set's typicals key (typicals tier 2) and before any typical or reading eval ran
+# on the set. What an estimator would answer for this project.
+# Answers: PQ1 bas_in_scope yes|no|unknown · PQ2 owner_criteria dod|va|other|unknown ·
+# PQ3 existing_units keep|integrate|new_controls|unknown|n/a · PQ4 unscheduled_speed constant|unknown|n/a ·
+# PQ5 packaged_pumps not_in_scope|as_drawn|unknown|n/a. "n/a": no keyed unit of this set is one the question
+# decides. A key that looks wrong later is catalogued, never edited (GOAL_LOOPS ANTI-GAMING).
+question,answer,evidence_sheet,evidence_quote,note
+PQ1,yes,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#20,THE COOLING SYSTEM SHALL BE CONTROLLED FROM THE BUILDING AUTOMATION CONTROL SYSTEM (BAS),M701: the chilled water system sequence and the DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM
+PQ2,other,012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#1,OWNER: STATE OF MISSOURI,"a State of Missouri (Department of Mental Health) facility, project managed by the Office of Administration: neither DoD nor VA criteria"
+PQ3,n/a,,,no keyed unit is flagged existing
+PQ4,n/a,,,the pump schedule prints PUMP SPEED (rpm); no keyed fan
+PQ5,n/a,,,no packaged or plumbing-service pump keyed
