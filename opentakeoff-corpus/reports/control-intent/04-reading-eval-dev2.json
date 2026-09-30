@@ -1,0 +1,83 @@
+{
+ "side": "dev2",
+ "mode": "live",
+ "reading": {
+  "total": {
+   "applied-right": 128,
+   "applied-wrong": 0,
+   "INVENTED": 0,
+   "proposal-right": 104,
+   "proposal-wrong": 10,
+   "unresolved": 4,
+   "abstained": 324
+  },
+  "applied": 128,
+  "applied_wrong_rate": 0,
+  "absence": {
+   "applied-right": 0,
+   "applied-wrong": 0,
+   "INVENTED": 0,
+   "proposal-right": 54,
+   "proposal-wrong": 0,
+   "unresolved": 0,
+   "abstained": 0
+  },
+  "uncited_applied": 0,
+  "readers": {
+   "r0": {
+    "right": 139,
+    "wrong": 6,
+    "abstained": 425,
+    "unverified": 0,
+    "undecided-key": 0
+   },
+   "r1": {
+    "right": 309,
+    "wrong": 3,
+    "abstained": 178,
+    "unverified": 80,
+    "undecided-key": 0
+   },
+   "r2a": {
+    "right": 166,
+    "wrong": 9,
+    "abstained": 351,
+    "unverified": 36,
+    "undecided-key": 0
+   },
+   "r2b": {
+    "right": 184,
+    "wrong": 7,
+    "abstained": 311,
+    "unverified": 37,
+    "undecided-key": 23
+   }
+  }
+ },
+ "typical": {
+  "instances": 202,
+  "exact": 147,
+  "option_wrong": 29,
+  "wrong_typical": 8,
+  "unresolved": 16,
+  "unmatched": 2,
+  "exact_pct": 0.7277227722772277,
+  "key_typical": 156,
+  "key_none": 46,
+  "unresolved_dishonest": 2,
+  "rests_on_unprinted": 13,
+  "exact_with_default": 81
+ },
+ "control_drawing_instances": null,
+ "calls": {
+  "r1.replayed": 40,
+  "r1.live": 1,
+  "r1.not_recorded": 0,
+  "r1.failed": 0,
+  "r2.replayed": 128,
+  "r2.live": 2,
+  "r2.not_recorded": 0,
+  "r2.failed": 0
+ },
+ "errors": 2
+}

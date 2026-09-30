@@ -279,6 +279,17 @@ export function selectAssembly(instance: Instance, library: readonly AssemblyDef
     };
   }
 
+  // The unit's own row shows it is a kind no typical of the library fits
+  // (a duct heater among the unit heaters): no typical, and why (a user's
+  // own choice of assembly still wins, below).
+  const noTypical = instance.intent?.no_typical;
+  if (noTypical && !override?.assembly) {
+    return {
+      ...base, ...empty, assembly: null, selected_by: "rule", reason: `${noTypical.rule}: ${noTypical.basis}`, status: "no_assembly",
+      intent: [{ target: "typical", value: false, source: noTypical.source, rule: noTypical.rule, basis: noTypical.basis, cites: noTypical.cites }],
+    };
+  }
+
   if (override?.assembly) {
     const def = library.filter((a) => a.id === override.assembly!.id && (!override.assembly!.version || a.version === override.assembly!.version));
     const pick = latest(def)[0];

@@ -157,8 +157,8 @@ export interface ApplicationRecord {
   intent?: IntentUse[];
 }
 
-/** One control-intent fact a record used: its target ("scope", "attr.<id>"
- * or "opt.<id>"), value, source, rule, basis and cites. */
+/** One control-intent fact a record used: its target ("scope", "typical",
+ * "attr.<id>" or "opt.<id>"), value, source, rule, basis and cites. */
 export interface IntentUse {
   target: string;
   value: number | string | boolean | null;

@@ -7165,3 +7165,70 @@ matches widen the gap. It is AS-117.
 **Scorer (disclosed, eval-only).** `reconcile-eval.mjs --check` prints and writes the totals and which documents
 errored, never a document's own numbers. It also exits once its output has drained: exiting at once cut a long piped
 reply short. Rescoring 4d16d7e's dev runs with it gives byte-identical output.
+
+## AS-121: typicals tier 2, first measure on eight new documents (MEASURE NOTE)
+
+**Keys:** `keys/<id>.typicals.csv` and `keys/<id>.project.csv` for the binding tier 2's dev documents (009_FL, 011_IL,
+012_MO, 01_NY, 028_TX, 061_IA, 06_MO, 16_NV; 202 instances), authored from renders and the PDFs' own text and
+committed (d12f7ab) before any typical or reading eval ran on them. Each typicals key discloses its exposure: until
+dev 2 was drawn these were control-intent unseen sets, the unseen audit showed 104 of the readers' applied decisions
+on seven of them (all judged right by hand), and the finder, binder and two reader fixes were drawn in part from them.
+The measure is first for the typicals, not for those stages.
+
+**First measure (committed code, 877ce52; answers from the project keys):**
+- R0 alone: GATE C 78/202 (38.6%).
+- With the model readers (live, recorded in `runs/`): 123/202 (60.9%); 129 readings applied, 128 right, 1 wrong
+  (CI-67); option-wrong 36, typical-wrong 25, unresolved 16, unmatched 2.
+
+**After AS-122 to AS-125 and CI-66 to CI-68:** 147/202 (72.8%); 128 applied, 0 wrong. Dev (tier 1) unchanged
+(227/244; 296 applied, 0 wrong); held-out unchanged (35/91, aggregates); the unseen audit unchanged (59 of 59 right).
+
+**What is left on dev 2** (report `reports/control-intent/04-reading-eval-dev2.md`):
+- 16 units wait for an attribute no schedule prints (energy recovery, a fan's VFD, a fan coil's ECM motor); the readers
+  answer roles and options only, never these (next).
+- Options the readers do not settle: 011_IL's heat pumps' setpoint adjustment (15; "SETPOINTS SHALL BE ADJUSTABLE AT
+  OPERATOR'S TERMINAL", printed in one open document only), 012_MO's chiller and tower valves (no reading question for
+  modulating isolation; towers' bypass and cell isolation valves), 061_IA's heat exchangers' isolation valves.
+- Typicals v1 cannot express: 06_MO's VRF system (HP-1/2, FCU-3 keyed vrf-outdoor / vrf-indoor, scheduled under HEAT
+  PUMP and FAN COIL titles), 061_IA's water-to-water heat pump (keyed chiller). 028_TX's two gas unit heaters on their
+  own thermostats with nothing in the drawings about their controls.
+- 2 are the key's errors (AS-122).
+
+## AS-122: typicals tier-2 key error: 06_MO's VAV-5 and VAV-6 keyed electric reheat; their rows print none (KEY ERROR)
+
+`keys/06_MO_NatlGuard_JeffCity_CST_Addition.typicals.csv` keys VAV-5 and VAV-6 `vav-reheat-electric` with scr_heat.
+Their rows on page 74 print N/A under ELECTRIC HEAT (KW), 24 V, and cite note 2 only (the electric boxes cite "1,2",
+note 1 being the SCR controller); the attribute key (AS-17) reads heat_type none. They are cooling-only boxes, and the
+pipeline's `vav-cooling-only` is right. The basis of the other seven boxes was copied onto them. Not edited (the
+catalogue is the record): the eval counts both as wrong typicals.
+
+## AS-123: an electric duct heater took the fan-forced unit heater typical (FIXED, this commit)
+
+009_FL's EDH-1 to EDH-5 (table "ELECTRIC DUCT HEATER") and 06_MO's EDH-1 ("DUCT MOUNTED WITH DUCT FLANGE
+CONNECTIONS") are read under UNIT_HEATER, and took `unit-heater`: a fan relay, fan start and an OFF-AUTO switch for a
+heater with no fan. v1 has no duct heater typical; the keys say none.
+
+**Change:** a unit's intent may say no typical fits it (`no_typical`, controlIntent/intent.ts); selection then gives
+the record `no_assembly` with the reason (select.ts; a user's own choice still wins). The row reader's
+`row.duct_heater`: a heater whose schedule's title calls it a duct heater, or whose TYPE / DESCRIPTION / MOUNTING cell
+says duct mounted. Not out of scope: 009_FL's are on the BAS. Census over the 56 open cached documents: these 6 units
+only. Tests: rowReader and catalogue tests; mutations (rule off, cell off, selection ignores it, beats a user's
+choice) each fail a test.
+
+## AS-124: fans an electrical schedule describes as "AHU SUPPLY FAN" took typicals of their own (FIXED, this commit)
+
+061_IA's EQUIPMENT SCHEDULE lists AHU-A's fan array as SF-1 to SF-6 ("AHU SUPPLY FAN") and RF-1 to RF-4 ("AHU RETURN
+FAN"); each took `fan-variable`, pricing AHU-A's fans twice. `row.component_of` read only a SERVICE, SYSTEM or
+LOCATION naming the air handler.
+
+**Change:** a fan whose DESCRIPTION, TYPE, SERVICE or SYSTEM calls it an air handler's supply, return or relief fan is
+that air handler's part when the words name a scheduled one ("AHU-2 SUPPLY FAN") or the set schedules one of the kind
+named. Exhaust fans are not read ("AHU ROOM EXHAUST FAN" is a room's); two air handlers and no mark decide nothing.
+Census over the 56 open documents: 061_IA's 10 fans only. Tests and mutations as above.
+
+## AS-125: a VAV box's schedule note "PROVIDE WITH SCR CONTROLLER FOR ELECTRIC HEAT" was not read (FIXED, this commit)
+
+06_MO's seven electric boxes cite that note; scr_heat stayed at its default (staged) because the readers read the
+control drawings, which do not say. **Change:** `row.scr_heat`: a VAV box's or fan coil's own note or REMARK /
+CONTROL cell printing an SCR (never "NO SCR"). Dev 2: +7 exact. Recording note: a decided option drops its reading
+question, which changes those units' model requests; the 3 new requests were recorded live.

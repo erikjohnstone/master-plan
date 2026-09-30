@@ -37,6 +37,9 @@ export interface IntentFact<V> {
 export interface UnitIntent {
   /** The unit is outside the BAS scope: it takes no controls typical. */
   out_of_scope?: IntentFact<true>;
+  /** The unit is a kind no typical of the library fits (an electric duct
+   * heater under the unit heaters): it takes none, and its record says why. */
+  no_typical?: IntentFact<true>;
   /** Attributes its row leaves unknown, decided elsewhere (never one the row
    * prints). */
   attributes?: Record<string, IntentFact<Value>>;
@@ -51,6 +54,7 @@ export function mergeIntents(...intents: ReadonlyArray<UnitIntent | undefined>):
   for (const it of intents) {
     if (!it) continue;
     if (it.out_of_scope && !out.out_of_scope) out.out_of_scope = it.out_of_scope;
+    if (it.no_typical && !out.no_typical) out.no_typical = it.no_typical;
     for (const [k, f] of Object.entries(it.attributes ?? {})) {
       out.attributes ??= {};
       if (!(k in out.attributes)) out.attributes[k] = f;
@@ -60,7 +64,7 @@ export function mergeIntents(...intents: ReadonlyArray<UnitIntent | undefined>):
       if (!(k in out.options)) out.options[k] = f;
     }
   }
-  return out.out_of_scope || out.attributes || out.options ? out : undefined;
+  return out.out_of_scope || out.no_typical || out.attributes || out.options ? out : undefined;
 }
 
 /** A fact's short label for a record's reason and the report. */

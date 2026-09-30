@@ -13,11 +13,21 @@
 //                       variable ("CONSTANT", "CV", "VARIABLE") → vfd
 //   row.not_used        a cell that reads exactly "NOT USED" → no unit
 //   row.component_of    a fan whose SERVICE / SYSTEM names a scheduled air
-//                       handler, or whose LOCATION puts it in one: its
+//                       handler, or whose LOCATION puts it in one, or whose
+//                       DESCRIPTION / TYPE calls it an air handler's supply,
+//                       return or relief fan ("AHU SUPPLY FAN") naming a
+//                       scheduled one or in a set that schedules one: its
 //                       points are the air handler's
+//   row.duct_heater     a heater its schedule's title calls a duct heater, or
+//                       whose row prints it duct mounted: v1's unit heater
+//                       typical is a fan-forced heater's, and v1 has no duct
+//                       heater typical → no typical, and why
 //   row.standalone      a note or remark: "STANDALONE", "NOT CONTROLLED BY
 //                       (THE) DDC / BAS / BMS …" → outside the BAS scope
 //   row.modulating_valve a unit heater note: a modulating (control) valve
+//   row.scr_heat        a VAV box's or fan coil's note or remark printing an
+//                       SCR ("PROVIDE WITH SCR CONTROLLER FOR ELECTRIC HEAT")
+//                       → its electric heat is SCR-modulated
 //   row.motorized_damper a fan's damper cell: "MOTORIZED"
 // A value the normalizer already read is never replaced (C12): these rules
 // fill what the row leaves unknown or decide options the library leaves to
@@ -38,6 +48,15 @@ const clean = (s: unknown) => String(s ?? "").replace(/\s+/g, " ").trim();
 const canonTag = (t: string) => String(t ?? "").toUpperCase().replace(/[‐-―−﹘﹣－]/g, "-").replace(/\s+/g, "");
 
 const AIR_HANDLERS = new Set(["AHU", "RTU", "DOAS", "DOAH_UNIT", "DOAH_HANDLING", "OUTDOOR_AIR_UNIT"]);
+/** An air handler's own fan, in a description ("AHU SUPPLY FAN", "AHU-1
+ * RETURN FAN", "AIR HANDLING UNIT RELIEF FAN"): the host's word or mark, then
+ * the fan's part. An exhaust fan is not read: "AHU ROOM EXHAUST FAN" is a
+ * room's. */
+const HOST_FAN_RE = /\b(AHU|RTU|AIR[\s-]*HANDL(?:ING\s+UNIT|ER))S?((?:\s*-\s*|\s+)[A-Z0-9]{1,4}(?:-[A-Z0-9]{1,4})?)?\s+(?:SUPPLY|RETURN|RELIEF)\s+FANS?\b/;
+const HOST_FAMILY: Record<string, string> = { AHU: "AHU", RTU: "RTU" };
+const HEATERS = new Set(["UNIT_HEATER", "CABINET_UNIT_HEATER"]);
+const DUCT_HEATER_TITLE_RE = /\bDUCT[-\s]+(?:MOUNTED\s+)?(?:ELECTRIC\s+)?(?:RE)?HEATERS?\b/;
+const DUCT_MOUNTED_RE = /\bDUCT[-\s]MOUNTED\b|\bIN[-\s]DUCT\b/;
 const CONSTANT_RE = /^(?:CONSTANT(?:\s+(?:SPEED|VOLUME))?|C\.?\s?V\.?|SINGLE[-\s]SPEED|ON\s*\/\s*OFF)$/;
 const VARIABLE_RE = /^(?:VARIABLE(?:\s+(?:SPEED|FREQUENCY(?:\s+DRIVE)?))?|VFD|V\.F\.D\.?|VSD|V\.S\.D\.?)$/;
 const SPEED_HEADER_RE = /\bSPEED\s+CONTROL\b|\bVOLUME\s+CONTROL\b/i;
@@ -46,6 +65,8 @@ const SPEED_HEADER_RE = /\bSPEED\s+CONTROL\b|\bVOLUME\s+CONTROL\b/i;
 const STANDALONE_RE = /\b(?:UNIT|SYSTEM|HEATER|FAN|CONTROLS?|EQUIPMENT)\s+(?:TO\s+BE|SHALL\s+BE|IS)\s+STAND[-\s]?ALONE\b|\bSTAND[-\s]?ALONE\s+(?:UNIT|SYSTEM|CONTROLS?|OPERATION)\b|\bNOT\s+(?:BE\s+)?(?:CONTROLLED|MONITORED)\s+BY\s+(?:THE\s+)?(?:DDC|BAS|BMS|EMS|EMCS|FMCS|BUILDING\s+(?:AUTOMATION|MANAGEMENT))\b|\bNOT\s+CONNECTED\s+TO\s+(?:THE\s+)?(?:DDC|BAS|BMS|EMS|EMCS|FMCS)\b/;
 const MODULATING_VALVE_RE = /\bMODULATING\b[^.]{0,60}\bVALVE\b|\bVALVE\b[^.]{0,30}\bMODULATING\b/;
 const TWO_POSITION_RE = /\b(?:2|TWO)[-\s]?POSITION\b|\bON\s*\/\s*OFF\s+VALVE\b/;
+const SCR_RE = /\bSCR\b|\bSILICON[-\s]CONTROLLED\s+RECTIFIERS?\b/;
+const NO_SCR_RE = /\b(?:NO|WITHOUT|NOT)\s+(?:AN?\s+)?SCR\b/;
 
 const drawingFact = <V>(value: V, rule: string, basis: string, cite: Cite): IntentFact<V> => ({ value, source: "drawing", rule, basis, cites: [cite] });
 
@@ -89,6 +110,31 @@ export function rowIntents(units: readonly RowUnit[]): Map<number, UnitIntent> {
           break;
         }
       }
+      // Its description calls it an air handler's own fan: the one it names,
+      // or the set's one air handler of the kind it names.
+      if (!it.out_of_scope) {
+        for (const [h, v] of Object.entries(u.cells)) {
+          if (!/\bDESCRIPTION\b|\bTYPE\b|\bSERVICE\b|\bSYSTEM\b/i.test(h)) continue;
+          const m = clean(v).toUpperCase().match(HOST_FAN_RE);
+          if (!m) continue;
+          const word = /^AIR/.test(m[1]) ? "AHU" : m[1];
+          const named = m[2] ? airHandlers.get(canonTag(`${word}-${m[2].replace(/^[\s-]+/, "")}`)) : undefined;
+          const ofKind = units.filter((o) => o.family === HOST_FAMILY[word]);
+          const owner = named ?? (!m[2] && ofKind.length === 1 ? ofKind[0].tag : undefined);
+          if (!owner || canonTag(owner) === canonTag(u.tag)) continue;
+          it.out_of_scope = drawingFact(true as const, "drawing_read:row.component_of", `its ${h} reads "${clean(v)}": the fan is ${owner}'s${named ? "" : `, the set's one ${word}`}; its points are the air handler's`, cellCite(u, h));
+          break;
+        }
+      }
+    }
+    // row.duct_heater: a heater in another unit's duct, with no fan of its own.
+    if (!it.out_of_scope && HEATERS.has(u.family)) {
+      const title = clean(u.table_title).toUpperCase();
+      const cell = Object.entries(u.cells).find(([h, v]) => /\bTYPE\b|\bDESCRIPTION\b|\bMOUNT/i.test(h) && DUCT_MOUNTED_RE.test(clean(v).toUpperCase()));
+      if (DUCT_HEATER_TITLE_RE.test(title) || cell) {
+        const why = cell ? `its ${cell[0]} reads "${clean(cell[1])}"` : `its schedule is titled "${clean(u.table_title)}"`;
+        it.no_typical = drawingFact(true as const, "drawing_read:row.duct_heater", `${why}: a duct heater, with no fan of its own; v1's unit heater typical is a fan-forced heater's, and v1 has no duct heater typical`, cell ? cellCite(u, cell[0]) : cellCite(u, "(title)"));
+      }
     }
     // row.standalone: the row's own notes or remarks say it is off the BAS.
     if (!it.out_of_scope) {
@@ -126,6 +172,15 @@ export function rowIntents(units: readonly RowUnit[]): Map<number, UnitIntent> {
           }
         }
       }
+      // row.scr_heat: a note or remark the row cites prints an SCR.
+      if (u.family === "VAV" || u.family === "FCU") {
+        const texts = [
+          ...(u.notes ?? []).map((n) => ({ text: n.text, where: `note ${n.id}`, cite: noteCite(u, n) })),
+          ...Object.entries(u.cells).filter(([h]) => /REMARK|NOTE|COMMENT|CONTROL/i.test(h)).map(([h, v]) => ({ text: v, where: `its ${h}`, cite: cellCite(u, h) })),
+        ];
+        const hit = texts.find((t) => { const s = clean(t.text).toUpperCase(); return SCR_RE.test(s) && !NO_SCR_RE.test(s); });
+        if (hit) it.options = { ...(it.options ?? {}), scr_heat: drawingFact(true, "drawing_read:row.scr_heat", `${hit.where}: "${clean(hit.text).slice(0, 160)}"`, hit.cite) };
+      }
       // row.motorized_damper: a fan's damper cell.
       if (u.family === "FAN") {
         for (const [h, v] of Object.entries(u.cells)) {
@@ -136,7 +191,7 @@ export function rowIntents(units: readonly RowUnit[]): Map<number, UnitIntent> {
         }
       }
     }
-    if (it.out_of_scope || it.attributes || it.options) out.set(u.index, it);
+    if (it.out_of_scope || it.no_typical || it.attributes || it.options) out.set(u.index, it);
   }
   return out;
 }

@@ -5,11 +5,12 @@
 // its attribute key keys.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { KEY_COLUMNS, parseAttrKeyCsv } from "../scripts/assemblies-attr-eval.mjs";
-import { gateVerdict, parseOptions, parseTypicalKeyCsv, scoreTypicalSet, summarize, TYPICAL_KEY_COLUMNS } from "../scripts/assemblies-typical-eval.mjs";
+import { gateVerdict, parseOptions, parseTypicalKeyCsv, scoreTypicalSet, setPdfResolver, summarize, TYPICAL_KEY_COLUMNS } from "../scripts/assemblies-typical-eval.mjs";
 import { sanitizeAssemblyDefinitions } from "../../web/src/lib/assemblies/schema.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -106,4 +107,19 @@ test("every committed typicals key reads, names v1's typicals and all their opti
     }
     assert.equal(seen.size, keyed.size, `${f}: keys ${seen.size} of the attribute key's ${keyed.size} instances`);
   }
+});
+
+test("live readings render a set's own PDFs wherever the corpus keeps them: raw/ or bulk/", () => {
+  const corpus = mkdtempSync(join(tmpdir(), "typical-eval-corpus-"));
+  const bulk = join(corpus, "bulk", "HVAC_BAS_Plan_Sets_Vol2");
+  mkdirSync(bulk, { recursive: true });
+  mkdirSync(join(corpus, "raw"));
+  writeFileSync(join(bulk, "b.pdf"), "%PDF");
+  writeFileSync(join(corpus, "raw", "r.pdf"), "%PDF");
+  const spec = { root: join(corpus, "gone"), sets: [{ id: "B", files: ["b.pdf"] }, { id: "R", files: ["r.pdf"] }] };
+  assert.equal(setPdfResolver(corpus, spec, "B")("b.pdf"), join(bulk, "b.pdf"));
+  assert.equal(setPdfResolver(corpus, spec, "R")("r.pdf"), join(corpus, "raw", "r.pdf"));
+  assert.equal(setPdfResolver(corpus, spec, "B")("r.pdf"), join(corpus, "raw", "r.pdf"));
+  assert.equal(setPdfResolver(corpus, spec, "B")("missing.pdf"), null);
+  assert.equal(setPdfResolver(corpus, spec, "unknown")("b.pdf"), null);
 });

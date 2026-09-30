@@ -119,6 +119,18 @@ test("R0: a points list's software-function columns (TEMPERATURE ECONOMIZER, ENT
   assert.equal(b.answer, "yes", "a sequence that says so still does");
 });
 
+test("R0: a relief damper that holds the return fan plenum's pressure is the return fan's, not a relief damper controlling building pressure", () => {
+  // 061_IA's AHU-A (dev 2): "RELIEF DAMPER (AE-1) SHALL MODULATE TO MAINTAIN
+  // PRESSURE SETPOINT IN THE RETURN FAN PLENUM (PTE-2)" (Guideline 36's
+  // return fan control); the option is buiPreCon's building pressure relief.
+  const plenum = packet("seq", "AHU CONTROLS SEQUENCE", [sp("1. RELIEF DAMPER (AE-1) SHALL MODULATE TO MAINTAIN PRESSURE SETPOINT IN THE RETURN FAN PLENUM (PTE-2) AT OR BELOW 0.1\" W.C. (ADJ.).", 100, 100)], "sequence");
+  const [a] = readR0({ tag: "AHU-A", family: "AHU" }, [bound(plenum)], [opt("relief_damper")], TERM_LIST);
+  assert.notEqual(a.answer, "yes", "the return fan's relief damper is no building pressure relief");
+  const building = packet("seq2", "AHU CONTROLS SEQUENCE", [sp("THE RELIEF DAMPER SHALL MODULATE TO MAINTAIN BUILDING STATIC PRESSURE AT 0.05\" W.C.", 100, 100)], "sequence");
+  const [b] = readR0({ tag: "AHU-A", family: "AHU" }, [bound(building)], [opt("relief_damper")], TERM_LIST);
+  assert.equal(b.answer, "yes", "a relief damper holding building pressure still is");
+});
+
 test("R0: a monitored point is the unit's own points list's to decide: a duct detector the list omits is no BAS point; one it lists is; a proposal's list decides nothing", () => {
   const seq = packet("seq", "AHU SEQUENCE OF OPERATION", [sp("WHEN SMOKE IS DETECTED BY DUCT SMOKE DETECTOR, SD, THE FANS SHALL STOP AND AN ALARM SHALL BE SENT TO THE FIRE ALARM SYSTEM.", 100, 100)], "sequence");
   const omits = packet("pts", "POINTS LIST FOR AHU", [sp("SUPPLY FAN STATUS BI-1", 100, 100), sp("MIXED AIR LOW LIMIT BI-2", 100, 130)], "points");

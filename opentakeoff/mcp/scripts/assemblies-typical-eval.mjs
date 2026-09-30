@@ -61,6 +61,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { canonTag, keyTables, matchItem, parseAttrKeyCsv, snapshotInChild } from "./assemblies-attr-eval.mjs";
+import { resolveSetFiles } from "./corpusFiles.mjs";
 import { canonicalAttributeFor } from "../../web/src/lib/assemblies/attributes.ts";
 import { applyAssemblies, rowCite } from "../../web/src/lib/assemblies/apply.ts";
 import { envFor, run } from "../../web/src/lib/assemblies/select.ts";
@@ -386,6 +387,19 @@ export function parseProjectKeyCsv(text) {
   return answers;
 }
 
+/** A set's PDF by file name, wherever the corpus keeps it (raw/ or bulk/),
+ * resolved as every other instrument resolves it (corpusFiles.mjs); a name
+ * the set does not list is looked up in raw/. */
+export function setPdfResolver(corpus, spec, id) {
+  const set = spec.sets.find((s) => s.id === id);
+  const byName = new Map((set ? resolveSetFiles(corpus, spec, set) : []).map((f) => [f.split(/[\\/]/).pop(), f]));
+  return (file) => {
+    const p = byName.get(file);
+    if (p && existsSync(p)) return p;
+    return existsSync(join(corpus, "raw", file)) ? join(corpus, "raw", file) : null;
+  };
+}
+
 /** The control-drawing readings for the eval (goals/CONTROL_INTENT.md C10):
  * R0 always; R1/R2 from the recorded runs (reports/control-intent/runs/
  * <set>.jsonl), and in live mode through the platform endpoint, recording
@@ -398,7 +412,7 @@ export async function readingTools(corpus, mode) {
   const live = mode === "live";
   if (live && !process.env.CEREBRAS_API_KEY) throw new Error("--readings live needs CEREBRAS_API_KEY");
   const transport = live ? httpTransport({ endpoint: process.env.OPENTAKEOFF_AI_ENDPOINT || "https://api.cerebras.ai", apiKey: process.env.CEREBRAS_API_KEY }) : null;
-  const render = live ? pdfCropRenderer((file) => (existsSync(join(corpus, "raw", file)) ? join(corpus, "raw", file) : null)) : null;
+  const spec = live ? JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8")) : null;
   return {
     async read(id, project, library, settings) {
       const path = join(dir, `${id}.jsonl`);
@@ -406,11 +420,18 @@ export async function readingTools(corpus, mode) {
       // Read as every surface reads: before the project's settings and
       // answers (mcp/src/assemblies.ts sessionControlReadings).
       void settings;
-      const readings = await readControlIntent({ project, library }, {
-        store, transport, render,
-        readers: mode === "r0" ? { r1: false, r2: false } : undefined,
-        concurrency: 6,
-      });
+      // Live, the vision reader renders the set's own PDFs, raw/ or bulk/.
+      const render = live ? pdfCropRenderer(setPdfResolver(corpus, spec, id)) : null;
+      let readings;
+      try {
+        readings = await readControlIntent({ project, library }, {
+          store, transport, render,
+          readers: mode === "r0" ? { r1: false, r2: false } : undefined,
+          concurrency: 6,
+        });
+      } finally {
+        await render?.close();
+      }
       if (live) {
         // The store keeps exactly the runs this reading pinned: a run an
         // earlier prompt or packet asked for is never replayed again.
@@ -420,7 +441,7 @@ export async function readingTools(corpus, mode) {
       }
       return readings;
     },
-    async close() { await render?.close(); },
+    async close() {},
   };
 }
 

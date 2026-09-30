@@ -72,6 +72,35 @@ test("PQ2 dod sets UFC minimum points on HVAC units and HVAC-service pumps only 
   assert.deepEqual([2, 3, 4].map((i) => m.has(i)), [false, false, false], "unknown service, plumbing and fan typicals without the option are untouched");
 });
 
+// 06_MO (dev 2): SP-1 on the plumbing sheet's SINK PUMP SCHEDULE, TYPE
+// "PACKAGED SYSTEM SINK DRAIN PUMP"; keyed "none" under PQ5 not_in_scope.
+test("PQ5 plumbing words: a sink drain, grinder or lift station pump; a heat sink loop pump is HVAC", () => {
+  const sink = unit(0, "SP-1", "PUMP", { cells: { TYPE: "PACKAGED SYSTEM SINK DRAIN PUMP" }, table_title: "SINK PUMP SCHEDULE" });
+  const grinder = unit(1, "GP-1", "PUMP", { attributes: { service: { value: "GRINDER" } } });
+  const lift = unit(2, "LP-1", "PUMP", { cells: { DESCRIPTION: "SEWAGE LIFT STATION PUMP" } });
+  const heatSink = unit(3, "HSP-1", "PUMP", { attributes: { service: { value: "HEAT SINK LOOP" } } });
+  assert.match(plumbingService(sink) ?? "", /TYPE reads "PACKAGED SYSTEM SINK DRAIN PUMP"/);
+  assert.ok(plumbingService(grinder) && plumbingService(lift));
+  assert.match(plumbingService(unit(4, "SP-2", "PUMP", { table_title: "SINK PUMP SCHEDULE" })) ?? "", /titled "SINK PUMP SCHEDULE"/);
+  assert.equal(plumbingService(heatSink), null);
+  const m = answerIntents([sink, grinder, lift, heatSink], { PQ5: "not_in_scope" }, LIB);
+  assert.deepEqual([0, 1, 2, 3].map((i) => Boolean(m.get(i)?.out_of_scope)), [true, true, true, false]);
+});
+
+test("selection: a kind no typical fits → no_assembly with the reason; the estimator's own choice still wins", () => {
+  const base = { scope: { building: null, floor: null, system: null }, cites: [cite] };
+  const fact = { value: true as const, source: "drawing" as const, rule: "drawing_read:row.duct_heater", basis: "a duct heater", cites: [cite] };
+  const edh = { tag: "EDH-1", family: "UNIT_HEATER", attributes: {}, ...base, intent: { no_typical: fact } };
+  const rec = selectAssembly(edh, LIB);
+  assert.equal(rec.status, "no_assembly");
+  assert.equal(rec.assembly, null);
+  assert.match(rec.reason ?? "", /^drawing_read:row\.duct_heater: a duct heater$/);
+  assert.equal(rec.intent?.[0].target, "typical");
+  const chosen = selectAssembly(edh, LIB, {}, { tag: "EDH-1", reason: "estimator", assembly: { id: "unit-heater" } });
+  assert.equal(chosen.assembly?.id, "unit-heater");
+  assert.equal(chosen.selected_by, "user");
+});
+
 test("selection: out of scope → not_in_scope; a project option fills a default; a fact contradicting the schedule is a conflict", () => {
   const base = { scope: { building: null, floor: null, system: null }, cites: [cite] };
   const out = selectAssembly({ tag: "AHU-1", family: "AHU", attributes: {}, ...base, intent: { out_of_scope: { value: true, source: "project", rule: "project_answer:PQ1=no", basis: "no BAS", cites: [] } } }, LIB);

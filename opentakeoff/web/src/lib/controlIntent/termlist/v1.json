@@ -30,7 +30,8 @@
     "dev-wire-to": "dev documents of 2 drafters print a wiring callout beside a safety device: 'WIRE TO STARTER' (atkins 094), 'WIRED TO THE VFD' (smithgroup federal-mech)",
     "ufgs-230900-names": "UFGS 23 09 00 and 23 09 23.02 name the building control system and its parts: DDC, Building Control System (BCS), Utility Monitoring and Control System (UMCS)",
     "dev-bas-commands": "dev documents of 3 drafters make the control system the subject of a control act: 'THE BMS SHALL …' (smithgroup federal-mech), 'THE DDC CONTROLLER SHALL …' (musgrove-engineering itd-d1-lab), 'FMCS SHALL …' (imeg 040)",
-    "unseen-points-function-columns": "a VA points list prints the software functions as columns (SCHEDULE START / STOP, DUTY CYCLE, TEMPERATURE ECONOMIZER, ENTHALPY ECONOMIZER, TEMPERATURE RESET, DEMAND LIMITING …) and marks each column row by row; a column's label names what the column marks, not what the unit has (an unseen document, 05_MO, sheets 50, 52 and 54; CI-64)"
+    "unseen-points-function-columns": "a VA points list prints the software functions as columns (SCHEDULE START / STOP, DUTY CYCLE, TEMPERATURE ECONOMIZER, ENTHALPY ECONOMIZER, TEMPERATURE RESET, DEMAND LIMITING …) and marks each column row by row; a column's label names what the column marks, not what the unit has (an unseen document, 05_MO, sheets 50, 52 and 54; CI-64)",
+    "g36-return-fan": "ASHRAE Guideline 36 return fan control: with a return fan, the relief (exhaust) damper modulates to hold the return fan's discharge (plenum) static pressure, as part of the return fan's sequence; a relief damper controlling building pressure (buiPreCon ReliefDamper) is the arrangement without one (dev 2: 061_IA's AHU-A, 'RELIEF DAMPER (AE-1) SHALL MODULATE TO MAINTAIN PRESSURE SETPOINT IN THE RETURN FAN PLENUM')"
   },
   "role": {
     "not_connected": [
@@ -511,6 +512,15 @@
           "re": "\\bRELIEF\\s+(?:AIR\\s+)?DAMPERS?\\b",
           "sources": [
             "lib"
+          ]
+        }
+      ],
+      "traps": [
+        {
+          "id": "return_plenum",
+          "re": "\\bRELIEF\\s+(?:AIR\\s+)?DAMPERS?\\b[^.;]{0,90}\\bRETURN\\s+(?:FAN\\s+|AIR\\s+)?(?:DISCHARGE\\s+)?PLENUM\\b|\\bRETURN\\s+(?:FAN\\s+|AIR\\s+)?(?:DISCHARGE\\s+)?PLENUM\\b[^.;]{0,90}\\bRELIEF\\s+(?:AIR\\s+)?DAMPERS?\\b",
+          "sources": [
+            "g36-return-fan"
           ]
         }
       ],

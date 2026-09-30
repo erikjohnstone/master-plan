@@ -1,5 +1,24 @@
 # Changelog
 
+- **Assemblies on eight new documents: typicals tier 2 keyed, measured, and
+  their general misses fixed.** Typicals and project-question keys for the
+  binding tier 2's dev documents (202 units). With the model readers, units
+  whose typical and every option are right: 60.9% → 72.8% (123 → 147 of
+  202); readings applied 128, 0 wrong (was 1 wrong). Dev (227/244), held-out
+  (35/91, aggregates) and the unseen audit (59 of 59 right) unchanged.
+  - An electric duct heater no longer takes the fan-forced unit heater
+    typical: no typical fits it, and its record says why.
+  - Fans a schedule describes as an air handler's supply or return fan
+    ("AHU SUPPLY FAN") are that air handler's parts, not priced twice.
+  - A VAV box's note "PROVIDE WITH SCR CONTROLLER" gives it SCR heat; a sink
+    drain pump is a plumbing pump under the packaged-pumps answer; a relief
+    damper holding the return fan plenum is not the building-pressure one.
+  - The reading eval's live runs render PDFs kept under bulk/ too.
+  (`web/src/lib/controlIntent/rowReader.ts`, `intent.ts`, `catalogue.ts`,
+  `termlist/v1.json`, `web/src/lib/assemblies/select.ts`, `apply.ts`,
+  `mcp/scripts/assemblies-typical-eval.mjs`; ASSEMBLIES_BUG_CATALOGUE
+  AS-121 to AS-125, CONTROL_INTENT_BUG_CATALOGUE CI-66 to CI-68.)
+
 - **Control drawings: each unit is linked to far more of its own sequences,
   diagrams and points lists, on documents no rule was drawn from.**
   Measured with the binding eval on every tier (8d46f5c → this commit, the

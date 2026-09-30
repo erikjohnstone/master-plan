@@ -1898,3 +1898,27 @@ another kind of unit by is about that kind …". A mutation dropping the letters
 - Dev reading eval and GATE C: byte-identical with and without the change (296 applied, 0 wrong; 227/244).
 - Unseen audit: the same 59 decisions.
 - Held-out reading (aggregates): the same (5 applied right, 0 wrong; 20 proposals right, 0 wrong).
+
+## CI-66: PQ5's plumbing words missed a sink drain pump (FIXED, this commit)
+
+06_MO's SP-1 (plumbing sheet, SINK PUMP SCHEDULE, TYPE "PACKAGED SYSTEM SINK DRAIN PUMP") stayed in scope under PQ5
+not_in_scope. The plumbing-service words gain SINK (never HEAT SINK), DRAIN(AGE), GRINDER, SANITARY, WASTEWATER and
+LIFT STATION. Census of the 56 open cached documents' pumps: SP-1 is the only pump these words reach. Test:
+catalogue.test.ts; mutations dropping SINK or the HEAT SINK guard fail it.
+
+## CI-67: a relief damper holding the return fan plenum's pressure applied as the building-pressure relief damper (FIXED, this commit; term list v1)
+
+061_IA's AHU-A (dev 2): R0 and R1 agreed relief_damper = yes from "RELIEF DAMPER (AE-1) SHALL MODULATE TO MAINTAIN
+PRESSURE SETPOINT IN THE RETURN FAN PLENUM", and it applied (the first applied-wrong reading on dev 2). The option is
+Guideline 36's building pressure relief (buiPreCon ReliefDamper); with a return fan the relief damper is the return
+fan's (its lines come with return_fan). **Change:** a trap, `return_plenum` (source "g36-return-fan"), on
+relief_damper: a relief damper tied to the return (fan) plenum is not the device. Traps are not in the models'
+prompts: no recorded request changes. Dev 2: applied-wrong 1 → 0; dev, held-out and the unseen audit unchanged. Test:
+readers.test.ts; a mutation disabling the trap fails it.
+
+## CI-68: the reading eval's live renderer found only raw/ PDFs (FIXED, this commit; instrument)
+
+`readingTools` rendered crops from `corpus/raw/` alone, so a live run on any set kept under `bulk/` (every tier after
+the first) gave the vision reader no image. It now resolves each set's PDFs as the other instruments do
+(`corpusFiles.mjs`, per set; `setPdfResolver`). Replay is unaffected. Test: assembliesTypicalEval.test.mjs (bulk/,
+raw/, a missing name, an unknown set); a raw-only mutation fails it.

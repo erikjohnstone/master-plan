@@ -114,7 +114,7 @@ export function existingFlag(u: Pick<AnswerUnit, "tag" | "table_title" | "cells"
 
 /** Plumbing or packaged service, from what the row prints: service, remarks
  * and table title. */
-const PLUMBING_RE = /\b(CONDENSATE|SUMP|SEWAGE|SEWER|EJECTOR|DOMESTIC|DHW|PLUMBING|STORM|GREASE|ELEVATOR|IRRIGATION|BOOSTER|DW)\b|HOT\s+WATER\s+RECIRC(ULATION)?\s+\(?DOMESTIC|DOMESTIC\s+HOT\s+WATER/i;
+const PLUMBING_RE = /\b(CONDENSATE|SUMP|SEWAGE|SEWER|EJECTOR|DOMESTIC|DHW|PLUMBING|STORM|GREASE|ELEVATOR|IRRIGATION|BOOSTER|DW|DRAIN(?:AGE)?|GRINDER|SANITARY|WASTEWATER)\b|(?<!\bHEAT\s)\bSINK\b|\bLIFT\s+STATION\b|HOT\s+WATER\s+RECIRC(ULATION)?\s+\(?DOMESTIC|DOMESTIC\s+HOT\s+WATER/i;
 const HVAC_SERVICE_RE = /\b(CHILLED|CHW|CHWS|CHWR|HEATING|HHW|HW|HWS|HOT\s+WATER|CONDENSER|CW|CDW|BOILER|CHILLER|COIL|GLYCOL|PRIMARY|SECONDARY|LOOP|HEAT\s+PUMP|GEOTHERMAL|TOWER)\b/i;
 
 export function plumbingService(u: Pick<AnswerUnit, "attributes" | "cells" | "table_title">): string | null {

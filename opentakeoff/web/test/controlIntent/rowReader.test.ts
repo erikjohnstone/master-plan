@@ -77,6 +77,60 @@ test("row.component_of: a fan whose location is a scheduled air handler is part 
   assert.equal(loose.get(4)?.out_of_scope, undefined, "AHU-1-1 and AHU-11 both read AHU11");
 });
 
+// 061_IA (dev 2): the electrical EQUIPMENT SCHEDULE lists the air handler
+// AHU-A's fan array by DESCRIPTION alone, "AHU SUPPLY FAN" (SF-1 to SF-6) and
+// "AHU RETURN FAN" (RF-1 to RF-4); the set schedules one air handler. Keyed
+// "none": their points are AHU-A's.
+test("row.component_of: a fan its description calls an air handler's supply, return or relief fan", () => {
+  const one = rowIntents([
+    unit(0, "AHU-A", "AHU"),
+    unit(1, "SF-1", "FAN", { cells: { DESCRIPTION: "AHU SUPPLY FAN" } }),
+    unit(2, "RF-1", "FAN", { cells: { DESCRIPTION: "AHU RETURN FAN", NOTES: "1" } }),
+    unit(3, "RLF-1", "FAN", { cells: { TYPE: "AIR HANDLING UNIT RELIEF FAN" } }),
+    // Look-alikes: a room's exhaust fan, a plain exhaust fan, and a supply fan
+    // with no air handler in its words.
+    unit(4, "EF-1", "FAN", { cells: { DESCRIPTION: "AHU ROOM EXHAUST FAN" } }),
+    unit(5, "EF-2", "FAN", { cells: { DESCRIPTION: "EXHAUST FAN" } }),
+    unit(6, "SF-9", "FAN", { cells: { DESCRIPTION: "SUPPLY FAN" } }),
+    unit(7, "EF-3", "FAN", { cells: { DESCRIPTION: "AHU EXHAUST FAN" } }),
+  ]);
+  assert.deepEqual([1, 2, 3].map((i) => one.get(i)?.out_of_scope?.rule), Array(3).fill("drawing_read:row.component_of"));
+  assert.match(one.get(1)!.out_of_scope!.basis, /AHU-A's, the set's one AHU/);
+  assert.deepEqual([0, 4, 5, 6, 7].map((i) => one.has(i)), [false, false, false, false, false], "an exhaust fan is not read as the air handler's");
+  // Two air handlers: the description must name the one it belongs to.
+  const two = rowIntents([
+    unit(0, "AHU-1", "AHU"), unit(1, "AHU-2", "AHU"),
+    unit(2, "SF-1", "FAN", { cells: { DESCRIPTION: "AHU SUPPLY FAN" } }),
+    unit(3, "SF-2", "FAN", { cells: { DESCRIPTION: "AHU-2 SUPPLY FAN" } }),
+    unit(4, "SF-3", "FAN", { cells: { DESCRIPTION: "AHU-9 SUPPLY FAN" } }),
+  ]);
+  assert.equal(two.has(2), false, "which of two air handlers is not said");
+  assert.match(two.get(3)!.out_of_scope!.basis, /the fan is AHU-2's; its points/);
+  assert.equal(two.has(4), false, "an air handler the set does not schedule");
+});
+
+// 009_FL and 06_MO (dev 2): electric duct heaters (EDH-1 …) under the unit
+// heaters, one set's titled "ELECTRIC DUCT HEATER", the other's row printing
+// "DUCT MOUNTED WITH DUCT FLANGE CONNECTIONS". Keyed "none": v1's unit heater
+// typical is a fan-forced heater's (fan start, relay, OFF-AUTO switch).
+test("row.duct_heater: a heater titled or printed as a duct heater takes no typical, and says why", () => {
+  const m = rowIntents([
+    unit(0, "EDH-1", "UNIT_HEATER", { table_title: "ELECTRIC DUCT HEATER" }),
+    unit(1, "EDH-2", "UNIT_HEATER", { table_title: "ELECTRIC HEATER SCHEDULE", cells: { DESCRIPTION: "DUCT MOUNTED WITH DUCT FLANGE CONNECTIONS" } }),
+    // Look-alikes: a unit heater, a cabinet heater with a duct collar, and a
+    // fan listed in a duct heater table.
+    unit(2, "UH-1", "UNIT_HEATER", { table_title: "UNIT HEATER SCHEDULE", cells: { MOUNTING: "CEILING HUNG" } }),
+    unit(3, "CUH-1", "CABINET_UNIT_HEATER", { table_title: "CABINET UNIT HEATER SCHEDULE", cells: { REMARKS: "PROVIDE DUCT COLLAR" } }),
+    unit(4, "EF-1", "FAN", { table_title: "ELECTRIC DUCT HEATER SCHEDULE" }),
+  ]);
+  assert.equal(m.get(0)?.no_typical?.rule, "drawing_read:row.duct_heater");
+  assert.match(m.get(0)!.no_typical!.basis, /titled "ELECTRIC DUCT HEATER"/);
+  assert.match(m.get(1)!.no_typical!.basis, /DESCRIPTION reads "DUCT MOUNTED/);
+  assert.equal(m.get(1)!.no_typical!.cites[0].header, "DESCRIPTION");
+  assert.deepEqual([2, 3, 4].map((i) => m.has(i)), [false, false, false]);
+  assert.equal(m.get(0)?.out_of_scope, undefined, "a duct heater may be on the BAS: it is not out of scope");
+});
+
 test("row.standalone: a statement about the unit or its controls, never a standalone disconnect", () => {
   const note = (id: string, text: string) => ({ id, text });
   const m = rowIntents([
@@ -100,6 +154,24 @@ test("row.modulating_valve and row.motorized_damper read their own printed words
   assert.equal(m.get(1)?.options?.modulating_valve?.value, false);
   assert.equal(m.get(2)?.options?.motorized_damper?.value, true);
   assert.equal(m.has(3), false, "a gravity damper says nothing about a motorized one");
+});
+
+// 06_MO (dev 2): the VARIABLE-AIR-VOLUME BOX SCHEDULE's note 1, "PROVIDE WITH
+// SCR CONTROLLER FOR ELECTRIC HEAT"; its boxes are keyed scr_heat = true.
+test("row.scr_heat: a VAV box's or fan coil's own note or remark printing an SCR", () => {
+  const m = rowIntents([
+    unit(0, "VAV-1", "VAV", { notes: [{ id: "1", text: "PROVIDE WITH SCR CONTROLLER FOR ELECTRIC HEAT." }] }),
+    unit(1, "FCU-1", "FCU", { cells: { REMARKS: "ELECTRIC HEAT WITH SCR CONTROL" } }),
+    // Look-alikes: a note refusing one, an SCR on another kind of unit, and
+    // a VAV box whose notes say nothing of it.
+    unit(2, "VAV-2", "VAV", { notes: [{ id: "2", text: "STAGED ELECTRIC HEAT, NO SCR." }] }),
+    unit(3, "UH-1", "UNIT_HEATER", { notes: [{ id: "3", text: "PROVIDE WITH SCR CONTROLLER." }] }),
+    unit(4, "VAV-3", "VAV", { notes: [{ id: "4", text: "PROVIDE WITH FACTORY MOUNTED DDC CONTROLLER." }] }),
+  ]);
+  assert.equal(m.get(0)?.options?.scr_heat?.value, true);
+  assert.match(m.get(0)!.options!.scr_heat!.basis, /^note 1: "PROVIDE WITH SCR CONTROLLER/);
+  assert.equal(m.get(1)?.options?.scr_heat?.value, true);
+  assert.deepEqual([2, 3, 4].map((i) => m.get(i)?.options?.scr_heat), [undefined, undefined, undefined]);
 });
 
 test("scheduleNotes: the next table's REMARKS label beside the notes ends their width, not the block", () => {

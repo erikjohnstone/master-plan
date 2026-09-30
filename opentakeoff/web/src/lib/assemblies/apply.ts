@@ -620,13 +620,14 @@ export function combineUnitIntent(drawing: UnitIntent | undefined, answers: Unit
   const out: UnitIntent = {};
   const scope = answers?.out_of_scope ?? drawing?.out_of_scope;
   if (scope) out.out_of_scope = scope;
+  if (drawing?.no_typical) out.no_typical = drawing.no_typical;
   const pick = <K extends "attributes" | "options">(k: K) => {
     const m = { ...(answers?.[k] ?? {}), ...(drawing?.[k] ?? {}) } as NonNullable<UnitIntent[K]>;
     if (Object.keys(m).length) out[k] = m;
   };
   pick("attributes");
   pick("options");
-  return out.out_of_scope || out.attributes || out.options ? out : undefined;
+  return out.out_of_scope || out.no_typical || out.attributes || out.options ? out : undefined;
 }
 
 /** Attach each instance's intent: its facts on attributes the row leaves
