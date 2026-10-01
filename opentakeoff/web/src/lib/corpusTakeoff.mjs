@@ -1171,6 +1171,65 @@ export function expandEquipMarks(raw) {
   return expandEquipMarkRange(raw) ?? expandMarkList(raw) ?? runTogetherMarks(raw) ?? expandAmpersandEquipMarks(raw);
 }
 
+/** The marks a set draws whole outside every table (the sheet graph's
+ * drawn-tag census, graph.tags), hyphen- and space-insensitive: the evidence
+ * a row mark "X N-M" is read by (setRangeMarks, AS-116). Null where the graph
+ * carries no census, so a table read alone reads as before. */
+const drawnMarksByGraph = new WeakMap();
+export function setDrawnMarks(graph) {
+  if (!graph || !Array.isArray(graph.tags)) return null;
+  let marks = drawnMarksByGraph.get(graph);
+  if (!marks) {
+    marks = new Set(graph.tags.filter((t) => !t.in_table && !t.sheet_callout)
+      .map((t) => String(t.text || "").toUpperCase().replace(/[\s-]+/g, "")).filter(Boolean));
+    drawnMarksByGraph.set(graph, marks);
+  }
+  return marks;
+}
+
+/** A row mark printed "X N-M" (043_FL's "HWP 1-2" and "CWP 9-10") names X-N
+ * to X-M when the set draws every one of them whole outside its tables and
+ * never X-N-M (AS-116). By its shape alone it is one mark: 26_CA's AHU 2-1 is
+ * level 2's unit 1, and its plans draw AHU 2-1, never AHU-2 and AHU-1. */
+export function setRangeMarks(raw, drawn) {
+  if (!drawn || !drawn.size) return null;
+  const m = String(raw || "").toUpperCase().replace(/[\u2013\u2014]/g, "-").trim()
+    .match(/^([A-Z]{1,8})[\s-]?(\d{1,3})\s*-\s*(\d{1,3})$/);
+  if (!m) return null;
+  const [, pre, a, b] = m;
+  const lo = Number(a), hi = Number(b);
+  if (!(hi > lo && hi - lo <= 20) || /^0/.test(a) || /^0/.test(b)) return null;
+  if (drawn.has(`${pre}${a}${b}`)) return null;
+  const marks = Array.from({ length: hi - lo + 1 }, (_, i) => `${pre}-${lo + i}`);
+  return marks.every((x) => drawn.has(x.replace(/-/g, ""))) ? marks : null;
+}
+
+/** The set's drawn marks as a table's rows may read them (AS-116): null when
+ * the table's "X N-M" rows, read as ranges, would name a unit twice (two rows
+ * whose ranges overlap, or one whose range holds another row's own mark).
+ * Each unit is scheduled once, so overlapping ranges are type codes: 019_FL's
+ * diffusers S1-2, S1-3, S1-4 and S2-4 are four types, not S-1 to S-4. */
+export function tableRangeEvidence(table, drawn) {
+  if (!drawn || !drawn.size) return null;
+  const own = new Set();
+  const ranges = [];
+  for (const row of table?.rows || []) {
+    const key = String(row?.key || "").trim();
+    if (!key) continue;
+    const marks = setRangeMarks(key, drawn);
+    if (marks) ranges.push(marks.map((m) => m.replace(/-/g, "")));
+    else own.add(key.toUpperCase().replace(/[\s-]+/g, ""));
+  }
+  const seen = new Set();
+  for (const marks of ranges) {
+    for (const m of marks) {
+      if (seen.has(m) || own.has(m)) return null;
+      seen.add(m);
+    }
+  }
+  return drawn;
+}
+
 /** Two marks of one family the extraction's key ran together (AS-86): it
  * keys "CH-1 & CH-2" and "CH-1, CH-2" as CH-1CH-2, "B1, B2" as B1B2. Where
  * no cell prints the row's name (itd-d1-lab's canopy hoods print theirs in
@@ -1740,9 +1799,11 @@ export function rowMarkText(text, rowKey, willFilter) {
  * familyTableGate reading), is one line: its slash lists no marks (AS-81).
  * A slash beside a mark printed as one token (GENERAL EXHAUST/EF-1), or
  * between bare marks (AHU 1/AHU 2), lists marks wherever it is printed, so
- * a printed mark always keeps its own tag.
+ * a printed mark always keeps its own tag. With the set's drawn marks
+ * (`drawn`, setDrawnMarks), a mark "X N-M" the set draws as X-N to X-M names
+ * them (AS-116).
  */
-export function splitRowMarks(text, willFilter, wordsNamed = false) {
+export function splitRowMarks(text, willFilter, wordsNamed = false, drawn = null) {
   // In plain type (AS-85), so a range or list printed with another dash
   // glyph reads as one printed with a hyphen.
   text = plainMarkText(text);
@@ -1755,7 +1816,7 @@ export function splitRowMarks(text, willFilter, wordsNamed = false) {
   // split for a key filter, "EF-1, 2" name EF-1 and EF-2.
   const continued = [];
   for (const piece of pieces) continued.push(continuedMark(continued[continued.length - 1], piece) ?? piece);
-  return continued.flatMap((t) => expandEquipMarks(t));
+  return continued.flatMap((t) => setRangeMarks(t, drawn) ?? expandEquipMarks(t));
 }
 
 /** A row's text in the pieces its marks are split from (splitRowMarks), on
@@ -1869,7 +1930,7 @@ function uniqueFamily(graph, spec, family, onEmit = null) {
       // "RETURN"), measured: 16 real rows became 31 items.
       const tagList = countKeyedIdentCol
         ? [String(working).trim()].filter(Boolean)
-        : splitRowMarks(working, willFilter, gate.wordsNamed);
+        : splitRowMarks(working, willFilter, gate.wordsNamed, tableRangeEvidence(table, setDrawnMarks(graph)));
       for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
         // The mark as printed when a status is printed with it, which the

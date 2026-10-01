@@ -8579,3 +8579,38 @@ totals rule is in the one mark check the takeoff and the reconcile share.
 Tests: `web/test/vectorGridPictureSchedule.test.ts` (live): a sheet whose only drawn lines are a border's corner
 says its size and reads its tank schedule picture (EXT 1); with the fix reverted it fails.
 `corpusTakeoffVol2Families`: DOAS-3TOTAL:, DOAS-2 TOTAL: and TOTALS are no unit; its mutant fails it.
+
+## AS-116 — a row naming two units as "X N-M" was one unit: 043_FL's HWP 1-2 and CWP 9-10 (FIXED, this commit)
+
+**Found:** binding tier 3 scored 043_FL at 0%: every keyed pair's instance was "not matched to a schedule row". Its
+MECHANICAL EQUIPMENT SCHEDULE (M600) prints one row "HWP 1-2" (HOT WATER PUMP) and one "CWP 9-10" (CHILLED WATER
+PUMP), and the takeoff counted two units, "HWP1-2" and "CWP9-10". The set's plans and electrical sheets draw HWP-1,
+HWP-2, CWP-9 and CWP-10 (pages 12, 15, 28 and 32), and no sheet prints HWP-1-2. The range rule (AS-75) reads
+"X-N-X-M" and "X-N THRU M"; "X N-M" alone is ambiguous by shape: 26_CA's AHU 2-1 is level 2's unit 1, and 12 open
+documents print marks of this shape, most of them one unit each.
+
+**Change** (`corpusTakeoff.mjs` `setDrawnMarks`, `setRangeMarks`, `splitRowMarks`; `schedulePlanReconcile.mjs`): the
+set decides. A row mark "X N-M" (M > N, at most 20 apart) names X-N to X-M when the sheet graph's drawn-tag census
+(graph.tags, outside every table, no sheet callout) draws every one of them and never draws X-N-M (hyphen- and
+space-insensitive). It never does where the table's ranges would name a unit twice (two rows' ranges overlap, or one holds another row's
+own mark): each unit is scheduled once, so such marks are type codes (`tableRangeEvidence`). Otherwise it is one mark,
+as before; a table read with no census (a graph without tags) reads as
+before. The takeoff, the per-row units (`takeoffUnitsByRow`), the family reconcile and the review lists split a row's
+marks through the same `splitRowMarks`, so all four read the pair alike.
+
+**Measured** (the production sheet graph, Session.graphForPipeline, built for all 12 open documents whose tables print
+a mark of this shape: 009_FL, 019_FL, 028_TX, 043_FL, 053_VA, 05_MO, 06_MO, 100_OH, 12_MT, 21_VA, 26_CA,
+federal-mech; takeoff before and after): only 043_FL changes, HWP1-2 and CWP9-10 out, HWP-1, HWP-2, CWP-9 and CWP-10
+in. 26_CA's 291 units, 21_VA's 88 and 05_MO's ATU-6-7 to ATU-6-12 are unchanged. The first version, without the
+overlap rule, read 019_FL's and federal-mech's diffuser types S1-2, S1-3, S1-4 and S2-4 (their plans draw S1 to S4)
+as S-1 to S-4; the overlap rule was written for that before any commit. No walled document prints the shape in a
+table the census touches (124 walled rows were not built or read).
+
+**Should this be on the shared path? Yes.** It decides how many units a schedule row names, for the takeoff, the
+reconcile and the assemblies alike.
+
+Tests: `corpusTakeoffVol2Families` (AS-116): the pair is read when the census draws HWP-1, HWP-2, CWP-9 and CWP-10;
+one mark each with no census, with one of the marks undrawn, with HWP-1-2 drawn, and when the only drawings are the
+schedule's own text; 019_FL's four diffuser types stay four. Five mutants (an X-N-M drawing ignored, some marks drawn
+instead of every, the schedule's own text counted as a drawing, no overlap rule, the takeoff not given the census) each
+fail it.

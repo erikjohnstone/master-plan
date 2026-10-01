@@ -513,6 +513,33 @@ describe("AS-68 a table titled with the family's name in words is the family's s
     assert.deepEqual(tags("DOAS"), ["DOAS-1", "DOAS-2"]);
   });
 
+  it("reads a row mark X N-M as X-N to X-M only when the set draws them so, and never X-N-M (AS-116)", () => {
+    // 043_FL's MECHANICAL EQUIPMENT SCHEDULE: "HWP 1-2" and "CWP 9-10", one
+    // row each; its plans and electrical sheets draw HWP-1, HWP-2, CWP-9 and
+    // CWP-10, and no sheet prints HWP-1-2.
+    const drawn = (texts: string[], inTable = false) => texts.map((text) => ({
+      text, sheet: "m.pdf#12", role: "plan", in_table: inTable ? { sheet: "m.pdf#23", title: "PUMP SCHEDULE" } : null, sheet_callout: false,
+    }));
+    const pumps = [table("m.pdf#23", "PUMP SCHEDULE", ["HWP 1-2", "CWP 9-10"])];
+    const read = (tags: unknown[]) => {
+      const cats = compileHvacTakeoff(null, { tables: pumps, tags }).categories as Record<string, { items: Array<{ tag: string }> }>;
+      return (cats.PUMP?.items || []).map((i) => i.tag).sort();
+    };
+    assert.deepEqual(read(drawn(["HWP-1", "HWP-2", "CWP-9", "CWP-10"])), ["CWP-10", "CWP-9", "HWP-1", "HWP-2"]);
+    // No census (a table read alone), or one that draws only some of them, or
+    // the mark itself (26_CA's AHU 2-1 is level 2's unit 1): one mark each.
+    assert.deepEqual(read([]), ["CWP 9-10", "HWP 1-2"]);
+    assert.deepEqual(read(drawn(["HWP-1", "CWP-9", "CWP-10"])), ["CWP-9", "CWP-10", "HWP 1-2"].sort());
+    assert.deepEqual(read(drawn(["HWP-1", "HWP-2", "HWP-1-2", "CWP 9-10", "CWP-9", "CWP-10"])), ["CWP 9-10", "HWP 1-2"]);
+    // The schedule's own text is no drawing of the units.
+    assert.deepEqual(read(drawn(["HWP-1", "HWP-2", "CWP-9", "CWP-10"], true)), ["CWP 9-10", "HWP 1-2"]);
+    // Ranges that would name a unit twice are type codes: 019_FL's diffusers
+    // S1-2, S1-3, S1-4 and S2-4 are four types, though its plans draw S1 to S4.
+    const grilles = [table("m.pdf#15", "GRILLE, REGISTER, AND DIFFUSER SCHEDULE", ["S1-2", "S1-3", "S1-4", "S2-4"])];
+    const cats = compileHvacTakeoff(null, { tables: grilles, tags: drawn(["S1", "S2", "S3", "S4"]) }).categories as Record<string, { items: Array<{ tag: string }> }>;
+    assert.deepEqual((cats.GRD?.items || []).map((i) => i.tag).sort(), ["S1-2", "S1-3", "S1-4", "S2-4"]);
+  });
+
   it("reads a relief fan RLF under a fan title only (AS-155)", () => {
     // 07_MO's pictured FAN SCHEDULE: RLF 1 beside EXF 1 to EXF 3.
     assert.deepEqual(compile([table("m.pdf#23", "FAN SCHEDULE", ["RLF 1", "EXF 1"])])("FAN"), ["EXF 1", "RLF 1"]);

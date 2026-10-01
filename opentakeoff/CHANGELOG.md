@@ -1,5 +1,10 @@
 # Changelog
 
+- **A row naming two units as "X N-M" counts both when the set draws them so.** 043_FL schedules its pumps as "HWP 1-2"
+  and "CWP 9-10"; the takeoff counted two units, HWP1-2 and CWP9-10. Where the set's own drawings tag every one of X-N
+  to X-M and never X-N-M, and no two of the table's ranges overlap, the row names each: HWP-1, HWP-2, CWP-9, CWP-10.
+  By its shape alone the mark stays one unit (26_CA's AHU 2-1 is level 2's unit 1), and so do type codes (019_FL's
+  diffusers S1-2, S1-3). The takeoff and the reconcile read it alike. (ASSEMBLIES_BUG_CATALOGUE AS-116.)
 - **A schedule pasted into a sheet as a picture is read, and says so.**
   - vectorgrid found pictured tables and could only report them as raster regions with no cells: 07_MO's M-601 (29
     VAV boxes, tanks, air devices) and 029_ME's ME601 (two boilers, six pumps) gave the takeoff nothing. Now a
