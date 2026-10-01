@@ -64,7 +64,10 @@ const categoriesCsv = arg(process.argv, "--categories");
 const categories = categoriesCsv
   ? categoriesCsv.split(",").map((s) => s.trim()).filter(Boolean)
   : null;
-const familySweepAll = process.argv.includes("--family-sweep-all");
+// MCP's reconcile_schedule_plan sweeps every row of a family unless the
+// caller opts out; the bridge passes a choice only when one was made (AS-117).
+const familySweepAll = process.argv.includes("--family-sweep-all") ? true
+  : process.argv.includes("--no-family-sweep-all") ? false : undefined;
 // MCP's own real default is exhaustive (sweep_schedule_row's tagged_only
 // z.boolean().default(false), mcp/src/tools.ts) — every caller through this
 // CLI (both HTTP-bridged UI reconcile/sweep calls and direct script calls)
@@ -81,7 +84,7 @@ const symbolOptionsRaw = arg(process.argv, "--symbol-options");
 const outPath = arg(process.argv, "--out");
 const pdfs = argsOf(process.argv, "--pdf").map((p) => resolve(p));
 if (!pdfs.length) {
-  console.error("usage: production-graph-cli.mjs --mode graph|compile|sweep|count_marks|reconcile --pdf <path> [--pdf …] [--kind …] [--tag …] [--sweep-options JSON] [--marks a,b] [--family VAV] [--tags a,b] [--family-sweep-all] [--service CHW|HHW] [--out …]");
+  console.error("usage: production-graph-cli.mjs --mode graph|compile|sweep|count_marks|reconcile --pdf <path> [--pdf …] [--kind …] [--tag …] [--sweep-options JSON] [--marks a,b] [--family VAV] [--tags a,b] [--family-sweep-all | --no-family-sweep-all] [--service CHW|HHW] [--out …]");
   process.exit(2);
 }
 if (mode === "compile" && !kind) {

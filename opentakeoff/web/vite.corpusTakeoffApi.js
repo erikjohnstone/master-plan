@@ -75,6 +75,14 @@ export function resolveTsxLoader() {
   );
 }
 
+/** A yes/no request field that may be left unset: "1"/"true" or true is
+ * yes, "0"/"false" or false is no, anything else leaves the default. */
+export function optionalFlag(value) {
+  if (value === true || value === "1" || value === "true") return true;
+  if (value === false || value === "0" || value === "false") return false;
+  return undefined;
+}
+
 function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, marks, family, tags, categories, familySweepAll, evaluationFast, sweepOptions, symbol, onProgress, signal, postGraphTimeoutMs }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
@@ -95,7 +103,9 @@ function runCli({ mode, kind, pdfPaths, outPath, service, basMathOptions, tag, m
     if (family) args.push("--family", family);
     if (tags?.length) args.push("--tags", tags.join(","));
     if (categories?.length) args.push("--categories", categories.join(","));
-    if (familySweepAll) args.push("--family-sweep-all");
+    // Unset leaves MCP's default: a family reconcile sweeps every row (AS-117).
+    if (familySweepAll === true) args.push("--family-sweep-all");
+    else if (familySweepAll === false) args.push("--no-family-sweep-all");
     if (evaluationFast) args.push("--evaluation-fast");
     if (sweepOptions) args.push("--sweep-options", JSON.stringify(sweepOptions));
     if (symbol) {
@@ -266,7 +276,7 @@ async function resolvePdfs(req) {
   let family = null;
   let tags = null;
   let categories = null;
-  let familySweepAll = false;
+  let familySweepAll;
   let evaluationFast = false;
   let sweepOptions = null;
   let symbol = null;
@@ -285,7 +295,7 @@ async function resolvePdfs(req) {
     categories = mp.fields.categories
       ? mp.fields.categories.split(",").map((value) => value.trim()).filter(Boolean)
       : null;
-    familySweepAll = mp.fields.familySweepAll === "1" || mp.fields.familySweepAll === "true";
+    familySweepAll = optionalFlag(mp.fields.familySweepAll);
     evaluationFast = mp.fields.evaluationFast === "1" || mp.fields.evaluationFast === "true";
     sweepOptions = mp.fields.sweepOptions ? JSON.parse(mp.fields.sweepOptions) : null;
     if (mp.fields.symbolSeedRect) {
@@ -332,7 +342,7 @@ async function resolvePdfs(req) {
     family = body.family || null;
     tags = body.tags || null;
     categories = Array.isArray(body.categories) ? body.categories : null;
-    familySweepAll = !!body.familySweepAll;
+    familySweepAll = optionalFlag(body.familySweepAll);
     evaluationFast = !!body.evaluationFast;
     sweepOptions = body.sweepOptions || null;
     symbol = body.symbol || null;

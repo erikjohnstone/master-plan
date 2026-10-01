@@ -1,5 +1,24 @@
 # Changelog
 
+- **Takeoff canvas: a family's schedule ↔ plan reconcile sweeps the plans as
+  MCP's tool does, also past the canvas's time limit.**
+  - Asked to reconcile one family, the in-app agent got no row swept: the
+    canvas asked for none, so every unit read SCHEDULE_ONLY (scheduled, not
+    drawn) with nothing searched, where MCP's tool, called the same way,
+    sweeps every row (011_IL's 15 heat pumps: 15 SCHEDULE_ONLY in the canvas,
+    15 MATCH over MCP). The caller's choice now passes through; unset is
+    MCP's default.
+  - Past the production run's three-minute post-index limit, the canvas
+    swept the rows itself, with its own defaults (the tag-only reading,
+    without the reconcile's geometry check): a unit drawn with its symbol
+    read AMBIGUOUS. It now runs the same family reconcile in parts, each part
+    MCP's reconcile on the shared Session, so every row is MCP's row; a part
+    that fails is split and run again, and a tag that still fails is shown
+    as a plan search that did not finish, never a quantity.
+  (`web/src/lib/schedulePlanReconcile.mjs` `reconcileFamilyInChunks`,
+  `web/src/pages/TakeoffCanvas.jsx`, `web/vite.corpusTakeoffApi.js`,
+  `mcp/scripts/production-graph-cli.mjs` `--no-family-sweep-all`;
+  ASSEMBLIES_BUG_CATALOGUE AS-117.)
 - **BAS points: a list whose first row the extraction folded into its
   headings is read, with that row.**
   - 05_MO's AHU POINTS LIST (sheet 54) had its first row folded into the

@@ -1634,6 +1634,86 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
   };
 }
 
+/**
+ * A family reconcile run as several calls of the shared reconcile (AS-117).
+ * The canvas's production run stops at its post-index limit; past it, the
+ * same family reconcile runs again in tag chunks. `run` is one call of the
+ * shared reconcile for the family (MCP's reconcile_schedule_plan on the
+ * Session, over the remote bridge or the production path) scoped to `tags`,
+ * so every row is the row that reconcile computes and the rows equal its one
+ * call's. `run({ familySweepAll: false })` reads the family's rows unswept;
+ * each chunk then sweeps its own tags. A chunk that fails is split in half and
+ * run again; a tag that fails alone keeps its row, marked as a plan search
+ * that did not finish (AMBIGUOUS, installed quantity unknown).
+ *
+ * @param {(o: { tags?: string[], familySweepAll?: boolean }) => Promise<any>} run
+ * @param {{ tags?: string[]|null, familySweepAll?: boolean, chunkSize?: number,
+ *   onChunk?: (p: { done: number, total: number, tags: string[], ok: boolean }) => void }} [opts]
+ */
+export async function reconcileFamilyInChunks(run, opts = {}) {
+  const attempt = async (o) => {
+    try {
+      const result = await run(o);
+      return result && !result.error && Array.isArray(result.rows)
+        ? result
+        : { error: result?.error || "The reconcile returned no rows." };
+    } catch (e) {
+      return { error: e?.message || String(e) };
+    }
+  };
+  const scaffold = await attempt({ familySweepAll: false });
+  if (scaffold.error) return scaffold;
+  const norm = (tag) => String(tag ?? "").trim().toUpperCase();
+  const requested = opts.tags?.length ? new Set(opts.tags.map(norm).filter(Boolean)) : null;
+  // reconcileSchedulePlan's rule: a family with no tag list sweeps every row
+  // unless the caller opts out.
+  const sweepAll = !requested && opts.familySweepAll !== false;
+  const wanted = [];
+  const seen = new Set();
+  for (const row of scaffold.rows) {
+    const tag = norm(row.tag);
+    if (!tag || seen.has(tag) || !(requested ? requested.has(tag) : sweepAll)) continue;
+    seen.add(tag);
+    wanted.push(tag);
+  }
+  const size = Math.max(1, Math.floor(opts.chunkSize || 8));
+  const queue = [];
+  for (let i = 0; i < wanted.length; i += size) queue.push(wanted.slice(i, i + size));
+  const key = (row) => row.row_id ?? `${row.schedule_cite?.sheet ?? ""}|${row.schedule_cite?.title ?? ""}|${row.tag}`;
+  const swept = new Map();
+  const failed = new Map();
+  let done = 0;
+  while (queue.length) {
+    const tags = queue.shift();
+    const result = await attempt({ tags });
+    if (result.error && tags.length > 1) {
+      const half = Math.ceil(tags.length / 2);
+      queue.unshift(tags.slice(0, half), tags.slice(half));
+      continue;
+    }
+    if (result.error) failed.set(tags[0], result.error);
+    else {
+      const own = new Set(tags);
+      for (const row of result.rows) if (own.has(norm(row.tag))) swept.set(key(row), row);
+    }
+    done += tags.length;
+    opts.onChunk?.({ done, total: wanted.length, tags, ok: !result.error });
+  }
+  const rows = scaffold.rows.map((row) => {
+    const own = swept.get(key(row));
+    if (own) return own;
+    const error = failed.get(norm(row.tag));
+    if (error == null) return row;
+    return {
+      ...row,
+      status: "AMBIGUOUS",
+      plan_search_complete: false,
+      reason: `The plan search for ${row.tag} did not finish (${error}); its installed quantity is unknown.`,
+    };
+  });
+  return { ...scaffold, rows, summary: summarizeReconcile(rows) };
+}
+
 /** CSV header row for contractor reconcile export. */
 export const RECONCILE_CSV_HEADERS = [
   "Tag",

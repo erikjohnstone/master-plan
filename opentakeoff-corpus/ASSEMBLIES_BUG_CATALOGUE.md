@@ -7786,3 +7786,48 @@ Tests: `bas_engine/tests/test_point_folded_header.py` (the folded row read; vers
 NAME; a page line with another name, a mark in another column, or no line; a longer name heading without a folded
 mark); 4 mutations, each failing a test. The AS-132/133 (18) and AS-134 (8) mutations re-run on this code, all failing
 a test.
+
+## AS-117 — the canvas's family reconcile read every unit SCHEDULE_ONLY where MCP's tool reads the plans: it swept no row unless told to, and past its time limit it swept them its own way (FIXED, this commit)
+
+**Found:** the UI proof of AS-102 to AS-107 (26_CA's FAN family, 1,355 s over MCP then), and a reproduction on 011_IL.
+The in-app agent's `reconcile_schedule_plan` calls the canvas with `{ family }` alone. MCP's tool, called the same
+way, sweeps every row of the family (`family_sweep_all` unset). The canvas did not:
+- over the remote MCP bridge it sent `family_sweep_all: false`, and over the production path it left the CLI's
+  `--family-sweep-all` off, so no row was swept and every unswept row read SCHEDULE_ONLY ("scheduled, not drawn")
+  with nothing searched;
+- past the production run's three-minute post-index limit it swept the rows itself, one by one through the sweep
+  bridge, with defaults of its own: no row unless `familySweepAll`; the tag-only reading (`evaluationFast !== false`)
+  where MCP sweeps exhaustively; and without the reconcile's `verifyTaggedGeometry` and `equipmentFamily`, which the
+  bridge dropped, so a tag drawn with its symbol read AMBIGUOUS. It also read none of a row's other drawn occurrences
+  (`plan_other_cites`) or diagram cites, which MCP's family reconcile attaches.
+
+On 011_IL's 15 heat pumps: MCP 15 MATCH; the canvas, called as its agent calls it, 15 SCHEDULE_ONLY; its fallback 15
+SCHEDULE_ONLY, or 15 AMBIGUOUS with `familySweepAll`.
+
+**Change:**
+- The canvas passes the caller's sweep-every-row choice through unchanged, unset meaning MCP's default (every row);
+  the dev server's bridge (`optionalFlag`) and `production-graph-cli.mjs` carry it as set, unset or
+  `--no-family-sweep-all`.
+- Past the production run's limit, the canvas reconciles the family in tag chunks (`reconcileFamilyInChunks`,
+  `schedulePlanReconcile.mjs`): the family's rows unswept from the shared reconcile, then each chunk of up to 8 tags as
+  one call of MCP's `reconcile_schedule_plan` on the Session (the remote bridge, else the production path), merged by
+  row. Every row is computed by the code MCP runs. A chunk that fails is split in half and run again; a tag that fails
+  alone keeps its row as a plan search that did not finish (AMBIGUOUS, `plan_search_complete: false`, installed
+  quantity unknown, the error in its reason). The canvas-side sweep loop is gone.
+
+MCP's tool and the reconcile itself are unchanged; only what the canvas asks for, and how it asks past the limit.
+
+**Measured:**
+- 011_IL HEAT_PUMP, the agent's call: 15 SCHEDULE_ONLY → 15 MATCH, MCP's rows.
+- A family reconciled in chunks against MCP's one call, deep-equal on every row, the summary and the likely-units
+  list: D07 VAV (test), 011_IL HEAT_PUMP (15 rows), 004_MO RTU (7) and DOAS (1), itd-d1-lab AHU (1), CONDENSING_UNIT
+  (2) and FAN (7), 14_OR FCU (20), HEAT_PUMP (2) and PUMP (8), 26_CA FAN (47).
+- UI proof (headless Chromium, the dev server, MCP's tool over an in-memory client): 011_IL, 004_MO, itd-d1-lab, 14_OR and 26_CA, 11 families, 167 checks, each row compared with MCP's (status, quantities, evidence grade, search scope, placements, tag-only and other cites, diagram cites), the summary and the likely-units list: the agent's call (`{ family }`) returns MCP's rows on the production path (26_CA's 47 fans in 65 s); with that run refused as the dev server refuses it at its limit, the canvas reconciles the family in chunks to MCP's rows (26_CA in 6 chunks, 347 s); scoped to two tags, the same.
+
+**Should this be on the shared path? Yes.** The canvas's per-row fallback was a fork of the reconcile with its own
+options; it is now the shared reconcile, run in parts.
+
+Tests: `web/test/reconcileInChunks.test.ts` (7: chunks read the one call's rows, a failing chunk split and a tag
+failing alone, a caller's tags and opt-out, a mark in two tables, a scaffold that cannot be read, the bridge's flag,
+the canvas's wiring); `mcp/test/planToolParity.test.mjs` (2 on D07: chunks against one call, with a failing chunk,
+tags and an opt-out; the CLI sweeping every row unless told not to); 13 mutations, each failing a test.

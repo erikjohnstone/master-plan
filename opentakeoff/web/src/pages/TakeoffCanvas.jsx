@@ -155,13 +155,12 @@ import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../l
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText, linearRunRows } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
-import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
+import { takeoffWorkbookSheets, rowsToCsv } from "../lib/corpusTakeoff.mjs";
 import { buildValveSizeExport } from "../lib/valveSizeExport.ts";
 import { valveSizeTemplateFiles, VALVE_SIZE_TEMPLATE_PUBLIC_PATH } from "../lib/valveSizeTemplate.ts";
 import {
-  reconcileScheduleFamilyWithSweeps,
+  reconcileFamilyInChunks,
   reconcileRowsToCsv,
-  familyNeedleFromSpecs,
 } from "../lib/schedulePlanReconcile.mjs";
 import { queryTable } from "../lib/queryTable.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
@@ -7880,7 +7879,9 @@ export default function TakeoffCanvas() {
   async function fetchProductionReconcileSchedulePlan(opts = {}) {
     const fields = {};
     if (opts.family) fields.family = String(opts.family).trim();
-    if (opts.familySweepAll) fields.familySweepAll = "1";
+    // MCP sweeps every row of a family unless the caller opts out; carry the
+    // choice only when one was made (AS-117).
+    if (typeof opts.familySweepAll === "boolean") fields.familySweepAll = opts.familySweepAll ? "1" : "0";
     if (opts.tags?.length) fields.tags = opts.tags.join(",");
     if (opts.categories?.length) fields.categories = opts.categories.join(",");
     if (opts.evaluationFast) fields.evaluationFast = "1";
@@ -9024,7 +9025,7 @@ export default function TakeoffCanvas() {
       ...(opts.categories?.length ? { categories: opts.categories } : {}),
       ...(opts.tags?.length ? { tags: opts.tags } : {}),
       evaluation_fast: opts.evaluationFast === true,
-      family_sweep_all: opts.familySweepAll === true,
+      ...(typeof opts.familySweepAll === "boolean" ? { family_sweep_all: opts.familySweepAll } : {}),
     });
     if (remote && !remote.error) {
       reportProgress({ message: `Reconciliation complete — ${remote.rows?.length || 0} schedule rows reviewed.` });
@@ -9043,46 +9044,40 @@ export default function TakeoffCanvas() {
       return { ...prod, csv, path: "production_session" };
     }
     if (prod?.error && !family) return prod;
-
-    const g = await ensureAgentGraph();
-    if (!g.available) {
-      return { error: "This set has no text layer (a scan) — reconcile needs schedule tables and plan sweeps." };
-    }
     if (!family) {
       return {
         error: "Pass family to scope reconcile (e.g. VAV, FCU, AHU). Whole-set reconcile requires the MCP or production Session path.",
       };
     }
-    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
-    if (!needle) {
-      return { rows: [], summary: { total: 0, match: 0, schedule_only: 0, plan_only: 0, refused_no_scale: 0, refused_no_text: 0, ambiguous: 0 }, family_filter: family };
-    }
-    const sessionAdapter = {
-      sweepScheduleRow: async (rowTag, sweepOpts) => {
-        const r = await agentSweepScheduleRow(rowTag, sweepOpts);
-        if (r?.error) throw new Error(r.error);
-        if (r.found != null) return r;
-        return {
-          found: r.total_found ?? 0,
-          sheets: (r.per_sheet || r.sheets || []).map((ps) => ({
-            sheet: ps.sheet,
-            matches: ps.matches || [],
-          })),
-        };
-      },
+    // Past the production run's post-index limit, the same family reconcile
+    // runs again in tag chunks, each one call of MCP's reconcile_schedule_plan
+    // on the shared Session (the remote bridge, else the production path), so
+    // every row is the row MCP returns, never a canvas-side sweep with its own
+    // options and defaults (AS-117).
+    const familyChunk = async ({ tags, familySweepAll }) => {
+      const remoteChunk = await agentMcpTool("reconcile_schedule_plan", {
+        family,
+        ...(tags?.length ? { tags } : {}),
+        evaluation_fast: opts.evaluationFast === true,
+        ...(typeof familySweepAll === "boolean" ? { family_sweep_all: familySweepAll } : {}),
+      });
+      if (remoteChunk && !remoteChunk.error) return remoteChunk;
+      return fetchProductionReconcileSchedulePlan({ family, tags, familySweepAll, evaluationFast: opts.evaluationFast === true });
     };
-    const result = await reconcileScheduleFamilyWithSweeps(sessionAdapter, g, needle, {
+    reportProgress({ message: "Reconciling the family in parts on the shared Session…" });
+    const result = await reconcileFamilyInChunks(familyChunk, {
       tags: opts.tags,
-      evaluationFast: opts.evaluationFast !== false,
-      sweepAll: !!opts.familySweepAll && !opts.tags?.length,
+      familySweepAll: opts.familySweepAll,
+      onChunk: ({ done, total }) => reportProgress({ message: `Reconciled ${done} of ${total} schedule tags…`, processed: done, total }),
     });
+    if (result.error) return result;
     const csv = reconcileRowsToCsv(result.rows);
     if (opts.download !== false && result.rows.length) {
-      const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
+      const base = `${exportBaseName()}.reconcile-${family.toLowerCase()}`;
       downloadText(`${base}.csv`, csv, "text/csv");
     }
     pushReconcileToTakeoffPanel(result, family);
-    return { ...result, csv, path: "shared_session_sweep" };
+    return { ...result, csv, path: "production_session_chunked" };
   }
 
   // Playwright / primary-agent UI demos call the same compile path the Agent
