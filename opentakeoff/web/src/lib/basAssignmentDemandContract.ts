@@ -1,6 +1,6 @@
 /** Shared contracts/lineage checks. Arithmetic remains exclusively in Python. */
 import { z } from 'zod';
-import { basPointListsSchema } from './basPointLists.ts';
+import { basPointListsSchema, basPointRuleSchema } from './basPointLists.ts';
 import { basEquipmentRegisterSchema, validateBasEquipmentRegister, type BasEquipmentRegister } from './basEquipmentRegister.ts';
 import type { BasCapture, BasWorkflow } from './basWorkflow.ts';
 import { canonicalBasJson } from './basCanonical.ts';
@@ -26,7 +26,7 @@ export const basAssignmentDemandResultSchema = z.object({
   schema_version: z.literal('bas_assignment_demand_v1'),
   rule_version: z.union([z.literal(BAS_ASSIGNMENT_DEMAND_RULE_V1), z.literal(BAS_ASSIGNMENT_DEMAND_RULE)]),
   engine: z.literal('bas_math_v1'), capture_id: sha, equipment_head: sha,
-  point_rule_version: z.literal('point_observations_1'), scope: z.literal('explicit_assignments_discovered_matrices_only'),
+  point_rule_version: basPointRuleSchema, scope: z.literal('explicit_assignments_discovered_matrices_only'),
   assignments: z.array(z.object({ assignment, included_equipment_ids: ids, replication_factor: count,
     rows: z.array(z.object({ row_id: id, name: z.string(),
       observations: z.array(z.object({ observation_id: id, observation_index: count,

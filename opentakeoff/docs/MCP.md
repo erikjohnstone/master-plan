@@ -59,6 +59,10 @@ as resolved drawing truth or its `calculated` status as project completeness.
 The additive `bas_point_lists` record retains listed observations with source
 versions/pages, original cells, sparse/uninterpreted columns and supported
 controller notes. It does not establish installed quantity or field wiring.
+Its `rule_version` names the reading (`point_observations_2` reads standard
+point lists' function, fail-mode and alarm columns, "■" marks and direction/
+signal I/O headers, and checks a printed TOTALS row instead of counting it); a
+saved result is re-checked under the rule that read it.
 Do not substitute alarm/trend flags for I/O, or an unobserved cell for a verified
 zero. Its unavailable state is separate from math-policy failure. Durable
 equipment assignment, review and snapshot records are part of the shared workflow;

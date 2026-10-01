@@ -9,10 +9,10 @@ from typing import Any, Literal
 
 from pydantic import TypeAdapter, field_validator, model_validator
 
-from .adapters import (IndexedCell, IndexedRow, IndexedTable, indexed_columns, normalized_header,
-                       point_mark_kind, point_matrix_caption, point_type_header, printed_count,
-                       row_point_channel)
-from .models import Contract, Count, Identifier
+from .adapters import (CURRENT_POINT_RULE, POINT_RULE_V1, IndexedCell, IndexedRow, IndexedTable, PointRule,
+                       alarm_cell_roles, normalized_header, point_columns, point_mark_kind, point_matrix_caption,
+                       point_type_header, printed_count, row_point_channel)
+from .models import Contract, Count, Evidence, Identifier
 from .sources import Box, SourceContext, SourcePage, SourceSpan, valid_box
 
 
@@ -103,7 +103,7 @@ class PointMatrix(Contract):
 
 class PointListResult(Contract):
     schema_version: Literal["bas_point_lists_v1"] = "bas_point_lists_v1"
-    rule_version: Literal["point_observations_1"] = "point_observations_1"
+    rule_version: PointRule = CURRENT_POINT_RULE
     scope: Literal["discovered_matrices_only"] = "discovered_matrices_only"
     project_complete: Literal[False] = False
     matrices: list[PointMatrix]
@@ -115,14 +115,96 @@ ATTRIBUTES = {"ALARM", "TREND", "ADJUSTABLE", "SHOW ON GRAPHIC", "GRAPHIC", "REA
 ROW_METADATA = {"TAG", "MARK", "COL1", "POINT NUMBER", "POINT NO", "NO",
                 "HARDWARE TAG", "PHYSICAL TAG", "HARDWIRED TAG", "HARD WIRED TAG"}
 
+# Version 2 (point_observations_2) reads the columns standard point lists
+# print around their I/O: the software functions a point carries (UFGS point
+# function schedules, VA points lists, Guideline 13 lists), a row's number and
+# its tags, and the parameters a point is programmed with. A function column is
+# an attribute only when every cell it prints is a mark or a count; nothing it
+# reads is a quantity. A note, a network or calculated point, and any column
+# that names who furnishes, reuses or defers a point stay unread for review.
+IDENTITIES_V2 = IDENTITIES | {"EQUIPMENTDESCRIPTION"}
+ROW_METADATA_V2 = ROW_METADATA | {
+    "#", "NO.", "ITEM", "ITEM NO", "ITEM NO.", "ITEM #", "POINT #", "POINT ID", "POINT TAG",
+    "CONTROL POINT TAG", "DEVICE TAG", "ABBREVIATION", "ABBREV", "ABBREV.", "POINT ABBREVIATION",
+    "OBJECT ID", "OBJECT INSTANCE", "POINT ADDRESS", "ADDRESS"}
+FUNCTION_SCOPE = re.compile(
+    r"\b(?:SOFTWARE|GUI|APPLICATIONS?|FUNCTIONS?|ALARMING|ALARMS?|TRENDS?|TRENDING|PRIORITIES|"
+    r"FAIL(?:URE)?\s+MODES?|TRD|ALM|DISP|DISPLAY(?:ED)?|GRAPHICS?|ADJ|ADJUSTABLE|SCH|SCHED|"
+    r"SCHEDULE[DS]?|LOOPS?|OVERRIDES?|RUN\s*TIME|TOTALIZ\w*|HISTORY|LOGGING)\b")
+NOT_A_FUNCTION = re.compile(
+    r"\b(?:NETWORK\s+POINTS?|CALCULATED\s+POINTS?|NOTES?|REMARKS?|COMMENTS?|OTHERS|EXISTING|FUTURE|"
+    r"SPARES?|N\.?I\.?C\.?|ALTERNATES?|OPTIONAL|FURNISH\w*|PROVIDED|INSTALL\w*|REUSE[D]?|RELOCAT\w*|"
+    r"REMOVE[D]?|DEMO\w*|VENDOR|FACTORY|OEM|MANUFACTURER|CONTRACTOR|DIV(?:ISION)?|INTEGRAT\w*)\b")
+PARAMETER = re.compile(
+    r"\b(?:LIMITS?|RANGES?|SET\s*POINTS?|SETPOINTS?|INTERVALS?|DURATIONS?|ACCURACY|DEADBANDS?|DELAYS?)\b")
+
 
 def digest(value: object) -> str:
     canonical = json.dumps(value, sort_keys=True, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
     return hashlib.sha256(canonical.encode()).hexdigest()
 
 
-def identity_header(text: str) -> bool:
-    return normalized_header(text).replace(" ", "") in IDENTITIES
+def header_label(text: str, rule: PointRule = CURRENT_POINT_RULE) -> str:
+    """A printed header as the rule reads it. Version 2 reads a header the
+    extraction printed twice ("POINT ID POINT ID", a cell spanning two header
+    rows) as the header once; the source header itself is never changed."""
+    label = normalized_header(text)
+    if rule == POINT_RULE_V1:
+        return label
+    words = label.split(" ")
+    half = len(words) // 2
+    return " ".join(words[:half]) if len(words) % 2 == 0 and half and words[:half] == words[half:] else label
+
+
+def identity_header(text: str, rule: PointRule = CURRENT_POINT_RULE) -> bool:
+    identities = IDENTITIES if rule == POINT_RULE_V1 else IDENTITIES_V2
+    return header_label(text, rule).replace(" ", "") in identities
+
+
+class ColumnRoles(Contract):
+    """How a rule reads a matrix's columns that are neither typed I/O nor its
+    point name: attribute channels, and columns that describe a row without
+    being a point (its number, tags and programmed parameters)."""
+    attributes: dict[str, str]
+    metadata: list[str]
+
+
+def column_roles(table: IndexedTable, start: int, typed: dict[str, tuple[Literal["physical", "soft"], str]],
+                 rule: PointRule = CURRENT_POINT_RULE) -> ColumnRoles:
+    """The one reading of a matrix's other columns, shared by the observation
+    pass and every later check of a saved result under the rule that made it."""
+    columns = list(dict.fromkeys([*table.headers, *(h for r in table.rows for h in r.cells)]))
+    first = table.rows[0] if start and table.rows else None
+    attributes: dict[str, str] = {}
+    metadata: list[str] = []
+    for h in columns:
+        if h in typed:
+            continue
+        child = first.cells[h].text if first is not None and h in table.headers and h in first.cells else h
+        label = header_label(child, rule)
+        if rule == POINT_RULE_V1:
+            if label in ATTRIBUTES:
+                attributes[h] = label
+            elif label in ROW_METADATA:
+                metadata.append(h)
+            continue
+        # A subheader is read with its group ("GUI APPLICATION" over "TREND LOGGING").
+        parent = re.sub(r"\s+\d+$", "", normalized_header(h)) if child != h else ""
+        full = header_label(parent if parent.endswith(label) else f"{parent} {child}".strip(), rule)
+        values = [row.cells[h].text for row in table.rows[start:] if h in row.cells and row.cells[h].text.strip()]
+        counts = all(printed_count(value, rule) is not None for value in values)
+        if label in ATTRIBUTES:
+            attributes[h] = label
+        elif counts and values and FUNCTION_SCOPE.search(full) and not NOT_A_FUNCTION.search(full):
+            attributes[h] = full
+        elif label in ROW_METADATA_V2 or (PARAMETER.search(full) and not NOT_A_FUNCTION.search(full)):
+            metadata.append(h)
+        elif values and all(re.fullmatch(r"\d{1,4}", (row.cells[h].text if h in row.cells else "").strip())
+                            and row.cells[h].text.strip() == row.key.strip()
+                            for row in table.rows[start:] if h in row.cells and row.cells[h].text.strip()):
+            # The column the row's own number was read from.
+            metadata.append(h)
+    return ColumnRoles(attributes=attributes, metadata=metadata)
 
 
 def point_source(page: SourcePage | None, table: IndexedTable, cell: IndexedCell,
@@ -379,7 +461,8 @@ def source_marked_point_tables(sources: SourceContext) -> list[IndexedTable]:
     return tables
 
 
-def point_tables_with_source_recovery(payload: PointListInput) -> tuple[list[IndexedTable], set[int]]:
+def point_tables_with_source_recovery(payload: PointListInput, rule: PointRule = CURRENT_POINT_RULE,
+                                      ) -> tuple[list[IndexedTable], set[int]]:
     tables = list(payload.tables)
     recovered_ids: set[int] = set()
     for recovered in [*source_point_function_tables(payload.sources),
@@ -405,7 +488,7 @@ def point_tables_with_source_recovery(payload: PointListInput) -> tuple[list[Ind
         recovered_keys = {row.key for row in recovered.rows}
         merged_rows = []
         merged_headers = list(existing.headers)
-        existing_identity_headers = [header for header in existing.headers if identity_header(header)]
+        existing_identity_headers = [header for header in existing.headers if identity_header(header, rule)]
         existing_type_headers = [header for header in existing.headers if point_type_header(header)]
         for row in recovered.rows:
             previous = existing_rows.get(row.key)
@@ -439,17 +522,146 @@ def point_tables_with_source_recovery(payload: PointListInput) -> tuple[list[Ind
     return tables, recovered_ids
 
 
-def review_point_lists(payload: PointListInput) -> PointListResult:
+def identity_spill(table: IndexedTable, start: int, names: list[str]) -> list[str]:
+    """Version 2: a point name printed under its header but extracted into the
+    unlabelled column beside it. The printed identity column holds no text in
+    any row, and exactly one adjacent column with no printed header holds the
+    names; anything else leaves the identity as printed."""
+    if len(names) != 1:
+        return names
+    rows = table.rows[start:]
+    if not rows or any(names[0] in row.cells and row.cells[names[0]].text.strip() for row in rows):
+        return names
+    index = table.headers.index(names[0]) if names[0] in table.headers else -1
+    adjacent = [table.headers[i] for i in (index - 1, index + 1) if index >= 0 and 0 <= i < len(table.headers)]
+    unlabelled = [h for h in adjacent if re.fullmatch(r"COL\d+", h)
+                  and not (start and h in table.rows[0].cells and table.rows[0].cells[h].text.strip())
+                  and any(h in row.cells and row.cells[h].text.strip() for row in rows)]
+    return unlabelled if len(unlabelled) == 1 else names
+
+
+class MatrixReading(Contract):
+    """One rule's reading of a matrix's header: what every row is read through."""
+    typed: dict[str, tuple[Literal["physical", "soft"], str]]
+    header_evidence: list[Evidence]
+    start: Count
+    effective: dict[str, str]
+    names: list[str]
+    row_type_headers: list[str]
+    roles: ColumnRoles
+    alarm_headed: list[str]
+
+
+def read_matrix(table: IndexedTable, rule: PointRule = CURRENT_POINT_RULE) -> MatrixReading:
+    typed, header_evidence, start, flags = point_columns(table, rule)
+    effective = {h: table.rows[0].cells[h].text if start and h in table.rows[0].cells else h for h in table.headers}
+    names = [h for h, label in effective.items() if identity_header(label, rule)]
+    if rule != POINT_RULE_V1:
+        names = identity_spill(table, start, names)
+    row_type_headers = [h for h, label in effective.items() if point_type_header(header_label(label, rule))]
+    return MatrixReading(typed=typed, header_evidence=header_evidence, start=start, effective=effective, names=names,
+                         row_type_headers=row_type_headers, roles=column_roles(table, start, typed, rule),
+                         alarm_headed=sorted(flags))
+
+
+class CellReading(Contract):
+    column: str
+    kind: Literal["declared_io", "software_value", "attribute"]
+    channel: str
+    value: Count | None
+
+
+class RowReading(Contract):
+    cells: list[CellReading]
+    issues: list[str]
+    uninterpreted: list[str]
+
+
+# Version 2: a row the list prints as its totals is a check on the rows above
+# it, never points of its own.
+TOTAL_ROWS = {"TOTAL", "TOTALS", "SUBTOTAL", "SUBTOTALS", "SUB-TOTAL", "SUB TOTAL", "GRAND TOTAL",
+              "TOTAL POINTS", "POINT TOTALS", "POINTS TOTAL"}
+
+
+def printed_total_row(reading: MatrixReading, raw: IndexedRow, rule: PointRule = CURRENT_POINT_RULE) -> bool:
+    if rule == POINT_RULE_V1:
+        return False
+    name = raw.cells[reading.names[0]].text if len(reading.names) == 1 and reading.names[0] in raw.cells else ""
+    return normalized_header(name) in TOTAL_ROWS or (not name.strip() and normalized_header(raw.key) in TOTAL_ROWS)
+
+
+def read_row(reading: MatrixReading, raw: IndexedRow, rule: PointRule = CURRENT_POINT_RULE) -> RowReading:
+    """Every observation a row's cells give under one rule. The observation pass
+    and the later checks of a saved result both read rows here, so a mark, a
+    per-row point type or a typed column is checked exactly as it was read."""
+    if printed_total_row(reading, raw, rule):
+        return RowReading(cells=[], issues=[], uninterpreted=[])
+    cells: list[CellReading] = []
+    issues: list[str] = []
+    uninterpreted: list[str] = []
+    marked: set[str] = set()
+    alarm_roles = alarm_cell_roles(raw, reading.typed, set(reading.alarm_headed), rule)
+    if not reading.typed and not reading.row_type_headers:
+        mark_cells = [(header, cell) for header, cell in raw.cells.items() if point_mark_kind(cell.text) is not None]
+        if len(mark_cells) > 1:
+            issues.append("POINT_MARK_AMBIGUOUS")
+        elif len(mark_cells) == 1:
+            header, cell = mark_cells[0]
+            mark_kind = point_mark_kind(cell.text)
+            assert mark_kind is not None
+            kind, mark_channel = mark_kind
+            if cell.bbox is None:
+                issues.append("POINT_CELL_REGION_UNAVAILABLE")
+            cells.append(CellReading(column=header, kind="declared_io" if kind == "physical" else "software_value",
+                                     channel=mark_channel, value=1))
+            marked.add(header)
+    for header, cell in raw.cells.items():
+        if header in marked:
+            continue
+        observation_kind: Literal["declared_io", "software_value", "attribute"]
+        channel: str
+        value: int | None
+        if len(reading.row_type_headers) == 1 and header == reading.row_type_headers[0]:
+            row_channel = row_point_channel(cell.text)
+            if row_channel is None:
+                issues.append("POINT_TYPE_AMBIGUOUS")
+                continue
+            channel = row_channel
+            observation_kind, value = "declared_io", 1
+        elif header in alarm_roles:
+            # The row's own point's alarm, read as its attribute (version 2).
+            channel, observation_kind = normalized_header(header), "attribute"
+            value = printed_count(cell.text, rule)
+            if alarm_roles[header] == "ambiguous":
+                issues.append("POINT_CHANNEL_AMBIGUOUS")
+        elif header in reading.typed:
+            kind, channel = reading.typed[header]
+            observation_kind = "declared_io" if kind == "physical" else "software_value"
+            value = printed_count(cell.text, rule)
+        elif header in reading.roles.attributes:
+            channel, observation_kind = reading.roles.attributes[header], "attribute"
+            value = printed_count(cell.text, rule)
+        else:
+            if cell.text.strip() and header not in reading.names and header not in reading.roles.metadata:
+                uninterpreted.append(header)
+            continue
+        if value is None:
+            issues.append("POINT_CELL_AMBIGUOUS")
+        if cell.bbox is None:
+            issues.append("POINT_CELL_REGION_UNAVAILABLE")
+        cells.append(CellReading(column=header, kind=observation_kind, channel=channel, value=value))
+    return RowReading(cells=cells, issues=issues, uninterpreted=uninterpreted)
+
+
+def review_point_lists(payload: PointListInput, rule: PointRule = CURRENT_POINT_RULE) -> PointListResult:
     # Revalidate nested mutations and detach all output from caller-owned data.
     payload = PointListInput.model_validate(payload.model_dump())
     by_sheet = {alias: page for page in payload.sources.pages for alias in page.sheet_keys}
     selected = []
-    candidate_tables, recovered_ids = point_tables_with_source_recovery(payload)
+    candidate_tables, recovered_ids = point_tables_with_source_recovery(payload, rule)
     for table in candidate_tables:
-        typed, header_evidence, start = indexed_columns(table)
-        effective = {h: table.rows[0].cells[h].text if start and h in table.rows[0].cells else h for h in table.headers}
-        names = [h for h, label in effective.items() if identity_header(label)]
-        row_type_headers = [h for h, label in effective.items() if point_type_header(label)]
+        reading = read_matrix(table, rule)
+        typed, start, names, row_type_headers = reading.typed, reading.start, reading.names, reading.row_type_headers
         title = table.title.text if table.title else ""
         caption = point_matrix_caption(title)
         row_typed_shape = (len(names) == 1 and len(row_type_headers) == 1
@@ -460,8 +672,7 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
         page = by_sheet.get(table.sheet)
         material = [page.source_id if page else None, page.page_number if page else table.sheet, table.region, title]
         matrix_id = "matrix:" + digest(material)
-        selected.append((matrix_id, table, page, typed, header_evidence, start, effective, names,
-                         row_type_headers, id(table) in recovered_ids))
+        selected.append((matrix_id, table, page, reading, id(table) in recovered_ids))
 
     matrix_counts = Counter(item[0] for item in selected)
     if any(n > 1 for n in matrix_counts.values()):
@@ -475,7 +686,7 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
             if meaning is None:
                 continue
             owners = [item for item in selected if item[2] is not None
-                      and item[2].page_id == page.page_id and note_fits(span, item[1], item[5])]
+                      and item[2].page_id == page.page_id and note_fits(span, item[1], item[3].start)]
             if len(owners) != 1:
                 note_conflicts.update(item[0] for item in owners)
                 continue
@@ -484,8 +695,8 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
                 source=point_source(page, table, IndexedCell(text=span.text, bbox=span.bbox_px), span_id=span.span_id)))
 
     matrices = []
-    for (matrix_id, table, page, typed, header_evidence, start, effective, names,
-         row_type_headers, source_recovered) in selected:
+    for matrix_id, table, page, reading, source_recovered in selected:
+        typed, start, names, row_type_headers = reading.typed, reading.start, reading.names, reading.row_type_headers
         issues = []
         has_marked_rows = any(sum(point_mark_kind(cell.text) is not None for cell in row.cells.values()) == 1
                               for row in table.rows[start:])
@@ -506,6 +717,12 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
             issues.append("FOOTNOTE_TABLE_SCOPE_AMBIGUOUS")
         notes = sorted(bound_notes[matrix_id], key=lambda n: n.source.span_id or "")
         local_keys = Counter(r.key for r in table.rows[start:])
+        totals = [raw for raw in table.rows[start:] if printed_total_row(reading, raw, rule)]
+        column_sums: Counter[str] = Counter()
+        for raw in table.rows[start:]:
+            if not printed_total_row(reading, raw, rule):
+                column_sums.update({c.column: c.value or 0 for c in read_row(reading, raw, rule).cells})
+        checked_columns = {*reading.typed, *reading.roles.attributes}
         occurrences: Counter[str] = Counter()
         rows = []
         # `table.rows` is the indexed source order retained in `raw`.  Do not
@@ -519,59 +736,21 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
             row_issues = []
             if local_keys[raw.key] > 1:
                 row_issues.append("DUPLICATE_LOCAL_ROW_KEY")
-            observations = []
-            uninterpreted = []
-            mark_observation_headers: set[str] = set()
-            if not typed and not row_type_headers:
-                mark_cells = [(header, cell) for header, cell in raw.cells.items()
-                              if point_mark_kind(cell.text) is not None]
-                if len(mark_cells) > 1:
-                    row_issues.append("POINT_MARK_AMBIGUOUS")
-                elif len(mark_cells) == 1:
-                    header, cell = mark_cells[0]
-                    mark_kind = point_mark_kind(cell.text)
-                    assert mark_kind is not None
-                    kind, mark_channel = mark_kind
-                    if cell.bbox is None:
-                        row_issues.append("POINT_CELL_REGION_UNAVAILABLE")
-                    observations.append(PointObservation(kind="declared_io" if kind == "physical" else "software_value",
-                        channel=mark_channel, value=1,
-                        status="read", source=point_source(page, table, cell, header)))
-                    mark_observation_headers.add(header)
+            read = read_row(reading, raw, rule)
+            row_issues.extend(read.issues)
+            if any(raw is total for total in totals) and (len(totals) > 1 or any(
+                    printed_count(cell.text, rule) is not None and printed_count(cell.text, rule) != column_sums[header]
+                    for header, cell in raw.cells.items() if header in checked_columns)):
+                # One printed total row is a check on the rows above it.
+                row_issues.append("PRINTED_TOTAL_MISMATCH")
+            uninterpreted = read.uninterpreted
+            observations = [PointObservation(kind=c.kind, channel=c.channel, value=c.value,
+                                             status="ambiguous" if c.value is None else "read",
+                                             source=point_source(page, table, raw.cells[c.column], c.column))
+                            for c in read.cells]
             # Graph rows are deliberately sparse. No cell means no observed
             # value/box, not an explicitly printed zero and not proof of loss.
             unobserved = sorted(h for h in table.headers if h not in raw.cells)
-            for header, cell in raw.cells.items():
-                if header in mark_observation_headers:
-                    continue
-                observation_kind: Literal["declared_io", "software_value", "attribute"]
-                channel: str
-                value: int | None
-                if len(row_type_headers) == 1 and header == row_type_headers[0]:
-                    row_channel = row_point_channel(cell.text)
-                    if row_channel is None:
-                        row_issues.append("POINT_TYPE_AMBIGUOUS")
-                        continue
-                    channel = row_channel
-                    observation_kind, value = "declared_io", 1
-                elif header in typed:
-                    kind, channel = typed[header]
-                    observation_kind = "declared_io" if kind == "physical" else "software_value"
-                    value = printed_count(cell.text)
-                elif normalized_header(effective.get(header, header)) in ATTRIBUTES:
-                    channel, observation_kind = normalized_header(effective.get(header, header)), "attribute"
-                    value = printed_count(cell.text)
-                else:
-                    if (cell.text.strip() and header not in names
-                            and normalized_header(effective.get(header, header)) not in ROW_METADATA):
-                        uninterpreted.append(header)
-                    continue
-                if value is None:
-                    row_issues.append("POINT_CELL_AMBIGUOUS")
-                if cell.bbox is None:
-                    row_issues.append("POINT_CELL_REGION_UNAVAILABLE")
-                observations.append(PointObservation(kind=observation_kind, channel=channel, value=value,
-                    status="ambiguous" if value is None else "read", source=point_source(page, table, cell, header)))
             qualifiers = []
             if "*" in name:
                 if name.endswith("*") and name.count("*") == 1 and len(notes) == 1 and matrix_id not in note_conflicts:
@@ -586,7 +765,7 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
             if name and raw.cells[names[0]].bbox is None:
                 row_issues.append("POINT_NAME_REGION_UNAVAILABLE")
             populated = bool(name.strip() or any(c.text.strip() for h, c in raw.cells.items()
-                                                if h not in names and normalized_header(effective.get(h, h)) not in ROW_METADATA))
+                                                if h not in names and h not in reading.roles.metadata))
             status: Literal["interpreted", "unpopulated", "no_typed_requirement", "review_required"] = (
                 "review_required" if row_issues or issues else "interpreted" if positive
                 else "no_typed_requirement" if populated else "unpopulated")
@@ -598,7 +777,7 @@ def review_point_lists(payload: PointListInput) -> PointListResult:
                 issues=sorted(set(row_issues))))
         matrices.append(PointMatrix(matrix_id=matrix_id, source_id=page.source_id if page else None,
             page_id=page.page_id if page else None, raw=table, header_rows=start,
-            header_sources=[point_source(page, table, IndexedCell(text=e.text or "", bbox=e.bbox_px), e.column) for e in header_evidence],
+            header_sources=[point_source(page, table, IndexedCell(text=e.text or "", bbox=e.bbox_px), e.column) for e in reading.header_evidence],
             notes=notes, rows=rows, issues=issues))
-    return PointListResult(matrices=sorted(matrices, key=lambda m: m.matrix_id),
+    return PointListResult(rule_version=rule, matrices=sorted(matrices, key=lambda m: m.matrix_id),
                            issues=["SOURCE_DISCOVERY_COVERAGE_UNVERIFIED"])

@@ -1,5 +1,34 @@
 # Changelog
 
+- **BAS points: the columns standard point lists print around their I/O are
+  read (point rule version 2).**
+  - The production point lists (Takeoff's BAS workspace and MCP, one Python
+    reader) read "■" marks; I/O columns printed as a direction and a signal
+    ("SYSTEM INPUTS ANALOG TEMPERATURE", the VA points list); software
+    function, fail mode and alarm columns as each point's attributes; a row's
+    number, tags and programmed limits and set points; EQUIPMENT DESCRIPTION
+    as a point's name; a header the extraction printed twice; a name printed
+    beside its empty name column.
+  - An ALARM column under binary inputs is an analog sensor's own alarm on
+    its row, and a binary alarm input on a row of its own; beside an output
+    it is left for review, never counted.
+  - Notes, network and calculated point flags, and columns naming who
+    furnishes or reuses a point still wait for review.
+  - Over the 11 open sets with point lists (841 rows): interpreted 201 → 557;
+    waiting for review 563 → 203. Counted I/O changes only where the reader
+    now reads it (05_MO: AI 52, AO 23, DI 23, DO 9, checked row by row on the
+    drawings; 013_MO: 3 AI), and the BAS math agrees.
+  - A printed TOTALS row is no longer counted as points: it checks the rows
+    above it and is flagged where they disagree (087_US's counts were doubled;
+    039_TX's totals reveal two rows the extraction dropped).
+  - Assigning a point list read from a per-row POINT TYPE or from printed
+    point marks ("BI1") to equipment, or comparing revisions holding one, was
+    refused; it now works. A saved result is checked under the rule that read
+    it, so earlier projects stay valid.
+  (`bas_engine/adapters.py`, `point_lists.py`, `assignment_demand.py`,
+  `revision_quantities.py`; `web/src/lib/basPointLists.ts`;
+  ASSEMBLIES_BUG_CATALOGUE AS-129 to AS-131.)
+
 - **Takeoff: a dual duct box scheduled as its two air valves is one box.**
   - 039_TX schedules each box as two rows, TU-101C and TU-101H: one room, one
     airflow, a note saying the two valves "OPERATE AS A SINGLE DUAL DUCT BOX".

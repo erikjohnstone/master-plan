@@ -12,8 +12,14 @@ const table = z.object({ sheet: z.string(), title: cell.nullable(), headers: z.a
 const source = z.object({ source_id: id.nullable(), page_id: id.nullable(), sheet_key: id,
   column: z.string().nullable(), span_id: id.nullable(), text: z.string(), bbox_px: box.nullable() }).strict();
 const note = z.object({ kind: z.enum(['controller_provided', 'lon_integrated']), subject: z.string(), source }).strict();
+/** The interpretation rule a point result was read with. A saved result keeps
+ * its rule and is checked again under it; version 2 reads more printed
+ * columns (bas_engine/point_lists.py), version 1 results stay valid. */
+export const BAS_POINT_RULES = ['point_observations_1', 'point_observations_2'] as const;
+export const BAS_POINT_RULE = 'point_observations_2' as const;
+export const basPointRuleSchema = z.enum(BAS_POINT_RULES);
 export const basPointListsSchema = z.object({
-  schema_version: z.literal('bas_point_lists_v1'), rule_version: z.literal('point_observations_1'),
+  schema_version: z.literal('bas_point_lists_v1'), rule_version: basPointRuleSchema,
   scope: z.literal('discovered_matrices_only'), project_complete: z.literal(false), issues: z.array(z.string()),
   matrices: z.array(z.object({ matrix_id: id, source_id: id.nullable(), page_id: id.nullable(), raw: table,
     header_rows: count, header_sources: z.array(source), notes: z.array(note), issues: z.array(z.string()),

@@ -79,7 +79,8 @@ async function completeBasRevisionComparison(prepare: () => ReturnType<typeof pr
   const pointMatrices: NumericRequest['point_matrices'] = [], captures = new Set<string>();
   for (const state of states) if (!captures.has(state.capture.capture_id)) {
     captures.add(state.capture.capture_id);
-    pointMatrices.push(...state.capture.points.matrices.map(matrix => ({ capture_id: state.capture.capture_id, matrix })));
+    pointMatrices.push(...state.capture.points.matrices.map(matrix => ({ capture_id: state.capture.capture_id, matrix,
+      point_rule_version: state.capture.points.rule_version })));
   }
   const checked_point_matrices: Array<{ capture_id: string; matrix_id: string }> = [];
   const values = new Map<string, number>();

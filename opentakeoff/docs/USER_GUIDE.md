@@ -448,6 +448,17 @@ add terminals or software values. These are listed-table calculations, not
 verified installed quantities; controller-provided qualifiers and applicability
 still need review. The original cells and source locations remain available.
 
+The point lists also read the columns standard lists print around their I/O:
+"■" marks; I/O columns printed as a direction and a signal (the VA points
+list's "SYSTEM INPUTS ANALOG TEMPERATURE"); software function, fail mode and
+alarm columns as each point's attributes; a row's number, tags and programmed
+limits. An ALARM column under the binary inputs is an analog sensor's own alarm
+on its row and a binary alarm input on a row of its own; beside an output it is
+flagged for review and not counted. A printed TOTALS row is never counted: it
+is checked against the rows above it, and a disagreement is flagged (a row may
+be missing from the extraction). Notes, network or calculated point flags, and
+columns naming who furnishes or reuses a point still wait for your review.
+
 Full compile JSON additionally contains `bas_point_lists`: source-bound listed
 observations, supported controller footnotes, and separate unobserved-column
 accounting for sparse tables. The existing **Export BAS JSON** button exports

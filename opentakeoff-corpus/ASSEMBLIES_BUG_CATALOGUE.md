@@ -7549,3 +7549,94 @@ Tests: rowReader.test.ts "row.dual_duct_pair". It covers 039_TX's rows and notes
 
 Each guard (the number before the letter, the room, the words, a printed type) was checked to fail the test without
 it.
+
+## AS-129 — the BAS point lists read 201 of 841 listed rows: the columns standard point lists print around their I/O were unread (FIXED, this commit; point rule version 2)
+
+**Found:** 2026-10-01, by a census of the production point lists (`runBasPointLists`, the Python reader the Takeoff
+BAS workspace and MCP share) over the 81 cached open sets: 11 sets print 44 point matrices, 841 rows. 201 rows were
+interpreted, 563 waited for review and 77 printed no typed point. Read row by row against the renders, the waits were
+mostly columns no rule read, in the shapes three standard formats print:
+- UFGS point function schedules (federal-mech, its twin 019_FL): the I/O type was read on every row, but every row
+  also prints FAIL MODE and SOFTWARE function columns (TREND, ALARM INSTRUCTIONS, RUN TIME…) marked "■", a mark the
+  reader did not know, and a row-number column the extraction headed "B-1".
+- The VA points list (05_MO): its I/O columns read "SYSTEM INPUTS ANALOG TEMPERATURE (TI)", "SYSTEM OUTPUTS BINARY
+  START / STOP", a direction and a signal before the point, so no column was typed and no row was read; its point
+  name is headed EQUIPMENT DESCRIPTION.
+- Guideline 13 lists and consultants' summaries (012_MO, 039_TX, 087_US, 077_MT): GUI APPLICATION, ALARMING
+  SCENARIOS and ALARM PRIORITIES groups, a "#" column, LOOP and SCHED, TRD/ALM/DISP.
+- 013_MO's headers printed twice by the extraction ("POINT TYPE POINT TYPE"); 009_FL's exhaust fan lists, whose names
+  sit in an unlabelled column beside their DESCRIPTION header.
+
+**Change:** a second point rule, `point_observations_2` (`bas_engine/adapters.py`, `point_lists.py`). It reads:
+- "■" and other filled squares as marks, as "●" was. Hollow shapes stay unread.
+- A column printed under one direction and one signal kind, in either order, as that physical channel. Values,
+  variables, software or network scopes, two directions or two signal kinds decide nothing.
+- A software function column (SOFTWARE, GUI, APPLICATION/FUNCTION, ALARM… and FAIL MODE groups, TREND/TRD, ALM, DISP,
+  ADJ, SCHED, LOOP…) as an attribute, only where every cell it prints is a mark or a count. An attribute is never a
+  quantity.
+- A point's programmed parameters (limits, ranges, set points, intervals, durations), a "#" or ITEM column, its tags
+  and abbreviation, and a column of the rows' own numbers, as descriptions of the row.
+- EQUIPMENT DESCRIPTION as the point name where it is the only one; a header the extraction printed twice, once; a
+  name extracted into the unlabelled column beside an empty name column, as the name.
+- An alarm column headed ALARM under an I/O group is the point's alarm beside an analog input on its row (a sensor's
+  alarm is its reading's), the row's binary input where it is the row's only mark, and left for review, never
+  counted, beside any other channel (05_MO's condensing unit and heat pipe start/stop).
+- What it never reads away: a NOTES/REMARKS cell, a network or calculated point flag, and any column naming who
+  furnishes, reuses or defers a point. Those rows stay for review.
+
+The BAS math reads the same columns (`point_columns`, `alarm_cell_roles`), so its totals and the point lists agree.
+
+**Measured** (the 11 open sets' production inputs, replayed through the old and the new engine, and through the
+node transport and the JS contract):
+- Interpreted 201 → **557 of 841** (66%); review 563 → 203; no typed point 74 → 78.
+- Per set: federal-mech and 019_FL 0 → 89 each; 012_MO 0 → 100; 05_MO 0 → 74; 009_FL 63 → 67.
+- Counted I/O (declared I/O and software values) is unchanged on every set but 05_MO, 013_MO and the two totals
+  rows (AS-131). 05_MO: AI 52, AO 23, DI 23, DO 9, each of its 80 rows on three lists checked against the drawing
+  (the fourth list, 30 rows, stays for review: the extraction merged its first row into its header). 013_MO: three AI, checked.
+- The BAS math changes on 05_MO alone (0 → AI 52, AO 23, DI 23, DO 9).
+- Version 1 is reproduced byte for byte on all 11 sets (`review_point_lists(..., "point_observations_1")`).
+- Walled sets (held-out, held-out drafters' and reconcile-check documents; totals only, no row read): 28 cached, 8
+  with point lists, 823 rows: interpreted 567 → 567, review 243 → 239, no typed point 13 → 17. Their lists were
+  already read; nothing in them is read differently enough to count.
+- What still waits (203): 138 rows of the two UFGS documents' schedule the extraction omitted, recovered from the
+  text with its core columns only (SOURCE_SPAN_CORE_COLUMNS_ONLY); 30 rows of 05_MO's list whose first row the
+  extraction merged into its header (no point name; that row's point is lost); NOTES on 077_MT (12), 013_MO (3) and
+  05_MO (2); 2 ambiguous alarms; 8 points 009_FL prints twice under one name (AI3, BI1, AI4, BI2 — so printed); 011_IL's
+  trending-interval table (5); a blank UFGS form (2); one totals mismatch (AS-131).
+
+**Not fixed (documented):** 013_MO's and 077_MT's lists continue below a full-width section band ("CROSS-TIE LOOP",
+"DDC CONTROLLER"); the extraction stops at the band, so those rows are not read (013_MO's continuation is extracted as
+two further tables; 077_MT's not at all). 039_TX's list loses two rows. Next: AS-132.
+
+Tests: `bas_engine/tests/test_point_rules_v2.py`, each rule with its negative control; 14 mutations, each failing a
+test.
+
+## AS-130 — a saved point result whose I/O came from a per-row POINT TYPE or a printed point mark was refused by the assignment and revision checks (FIXED, this commit)
+
+**Found:** with AS-129, re-checking every matrix through `validate_observations` (assignment demand and revision
+quantities re-check a saved point matrix before using it). Version 1's check re-derived only typed columns and
+attributes, so an observation read from a per-row POINT TYPE cell ("AI") or a printed mark ("BI1") failed it: 5 of
+federal-mech's 6 matrices, 5 of 019_FL's and all 8 of 009_FL's. Assigning any of those lists to equipment, or
+comparing revisions holding them, raised "Point observation value differs from source interpretation".
+
+**Change:** one reader of a row (`read_matrix`, `read_row`) makes the observations and re-checks them, under the rule
+that made them: a version 1 result is checked by version 1, never by a later rule. Revision requests carry each
+matrix's rule (`point_rule_version`, absent on version 1 requests); an assignment result's `point_rule_version` is
+its points'.
+
+**Measured:** all 44 matrices validate under both rules; the 18 refused before now pass. Tests: test_point_rules_v2.py
+("saved results are checked under their own rule", "marked point lists validate for assignment").
+
+## AS-131 — a points list's printed TOTALS row was counted as points (FIXED, this commit; version 2)
+
+**Found:** 087_US prints a TOTALS row (AI 2, AO 1, BI 3, BO 3, AV 1); version 1 read its counts as a point's, so every
+sum over the list doubled. 039_TX's TOTALS row was read the same way. The BAS math already skipped such rows; the
+point lists did not.
+
+**Change (version 2):** a row named TOTAL, TOTALS, SUBTOTAL or GRAND TOTAL (the whole name; "TOTAL FLOW" is a point)
+gives no observations. It checks the rows above it: where a printed total differs from what the rows read, the row is
+flagged PRINTED_TOTAL_MISMATCH.
+
+**Measured:** 087_US's totals match its rows, and its counted I/O is now the drawing's (AI 4 → 2, AO 2 → 1, DI 6 → 3,
+DO 6 → 3, AV 2 → 1). 039_TX's totals disagree (ALARM 2, its rows 0): the drawing prints LOW ZONE TEMP and HIGH ZONE
+TEMP, which the extraction dropped. The flag catches it.

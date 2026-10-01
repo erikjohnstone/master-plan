@@ -95,3 +95,42 @@ with a source PDF, earlier compile, fresh CLI compile and report destination.
 End-to-end delivery still requires reviewed corrections, SOO/equipment mapping,
 historical source retention and the complete review/release UI/export journey.
 Do not declare workflow A complete when only these internal checks pass.
+
+## Rule version 2: `point_observations_2` (2026-10-01)
+
+**Should this be on the shared path? Yes.** The one Python reader the Takeoff
+BAS workspace and MCP share; the BAS math reads the same typed columns
+(`point_columns`, `alarm_cell_roles`), so its totals and the point lists agree.
+
+Every result names its `rule_version`. Version 2 adds readings; version 1 is
+kept and reproduced byte for byte (`review_point_lists(payload,
+"point_observations_1")`). A saved matrix is re-checked by the same reader
+(`read_matrix`, `read_row`) under the rule that made it: assignment demand
+reads its points' rule, and a revision request carries each matrix's
+`point_rule_version` (absent means version 1). An assignment result's
+`point_rule_version` is its points'.
+
+Version 2 reads, beyond version 1:
+- filled-square marks ("■" and kin) as marks; hollow shapes stay unread;
+- a column printed under one direction and one signal kind ("SYSTEM INPUTS
+  ANALOG TEMPERATURE", "BINARY OUTPUTS START/STOP") as that physical channel;
+  values, variables, software/network scopes, two directions or two signal
+  kinds decide nothing;
+- software function, fail mode, alarm-priority and trend/graphic/schedule/loop
+  columns as attributes, only where every printed cell is a mark or a count
+  (never a quantity);
+- a row's number, tags, abbreviation and programmed parameters (limits,
+  ranges, set points, intervals) as descriptions of the row;
+- EQUIPMENT DESCRIPTION as the point name where it is the only one, a header
+  printed twice once, and a name extracted into the unlabelled column beside
+  an empty name column;
+- an ALARM-headed binary input column as the point's alarm beside an analog
+  input on its row, as the row's binary input when it is the only mark, and
+  as POINT_CHANNEL_AMBIGUOUS (not counted) beside any other channel;
+- a TOTAL/TOTALS/SUBTOTAL row as a check, never points:
+  PRINTED_TOTAL_MISMATCH where it disagrees with the rows above it.
+
+Never read away: a note or remark, a network or calculated point flag, and a
+column naming who furnishes, reuses or defers a point. Such rows stay
+`review_required`. Measured and tested in ASSEMBLIES_BUG_CATALOGUE AS-129 to
+AS-131 and `bas_engine/tests/test_point_rules_v2.py`.
