@@ -1,5 +1,10 @@
 # Changelog
 
+- **A schedule title whose family word lost its glyphs is read as an untitled schedule.** bldg5406's text layer has no
+  M, so its PUMP SCHEDULE reads "P SCHEDULE" and its chilled water pumps CWP-1 and CWP-2 were never units. A title of
+  only one- or two-letter fragments and SCHEDULE now names no family, and each family's own marks decide its rows; a
+  bare "SCHEDULE" title is unchanged. Over every cached graph only bldg5406 changes (+2 pumps); WP1 40 → 41.
+  (`web/src/lib/corpusTakeoff.mjs`; ASSEMBLIES_BUG_CATALOGUE AS-148.)
 - **A schedule row standing for one unit on each typical level it lists is that many units, and the plans' level
   marks are its tags.**
   - 26_CA's tri-path air handler schedule prints twelve rows such as AHU-(6-33)-1 (TYPICAL LEVELS 6-33): 112 air

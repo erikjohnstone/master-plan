@@ -8167,3 +8167,26 @@ Tests: `web/test/typicalLevels.test.ts` (8): the template forms, a one-level mar
 the X form, plan title levels, the installed quantity and the review list; 8 of 8 mutations of the rules fail them.
 `mcp/test/typicalLevelSweeps.test.ts` (4): the level sweeps merged as the row's (sheets joined, counts added,
 completeness, a text-only level kept as plan-tag text, unanchored marks named).
+
+## AS-148 — a schedule title whose family word lost its glyphs named no family, and its units were not read: bldg5406's chilled water pumps (FIXED, this commit)
+
+**Found:** the WP1 under-count list after AS-145: bldg5406's key lists three pumps, the takeoff read one (CP-1). M601
+prints the PUMP SCHEDULE with CWP-1 and CWP-2 (BELL AND GOSSETT 1.5X1.5X7C, chilled water, inline centrifugal), and
+the table is read whole, rows and columns. But this drawing's text layer has no M, V or X glyphs ("LOU ER SCHEDULE",
+"E PANSION AND CO PRESSION TANK SCHEDULE"), so its title reads "P SCHEDULE": no family's title rule reads it, and,
+being titled, no family's mark gate (blankKeyRe) was offered it either.
+
+**Change:** `corpusTakeoff.mjs` (the takeoff's family gate, which the reconcile reads too, AS-77): a title made only of
+one- or two-letter fragments and SCHEDULE names no family, and is read as an untitled schedule is, its rows gated by
+each family's own marks (CWP-1 is a pump's). A bare "SCHEDULE" is unchanged: 017_MD's occupancy schedule (M-F, SAT,
+SUN) and 054_NV's pipe hanger sizes print it as their whole title.
+
+**Census:** titles of that shape over every cached graph: bldg5406 #7 only (cached three times); no walled document.
+Takeoff over every cached graph, before → after: 3 open graphs change, all bldg5406, +CWP-1 and +CWP-2 each, nothing
+removed; no walled graph changes. WP1 acceptance: 40 → 41 pass (bldg5406 32/32); walled pass/fail unchanged.
+
+**Should this be on the shared path? Yes.** The family gate decides what a schedule's rows are for every surface.
+
+Tests: `web/test/fragmentTitle.test.ts` on the cached graphs' own tables (fixture `as148-fragment-titles.json`): the
+pumps read; the same table with marks no family's reads nothing; the three bare SCHEDULE tables read nothing. Fails
+at HEAD on the first.

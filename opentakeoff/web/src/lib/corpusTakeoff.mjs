@@ -1350,7 +1350,14 @@ export function familyTableGate(table, spec, family = null) {
   const ruleTitle = familyRuleTitle(title);
   const titleOk = Boolean(titleRe) && scheduleTitleMatches(ruleTitle, titleRe, exclude);
   const altOk = Boolean(altTitleRe) && scheduleTitleMatches(ruleTitle, altTitleRe, exclude);
-  const blankTitle = !title.trim();
+  // A TITLE WHOSE FAMILY WORD LOST ITS GLYPHS NAMES NO FAMILY (AS-148).
+  // bldg5406's text layer has no M, V or X ("LOU ER SCHEDULE", "E PANSION
+  // AND CO PRESSION TANK"), so its PUMP SCHEDULE reads "P SCHEDULE": a
+  // one- or two-letter fragment and SCHEDULE. Such a title is read as an
+  // untitled schedule, its rows gated by each family's own marks (CWP-1 is
+  // a pump's). A bare "SCHEDULE" is not one: 017_MD's occupancy schedule
+  // (M-F, SAT, SUN) and 054_NV's hanger sizes print it as their whole title.
+  const blankTitle = !title.trim() || /^(?:[A-Z]{1,2}\s+)+SCHEDULES?$/i.test(title.trim());
   // A titled-but-service-unqualified "CONTROL VALVE(S)" table is the same
   // problem as a blank title for CHW_CONTROL_VALVE/HHW_CONTROL_VALVE
   // specifically (blankServiceHint set) — service still has to come from
