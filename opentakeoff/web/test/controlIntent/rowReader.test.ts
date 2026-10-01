@@ -186,3 +186,56 @@ test("scheduleNotes: the next table's REMARKS label beside the notes ends their 
   const notes = scheduleNotes(spans, [407, 136, 2565, 1000]);
   assert.deepEqual(notes.map((n) => n.id), ["1", "2"]);
 });
+
+// 039_TX (unseen): the BLDG 109 AIR TERMINAL UNIT SCHEDULE lists each dual
+// duct box as its two air valves, TU-101C and TU-101H, on rows that print the
+// same room, airflow and remarks; note 3, which every row cites, says the two
+// "OPERATE AS A SINGLE DUAL DUCT BOX". The points list (DUAL DUCT TERMINAL
+// UNIT CONTROLS) is one box's: cold and hot duct airflow and dampers, one
+// zone sensor, one discharge temperature.
+test("row.dual_duct_pair: a dual duct box scheduled as its cold and hot valves is one box", () => {
+  const note3 = { id: "3", text: "PROVIDE SEPARATE AIR VOLUME CONTROL VALVES FOR HOT DUCT AND COLD DUCT THAT OPERATE AS A SINGLE DUAL DUCT BOX. COLD SIDE SHALL BE THE MASTER AND HOT DUCT AS THE SLAVE PER DETAIL 2/MH113." };
+  const note1 = { id: "1", text: "INSTALL PER MANUFACTURER'S RECOMMENDATIONS." };
+  const row = (room: string, max: string) => ({ "ROOM SERVED": room, "SYSTEM AIR HANDLING": "AHU 1", "AIRFLOW MAX": max, "AIRFLOW MIN": "0", "CONTROL TYPE": "VAV", REMARKS: "1, 2, 3, 4" });
+  const tu = (index: number, tag: string, room: string, o: Partial<RowUnit> = {}) => unit(index, tag, "VAV", { table_title: "BLDG 109 AIR TERMINAL UNIT SCHEDULE", cells: row(room, "345"), notes: [note1, note3], ...o });
+  const m = rowIntents([
+    tu(0, "TU-101C", "127"), tu(1, "TU-101H", "127"),
+    tu(2, "TU-102C", "128"), tu(3, "TU-102-H", "128"),
+    // Look-alikes: a C and an H valve serving different rooms; a pair whose
+    // notes never name a dual duct box; a lone cold valve.
+    tu(4, "TU-103C", "129"), tu(5, "TU-103H", "130"),
+    tu(6, "TU-104C", "131", { notes: [note1] }), tu(7, "TU-104H", "131", { notes: [note1] }),
+    tu(8, "TU-105C", "132"),
+  ]);
+  assert.equal(m.get(0)?.attributes?.terminal_type?.value, "dual_duct");
+  assert.match(m.get(0)!.attributes!.terminal_type!.basis, /TU-101C and TU-101H are one dual duct box's cold and hot duct valves \(both serve ROOM SERVED 127; note 3: "PROVIDE SEPARATE/);
+  assert.equal(m.get(1)?.out_of_scope?.value, true);
+  assert.match(m.get(1)!.out_of_scope!.basis, /note 3: "PROVIDE SEPARATE AIR VOLUME CONTROL VALVES FOR HOT DUCT AND COLD DUCT THAT OPERATE AS A SINGLE DUAL DUCT BOX\."\): the hot duct valve's points are the box's, counted on TU-101C$/);
+  assert.equal(m.get(1)!.out_of_scope!.rule, "drawing_read:row.dual_duct_pair");
+  assert.equal(m.get(1)?.attributes, undefined);
+  assert.equal(m.has(2) && m.has(3), false, "a dash before the hot valve's letter is another mark");
+  assert.deepEqual([4, 5, 6, 7, 8].map((i) => m.has(i)), [false, false, false, false, false]);
+  // 03_FL lists its terminal units ATU A to ATU O and 061_IA its boxes VAV-A
+  // to VAV-H: a letter that is the whole qualifier is a sequence letter.
+  const seq = rowIntents([
+    unit(0, "ATU C", "VAV", { cells: { ROOM: "101" }, notes: [note3] }), unit(1, "ATU H", "VAV", { cells: { ROOM: "101" }, notes: [note3] }),
+    unit(2, "VAV-C", "VAV", { cells: { ROOM: "102" }, notes: [note3] }), unit(3, "VAV-H", "VAV", { cells: { ROOM: "102" }, notes: [note3] }),
+  ]);
+  assert.equal(seq.size, 0);
+  // A row that prints its terminal type keeps it, and neither valve pairs.
+  const typed = rowIntents([
+    tu(0, "TU-1C", "127", { attributes: { terminal_type: { value: "single_duct" } } }), tu(1, "TU-1H", "127"),
+  ]);
+  assert.equal(typed.size, 0);
+  // With no room column, every cell must agree; the title may name the box.
+  const titled = rowIntents([
+    unit(0, "DD-1C", "VAV", { table_title: "DUAL DUCT TERMINAL UNIT SCHEDULE", cells: { CFM: "400", "INLET SIZE": "8", REMARKS: "-" } }),
+    unit(1, "DD-1H", "VAV", { table_title: "DUAL DUCT TERMINAL UNIT SCHEDULE", cells: { CFM: "400", "INLET SIZE": "8", REMARKS: "-" } }),
+    unit(2, "DD-2C", "VAV", { table_title: "DUAL DUCT TERMINAL UNIT SCHEDULE", cells: { CFM: "400", "INLET SIZE": "8", REMARKS: "-" } }),
+    unit(3, "DD-2H", "VAV", { table_title: "DUAL DUCT TERMINAL UNIT SCHEDULE", cells: { CFM: "250", "INLET SIZE": "6", REMARKS: "-" } }),
+  ]);
+  assert.equal(titled.get(0)?.attributes?.terminal_type?.value, "dual_duct");
+  assert.match(titled.get(0)!.attributes!.terminal_type!.basis, /the same row; its schedule's title: "DUAL DUCT TERMINAL UNIT SCHEDULE"/);
+  assert.equal(titled.get(1)?.out_of_scope?.value, true);
+  assert.deepEqual([2, 3].map((i) => titled.has(i)), [false, false]);
+});

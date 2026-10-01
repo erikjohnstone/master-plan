@@ -434,6 +434,13 @@ const ITEM_MARK = /^(?:\(?[A-Z0-9]{1,2}[.)]|\(?[ivx]{1,4}[.)])$/i;
 /** A line under a title that belongs to it: its scale note, a parenthetical
  * subtitle ("(AHU-1)", "(ROOMS 119 / 123)"). */
 const SUBTITLE = /^\(.*\)$/;
+/** A diagram's point label ("AI - ZONE TEMP", "AO RF-SPD SPEED CONTROL") or a
+ * note with its text on its line ("NOTE: OPERATE TWO SINGLE DUCT RETROFIT KITS
+ * AS …"): printed at a title's size beside a drawing, never a title. A point
+ * type and its name apart, or after a spaced dash or a colon; never a word the
+ * type's letters begin ("BI-POLAR IONIZATION", "DI WATER", "DO NOT"). A note
+ * runs on after its colon; "GENERAL NOTES - MECHANICAL" heads a block. */
+const NOT_TITLE = /^(?:(?:AI|AO|BO)\s+(?=[A-Z])|(?:AI|AO|BI|BO|DI|DO|AV|BV|UI|UO)(?:\s+[-–]\s*|\s*:\s*)(?=[A-Z])|(?:GENERAL\s+|KEYED\s+|SHEET\s+|PLAN\s+)?NOTES?(?:\s*#?\d+)?\s*[:.]\s*\S)/;
 /** A points table's header row: its column groups or its first column's
  * heading, or three or more I/O types in a row. */
 const POINTS_HEADER = /\b(?:HARDWARE|SOFTWARE)\s+POINTS\b|\bPOINT\s+(?:NAME|DESCRIPTION)\b|^(?:AI|AO|BI|BO|DI|DO|AV|BV)(?:\s+(?:AI|AO|BI|BO|DI|DO|AV|BV)){2,}\b/;
@@ -535,9 +542,23 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     return beside.every((o) => Math.max(o.box[0] - l.box[2], l.box[0] - o.box[2]) >= 2 * l.h) && namesEvidence(l);
   };
   const hasWord = (l: Line) => /[A-Z]{3,}/i.test(l.text);
-  const big = lines.filter((l) => l.h >= 1.2 * body && hasWord(l) && !ROW_NUMBER.test(l.text) && !DETAIL_NUMBER.test(l.text) && !SCALE_NOTE.test(l.text)
+  const big = lines.filter((l) => l.h >= 1.2 * body && hasWord(l) && !ROW_NUMBER.test(l.text) && !DETAIL_NUMBER.test(l.text) && !SCALE_NOTE.test(l.text) && !NOT_TITLE.test(repairSpacing(l.text))
     && !SUBTITLE.test(l.text) && !inTable(l) && isolated(l))
     .sort((a, b) => a.rot - b.rot || a.box[1] - b.box[1] || a.box[0] - b.box[0]);
+  // A wrapped title's next line, set like the line above it, may stand
+  // beside the next detail's title in a row of detail titles across the
+  // sheet: it continues the title when whatever is beside it on its baseline
+  // is a title column away (two line heights or more), as a first line's
+  // neighbours must be (040_IL's "TAB CONTROL W/HOT WATER" over "REHEAT AND
+  // CFM OFFSET - TAB-A", beside the same title for TAB-B). It never starts a
+  // title.
+  const wraps = lines.filter((l) => l.h >= 1.2 * body && hasWord(l) && !ROW_NUMBER.test(l.text) && !DETAIL_NUMBER.test(l.text) && !SCALE_NOTE.test(l.text)
+    && !SUBTITLE.test(l.text) && !inTable(l) && !big.includes(l)
+    && sameRot(l.rot).filter((o) => o !== l && Math.abs(o.h - l.h) <= 0.15 * l.h
+      && Math.abs((o.box[1] + o.box[3]) / 2 - (l.box[1] + l.box[3]) / 2) <= 0.35 * l.h
+      && !DETAIL_NUMBER.test(o.text) && !SCALE_NOTE.test(o.text)
+      && ((o.box[0] >= l.box[2] && o.box[0] - l.box[2] <= 6 * l.h) || (o.box[2] <= l.box[0] && l.box[0] - o.box[2] <= 6 * l.h)))
+      .every((o) => Math.max(o.box[0] - l.box[2], l.box[0] - o.box[2]) >= 2 * l.h));
   const used = new Set<Line>();
   for (const l of big) {
     if (used.has(l)) continue;
@@ -545,7 +566,7 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     used.add(l);
     while (group.length < 4) {
       const last = group[group.length - 1];
-      const next = big.find((n) => !used.has(n) && n.rot === last.rot && Math.abs(n.h - last.h) <= 0.15 * last.h
+      const next = [...big, ...wraps].find((n) => !used.has(n) && n.rot === last.rot && Math.abs(n.h - last.h) <= 0.15 * last.h
         && n.box[1] - last.box[3] >= -0.2 * last.h && n.box[1] - last.box[3] <= 0.6 * last.h
         && (Math.abs(n.box[0] - last.box[0]) <= last.h || Math.abs((n.box[0] + n.box[2]) / 2 - (last.box[0] + last.box[2]) / 2) <= last.h));
       if (!next) break;
@@ -799,6 +820,10 @@ export function analyzePage(spans: readonly NoteSpan[], tables: readonly TableHi
     const region = t.direction === "above_title" ? captionRegion(t) : headingRegion(t);
     regions.set(t, region);
     const text = repairSpacing(t.text);
+    // A line ending in a period is a sentence of a note ("AS HARDWIRED
+    // CONTROLS.", "REPLACE AUTO OPENER AND ACCESS CONTROL AS REQ'D."), at any
+    // size; a caption keeps its period ("… CONTROL DIAGRAM.").
+    if (/\.\s*$/.test(text) && !t.caption) continue;
     if (t.kind && (t.kind !== "diagram" || CONTROL_WORD.test(text) || contentHits(region, t.rot) >= 2)) {
       t.packet = t.kind;
     } else if (!t.kind && !t.generic && (t.caption || t.big) && wordCount(text) >= 2 && text.replace(/\s+/g, "") !== sheetNo

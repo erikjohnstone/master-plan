@@ -75,8 +75,8 @@ ROBUSTNESS SUITE (GATE D) — dev, live model calls where not recorded (the re-r
   negative controls: PASS (no unit is in scope with PQ1 = no); the premise, no control packets, does not hold: the option decisions above are what their packets print
 
 ── adversarial swap: readings through a packet rebound to another unit must not apply (≥ 99%)
-  another family: 89 packets rebound to 84 units asked 510 questions; decisions resting on the swap 0: applied 0, proposal 0, unresolved 0 → none read through them PASS
-      reader answers citing a swapped packet 62: 62 unverified (100.0%); decided elsewhere (the zone plan) 2, applied 2; live calls 0
+  another family: 91 packets rebound to 86 units asked 513 questions; decisions resting on the swap 0: applied 0, proposal 0, unresolved 0 → none read through them PASS
+      reader answers citing a swapped packet 61: 61 unverified (100.0%); decided elsewhere (the zone plan) 2, applied 2; live calls 15
   another tag, same family: 19 packets rebound to 17 units asked 69 questions; decisions resting on the swap 0: applied 0, proposal 0, unresolved 0 → none read through them PASS
       reader answers citing a swapped packet 20: 20 unverified (100.0%); decided elsewhere (the zone plan) 0, applied 0; live calls 0
 
@@ -84,33 +84,38 @@ ROBUSTNESS SUITE (GATE D) — dev, live model calls where not recorded (the re-r
   R0 alone: applied 19, applied-wrong 0, INVENTED 0; absences applied 0, left as proposals 75 → PASS
 
 ── replay: the recorded readings, applied twice, byte-identical
-  11 of 11 documents byte-identical (223 runs replayed, 0 not recorded) → PASS
+  11 of 11 documents byte-identical (229 runs replayed, 0 not recorded) → PASS
 
 ── re-run: the models read the dev documents again (afresh, now) against the recorded replay: ≤ 2% of decisions change
-  11 of 727 decisions changed (1.5%) → PASS
+  16 of 825 decisions changed (1.9%) → PASS
       040_IL_VA_Solici TAB-201 opt.setpoint_adjust: proposal true → applied true  [r0:not_shown r1:not_shown r2a:yes r2b:yes → r0:not_shown r1:yes r2a:yes r2b:yes]
       federal-mech AHU-1 opt.relief_damper: proposal true → none  [r0:not_shown r1:yes r2a:not_shown r2b:not_shown → -]
-      federal-mech AHU-1 opt.freezestat_to_bas: proposal false → applied false  [r0:no r1:not_shown r2a:no r2b:no(unverified) → r0:no r1:no r2a:not_shown r2b:not_shown]
-      federal-mech AHU-1 opt.duct_smoke_detectors: proposal true → unresolved null  [r0:yes r1:not_shown r2a:not_shown r2b:not_shown → r0:yes r1:no r2a:not_shown r2b:no(unverified)]
-      federal-mech B-1 role: unresolved null → applied "in"  [r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands → r0:commands r1:commands r2a:commands r2b:not_shown]
-      federal-mech B-2 role: unresolved null → applied "in"  [r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands → r0:commands r1:commands r2a:commands r2b:not_shown]
+      federal-mech AHU-1 opt.freezestat_to_bas: proposal false → applied false  [r0:no r1:not_shown r2a:no r2b:no(unverified) → r0:no r1:no r2a:yes r2b:not_shown]
+      federal-mech AHU-1 opt.duct_smoke_detectors: proposal true → unresolved null  [r0:yes r1:not_shown r2a:not_shown r2b:not_shown → r0:yes r1:no r2a:not_shown r2b:no]
+      federal-mech AHU-1 opt.economizer: proposal true → applied true  [r0:yes r1:yes(unverified) r2a:not_shown r2b:yes → r0:yes r1:yes(unverified) r2a:yes r2b:yes]
+      federal-mech B-1 role: unresolved null → applied "in"  [r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands → r0:commands r1:commands r2a:commands r2b:commands]
+      federal-mech B-2 role: unresolved null → applied "in"  [r0:commands r1:commands r2a:monitors_only(unverified) r2b:commands → r0:commands r1:commands r2a:commands r2b:commands]
       federal-mech EF-1 opt.motorized_damper: unresolved null → applied true  [r0:yes r1:no r2a:yes r2b:yes → r0:yes r1:not_shown r2a:yes r2b:yes]
-      federal-mech EF-4 opt.motorized_damper: applied true → proposal true  [r0:yes r1:not_shown r2a:yes r2b:yes → r0:yes r1:not_shown r2a:yes(unverified) r2b:yes]
       federal-mech AHU-1 role: none → applied "in"  [- → r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:commands r2b:commands]
+      federal-mech UH-1 opt.fan_status: none → applied false  [- → r0:absent r1:absent r2a:absent r2b:absent]
+      federal-mech UH-2 opt.fan_status: none → applied false  [- → r0:absent r1:absent r2a:absent r2b:absent]
+      itd-d1-lab B-1 role: unresolved null → proposal "in"  [r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:monitors_only(unverified) → r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:commands r2b:not_shown]
+      itd-d1-lab B-2 role: unresolved null → proposal "in"  [r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:not_shown r2b:monitors_only(unverified) → r0:not_shown(a local controller runs the unit, yet the BAS commands it too) r1:commands r2a:commands r2b:not_shown]
+      itd-d1-lab BP-2 role: proposal "out" → none  [r0:not_shown r1:monitors_only(unverified) r2a:monitors_only r2b:monitors_only → -]
       itd-d1-lab EH-5 opt.fan_status: applied true → proposal true  [r0:yes r1:yes r2a:yes r2b:not_shown → r0:yes r1:not_shown r2a:yes r2b:not_shown]
-      itd-d1-lab HUM-1 role: applied "in" → proposal "in"  [r0:commands r1:commands r2a:not_shown r2b:commands → r0:commands r1:commands(unverified) r2a:not_shown r2b:commands]
-  cost (the live re-run just now): 221 model calls, 1556524 tokens; wall per document at most 100 s, 403 s in all → PASS (≤ 300 s)
+      itd-d1-lab HUM-1 role: applied "in" → proposal "in"  [r0:commands r1:commands r2a:not_shown r2b:commands → r0:commands r1:commands(unverified) r2a:not_shown r2b:not_shown]
+  cost (the live re-run just now): 228 model calls, 1640993 tokens; wall per document at most 175 s, 545 s in all → PASS (≤ 300 s)
       004_MO_T2504_03_Interior_and_Exterior_Re    4 calls    15929 tokens    1 s; 0/60 changed
-      031_MO_VA_Project_589A4_20_158_Renovate_   17 calls   107176 tokens   26 s; 0/22 changed
-      040_IL_VA_Solicitation_36C77623B0051_Exp   29 calls   193533 tokens   28 s; 1/103 changed
-      069_ID_ITD_District_2_Laboratory_Heating   12 calls    85281 tokens   27 s; 0/4 changed
-      074_CA_West_Valley_College_STEM_Classroo    9 calls    36559 tokens    6 s; 0/89 changed
-      094_FL_Orange_County_Regional_History_Ce    9 calls    90678 tokens   27 s; 0/60 changed
+      031_MO_VA_Project_589A4_20_158_Renovate_   17 calls   110339 tokens   33 s; 0/22 changed
+      040_IL_VA_Solicitation_36C77623B0051_Exp   35 calls   217942 tokens   27 s; 1/199 changed
+      069_ID_ITD_District_2_Laboratory_Heating   12 calls    92788 tokens   72 s; 0/4 changed
+      074_CA_West_Valley_College_STEM_Classroo    9 calls    36452 tokens    7 s; 0/89 changed
+      094_FL_Orange_County_Regional_History_Ce    9 calls    90678 tokens   26 s; 0/60 changed
       12_MT_MSU_ReidHall_Renovation               2 calls     6323 tokens    1 s; 0/31 changed
       baker-county-eoc                            1 calls     4877 tokens    1 s; 0/14 changed
-      bldg5406-hvac-demo                         34 calls   280662 tokens  100 s; 0/97 changed
-      federal-mech                               62 calls   450869 tokens   98 s; 8/194 changed
-      itd-d1-lab                                 42 calls   284637 tokens   88 s; 2/53 changed
+      bldg5406-hvac-demo                         35 calls   303531 tokens  175 s; 0/97 changed
+      federal-mech                               63 calls   500441 tokens  106 s; 10/196 changed
+      itd-d1-lab                                 41 calls   261693 tokens   96 s; 5/53 changed
 
 ── raster: a dev document's image-only rendition applies nothing its vector document does not
   itd-d1-lab-raster: 0 items, 0 control packets, 0 applied (the vector document: 36); not the vector document's: 0

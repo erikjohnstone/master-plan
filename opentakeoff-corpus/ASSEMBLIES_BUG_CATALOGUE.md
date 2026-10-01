@@ -7495,3 +7495,57 @@ the readers as they were and as they are): the deep chain 433 s, the fragmented 
 Tests: symbolsweep.test.ts (an index is not reused once a middle run changes in place; checked to fail with the old
 first-and-last check), and the sweep and reconcile suites: web 217/217, MCP tools 121/121, session, takeoff and
 reconcile eval 41/41.
+
+## AS-128 — a dual duct box scheduled as its two air valves, one row each, counted as two terminal units, every one waiting (FIXED, this commit)
+
+**Found:** 2026-10-01, while binding 039_TX's terminal units to their DUAL DUCT TERMINAL UNIT drawings (CI-73).
+- The BLDG 109 AIR TERMINAL UNIT SCHEDULE lists 186 rows in pairs, TU-101C and TU-101H and so on. Each pair prints the
+  same room, system, inlet size, airflow, control type, sequence and remarks.
+- Note 3, which every row cites: "PROVIDE SEPARATE AIR VOLUME CONTROL VALVES FOR HOT DUCT AND COLD DUCT THAT OPERATE AS A
+  SINGLE DUAL DUCT BOX. COLD SIDE SHALL BE THE MASTER AND HOT DUCT AS THE SLAVE PER DETAIL 2/MH113." Note 4: "PROVIDE WITH
+  A DISCHARGE TEMPERATURE SENSOR PER SET OF AIR VALVES".
+- The points list, DUAL DUCT TERMINAL UNIT CONTROLS (M-501), is one box's: cold and hot duct airflow, cold and hot duct
+  damper, discharge air temperature, zone temperature and setpoint adjustment (5 AI, 2 AO).
+- So the set has 93 dual duct boxes of two valves each. The takeoff counted 186 terminal units, as printed, and every
+  one waited for the estimator: no column prints a heat type, and the row never says dual duct, so the candidates were
+  the cooling-only and reheat typicals.
+
+**Fix (shared path: the row reader, controlIntent/rowReader.ts, which applyAssemblies runs on every surface):**
+row.dual_duct_pair reads a dual duct box scheduled as its two valves.
+- The two rows share a schedule, their marks differ only in a C and an H after a number ("TU-101C", "TU-101H"), and
+  they serve the same room (with no room column, every cell agrees).
+- A note either row cites, a cell or the schedule's title names the box: "DUAL DUCT", "DOUBLE DUCT", or its hot and
+  cold ducts (or decks) together.
+- Neither row prints another terminal type.
+- The cold valve is the box: terminal_type dual_duct, so it takes the library's dual duct typical (both dampers, an
+  airflow sensor on each inlet, discharge temperature, the zone sensor). The hot valve is out of scope, with the basis
+  "the hot duct valve's points are the box's, counted on TU-101C", cited to the note.
+- Never a sequence letter: 03_FL lists ATU A to ATU O, and 061_IA VAV-A to VAV-H. A C and an H that is the whole
+  qualifier pairs nothing.
+
+**Not decided:** M-501's diagram notes "OPERATE TWO SINGLE DUCT RETROFIT KITS AS A COMBINED DUAL DUCT UNIT". If each
+kit carries its own controller, the box has two where the dual duct typical prices one; the points list prices one
+box's points either way. The estimator adds the second controller by choosing a typical for the hot valves, one group
+decision (AS-59).
+
+**Measured** (applyAssemblies over the 55 cached open snapshots, 24 dev-tier sets and 31 unseen, before and after):
+- The rule fires on 039_TX alone: 186 applications cite row.dual_duct_pair.
+- 039_TX: 189 units waiting → 93 boxes on the dual duct typical, 93 hot valves out of scope, 3 still waiting (units
+  outside the pairs).
+- All 55 sets: waiting 574 → 388; ok 533 → 626; out of scope 24 → 117. No other set's application changes.
+- No keyed set schedules a box as its two valves. The typical evals are unchanged (GATE C 227/244 on dev, 62/91 on
+  held-out; dev 2 unchanged), and so are the binding and reading evals.
+- The unseen audit: the hot valves' 558 drawing decisions are gone with them (an out-of-scope unit is asked
+  nothing). Applied 1,230 → 672, all right (see CI-74).
+
+Tests: rowReader.test.ts "row.dual_duct_pair". It covers 039_TX's rows and notes with these negative controls:
+- valves serving different rooms;
+- a pair whose notes never name the box;
+- a lone cold valve;
+- a mismatched dash;
+- 03_FL's and 061_IA's sequence letters;
+- a row printing single duct;
+- a titled schedule whose rows disagree.
+
+Each guard (the number before the letter, the room, the words, a printed type) was checked to fail the test without
+it.

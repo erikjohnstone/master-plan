@@ -1,6 +1,6 @@
 # Control intent: binding eval (dev3)
 
-packets found: 138; keyed pairs: 310; key packets not found: 10; unmatched instances: 21
+packets found: 137; keyed pairs: 310; key packets not found: 10; unmatched instances: 21
 pair recall 58.7% (182/310; without semantic 59.9%; with proposals 60.6%; hits inside 0, containing 0)
 precision 96.3% over 188 confirmed bindings (with proposals 91.2% over 205); proposals 17; ambiguous 18; units keyed "none" but bound 4
 unit recall 74.7% (146 instances with a governing packet)
@@ -36,7 +36,7 @@ unit recall 74.7% (146 instances with a governing packet)
 | 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling | 11 | 39 | 100.0% | 39 | 100.0% |
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | 1 | 1 | 100.0% | 1 | 100.0% |
 | 03_FL_HurlburtField_ChildDevCenter | 18 | 47 | 36.2% | 16 | 100.0% |
-| 043_FL_VA_Project_673_21_151_Replace_Air_Handling | 8 | 12 | 0.0% | 0 | n/a |
+| 043_FL_VA_Project_673_21_151_Replace_Air_Handling | 7 | 12 | 0.0% | 0 | n/a |
 | 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction | 23 | 34 | 52.9% | 18 | 100.0% |
 
 2 walled document(s) (reconcile check documents) are counted in the totals and never shown.

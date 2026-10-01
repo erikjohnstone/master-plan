@@ -2165,3 +2165,87 @@ unit is excluded, and another family named in words keeps its family. The dual d
 and not a fan coil. A union naming two families names none. Without a row that says dual duct, the drawing is the
 family's one design (CI-58); beside a single duct one, it stays a proposal. The test fails when the fallback is
 removed.
+
+## CI-74: the finder read a diagram's own labels and notes as titles, and lost a wrapped title's second line (FIXED, this commit; finder v7)
+
+**Found:** 2026-10-01, auditing CI-73's decisions on 039_TX and the census of units bound to nothing (CI-73).
+- 039_TX M-501: the vision runs' crop of DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM held its title alone. On that sheet
+  the diagram's point labels ("AO - COLD DUCT DAMPER", "AI - HOT DUCT AIRFLOW") and its note ("NOTE: OPERATE TWO SINGLE
+  DUCT RETROFIT KITS AS A COMBINED DUAL DUCT UNIT.") are set in type the size of a title. Each read as a title, and a
+  caption's region runs up only to the title above it in its lane: the region stopped at the note, one line above the
+  caption.
+- 29_TX M8.01: the chiller and VFD network interface boxes print their point legends and their note's sentences at a
+  title's size. "AS HARDWIRED CONTROLS." and "AO RF-SPD SPEED CONTROL (% FULL)" were detail packets of their own.
+- 040_IL M402: the terminal air boxes print their control detail in a column, "CONTROL TYPE (NOTE 3)": TAB-A, TAB-B,
+  TAB-C or TAB-E. TAB-A's and TAB-B's details are titled on two lines each, side by side ("TAB CONTROL W/HOT WATER" over
+  "REHEAT AND CFM OFFSET - TAB-A"). The finder stacks a title's next line only when that line stands alone on its
+  baseline, so a large-print table row is never a title; the two second lines stand under six line heights apart, so
+  each title kept its first line and lost the designator the rows name. Their 16 boxes had only a proposal, the
+  TERMINAL AIR BOX REPORT GENERATION diagram; each now takes its own detail by its CONTROL TYPE (TAB-101's "TAB-A").
+
+**Change (evidence.ts):**
+- A point label (a point type and its name apart, "AO RF-SPD …", or after a spaced dash or a colon, "AI - ZONE TEMP")
+  or a note that runs on after its colon ("NOTE: …") is never a title, at any size. A word the type's letters begin is
+  no label ("BI-POLAR IONIZATION CONTROL DETAIL", "DI WATER", "DO NOT"), and "GENERAL NOTES - MECHANICAL" still heads its
+  block.
+- A line ending in a period is never a packet unless it is a caption (a detail number or scale note beside it): a
+  note's sentence keeps bounding the regions around it. "LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM." keeps its packet.
+- A line set like the title line above it continues that title when whatever is beside it on its baseline is a title
+  column away (two line heights or more), as a first line's neighbours must be. Such a line never starts a title.
+
+**Measured:**
+- Finder, v6 against v7, on every sheet of the 81 open sets whose graphs are cached (2,615 sheets): packets 590 → 587.
+  Seven packets differ and one region changes, each intended:
+  - 29_TX: "AS HARDWIRED CONTROLS." and "AO RF-SPD SPEED CONTROL (% FULL)" are no longer packets.
+  - 043_FL: neither is "REPLACE AUTO OPENER AND ACCESS CONTROL AS REQ'D." (a demolition note's sentence).
+  - 040_IL: the two "TAB CONTROL W/HOT WATER" titles become "… REHEAT AND CFM OFFSET - TAB-A" and "… - TAB-B".
+  - 039_TX: DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM's region grows from 95 to 1,094 units tall (1 span → 14), the whole
+    drawing.
+- Binding evals on every tier (dev, dev 2, dev 3, held-out, held-out 2): the reports are identical, but for dev 3's
+  packets found, 138 → 137 (043_FL's sentence, bound to nothing).
+- Reading evals (dev, held-out) and the typical evals: unchanged (dev applied 316, applied-wrong 0; GATE C 227/244 on
+  dev, 62/91 on held-out). 040_IL's terminal air boxes are not in its typicals key.
+- 040_IL: the 16 boxes whose CONTROL TYPE is TAB-A or TAB-B (TAB-101, TAB-103, TAB-108 to TAB-120, TAB-202) now take
+  their own detail. Each applies three absences: no CO2 sensor, occupancy sensor or window switch (48 decisions). Both
+  details were checked by eye on M402: an exhaust box and a supply box with hot water reheat (damper, airflow, discharge
+  temperature, a wall temperature sensor, a two-way valve), and nothing else. Right. Their role and the other options stay
+  proposals.
+  - Found doing so: each detail's region holds only the last paragraph of its sequence box. The sub-heading
+    "EXHAUST/RETURN TAB SEQUENCE OF OPERATION:" inside the box was read as a caption over everything above it. The
+    absences stand on the details read by eye. A fix was measured and not adopted (CI-75).
+- The unseen audit: applied 1,230 → 672, audited 672, right 672. With AS-128, 039_TX's 93 hot valves are out of
+  scope, and their 558 decisions are gone. Each box's role decision now stands on all three readers: R0 reads "AO -
+  COLD DUCT DAMPER" and "AO - HOT DUCT DAMPER", which the region now holds. These 93 decisions are new, each checked
+  against M-501. Five model calls were made live, for the regrown diagram.
+- GATE D: every item passes. The live re-run changes 16 of 825 decisions (1.9%; the limit is 2%).
+
+Tests: evidence.test.ts "… (CI-74)", two tests.
+- 039_TX's diagram: its labels and note fall inside its region, which runs up the whole drawing. 23_GA's and a DI
+  WATER caption keep their packets. 29_TX's legend lines are no packets; a period-ended caption is.
+- 040_IL's two wrapped titles keep both lines; a row of marks in a large font under a title is no part of it.
+
+Each part was checked to fail without it: the period rule, the note, the label apart from its name, the spaced dash,
+the narrower letters (the broad form drops 23_GA), and the wrap.
+
+## CI-75: a sequence sub-heading inside a detail cuts the detail's region at it (NOT ADOPTED, documented ceiling)
+
+**Found:** 2026-10-01, by eye on 040_IL M402 while auditing CI-74's new decisions. Inside TAB-A's, TAB-B's and TAB-C's
+SEQUENCE OF OPERATION boxes, "EXHAUST/RETURN TAB SEQUENCE OF OPERATION:" is printed at body size. It stands 24 units
+under the last sentence above it and 25 units over its own paragraph. A text title goes with the nearer block of text,
+so it read as a caption over everything above it: the diagrams and the box's first part. Each detail's caption region
+stops at the first title above it in its lane, so the detail kept only its last paragraph.
+
+**Tried:** a title ending in a colon heads the text under it whenever text follows; then only when that text starts
+within half a line of where the text above ends.
+- Finder diff on 2,615 sheets of 81 open sets: only 040_IL M402 changed, as intended. The three details ran up their
+  whole drawings, and the three sub-headings kept their own paragraphs. Tests and two mutation checks passed.
+- On the walled documents, totals only: one document changed, two packets' regions in it. The narrower form changes
+  the same two regions.
+- That document is in binding dev 2. Under the first form, pair recall 95.7% → 90.9% (602 → 572 of 629) and precision
+  96.9% → 91.5%: 30 keyed bindings fell off. Every open document on that tier was unchanged.
+
+**Not adopted:** the geometry cannot tell 040_IL's sub-heading from the walled document's caption. A rule tuned until a
+walled document stops moving would be fitted to it. 040_IL's TAB decisions (CI-74) are right on the drawing either
+way: no CO2 sensor, occupancy sensor or window switch in TAB-A or TAB-B. Only their evidence is narrower than the
+detail. A candidate for a later batch is a box-aware reading of the sequence box, one that needs the drawing's lines,
+not only its text.

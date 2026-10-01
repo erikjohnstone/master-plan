@@ -1,5 +1,35 @@
 # Changelog
 
+- **Takeoff: a dual duct box scheduled as its two air valves is one box.**
+  - 039_TX schedules each box as two rows, TU-101C and TU-101H: one room, one
+    airflow, a note saying the two valves "OPERATE AS A SINGLE DUAL DUCT BOX".
+    The cold valve now takes the dual duct typical. The hot valve is out of
+    scope, cited to that note ("the hot duct valve's points are the box's,
+    counted on TU-101C").
+  - 039_TX: 189 units waiting for the estimator → 93 boxes on the dual duct
+    typical, 93 hot valves out of scope, 3 still waiting.
+  - No other set changes, over 55 cached open sets.
+  (`web/src/lib/controlIntent/rowReader.ts`; ASSEMBLIES_BUG_CATALOGUE AS-128.)
+
+- **Control drawings: a diagram's own labels and notes no longer cut it
+  short, and a title wrapped onto two lines keeps both.**
+  - Point labels ("AO - COLD DUCT DAMPER") and notes ("NOTE: OPERATE …") set
+    at a title's size were read as titles, so 039_TX's dual duct diagram was
+    read as its title alone. It is now read whole.
+  - A note's sentence ("AS HARDWIRED CONTROLS.") is no longer a drawing of
+    its own.
+  - 040_IL's "TAB CONTROL W/HOT WATER" / "REHEAT AND CFM OFFSET - TAB-A"
+    titles keep their second line. Its 16 terminal air boxes now take their
+    own TAB-A or TAB-B detail, by their CONTROL TYPE column.
+  - The finder changes 7 packets and 1 region over 2,615 sheets of 81 open
+    sets, each intended.
+  - Every binding tier is unchanged; GATE C is unchanged (227/244 dev, 62/91
+    held-out).
+  - Unseen audit: 672 applied, 672 right. GATE D passes every item (the live
+    re-run changes 1.9% of decisions; the limit is 2%).
+  (`web/src/lib/controlIntent/evidence.ts`; CONTROL_INTENT_BUG_CATALOGUE
+  CI-74.)
+
 - **Control drawings: units their set's own words tie to a drawing are bound
   to it.**
   - A split system's sequence ("SPLIT SYSTEMS - SEQUENCE OF OPERATION & BAS

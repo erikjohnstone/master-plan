@@ -1083,3 +1083,66 @@ test("a caption over a schedule the graph extracted is the schedule's title; ove
   ];
   assert.ok(findPackets("s.pdf#28", points, [{ title: "VARIABLE AIR VOLUME AHU (AHU-1)", region: [280, 180, 900, 280] }]).some((p) => p.title === "VARIABLE AIR VOLUME AHU (AHU-1)"));
 });
+
+test("a title wrapped onto a second line keeps it beside the next detail's wrapped title (CI-74)", () => {
+  // 040_IL M402: two details side by side, each titled on two lines. Their
+  // second lines stand less than six line heights apart, so neither was
+  // alone on its baseline and both titles lost them ("TAB CONTROL W/HOT
+  // WATER", without "REHEAT AND CFM OFFSET - TAB-A"): the designator the
+  // terminal boxes' CONTROL TYPE cell names.
+  const drawing = (x: number) => [sp("DAMPER", x + 60, 1850), sp("AO", x + 160, 1900), sp("TAB", x + 260, 1950), sp("AIRFLOW SENSOR", x + 60, 2000)];
+  const spans = [
+    ...drawing(2533), ...drawing(3610),
+    sp("TAB CONTROL W/HOT WATER", 2533, 2093, 50), sp("REHEAT AND CFM OFFSET - TAB-A", 2533, 2150, 50), sp("NO SCALE", 2533, 2209),
+    sp("TAB CONTROL W/HOT WATER", 3610, 2093, 50), sp("REHEAT AND CFM OFFSET - TAB-B", 3610, 2150, 50), sp("NO SCALE", 3610, 2209),
+    ...para(400, 300, 12),
+  ];
+  const titles = findPackets("s.pdf#44", spans).map((p) => p.title).sort();
+  assert.deepEqual(titles, ["TAB CONTROL W/HOT WATER REHEAT AND CFM OFFSET - TAB-A", "TAB CONTROL W/HOT WATER REHEAT AND CFM OFFSET - TAB-B"]);
+  // A big line with another beside it closer than two line heights (a large
+  // print table row) never continues a title above it.
+  const row = [...drawing(2533), sp("EXHAUST FAN CONTROL", 2533, 2093, 50), sp("EF-1", 2533, 2150, 50), sp("EF-2", 2533 + 4 * 27.5 + 60, 2150, 50), sp("NO SCALE", 2533, 2209), ...para(400, 300, 12)];
+  assert.ok(findPackets("s.pdf#45", row).every((p) => !/EF-1/.test(p.title)), "a row of marks is no part of the title");
+});
+
+
+test("a diagram's point labels and notes printed at a title's size are no titles; a sentence is no packet (CI-74)", () => {
+  // 039_TX M-501: the dual duct terminal unit's control diagram labels its
+  // points ("AO - COLD DUCT DAMPER") and notes it ("NOTE: OPERATE TWO
+  // SINGLE DUCT RETROFIT KITS …") in type the size of a title. Read as
+  // titles, they closed the caption's region at the note: the vision runs'
+  // crop held the caption alone.
+  const diagram = [
+    sp("AO - COLD DUCT DAMPER", 4191, 235, 26), sp("AI - COLD DUCT AIRFLOW", 4191, 304, 26), sp("AI - DISCHARGE AIR TEMP", 4800, 380, 26),
+    sp("COLD SA", 4320, 520), sp("HOT SA", 4320, 720),
+    sp("AO - HOT DUCT DAMPER", 4191, 844, 26), sp("AI - HOT DUCT AIRFLOW", 4191, 913, 26),
+    sp("NOTE: OPERATE TWO SINGLE DUCT RETROFIT KITS AS A COMBINED DUAL DUCT UNIT.", 4217, 993, 26),
+    sp("1", 4161, 1075, 38), sp("DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM", 4231, 1075, 38), sp("Scale: No Scale", 4251, 1127, 25),
+  ];
+  const packets = findPackets("s.pdf#31", [...diagram, ...para(400, 300, 12)]);
+  assert.deepEqual(packets.map((p) => p.title), ["DUAL DUCT TERMINAL UNIT CONTROL DIAGRAM"]);
+  const strs = packets[0].spans.map((s) => s.str);
+  for (const label of ["AO - COLD DUCT DAMPER", "AI - DISCHARGE AIR TEMP", "AI - HOT DUCT AIRFLOW", "COLD SA"]) assert.ok(strs.includes(label), `the diagram holds "${label}"`);
+  assert.ok(packets[0].region[1] <= 235, "the region runs up the whole drawing");
+  // A point type is a label only apart from its name or after a spaced dash
+  // or a colon: words the letters begin still title their details.
+  const titled = (title: string) => findPackets("s.pdf#34", [
+    sp("IONIZER", 700, 300), sp("DDC CONTROLLER", 700, 500), sp("BO", 1000, 520),
+    sp("1", 651, 1020, 50), sp(title, 734, 1000, 50), sp("SCALE: NONE", 734, 1060, 25), ...para(3000, 300, 12),
+  ]).map((p) => p.title);
+  assert.deepEqual(titled("BI-POLAR IONIZATION CONTROL DETAIL"), ["BI-POLAR IONIZATION CONTROL DETAIL"]);
+  assert.deepEqual(titled("DI WATER SYSTEM CONTROL DIAGRAM"), ["DI WATER SYSTEM CONTROL DIAGRAM"]);
+  // 29_TX M8.01: the chiller and VFD network interface boxes print their
+  // point legends and their note's sentences at a title's size; "AS
+  // HARDWIRED CONTROLS." and "AO RF-SPD SPEED CONTROL (% FULL)" were detail
+  // packets. A caption keeps its period.
+  const legend = findPackets("s.pdf#5", [
+    sp("ALL POINTS SHALL BE ACCESSIBLE THROUGH THE DDC", 600, 1300, 26), sp("AS HARDWIRED CONTROLS.", 600, 1420, 26),
+    sp("DO START-STOP", 640, 1520, 26),
+    sp("VFD NETWORK INTERFACE", 1600, 1300, 26), sp("AO RF-SPD SPEED CONTROL (% FULL)", 1640, 1420, 26),
+    sp("EXHAUST FAN", 2700, 900), sp("DDC CONTROLLER", 2700, 1000), sp("DO", 2900, 1020),
+    sp("2", 2651, 1320, 50), sp("LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM.", 2734, 1300, 50), sp("SCALE: NONE", 2734, 1360, 25),
+    ...para(400, 2000, 12),
+  ]).map((p) => p.title);
+  assert.deepEqual(legend, ["LIGHTNG AND EXHAUST FAN CONTROL DIAGRAM."]);
+});
