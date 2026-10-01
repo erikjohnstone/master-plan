@@ -116,6 +116,7 @@ MAX_GROUP_CELLS = 500
 EDGE_TOL = 4.0       # the tolerance the authored ground truth is measured to
 WIDEN_CONSENSUS = 0.80 # rows that must agree on an edge before it moves — see
                        # _consensus_edge for the measurement that set it
+MIN_WIDE_TABLE_COLS = 20 # ... unless it has a schedule's columns (AS-146, see find_tables)
 MAX_REGION_WFRAC = 0.92 # a REGION this wide is the sheet's own furniture, not a
                       # schedule. A drawing has a border and margins, so nothing
                       # is drawn edge to edge: the widest real table in the key
@@ -1189,7 +1190,14 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         if len(members) < len(rowset) * len(colset) * MIN_FILL_RATIO:
             continue
         xs0, ys0, xs1, ys1 = zip(*(cells[i].bounds for i in members))
-        if max(xs1) - min(xs0) > page_w * MAX_REGION_WFRAC:
+        # A SCHEDULE DRAWN EDGE TO EDGE IS STILL A SCHEDULE (AS-146). 014_MT
+        # M0.2 runs its CUSTOM and COMFORT AIR HANDLING UNIT SCHEDULEs across
+        # the sheet, 93.7% and 92.7% of its width, one air handler each, and
+        # the guard above handed both back as furniture. What a title block
+        # strip never has is a schedule's columns: measured over every
+        # schedule sheet's regions wider than the guard, title blocks and
+        # sheet strips run 3 to 15 columns, the two schedules 42 and 49.
+        if max(xs1) - min(xs0) > page_w * MAX_REGION_WFRAC and len(colset) < MIN_WIDE_TABLE_COLS:
             continue
         cands.append((members, (min(xs0), min(ys0), max(xs1), max(ys1))))
 

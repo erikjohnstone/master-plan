@@ -10205,6 +10205,13 @@ export function scheduleTableFromODL(
 
 /** scheduleTableFromODL's reading, with AS-142's title rules when
  * `onTitleRule` is given (called when one of them titles the table). */
+/**
+ * A cell that prints a unit's mark, as a row's first cell does (AS-146): one
+ * token holding a letter and a digit ("AHU-A1", "ACU-A-1", "F-2"). A header
+ * label (MARK, UNIT, TAG, NO.) never does, nor a grouping label ("HOT WATER").
+ */
+const printsAMark = (text: string): boolean => /^(?=\S*\d)(?=\S*[A-Z])\S+$/i.test(text.trim());
+
 function scheduleTableFromODLRead(
   t: ODLTable,
   sheetKey: string,
@@ -10676,6 +10683,21 @@ function scheduleTableFromODLRead(
   // opts.headerLookahead) can classify a CANDIDATE row further down the
   // table with the exact same rule the main loop uses, rather than a
   // second, driftable copy of it.
+  // THE SECOND LINE OF A UNIT'S ROW (AS-146): a grid row whose key cell spans
+  // down from the row above, where that cell prints a mark, and which prints
+  // no mark of its own. 014_MT's AHU-A1 carries its coils' second line
+  // (75,000 CFM) and 017_MD's ACU-A-1 its discharge and inlet sound power
+  // under the mark; 18_OR's HP-5 spans FC-1 and FC-2 because one heat pump
+  // serves two fan coils, and FC-2's line is a unit of its own.
+  const isSecondLine = (r: number, keyCol: number): boolean => {
+    const keyCell = grid[r][keyCol];
+    if (!keyCell || keyCell["row number"] - 1 >= r || !printsAMark(odlCellText(keyCell))) return false;
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (cell && cell["row number"] - 1 === r && printsAMark(odlCellText(cell))) return false;
+    }
+    return true;
+  };
   const classifyBodyRow = (r: number, ownCells: Set<ODLTableCell>): { fullCoverage: boolean; grouped: boolean } => {
     const coveredCols = new Set<number>();
     for (let c = 0; c < C; c++) {
@@ -10692,7 +10714,19 @@ function scheduleTableFromODLRead(
     if (ownsLeadCell) for (let c = 0; c < C; c++) if (grid[r][c]) inheritedCols++;
     const bar = Math.max(1, Math.min(C, maxCovered) - (opts.fullCoverageSlack ?? 0));
     const fullCoverage = coveredCols.size >= bar || (ownsLeadCell && inheritedCols >= bar);
-    const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size);
+    // A UNIT'S ROW PRINTED ON TWO LINES IS ITS ROW, NOT A HEADER TIER (AS-146).
+    // 014_MT M0.2's CUSTOM AIR HANDLING UNIT SCHEDULE prints AHU-A1 once, but
+    // its cooling and steam coils print a second line (48,400 and 75,000 CFM),
+    // so the mark and every single-valued cell span two grid rows. Half the
+    // row's cells span, which the majority rule above reads as a grouping
+    // tier: the row became part of the header, every column was named with
+    // its value ("MARK AHU-A1", "MANUFACTURER TEMTROL"), and the unit was gone.
+    // A grouping tier groups COLUMNS; a row whose spans run down only and whose
+    // first cell prints a mark is a unit's row, however many lines it takes.
+    const lead = grid[r][0];
+    const tallUnitRow = ownsLeadCell && !!lead && spanning.every((cl) => (cl["column span"] || 1) === 1)
+      && printsAMark(odlCellText(lead));
+    const grouped = spanning.length > 0 && (!fullCoverage || spanning.length * 2 >= ownCells.size) && !tallUnitRow;
     return { fullCoverage, grouped };
   };
   const headerVocabHitRate = (ownCells: Set<ODLTableCell>): { texts: string[]; hitRate: number } => {
@@ -11586,6 +11620,11 @@ function scheduleTableFromODLRead(
       const identical = existingHeaders.length === newHeaders.length
         && existingHeaders.every((h) => dupOf.cells[h]?.text === cells[h]?.text);
       if (identical) continue;
+      // The second line of a unit's row (AS-146) inherits its mark and would
+      // mint the unit twice. A grouping label spanning a transposed table's
+      // rows (21_VA's "HOT WATER" over FLOW, EWT, LWT) is no mark and keeps
+      // its rows.
+      if (isSecondLine(r, keyCol)) continue;
     }
     emitted.add(r);
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
@@ -11770,7 +11809,13 @@ function scheduleTableFromODLRead(
   // qualified to replace it, and a table that had been read correctly was
   // refused. Speculating about which convention is right is unnecessary when
   // both can be run and counted.
-  if (rows.length && dataRows.length >= 2 && rows.length * 2 < dataRows.length) {
+  // A unit printed on several lines (AS-146) keys one row from its mark and
+  // fills the grid rows under it: 017_MD's ACU-A-1 to ACU-A-6 each print
+  // casing, discharge and inlet sound power, six units over eighteen lines.
+  // Those lines are not rows the strict rule failed, and counting them as such
+  // handed the table to its sound readings as keys.
+  const tallMarkLines = dataRows.filter((r) => isSecondLine(r, strictKeyCol)).length;
+  if (rows.length && dataRows.length >= 2 && rows.length * 2 < dataRows.length - tallMarkLines) {
     const strictRows = rows.slice();
     const strictEmitted = new Set(emitted);
     rows.length = 0;

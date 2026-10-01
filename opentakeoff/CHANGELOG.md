@@ -1,5 +1,17 @@
 # Changelog
 
+- **A schedule drawn edge to edge, and a unit's row printed on two or more lines, are read as schedules and rows.**
+  - vectorgrid dropped any region wider than 92% of its sheet as a title block strip; 014_MT M0.2's CUSTOM and COMFORT
+    AIR HANDLING UNIT SCHEDULEs are 93.7% and 92.7%. A region that wide is now kept when it has a schedule's columns
+    (20 or more; title blocks run 3 to 15).
+  - A unit whose row prints a second line (AHU-A1's coils; 017_MD's ACU-A-1 sound power readings) spans its mark cell
+    down; the table builder took that row for a header tier, or its second line for another row with the same mark.
+    A row spanning rows only and opening with a mark is a unit's row; a line under a spanning mark that prints no mark
+    of its own is that unit's second line.
+  - 014_MT's air handlers cite their own schedules; 017_MD's six supply fans are read (+6); two plumbing fixture
+    schedules (004_MO, 03_FL) read their rows. Replayed over 969 captured sheets, nothing is lost.
+  (`bakeoff/vectorgrid.py` `MIN_WIDE_TABLE_COLS`; `web/src/lib/sheetgraph.ts` `printsAMark`, `isSecondLine`;
+  ASSEMBLIES_BUG_CATALOGUE AS-146.)
 - **A schedule title whose family word lost its glyphs is read as an untitled schedule.** bldg5406's text layer has no
   M, so its PUMP SCHEDULE reads "P SCHEDULE" and its chilled water pumps CWP-1 and CWP-2 were never units. A title of
   only one- or two-letter fragments and SCHEDULE now names no family, and each family's own marks decide its rows; a

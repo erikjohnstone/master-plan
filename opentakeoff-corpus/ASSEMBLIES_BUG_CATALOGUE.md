@@ -8190,3 +8190,53 @@ removed; no walled graph changes. WP1 acceptance: 40 → 41 pass (bldg5406 32/32
 Tests: `web/test/fragmentTitle.test.ts` on the cached graphs' own tables (fixture `as148-fragment-titles.json`): the
 pumps read; the same table with marks no family's reads nothing; the three bare SCHEDULE tables read nothing. Fails
 at HEAD on the first.
+
+## AS-146 — a schedule drawn edge to edge was page furniture, and a unit's row printed on two lines was a header tier: 014_MT's two air handlers were never units (FIXED, this commit)
+
+**Found:** the gap census after AS-145 (titled tables no family reads): 014_MT's takeoff counts every unit on M0.2
+but its air handlers, though its coil schedules are titled "MULTI-ZONE AHU" and its condensing units serve AHU-A1 and
+AHU-A2. M0.2 prints CUSTOM AIR HANDLING UNIT SCHEDULE (AHU-A1, TEMTROL) and ALTERNATE 3 - VAV AHU: COMFORT AIR
+HANDLING UNIT SCHEDULE (AHU-A2, DAIKIN), each one unit, 49 and 42 columns across the sheet.
+- vectorgrid returned neither table. Its width guard (`MAX_REGION_WFRAC` 0.92) drops a region wider than 92% of the
+  page as the sheet's own furniture (a title-block strip); these schedules are 93.7% and 92.7%.
+- Read without that guard, the custom air handler's row was still lost: its mark, AHU-A1, spans two grid rows
+  because the cooling and steam coils print a second line (48,400 and 75,000 CFM). Half the row's cells span, so the
+  table builder took it for a grouping tier of the header: every column was named with its value ("MARK AHU-A1",
+  "MANUFACTURER TEMTROL") and the second line minted a second AHU-A1.
+
+**Change:**
+- `bakeoff/vectorgrid.py` `find_tables`: a region wider than the guard is kept when it has a schedule's columns
+  (`MIN_WIDE_TABLE_COLS`, 20); a title block or sheet strip that wide is still furniture.
+- `sheetgraph.ts` `scheduleTableFromODL`, three rules around one test, a cell that prints a mark (`printsAMark`: one
+  token, a letter and a digit; MARK, UNIT, TAG or HOT WATER never does):
+  - a body row whose spanning cells all span rows (none spans columns) and whose first cell prints a mark is a unit's
+    row printed on several lines, not a header tier; a row grouping columns stays a tier, whatever it opens with;
+  - a grid line whose key cell spans down from a mark above, and which prints no mark of its own, is that unit's
+    second line, never another row with its key (18_OR's HP-5 spans FC-1 and FC-2, one heat pump for two fan coils:
+    FC-2 prints its own mark and keeps its row; 21_VA's transposed unit heater keeps its rows under HOT WATER);
+  - when the strict mark column keys a minority of the grid rows, those second lines are not counted against it
+    (017_MD's ACU-A-1 to ACU-A-6 each print casing, discharge and inlet sound power: six units over eighteen lines,
+    which once the rows read as rows handed the table to its sound readings as keys).
+
+**Measured:** 014_MT's sheet re-captured with the width rule: M0.2's tables 4 → 6, the two schedules read; the takeoff
+counts its air handlers as before (69 units), but AHU-A1 and AHU-A2 now cite their own schedules on M0.2 (manufacturer,
+fans, coils, CFM for the assemblies) where they had cited an untitled coil table on sheet 5. The table rules replayed
+over every captured schedule sheet (90 documents, 969 sheets), against the head: 4 tables change and 0 are lost, no
+walled document changes. 017_MD #12's SUPPLY FAN SCHEDULE is now read (S-A-1 to S-A-6, six fans its built-up
+air handlers' rows name, +6 units); 004_MO #31's and 03_FL #51's PLUMBING FIXTURE SCHEDULEs stop folding every row
+into their column names (+7 and +5 rows); 012_MO #19's piping material schedule is read (no units). No unit is
+removed anywhere.
+
+**Census:** every region wider than the guard on the 899 captured schedule sheets whose rules could make one (the
+sheets with a single rule spanning 85% of the page, either axis): 31 on open documents. Title blocks and sheet strips
+are 2 to 12 rows by 3 to 15 columns (058_CA's on 25 sheets, 04_NV, 055_US, 057_US, 086_CA); the two kept are 014_MT's
+schedules (6 x 49, 5 x 42). Walled documents (count only): 126 sheets in 8 documents, none keeps a wide region.
+
+**Should this be on the shared path? Yes.** vectorgrid and the table builder are the one reading of a schedule's grid
+for every surface (`Session.graphForPipeline`).
+
+Tests: `web/test/tallDataRows.test.ts` on M0.2's and 017_MD #12's own vectorgrid replies (fixtures
+`as146-014mt-m02.vectorgrid.json`, `as146-017md-m12.vectorgrid.json`, and 21_VA's and 18_OR's as negatives): 8 of 8
+mutations of the three rules fail them. `web/test/vectorGridWideSchedule.test.ts` redraws M0.2's COMFORT schedule's
+own ruling and runs the real sidecar: it reads AHU-A2 across 42 columns, and a title strip as wide, ten fields, is
+still dropped (with the guard as before, the first fails; with no guard, the second).
